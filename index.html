@@ -43,7 +43,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* ═══ VIEW 1: BROWSE ═══ */
-.browse-layout{display:grid;grid-template-columns:280px 1fr;gap:16px}
+.browse-layout{display:grid;grid-template-columns:250px 1fr 340px;gap:16px}
 .filter-panel .field{margin-bottom:10px}
 .filter-panel label{font-size:11px;color:var(--muted);font-weight:600;display:block;margin-bottom:4px}
 .tag-cloud{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
@@ -59,6 +59,22 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 .paper-value.show{display:block}
 .paper-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
 .paper-actions{display:flex;gap:6px;margin-top:8px}
+.paper-card.active{border-color:var(--accent2);background:#1a2635}
+
+/* Detail panel */
+.detail-panel{position:sticky;top:80px;max-height:calc(100vh - 100px);overflow-y:auto;padding:16px}
+.detail-panel::-webkit-scrollbar{width:5px}.detail-panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.detail-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.4}
+.detail-meta{font-size:12px;color:var(--muted);margin-bottom:10px}
+.detail-section{margin-bottom:14px}
+.detail-section-title{font-size:11px;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--border)}
+.detail-abstract{font-size:13px;line-height:1.7;color:var(--text)}
+.detail-value{font-size:13px;line-height:1.6;color:#e0c080;padding:10px 12px;background:var(--surface);border-left:3px solid var(--warn);border-radius:0 6px 6px 0}
+.detail-purpose{font-size:13px;color:var(--accent2);font-style:italic;line-height:1.6}
+.detail-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.detail-link{display:inline-flex;align-items:center;gap:4px;color:var(--accent);text-decoration:none;font-size:12px;margin-top:4px}
+.detail-link:hover{text-decoration:underline}
+.detail-empty{text-align:center;padding:60px 16px;color:var(--muted);font-size:13px}
 
 /* ═══ VIEW 2: GRAPH ═══ */
 .graph-container{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);min-height:500px;overflow:hidden}
@@ -175,6 +191,13 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
     <div class="panel" style="display:flex;flex-direction:column">
       <div class="panel-h"><span id="filterCount">0 篇</span></div>
       <div class="paper-list" id="paperList"></div>
+    </div>
+    <!-- 右側詳細面板 -->
+    <div class="panel" style="display:flex;flex-direction:column">
+      <div class="panel-h">📖 文獻詳情</div>
+      <div class="detail-panel" id="detailPanel">
+        <div class="detail-empty">← 點擊文獻卡片查看詳情<br><br>包含中文精華摘要、對專案價值、標籤與原文連結</div>
+      </div>
     </div>
   </div>
 </div>
@@ -471,7 +494,7 @@ function renderPapers() {
     const typeColor = p.doc_type==='專利'?'tag-orange':p.doc_type==='商用產品'?'tag-green':'tag-blue';
     const tags = (p.tags||[]).map(t=>`<span class="tag tag-gray">${t}</span>`).join('');
     const link = p.links ? Object.values(p.links)[0] : '';
-    return `<div class="paper-card">
+    return `<div class="paper-card" id="pc_${i}" onclick="showDetail(${i});document.querySelectorAll('.paper-card').forEach(c=>c.classList.remove('active'));this.classList.add('active')">
       <div style="display:flex;gap:6px;margin-bottom:4px;flex-wrap:wrap;align-items:center">
         <span class="tag ${typeColor}">${p.doc_type||''}</span>
         <span class="tag tag-gray">${p.id}</span>
@@ -482,20 +505,60 @@ function renderPapers() {
       ${p.authors?`<div class="paper-sub">${p.authors}</div>`:''}
       ${p.purpose?`<div class="paper-purpose">📌 ${p.purpose}</div>`:''}
       <div class="paper-tags">${tags}</div>
-      <div class="paper-actions">
-        <button class="btn btn-s" onclick="toggleValue('pv_${i}')">💡 對專案價值</button>
-        ${link?`<a href="${link}" target="_blank" class="btn btn-s">↗ 原文</a>`:''}
-        <button class="btn btn-s" onclick="pinPaper('${p.id}')">📌 釘選到AI</button>
-      </div>
-      <div class="paper-value" id="pv_${i}">
-        ${p.value_to_project||'—'}<br>
-        ${p.abstract_note?`<div style="margin-top:6px;color:var(--muted);font-size:11px">${p.abstract_note}</div>`:''}
-      </div>
     </div>`;
   }).join('');
 }
 
 function toggleValue(id){document.getElementById(id)?.classList.toggle('show')}
+
+function showDetail(i) {
+  const p = filtered[i];
+  if(!p) return;
+  const link = p.links ? Object.values(p.links)[0] : '';
+  const tags = (p.tags||[]).map(t=>`<span class="tag tag-gray">${t}</span>`).join('');
+  const typeColor = p.doc_type==='專利'?'tag-orange':p.doc_type==='商用產品'?'tag-green':'tag-blue';
+
+  document.getElementById('detailPanel').innerHTML = `
+    <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+      <span class="tag ${typeColor}">${p.doc_type||''}</span>
+      <span class="tag tag-gray">${p.id}</span>
+      ${p.year?`<span class="tag tag-gray">${p.year}</span>`:''}
+      ${p.access?`<span class="tag tag-gray">${p.access}</span>`:''}
+    </div>
+    <div class="detail-title">${p.title}</div>
+    <div class="detail-meta">${p.authors||''} ${p.venue?'· '+p.venue:''}</div>
+
+    ${p.purpose?`<div class="detail-section">
+      <div class="detail-section-title">📌 收錄目的</div>
+      <div class="detail-purpose">${p.purpose}</div>
+    </div>`:''}
+
+    ${p.abstract_note?`<div class="detail-section">
+      <div class="detail-section-title">📖 中文精華摘要</div>
+      <div class="detail-abstract">${p.abstract_note}</div>
+    </div>`:''}
+
+    ${p.value_to_project?`<div class="detail-section">
+      <div class="detail-section-title">💡 對專案價值</div>
+      <div class="detail-value">${p.value_to_project}</div>
+    </div>`:''}
+
+    <div class="detail-section">
+      <div class="detail-section-title">🏷 標籤</div>
+      <div class="detail-tags">${tags}</div>
+    </div>
+
+    ${link?`<div class="detail-section">
+      <div class="detail-section-title">🔗 連結</div>
+      <a href="${link}" target="_blank" class="detail-link">↗ ${link.length>50?link.slice(0,50)+'…':link}</a>
+    </div>`:''}
+
+    <div style="display:flex;gap:6px;margin-top:16px;flex-wrap:wrap">
+      <button class="btn btn-s" onclick="pinPaper('${p.id}')">📌 釘選到 AI</button>
+      ${link?`<a href="${link}" target="_blank" class="btn btn-s">↗ 開啟原文</a>`:''}
+    </div>
+  `;
+}
 function pinPaper(id){if(pinnedIds.has(id))pinnedIds.delete(id);else pinnedIds.add(id);renderCtx();toast(pinnedIds.has(id)?'已釘選':'已取消','success')}
 
 // ══════════════════════════════════════════════
