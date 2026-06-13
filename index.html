@@ -321,10 +321,13 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 <div class="view" id="v-add">
   <div class="help-box" id="help-add">
     <button class="close-help" onclick="this.parentElement.classList.add('hidden')">✕</button>
-    <h4>➕ 新增文獻 — 三種方式擴充知識庫</h4>
-    <strong>方式一：AI 自動填入</strong> — 貼上論文標題、摘要或 DOI，AI 會自動辨識並填入所有欄位（標籤、用途、對專案價值），每次約 $0.001。<br>
-    <strong>方式二：PubMed 批次搜尋</strong> — 輸入關鍵字搜尋 PubMed，勾選想收錄的論文，一鍵批次加入（不需 AI，免費）。<br>
-    <strong>方式三：手動填寫</strong> — 直接填欄位，適合專利或商用產品。
+    <h4>➕ 新增文獻 — 四種方式擴充知識庫</h4>
+    <strong>方式一：📎 書籤小工具（最方便）</strong> — 把下方按鈕拖到書籤列，瀏覽論文時點一下就自動匯入 litdb。<br>
+    <strong>方式二：AI 自動填入</strong> — 貼上論文標題、摘要或 DOI，AI 自動辨識填入所有欄位，每次約 $0.001。<br>
+    <strong>方式三：PubMed 批次搜尋</strong> — 輸入關鍵字搜尋 PubMed，勾選想收錄的論文，一鍵批次加入（免費）。<br>
+    <strong>方式四：手動填寫</strong> — 直接填欄位，適合專利或商用產品。<br><br>
+    <span style="font-size:12px">👉 <strong>書籤安裝：</strong>把這個連結拖到書籤列 → </span>
+    <a href="javascript:void(window.open('https://chiuchangru.github.io/litdb/?title='+encodeURIComponent(document.title)+'&url='+encodeURIComponent(location.href)+'&abstract='+encodeURIComponent((document.querySelector('meta[name=description]')||{}).content||''),'_blank'))" style="display:inline-block;padding:4px 12px;background:var(--accent);color:#fff;border-radius:6px;text-decoration:none;font-size:12px;font-weight:600;cursor:grab" onclick="event.preventDefault();toast('請用滑鼠拖曳此按鈕到書籤列！','')">📎 存入 LitDB</a>
   </div>
   <div class="add-layout">
     <!-- Left: Batch PubMed Search -->
@@ -417,7 +420,35 @@ window.onload = async () => {
   if(cfg.proxy) document.getElementById('cfgProxy').value = cfg.proxy;
   if(cfg.dataUrl) document.getElementById('cfgDataUrl').value = cfg.dataUrl;
   await loadDB();
+  checkBookmarkletParams();
 };
+
+// 從書籤小工具接收資料
+function checkBookmarkletParams() {
+  const params = new URLSearchParams(window.location.search);
+  const title = params.get('title');
+  const url = params.get('url');
+  const abstract = params.get('abstract');
+  if(!title && !url) return;
+
+  // 切到新增文獻分頁
+  showView('add', document.querySelectorAll('.tab')[4]);
+
+  // 組合內容填入 AI 自動填入框
+  let raw = '';
+  if(title) raw += title + '\n\n';
+  if(abstract) raw += abstract + '\n\n';
+  if(url) raw += url;
+  document.getElementById('addRaw').value = raw.trim();
+
+  // 也預填連結
+  if(url) document.getElementById('addLink').value = url;
+
+  // 清除 URL 參數（避免重整時重複觸發）
+  window.history.replaceState({}, '', window.location.pathname);
+
+  toast('已從書籤匯入，點「AI 自動填入」完成分類', 'success');
+}
 
 async function loadDB() {
   // Try localStorage first, then remote, then same-dir
