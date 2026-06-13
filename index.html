@@ -75,6 +75,10 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 .detail-link{display:inline-flex;align-items:center;gap:4px;color:var(--accent);text-decoration:none;font-size:12px;margin-top:4px}
 .detail-link:hover{text-decoration:underline}
 .detail-empty{text-align:center;padding:60px 16px;color:var(--muted);font-size:13px}
+.detail-figure{width:100%;border-radius:6px;border:1px solid var(--border);margin-bottom:12px;cursor:pointer;transition:var(--tr)}
+.detail-figure:hover{border-color:var(--accent)}
+.fig-caption{font-size:11px;color:var(--muted);text-align:center;margin-top:-8px;margin-bottom:12px}
+.fig-placeholder{width:100%;padding:24px;background:var(--card);border:1px dashed var(--border);border-radius:6px;text-align:center;font-size:12px;color:var(--muted);margin-bottom:12px}
 
 /* ═══ VIEW 2: GRAPH ═══ */
 .graph-container{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);min-height:500px;overflow:hidden}
@@ -334,6 +338,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
         <div class="field"><label>精華摘要</label><textarea id="addAbstract" rows="3"></textarea></div>
         <div class="field"><label>對專案的價值</label><textarea id="addValue" rows="2"></textarea></div>
         <div class="field"><label>連結</label><input type="text" id="addLink" placeholder="https://..."></div>
+        <div class="field"><label>簡圖 URL（選填）</label><input type="text" id="addFigure" placeholder="https://... 或留空，之後上傳 img/ID.png"></div>
         <button class="btn btn-p" style="width:100%" onclick="addPaper()">✅ 加入資料庫</button>
       </div>
     </div>
@@ -528,6 +533,8 @@ function showDetail(i) {
     <div class="detail-title">${p.title}</div>
     <div class="detail-meta">${p.authors||''} ${p.venue?'· '+p.venue:''}</div>
 
+    <div id="detailFigure_${i}"></div>
+
     ${p.purpose?`<div class="detail-section">
       <div class="detail-section-title">📌 收錄目的</div>
       <div class="detail-purpose">${p.purpose}</div>
@@ -558,6 +565,30 @@ function showDetail(i) {
       ${link?`<a href="${link}" target="_blank" class="btn btn-s">↗ 開啟原文</a>`:''}
     </div>
   `;
+
+  // 載入圖片：先試 figure 欄位，再試 img/ID.png
+  const figEl = document.getElementById('detailFigure_' + i);
+  if(figEl) {
+    const figUrl = p.figure || '';
+    const localUrl = 'img/' + p.id + '.png';
+
+    if(figUrl) {
+      figEl.innerHTML = `<img src="${figUrl}" class="detail-figure" onclick="window.open('${figUrl}','_blank')" onerror="tryLocalFig(this,'${localUrl}')"><div class="fig-caption">${p.figure_caption||'點擊放大'}</div>`;
+    } else {
+      // 嘗試本地圖片
+      const img = new Image();
+      img.onload = () => { figEl.innerHTML = `<img src="${localUrl}" class="detail-figure" onclick="window.open('${localUrl}','_blank')"><div class="fig-caption">點擊放大</div>`; };
+      img.onerror = () => { figEl.innerHTML = `<div class="fig-placeholder">📷 尚無簡圖<br><span style="font-size:10px">上傳 img/${p.id}.png 或在 papers.json 加入 figure URL</span></div>`; };
+      img.src = localUrl;
+    }
+  }
+}
+
+function tryLocalFig(el, localUrl) {
+  const img = new Image();
+  img.onload = () => { el.src = localUrl; };
+  img.onerror = () => { el.parentElement.innerHTML = `<div class="fig-placeholder">📷 圖片載入失敗</div>`; };
+  img.src = localUrl;
 }
 function pinPaper(id){if(pinnedIds.has(id))pinnedIds.delete(id);else pinnedIds.add(id);renderCtx();toast(pinnedIds.has(id)?'已釘選':'已取消','success')}
 
@@ -1014,13 +1045,15 @@ function addPaper() {
   };
   const link = document.getElementById('addLink').value.trim();
   if(link) paper.links = {ref: link};
+  const figure = document.getElementById('addFigure').value.trim();
+  if(figure) paper.figure = figure;
 
   DB.papers.push(paper);
   saveDB();
   onDBLoaded();
 
   // Clear form
-  ['addId','addTitle','addAuthors','addYear','addTags','addPurpose','addAbstract','addValue','addLink','addRaw'].forEach(id=>document.getElementById(id).value='');
+  ['addId','addTitle','addAuthors','addYear','addTags','addPurpose','addAbstract','addValue','addLink','addFigure','addRaw'].forEach(id=>document.getElementById(id).value='');
   toast(`已新增 ${paper.id}: ${paper.title.slice(0,30)}...`,'success');
 }
 </script>
