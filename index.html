@@ -154,8 +154,14 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 .help-box.hidden{display:none}
 /* Batch search */
 .batch-results{max-height:400px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin-top:10px}
-.batch-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:12px;display:flex;gap:8px;align-items:flex-start}
+.batch-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:12px}
 .batch-card.added{opacity:.5;border-color:var(--accent2)}
+.batch-header{display:flex;gap:8px;align-items:flex-start}
+.batch-check{flex-shrink:0;margin-top:3px;accent-color:var(--accent2)}
+.batch-abstract{margin-top:6px;padding:8px 10px;background:var(--surface);border-radius:4px;font-size:12px;color:var(--muted);line-height:1.6;display:none;max-height:200px;overflow-y:auto}
+.batch-abstract.show{display:block}
+.batch-zh{margin-top:6px;padding:8px 10px;background:var(--surface);border-left:3px solid var(--accent2);border-radius:0 4px 4px 0;font-size:12px;color:var(--text);line-height:1.6}
+.batch-actions{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
 .batch-check{flex-shrink:0;margin-top:2px;accent-color:var(--accent2)}
 @media(max-width:900px){.browse-layout,.chat-layout,.add-layout{grid-template-columns:1fr}}
 </style>
@@ -1115,14 +1121,51 @@ async function batchSearch() {
 
 function renderBatch() {
   document.getElementById('batchResults').innerHTML = batchPapers.map((p,i)=>`
-    <div class="batch-card${p._exists?' added':''}">
-      <input type="checkbox" class="batch-check" ${p._checked?'checked':''} ${p._exists?'disabled':''} onchange="batchPapers[${i}]._checked=this.checked">
-      <div style="flex:1;min-width:0">
-        <div style="font-weight:600;color:${p._exists?'var(--muted)':'var(--text)'}">${p.title}</div>
-        <div style="color:var(--muted);margin-top:2px">${p.authors} · ${p.journal} · ${p.year}</div>
-        ${p._exists?'<span style="color:var(--accent2);font-size:10px">✓ 已收錄</span>':''}
+    <div class="batch-card${p._exists?' added':''}" id="bc_${i}">
+      <div class="batch-header">
+        <input type="checkbox" class="batch-check" ${p._checked?'checked':''} ${p._exists?'disabled':''} onchange="batchPapers[${i}]._checked=this.checked">
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;color:${p._exists?'var(--muted)':'var(--text)'}; line-height:1.4">${p.title}</div>
+          <div style="color:var(--muted);margin-top:2px">${p.authors} · ${p.journal} · ${p.year}</div>
+          ${p._exists?'<span style="color:var(--accent2);font-size:10px">✓ 已收錄</span>':''}
+        </div>
       </div>
+      <div class="batch-actions">
+        ${p.abstract?`<button class="btn btn-s" style="padding:2px 8px;font-size:11px" onclick="toggleBatchAbstract(${i})">📄 摘要</button>`:'<span style="font-size:10px;color:var(--muted)">（無摘要）</span>'}
+        ${p.abstract&&cfg.proxy?`<button class="btn btn-s" style="padding:2px 8px;font-size:11px" onclick="translateBatch(${i})">🌐 翻譯</button>`:''}
+        ${p.pmid?`<a href="https://pubmed.ncbi.nlm.nih.gov/${p.pmid}/" target="_blank" class="btn btn-s" style="padding:2px 8px;font-size:11px">↗ PubMed</a>`:''}
+      </div>
+      ${p.abstract?`<div class="batch-abstract" id="ba_${i}">${p.abstract}</div>`:''}
+      ${p._zhAbstract?`<div class="batch-zh" id="bz_${i}"><strong style="font-size:10px;color:var(--accent2)">🌐 中文翻譯</strong><br>${p._zhAbstract}</div>`:'<div id="bz_${i}"></div>'}
     </div>`).join('');
+}
+
+function toggleBatchAbstract(i) {
+  const el = document.getElementById('ba_'+i);
+  if(el) el.classList.toggle('show');
+}
+
+async function translateBatch(i) {
+  const p = batchPapers[i];
+  if(!p.abstract||!cfg.proxy) return;
+  if(p._zhAbstract) { document.getElementById('bz_'+i).style.display='block'; return; }
+
+  const bzEl = document.getElementById('bz_'+i);
+  bzEl.innerHTML = '<span class="spinner"></span> 翻譯中...';
+  bzEl.style.display = 'block';
+
+  try {
+    const r = await fetch(cfg.proxy, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({model:'claude-haiku-4-5-20251001', max_tokens:600,
+        messages:[{role:'user',content:`將以下醫學文獻摘要翻譯成繁體中文，保留專業術語原文（括號附註）。簡潔精確，不超過200字。\n\n${p.abstract.slice(0,1200)}`}]})
+    });
+    const data = await r.json();
+    p._zhAbstract = data.content?.[0]?.text || '翻譯失敗';
+    bzEl.innerHTML = `<div class="batch-zh"><strong style="font-size:10px;color:var(--accent2)">🌐 中文翻譯</strong><br>${p._zhAbstract}</div>`;
+  } catch(e) {
+    bzEl.innerHTML = `<span style="color:var(--danger);font-size:11px">翻譯失敗：${e.message}</span>`;
+  }
 }
 
 function batchSelectAll() {
