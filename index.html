@@ -203,7 +203,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
     <div class="filter-panel panel">
       <div class="panel-h">🔍 篩選</div>
       <div style="padding:12px">
-        <div class="field"><label>關鍵字</label><input type="text" id="fKw" placeholder="搜尋標題/摘要/用途..." oninput="filterPapers()"></div>
+        <div class="field"><label>關鍵字</label><input type="text" id="fKw" placeholder="多關鍵字用逗號/空白/分號分隔（OR）" oninput="filterPapers()"></div>
         <div class="field"><label>文獻類型</label><select id="fType" onchange="filterPapers()"><option value="">全部</option></select></div>
         <div class="field"><label>基材</label><select id="fSub" onchange="filterPapers()"><option value="">全部</option></select></div>
         <div class="field"><label>固化方式</label><select id="fCure" onchange="filterPapers()"><option value="">全部</option></select></div>
@@ -516,8 +516,9 @@ function filterPapers() {
     if(app && !tags.includes(app)) return false;
     if(activeTags.size && ![...activeTags].every(t=>tags.includes(t))) return false;
     if(kw) {
-      const hay = `${p.title} ${p.abstract_note} ${p.purpose} ${p.value_to_project} ${tags.join(' ')} ${p.authors}`.toLowerCase();
-      if(!hay.includes(kw)) return false;
+      const hay = `${p.title} ${p.abstract_note} ${p.purpose} ${p.value_to_project} ${tags.join(' ')} ${p.authors} ${p.id} ${p.venue||''}`.toLowerCase();
+      const terms = kw.split(/[,;，；\s]+/).map(s=>s.trim()).filter(Boolean);
+      if(terms.length && !terms.some(t=>hay.includes(t))) return false;
     }
     return true;
   });
