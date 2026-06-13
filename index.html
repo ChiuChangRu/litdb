@@ -253,13 +253,29 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
     矩陣中的數字代表「同時涵蓋該行與該列標籤」的文獻篇數。<span class="tip">·</span>代表零篇——這就是你的知識缺口。例如：<span class="tip">TPU × plasma</span>若為 0，代表資料庫中沒有 TPU 基材搭配 plasma 固化的文獻，值得去搜尋。<strong>點擊格子</strong>可查看具體文獻，點擊缺口格子可直接問 AI 建議搜尋關鍵字。
   </div>
   <div class="panel">
-    <div class="panel-h">基材 × 固化方式 覆蓋度矩陣</div>
+    <div class="panel-h">① 基材 × 固化方式</div>
     <div class="heatmap-wrap" id="heatmapWrap"></div>
   </div>
   <div class="gap-detail" id="gapDetail"></div>
   <div class="panel" style="margin-top:16px">
-    <div class="panel-h">應用 × 親水高分子 覆蓋度矩陣</div>
+    <div class="panel-h">② 應用 × 親水高分子</div>
     <div class="heatmap-wrap" id="heatmapWrap2"></div>
+  </div>
+  <div class="panel" style="margin-top:16px">
+    <div class="panel-h">③ 基材 × 親水高分子</div>
+    <div class="heatmap-wrap" id="heatmapWrap3"></div>
+  </div>
+  <div class="panel" style="margin-top:16px">
+    <div class="panel-h">④ 應用 × 固化方式</div>
+    <div class="heatmap-wrap" id="heatmapWrap4"></div>
+  </div>
+  <div class="panel" style="margin-top:16px">
+    <div class="panel-h">⑤ 基材 × 錨固劑/底塗</div>
+    <div class="heatmap-wrap" id="heatmapWrap5"></div>
+  </div>
+  <div class="panel" style="margin-top:16px">
+    <div class="panel-h">⑥ 親水高分子 × 錨固劑/底塗</div>
+    <div class="heatmap-wrap" id="heatmapWrap6"></div>
   </div>
 </div>
 
@@ -863,8 +879,18 @@ function buildGraph() {
 // ══════════════════════════════════════════════
 function buildHeatmaps() {
   const dict = DB.meta.tag_dictionary || {};
-  buildOneHeatmap('heatmapWrap', dict.substrate||[], dict.cure_method||[], '基材','固化');
-  buildOneHeatmap('heatmapWrap2', dict.application||[], dict.hydrophilic_polymer||[], '應用','高分子');
+  const sub = dict.substrate||[];
+  const poly = dict.hydrophilic_polymer||[];
+  const cure = dict.cure_method||[];
+  const anchor = dict.anchor_primer||[];
+  const app = dict.application||[];
+
+  buildOneHeatmap('heatmapWrap',  sub,    cure,   '基材','固化方式');
+  buildOneHeatmap('heatmapWrap2', app,    poly,   '應用','親水高分子');
+  buildOneHeatmap('heatmapWrap3', sub,    poly,   '基材','親水高分子');
+  buildOneHeatmap('heatmapWrap4', app,    cure,   '應用','固化方式');
+  buildOneHeatmap('heatmapWrap5', sub,    anchor, '基材','錨固劑');
+  buildOneHeatmap('heatmapWrap6', poly,   anchor, '親水高分子','錨固劑');
 }
 
 function buildOneHeatmap(wrapperId, rows, cols, rowLabel, colLabel) {
