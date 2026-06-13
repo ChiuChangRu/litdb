@@ -80,6 +80,21 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 .fig-caption{font-size:11px;color:var(--muted);text-align:center;margin-top:-8px;margin-bottom:12px}
 .fig-placeholder{width:100%;padding:24px;background:var(--card);border:1px dashed var(--border);border-radius:6px;text-align:center;font-size:12px;color:var(--muted);margin-bottom:12px}
 
+/* Citation tree */
+.cite-tree{margin-top:14px;border-top:1px solid var(--border);padding-top:14px}
+.cite-branch{margin-bottom:12px}
+.cite-branch-title{font-size:11px;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.cite-branch-title .cnt{background:var(--accent2);color:#0f1117;border-radius:10px;padding:0 6px;font-size:10px}
+.cite-node{display:flex;gap:8px;align-items:flex-start;padding:6px 8px;margin-bottom:4px;border-radius:6px;font-size:12px;transition:var(--tr);border:1px solid transparent}
+.cite-node:hover{background:var(--card);border-color:var(--border)}
+.cite-node.in-db{border-left:3px solid var(--accent2);background:#1a2a20}
+.cite-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.cite-dot.ref{background:var(--accent)}.cite-dot.cited{background:var(--warn)}.cite-dot.indb{background:var(--accent2)}
+.cite-title{font-weight:500;color:var(--text);line-height:1.4}
+.cite-meta{font-size:11px;color:var(--muted);margin-top:2px}
+.cite-actions{display:flex;gap:4px;margin-top:4px}
+.cite-loading{text-align:center;padding:20px;color:var(--muted);font-size:12px}
+
 /* ═══ VIEW 2: GRAPH ═══ */
 .graph-container{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);min-height:500px;overflow:hidden}
 .graph-controls{display:flex;gap:8px;padding:10px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center}
@@ -563,7 +578,9 @@ function showDetail(i) {
     <div style="display:flex;gap:6px;margin-top:16px;flex-wrap:wrap">
       <button class="btn btn-s" onclick="pinPaper('${p.id}')">📌 釘選到 AI</button>
       ${link?`<a href="${link}" target="_blank" class="btn btn-s">↗ 開啟原文</a>`:''}
+      <button class="btn btn-p" onclick="loadCiteTree(${i})" style="margin-left:auto">🌳 引文樹</button>
     </div>
+    <div id="citeTree_${i}"></div>
   `;
 
   // 載入圖片：先試 figure 欄位，再試 img/ID.png
@@ -591,6 +608,157 @@ function tryLocalFig(el, localUrl) {
   img.src = localUrl;
 }
 function pinPaper(id){if(pinnedIds.has(id))pinnedIds.delete(id);else pinnedIds.add(id);renderCtx();toast(pinnedIds.has(id)?'已釘選':'已取消','success')}
+
+// ══════════════════════════════════════════════
+// CITATION TREE (Semantic Scholar API, 免費)
+// ══════════════════════════════════════════════
+const S2_BASE = 'https://api.semanticscholar.org/graph/v1/paper';
+const S2_FIELDS = 'title,year,authors,citationCount,externalIds,abstract';
+
+async function loadCiteTree(i) {
+  const p = filtered[i];
+  const el = document.getElementById('citeTree_' + i);
+  if(!el) return;
+  el.innerHTML = '<div class="cite-loading"><span class="spinner"></span> 查詢 Semantic Scholar（免費）...</div>';
+
+  // 用 DOI、PMID 或標題搜尋
+  let s2id = null;
+  try {
+    if(p.doi) {
+      const r = await fetch(`${S2_BASE}/DOI:${p.doi}?fields=paperId`);
+      if(r.ok) { const d = await r.json(); s2id = d.paperId; }
+    }
+    if(!s2id && p.pmid) {
+      const r = await fetch(`${S2_BASE}/PMID:${p.pmid}?fields=paperId`);
+      if(r.ok) { const d = await r.json(); s2id = d.paperId; }
+    }
+    if(!s2id) {
+      // 用標題搜尋
+      const cleanTitle = (p.title||'').replace(/\(.*?\)/g,'').trim().slice(0,100);
+      const r = await fetch(`${S2_BASE}/search?query=${encodeURIComponent(cleanTitle)}&limit=3&fields=paperId,title`);
+      if(r.ok) {
+        const d = await r.json();
+        if(d.data && d.data.length) s2id = d.data[0].paperId;
+      }
+    }
+  } catch(e) { console.warn('S2 search error:', e); }
+
+  if(!s2id) {
+    el.innerHTML = '<div class="cite-loading" style="color:var(--warn)">⚠ 在 Semantic Scholar 中找不到此文獻<br><span style="font-size:11px;color:var(--muted)">專利通常不在學術資料庫中，僅期刊論文可用</span></div>';
+    return;
+  }
+
+  // 取得引用和參考文獻
+  el.innerHTML = '<div class="cite-loading"><span class="spinner"></span> 載入引文網絡...</div>';
+
+  try {
+    const [citRes, refRes] = await Promise.all([
+      fetch(`${S2_BASE}/${s2id}/citations?fields=${S2_FIELDS}&limit=20`).then(r=>r.ok?r.json():{data:[]}),
+      fetch(`${S2_BASE}/${s2id}/references?fields=${S2_FIELDS}&limit=20`).then(r=>r.ok?r.json():{data:[]})
+    ]);
+
+    const citations = (citRes.data||[]).map(d=>d.citingPaper).filter(p=>p&&p.title);
+    const references = (refRes.data||[]).map(d=>d.citedPaper).filter(p=>p&&p.title);
+
+    renderCiteTree(el, p, citations, references);
+  } catch(e) {
+    el.innerHTML = `<div class="cite-loading" style="color:var(--danger)">載入失敗：${e.message}</div>`;
+  }
+}
+
+function renderCiteTree(el, paper, citations, references) {
+  // 檢查哪些在資料庫中
+  function isInDB(s2paper) {
+    const doi = s2paper.externalIds?.DOI;
+    const pmid = s2paper.externalIds?.PubMed;
+    return DB.papers.some(p =>
+      (doi && p.doi === doi) ||
+      (pmid && p.pmid === pmid) ||
+      (p.title && s2paper.title && p.title.toLowerCase().includes(s2paper.title.toLowerCase().slice(0,40)))
+    );
+  }
+
+  function getDbMatch(s2paper) {
+    const doi = s2paper.externalIds?.DOI;
+    const pmid = s2paper.externalIds?.PubMed;
+    return DB.papers.find(p =>
+      (doi && p.doi === doi) ||
+      (pmid && p.pmid === pmid) ||
+      (p.title && s2paper.title && p.title.toLowerCase().includes(s2paper.title.toLowerCase().slice(0,40)))
+    );
+  }
+
+  function nodeHTML(s2p, type) {
+    const indb = isInDB(s2p);
+    const match = indb ? getDbMatch(s2p) : null;
+    const authors = (s2p.authors||[]).slice(0,2).map(a=>a.name).join(', ');
+    const pmid = s2p.externalIds?.PubMed || '';
+    const doi = s2p.externalIds?.DOI || '';
+    const link = doi ? `https://doi.org/${doi}` : pmid ? `https://pubmed.ncbi.nlm.nih.gov/${pmid}/` : '';
+
+    return `<div class="cite-node${indb?' in-db':''}">
+      <div class="cite-dot ${indb?'indb':type}"></div>
+      <div style="flex:1;min-width:0">
+        <div class="cite-title">${s2p.title}</div>
+        <div class="cite-meta">
+          ${authors}${s2p.year?' · '+s2p.year:''}${s2p.citationCount?' · 引用 '+s2p.citationCount+' 次':''}
+          ${indb?` · <span style="color:var(--accent2)">✓ 資料庫 ${match.id}</span>`:''}
+        </div>
+        <div class="cite-actions">
+          ${link?`<a href="${link}" target="_blank" class="btn btn-s" style="padding:2px 8px;font-size:11px">↗ 原文</a>`:''}
+          ${!indb?`<button class="btn btn-s" style="padding:2px 8px;font-size:11px" onclick='quickAddFromS2(${JSON.stringify({title:s2p.title,authors,year:s2p.year,doi,pmid,abstract:(s2p.abstract||"").slice(0,300)}).replace(/'/g,"\\'")})'> + 加入</button>`:''}
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // 排序：資料庫中的排前面，然後按引用數排
+  citations.sort((a,b)=>(isInDB(b)?1:0)-(isInDB(a)?1:0) || (b.citationCount||0)-(a.citationCount||0));
+  references.sort((a,b)=>(isInDB(b)?1:0)-(isInDB(a)?1:0) || (b.citationCount||0)-(a.citationCount||0));
+
+  const citInDb = citations.filter(isInDB).length;
+  const refInDb = references.filter(isInDB).length;
+
+  el.innerHTML = `<div class="cite-tree">
+    <div class="cite-branch">
+      <div class="cite-branch-title">⬆ 被引用（Cited by）<span class="cnt">${citations.length}</span>${citInDb?`<span style="font-size:10px;color:var(--accent2)">${citInDb} 篇在資料庫中</span>`:''}</div>
+      ${citations.length ? citations.map(c=>nodeHTML(c,'cited')).join('') : '<div style="padding:8px;font-size:12px;color:var(--muted)">尚無引用記錄</div>'}
+    </div>
+    <div class="cite-branch">
+      <div class="cite-branch-title">⬇ 參考文獻（References）<span class="cnt">${references.length}</span>${refInDb?`<span style="font-size:10px;color:var(--accent2)">${refInDb} 篇在資料庫中</span>`:''}</div>
+      ${references.length ? references.map(r=>nodeHTML(r,'ref')).join('') : '<div style="padding:8px;font-size:12px;color:var(--muted)">無參考文獻資料</div>'}
+    </div>
+  </div>`;
+}
+
+function quickAddFromS2(info) {
+  const prefix = 'A';
+  const maxNum = DB.papers.filter(p=>p.id.startsWith(prefix)).map(p=>parseInt(p.id.slice(1))||0).reduce((a,b)=>Math.max(a,b),0);
+  const newId = prefix + String(maxNum+1).padStart(2,'0');
+
+  const paper = {
+    id: newId,
+    title: info.title,
+    authors: info.authors,
+    year: info.year || null,
+    venue: '',
+    doi: info.doi || null,
+    pmid: info.pmid || null,
+    doc_type: '期刊論文',
+    access: '開放摘要',
+    tags: [],
+    purpose: '',
+    abstract_note: info.abstract || '',
+    value_to_project: '',
+    links: {}
+  };
+  if(info.doi) paper.links.doi = 'https://doi.org/' + info.doi;
+  else if(info.pmid) paper.links.pubmed = 'https://pubmed.ncbi.nlm.nih.gov/' + info.pmid + '/';
+
+  DB.papers.push(paper);
+  saveDB(); onDBLoaded();
+  toast(`已加入 ${newId}: ${info.title.slice(0,30)}...（標籤待補）`, 'success');
+}
 
 // ══════════════════════════════════════════════
 // GRAPH: Tag Co-occurrence
