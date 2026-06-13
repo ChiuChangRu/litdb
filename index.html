@@ -161,6 +161,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+TC:wght@400;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
@@ -168,6 +169,12 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
   <div class="logo">Lit<span>DB</span></div>
   <span style="font-size:12px;color:var(--muted)">親水塗層文獻知識管理</span>
   <div class="header-r">
+    <span id="gUserLabel" style="font-size:12px;color:var(--accent2);display:none"></span>
+    <button class="btn btn-s" id="gSignInBtn" onclick="googleSignIn()">G 登入 Google</button>
+    <button class="btn btn-s" id="gSaveBtn" style="display:none" onclick="saveToSheets()">📊 存到 Sheets</button>
+    <button class="btn btn-s" id="gLoadBtn" style="display:none" onclick="loadFromSheets()">📂 從 Sheets 載入</button>
+    <button class="btn btn-s" id="gOutBtn" style="display:none" onclick="googleSignOut()" style="color:var(--warn)">登出</button>
+    <span style="color:var(--border)">|</span>
     <span id="dbStats">—</span>
     <button class="btn btn-s" onclick="openSettings()">⚙</button>
     <button class="btn btn-s" onclick="exportDB()">⬇ 匯出</button>
@@ -1249,6 +1256,195 @@ function addPaper() {
   // Clear form
   ['addId','addTitle','addAuthors','addYear','addTags','addPurpose','addAbstract','addValue','addLink','addFigure','addRaw'].forEach(id=>document.getElementById(id).value='');
   toast(`已新增 ${paper.id}: ${paper.title.slice(0,30)}...`,'success');
+}
+
+// ══════════════════════════════════════════════
+// GOOGLE: Sign-In + Sheets Sync
+// ══════════════════════════════════════════════
+const G_CLIENT_ID = '125175641040-ociephfgmm1lhauegv1jlvr0mumecagd.apps.googleusercontent.com';
+const G_SCOPES = 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.file';
+const SHEETS_API = 'https://sheets.googleapis.com/v4/spreadsheets';
+const DRIVE_API = 'https://www.googleapis.com/drive/v3/files';
+let gToken = null;
+
+function googleSignIn() {
+  if(!window.google?.accounts?.oauth2) {
+    toast('Google 登入服務載入中，請稍候再試','error');
+    return;
+  }
+  const client = google.accounts.oauth2.initTokenClient({
+    client_id: G_CLIENT_ID,
+    scope: G_SCOPES,
+    callback: (resp) => {
+      if(resp.error) { toast('登入失敗：'+resp.error,'error'); return; }
+      gToken = resp.access_token;
+      onGoogleSignedIn();
+    }
+  });
+  client.requestAccessToken();
+}
+
+async function onGoogleSignedIn() {
+  // 取得使用者資訊
+  try {
+    const r = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+      headers: {'Authorization': 'Bearer '+gToken}
+    });
+    const u = await r.json();
+    document.getElementById('gUserLabel').textContent = '✓ '+u.name;
+    document.getElementById('gUserLabel').style.display = '';
+  } catch(e) {}
+
+  document.getElementById('gSignInBtn').style.display = 'none';
+  document.getElementById('gSaveBtn').style.display = '';
+  document.getElementById('gLoadBtn').style.display = '';
+  document.getElementById('gOutBtn').style.display = '';
+  toast('Google 登入成功','success');
+}
+
+function googleSignOut() {
+  gToken = null;
+  document.getElementById('gUserLabel').style.display = 'none';
+  document.getElementById('gSignInBtn').style.display = '';
+  document.getElementById('gSaveBtn').style.display = 'none';
+  document.getElementById('gLoadBtn').style.display = 'none';
+  document.getElementById('gOutBtn').style.display = 'none';
+  toast('已登出 Google','');
+}
+
+// ── 存到 Google Sheets ──
+async function saveToSheets() {
+  if(!gToken) { toast('請先登入 Google','error'); return; }
+  toast('儲存中...','');
+
+  try {
+    // 找或建立 LitDB 試算表
+    let sheetId = await findLitDBSheet();
+    if(!sheetId) sheetId = await createLitDBSheet();
+
+    // 轉換 papers 為二維陣列
+    const headers = ['id','title','authors','year','venue','doi','pmid','doc_type','access','tags','purpose','abstract_note','value_to_project','links','figure'];
+    const rows = [headers];
+    DB.papers.forEach(p => {
+      rows.push(headers.map(h => {
+        const v = p[h];
+        if(h==='tags') return (v||[]).join('; ');
+        if(h==='links') return JSON.stringify(v||{});
+        return v==null?'':String(v);
+      }));
+    });
+
+    // 寫入（覆蓋整個 Sheet1）
+    await fetch(`${SHEETS_API}/${sheetId}/values/Sheet1?valueInputOption=RAW`, {
+      method: 'PUT',
+      headers: {'Authorization':'Bearer '+gToken, 'Content-Type':'application/json'},
+      body: JSON.stringify({range:'Sheet1', values: rows})
+    });
+
+    // 也存一份完整 JSON 到 meta sheet
+    // 先確認 meta sheet 存在
+    const sheetInfo = await fetch(`${SHEETS_API}/${sheetId}`, {
+      headers: {'Authorization':'Bearer '+gToken}
+    }).then(r=>r.json());
+
+    const hasMetaSheet = (sheetInfo.sheets||[]).some(s=>s.properties.title==='_meta');
+    if(!hasMetaSheet) {
+      await fetch(`${SHEETS_API}/${sheetId}:batchUpdate`, {
+        method:'POST',
+        headers:{'Authorization':'Bearer '+gToken,'Content-Type':'application/json'},
+        body: JSON.stringify({requests:[{addSheet:{properties:{title:'_meta'}}}]})
+      });
+    }
+
+    // 把完整 JSON 存到 _meta!A1
+    await fetch(`${SHEETS_API}/${sheetId}/values/_meta!A1?valueInputOption=RAW`, {
+      method: 'PUT',
+      headers: {'Authorization':'Bearer '+gToken, 'Content-Type':'application/json'},
+      body: JSON.stringify({range:'_meta!A1', values: [[JSON.stringify(DB)]]})
+    });
+
+    localStorage.setItem('litdb_sheetId', sheetId);
+    toast(`已儲存 ${DB.papers.length} 篇到 Google Sheets ✓`,'success');
+  } catch(e) {
+    toast('儲存失敗：'+e.message,'error');
+  }
+}
+
+// ── 從 Google Sheets 載入 ──
+async function loadFromSheets() {
+  if(!gToken) { toast('請先登入 Google','error'); return; }
+  toast('載入中...','');
+
+  try {
+    let sheetId = localStorage.getItem('litdb_sheetId');
+    if(!sheetId) sheetId = await findLitDBSheet();
+    if(!sheetId) { toast('找不到 LitDB 試算表，請先儲存一次','error'); return; }
+
+    // 先嘗試從 _meta 載入完整 JSON
+    try {
+      const metaRes = await fetch(`${SHEETS_API}/${sheetId}/values/_meta!A1`, {
+        headers: {'Authorization':'Bearer '+gToken}
+      });
+      const metaData = await metaRes.json();
+      if(metaData.values && metaData.values[0] && metaData.values[0][0]) {
+        const fullDB = JSON.parse(metaData.values[0][0]);
+        if(fullDB.papers && fullDB.papers.length) {
+          DB = fullDB;
+          saveDB(); onDBLoaded();
+          toast(`已從 Sheets 載入 ${DB.papers.length} 篇（完整格式）`,'success');
+          return;
+        }
+      }
+    } catch(e) { console.warn('meta load failed, trying table format'); }
+
+    // 備援：從 Sheet1 表格載入
+    const res = await fetch(`${SHEETS_API}/${sheetId}/values/Sheet1`, {
+      headers: {'Authorization':'Bearer '+gToken}
+    });
+    const data = await res.json();
+    const rows = data.values || [];
+    if(rows.length < 2) { toast('試算表是空的','error'); return; }
+
+    const headers = rows[0];
+    const papers = rows.slice(1).map(row => {
+      const obj = {};
+      headers.forEach((h,i) => {
+        let v = row[i] || '';
+        if(h==='tags') v = v.split('; ').filter(Boolean);
+        else if(h==='links') { try{v=JSON.parse(v)}catch(e){v={}} }
+        else if(h==='year') v = parseInt(v)||null;
+        else if(v==='') v = null;
+        obj[h] = v;
+      });
+      return obj;
+    });
+
+    DB.papers = papers;
+    saveDB(); onDBLoaded();
+    toast(`已從 Sheets 載入 ${papers.length} 篇`,'success');
+  } catch(e) {
+    toast('載入失敗：'+e.message,'error');
+  }
+}
+
+// ── 工具函式 ──
+async function findLitDBSheet() {
+  const r = await fetch(`${DRIVE_API}?q=name='LitDB' and mimeType='application/vnd.google-apps.spreadsheet' and trashed=false&fields=files(id,name)`, {
+    headers: {'Authorization':'Bearer '+gToken}
+  });
+  const d = await r.json();
+  return (d.files && d.files.length) ? d.files[0].id : null;
+}
+
+async function createLitDBSheet() {
+  const r = await fetch(SHEETS_API, {
+    method: 'POST',
+    headers: {'Authorization':'Bearer '+gToken, 'Content-Type':'application/json'},
+    body: JSON.stringify({properties:{title:'LitDB'}})
+  });
+  const d = await r.json();
+  toast('已建立 Google Sheets「LitDB」','success');
+  return d.spreadsheetId;
 }
 </script>
 </body>
