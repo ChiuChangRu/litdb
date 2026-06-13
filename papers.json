@@ -3,8 +3,8 @@
     "project": "親水塗層文獻資料庫",
     "scope": "TPU / 穿刺針 / 導管 / 光固化 / 熱固化 / PVP-PEG 配方應用導向",
     "focus_note": "以「配方/塗料應用」為主：市售原料調配、製程參數、塗覆固化條件、商用塗料系統。排除需自行合成單體/聚合物的純學術文獻。",
-    "last_updated": "2026-06-01",
-    "schema_version": "1.1",
+    "last_updated": "2026-06-14",
+    "schema_version": "1.2",
     "tag_dictionary": {
       "substrate": [
         "TPU",
@@ -15,7 +15,9 @@
         "nitinol",
         "stainless-steel",
         "PEEK",
-        "silicone"
+        "silicone",
+        "PP",
+        "PE"
       ],
       "hydrophilic_polymer": [
         "PVP",
@@ -25,14 +27,21 @@
         "PEO",
         "PAA",
         "MPC",
-        "hydrogel"
+        "SBMA",
+        "PTFE",
+        "hydrogel",
+        "chitosan"
       ],
       "cure_method": [
         "UV光固化",
         "熱固化",
         "plasma",
         "self-polymerization",
-        "EB電子束"
+        "EB電子束",
+        "dip-coating",
+        "spray-coating",
+        "inline-UV",
+        "powder-coating"
       ],
       "anchor_primer": [
         "benzophenone",
@@ -41,7 +50,9 @@
         "isocyanate",
         "photografting",
         "silane",
-        "plasma-treat"
+        "plasma-treat",
+        "covalent-bonding",
+        "cross-linked"
       ],
       "application": [
         "穿刺針",
@@ -52,14 +63,34 @@
         "導線guidewire",
         "balloon",
         "stent",
-        "通用biomaterial"
+        "通用biomaterial",
+        "drainage",
+        "introducer-sheath"
+      ],
+      "performance": [
+        "lubricity",
+        "durability",
+        "particulate",
+        "WCA接觸角",
+        "adhesion附著力",
+        "biocompatibility",
+        "coating-thickness",
+        "friction-coefficient"
+      ],
+      "market_trend": [
+        "PFAS-free",
+        "low-VOC",
+        "OEM外包",
+        "contract-manufacturing",
+        "bi-laminar"
       ],
       "doc_type": [
         "專利",
         "期刊論文",
         "綜述review",
         "商用產品",
-        "會議論文"
+        "會議論文",
+        "市場報告"
       ],
       "access": [
         "開放全文",
@@ -70,9 +101,9 @@
       ]
     },
     "stats": {
-      "total": 50,
+      "total": 65,
       "patents": 20,
-      "patent_ratio": "40%"
+      "patent_ratio": "31%"
     }
   },
   "papers": [
@@ -1225,6 +1256,371 @@
       "value_to_project": "PEG hydrogel可見光固化(低能量光源方向)",
       "links": {
         "doi": "https://doi.org/10.3390/gels8030164"
+      }
+    },
+    {
+      "id": "G01",
+      "title": "Frictional properties of poly(MPC-co-BMA) phospholipid polymer for catheter applications",
+      "authors": "Ho SP; Nakabayashi N; Iwasaki Y et al.",
+      "year": 2003,
+      "venue": "Biomaterials",
+      "doi": "10.1016/s0142-9612(03)00450-2",
+      "pmid": "14568428",
+      "doc_type": "期刊論文",
+      "access": "付費",
+      "tags": [
+        "MPC",
+        "導管",
+        "dip-coating",
+        "friction-coefficient",
+        "lubricity"
+      ],
+      "purpose": "MPC 塗層在 PU 導管的摩擦係數定量數據",
+      "abstract_note": "poly(MPC-co-BMA) dip casting 2.5μm塗層在PU導管；濕態摩擦力從0.017降至0.004；AFM量測；展現hydration-dependent boundary lubrication。",
+      "value_to_project": "MPC路線在PU基材的摩擦係數基準數據，可與PVP路線比較",
+      "links": {
+        "doi": "https://doi.org/10.1016/s0142-9612(03)00450-2"
+      }
+    },
+    {
+      "id": "G02",
+      "title": "Grafting of Multifunctional Antithrombogenic Chemical Networks on Polyurethane Intravascular Catheters",
+      "authors": "Roth Y; Lewitus D",
+      "year": 2020,
+      "venue": "Polymers",
+      "doi": "10.3390/polym12051131",
+      "pmid": "32429046",
+      "doc_type": "期刊論文",
+      "access": "開放全文",
+      "tags": [
+        "MPC",
+        "TPU",
+        "導管",
+        "isocyanate",
+        "covalent-bonding",
+        "lubricity",
+        "biocompatibility"
+      ],
+      "purpose": "MPC+bPEI共價接枝PU導管的多功能塗層",
+      "abstract_note": "PU表面diisocyanate活化後接枝bPEI-S-MPC複合物；摩擦係數降30%、溶血率降50%；兔體內試驗抗血栓評分1.3 vs 3.3；具抗菌性。",
+      "value_to_project": "MPC在PU導管的共價接枝法+完整in vivo數據，可評估MPC替代PVP的可行性",
+      "links": {
+        "doi": "https://doi.org/10.3390/polym12051131"
+      }
+    },
+    {
+      "id": "G03",
+      "title": "Zwitterionic Photografted Coatings Reduce Friction and Insertion Forces (Cochlear Implant)",
+      "authors": "Bennion DM; Horne R; Peel A et al.",
+      "year": 2021,
+      "venue": "Otol Neurotol",
+      "doi": "10.1097/MAO.0000000000003288",
+      "pmid": "34310554",
+      "doc_type": "期刊論文",
+      "access": "付費",
+      "tags": [
+        "SBMA",
+        "photografting",
+        "silicone",
+        "covalent-bonding",
+        "friction-coefficient",
+        "lubricity"
+      ],
+      "purpose": "SBMA光接枝塗層的摩擦係數降>90%定量數據",
+      "abstract_note": "SBMA一步光聚合接枝於PDMS；摩擦係數降>90%；人體屍體耳蝸植入力降~40%；展現zwitterionic光接枝的臨床可行性。",
+      "value_to_project": "SBMA光接枝方法可移植到Bioteque的UV製程；摩擦降幅數據極有參考價值",
+      "links": {
+        "doi": "https://doi.org/10.1097/MAO.0000000000003288"
+      }
+    },
+    {
+      "id": "G04",
+      "title": "Soft Zwitterionic Hydrogel as Coating to Reduce Foreign Body Reaction (Polyimide)",
+      "authors": "Gori M; Giannitelli SM; Vadala G et al.",
+      "year": 2022,
+      "venue": "Molecules",
+      "doi": "10.3390/molecules27103126",
+      "pmid": "35630604",
+      "doc_type": "期刊論文",
+      "access": "開放全文",
+      "tags": [
+        "SBMA",
+        "hydrogel",
+        "PEG",
+        "covalent-bonding",
+        "biocompatibility"
+      ],
+      "purpose": "SBMA vs PEG的抗異物反應比較+藥物釋放",
+      "abstract_note": "poly(SBMA) hydrogel塗層與PEG比較；SBMA減少纖維母細胞和巨噬細胞黏附；WCA量測；可搭載Everolimus抗纖維化藥物釋放。",
+      "value_to_project": "SBMA優於PEG的實驗證據，可作為Bioteque材料選型參考*",
+      "links": {
+        "doi": "https://doi.org/10.3390/molecules27103126"
+      }
+    },
+    {
+      "id": "G05",
+      "title": "SBMA hydrogel-coated heart valves with anti-calcification",
+      "authors": "Luo Y; Huang S; Ma L",
+      "year": 2021,
+      "venue": "Mater Sci Eng C",
+      "doi": "10.1016/j.msec.2021.112329",
+      "pmid": "34474880",
+      "doc_type": "期刊論文",
+      "access": "付費",
+      "tags": [
+        "SBMA",
+        "hydrogel",
+        "biocompatibility",
+        "covalent-bonding"
+      ],
+      "purpose": "SBMA hydrogel的體內抗鈣化30天數據",
+      "abstract_note": "SBMA+MAHA hybrid hydrogel塗層；接REDV肽促內皮化；30天皮下植入免疫反應和鈣化顯著降低。",
+      "value_to_project": "SBMA長期體內數據，可補充Bioteque生物相容性評估資料",
+      "links": {
+        "doi": "https://doi.org/10.1016/j.msec.2021.112329"
+      }
+    },
+    {
+      "id": "G06",
+      "title": "SBMA Antifouling All-Polymeric Microneedle for ECG (14-day)",
+      "authors": "Kim JH; Hwang C; Lee JH et al.",
+      "year": 2025,
+      "venue": "Adv Sci",
+      "doi": "10.1002/advs.202512430",
+      "pmid": "41237340",
+      "doc_type": "期刊論文",
+      "access": "開放全文",
+      "tags": [
+        "SBMA",
+        "biocompatibility",
+        "durability"
+      ],
+      "purpose": "SBMA塗層14天長期穩定性數據",
+      "abstract_note": "SBMA塗層微針電極；蛋白質吸附降84.2%，細菌黏附降98.6%；14天連續ECG監測穩定；機械強度可穿透人體皮膚。",
+      "value_to_project": "SBMA 14天耐久數據，可佐證長期留置導管的塗層穩定性",
+      "links": {
+        "doi": "https://doi.org/10.1002/advs.202512430"
+      }
+    },
+    {
+      "id": "G07",
+      "title": "Enhanced antifouling SBMA hydrogel coatings for urinary catheters",
+      "authors": "Yao C; Teng X; Sun D et al.",
+      "year": 2024,
+      "venue": "Colloids Surf B",
+      "doi": "10.1016/j.colsurfb.2024.114277",
+      "pmid": "39342727",
+      "doc_type": "期刊論文",
+      "access": "付費",
+      "tags": [
+        "SBMA",
+        "導尿管",
+        "hydrogel",
+        "biocompatibility",
+        "lubricity"
+      ],
+      "purpose": "SBMA導尿管塗層的抗菌+潤滑雙功能",
+      "abstract_note": "SBMA與HPA共聚；控制hydrogel膨脹提升機械穩定性；纖維蛋白原沉積降40%、生物膜覆蓋降4倍；對E.coli和P.mirabilis有效。",
+      "value_to_project": "SBMA導尿管塗層直接對標Bioteque導尿管產品線",
+      "links": {
+        "doi": "https://doi.org/10.1016/j.colsurfb.2024.114277"
+      }
+    },
+    {
+      "id": "G08",
+      "title": "Quaternized chitosan-functionalized catheter with hydrophilicity and antibacterial",
+      "authors": "Liu X; Lin Q; Zhong Y et al.",
+      "year": 2025,
+      "venue": "J Biomater Sci Polym Ed",
+      "doi": "10.1080/09205063.2025.2574946",
+      "pmid": "41108519",
+      "doc_type": "期刊論文",
+      "access": "付費",
+      "tags": [
+        "chitosan",
+        "PVC",
+        "PDA-polydopamine",
+        "plasma-treat",
+        "導管",
+        "biocompatibility"
+      ],
+      "purpose": "chitosan+PDA+plasma在PVC導管的三合一塗層",
+      "abstract_note": "PVC表面O2 plasma活化→PDA塗覆→HTCC接枝；親水性提升減少尿道黏膜損傷；優於商用PVP-urea塗層PVC導管的抗菌效能。",
+      "value_to_project": "chitosan替代PVP的直接比較數據；plasma+PDA製程與Bioteque現有能力相容",
+      "links": {
+        "doi": "https://doi.org/10.1080/09205063.2025.2574946"
+      }
+    },
+    {
+      "id": "G09",
+      "title": "PDA+PVP antifouling and antimicrobial polymer membranes (PP substrate)",
+      "authors": "Jiang J; Zhu L; Zhu L et al.",
+      "year": 2013,
+      "venue": "ACS Appl Mater Interfaces",
+      "doi": "10.1021/am403405c",
+      "pmid": "24313803",
+      "doc_type": "期刊論文",
+      "access": "付費",
+      "tags": [
+        "PVP",
+        "PP",
+        "PDA-polydopamine",
+        "biocompatibility"
+      ],
+      "purpose": "PDA+PVP在PP基材的附著與抗菌",
+      "abstract_note": "PP表面PDA塗覆後PVP透過氫鍵固定；WCA顯著降低；抗蛋白/油水分離；碘複合後抗菌；PVP-PDA非共價鍵結具長期穩定性。",
+      "value_to_project": "PDA+PVP在PP基材的成功案例，可補充缺口分析中PP×PVP組合",
+      "links": {
+        "doi": "https://doi.org/10.1021/am403405c"
+      }
+    },
+    {
+      "id": "G10",
+      "title": "Chitosan-fatty acid coatings for catheters (friction 0.53→0.35)",
+      "authors": "Niemczyk A; Goszczynska A; Golda-Cepa M et al.",
+      "year": 2019,
+      "venue": "Carbohydr Polym",
+      "doi": "10.1016/j.carbpol.2019.115263",
+      "pmid": "31521311",
+      "doc_type": "期刊論文",
+      "access": "付費",
+      "tags": [
+        "chitosan",
+        "導管",
+        "friction-coefficient",
+        "biocompatibility"
+      ],
+      "purpose": "chitosan-脂肪酸衍生物降摩擦+抗菌",
+      "abstract_note": "chitosan與linoleic/α-linolenic/dilinoleic acid同時N,O-酰化；摩擦係數0.53→0.35；E.coli降>80%；非毒非溶血；脂肪酸自組裝降摩擦。",
+      "value_to_project": "chitosan降摩擦定量數據，與你資料庫R6的摩擦數據可交叉比較",
+      "links": {
+        "doi": "https://doi.org/10.1016/j.carbpol.2019.115263"
+      }
+    },
+    {
+      "id": "G11",
+      "title": "Chitosan-coated super-hydrophilic PVC for urothelial catheters",
+      "authors": "Vesel A; Motaln H; Mozetic M et al.",
+      "year": 2025,
+      "venue": "Int J Mol Sci",
+      "doi": "10.3390/ijms26052128",
+      "pmid": "40076751",
+      "doc_type": "期刊論文",
+      "access": "開放全文",
+      "tags": [
+        "chitosan",
+        "PVC",
+        "plasma-treat",
+        "導尿管",
+        "biocompatibility",
+        "WCA接觸角"
+      ],
+      "purpose": "plasma處理PVC→chitosan塗覆的完整製程",
+      "abstract_note": "H2 plasma+O2 plasma afterglow處理PVC→除氯→富氧官能基→chitosan水溶液浸塗；XPS確認均勻覆蓋；RT4泌尿上皮細胞活性提升。",
+      "value_to_project": "PVC導管plasma+chitosan製程，可評估導入Bioteque導尿管產線",
+      "links": {
+        "doi": "https://doi.org/10.3390/ijms26052128"
+      }
+    },
+    {
+      "id": "G12",
+      "title": "WPU-stabilized hydrogel coating with lubrication and antibacterial on catheters",
+      "authors": "Zhang P; Gao Y; Li S et al.",
+      "year": 2025,
+      "venue": "ACS Appl Mater Interfaces",
+      "doi": "10.1021/acsami.5c00154",
+      "pmid": "40223547",
+      "doc_type": "期刊論文",
+      "access": "付費",
+      "tags": [
+        "SBMA",
+        "PVP",
+        "chitosan",
+        "導管",
+        "UV光固化",
+        "lubricity",
+        "adhesion附著力",
+        "WCA接觸角"
+      ],
+      "purpose": "WPU+SBMA+NVP+chitosan UV固化多功能塗層",
+      "abstract_note": "WPU底塗→QCS/SBMA/NVP/ZnSO4 UV固化hydrogel；界面結合強度536N/m；WCA=24.6°；COF=0.0357；厚度可調；抗E.coli和S.aureus。",
+      "value_to_project": "UV固化+多功能塗層配方，直接適用Bioteque UV製程；附著力536N/m是重要基準",
+      "links": {
+        "doi": "https://doi.org/10.1021/acsami.5c00154"
+      }
+    },
+    {
+      "id": "G13",
+      "title": "Bioinspired super-hydrophilic pMPC armor for vascular catheters",
+      "authors": "Ke Y; Meng H; Du Z et al.",
+      "year": 2024,
+      "venue": "Bioact Mater",
+      "doi": "10.1016/j.bioactmat.2024.04.002",
+      "pmid": "38698921",
+      "doc_type": "期刊論文",
+      "access": "開放全文",
+      "tags": [
+        "MPC",
+        "導管",
+        "PDA-polydopamine",
+        "covalent-bonding",
+        "biocompatibility",
+        "lubricity"
+      ],
+      "purpose": "PDA啟發的pMPC共價接枝血管導管",
+      "abstract_note": "phenol-polyamine膜啟發昆蟲硬化→pMPC自由基聚合接枝；super-hydrophilic；兔頸靜脈模型抗血栓；大鼠皮下抗感染；持久抗污。",
+      "value_to_project": "PDA+MPC組合的in vivo數據，可評估MPC路線在導管上的臨床可行性",
+      "links": {
+        "doi": "https://doi.org/10.1016/j.bioactmat.2024.04.002"
+      }
+    },
+    {
+      "id": "G14",
+      "title": "Universal zwitterionic coating for blood-contacting catheters (10 substrates)",
+      "authors": "Zhang T; Liang T; Pan Q et al.",
+      "year": 2025,
+      "venue": "Adv Sci",
+      "doi": "10.1002/advs.202502411",
+      "pmid": "40125798",
+      "doc_type": "期刊論文",
+      "access": "開放全文",
+      "tags": [
+        "MPC",
+        "導管",
+        "covalent-bonding",
+        "biocompatibility",
+        "通用biomaterial"
+      ],
+      "purpose": "通用型zwitterionic塗層適用10種基材",
+      "abstract_note": "wet-adhesive引發劑polymer水相自組裝→pMPC接枝；適用10種基材包括PU/silicone/PTFE；寬pH範圍近零蛋白汙染；模擬血流穩定；可選擇性捕獲CTC。",
+      "value_to_project": "10種基材通用性=TPU/silicone等Bioteque基材都可用；製程簡單水相操作",
+      "links": {
+        "doi": "https://doi.org/10.1002/advs.202502411"
+      }
+    },
+    {
+      "id": "G15",
+      "title": "Stable Dual-Functional Coating on PU by Grafting Antibacterial-Zwitterionic Copolymer",
+      "authors": "Zhang M; Yuan H; Huang J et al.",
+      "year": 2026,
+      "venue": "Langmuir",
+      "doi": "10.1021/acs.langmuir.6c01452",
+      "pmid": "42241503",
+      "doc_type": "期刊論文",
+      "access": "付費",
+      "tags": [
+        "MPC",
+        "TPU",
+        "PDA-polydopamine",
+        "covalent-bonding",
+        "biocompatibility",
+        "WCA接觸角"
+      ],
+      "purpose": "2026最新PU表面MPC抗菌雙功能塗層",
+      "abstract_note": "MPC/DADMAC/GMA共聚物→PDA/PEI預處理PU→環氧開環接枝；WCA 85.95°→18.25°；蛋白吸附阻抗+殺菌99%；4週PBS浸泡穩定。",
+      "value_to_project": "2026最新！直接在PU(=TPU)上做MPC塗層；4週穩定性數據",
+      "links": {
+        "doi": "https://doi.org/10.1021/acs.langmuir.6c01452"
       }
     }
   ]
