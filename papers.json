@@ -1690,6 +1690,54 @@
       "value_to_project": "UV固化+多功能塗層配方，直接適用Bioteque UV製程；附著力536N/m是重要基準",
       "links": {
         "doi": "https://doi.org/10.1021/acsami.5c00154"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "WPU底塗+UV聚合QCS/SBMA/NVP/ZnSO₄ hydrogel面塗，一次解決潤滑+抗菌+附著，附著力536 N/m，COF 0.0357，WCA 24.6°",
+          "examples": [
+            {
+              "name": "WPU+hydrogel 導管塗層",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "有具體數值(536 N/m, COF 0.0357, WCA 24.6°)，期刊論文有同行審查",
+              "substrate": "醫療導管（通用）",
+              "formulation": {
+                "primer": "WPU（水性聚氨酯）— 塗覆後乾燥形成黏著層",
+                "topcoat": "QCS（季銨化chitosan）+ SBMA（sulfobetaine methacrylate）+ NVP（N-vinylpyrrolidone）+ ZnSO₄·7H₂O — 水溶液"
+              },
+              "process": {
+                "surface_prep": "WPU底塗（一步塗覆+乾燥）",
+                "coating_method": "Dip coating 在單體溶液中",
+                "drying": "未明示",
+                "curing": "UV引發聚合（具體波長/時間在全文中）"
+              },
+              "results": {
+                "friction": "COF = 0.0357",
+                "adhesion": "界面結合強度 536 N/m",
+                "wca": "24.6°",
+                "durability": "未在摘要中見到，需讀全文",
+                "other": "抗菌：對E.coli和S.aureus有效（QCS+Zn²⁺雙機制）；厚度可調"
+              }
+            }
+          ],
+          "key_claims": [
+            "WPU底塗解決hydrogel與基材的界面附著問題（536 N/m）",
+            "NVP單體原位聚合取代PVP高分子纏繞，交聯度更可控",
+            "QCS+ZnSO₄雙重抗菌機制（接觸殺菌+離子殺菌）"
+          ],
+          "actionable_insights": [
+            "WPU底塗比PDA更簡單（一步塗覆+乾燥）、比isocyanate更安全（水性無毒），對TPU基材天然親和",
+            "NVP單體原位聚合可控制交聯度，減少PVP遷移析出，比P01的semi-IPN方案更簡潔",
+            "536 N/m附著力是文獻中最高基準之一，可作為Bioteque塗層設計目標"
+          ],
+          "red_flags": [
+            "QCS季銨鹽有細胞毒性風險，生物相容性需確認",
+            "ZnSO₄的Zn²⁺釋放量需符合ISO 10993溶出物限量",
+            "摘要未提供耐久性數據（多少次摩擦循環後COF變化），需讀全文"
+          ],
+          "vs_database": "與P01(DSM)比：底塗WPU vs polyether，面塗NVP原位聚合 vs PVP高分子纏繞，G12多了抗菌功能。與A2(PDA+PVP)比：COF相當(0.0357 vs ~0.03)但G12附著力量化(536 N/m)且有抗菌。可融合路線：Bioteque的plasma+benzophenone底塗 + G12的NVP+SBMA面塗",
+          "bioteque_relevance": "匹配度7/10。WPU底塗+UV固化完全在Bioteque現有設備範圍內。主要差距：需採購SBMA和QCS。建議：可測試WPU底塗替代plasma前處理，若附著力達標可簡化製程。NVP+SBMA面塗可作為下一代抗菌塗層配方候選"
+        }
       }
     },
     {
