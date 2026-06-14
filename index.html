@@ -979,10 +979,11 @@ ${text.slice(0,5000)}
     raw = raw.replace(/```json|```/g,'').trim();
     const analysis = JSON.parse(raw);
     p._patentAnalysis = analysis;
-    el.innerHTML = renderPatentResult(analysis);
-    toast('專利萃取完成','success');
+    if(el) el.innerHTML = renderPatentResult(analysis);
+    toast('專利分析完成','success');
   } catch(e) {
-    el.innerHTML = `<div class="cite-loading" style="color:var(--danger)">分析失敗：${e.message}</div>`;
+    if(el) el.innerHTML = `<div class="cite-loading" style="color:var(--danger)">分析失敗：${e.message}</div>`;
+    else toast('分析失敗：'+e.message,'error');
   }
 }
 
