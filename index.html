@@ -1007,13 +1007,13 @@ async function doPatentAnalysis(i, p, text, mode='full') {
 專利：${p.title}
 標籤：${(p.tags||[]).join(', ')}
 相關專利：${relatedPatents||'無'}
-內容：${text.slice(0,5000)}
+內容：${text.slice(0,3000)}
 
 回傳純JSON：{"summary":"一句話白話","examples":[{"name":"","is_real":true,"credibility":"高/中/低","credibility_reason":"","substrate":"","formulation":{"primer":"","topcoat":""},"process":{"surface_prep":"","coating_method":"","drying":"","curing":""},"results":{"friction":"","adhesion":"","wca":"","durability":"","other":""}}],"key_claims":["白話claim"],"actionable_insights":["可借鏡做法"],"red_flags":["可疑部分"],"vs_database":"與其他專利比對","bioteque_relevance":"對Bioteque的建議"}`,
 
     avoidance: `你是醫材專利迴避設計專家。聚焦 Claims 分析。
 專利：${p.title}
-內容：${text.slice(0,5000)}
+內容：${text.slice(0,3000)}
 
 任務：
 1. 列出所有獨立項 Claims（白話翻譯，去法律修飾）
@@ -1025,7 +1025,7 @@ async function doPatentAnalysis(i, p, text, mode='full') {
 
     formulation: `你是醫材塗層配方萃取專家。只關注 Examples 中的具體配方和數據。
 專利：${p.title}
-內容：${text.slice(0,5000)}
+內容：${text.slice(0,3000)}
 
 任務：提取每個實施例的精確配方（忽略所有法律語言和泛泛描述）。
 回傳純JSON：{"summary":"配方核心概念","examples":[{"name":"","is_real":true,"credibility":"高/中/低","credibility_reason":"","substrate":"基材+規格","primer":{"materials":"材料+牌號","concentration":"濃度wt%","solvent":"溶劑+比例","photoinitiator":"光起始劑+濃度"},"topcoat":{"materials":"","concentration":"","solvent":"","crosslinker":"交聯劑"},"process":{"dip_speed":"mm/s","dip_time":"s","dry_temp":"°C","dry_time":"min","uv_intensity":"mW/cm²","uv_time":"s","uv_wavelength":"nm"},"results":{"friction_force":"gf","friction_method":"Harland FTS等","adhesion_grade":"","wca_before":"°","wca_after":"°","durability_cycles":"","thickness_um":""}}],"key_ratios":"關鍵比例關係（如PVP:溶劑、光起始劑:單體）","reproducibility":"以Bioteque設備可複製性評估"}`,
@@ -1040,7 +1040,7 @@ Bioteque 現有能力：
 - 化學品：PVP K90、PEGDA、benzophenone、Irgacure 2959
 
 專利：${p.title}
-內容：${text.slice(0,5000)}
+內容：${text.slice(0,3000)}
 
 回傳純JSON：{"summary":"與Bioteque能力的匹配度","match_score":"0-10（10=完全可複製）","can_do":[{"item":"可直接做的部分","how":"怎麼做"}],"need_buy":[{"item":"需採購的設備/材料","estimated_cost":"概估","source":"供應商"}],"cannot_do":[{"item":"做不到的部分","reason":"原因","alternative":"替代方案"}],"implementation_plan":"建議的實施步驟（1-2-3）","timeline":"預估時程"}`,
 
@@ -1062,14 +1062,25 @@ ${relatedPatents||'無'}
   try {
     const r = await fetch(cfg.proxy, {
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:2000,
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:4000,
+        system:'你是專利分析專家。回傳精簡的純JSON，不含markdown fence。每個欄位用繁體中文，盡量簡短。',
         messages:[{role:'user',content:prompt}]})
     });
     const data = await r.json();
     trackUsage(data);
     let raw = data.content?.[0]?.text||'';
+    if(!raw) throw new Error('API 無回應，請確認 Proxy URL 設定');
     raw = raw.replace(/```json|```/g,'').trim();
-    const analysis = JSON.parse(raw);
+    // 嘗試修復截斷的 JSON
+    if(!raw.endsWith('}')) {
+      const lastBrace = raw.lastIndexOf('}');
+      if(lastBrace > 0) raw = raw.slice(0, lastBrace+1);
+    }
+    let analysis;
+    try { analysis = JSON.parse(raw); } catch(je) {
+      console.warn('JSON parse failed, raw:', raw.slice(-200));
+      throw new Error('AI 回傳格式異常，請重試');
+    }
 
     // 儲存結果（按模式分開存）
     if(!p._patentResults) p._patentResults = {};
