@@ -241,7 +241,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
         <div class="field"><label>固化方式</label><select id="fCure" onchange="filterPapers()"><option value="">全部</option></select></div>
         <div class="field"><label>應用</label><select id="fApp" onchange="filterPapers()"><option value="">全部</option></select></div>
         <div class="field"><label>排序</label><select id="fSort" onchange="filterPapers()"><option value="id">編號</option><option value="year-desc">年份新→舊</option><option value="year-asc">年份舊→新</option><option value="tags">標籤數多→少</option></select></div>
-        <div class="field"><label>專利分析</label><select id="fPatentStatus" onchange="filterPapers()"><option value="">全部</option><option value="analyzed">✅ 已分析</option><option value="not-analyzed">🔴 未分析</option><option value="patent-only">專利（全部）</option></select></div>
+        <div class="field"><label>技術分析</label><select id="fPatentStatus" onchange="filterPapers()"><option value="">全部</option><option value="analyzed">✅ 已分析</option><option value="not-analyzed">🔴 未分析（專利）</option><option value="patent-only">專利（全部）</option></select></div>
         <hr style="border:none;border-top:1px solid var(--border);margin:10px 0">
         <label style="font-size:11px;color:var(--muted);font-weight:600">標籤快篩</label>
         <div class="tag-cloud" id="tagCloud"></div>
@@ -721,7 +721,7 @@ function filterPapers() {
     if(patentStatus) {
       const isPatent = p.doc_type === '專利';
       const hasAnalysis = p.patentResults && Object.keys(p.patentResults).length > 0;
-      if(patentStatus === 'analyzed' && !(isPatent && hasAnalysis)) return false;
+      if(patentStatus === 'analyzed' && !hasAnalysis) return false;
       if(patentStatus === 'not-analyzed' && !(isPatent && !hasAnalysis)) return false;
       if(patentStatus === 'patent-only' && !isPatent) return false;
     }
@@ -746,8 +746,8 @@ function renderPapers() {
   if(!filtered.length){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)">無符合結果</div>';return}
   c.innerHTML = filtered.map((p,i)=>{
     const typeColor = p.doc_type==='專利'?'tag-orange':p.doc_type==='商用產品'?'tag-green':'tag-blue';
-    const hasAnalysis = p.doc_type==='專利' && (p.patentResults && Object.keys(p.patentResults).length > 0);
-    const analysisStyle = p.doc_type==='專利' ? (hasAnalysis ? 'border-left:4px solid #2d8c5a' : 'border-left:4px solid #c0392b') : '';
+    const hasAnalysis = p.patentResults && Object.keys(p.patentResults).length > 0;
+    const analysisStyle = hasAnalysis ? 'border-left:4px solid #2d8c5a' : (p.doc_type==='專利' ? 'border-left:4px solid #c0392b' : '');
     const tags = (p.tags||[]).map(t=>`<span class="tag tag-gray">${t}</span>`).join('');
     const link = p.links ? Object.values(p.links)[0] : '';
     return `<div class="paper-card" id="pc_${i}" onclick="showDetail(${i});document.querySelectorAll('.paper-card').forEach(c=>c.classList.remove('active'));this.classList.add('active')" style="${analysisStyle}">
@@ -773,8 +773,8 @@ function showDetail(i) {
   const link = p.links ? Object.values(p.links)[0] : '';
   const tags = (p.tags||[]).map(t=>`<span class="tag tag-gray">${t}</span>`).join('');
   const typeColor = p.doc_type==='專利'?'tag-orange':p.doc_type==='商用產品'?'tag-green':'tag-blue';
-    const hasAnalysis = p.doc_type==='專利' && (p.patentResults && Object.keys(p.patentResults).length > 0);
-    const analysisStyle = p.doc_type==='專利' ? (hasAnalysis ? 'border-left:4px solid #2d8c5a' : 'border-left:4px solid #c0392b') : '';
+    const hasAnalysis = p.patentResults && Object.keys(p.patentResults).length > 0;
+    const analysisStyle = hasAnalysis ? 'border-left:4px solid #2d8c5a' : (p.doc_type==='專利' ? 'border-left:4px solid #c0392b' : '');
 
   document.getElementById('detailPanel').innerHTML = `
     <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
@@ -816,7 +816,7 @@ function showDetail(i) {
     <div style="display:flex;gap:6px;margin-top:16px;flex-wrap:wrap">
       <button class="btn btn-s" onclick="pinPaper('${p.id}')">📌 釘選到 AI</button>
       ${link?`<a href="${link}" target="_blank" class="btn btn-s">↗ 開啟原文</a>`:''}
-      ${p.doc_type==='專利'?`<button class="btn btn-p" onclick="showPatentAnalysis(${i})">🧪 專利分析</button>`:''}
+      ${p.doc_type==='專利'?`<button class="btn btn-p" onclick="showPatentAnalysis(${i})">🧪 專利分析</button>`:`<button class="btn btn-s" onclick="showPaperAnalysis(${i})">📊 技術分析</button>`}
       <button class="btn btn-p" onclick="loadCiteTree(${i})" style="margin-left:auto">🌳 引文樹</button>
     </div>
     <div id="patentAnalysis_${i}"></div>
@@ -968,6 +968,125 @@ function showPrevResult(mode) {
 
 function closePatentModal() {
   document.getElementById('patentModal').classList.remove('show');
+}
+
+// ══ 文獻技術分析（非專利）══
+function showPaperAnalysis(i) {
+  const p = filtered[i];
+  currentPatentIdx = i;
+  document.getElementById('patentModalTitle').textContent = p.title;
+  const mc = document.getElementById('patentModalContent');
+
+  const prevResult = p._patentResults || p.patentResults || {};
+  const prevHtml = Object.keys(prevResult).length ?
+    `<div style="margin-bottom:16px;padding:10px;background:var(--card);border-radius:8px">
+      <div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:6px">📁 已有分析結果（點擊查看）</div>
+      ${Object.entries(prevResult).map(([mode,r])=>`<button class="btn btn-s" style="margin:2px" onclick="showPrevResult('${mode}')">📊 ${mode}</button>`).join('')}
+    </div>` : '';
+
+  mc.innerHTML = `
+    ${prevHtml}
+    <div style="font-size:13px;color:var(--muted);margin-bottom:12px">
+      AI 技術分析：提取配方、製程、性能數據、可信度評估、與 Bioteque 的關聯
+    </div>
+    <div style="margin-bottom:12px">
+      <label style="font-size:12px;font-weight:600;color:var(--muted)">分析資料來源</label>
+      <select id="paperSource" style="margin-top:4px;font-size:13px;padding:10px">
+        ${p.abstract_note ? '<option value="note">📋 現有摘要（推薦）</option>' : ''}
+        <option value="paste">📝 貼上全文（更完整）</option>
+      </select>
+    </div>
+    <div id="paperPasteArea" style="display:none;margin-bottom:12px">
+      <textarea id="paperText_${i}" rows="8" placeholder="從期刊網頁複製摘要/全文貼到這裡" style="font-size:13px"></textarea>
+    </div>
+    <button class="btn btn-p" onclick="runPaperAnalysis(${i})" style="width:100%;padding:12px;font-size:14px">📊 開始技術分析（~NT$0.15）</button>`;
+
+  const srcEl = document.getElementById('paperSource');
+  srcEl.onchange = () => {
+    document.getElementById('paperPasteArea').style.display = srcEl.value==='paste' ? 'block' : 'none';
+  };
+  document.getElementById('patentModal').classList.add('show');
+}
+
+async function runPaperAnalysis(i) {
+  const p = filtered[i];
+  const source = document.getElementById('paperSource').value;
+  if(!cfg.proxy){toast('請先設定 Claude API Proxy URL','error');return}
+
+  let text;
+  if(source === 'note') {
+    text = (p.abstract_note||'') + '\n' + (p.purpose||'') + '\n' + (p.value_to_project||'');
+  } else {
+    text = document.getElementById('paperText_'+i)?.value?.trim() || '';
+  }
+  if(!text){toast('請選擇資料來源或貼上內容','error');return}
+
+  const mc = document.getElementById('patentModalContent');
+  mc.innerHTML = '<div class="cite-loading" style="padding:40px"><span class="spinner"></span> 📊 技術分析中...</div>';
+
+  const relatedPapers = DB.papers
+    .filter(x=>x.id!==p.id && (x.tags||[]).some(t=>(p.tags||[]).includes(t)))
+    .slice(0,5)
+    .map(x=>`[${x.id}] ${x.title}: ${(x.abstract_note||'').slice(0,150)}`)
+    .join('\n');
+
+  try {
+    const r = await fetch(cfg.proxy, {
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:4000,
+        system:'你是醫材親水塗層技術分析專家。回傳精簡的純JSON，不含markdown fence。繁體中文。沒有的欄位不要填空字串，直接省略。',
+        messages:[{role:'user',content:`分析以下文獻的技術內容，提取可用於 Bioteque（邦特生物科技）R&D 的情報。
+
+Bioteque 現有能力：TPU/Pebax 基材、air plasma 前處理、LED UV 固化(365/405nm)、dip coating、Harland FTS 摩擦測試儀、Irgacure 2959、benzophenone、PVP K90、PEGDA。
+
+文獻：${p.title}
+標籤：${(p.tags||[]).join(', ')}
+
+資料庫中相關文獻：
+${relatedPapers||'無'}
+
+內容：
+${text.slice(0,3000)}
+
+回傳純JSON：
+{
+  "summary":"一句話技術概述",
+  "examples":[{
+    "name":"實驗/配方名稱",
+    "is_real":true,
+    "credibility":"高/中/低",
+    "credibility_reason":"可信度原因",
+    "substrate":"基材",
+    "formulation":{"primer":"底塗/前處理","topcoat":"面塗配方+濃度"},
+    "process":{"surface_prep":"前處理","coating_method":"塗覆方式","drying":"乾燥","curing":"固化條件"},
+    "results":{"friction":"摩擦數據","adhesion":"附著力","wca":"接觸角","durability":"耐久性","other":"其他"}
+  }],
+  "key_claims":["核心技術貢獻2-3點"],
+  "actionable_insights":["可直接借鏡的3個做法"],
+  "red_flags":["需注意的限制或疑點"],
+  "vs_database":"與資料庫其他文獻比較",
+  "bioteque_relevance":"對Bioteque的具體建議和可行性評估"
+}`}]})
+    });
+    const data = await r.json();
+    trackUsage(data);
+    let raw = data.content?.[0]?.text||'';
+    if(!raw) throw new Error('API 無回應');
+    raw = raw.replace(/```json|```/g,'').trim();
+    if(!raw.endsWith('}')) { const lb=raw.lastIndexOf('}'); if(lb>0) raw=raw.slice(0,lb+1); }
+    const analysis = JSON.parse(raw);
+
+    if(!p.patentResults) p.patentResults = {};
+    if(!p._patentResults) p._patentResults = {};
+    p.patentResults.full = analysis;
+    p._patentResults.full = analysis;
+    saveDB();
+    mc.innerHTML = renderPatentResult(analysis) +
+      `<button class="btn btn-s" onclick="showPaperAnalysis(${i})" style="margin-top:12px">← 返回</button>`;
+    toast('技術分析完成','success');
+  } catch(e) {
+    mc.innerHTML = `<div class="cite-loading" style="color:var(--danger)">分析失敗：${e.message}</div>`;
+  }
 }
 
 async function runPatentAnalysis(i) {
