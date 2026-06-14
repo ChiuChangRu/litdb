@@ -743,7 +743,7 @@ function showDetail(i) {
     <div style="display:flex;gap:6px;margin-top:16px;flex-wrap:wrap">
       <button class="btn btn-s" onclick="pinPaper('${p.id}')">📌 釘選到 AI</button>
       ${link?`<a href="${link}" target="_blank" class="btn btn-s">↗ 開啟原文</a>`:''}
-      ${p.doc_type==='專利'?`<button class="btn btn-p" onclick="showPatentAnalysis(${i})">🧪 分析實施例</button>`:''}
+      ${p.doc_type==='專利'?`<button class="btn btn-p" onclick="showPatentAnalysis(${i})">🧪 專利分析</button>`:''}
       <button class="btn btn-p" onclick="loadCiteTree(${i})" style="margin-left:auto">🌳 引文樹</button>
     </div>
     <div id="patentAnalysis_${i}"></div>
@@ -797,7 +797,7 @@ function showPatentAnalysis(i) {
 
   mc.innerHTML = `
     <div style="font-size:13px;color:var(--muted);margin-bottom:12px">
-      AI 會自動辨識：<strong>真實實施例</strong>（有具體數據）vs <strong>預言式實施例</strong>（假設性描述），並評估可信度。
+      AI 三層分析：<strong>① 這專利在做什麼</strong>（去法律修飾）→ <strong>② 迴避設計要點</strong>（Claims 白話翻譯）→ <strong>③ 可借鏡的配方</strong>（Examples 萃取+可信度評估）
     </div>
     ${patentId ? `<button class="btn btn-p" onclick="autoFetchPatent(${i},'${patentId}')" style="width:100%;margin-bottom:12px;padding:10px">🔍 自動抓取 ${patentId} 全文（文字版，免費）</button>` : ''}
     <div style="margin-bottom:8px">
@@ -805,7 +805,7 @@ function showPatentAnalysis(i) {
       <textarea id="patentText_${i}" rows="10" placeholder="Google Patents 頁面 Ctrl+A 全選 → Ctrl+C 複製 → 貼到這裡&#10;AI 會自動過濾垃圾內容，只萃取有價值的配方和數據" style="font-size:13px;margin-top:6px"></textarea>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-p" onclick="analyzePatentModal(${i})" style="flex:1;padding:10px">🤖 智慧萃取（~NT$0.15）</button>
+      <button class="btn btn-p" onclick="analyzePatentModal(${i})" style="flex:1;padding:10px">🤖 完整分析（~NT$0.3）</button>
       ${p.abstract_note ? `<button class="btn btn-s" onclick="analyzePatentFromNoteModal(${i})" style="padding:10px">📋 用現有摘要</button>` : ''}
     </div>
     <div id="patentFetchStatus_${i}" style="font-size:12px;color:var(--muted);margin-top:8px"></div>`;
@@ -822,7 +822,7 @@ async function analyzePatentModal(i) {
   const text = document.getElementById('patentText_'+i)?.value?.trim();
   if(!text){toast('請先貼上或抓取專利內容','error');return}
   if(!cfg.proxy){toast('請先設定 Claude API Proxy URL','error');return}
-  document.getElementById('patentModalContent').innerHTML = '<div class="cite-loading" style="padding:40px"><span class="spinner"></span> AI 智慧萃取中（過濾垃圾、辨識真假、交叉比對）...</div>';
+  document.getElementById('patentModalContent').innerHTML = '<div class="cite-loading" style="padding:40px"><span class="spinner"></span> AI 完整分析中（Claims 迴避 + Examples 萃取 + 可信度評估）...</div>';
   await doPatentAnalysis(i, p, text);
   if(p._patentAnalysis) document.getElementById('patentModalContent').innerHTML = renderPatentResult(p._patentAnalysis);
 }
