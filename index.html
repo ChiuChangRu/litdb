@@ -45,9 +45,9 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 /* ═══ VIEW 1: BROWSE ═══ */
 .browse-layout{display:flex;gap:0;height:calc(100vh - 130px);overflow:hidden}
 .browse-col{overflow-y:auto;padding:8px;min-width:120px}
-.col-left{width:20%;flex-shrink:0}
-.col-mid{width:40%;flex-shrink:0}
-.col-right{width:40%;flex-shrink:0}
+.col-left{width:16.6%;flex-shrink:0}
+.col-mid{width:33.3%;flex-shrink:0}
+.col-right{width:50%;flex-shrink:0}
 .col-resize{width:5px;cursor:col-resize;background:var(--border);flex-shrink:0;transition:background 0.15s}
 .col-resize:hover,.col-resize.dragging{background:var(--accent);opacity:0.6}
 .filter-panel .field{margin-bottom:10px}
@@ -821,25 +821,12 @@ function showDetail(i) {
     </div>
     <div id="patentAnalysis_${i}"></div>
     ${(p.doc_type==='專利' && p.patentResults && Object.keys(p.patentResults).length) ? `
-    <div style="margin-top:12px;border:1px solid var(--accent2);border-radius:8px;overflow:hidden">
-      <div style="padding:8px 12px;background:var(--accent2);color:#fff;font-size:12px;font-weight:600">✅ 已有專利分析結果</div>
-      <div style="padding:10px 12px">
-        ${Object.entries(p.patentResults).map(([mode,r])=>{
-          const modeLabels = {full:'📊 完整分析',avoidance:'🚧 迴避設計',formulation:'🧪 配方萃取',feasibility:'🏭 可行性評估',compare:'🔄 對比分析'};
-          const label = modeLabels[mode] || mode;
-          return `<div style="margin-bottom:8px">
-            <div style="font-size:12px;font-weight:600;color:var(--accent);cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">${label} ▾</div>
-            <div style="display:none;margin-top:6px;font-size:12px;line-height:1.6">
-              ${r.summary?`<div style="padding:6px 8px;background:var(--card);border-radius:4px;margin-bottom:6px;font-weight:600">💡 ${r.summary}</div>`:''}
-              ${r.key_claims?`<div style="margin-bottom:6px"><strong style="color:var(--warn)">📜 Claims</strong><br>${r.key_claims.map((c,ci)=>(ci+1)+'. '+c).join('<br>')}</div>`:''}
-              ${r.actionable_insights?`<div style="margin-bottom:6px"><strong style="color:var(--accent2)">✅ 可借鏡</strong><br>${r.actionable_insights.map((x,xi)=>(xi+1)+'. '+x).join('<br>')}</div>`:''}
-              ${r.red_flags?`<div style="margin-bottom:6px"><strong style="color:var(--danger)">🚩 可疑</strong><br>${r.red_flags.map(x=>'• '+x).join('<br>')}</div>`:''}
-              ${r.bioteque_relevance?`<div><strong style="color:var(--accent)">🏭 Bioteque</strong><br>${r.bioteque_relevance}</div>`:''}
-            </div>
-          </div>`;
-        }).join('')}
-        <button class="btn btn-s" onclick="showPatentAnalysis(${i})" style="width:100%;margin-top:4px">🔄 重新分析 / 其他模式</button>
-      </div>
+    <div style="margin-top:12px">
+      ${Object.entries(p.patentResults).map(([mode,r])=>{
+        const modeLabels = {full:'📊 完整分析',avoidance:'🚧 迴避設計',formulation:'🧪 配方萃取',feasibility:'🏭 可行性評估',compare:'🔄 對比分析'};
+        return `<div style="margin-bottom:6px;font-size:11px;color:var(--accent2);font-weight:600">${modeLabels[mode]||mode}</div>` + renderPatentResult(r);
+      }).join('')}
+      <button class="btn btn-s" onclick="showPatentAnalysis(${i})" style="width:100%;margin-top:8px">🔄 重新分析 / 其他模式</button>
     </div>` : ''}
     <div id="citeTree_${i}"></div>
   `;
