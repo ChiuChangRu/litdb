@@ -95,6 +95,15 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 .cite-actions{display:flex;gap:4px;margin-top:4px}
 .cite-loading{text-align:center;padding:20px;color:var(--muted);font-size:12px}
 
+/* Patent analysis */
+.patent-input{margin-top:12px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:8px}
+.patent-result{margin-top:10px}
+.patent-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+.patent-table th{text-align:left;padding:6px 8px;background:var(--card);border:1px solid var(--border);color:var(--muted);font-weight:600;white-space:nowrap}
+.patent-table td{padding:6px 8px;border:1px solid var(--border);vertical-align:top;line-height:1.5}
+.patent-example{margin-top:10px;padding:10px;background:var(--card);border-radius:6px;border-left:3px solid var(--accent)}
+.patent-example h5{font-size:12px;color:var(--accent);margin-bottom:6px}
+
 /* ═══ VIEW 2: GRAPH ═══ */
 .graph-container{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);min-height:500px;overflow:hidden}
 .graph-controls{display:flex;gap:8px;padding:10px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center}
@@ -655,8 +664,10 @@ function showDetail(i) {
     <div style="display:flex;gap:6px;margin-top:16px;flex-wrap:wrap">
       <button class="btn btn-s" onclick="pinPaper('${p.id}')">📌 釘選到 AI</button>
       ${link?`<a href="${link}" target="_blank" class="btn btn-s">↗ 開啟原文</a>`:''}
+      ${p.doc_type==='專利'?`<button class="btn btn-p" onclick="showPatentAnalysis(${i})">🧪 分析實施例</button>`:''}
       <button class="btn btn-p" onclick="loadCiteTree(${i})" style="margin-left:auto">🌳 引文樹</button>
     </div>
+    <div id="patentAnalysis_${i}"></div>
     <div id="citeTree_${i}"></div>
   `;
 
@@ -683,6 +694,168 @@ function tryLocalFig(el, localUrl) {
   img.onload = () => { el.src = localUrl; };
   img.onerror = () => { el.parentElement.innerHTML = `<div class="fig-placeholder">📷 圖片載入失敗</div>`; };
   img.src = localUrl;
+}
+
+// ══════════════════════════════════════════════
+// PATENT: 實施例分析
+// ══════════════════════════════════════════════
+function showPatentAnalysis(i) {
+  const p = filtered[i];
+  const el = document.getElementById('patentAnalysis_' + i);
+  if(!el) return;
+
+  // 檢查是否已有分析結果
+  if(p._patentAnalysis) {
+    el.innerHTML = renderPatentResult(p._patentAnalysis);
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    return;
+  }
+
+  const link = p.links ? Object.values(p.links)[0] : '';
+  el.innerHTML = `
+    <div class="patent-input">
+      <div style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:8px">🧪 專利實施例分析</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">
+        ${link ? `1. 先<a href="${link}" target="_blank" style="color:var(--accent)">開啟專利原文 ↗</a>` : '1. 開啟專利原文'}
+        <br>2. 找到 <strong>Examples / 實施例</strong> 段落
+        <br>3. 複製貼到下方（可包含 Claims）
+        <br>4. AI 自動提取配方、製程、測試結果
+      </div>
+      <textarea id="patentText_${i}" rows="6" placeholder="貼上專利的 Examples / Detailed Description 段落...&#10;&#10;也可以貼整段 Claims + Examples，AI 會自動辨識" style="font-size:12px"></textarea>
+      <div style="display:flex;gap:6px;margin-top:6px">
+        <button class="btn btn-p" onclick="analyzePatent(${i})" style="flex:1">🤖 AI 提取實施例（~$0.005）</button>
+        ${p.abstract_note ? `<button class="btn btn-s" onclick="analyzePatentFromNote(${i})">📋 用現有摘要分析</button>` : ''}
+      </div>
+    </div>`;
+}
+
+async function analyzePatent(i) {
+  const p = filtered[i];
+  const text = document.getElementById('patentText_'+i)?.value?.trim();
+  if(!text){toast('請先貼上專利內容','error');return}
+  if(!cfg.proxy){toast('請先設定 Claude API Proxy URL','error');return}
+
+  const el = document.getElementById('patentAnalysis_'+i);
+  el.innerHTML = '<div class="cite-loading"><span class="spinner"></span> AI 分析實施例中...</div>';
+
+  await doPatentAnalysis(i, p, text);
+}
+
+async function analyzePatentFromNote(i) {
+  const p = filtered[i];
+  if(!p.abstract_note){toast('此文獻沒有摘要','error');return}
+  if(!cfg.proxy){toast('請先設定 Claude API Proxy URL','error');return}
+
+  const el = document.getElementById('patentAnalysis_'+i);
+  el.innerHTML = '<div class="cite-loading"><span class="spinner"></span> AI 分析中...</div>';
+
+  await doPatentAnalysis(i, p, p.abstract_note);
+}
+
+async function doPatentAnalysis(i, p, text) {
+  const el = document.getElementById('patentAnalysis_'+i);
+  try {
+    const r = await fetch(cfg.proxy, {
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1500,
+        messages:[{role:'user',content:`你是醫材親水塗層專利分析專家。分析以下專利內容，提取所有實施例的結構化數據。
+
+專利：${p.title}
+
+內容：
+${text.slice(0,4000)}
+
+回傳純 JSON（不含 markdown fence）：
+{
+  "examples": [
+    {
+      "name": "實施例 1 名稱",
+      "substrate": "基材（如 PVC 14Fr 導管）",
+      "formulation": {
+        "primer": "底塗配方（材料+濃度+溶劑）",
+        "topcoat": "面塗配方（材料+濃度+溶劑）"
+      },
+      "process": {
+        "surface_prep": "表面前處理",
+        "coating_method": "塗覆方式（dip/spray）+ 速度/時間",
+        "drying": "乾燥條件（溫度+時間）",
+        "curing": "固化條件（UV 劑量/溫度+時間）"
+      },
+      "results": {
+        "friction": "摩擦係數/力（數值+測試方法）",
+        "adhesion": "附著力（數值+方法）",
+        "wca": "接觸角",
+        "durability": "耐久性（循環數/時間）",
+        "other": "其他測試結果"
+      }
+    }
+  ],
+  "key_claims": ["最重要的 2-3 個 claim 摘要"],
+  "bioteque_relevance": "與 Bioteque（TPU/Pebax 基材、LED UV 固化、air plasma）的相關性和可借鏡之處"
+}`}]})
+    });
+    const data = await r.json();
+    let raw = data.content?.[0]?.text||'';
+    raw = raw.replace(/```json|```/g,'').trim();
+    const analysis = JSON.parse(raw);
+
+    // 存入 paper 記錄
+    p._patentAnalysis = analysis;
+    el.innerHTML = renderPatentResult(analysis);
+    toast('實施例分析完成','success');
+  } catch(e) {
+    el.innerHTML = `<div class="cite-loading" style="color:var(--danger)">分析失敗：${e.message}<br>請確認貼入的內容是否足夠</div>`;
+  }
+}
+
+function renderPatentResult(analysis) {
+  const examples = analysis.examples || [];
+  const claims = analysis.key_claims || [];
+  const relevance = analysis.bioteque_relevance || '';
+
+  let html = '<div class="patent-result">';
+
+  // 關鍵 Claims
+  if(claims.length) {
+    html += `<div style="margin-bottom:10px;padding:8px 10px;background:var(--card);border-left:3px solid var(--warn);border-radius:0 6px 6px 0;font-size:12px">
+      <strong style="color:var(--warn)">📜 關鍵 Claims</strong><br>${claims.map((c,i)=>`${i+1}. ${c}`).join('<br>')}</div>`;
+  }
+
+  // 實施例
+  examples.forEach((ex, idx) => {
+    html += `<div class="patent-example">
+      <h5>🧪 ${ex.name || '實施例 '+(idx+1)}</h5>
+      <table class="patent-table">
+        <tr><th>基材</th><td>${ex.substrate||'—'}</td></tr>`;
+
+    if(ex.formulation) {
+      if(ex.formulation.primer) html += `<tr><th>底塗配方</th><td>${ex.formulation.primer}</td></tr>`;
+      if(ex.formulation.topcoat) html += `<tr><th>面塗配方</th><td>${ex.formulation.topcoat}</td></tr>`;
+    }
+    if(ex.process) {
+      if(ex.process.surface_prep) html += `<tr><th>表面前處理</th><td>${ex.process.surface_prep}</td></tr>`;
+      if(ex.process.coating_method) html += `<tr><th>塗覆方式</th><td>${ex.process.coating_method}</td></tr>`;
+      if(ex.process.drying) html += `<tr><th>乾燥</th><td>${ex.process.drying}</td></tr>`;
+      if(ex.process.curing) html += `<tr><th>固化</th><td>${ex.process.curing}</td></tr>`;
+    }
+    if(ex.results) {
+      if(ex.results.friction) html += `<tr><th>摩擦</th><td>${ex.results.friction}</td></tr>`;
+      if(ex.results.adhesion) html += `<tr><th>附著力</th><td>${ex.results.adhesion}</td></tr>`;
+      if(ex.results.wca) html += `<tr><th>接觸角</th><td>${ex.results.wca}</td></tr>`;
+      if(ex.results.durability) html += `<tr><th>耐久性</th><td>${ex.results.durability}</td></tr>`;
+      if(ex.results.other) html += `<tr><th>其他</th><td>${ex.results.other}</td></tr>`;
+    }
+    html += '</table></div>';
+  });
+
+  // Bioteque 相關性
+  if(relevance) {
+    html += `<div style="margin-top:10px;padding:8px 10px;background:var(--card);border-left:3px solid var(--accent2);border-radius:0 6px 6px 0;font-size:12px">
+      <strong style="color:var(--accent2)">🏭 與 Bioteque 的關聯</strong><br>${relevance}</div>`;
+  }
+
+  html += '</div>';
+  return html;
 }
 function pinPaper(id){if(pinnedIds.has(id))pinnedIds.delete(id);else pinnedIds.add(id);renderCtx();toast(pinnedIds.has(id)?'已釘選':'已取消','success')}
 
