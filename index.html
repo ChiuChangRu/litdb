@@ -496,13 +496,47 @@ function checkBookmarkletParams() {
   if(url) raw += url;
   document.getElementById('addRaw').value = raw.trim();
 
-  // 也預填連結
+  // 自動填入表單欄位
+  if(title) {
+    // 清理標題（移除網站名稱部分）
+    let cleanTitle = title.replace(/\s*[-–|].*?(Inc\.|LLC|Ltd|Company|Corporation).*$/i, '').trim();
+    cleanTitle = cleanTitle.replace(/\s*[-–|]\s*[^-–|]+$/, '').trim();
+    document.getElementById('addTitle').value = cleanTitle || title;
+  }
   if(url) document.getElementById('addLink').value = url;
 
-  // 清除 URL 參數（避免重整時重複觸發）
+  // 自動偵測文獻類型
+  const urlLow = (url||'').toLowerCase();
+  if(urlLow.includes('patent')) {
+    document.getElementById('addDocType').value = '專利';
+    document.getElementById('addAccess').value = '專利全文';
+  } else if(urlLow.includes('pubmed') || urlLow.includes('doi.org') || urlLow.includes('sciencedirect') || urlLow.includes('springer') || urlLow.includes('mdpi') || urlLow.includes('nature.com')) {
+    document.getElementById('addDocType').value = '期刊論文';
+    document.getElementById('addAccess').value = abstract ? '開放摘要' : '付費';
+  } else if(urlLow.includes('biocoat') || urlLow.includes('hydromer') || urlLow.includes('surmodics') || urlLow.includes('freudenberg') || urlLow.includes('harland')) {
+    document.getElementById('addDocType').value = '商用產品';
+    document.getElementById('addAccess').value = '產品頁';
+  } else {
+    document.getElementById('addDocType').value = '綜述review';
+    document.getElementById('addAccess').value = '開放全文';
+  }
+
+  // 自動產生 ID
+  const docType = document.getElementById('addDocType').value;
+  const prefix = docType==='專利'?'P':docType==='商用產品'?'C':docType==='綜述review'?'R':'A';
+  const maxNum = DB.papers.filter(p=>p.id.startsWith(prefix)).map(p=>parseInt(p.id.slice(1))||0).reduce((a,b)=>Math.max(a,b),0);
+  document.getElementById('addId').value = prefix + String(maxNum+1).padStart(2,'0');
+
+  // 從 URL 提取 DOI
+  const doiMatch = (url||'').match(/10\.\d{4,}\/[^\s&?#]+/);
+  if(doiMatch) {
+    document.getElementById('addRaw').value += '\nDOI: ' + doiMatch[0];
+  }
+
+  // 清除 URL 參數
   window.history.replaceState({}, '', window.location.pathname);
 
-  toast('已從書籤匯入，點「AI 自動填入」完成分類', 'success');
+  toast('已從書籤匯入並自動填入，確認後加入資料庫', 'success');
 }
 
 async function loadDB() {
