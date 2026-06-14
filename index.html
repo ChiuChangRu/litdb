@@ -677,9 +677,11 @@ function renderPapers() {
   if(!filtered.length){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)">無符合結果</div>';return}
   c.innerHTML = filtered.map((p,i)=>{
     const typeColor = p.doc_type==='專利'?'tag-orange':p.doc_type==='商用產品'?'tag-green':'tag-blue';
+    const hasAnalysis = p.doc_type==='專利' && (p.patentResults && Object.keys(p.patentResults).length > 0);
+    const analysisStyle = p.doc_type==='專利' ? (hasAnalysis ? 'border-left:4px solid #2d8c5a' : 'border-left:4px solid #c0392b') : '';
     const tags = (p.tags||[]).map(t=>`<span class="tag tag-gray">${t}</span>`).join('');
     const link = p.links ? Object.values(p.links)[0] : '';
-    return `<div class="paper-card" id="pc_${i}" onclick="showDetail(${i});document.querySelectorAll('.paper-card').forEach(c=>c.classList.remove('active'));this.classList.add('active')">
+    return `<div class="paper-card" id="pc_${i}" onclick="showDetail(${i});document.querySelectorAll('.paper-card').forEach(c=>c.classList.remove('active'));this.classList.add('active')" style="${analysisStyle}">
       <div style="display:flex;gap:6px;margin-bottom:4px;flex-wrap:wrap;align-items:center">
         <span class="tag ${typeColor}">${p.doc_type||''}</span>
         <span class="tag tag-gray">${p.id}</span>
@@ -702,6 +704,8 @@ function showDetail(i) {
   const link = p.links ? Object.values(p.links)[0] : '';
   const tags = (p.tags||[]).map(t=>`<span class="tag tag-gray">${t}</span>`).join('');
   const typeColor = p.doc_type==='專利'?'tag-orange':p.doc_type==='商用產品'?'tag-green':'tag-blue';
+    const hasAnalysis = p.doc_type==='專利' && (p.patentResults && Object.keys(p.patentResults).length > 0);
+    const analysisStyle = p.doc_type==='專利' ? (hasAnalysis ? 'border-left:4px solid #2d8c5a' : 'border-left:4px solid #c0392b') : '';
 
   document.getElementById('detailPanel').innerHTML = `
     <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
@@ -824,7 +828,7 @@ function showPatentAnalysis(i) {
   const mc = document.getElementById('patentModalContent');
 
   // 已有分析結果時顯示上次結果 + 可重新分析
-  const prevResult = p._patentResults || {};
+  const prevResult = p._patentResults || p.patentResults || {};
   const prevHtml = Object.keys(prevResult).length ?
     `<div style="margin-bottom:16px;padding:10px;background:var(--card);border-radius:8px">
       <div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:6px">📁 已有分析結果（點擊查看）</div>
@@ -878,7 +882,7 @@ function updateModeDesc() {
 
 function showPrevResult(mode) {
   const p = filtered[currentPatentIdx];
-  const result = p._patentResults?.[mode];
+  const result = p._patentResults?.[mode] || p.patentResults?.[mode];
   if(result) {
     document.getElementById('patentModalContent').innerHTML = renderPatentResult(result) +
       `<button class="btn btn-s" onclick="showPatentAnalysis(${currentPatentIdx})" style="margin-top:12px">← 返回分析選單</button>`;
@@ -1148,9 +1152,12 @@ ${relatedPatents||'無'}
     }
 
     // 儲存結果（按模式分開存）
+    if(!p.patentResults) p.patentResults = {};
     if(!p._patentResults) p._patentResults = {};
     p._patentResults[mode] = analysis;
-    p._patentAnalysis = analysis; // 相容舊版
+    p.patentResults[mode] = analysis;
+    p._patentAnalysis = analysis;
+    saveDB(); // 自動存檔
     toast('分析完成','success');
   } catch(e) {
     toast('分析失敗：'+e.message,'error');
@@ -1229,6 +1236,7 @@ function renderPatentResult(a) {
       <strong style="color:var(--accent)">🏭 對 Bioteque 的建議</strong><br>${a.bioteque_relevance}</div>`;
   }
 
+  html += '<div style="margin-top:12px;padding:8px 10px;background:var(--card);border-radius:6px;font-size:12px;color:var(--accent2);text-align:center">✅ 分析已自動儲存。點頂部「📊 存到 Sheets」可同步到 Google Drive。</div>';
   html += '</div>';
   return html;
 }
