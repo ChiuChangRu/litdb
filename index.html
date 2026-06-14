@@ -196,7 +196,8 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 <body>
 
 <header>
-  <div class="logo">Lit<span>DB</span></div>
+  <div class="logo" onclick="location.reload()" style="cursor:pointer" title="重新整理">Lit<span>DB</span></div>
+  <span style="font-size:10px;color:var(--muted)">v3.2 · 2026-06-15</span>
   <span style="font-size:12px;color:var(--muted)">親水塗層文獻知識管理</span>
   <div class="header-r">
     <span id="gUserLabel" style="font-size:12px;color:var(--accent2);display:none"></span>
@@ -749,20 +750,80 @@ function renderPapers() {
     const hasAnalysis = p.patentResults && Object.keys(p.patentResults).length > 0;
     const analysisStyle = hasAnalysis ? 'border-left:4px solid #2d8c5a' : (p.doc_type==='專利' ? 'border-left:4px solid #c0392b' : '');
     const tags = (p.tags||[]).map(t=>`<span class="tag tag-gray">${t}</span>`).join('');
-    const link = p.links ? Object.values(p.links)[0] : '';
+
+    // 機構（橘底）
+    const org = extractOrg(p);
+    const orgBadge = org ? `<span style="background:#fff0e6;color:#b85c2a;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600">${org}</span>` : '';
+
+    // 主要作者（綠底）
+    const mainAuthor = extractMainAuthor(p);
+    const authorBadge = mainAuthor ? `<span style="background:#eaf5ef;color:#1a7040;padding:1px 6px;border-radius:3px;font-size:10px">${mainAuthor}</span>` : '';
+
+    // 專利狀態
+    const patentBadge = getPatentBadge(p);
+
     return `<div class="paper-card" id="pc_${i}" onclick="showDetail(${i});document.querySelectorAll('.paper-card').forEach(c=>c.classList.remove('active'));this.classList.add('active')" style="${analysisStyle}">
-      <div style="display:flex;gap:6px;margin-bottom:4px;flex-wrap:wrap;align-items:center">
+      <div style="display:flex;gap:4px;margin-bottom:4px;flex-wrap:wrap;align-items:center">
         <span class="tag ${typeColor}">${p.doc_type||''}</span>
         <span class="tag tag-gray">${p.id}</span>
         ${p.year?`<span class="tag tag-gray">${p.year}</span>`:''}
-        ${p.access?`<span style="font-size:10px;color:var(--muted)">${p.access}</span>`:''}
+        ${patentBadge}
+        ${orgBadge}
       </div>
       <div class="paper-title">${p.title}</div>
-      ${p.authors?`<div class="paper-sub">${p.authors}</div>`:''}
+      <div style="display:flex;gap:4px;align-items:center;flex-wrap:wrap;margin-top:2px">
+        ${authorBadge}
+        ${p.venue?`<span style="font-size:10px;color:var(--muted)">${p.venue.length>25?p.venue.slice(0,24)+'…':p.venue}</span>`:''}
+      </div>
       ${p.purpose?`<div class="paper-purpose">📌 ${p.purpose}</div>`:''}
       <div class="paper-tags">${tags}</div>
     </div>`;
   }).join('');
+}
+
+// 提取機構（公司/大學）
+function extractOrg(p) {
+  const a = p.authors || '';
+  // 專利：通常格式 "Dias et al. / DSM"
+  if(a.includes('/')) return a.split('/').pop().trim();
+  if(a.includes('·')) return a.split('·').pop().trim();
+  // 商用產品：用 venue 或 title 關鍵字
+  if(p.doc_type==='商用產品') {
+    const brands = ['Biocoat','Surmodics','Hydromer','Freudenberg','Harland','AST','Covalon','Coloplast','Bard','Teleflex'];
+    for(const b of brands) { if((p.title+' '+a+' '+(p.venue||'')).includes(b)) return b; }
+  }
+  return '';
+}
+
+// 提取主要作者
+function extractMainAuthor(p) {
+  const a = p.authors || '';
+  if(!a) return '';
+  const clean = a.split('/')[0].split('·')[0].trim();
+  const first = clean.split(/[;,]/).map(s=>s.trim()).filter(Boolean)[0] || '';
+  return first.replace(/\s*et al\.?\s*$/,'').trim();
+}
+
+// 專利狀態標籤
+function getPatentBadge(p) {
+  if(p.doc_type !== '專利') return '';
+  const title = p.title || '';
+  // 從標題提取專利號
+  const m = title.match(/(US\d+B\d?|EP\d+B\d?)/i);
+  const isGranted = m ? true : false;
+  // 估算是否在專利期內（US: filing + 20年，簡化用 year + 20）
+  const yr = p.year || 0;
+  const now = new Date().getFullYear();
+  if(isGranted && yr && (yr + 20) > now) {
+    return `<span style="background:#c0392b;color:#fff;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:700">🔒 有效至~${yr+20}</span>`;
+  }
+  if(isGranted && yr && (yr + 20) <= now) {
+    return `<span style="background:#8a7e72;color:#fff;padding:1px 6px;border-radius:3px;font-size:9px">✓ 已過期</span>`;
+  }
+  if(!isGranted) {
+    return `<span style="background:#d4a030;color:#fff;padding:1px 6px;border-radius:3px;font-size:9px">📋 申請中/公開</span>`;
+  }
+  return '';
 }
 
 function toggleValue(id){document.getElementById(id)?.classList.toggle('show')}
@@ -777,14 +838,19 @@ function showDetail(i) {
     const analysisStyle = hasAnalysis ? 'border-left:4px solid #2d8c5a' : (p.doc_type==='專利' ? 'border-left:4px solid #c0392b' : '');
 
   document.getElementById('detailPanel').innerHTML = `
-    <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+    <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap;align-items:center">
       <span class="tag ${typeColor}">${p.doc_type||''}</span>
       <span class="tag tag-gray">${p.id}</span>
       ${p.year?`<span class="tag tag-gray">${p.year}</span>`:''}
       ${p.access?`<span class="tag tag-gray">${p.access}</span>`:''}
+      ${getPatentBadge(p)}
     </div>
     <div class="detail-title">${p.title}</div>
-    <div class="detail-meta">${p.authors||''} ${p.venue?'· '+p.venue:''}</div>
+    <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:4px 0 8px">
+      ${extractMainAuthor(p)?`<span style="background:#eaf5ef;color:#1a7040;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600">${extractMainAuthor(p)}</span>`:''}
+      ${extractOrg(p)?`<span style="background:#fff0e6;color:#b85c2a;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600">${extractOrg(p)}</span>`:''}
+      ${p.venue?`<span style="font-size:11px;color:var(--muted)">${p.venue}</span>`:''}
+    </div>
 
     <div id="detailFigure_${i}"></div>
 
