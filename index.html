@@ -190,6 +190,8 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
     <button class="btn btn-s" id="gLoadBtn" style="display:none" onclick="loadFromSheets()">📂 從 Sheets 載入</button>
     <button class="btn btn-s" id="gOutBtn" style="display:none" onclick="googleSignOut()" style="color:var(--warn)">登出</button>
     <span style="color:var(--border)">|</span>
+    <span id="costDisplay" style="font-size:11px;color:var(--accent);cursor:pointer" onclick="if(confirm('重置費用計算？')){{costData={calls:0,input_tokens:0,output_tokens:0};localStorage.setItem(COST_KEY,JSON.stringify(costData));updateCostDisplay();toast('已重置','success')}}}" title="點擊重置">0 次 ≈ NT$0</span>
+    <span style="color:var(--border)">|</span>
     <span id="dbStats">—</span>
     <button class="btn btn-s" onclick="openSettings()">⚙</button>
     <button class="btn btn-s" onclick="exportDB()">⬇ 匯出</button>
@@ -443,6 +445,27 @@ let chatHistory = [];
 let activeTags = new Set();
 const CFG_KEY = 'litdb_cfg';
 let cfg = JSON.parse(localStorage.getItem(CFG_KEY)||'{}');
+const COST_KEY = 'litdb_cost';
+let costData = JSON.parse(localStorage.getItem(COST_KEY)||'{"calls":0,"input_tokens":0,"output_tokens":0}');
+const USD_TWD = 32;
+// Haiku pricing: input $0.25/M, output $1.25/M
+function estimateCost(input_t, output_t) { return (input_t*0.25 + output_t*1.25)/1000000; }
+function trackUsage(data) {
+  const usage = data.usage || {};
+  const inp = usage.input_tokens || 0;
+  const out = usage.output_tokens || 0;
+  costData.calls++;
+  costData.input_tokens += inp;
+  costData.output_tokens += out;
+  localStorage.setItem(COST_KEY, JSON.stringify(costData));
+  updateCostDisplay();
+}
+function updateCostDisplay() {
+  const usd = estimateCost(costData.input_tokens, costData.output_tokens);
+  const twd = usd * USD_TWD;
+  const el = document.getElementById('costDisplay');
+  if(el) el.textContent = `${costData.calls} 次 ≈ NT$${twd.toFixed(1)}`;
+}
 
 // ══════════════════════════════════════════════
 // INIT
@@ -452,6 +475,7 @@ window.onload = async () => {
   if(cfg.dataUrl) document.getElementById('cfgDataUrl').value = cfg.dataUrl;
   await loadDB();
   checkBookmarkletParams();
+  updateCostDisplay();
 };
 
 // 從書籤小工具接收資料
@@ -880,6 +904,7 @@ ${text.slice(0,5000)}
 }`}]})
     });
     const data = await r.json();
+    trackUsage(data);
     let raw = data.content?.[0]?.text||'';
     raw = raw.replace(/```json|```/g,'').trim();
     const analysis = JSON.parse(raw);
@@ -1570,6 +1595,7 @@ Bioteque 現有能力：TPU/Pebax 基材、air plasma 前處理、LED UV 固化�
       body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1200,messages})
     });
     const data = await r.json();
+    trackUsage(data);
     const reply = data.content?.[0]?.text || '回應失敗';
     chatHistory.push({role:'assistant',content:reply});
 
@@ -1695,6 +1721,7 @@ async function translateBatch(i) {
         messages:[{role:'user',content:`將以下醫學文獻摘要翻譯成繁體中文，保留專業術語原文（括號附註）。簡潔精確，不超過200字。\n\n${p.abstract.slice(0,1200)}`}]})
     });
     const data = await r.json();
+    trackUsage(data);
     p._zhAbstract = data.content?.[0]?.text || '翻譯失敗';
     bzEl.innerHTML = `<div class="batch-zh"><strong style="font-size:10px;color:var(--accent2)">🌐 中文翻譯</strong><br>${p._zhAbstract}</div>`;
   } catch(e) {
@@ -1766,6 +1793,7 @@ async function batchAIEnrich() {
 回傳純 JSON：{"tags":[],"purpose":"一句話","value_to_project":"對 Bioteque TPU catheter/stent 的具體價值"}`}]})
       });
       const data = await r.json();
+      trackUsage(data);
       let text = data.content?.[0]?.text||'';
       text = text.replace(/```json|```/g,'').trim();
       const parsed = JSON.parse(text);
@@ -1905,6 +1933,7 @@ async function aiParseAdd() {
 ${raw.slice(0,2000)}`}]})
     });
     const data = await r.json();
+    trackUsage(data);
     let text = data.content?.[0]?.text||'';
     text = text.replace(/```json|```/g,'').trim();
     const parsed = JSON.parse(text);
