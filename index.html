@@ -780,6 +780,40 @@ function tryLocalFig(el, localUrl) {
 // ══════════════════════════════════════════════
 let currentPatentIdx = null;
 
+// 專利分析模板
+const PATENT_MODES = {
+  full: {
+    label: '① 完整分析',
+    desc: 'Claims 迴避 + Examples 萃取 + 可信度 + Bioteque 建議',
+    cost: 'NT$0.3',
+    icon: '📊'
+  },
+  avoidance: {
+    label: '② 迴避設計',
+    desc: '聚焦 Claims：哪些技術範圍不能碰？如何繞過？',
+    cost: 'NT$0.15',
+    icon: '🚧'
+  },
+  formulation: {
+    label: '③ 配方萃取',
+    desc: '聚焦 Examples：具體配方、製程參數、測試數據',
+    cost: 'NT$0.15',
+    icon: '🧪'
+  },
+  feasibility: {
+    label: '④ 可行性評估',
+    desc: '對照 Bioteque 現有設備能力，哪些能做？差什麼？',
+    cost: 'NT$0.15',
+    icon: '🏭'
+  },
+  compare: {
+    label: '⑤ 對比分析',
+    desc: '與資料庫中其他專利交叉比對，找出獨特技術',
+    cost: 'NT$0.2',
+    icon: '🔄'
+  }
+};
+
 function showPatentAnalysis(i) {
   const p = filtered[i];
   currentPatentIdx = i;
@@ -789,51 +823,96 @@ function showPatentAnalysis(i) {
   document.getElementById('patentModalTitle').textContent = p.title;
   const mc = document.getElementById('patentModalContent');
 
-  if(p._patentAnalysis) {
-    mc.innerHTML = renderPatentResult(p._patentAnalysis);
-    document.getElementById('patentModal').classList.add('show');
-    return;
-  }
+  // 已有分析結果時顯示上次結果 + 可重新分析
+  const prevResult = p._patentResults || {};
+  const prevHtml = Object.keys(prevResult).length ?
+    `<div style="margin-bottom:16px;padding:10px;background:var(--card);border-radius:8px">
+      <div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:6px">📁 已有分析結果（點擊查看）</div>
+      ${Object.entries(prevResult).map(([mode,r])=>`<button class="btn btn-s" style="margin:2px" onclick="showPrevResult('${mode}')">${PATENT_MODES[mode]?.icon||''} ${PATENT_MODES[mode]?.label||mode}</button>`).join('')}
+    </div>` : '';
+
+  const modeOptions = Object.entries(PATENT_MODES).map(([k,v])=>
+    `<option value="${k}">${v.icon} ${v.label}（${v.cost}）</option>`
+  ).join('');
 
   mc.innerHTML = `
-    <div style="font-size:13px;color:var(--muted);margin-bottom:12px">
-      AI 三層分析：<strong>① 這專利在做什麼</strong>（去法律修飾）→ <strong>② 迴避設計要點</strong>（Claims 白話翻譯）→ <strong>③ 可借鏡的配方</strong>（Examples 萃取+可信度評估）
+    ${prevHtml}
+    <div style="display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px">
+        <label style="font-size:12px;font-weight:600;color:var(--muted)">分析類型</label>
+        <select id="patentMode" onchange="updateModeDesc()" style="margin-top:4px;font-size:13px;padding:10px">
+          ${modeOptions}
+        </select>
+      </div>
+      <div style="flex:1;min-width:200px">
+        <label style="font-size:12px;font-weight:600;color:var(--muted)">資料來源</label>
+        <select id="patentSource" style="margin-top:4px;font-size:13px;padding:10px">
+          ${p.abstract_note ? '<option value="note">📋 現有摘要（免費感覺）</option>' : ''}
+          <option value="paste">📝 貼上全文（更精確）</option>
+        </select>
+      </div>
     </div>
-    ${patentId ? `<button class="btn btn-p" onclick="autoFetchPatent(${i},'${patentId}')" style="width:100%;margin-bottom:12px;padding:10px">🔍 開啟 ${patentId} 專利頁（複製後一鍵貼上分析）</button>` : ''}
-    <div style="margin-bottom:8px">
-      <label style="font-size:12px;font-weight:600;color:var(--muted)">或手動貼上 Description + Examples 段落</label>
-      <textarea id="patentText_${i}" rows="10" placeholder="Google Patents 頁面 Ctrl+A 全選 → Ctrl+C 複製 → 貼到這裡&#10;AI 會自動過濾垃圾內容，只萃取有價值的配方和數據" style="font-size:13px;margin-top:6px"></textarea>
+    <div id="modeDesc" style="font-size:12px;color:var(--muted);padding:8px 10px;background:var(--card);border-radius:6px;margin-bottom:12px">
+      ${PATENT_MODES.full.desc}
     </div>
-    <div style="display:flex;gap:8px">
-      <button class="btn btn-p" onclick="analyzePatentModal(${i})" style="flex:1;padding:10px">🤖 完整分析（~NT$0.3）</button>
-      ${p.abstract_note ? `<button class="btn btn-s" onclick="analyzePatentFromNoteModal(${i})" style="padding:10px">📋 用現有摘要</button>` : ''}
+    <div id="pasteArea" style="display:none;margin-bottom:12px">
+      ${patentId ? `<button class="btn btn-p" onclick="autoFetchPatent(${i},'${patentId}')" style="width:100%;margin-bottom:8px;padding:8px">🔍 開啟 ${patentId} 專利頁（複製後一鍵貼上）</button>` : ''}
+      <textarea id="patentText_${i}" rows="8" placeholder="Google Patents 頁面 Ctrl+A 全選 → Ctrl+C 複製 → 貼到這裡" style="font-size:13px"></textarea>
+      <div id="patentFetchStatus_${i}" style="font-size:12px;color:var(--muted);margin-top:4px"></div>
     </div>
-    <div id="patentFetchStatus_${i}" style="font-size:12px;color:var(--muted);margin-top:8px"></div>`;
+    <button class="btn btn-p" onclick="runPatentAnalysis(${i})" style="width:100%;padding:12px;font-size:14px">🤖 開始分析</button>`;
+
+  // 綁定 source 切換
+  const srcEl = document.getElementById('patentSource');
+  srcEl.onchange = () => {
+    document.getElementById('pasteArea').style.display = srcEl.value==='paste' ? 'block' : 'none';
+  };
 
   document.getElementById('patentModal').classList.add('show');
+}
+
+function updateModeDesc() {
+  const mode = document.getElementById('patentMode').value;
+  document.getElementById('modeDesc').textContent = PATENT_MODES[mode]?.desc || '';
+}
+
+function showPrevResult(mode) {
+  const p = filtered[currentPatentIdx];
+  const result = p._patentResults?.[mode];
+  if(result) {
+    document.getElementById('patentModalContent').innerHTML = renderPatentResult(result) +
+      `<button class="btn btn-s" onclick="showPatentAnalysis(${currentPatentIdx})" style="margin-top:12px">← 返回分析選單</button>`;
+  }
 }
 
 function closePatentModal() {
   document.getElementById('patentModal').classList.remove('show');
 }
 
-async function analyzePatentModal(i) {
+async function runPatentAnalysis(i) {
   const p = filtered[i];
-  const text = document.getElementById('patentText_'+i)?.value?.trim();
-  if(!text){toast('請先貼上或抓取專利內容','error');return}
-  if(!cfg.proxy){toast('請先設定 Claude API Proxy URL','error');return}
-  document.getElementById('patentModalContent').innerHTML = '<div class="cite-loading" style="padding:40px"><span class="spinner"></span> AI 完整分析中（Claims 迴避 + Examples 萃取 + 可信度評估）...</div>';
-  await doPatentAnalysis(i, p, text);
-  if(p._patentAnalysis) document.getElementById('patentModalContent').innerHTML = renderPatentResult(p._patentAnalysis);
-}
+  const mode = document.getElementById('patentMode').value;
+  const source = document.getElementById('patentSource').value;
 
-async function analyzePatentFromNoteModal(i) {
-  const p = filtered[i];
-  if(!p.abstract_note){toast('此文獻沒有摘要','error');return}
   if(!cfg.proxy){toast('請先設定 Claude API Proxy URL','error');return}
-  document.getElementById('patentModalContent').innerHTML = '<div class="cite-loading" style="padding:40px"><span class="spinner"></span> AI 分析中...</div>';
-  await doPatentAnalysis(i, p, p.abstract_note);
-  if(p._patentAnalysis) document.getElementById('patentModalContent').innerHTML = renderPatentResult(p._patentAnalysis);
+
+  let text;
+  if(source === 'note') {
+    text = p.abstract_note || '';
+  } else {
+    text = document.getElementById('patentText_'+i)?.value?.trim() || '';
+  }
+  if(!text){toast('請選擇資料來源或貼上專利內容','error');return}
+
+  const mc = document.getElementById('patentModalContent');
+  mc.innerHTML = `<div class="cite-loading" style="padding:40px"><span class="spinner"></span> ${PATENT_MODES[mode].icon} ${PATENT_MODES[mode].label} 分析中...</div>`;
+
+  await doPatentAnalysis(i, p, text, mode);
+
+  if(p._patentResults?.[mode]) {
+    mc.innerHTML = renderPatentResult(p._patentResults[mode]) +
+      `<button class="btn btn-s" onclick="showPatentAnalysis(${i})" style="margin-top:12px">← 返回分析選單</button>`;
+  }
 }
 
 function extractPatentId(text) {
@@ -904,86 +983,95 @@ async function analyzePatentFromNote(i) {
   await doPatentAnalysis(i, p, p.abstract_note);
 }
 
-async function doPatentAnalysis(i, p, text) {
-  const el = document.getElementById('patentAnalysis_'+i);
-
-  // 收集資料庫中其他相關專利的摘要，用於交叉比對
+async function doPatentAnalysis(i, p, text, mode='full') {
   const relatedPatents = DB.papers
     .filter(x=>x.doc_type==='專利' && x.id!==p.id && (x.tags||[]).some(t=>(p.tags||[]).includes(t)))
     .slice(0,5)
     .map(x=>`[${x.id}] ${x.title}: ${x.abstract_note||''}`.slice(0,200))
     .join('\n');
 
+  // 每個模式的專用 prompt
+  const prompts = {
+    full: `你是醫材親水塗層專利分析專家。完整分析以下專利。
+重要原則：
+1. 專利大部分內容是法律垃圾，只提取有具體數據的部分
+2. 辨識「真實實施例」（過去式、具體數值、指名設備）vs「預言式」（may/can/preferably、範圍很寬）
+3. 可信度評分：有具體數據=高、有設備型號=高、只有泛泛範圍=低
+
+專利：${p.title}
+標籤：${(p.tags||[]).join(', ')}
+相關專利：${relatedPatents||'無'}
+內容：${text.slice(0,5000)}
+
+回傳純JSON：{"summary":"一句話白話","examples":[{"name":"","is_real":true,"credibility":"高/中/低","credibility_reason":"","substrate":"","formulation":{"primer":"","topcoat":""},"process":{"surface_prep":"","coating_method":"","drying":"","curing":""},"results":{"friction":"","adhesion":"","wca":"","durability":"","other":""}}],"key_claims":["白話claim"],"actionable_insights":["可借鏡做法"],"red_flags":["可疑部分"],"vs_database":"與其他專利比對","bioteque_relevance":"對Bioteque的建議"}`,
+
+    avoidance: `你是醫材專利迴避設計專家。聚焦 Claims 分析。
+專利：${p.title}
+內容：${text.slice(0,5000)}
+
+任務：
+1. 列出所有獨立項 Claims（白話翻譯，去法律修飾）
+2. 每個 claim 標出「技術要素」（材料+製程+結構）
+3. 針對每個要素提出迴避方案（替代材料/替代製程/修改結構）
+4. 評估迴避難度（容易/中等/困難）
+
+回傳純JSON：{"summary":"這個專利保護什麼","claims":[{"number":1,"type":"獨立項/附屬項","white_text":"白話翻譯","elements":["技術要素1","技術要素2"],"avoidance":[{"element":"要素","strategy":"迴避方案","difficulty":"容易/中等/困難","note":"補充"}]}],"overall_risk":"對Bioteque的整體風險評估","safe_space":"可安全操作的技術空間"}`,
+
+    formulation: `你是醫材塗層配方萃取專家。只關注 Examples 中的具體配方和數據。
+專利：${p.title}
+內容：${text.slice(0,5000)}
+
+任務：提取每個實施例的精確配方（忽略所有法律語言和泛泛描述）。
+回傳純JSON：{"summary":"配方核心概念","examples":[{"name":"","is_real":true,"credibility":"高/中/低","credibility_reason":"","substrate":"基材+規格","primer":{"materials":"材料+牌號","concentration":"濃度wt%","solvent":"溶劑+比例","photoinitiator":"光起始劑+濃度"},"topcoat":{"materials":"","concentration":"","solvent":"","crosslinker":"交聯劑"},"process":{"dip_speed":"mm/s","dip_time":"s","dry_temp":"°C","dry_time":"min","uv_intensity":"mW/cm²","uv_time":"s","uv_wavelength":"nm"},"results":{"friction_force":"gf","friction_method":"Harland FTS等","adhesion_grade":"","wca_before":"°","wca_after":"°","durability_cycles":"","thickness_um":""}}],"key_ratios":"關鍵比例關係（如PVP:溶劑、光起始劑:單體）","reproducibility":"以Bioteque設備可複製性評估"}`,
+
+    feasibility: `你是醫材製程可行性評估專家。
+Bioteque 現有能力：
+- 基材：TPU (Pellethane 2363)、Pebax、PVC、nylon
+- 前處理：air plasma（大氣壓）
+- 塗覆：dip coating（手動/半自動）
+- 固化：LED UV（365nm, 405nm）、烘箱（最高150°C）
+- 測試：Harland FTS 摩擦測試儀、接觸角量測儀
+- 化學品：PVP K90、PEGDA、benzophenone、Irgacure 2959
+
+專利：${p.title}
+內容：${text.slice(0,5000)}
+
+回傳純JSON：{"summary":"與Bioteque能力的匹配度","match_score":"0-10（10=完全可複製）","can_do":[{"item":"可直接做的部分","how":"怎麼做"}],"need_buy":[{"item":"需採購的設備/材料","estimated_cost":"概估","source":"供應商"}],"cannot_do":[{"item":"做不到的部分","reason":"原因","alternative":"替代方案"}],"implementation_plan":"建議的實施步驟（1-2-3）","timeline":"預估時程"}`,
+
+    compare: `你是醫材專利比較分析專家。
+目標專利：${p.title}
+標籤：${(p.tags||[]).join(', ')}
+摘要：${(p.abstract_note||'').slice(0,300)}
+
+資料庫中相關專利：
+${relatedPatents||'無'}
+
+目標專利內容：${text.slice(0,3000)}
+
+回傳純JSON：{"summary":"這篇的獨特定位","vs_others":[{"patent_id":"P01等","similarity":"相似之處","difference":"關鍵差異","which_better":"哪個更好+原因"}],"unique_contribution":"這篇獨有的技術貢獻","technology_evolution":"技術演進脈絡（從舊到新）","gaps":"這篇沒解決的問題","recommendation":"建議下一步研究方向"}`
+  };
+
+  const prompt = prompts[mode] || prompts.full;
+
   try {
     const r = await fetch(cfg.proxy, {
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:2000,
-        messages:[{role:'user',content:`你是醫材親水塗層專利分析專家。請從以下專利內容中萃取有價值的技術情報。
-
-重要原則：
-1. 專利大部分內容是法律語言和泛泛描述（垃圾），只提取有具體數據的部分
-2. 辨識「真實實施例」vs「預言式實施例」：
-   - 真實：用過去式描述、有具體數值、指名設備/供應商
-   - 預言式：用 "may", "can", "preferably" 等推測語氣，範圍很寬（如 "1-99%"）
-3. 可信度評分：有具體數據=高、有設備型號=高、只有泛泛範圍=低
-4. 與資料庫中其他專利交叉比對
-
-專利：${p.title}
-已知標籤：${(p.tags||[]).join(', ')}
-
-資料庫中相關專利（用於比對）：
-${relatedPatents || '（無）'}
-
-專利內容：
-${text.slice(0,5000)}
-
-回傳純 JSON（不含 markdown fence）：
-{
-  "summary": "一句話：這個專利真正在做什麼（去掉法律修飾）",
-  "examples": [
-    {
-      "name": "實施例名稱",
-      "is_real": true或false,
-      "credibility": "高/中/低",
-      "credibility_reason": "為什麼這個可信度是這樣",
-      "substrate": "基材",
-      "formulation": {
-        "primer": "底塗（具體配方+濃度）",
-        "topcoat": "面塗（具體配方+濃度）"
-      },
-      "process": {
-        "surface_prep": "前處理",
-        "coating_method": "塗覆（方式+速度+時間）",
-        "drying": "乾燥（溫度+時間）",
-        "curing": "固化（UV劑量或溫度+時間）"
-      },
-      "results": {
-        "friction": "摩擦數據",
-        "adhesion": "附著力",
-        "wca": "接觸角",
-        "durability": "耐久性",
-        "other": "其他"
-      }
-    }
-  ],
-  "key_claims": ["最重要的2-3個claim（用白話解釋）"],
-  "actionable_insights": ["可以直接借鏡的3個具體做法"],
-  "red_flags": ["可疑或不可信的部分"],
-  "vs_database": "與資料庫中其他專利比對：重疊之處和獨特之處",
-  "bioteque_relevance": "對Bioteque（TPU/Pebax基材、LED UV固化、air plasma、Harland FTS）的具體建議"
-}`}]})
+        messages:[{role:'user',content:prompt}]})
     });
     const data = await r.json();
     trackUsage(data);
     let raw = data.content?.[0]?.text||'';
     raw = raw.replace(/```json|```/g,'').trim();
     const analysis = JSON.parse(raw);
-    p._patentAnalysis = analysis;
-    if(el) el.innerHTML = renderPatentResult(analysis);
-    toast('專利分析完成','success');
+
+    // 儲存結果（按模式分開存）
+    if(!p._patentResults) p._patentResults = {};
+    p._patentResults[mode] = analysis;
+    p._patentAnalysis = analysis; // 相容舊版
+    toast('分析完成','success');
   } catch(e) {
-    if(el) el.innerHTML = `<div class="cite-loading" style="color:var(--danger)">分析失敗：${e.message}</div>`;
-    else toast('分析失敗：'+e.message,'error');
+    toast('分析失敗：'+e.message,'error');
   }
 }
 
