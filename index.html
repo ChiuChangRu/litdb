@@ -953,9 +953,15 @@ async function pasteFromClipboard(i) {
     if(textEl) textEl.value = cleaned;
     toast(`已貼上 ${cleaned.length} 字，開始分析...`,'success');
     
+    // 設定來源為貼上，並顯示貼上區域
+    const srcEl = document.getElementById('patentSource');
+    if(srcEl) { srcEl.value = 'paste'; }
+    const pasteArea = document.getElementById('pasteArea');
+    if(pasteArea) pasteArea.style.display = 'block';
+    
     // 自動觸發分析
     if(cfg.proxy) {
-      setTimeout(()=>analyzePatentModal(i), 300);
+      setTimeout(()=>runPatentAnalysis(i), 300);
     }
   } catch(e) {
     // 剪貼簿權限被拒
