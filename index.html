@@ -104,6 +104,15 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 .patent-example{margin-top:10px;padding:10px;background:var(--card);border-radius:6px;border-left:3px solid var(--accent)}
 .patent-example h5{font-size:12px;color:var(--accent);margin-bottom:6px}
 
+/* Patent modal */
+.patent-modal{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,0.5);overflow-y:auto;padding:24px}
+.patent-modal.show{display:flex;justify-content:center}
+.patent-modal-body{background:var(--surface);border:1px solid var(--border);border-radius:12px;width:100%;max-width:900px;margin:auto;padding:0;box-shadow:0 8px 32px rgba(0,0,0,0.15)}
+.patent-modal-header{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--border)}
+.patent-modal-header h3{font-size:14px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.patent-modal-content{padding:20px;max-height:calc(100vh - 160px);overflow-y:auto}
+.patent-modal-content textarea{min-height:100px}
+
 /* ═══ VIEW 2: GRAPH ═══ */
 .graph-container{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);min-height:500px;overflow:hidden}
 .graph-controls{display:flex;gap:8px;padding:10px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center}
@@ -434,6 +443,18 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 
 <div id="toast"></div>
 
+<!-- Patent Analysis Modal -->
+<div class="patent-modal" id="patentModal" onclick="if(event.target===this)closePatentModal()">
+  <div class="patent-modal-body">
+    <div class="patent-modal-header">
+      <span style="font-size:18px">🧪</span>
+      <h3 id="patentModalTitle">專利實施例分析</h3>
+      <button class="btn btn-s" onclick="closePatentModal()">✕ 關閉</button>
+    </div>
+    <div class="patent-modal-content" id="patentModalContent"></div>
+  </div>
+</div>
+
 <script>
 // ══════════════════════════════════════════════
 // STATE
@@ -757,34 +778,62 @@ function tryLocalFig(el, localUrl) {
 // ══════════════════════════════════════════════
 // PATENT: 實施例分析
 // ══════════════════════════════════════════════
+let currentPatentIdx = null;
+
 function showPatentAnalysis(i) {
   const p = filtered[i];
-  const el = document.getElementById('patentAnalysis_' + i);
-  if(!el) return;
-
-  if(p._patentAnalysis) {
-    el.innerHTML = renderPatentResult(p._patentAnalysis);
-    el.style.display = el.style.display === 'none' ? 'block' : 'none';
-    return;
-  }
-
+  currentPatentIdx = i;
   const link = p.links ? Object.values(p.links)[0] : '';
   const patentId = extractPatentId(link || p.title);
 
-  el.innerHTML = `
-    <div class="patent-input">
-      <div style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:8px">🧪 專利實施例分析（智慧萃取）</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">
-        AI 會自動辨識：<strong>真實實施例</strong>（有具體數據）vs <strong>預言式實施例</strong>（假設性描述），並評估可信度。
-      </div>
-      ${patentId ? `<button class="btn btn-p" onclick="autoFetchPatent(${i},'${patentId}')" style="width:100%;margin-bottom:8px">🔍 自動抓取 ${patentId} 全文（文字版，免費）</button>` : ''}
-      <textarea id="patentText_${i}" rows="6" placeholder="或手動貼上專利 Description + Examples 段落...&#10;（Google Patents 頁面直接全選複製即可，AI 會自動過濾垃圾內容）" style="font-size:12px"></textarea>
-      <div style="display:flex;gap:6px;margin-top:6px">
-        <button class="btn btn-p" onclick="analyzePatent(${i})" style="flex:1">🤖 智慧萃取（~$0.005）</button>
-        ${p.abstract_note ? `<button class="btn btn-s" onclick="analyzePatentFromNote(${i})">📋 用現有摘要</button>` : ''}
-      </div>
-      <div id="patentFetchStatus_${i}" style="font-size:11px;color:var(--muted);margin-top:4px"></div>
-    </div>`;
+  document.getElementById('patentModalTitle').textContent = p.title;
+  const mc = document.getElementById('patentModalContent');
+
+  if(p._patentAnalysis) {
+    mc.innerHTML = renderPatentResult(p._patentAnalysis);
+    document.getElementById('patentModal').classList.add('show');
+    return;
+  }
+
+  mc.innerHTML = `
+    <div style="font-size:13px;color:var(--muted);margin-bottom:12px">
+      AI 會自動辨識：<strong>真實實施例</strong>（有具體數據）vs <strong>預言式實施例</strong>（假設性描述），並評估可信度。
+    </div>
+    ${patentId ? `<button class="btn btn-p" onclick="autoFetchPatent(${i},'${patentId}')" style="width:100%;margin-bottom:12px;padding:10px">🔍 自動抓取 ${patentId} 全文（文字版，免費）</button>` : ''}
+    <div style="margin-bottom:8px">
+      <label style="font-size:12px;font-weight:600;color:var(--muted)">或手動貼上 Description + Examples 段落</label>
+      <textarea id="patentText_${i}" rows="10" placeholder="Google Patents 頁面 Ctrl+A 全選 → Ctrl+C 複製 → 貼到這裡&#10;AI 會自動過濾垃圾內容，只萃取有價值的配方和數據" style="font-size:13px;margin-top:6px"></textarea>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-p" onclick="analyzePatentModal(${i})" style="flex:1;padding:10px">🤖 智慧萃取（~NT$0.15）</button>
+      ${p.abstract_note ? `<button class="btn btn-s" onclick="analyzePatentFromNoteModal(${i})" style="padding:10px">📋 用現有摘要</button>` : ''}
+    </div>
+    <div id="patentFetchStatus_${i}" style="font-size:12px;color:var(--muted);margin-top:8px"></div>`;
+
+  document.getElementById('patentModal').classList.add('show');
+}
+
+function closePatentModal() {
+  document.getElementById('patentModal').classList.remove('show');
+}
+
+async function analyzePatentModal(i) {
+  const p = filtered[i];
+  const text = document.getElementById('patentText_'+i)?.value?.trim();
+  if(!text){toast('請先貼上或抓取專利內容','error');return}
+  if(!cfg.proxy){toast('請先設定 Claude API Proxy URL','error');return}
+  document.getElementById('patentModalContent').innerHTML = '<div class="cite-loading" style="padding:40px"><span class="spinner"></span> AI 智慧萃取中（過濾垃圾、辨識真假、交叉比對）...</div>';
+  await doPatentAnalysis(i, p, text);
+  if(p._patentAnalysis) document.getElementById('patentModalContent').innerHTML = renderPatentResult(p._patentAnalysis);
+}
+
+async function analyzePatentFromNoteModal(i) {
+  const p = filtered[i];
+  if(!p.abstract_note){toast('此文獻沒有摘要','error');return}
+  if(!cfg.proxy){toast('請先設定 Claude API Proxy URL','error');return}
+  document.getElementById('patentModalContent').innerHTML = '<div class="cite-loading" style="padding:40px"><span class="spinner"></span> AI 分析中...</div>';
+  await doPatentAnalysis(i, p, p.abstract_note);
+  if(p._patentAnalysis) document.getElementById('patentModalContent').innerHTML = renderPatentResult(p._patentAnalysis);
 }
 
 function extractPatentId(text) {
