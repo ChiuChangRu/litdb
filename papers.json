@@ -130,6 +130,54 @@
       "value_to_project": "最完整的雙層 UV 配方+測試規格基準",
       "links": {
         "patents": "https://patents.google.com/patent/US8133580B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "DSM 雙層塗層：polyether primer（Norrish I）+ PVP+polyelectrolyte 面塗（Norrish II benzophenone），解決 PVP 遷移析出問題",
+          "examples": [
+            {
+              "name": "PVC 14Fr 導尿管實施例",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "有指名基材(14Fr PVC)和測試設備(Harland FTS)，但配方濃度用寬範圍描述",
+              "substrate": "PVC 14Fr 導尿管",
+              "formulation": {
+                "primer": "Polyether diol + Irgacure 2959 + PVP K90 / THF:NMP 溶劑",
+                "topcoat": "PVP + PAA sodium salt + benzophenone / 乙醇:水"
+              },
+              "process": {
+                "surface_prep": "未明示",
+                "coating_method": "Dip coating",
+                "drying": "未明示",
+                "curing": "UV（Norrish I 300-400nm + Norrish II benzophenone）"
+              },
+              "results": {
+                "friction": "≤20g（Harland FTS），嚴格版≤15g",
+                "adhesion": "20次搓揉後仍有潤滑性",
+                "wca": "未明示",
+                "durability": "20次搓揉耐久",
+                "other": "Dry-out time：22°C/35%RH 下測量；總厚 2-10μm"
+              }
+            }
+          ],
+          "key_claims": [
+            "雙層結構：內層 polyether/polythioether 網絡 primer + 外層 PVP+polyelectrolyte 功能層",
+            "Primer 用 Norrish I 光起始劑交聯 polyether 網絡，物理纏繞 PVP",
+            "功能層用 Norrish II (benzophenone) H抽取交聯 PVP+polyelectrolyte"
+          ],
+          "actionable_insights": [
+            "Harland FTS 測試條件(22°C/35%RH/20g閾值)可作為 Bioteque 標準 SOP",
+            "雙光起始劑策略概念可借鏡但具體組合需迴避",
+            "PAA 鈉鹽延長 dry-out time 的效果值得測試"
+          ],
+          "red_flags": [
+            "配方濃度用1-99 wt%寬範圍描述→預言式",
+            "聲稱任何 polyether 都可作 primer→誇大",
+            "具體 dry-out time 數據可能在 PDF Table 中，抓取的全文段落未見"
+          ],
+          "vs_database": "P01 是 DSM 家族專利的核心，P02(EP1957130B1)和 P03 是同家族的延伸。P06(US5160790)的 isocyanate 路線是完全不同的技術路徑，已過期可自由使用。Bioteque 的 UV+benzophenone 路線不侵權，因為 P01 claim 綁定在 polyether primer 上",
+          "bioteque_relevance": "Bioteque 用 benzophenone+PVP 的 UV 路線不會侵權（P01 claim 綁定 polyether primer）。安全空間：PDA底塗+PVP/PEGDA UV固化+不含polyelectrolyte。建議建立 Harland FTS 標準測試 SOP（22°C/35%RH）"
+        }
       }
     },
     {
@@ -178,6 +226,54 @@
       "value_to_project": "Pebax 基材雙光起始劑系統配方",
       "links": {
         "patents": "https://patents.google.com/patent/WO2009112548A1/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "DSM 的面塗獨立專利：PVP+polyelectrolyte 組合+benzophenone UV交聯，重點解決 dry-out time（塗層離水後維持潤滑的時間）。2026/12/11到期！",
+          "examples": [
+            {
+              "name": "Pebax 導管實施例",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "有指名基材(Pebax)和具體比例範圍(10-20wt%)，但 polyelectrolyte 種類列了一大串只測了1-2種",
+              "substrate": "Pebax 導管",
+              "formulation": {
+                "primer": "與P01共用 polyether primer 系統",
+                "topcoat": "PVP + poly(acrylamide-co-acrylic acid) sodium salt + benzophenone，polyelectrolyte 10-20wt% of dry coating"
+              },
+              "process": {
+                "surface_prep": "未明示",
+                "coating_method": "Dip coating",
+                "drying": "未明示",
+                "curing": "UV（benzophenone H抽取交聯）"
+              },
+              "results": {
+                "friction": "未在抓取範圍內",
+                "adhesion": "未在抓取範圍內",
+                "wca": "未明示",
+                "durability": "未在抓取範圍內",
+                "other": "Dry-out time 顯著延長（Table 3 有數據但未在抓取範圍內）"
+              }
+            }
+          ],
+          "key_claims": [
+            "非離子親水高分子(PVP)+polyelectrolyte(PAA鈉鹽等)組合配方",
+            "Polyelectrolyte 佔乾重5-100%（實際可信範圍10-20%）",
+            "Benzophenone 作為 Norrish II 型交聯劑"
+          ],
+          "actionable_insights": [
+            "Dry-out time 概念：塗層離水後多久還滑，是臨床重要指標，Bioteque 應建立此測試",
+            "Polyelectrolyte 保水機制（離子水合）可在2027年專利到期後使用",
+            "Pebax 基材已驗證可行，Bioteque Pebax 產線可參考"
+          ],
+          "red_flags": [
+            "Polyelectrolyte 種類列了PAA/PMA/PSS/季銨鹽等一大串→典型預言式，實際只測1-2種",
+            "5-100%的比例範圍→預言式",
+            "具體 dry-out 數據在 PDF Table 中未在抓取範圍"
+          ],
+          "vs_database": "P03 是 P01 面塗的獨立專利。P01 保護雙層結構，P03 保護面塗配方（PVP+polyelectrolyte）。兩者搭配形成 DSM 的專利壁壘。重要：P03 2026/12/11 到期，屆時 polyelectrolyte 技術可自由使用",
+          "bioteque_relevance": "此專利2026/12/11到期！只剩6個月。建議：現在先不碰polyelectrolyte，2027年起可納入配方選項。到時測試 PVP+PAA Na 10-20wt% 的 dry-out 提升效果。安全空間：不含polyelectrolyte即可迴避"
+        }
       }
     },
     {
@@ -201,6 +297,53 @@
       "value_to_project": "單步熱固化路徑(UV設備有限時備案)",
       "links": {
         "patents": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/5160790"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Hydromer 單步熱固化：isocyanate+polyol+PVP 混合一次 dip coating+烘乾完成，isocyanate+PVP 路線的鼻祖專利，已過期可自由使用",
+          "examples": [
+            {
+              "name": "Polyurethane tubing 實施例",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "過去式描述、具體操作步驟、具體耐久性數據(20次搓揉/10次乾濕循環/10天浸泡)、配方穩定性28天",
+              "substrate": "Polyurethane tubing",
+              "formulation": {
+                "primer": "不需要（單層系統）",
+                "topcoat": "Isocyanate + polyol + PVP / 有機溶劑"
+              },
+              "process": {
+                "surface_prep": "未明示",
+                "coating_method": "單次 dip coating",
+                "drying": "溶劑蒸發",
+                "curing": "熱固化 70-250°F (21-121°C)，2分鐘至72小時"
+              },
+              "results": {
+                "friction": "COF ≤ 0.3",
+                "adhesion": "20次搓揉（firm finger pressure under running water）後無衰退",
+                "wca": "未明示",
+                "durability": "10次乾濕循環無衰退；水中10天浸泡無衰退",
+                "other": "配方室溫密封28天後塗覆效果不變（pot life）"
+              }
+            }
+          ],
+          "key_claims": [
+            "已過期（1992年），所有技術可自由使用",
+            "核心：isocyanate+polyol+PVP 混合物一次塗覆+熱固化形成潤滑水凝膠",
+            "PVP 被 polyurethane 網絡物理纏繞固定"
+          ],
+          "actionable_insights": [
+            "已過期專利，配方可直接使用作為 Bioteque 備援路線",
+            "耐久性測試方法(20次搓揉+10次乾濕循環+10天浸泡)可納入驗證SOP",
+            "pot life 28天是配方穩定性的基準"
+          ],
+          "red_flags": [
+            "固化溫度範圍寬(21-121°C)→實際最佳條件可能需要自己摸索",
+            "isocyanate 有毒性，需通風操作環境"
+          ],
+          "vs_database": "P06 是 isocyanate+PVP 路線的源頭，DSM 的 P01 在此基礎上改為 UV 固化。兩者是不同技術世代。P06 已過期，是最安全的備援選擇",
+          "bioteque_relevance": "備援路線：如果 UV 固化遇瓶頸，isocyanate+PVP 熱固化是最成熟替代方案。Bioteque 已有烘箱(≤150°C)可執行。缺點：isocyanate 毒性需通風、固化時間長(小時級 vs UV秒級)。建議作為 Plan B 保留"
+        }
       }
     },
     {
