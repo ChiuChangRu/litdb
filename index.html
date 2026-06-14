@@ -238,23 +238,29 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 <div class="view" id="v-graph">
   <div class="help-box" id="help-graph">
     <button class="close-help" onclick="this.parentElement.classList.add('hidden')">✕</button>
-    <h4>🕸 關係圖 — 發現技術關聯與核心節點</h4>
-    每個圓點代表一個標籤（或作者/文獻），<strong>連線越粗</strong>代表共同出現在越多篇文獻中。節點越大代表出現次數越多。用這張圖回答：「<span class="tip">PVP</span>最常搭配什麼固化方式？」「誰是<span class="tip">benzophenone</span>領域的核心作者？」。拖動<span class="tip">最低共現</span>滑桿可過濾弱連結，讓核心關係浮現。顏色依類別：藍=基材、綠=高分子、橘=固化、紅=錨固劑、紫=應用。
+    <h4>🕸 關係圖 — Paper ↔ Tag 二部圖</h4>
+    <strong>方形</strong>=文獻，<strong>圓形</strong>=標籤。連線代表「這篇文獻有這個標籤」。<strong>點擊任何節點</strong>會高亮所有連結，快速看出：哪些文獻共享同一個標籤？某個標籤連結了哪些文獻？用<span class="tip">標籤類別</span>篩選聚焦特定維度。
   </div>
   <div class="graph-container">
     <div class="graph-controls">
-      <label style="font-size:11px;color:var(--muted)">節點類型</label>
-      <select id="graphMode" onchange="buildGraph()" style="width:auto;padding:4px 8px;font-size:12px">
-        <option value="tags">標籤共現</option>
-        <option value="authors">作者網絡</option>
-        <option value="papers">文獻相似度</option>
+      <label style="font-size:11px;color:var(--muted)">標籤類別</label>
+      <select id="graphTagCat" onchange="buildGraph()" style="width:auto;padding:4px 8px;font-size:12px">
+        <option value="">全部標籤</option>
+        <option value="substrate">基材</option>
+        <option value="hydrophilic_polymer">親水高分子</option>
+        <option value="cure_method">固化方式</option>
+        <option value="anchor_primer">錨固劑</option>
+        <option value="application">應用</option>
+        <option value="performance">性能指標</option>
       </select>
-      <label style="font-size:11px;color:var(--muted);margin-left:12px">最低共現</label>
-      <input type="range" id="graphThreshold" min="1" max="10" value="2" oninput="buildGraph()" style="width:100px">
-      <span id="graphThreshVal" style="font-size:11px;color:var(--muted)">2</span>
+      <label style="font-size:11px;color:var(--muted);margin-left:12px">最少連結</label>
+      <input type="range" id="graphThreshold" min="1" max="10" value="1" oninput="buildGraph()" style="width:80px">
+      <span id="graphThreshVal" style="font-size:11px;color:var(--muted)">1</span>
+      <span id="graphInfo" style="font-size:11px;color:var(--muted);margin-left:auto"></span>
     </div>
-    <canvas id="graphCanvas" width="1200" height="500"></canvas>
+    <canvas id="graphCanvas" width="1200" height="550" onclick="onGraphClick(event)"></canvas>
     <div class="graph-legend" id="graphLegend"></div>
+    <div id="graphDetail" style="padding:10px 14px;font-size:12px;color:var(--muted);display:none"></div>
   </div>
 </div>
 
@@ -834,99 +840,226 @@ function quickAddFromS2(info) {
 // ══════════════════════════════════════════════
 // GRAPH: Tag Co-occurrence
 // ══════════════════════════════════════════════
+let graphNodes = [];
+let graphEdges = [];
+
 function buildGraph() {
-  const mode = document.getElementById('graphMode').value;
+  const catFilter = document.getElementById('graphTagCat').value;
   const threshold = parseInt(document.getElementById('graphThreshold').value);
   document.getElementById('graphThreshVal').textContent = threshold;
   const canvas = document.getElementById('graphCanvas');
   const ctx = canvas.getContext('2d');
-  canvas.width = canvas.offsetWidth * (window.devicePixelRatio||1);
-  canvas.height = 500 * (window.devicePixelRatio||1);
-  ctx.scale(window.devicePixelRatio||1, window.devicePixelRatio||1);
-  const W = canvas.offsetWidth, H = 500;
+  const dpr = window.devicePixelRatio||1;
+  canvas.width = canvas.offsetWidth * dpr;
+  canvas.height = 550 * dpr;
+  ctx.scale(dpr, dpr);
+  const W = canvas.offsetWidth, H = 550;
 
-  // Build co-occurrence
-  const cooc = {};
-  const nodeCounts = {};
+  const dict = DB.meta.tag_dictionary||{};
+  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',performance:'#2980b9',market_trend:'#7f8c8d',doc_type:'#8a7e72',access:'#8a7e72'};
+  const tagCat = {};
+  Object.entries(dict).forEach(([cat,tags])=>tags.forEach(t=>{tagCat[t]=cat}));
+
+  // 建立有效標籤集（依篩選）
+  let validTags = new Set();
+  if(catFilter) {
+    (dict[catFilter]||[]).forEach(t=>validTags.add(t));
+  } else {
+    Object.values(dict).flat().forEach(t=>validTags.add(t));
+  }
+
+  // 建立 Paper ↔ Tag 邊
+  const edges = [];
+  const tagCount = {};
+  const paperTagCount = {};
 
   DB.papers.forEach(p => {
-    const items = mode==='tags' ? (p.tags||[]) : mode==='authors' ? (p.authors||'').split(/[;,]/).map(s=>s.trim()).filter(Boolean) : [p.id];
-    items.forEach(a => { nodeCounts[a] = (nodeCounts[a]||0)+1; });
-    for(let i=0;i<items.length;i++) for(let j=i+1;j<items.length;j++) {
-      const key = [items[i],items[j]].sort().join('||');
-      cooc[key] = (cooc[key]||0)+1;
-    }
+    const tags = (p.tags||[]).filter(t=>validTags.has(t));
+    paperTagCount[p.id] = tags.length;
+    tags.forEach(t => {
+      tagCount[t] = (tagCount[t]||0) + 1;
+      edges.push({paper: p.id, tag: t});
+    });
   });
 
-  const edges = Object.entries(cooc).filter(([,v])=>v>=threshold).map(([k,v])=>{const [a,b]=k.split('||');return {a,b,w:v}});
-  const nodeSet = new Set();
-  edges.forEach(e=>{nodeSet.add(e.a);nodeSet.add(e.b)});
-  const nodes = [...nodeSet].map(id=>({id, count:nodeCounts[id]||1, x:Math.random()*W, y:Math.random()*H, vx:0, vy:0}));
+  // 過濾：標籤至少出現 threshold 次
+  const activeTags = new Set(Object.entries(tagCount).filter(([,c])=>c>=threshold).map(([t])=>t));
+  const filteredEdges = edges.filter(e=>activeTags.has(e.tag));
+
+  // 涉及的 papers
+  const activePapers = new Set(filteredEdges.map(e=>e.paper));
+
+  // 建立節點
+  const nodes = [];
   const nodeMap = {};
-  nodes.forEach(n=>nodeMap[n.id]=n);
 
-  // Color by tag dictionary category
-  const dict = DB.meta.tag_dictionary||{};
-  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#f0a04b',anchor_primer:'#c0392b',application:'#8e44ad',doc_type:'#8a7e72',access:'#8a7e72'};
-  const tagCat = {};
-  Object.entries(dict).forEach(([cat,tags])=>tags.forEach(t=>tagCat[t]=cat));
+  // Tag 節點
+  [...activeTags].forEach(t => {
+    const n = {id:t, type:'tag', cat:tagCat[t]||'', count:tagCount[t], x:W*0.3+Math.random()*W*0.4, y:Math.random()*H, vx:0, vy:0, highlight:false};
+    nodes.push(n); nodeMap[t]=n;
+  });
 
-  function getColor(id){ return catColors[tagCat[id]]||'#7a85a0'; }
+  // Paper 節點
+  [...activePapers].forEach(pid => {
+    const p = DB.papers.find(x=>x.id===pid);
+    const n = {id:pid, type:'paper', docType:p?.doc_type||'', count:paperTagCount[pid]||1, x:Math.random()*W, y:Math.random()*H, vx:0, vy:0, highlight:false, title:(p?.title||'').slice(0,30)};
+    nodes.push(n); nodeMap[pid]=n;
+  });
 
-  // Simple force simulation
-  const maxW = Math.max(1,...edges.map(e=>e.w));
-  for(let iter=0;iter<200;iter++){
-    // Repulsion
+  document.getElementById('graphInfo').textContent = `${activePapers.size} 篇文獻 · ${activeTags.size} 個標籤 · ${filteredEdges.length} 條連結`;
+
+  // Force simulation
+  for(let iter=0;iter<300;iter++){
     for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++){
       let dx=nodes[j].x-nodes[i].x, dy=nodes[j].y-nodes[i].y;
       const dist=Math.max(Math.sqrt(dx*dx+dy*dy),1);
-      const f=800/(dist*dist);
+      const repel = nodes[i].type===nodes[j].type ? 1200 : 600;
+      const f=repel/(dist*dist);
       nodes[i].vx-=f*dx/dist; nodes[i].vy-=f*dy/dist;
       nodes[j].vx+=f*dx/dist; nodes[j].vy+=f*dy/dist;
     }
-    // Attraction
-    edges.forEach(e=>{
-      const a=nodeMap[e.a],b=nodeMap[e.b];if(!a||!b)return;
+    filteredEdges.forEach(e=>{
+      const a=nodeMap[e.paper],b=nodeMap[e.tag];if(!a||!b)return;
       let dx=b.x-a.x,dy=b.y-a.y;
       const dist=Math.max(Math.sqrt(dx*dx+dy*dy),1);
-      const f=dist*0.005*e.w;
+      const f=dist*0.004;
       a.vx+=f*dx/dist; a.vy+=f*dy/dist;
       b.vx-=f*dx/dist; b.vy-=f*dy/dist;
     });
-    // Center gravity
     nodes.forEach(n=>{
-      n.vx+=(W/2-n.x)*0.001; n.vy+=(H/2-n.y)*0.001;
-      n.x+=n.vx*0.3; n.y+=n.vy*0.3;
-      n.vx*=0.85; n.vy*=0.85;
-      n.x=Math.max(40,Math.min(W-40,n.x));
+      n.vx+=(W/2-n.x)*0.0008; n.vy+=(H/2-n.y)*0.0008;
+      n.x+=n.vx*0.25; n.y+=n.vy*0.25;
+      n.vx*=0.82; n.vy*=0.82;
+      n.x=Math.max(50,Math.min(W-50,n.x));
       n.y=Math.max(30,Math.min(H-30,n.y));
     });
   }
 
-  // Draw
-  ctx.clearRect(0,0,W,H);
-  // Edges
-  edges.forEach(e=>{
-    const a=nodeMap[e.a],b=nodeMap[e.b];if(!a||!b)return;
-    ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
-    ctx.strokeStyle=`rgba(180,160,140,${0.15+0.6*(e.w/maxW)})`;
-    ctx.lineWidth=0.5+2*(e.w/maxW);ctx.stroke();
-  });
-  // Nodes
-  nodes.forEach(n=>{
-    const r=4+Math.min(n.count*1.5,16);
-    ctx.beginPath();ctx.arc(n.x,n.y,r,0,Math.PI*2);
-    ctx.fillStyle=getColor(n.id);ctx.globalAlpha=0.85;ctx.fill();ctx.globalAlpha=1;
-    ctx.strokeStyle='rgba(0,0,0,0.1)';ctx.lineWidth=0.5;ctx.stroke();
-    ctx.fillStyle='#4a3e35';ctx.font='500 10px Inter,sans-serif';ctx.textAlign='center';
-    ctx.fillText(n.id.length>12?n.id.slice(0,11)+'…':n.id, n.x, n.y-r-4);
-  });
+  graphNodes = nodes;
+  graphEdges = filteredEdges;
+  drawGraph(ctx, W, H, null);
 
   // Legend
   const legend = document.getElementById('graphLegend');
-  legend.innerHTML = Object.entries(catColors).map(([cat,col])=>
-    `<span><span class="legend-dot" style="background:${col}"></span>${cat}</span>`
-  ).join('');
+  legend.innerHTML = `<span>◼ 文獻（方形）</span>` +
+    Object.entries(catColors).filter(([cat])=>!catFilter||cat===catFilter).map(([cat,col])=>
+      `<span><span class="legend-dot" style="background:${col}"></span>${cat}</span>`
+    ).join('');
+}
+
+function drawGraph(ctx, W, H, highlightId) {
+  const dict = DB.meta.tag_dictionary||{};
+  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',performance:'#2980b9',market_trend:'#7f8c8d',doc_type:'#8a7e72',access:'#8a7e72'};
+  const tagCat = {};
+  Object.entries(dict).forEach(([cat,tags])=>tags.forEach(t=>{tagCat[t]=cat}));
+
+  const nodeMap = {};
+  graphNodes.forEach(n=>nodeMap[n.id]=n);
+
+  // 找出 highlight 的連結節點
+  const connected = new Set();
+  if(highlightId) {
+    connected.add(highlightId);
+    graphEdges.forEach(e=>{
+      if(e.paper===highlightId) connected.add(e.tag);
+      if(e.tag===highlightId) connected.add(e.paper);
+    });
+  }
+
+  ctx.clearRect(0,0,W,H);
+
+  // Edges
+  graphEdges.forEach(e=>{
+    const a=nodeMap[e.paper],b=nodeMap[e.tag];if(!a||!b)return;
+    const hl = highlightId && (connected.has(e.paper)&&connected.has(e.tag));
+    ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+    ctx.strokeStyle = hl ? 'rgba(232,108,58,0.6)' : highlightId ? 'rgba(200,190,180,0.08)' : 'rgba(180,160,140,0.2)';
+    ctx.lineWidth = hl ? 2 : 0.5;
+    ctx.stroke();
+  });
+
+  // Nodes
+  graphNodes.forEach(n=>{
+    const hl = !highlightId || connected.has(n.id);
+    const alpha = hl ? 1 : 0.15;
+    ctx.globalAlpha = alpha;
+
+    if(n.type==='tag') {
+      // 圓形 Tag 節點
+      const r = 5 + Math.min(n.count*2, 18);
+      const col = catColors[n.cat] || '#8a7e72';
+      ctx.beginPath();ctx.arc(n.x,n.y,r,0,Math.PI*2);
+      ctx.fillStyle=col;ctx.fill();
+      ctx.strokeStyle='rgba(0,0,0,0.15)';ctx.lineWidth=0.5;ctx.stroke();
+      ctx.fillStyle='#2a2420';ctx.font='600 11px Inter,sans-serif';ctx.textAlign='center';
+      ctx.fillText(n.id, n.x, n.y-r-4);
+    } else {
+      // 方形 Paper 節點
+      const s = 6 + Math.min(n.count*2, 12);
+      const docColor = n.docType==='專利'?'#d4a030':n.docType==='商用產品'?'#2d8c5a':'#e86c3a';
+      ctx.fillStyle=docColor;
+      ctx.fillRect(n.x-s/2, n.y-s/2, s, s);
+      ctx.strokeStyle='rgba(0,0,0,0.2)';ctx.lineWidth=0.5;
+      ctx.strokeRect(n.x-s/2, n.y-s/2, s, s);
+      ctx.fillStyle='#2a2420';ctx.font='500 9px JetBrains Mono,monospace';ctx.textAlign='center';
+      ctx.fillText(n.id, n.x, n.y-s/2-3);
+    }
+    ctx.globalAlpha = 1;
+  });
+
+  // Highlight 標籤
+  if(highlightId && nodeMap[highlightId]) {
+    const hn = nodeMap[highlightId];
+    ctx.fillStyle='var(--text)';ctx.font='700 13px Inter,sans-serif';ctx.textAlign='left';
+    ctx.fillText(`🔍 ${hn.id}${hn.title?' — '+hn.title:''}`, 10, H-10);
+  }
+}
+
+function onGraphClick(event) {
+  const canvas = document.getElementById('graphCanvas');
+  const rect = canvas.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+
+  // 找最近的節點
+  let closest = null, minDist = 30;
+  graphNodes.forEach(n=>{
+    const dx=n.x-x, dy=n.y-y;
+    const dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist<minDist){minDist=dist;closest=n}
+  });
+
+  const ctx = canvas.getContext('2d');
+  const W = canvas.offsetWidth, H = 550;
+
+  if(!closest){
+    drawGraph(ctx,W,H,null);
+    document.getElementById('graphDetail').style.display='none';
+    return;
+  }
+
+  drawGraph(ctx,W,H,closest.id);
+
+  // 顯示連結詳情
+  const detail = document.getElementById('graphDetail');
+  const connected = [];
+  graphEdges.forEach(e=>{
+    if(e.paper===closest.id) connected.push({type:'tag', id:e.tag});
+    if(e.tag===closest.id) connected.push({type:'paper', id:e.paper});
+  });
+
+  if(closest.type==='tag') {
+    const papers = connected.map(c=>{
+      const p=DB.papers.find(x=>x.id===c.id);
+      return p?`<span style="cursor:pointer;color:var(--accent)" onclick="highlightPaper('${c.id}')">[${c.id}]</span> ${p.title.slice(0,50)}`:'';
+    }).filter(Boolean);
+    detail.innerHTML = `<strong>🏷 ${closest.id}</strong>（${connected.length} 篇文獻）<br>${papers.join('<br>')}`;
+  } else {
+    const p = DB.papers.find(x=>x.id===closest.id);
+    const tags = connected.map(c=>`<span class="tag tag-gray">${c.id}</span>`).join(' ');
+    detail.innerHTML = `<strong>📄 [${closest.id}]</strong> ${p?.title||''}<br>${tags}<br><span style="color:var(--muted)">${p?.purpose||''}</span>`;
+  }
+  detail.style.display='block';
 }
 
 // ══════════════════════════════════════════════
