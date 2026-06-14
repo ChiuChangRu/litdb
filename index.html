@@ -1046,6 +1046,46 @@ function buildSmartContext(question) {
   return context;
 }
 
+// ══════════════════════════════════════════════
+// PubMed 即時搜尋（給 AI 對話用）
+// ══════════════════════════════════════════════
+async function searchPubMedForChat(question) {
+  // 從問題提取英文關鍵字
+  const engTerms = question.replace(/[^\w\s]/g,' ').split(/\s+/).filter(t=>t.length>2 && /[a-zA-Z]/.test(t)).slice(0,5);
+  if(!engTerms.length) {
+    // 嘗試用標籤字典翻譯中文關鍵字
+    const dict = DB.meta.tag_dictionary||{};
+    const allTags = Object.values(dict).flat();
+    const matched = allTags.filter(t => question.includes(t) || question.toLowerCase().includes(t.toLowerCase()));
+    if(matched.length) engTerms.push(...matched.slice(0,4));
+  }
+  if(!engTerms.length) return [];
+
+  const query = engTerms.join(' ') + ' hydrophilic coating';
+  try {
+    const sr = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${encodeURIComponent(query)}&retmax=5&sort=relevance&retmode=json`);
+    const sd = await sr.json();
+    const pmids = sd.esearchresult?.idlist || [];
+    if(!pmids.length) return [];
+
+    const fr = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=${pmids.join(',')}&retmode=xml`);
+    const xml = await fr.text();
+    const doc = new DOMParser().parseFromString(xml,'text/xml');
+
+    return [...doc.querySelectorAll('PubmedArticle')].map(art => {
+      const pmid = art.querySelector('PMID')?.textContent||'';
+      const title = art.querySelector('ArticleTitle')?.textContent||'';
+      const abstract = [...art.querySelectorAll('AbstractText')].map(a=>a.textContent).join(' ').slice(0,300);
+      const year = art.querySelector('PubDate Year')?.textContent||'';
+      const inDB = DB.papers.some(p=>p.pmid===pmid);
+      return { pmid, title, abstract, year, inDB };
+    }).filter(p=>!p.inDB); // 排除已在資料庫中的
+  } catch(e) {
+    console.warn('PubMed chat search failed:', e);
+    return [];
+  }
+}
+
 async function sendChat() {
   const input = document.getElementById('chatInput');
   const q = input.value.trim();
@@ -1055,27 +1095,41 @@ async function sendChat() {
 
   // Show user message
   appendMsg(q, 'user');
+  const aiDiv = appendMsg('<span class="spinner"></span> 搜尋 PubMed + 分析中...', 'ai');
 
-  // Build system prompt with DB context
-  const context = buildSmartContext(q);
+  // 同時進行：建立本地 context + 搜尋 PubMed
+  const [localContext, pubmedResults] = await Promise.all([
+    Promise.resolve(buildSmartContext(q)),
+    searchPubMedForChat(q).catch(()=>[])
+  ]);
+
+  // 組合 PubMed 結果
+  let pubmedContext = '';
+  if(pubmedResults.length) {
+    pubmedContext = `\n\n=== PubMed 即時搜尋結果（${pubmedResults.length} 篇，不在資料庫中）===\n` +
+      pubmedResults.map(p=>`[PMID:${p.pmid}] ${p.title} (${p.year})\n摘要:${p.abstract}`).join('\n---\n');
+  }
+
   const sysPrompt = `你是 Bioteque（邦特生物科技）的 R&D 文獻顧問。
 
-以下提供兩層資訊：
-1. 全部文獻索引：每篇一行（ID、標題、標籤、年份），讓你知道資料庫的完整範圍
-2. 相關文獻詳情：與問題相關的文獻完整摘要，供你深入分析
+以下提供三層資訊：
+1. 全部文獻索引：資料庫中每篇一行（ID、標題、標籤、年份）
+2. 相關文獻詳情：與問題相關的文獻完整摘要
+3. PubMed 即時搜尋：資料庫外的最新相關文獻
 
-${context}
+${localContext}${pubmedContext}
 
 Bioteque 現有能力：TPU/Pebax 基材、air plasma 前處理、LED UV 固化、Harland FTS 摩擦測試儀。
 產品線：ureteral stent、hemodialysis catheter、TPU catheter、biopsy needle。
 
 回答規則：
 1. 使用繁體中文
-2. 引用文獻時用 [ID] 標註（可引用索引中任何文獻）
+2. 資料庫文獻用 [ID] 標註，PubMed 新文獻用 [PMID:數字] 標註
 3. 不確定的推論標上 *
 4. 回答要具體可執行，不要泛泛而談
-5. 如果問題超出資料庫範圍，說明缺口並建議搜尋方向
-6. 優先參考「相關文獻詳情」，但也可以根據「全部文獻索引」指出相關的其他文獻`;
+5. 如果 PubMed 找到資料庫中沒有的重要文獻，主動推薦收錄
+6. 優先參考資料庫文獻，PubMed 結果作為補充
+7. 區分「資料庫中已有」vs「PubMed 新發現」`;
 
   chatHistory.push({role:'user',content:q});
   // Keep last 4 turns
@@ -1083,7 +1137,7 @@ Bioteque 現有能力：TPU/Pebax 基材、air plasma 前處理、LED UV 固化�
 
   const messages = [{role:'user',content:sysPrompt+'\\n\\n歷史對話將在下方，請根據以上背景回答：'},...chatHistory];
 
-  const aiDiv = appendMsg('<span class="spinner"></span> 思考中...', 'ai');
+  aiDiv.innerHTML = `<span class="spinner"></span> AI 分析中...（已搜尋 PubMed ${pubmedResults.length} 篇）`;
 
   try {
     const r = await fetch(cfg.proxy, {
@@ -1095,11 +1149,14 @@ Bioteque 現有能力：TPU/Pebax 基材、air plasma 前處理、LED UV 固化�
     chatHistory.push({role:'assistant',content:reply});
 
     // Format: replace [P01] etc with clickable refs
-    const formatted = reply.replace(/\[([A-Z]\d+)\]/g, (m,id)=>{
+    let formatted = reply.replace(/\[([A-Z]\d+)\]/g, (m,id)=>{
       const p = DB.papers.find(x=>x.id===id);
       if(!p) return m;
-      const link = p.links?Object.values(p.links)[0]:'';
-      return `<span style="color:var(--accent2);cursor:pointer" title="${p.title}" onclick="highlightPaper('${id}')">[${id}]</span>`;
+      return `<span style="color:var(--accent2);cursor:pointer;font-weight:600" title="${p.title}" onclick="highlightPaper('${id}')">[${id}]</span>`;
+    });
+    // Format: replace [PMID:xxxxx] with PubMed links
+    formatted = formatted.replace(/\[PMID:(\d+)\]/g, (m,pmid)=>{
+      return `<a href="https://pubmed.ncbi.nlm.nih.gov/${pmid}/" target="_blank" style="color:var(--accent);font-weight:600;text-decoration:none" title="PubMed 新文獻">[PMID:${pmid}]↗</a>`;
     });
     aiDiv.innerHTML = formatted;
   } catch(e) {
