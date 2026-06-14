@@ -741,7 +741,7 @@ function showDetail(i) {
       // 嘗試本地圖片
       const img = new Image();
       img.onload = () => { figEl.innerHTML = `<img src="${localUrl}" class="detail-figure" onclick="window.open('${localUrl}','_blank')"><div class="fig-caption">點擊放大</div>`; };
-      img.onerror = () => { figEl.innerHTML = `<div class="fig-placeholder">📷 尚無簡圖<br><span style="font-size:10px">上傳 img/${p.id}.png 或在 papers.json 加入 figure URL</span></div>`; };
+      img.onerror = () => { figEl.innerHTML = ''; };
       img.src = localUrl;
     }
   }
@@ -750,7 +750,7 @@ function showDetail(i) {
 function tryLocalFig(el, localUrl) {
   const img = new Image();
   img.onload = () => { el.src = localUrl; };
-  img.onerror = () => { el.parentElement.innerHTML = `<div class="fig-placeholder">📷 圖片載入失敗</div>`; };
+  img.onerror = () => { el.parentElement.innerHTML = ''; };
   img.src = localUrl;
 }
 
