@@ -327,11 +327,12 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 <div class="view" id="v-add">
   <div class="help-box" id="help-add">
     <button class="close-help" onclick="this.parentElement.classList.add('hidden')">✕</button>
-    <h4>➕ 新增文獻 — 四種方式擴充知識庫</h4>
-    <strong>方式一：📎 書籤小工具（最方便）</strong> — 把下方按鈕拖到書籤列，瀏覽論文時點一下就自動匯入 litdb。<br>
-    <strong>方式二：AI 自動填入</strong> — 貼上論文標題、摘要或 DOI，AI 自動辨識填入所有欄位，每次約 $0.001。<br>
-    <strong>方式三：PubMed 批次搜尋</strong> — 輸入關鍵字搜尋 PubMed，勾選想收錄的論文，一鍵批次加入（免費）。<br>
-    <strong>方式四：手動填寫</strong> — 直接填欄位，適合專利或商用產品。<br><br>
+    <h4>➕ 新增文獻 — 五種方式擴充知識庫</h4>
+    <strong>方式一：🔗 DOI 匯入（最精確）</strong> — 貼上 DOI，自動從 Crossref 抓取完整資訊，免費零 AI 費用。<br>
+    <strong>方式二：📎 書籤小工具</strong> — 瀏覽論文時點一下就自動匯入。<br>
+    <strong>方式三：AI 自動填入</strong> — 貼上標題/摘要，AI 辨識填入，$0.001/篇。<br>
+    <strong>方式四：PubMed 批次搜尋</strong> — 關鍵字搜尋，勾選加入，免費。<br>
+    <strong>方式五：手動填寫</strong> — 直接填欄位。<br><br>
     <span style="font-size:12px">👉 <strong>書籤安裝：</strong>把這個連結拖到書籤列 → </span>
     <a href="javascript:void(window.open('https://chiuchangru.github.io/litdb/?title='+encodeURIComponent(document.title)+'&url='+encodeURIComponent(location.href)+'&abstract='+encodeURIComponent((document.querySelector('meta[name=description]')||{}).content||''),'_blank'))" style="display:inline-block;padding:4px 12px;background:var(--accent);color:#fff;border-radius:6px;text-decoration:none;font-size:12px;font-weight:600;cursor:grab" onclick="event.preventDefault();toast('請用滑鼠拖曳此按鈕到書籤列！','')">📎 存入 LitDB</a>
   </div>
@@ -367,9 +368,18 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 
     <!-- Right: Manual / AI single add -->
     <div class="panel add-form">
-      <div class="panel-h">✏️ 單篇新增（AI 自動填 或 手動）</div>
+      <div class="panel-h">✏️ 單篇新增（DOI 匯入 / AI 自動填 / 手動）</div>
       <div style="padding:14px">
-        <div class="field"><label>快速方式：貼上標題/摘要，AI 自動填欄位</label>
+        <div class="field" style="background:var(--card);padding:12px;border-radius:8px;border:1px solid var(--border)">
+          <label style="font-size:12px;font-weight:700;color:var(--accent)">🔗 DOI 匯入（免費，零 AI 費用）</label>
+          <div style="display:flex;gap:6px;margin-top:6px">
+            <input type="text" id="doiInput" placeholder="10.1016/j.biomaterials.2024... 或完整 DOI URL" onkeydown="if(event.key==='Enter')importDOI()">
+            <button class="btn btn-p" onclick="importDOI()" style="white-space:nowrap">匯入</button>
+          </div>
+          <div id="doiStatus" style="font-size:11px;color:var(--muted);margin-top:4px"></div>
+        </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:12px 0">
+        <div class="field"><label>AI 自動填入：貼上標題/摘要</label>
           <textarea id="addRaw" rows="5" placeholder="貼上論文標題、摘要、DOI...任何內容，AI 會幫你解析"></textarea>
           <button class="btn btn-g" style="margin-top:6px;width:100%" onclick="aiParseAdd()">🤖 AI 自動填入</button>
         </div>
@@ -1357,6 +1367,104 @@ async function batchAIEnrich() {
 // ══════════════════════════════════════════════
 // ADD: New Paper (single)
 // ══════════════════════════════════════════════
+// ══════════════════════════════════════════════
+// DOI IMPORT (Crossref API, 免費)
+// ══════════════════════════════════════════════
+async function importDOI() {
+  let doi = document.getElementById('doiInput').value.trim();
+  if(!doi) { toast('請輸入 DOI','error'); return; }
+
+  // 清理 DOI：支援完整 URL 或純 DOI
+  doi = doi.replace(/^https?:\/\/doi\.org\//,'').replace(/^doi:/i,'').trim();
+
+  // 檢查是否已存在
+  if(DB.papers.some(p=>p.doi===doi)) {
+    toast('此 DOI 已在資料庫中','error'); return;
+  }
+
+  const statusEl = document.getElementById('doiStatus');
+  statusEl.innerHTML = '<span class="spinner"></span> 查詢 Crossref...';
+
+  try {
+    const r = await fetch(`https://api.crossref.org/works/${encodeURIComponent(doi)}`, {
+      headers: {'Accept':'application/json'}
+    });
+    if(!r.ok) throw new Error(`DOI 未找到（HTTP ${r.status}）`);
+    const data = await r.json();
+    const w = data.message;
+
+    // 解析作者
+    const authors = (w.author||[]).slice(0,4).map(a =>
+      `${a.family||''} ${(a.given||'').charAt(0)}`.trim()
+    ).join('; ') + ((w.author||[]).length > 4 ? ' et al.' : '');
+
+    // 解析年份
+    const year = w.published?.['date-parts']?.[0]?.[0] ||
+                 w['published-print']?.['date-parts']?.[0]?.[0] ||
+                 w['published-online']?.['date-parts']?.[0]?.[0] || null;
+
+    // 解析期刊
+    const journal = (w['container-title']||[])[0] || w.publisher || '';
+
+    // 解析標題
+    const title = (w.title||[])[0] || '';
+
+    // 解析摘要（Crossref 有時有 abstract）
+    let abstract = w.abstract || '';
+    // 清除 HTML tags
+    abstract = abstract.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,500);
+
+    // ISSN / URL
+    const url = w.URL || `https://doi.org/${doi}`;
+
+    // 自動產生 ID
+    const prefix = 'A';
+    const maxNum = DB.papers.filter(p=>p.id.startsWith(prefix)).map(p=>parseInt(p.id.slice(1))||0).reduce((a,b)=>Math.max(a,b),0);
+    const newId = prefix + String(maxNum+1).padStart(2,'0');
+
+    // 填入表單
+    document.getElementById('addId').value = newId;
+    document.getElementById('addTitle').value = title;
+    document.getElementById('addAuthors').value = authors;
+    document.getElementById('addYear').value = year || '';
+    document.getElementById('addDocType').value = '期刊論文';
+    document.getElementById('addAccess').value = abstract ? '開放摘要' : '付費';
+    document.getElementById('addAbstract').value = abstract;
+    document.getElementById('addLink').value = url;
+    document.getElementById('addTags').value = '';
+    document.getElementById('addPurpose').value = '';
+    document.getElementById('addValue').value = '';
+
+    // 也填入 AI 自動填入框（方便之後補標籤）
+    document.getElementById('addRaw').value = `${title}\n\n${abstract}\n\n${journal} (${year})\nDOI: ${doi}`;
+
+    statusEl.innerHTML = `✅ 已匯入：${title.slice(0,50)}...<br>
+      <span style="color:var(--muted)">${authors} · ${journal} · ${year}</span><br>
+      <span style="font-size:10px;color:var(--accent)">💡 點「🤖 AI 自動填入」可補標籤和對專案價值</span>`;
+
+    toast('DOI 匯入成功，請確認後加入資料庫','success');
+  } catch(e) {
+    statusEl.innerHTML = `<span style="color:var(--danger)">❌ ${e.message}</span>`;
+    toast('DOI 匯入失敗','error');
+  }
+}
+
+// 也支援批次 DOI 匯入（多個 DOI 用換行分隔）
+async function batchDOIImport(doiList) {
+  const dois = doiList.split(/[\n,;]+/).map(d=>d.trim()).filter(Boolean);
+  let added = 0;
+  for(const doi of dois) {
+    document.getElementById('doiInput').value = doi;
+    await importDOI();
+    if(document.getElementById('addTitle').value) {
+      addPaper();
+      added++;
+    }
+    await new Promise(r=>setTimeout(r,500)); // Crossref rate limit
+  }
+  toast(`批次匯入完成：${added}/${dois.length} 篇`,'success');
+}
+
 async function aiParseAdd() {
   const raw = document.getElementById('addRaw').value.trim();
   if(!raw){toast('請先貼上內容','error');return}
