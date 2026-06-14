@@ -922,9 +922,74 @@ function extractPatentId(text) {
 
 async function autoFetchPatent(i, patentId) {
   const statusEl = document.getElementById('patentFetchStatus_'+i);
-  // 直接開啟專利頁面
+  const textEl = document.getElementById('patentText_'+i);
+
+  // 嘗試透過 Worker 代理抓取
+  if(cfg.proxy) {
+    const proxyBase = cfg.proxy.replace(/\/api$/, '');
+    const patentUrl = `https://patents.google.com/patent/${patentId}/en`;
+    statusEl.innerHTML = '<span class="spinner"></span> 透過 Worker 抓取專利全文...';
+    
+    try {
+      const r = await fetch(`${proxyBase}/fetch?url=${encodeURIComponent(patentUrl)}`);
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const html = await r.text();
+      
+      // 解析 HTML 提取 Description + Claims
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      let desc = '';
+      let claims = '';
+      
+      // Google Patents 的文字在 .description 和 .claims 區塊
+      const descEl = doc.querySelector('.description, section[itemprop=description], #description');
+      if(descEl) desc = descEl.textContent;
+      const claimsEl = doc.querySelector('.claims, section[itemprop=claims], #claims');
+      if(claimsEl) claims = claimsEl.textContent;
+      
+      // 備援：搜尋所有 text content
+      if(!desc && !claims) {
+        const allText = doc.body?.textContent || '';
+        if(allText.length > 500) {
+          desc = allText;
+        }
+      }
+      
+      if(desc || claims) {
+        const fullText = (desc + '\n\nCLAIMS:\n' + claims).trim();
+        // 智慧截取 Examples
+        const exStart = fullText.search(/\b(EXAMPLE|Example|EXAMPLES|Embodiment|DETAILED DESCRIPTION)\b/i);
+        let extracted;
+        if(exStart > 0 && fullText.length > 8000) {
+          extracted = fullText.slice(Math.max(0,exStart-500), exStart+6000);
+        } else {
+          extracted = fullText.slice(0, 8000);
+        }
+        if(claims && !extracted.includes('CLAIMS')) {
+          extracted += '\n\n--- CLAIMS ---\n' + claims.slice(0,2000);
+        }
+        
+        if(textEl) textEl.value = extracted;
+        const srcEl = document.getElementById('patentSource');
+        if(srcEl) srcEl.value = 'paste';
+        const pasteArea = document.getElementById('pasteArea');
+        if(pasteArea) pasteArea.style.display = 'block';
+        
+        statusEl.innerHTML = `✅ 已自動抓取 ${extracted.length} 字`;
+        toast('專利全文已抓取，點「開始分析」','success');
+        
+        // 自動開始分析
+        setTimeout(()=>runPatentAnalysis(i), 500);
+        return;
+      }
+      throw new Error('無法從頁面提取文字');
+    } catch(e) {
+      console.warn('Worker fetch failed:', e);
+    }
+  }
+  
+  // 備援：手動複製貼上
   window.open(`https://patents.google.com/patent/${patentId}/en`, '_blank');
-  statusEl.innerHTML = `✅ 已開啟 Google Patents<br>
+  statusEl.innerHTML = `⚠ 自動抓取失敗，請手動操作：<br>
     <strong>步驟：</strong>在專利頁面 Ctrl+A 全選 → Ctrl+C 複製 → 回來點下方按鈕<br>
     <button class="btn btn-p" onclick="pasteFromClipboard(${i})" style="margin-top:6px;padding:8px 16px">📋 從剪貼簿貼上並分析</button>`;
 }
