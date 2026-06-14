@@ -775,6 +775,11 @@ async function autoFetchPatent(i, patentId) {
       // 附上 Claims
       if(claims) extractedText += '\n\n--- CLAIMS ---\n' + claims.slice(0,2000);
       textEl.value = extractedText;
+      // 自動觸發分析
+      if(cfg.proxy) {
+        statusEl.innerHTML += '<br><span class="spinner"></span> 自動分析中...';
+        setTimeout(()=>analyzePatent(i), 300);
+      }
       return;
     }
     throw new Error('無法解析內容');
