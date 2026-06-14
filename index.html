@@ -566,15 +566,35 @@ async function loadDB() {
   const saved = localStorage.getItem('litdb_data');
   if(saved) { try { DB = JSON.parse(saved); } catch(e){} }
 
-  if(!DB.papers.length) {
-    const url = cfg.dataUrl || 'papers.json';
-    try {
-      const r = await fetch(url + '?t=' + Date.now());
-      if(r.ok) DB = await r.json();
-    } catch(e) { console.warn('Failed to load remote:', e); }
-  }
+  // 無論是否有 local，都嘗試從遠端載入，合併 patentResults
+  const url = cfg.dataUrl || 'papers.json';
+  try {
+    const r = await fetch(url + '?t=' + Date.now());
+    if(r.ok) {
+      const remote = await r.json();
+      if(!DB.papers.length) {
+        DB = remote;
+      } else {
+        // 合併：遠端有 patentResults 但本地沒有 → 補入
+        (remote.papers||[]).forEach(rp => {
+          if(rp.patentResults) {
+            const lp = DB.papers.find(p=>p.id===rp.id);
+            if(lp && !lp.patentResults) lp.patentResults = rp.patentResults;
+          }
+        });
+        // 合併：遠端有新文獻但本地沒有 → 加入
+        (remote.papers||[]).forEach(rp => {
+          if(!DB.papers.find(p=>p.id===rp.id)) DB.papers.push(rp);
+        });
+        // 更新 meta
+        if(remote.meta) DB.meta = remote.meta;
+      }
+    }
+  } catch(e) { console.warn('Failed to load remote:', e); }
+
   if(!DB.papers) DB.papers = [];
   if(!DB.meta) DB.meta = {};
+  saveDB(); // 合併後存回 localStorage
   onDBLoaded();
 }
 
