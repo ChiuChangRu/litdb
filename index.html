@@ -235,6 +235,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
         <div class="field"><label>固化方式</label><select id="fCure" onchange="filterPapers()"><option value="">全部</option></select></div>
         <div class="field"><label>應用</label><select id="fApp" onchange="filterPapers()"><option value="">全部</option></select></div>
         <div class="field"><label>排序</label><select id="fSort" onchange="filterPapers()"><option value="id">編號</option><option value="year-desc">年份新→舊</option><option value="year-asc">年份舊→新</option><option value="tags">標籤數多→少</option></select></div>
+        <div class="field"><label>專利分析</label><select id="fPatentStatus" onchange="filterPapers()"><option value="">全部</option><option value="analyzed">✅ 已分析</option><option value="not-analyzed">🔴 未分析</option><option value="patent-only">專利（全部）</option></select></div>
         <hr style="border:none;border-top:1px solid var(--border);margin:10px 0">
         <label style="font-size:11px;color:var(--muted);font-weight:600">標籤快篩</label>
         <div class="tag-cloud" id="tagCloud"></div>
@@ -648,6 +649,7 @@ function filterPapers() {
   const cure = document.getElementById('fCure').value;
   const app = document.getElementById('fApp').value;
   const sort = document.getElementById('fSort').value;
+  const patentStatus = document.getElementById('fPatentStatus').value;
 
   filtered = DB.papers.filter(p => {
     if(type && p.doc_type !== type) return false;
@@ -656,6 +658,14 @@ function filterPapers() {
     if(cure && !tags.includes(cure)) return false;
     if(app && !tags.includes(app)) return false;
     if(activeTags.size && ![...activeTags].every(t=>tags.includes(t))) return false;
+    // 專利分析狀態篩選
+    if(patentStatus) {
+      const isPatent = p.doc_type === '專利';
+      const hasAnalysis = p.patentResults && Object.keys(p.patentResults).length > 0;
+      if(patentStatus === 'analyzed' && !(isPatent && hasAnalysis)) return false;
+      if(patentStatus === 'not-analyzed' && !(isPatent && !hasAnalysis)) return false;
+      if(patentStatus === 'patent-only' && !isPatent) return false;
+    }
     if(kw) {
       const hay = `${p.title} ${p.abstract_note} ${p.purpose} ${p.value_to_project} ${tags.join(' ')} ${p.authors} ${p.id} ${p.venue||''}`.toLowerCase();
       const terms = kw.split(/[,;，；\s]+/).map(s=>s.trim()).filter(Boolean);
@@ -751,6 +761,27 @@ function showDetail(i) {
       <button class="btn btn-p" onclick="loadCiteTree(${i})" style="margin-left:auto">🌳 引文樹</button>
     </div>
     <div id="patentAnalysis_${i}"></div>
+    ${(p.doc_type==='專利' && p.patentResults && Object.keys(p.patentResults).length) ? `
+    <div style="margin-top:12px;border:1px solid var(--accent2);border-radius:8px;overflow:hidden">
+      <div style="padding:8px 12px;background:var(--accent2);color:#fff;font-size:12px;font-weight:600">✅ 已有專利分析結果</div>
+      <div style="padding:10px 12px">
+        ${Object.entries(p.patentResults).map(([mode,r])=>{
+          const modeLabels = {full:'📊 完整分析',avoidance:'🚧 迴避設計',formulation:'🧪 配方萃取',feasibility:'🏭 可行性評估',compare:'🔄 對比分析'};
+          const label = modeLabels[mode] || mode;
+          return `<div style="margin-bottom:8px">
+            <div style="font-size:12px;font-weight:600;color:var(--accent);cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">${label} ▾</div>
+            <div style="display:none;margin-top:6px;font-size:12px;line-height:1.6">
+              ${r.summary?`<div style="padding:6px 8px;background:var(--card);border-radius:4px;margin-bottom:6px;font-weight:600">💡 ${r.summary}</div>`:''}
+              ${r.key_claims?`<div style="margin-bottom:6px"><strong style="color:var(--warn)">📜 Claims</strong><br>${r.key_claims.map((c,ci)=>(ci+1)+'. '+c).join('<br>')}</div>`:''}
+              ${r.actionable_insights?`<div style="margin-bottom:6px"><strong style="color:var(--accent2)">✅ 可借鏡</strong><br>${r.actionable_insights.map((x,xi)=>(xi+1)+'. '+x).join('<br>')}</div>`:''}
+              ${r.red_flags?`<div style="margin-bottom:6px"><strong style="color:var(--danger)">🚩 可疑</strong><br>${r.red_flags.map(x=>'• '+x).join('<br>')}</div>`:''}
+              ${r.bioteque_relevance?`<div><strong style="color:var(--accent)">🏭 Bioteque</strong><br>${r.bioteque_relevance}</div>`:''}
+            </div>
+          </div>`;
+        }).join('')}
+        <button class="btn btn-s" onclick="showPatentAnalysis(${i})" style="width:100%;margin-top:4px">🔄 重新分析 / 其他模式</button>
+      </div>
+    </div>` : ''}
     <div id="citeTree_${i}"></div>
   `;
 
