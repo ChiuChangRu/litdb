@@ -799,7 +799,7 @@ function showPatentAnalysis(i) {
     <div style="font-size:13px;color:var(--muted);margin-bottom:12px">
       AI 三層分析：<strong>① 這專利在做什麼</strong>（去法律修飾）→ <strong>② 迴避設計要點</strong>（Claims 白話翻譯）→ <strong>③ 可借鏡的配方</strong>（Examples 萃取+可信度評估）
     </div>
-    ${patentId ? `<button class="btn btn-p" onclick="autoFetchPatent(${i},'${patentId}')" style="width:100%;margin-bottom:12px;padding:10px">🔍 自動抓取 ${patentId} 全文（文字版，免費）</button>` : ''}
+    ${patentId ? `<button class="btn btn-p" onclick="autoFetchPatent(${i},'${patentId}')" style="width:100%;margin-bottom:12px;padding:10px">🔍 開啟 ${patentId} 專利頁（複製後一鍵貼上分析）</button>` : ''}
     <div style="margin-bottom:8px">
       <label style="font-size:12px;font-weight:600;color:var(--muted)">或手動貼上 Description + Examples 段落</label>
       <textarea id="patentText_${i}" rows="10" placeholder="Google Patents 頁面 Ctrl+A 全選 → Ctrl+C 複製 → 貼到這裡&#10;AI 會自動過濾垃圾內容，只萃取有價值的配方和數據" style="font-size:13px;margin-top:6px"></textarea>
@@ -843,58 +843,45 @@ function extractPatentId(text) {
 
 async function autoFetchPatent(i, patentId) {
   const statusEl = document.getElementById('patentFetchStatus_'+i);
-  const textEl = document.getElementById('patentText_'+i);
-  statusEl.innerHTML = '<span class="spinner"></span> 嘗試抓取專利全文...';
+  // 直接開啟專利頁面
+  window.open(`https://patents.google.com/patent/${patentId}/en`, '_blank');
+  statusEl.innerHTML = `✅ 已開啟 Google Patents<br>
+    <strong>步驟：</strong>在專利頁面 Ctrl+A 全選 → Ctrl+C 複製 → 回來點下方按鈕<br>
+    <button class="btn btn-p" onclick="pasteFromClipboard(${i})" style="margin-top:6px;padding:8px 16px">📋 從剪貼簿貼上並分析</button>`;
+}
 
-  // 嘗試從 Google Patents 抓取文字版
+async function pasteFromClipboard(i) {
   try {
-    const url = `https://patents.google.com/patent/${patentId}/en`;
-    const r = await fetch(url);
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const html = await r.text();
-
-    // 提取純文字（Description + Claims）
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-
-    // 抓 Description
-    let desc = '';
-    const descEl = doc.querySelector('.description');
-    if(descEl) desc = descEl.textContent;
-
-    // 抓 Claims
-    let claims = '';
-    const claimsEl = doc.querySelector('.claims');
-    if(claimsEl) claims = claimsEl.textContent;
-
-    if(desc || claims) {
-      // 只取 Examples 相關段落（節省 token）
-      const fullText = desc + '\n\nCLAIMS:\n' + claims;
-      // 智慧截取：找 Example/EXAMPLE 段落
-      const exampleStart = fullText.search(/\b(EXAMPLE|Example|EXAMPLES|Embodiment)\b/i);
-      let extractedText;
-      if(exampleStart > 0) {
-        extractedText = fullText.slice(Math.max(0,exampleStart-500), exampleStart+6000);
-        statusEl.innerHTML = `✅ 已抓取 Examples 段落（${extractedText.length} 字）+ Claims`;
-      } else {
-        extractedText = fullText.slice(0,6000);
-        statusEl.innerHTML = `✅ 已抓取全文（截取前 ${extractedText.length} 字）`;
-      }
-      // 附上 Claims
-      if(claims) extractedText += '\n\n--- CLAIMS ---\n' + claims.slice(0,2000);
-      textEl.value = extractedText;
-      // 自動觸發分析
-      if(cfg.proxy) {
-        statusEl.innerHTML += '<br><span class="spinner"></span> 自動分析中...';
-        setTimeout(()=>analyzePatent(i), 300);
-      }
+    const text = await navigator.clipboard.readText();
+    if(!text || text.length < 100) {
+      toast('剪貼簿內容太少，請先在專利頁面 Ctrl+A 全選 → Ctrl+C 複製','error');
       return;
     }
-    throw new Error('無法解析內容');
+    const textEl = document.getElementById('patentText_'+i);
+    // 智慧截取：找 Example/Claims 段落，過濾無用內容
+    let cleaned = text;
+    const exampleStart = cleaned.search(/\b(EXAMPLE|Example|EXAMPLES|Embodiment|DETAILED DESCRIPTION)\b/i);
+    if(exampleStart > 0 && cleaned.length > 8000) {
+      cleaned = cleaned.slice(Math.max(0, exampleStart - 500), exampleStart + 6000);
+    }
+    // 找 Claims
+    const claimsStart = text.search(/\bCLAIMS?\b/i);
+    if(claimsStart > 0) {
+      cleaned += '\n\n--- CLAIMS ---\n' + text.slice(claimsStart, claimsStart + 2000);
+    }
+    if(cleaned.length > 8000) cleaned = cleaned.slice(0, 8000);
+    
+    if(textEl) textEl.value = cleaned;
+    toast(`已貼上 ${cleaned.length} 字，開始分析...`,'success');
+    
+    // 自動觸發分析
+    if(cfg.proxy) {
+      setTimeout(()=>analyzePatentModal(i), 300);
+    }
   } catch(e) {
-    // CORS 或解析失敗，提供替代方案
-    statusEl.innerHTML = `⚠ 自動抓取失敗（${e.message}）<br>
-      <span style="font-size:10px">請手動操作：<a href="https://patents.google.com/patent/${patentId}/en" target="_blank" style="color:var(--accent)">開啟 Google Patents ↗</a> → 
-      Ctrl+A 全選 → Ctrl+C 複製 → 貼到上方文字框</span>`;
+    // 剪貼簿權限被拒
+    toast('請允許剪貼簿存取，或手動 Ctrl+V 貼到文字框','error');
+    document.getElementById('patentText_'+i)?.focus();
   }
 }
 
