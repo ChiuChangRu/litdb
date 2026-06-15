@@ -236,15 +236,6 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 <!-- ═══════════════ VIEW: SEARCH ═══════════════ -->
 <div class="view" id="v-search">
   <div style="max-width:1000px;margin:0 auto;padding:16px">
-    <div class="help-box" id="help-search">
-      <button class="close-help" onclick="this.parentElement.classList.add('hidden')">✕</button>
-      <h4>🔍 文獻與專利檢索 — 從外部資料庫搜尋並加入文庫</h4>
-      <strong>PubMed</strong>：搜尋生醫期刊論文（免費）。輸入英文關鍵字，如 <span class="tip">hydrophilic coating catheter PVP</span>。<br>
-      <strong>Google Patents / USPTO</strong>：搜尋美國專利（PatentsView API，免費）。輸入專利號如 <span class="tip">US8133580B2</span> 或英文關鍵字如 <span class="tip">hydrophilic coating catheter</span>。<br>
-      <strong>DOI 匯入</strong>：貼上 DOI 直接匯入完整書目資料（免費）。如 <span class="tip">10.1016/j.biomaterials.2024.122745</span>。<br>
-      <strong>📎 書籤小工具</strong>：瀏覽任何網頁時一鍵收錄，請到「➕ 新增」分頁安裝。
-    </div>
-
     <!-- 搜尋框 -->
     <div style="display:flex;gap:8px;margin-bottom:16px">
       <select id="searchSource" style="width:160px;font-size:13px;padding:10px;flex-shrink:0" onchange="updateSearchPlaceholder()">
@@ -283,11 +274,6 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 
 <!-- ═══════════════ VIEW: BROWSE ═══════════════ -->
 <div class="view active" id="v-browse">
-  <div class="help-box" id="help-browse">
-    <button class="close-help" onclick="this.parentElement.classList.add('hidden')">✕</button>
-    <h4>📚 文庫瀏覽 — 你的親水塗層知識地圖</h4>
-    用左側篩選器快速鎖定目標：選<span class="tip">基材</span>看 TPU/Pebax 專屬文獻，選<span class="tip">固化方式</span>比較 UV 與熱固路線。點「💡 對專案價值」看每篇對 Bioteque 的具體意義。點<span class="tip">📌 釘選到AI</span>可在「AI 對話」分頁針對這些文獻提問。
-  </div>
   <div class="browse-layout" id="browseLayout">
     <!-- 雙欄：文獻列表（含頂部篩選）+ 詳情 -->
     <div class="browse-columns">
@@ -304,7 +290,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
             <span class="ftag" data-filter="status" data-value="not-analyzed" onclick="toggleFilter(this)">🔴</span>
             <span class="ftag" data-filter="status" data-value="patent-only" onclick="toggleFilter(this)">專利</span>
           </span>
-          <select id="fSort" onchange="filterPapers()" style="padding:2px 4px;font-size:10px;border-radius:4px;border:1px solid var(--border);vertical-align:middle"><option value="id">ID</option><option value="year-desc">年↓</option><option value="year-asc">年↑</option></select>
+          <select id="fSort" onchange="filterPapers()" style="padding:2px 4px;font-size:10px;border-radius:4px;border:1px solid var(--border);vertical-align:middle"><option value="id-desc">最新加入</option><option value="id">ID↑</option><option value="year-desc">年↓</option><option value="year-asc">年↑</option></select>
         </div>
         <div class="panel-h"><span id="filterCount">0 篇</span></div>
         <div class="paper-list" id="paperList"></div>
@@ -336,11 +322,6 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 
 <!-- ═══════════════ VIEW: GRAPH ═══════════════ -->
 <div class="view" id="v-graph" style="display:none">
-  <div class="help-box" id="help-graph">
-    <button class="close-help" onclick="this.parentElement.classList.add('hidden')">✕</button>
-    <h4>🕸 關係圖 — Paper ↔ Tag 二部圖</h4>
-    <strong>方形</strong>=文獻，<strong>圓形</strong>=標籤。連線代表「這篇文獻有這個標籤」。<strong>點擊任何節點</strong>會高亮所有連結，快速看出：哪些文獻共享同一個標籤？某個標籤連結了哪些文獻？用<span class="tip">標籤類別</span>篩選聚焦特定維度。
-  </div>
   <div class="graph-container" style="display:flex;gap:0">
     <div style="flex:1;min-width:0">
       <div class="graph-controls">
@@ -373,11 +354,6 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 
 <!-- ═══════════════ VIEW: GAP ═══════════════ -->
 <div class="view" id="v-gap" style="display:none">
-  <div class="help-box" id="help-gap">
-    <button class="close-help" onclick="this.parentElement.classList.add('hidden')">✕</button>
-    <h4>🔥 缺口分析 — 找出知識盲區</h4>
-    矩陣中的數字代表「同時涵蓋該行與該列標籤」的文獻篇數。<span class="tip">·</span>代表零篇——這就是你的知識缺口。例如：<span class="tip">TPU × plasma</span>若為 0，代表資料庫中沒有 TPU 基材搭配 plasma 固化的文獻，值得去搜尋。<strong>點擊格子</strong>可查看具體文獻，點擊缺口格子可直接問 AI 建議搜尋關鍵字。
-  </div>
   <div class="panel">
     <div class="panel-h">① 基材 × 固化方式</div>
     <div class="heatmap-wrap" id="heatmapWrap"></div>
@@ -407,11 +383,6 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 
 <!-- ═══════════════ VIEW: COMPARE ═══════════════ -->
 <div class="view" id="v-compare" style="display:none">
-  <div class="help-box" id="help-compare">
-    <button class="close-help" onclick="this.parentElement.classList.add('hidden')">✕</button>
-    <h4>📊 自動分群比較 — 不用勾選，選維度就跑</h4>
-    選一個分群維度，系統自動把所有<strong>已分析</strong>的文獻依該維度分群，並排顯示配方、製程、性能數據。快速回答：「UV 固化群 vs 熱固化群誰的 COF 最低？」
-  </div>
   <div style="padding:12px">
     <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px;flex-wrap:wrap">
       <label style="font-size:13px;font-weight:600">分群維度</label>
@@ -507,11 +478,6 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 
 <!-- ═══════════════ VIEW: AI CHAT ═══════════════ -->
 <div class="view" id="v-chat" style="display:none">
-  <div class="help-box" id="help-chat">
-    <button class="close-help" onclick="this.parentElement.classList.add('hidden')">✕</button>
-    <h4>🤖 AI 對話 — 你的文獻顧問（每次約 $0.001）</h4>
-    用自然語言提問，AI 會根據你<strong>釘選的文獻</strong>摘要回答。建議先在右側釘選 3–10 篇相關文獻，回答會更精準。問題範例：「PDA 路線跟 BP 路線哪個更適合 TPU？」「穿刺針塗層有哪些配方可參考？」「我的資料庫還缺什麼方向？」。回答中的<span class="tip">[P01]</span>引用可點擊跳回文庫。需在<span class="tip">⚙ 設定</span>填入 Claude API Proxy URL。
-  </div>
   <div class="chat-layout">
     <div class="chat-panel panel">
       <div class="panel-h">🤖 AI 對話（基於文庫摘要）<span style="margin-left:auto;font-size:10px;text-transform:none;font-weight:400">每次約 $0.001-0.003</span></div>
@@ -538,17 +504,6 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 
 <!-- ═══════════════ VIEW: ADD ═══════════════ -->
 <div class="view" id="v-add">
-  <div class="help-box" id="help-add">
-    <button class="close-help" onclick="this.parentElement.classList.add('hidden')">✕</button>
-    <h4>➕ 新增文獻 — 五種方式擴充知識庫</h4>
-    <strong>方式一：🔗 DOI 匯入（最精確）</strong> — 貼上 DOI，自動從 Crossref 抓取完整資訊，免費零 AI 費用。<br>
-    <strong>方式二：📎 書籤小工具</strong> — 瀏覽論文時點一下就自動匯入。<br>
-    <strong>方式三：AI 自動填入</strong> — 貼上標題/摘要，AI 辨識填入，$0.001/篇。<br>
-    <strong>方式四：PubMed 批次搜尋</strong> — 關鍵字搜尋，勾選加入，免費。<br>
-    <strong>方式五：手動填寫</strong> — 直接填欄位。<br><br>
-    <span style="font-size:12px">👉 <strong>書籤安裝：</strong>把這個連結拖到書籤列 → </span>
-    <a href="javascript:void(window.open('https://chiuchangru.github.io/litdb/?title='+encodeURIComponent(document.title)+'&url='+encodeURIComponent(location.href)+'&abstract='+encodeURIComponent((document.querySelector('meta[name=description]')||{}).content||''),'_blank'))" style="display:inline-block;padding:4px 12px;background:var(--accent);color:#fff;border-radius:6px;text-decoration:none;font-size:12px;font-weight:600;cursor:grab" onclick="event.preventDefault();toast('請用滑鼠拖曳此按鈕到書籤列！','')">📎 存入 LitDB</a>
-  </div>
   <div class="add-layout">
     <!-- Left: Batch PubMed Search -->
     <div class="panel">
@@ -1983,7 +1938,8 @@ function filterPapers() {
     return true;
   });
 
-  if(sort==='year-desc') filtered.sort((a,b)=>(b.year||0)-(a.year||0));
+  if(sort==='id-desc') filtered.sort((a,b)=>{ const na=parseInt(a.id.slice(1))||0,nb=parseInt(b.id.slice(1))||0; if(a.id[0]===b.id[0]) return nb-na; return b.id>a.id?1:-1; });
+  else if(sort==='year-desc') filtered.sort((a,b)=>(b.year||0)-(a.year||0));
   else if(sort==='year-asc') filtered.sort((a,b)=>(a.year||0)-(b.year||0));
   else if(sort==='tags') filtered.sort((a,b)=>(b.tags||[]).length-(a.tags||[]).length);
 
