@@ -465,7 +465,7 @@
                 "friction": "0.02 N（ASTM D 1894-93 修改版）",
                 "adhesion": "高耐磨耗",
                 "wca": "未明示",
-                "durability": "gamma滅菌後維持潤滑性和drain-off time",
+                "durability": "US10850009: PEGDA Mn250-700在50次silicone孔往返磨耗後COF維持；Mn≥1000劣化。原專利US9138510: gamma滅菌後維持",
                 "other": "drain-off time > 3 min（離水後仍潤滑）；在溼潤PVP溶液中滅菌"
               }
             }
@@ -479,7 +479,9 @@
           "actionable_insights": [
             "Esacure KIP 150是你剛討論的高分子型光起始劑！此專利證實KIP 150用於醫材PVP塗層的可行性",
             "雙層不同交聯度策略：底塗高交聯(耐磨)+面塗低交聯(高潤滑)→解決潤滑vs耐磨矛盾",
-            "0.02N摩擦力是極低的基準值，可作為Bioteque目標"
+            "0.02N摩擦力是極低的基準值，可作為Bioteque目標",
+            "Coloplast另一專利US10850009有50次往返磨耗數據：PEGDA Mn250-700在50次後COF維持低位，Mn≥1000開始劣化",
+            "PEGDA分子量是耐磨關鍵：Mn越小→交聯密度越高→耐磨越好。Bioteque的SR344(Mn508)/SR610(Mn508-742)落在甜蜜區"
           ],
           "red_flags": [
             "UV 200-300nm是短波UVC/UVB，Bioteque的LED UV是365/405nm→波長不相容",
@@ -489,7 +491,10 @@
           "vs_database": "與P01(DSM)比：P12用PVP自交聯（KIP 150 Type I），P01用benzophenone H抽取（Type II），技術路徑不同。P12的0.02N COF比P01的≤20g更優。P12的雙層不同交聯度策略是獨特貢獻",
           "bioteque_relevance": "核心啟發：底塗高交聯+面塗低交聯的雙層策略。但KIP 150需要短波UV(200-300nm)，Bioteque的LED UV(365/405nm)不適用。如改用405nm可激發的Type I光起始劑（如TPO-L），可複製此雙層策略"
         }
-      }
+      },
+      "related_patents": [
+        "US10850009B2"
+      ]
     },
     {
       "id": "P13",
@@ -2427,6 +2432,109 @@
           ],
           "vs_database": "與P25(WO2007089761)是同家族。Merit的TEMNO系列重點在針體結構不在塗層。與其他塗層專利(P01/P06/P12)比：Merit加入echogenic是獨特差異化",
           "bioteque_relevance": "穿刺針開發的參考方向。如果Bioteque穿刺針需要超音波可視+潤滑，此複合塗層概念可借鏡。但目前Bioteque主攻導管親水塗層，穿刺針是延伸應用"
+        }
+      }
+    },
+    {
+      "id": "P33",
+      "title": "Medical device with hydrophilic coating (US10850009B2 / Coloplast PEGDA耐磨數據)",
+      "authors": "Coloplast A/S",
+      "year": 2020,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "PVP",
+        "PEG",
+        "UV光固化",
+        "導尿管",
+        "PEGDA"
+      ],
+      "purpose": "Coloplast PVP+PEGDA配方的50次往返磨耗實測數據，PEGDA分子量vs耐磨性",
+      "abstract_note": "PVP+PEGDA UV固化親水塗層。關鍵發現：PEGDA Mn250-700在50次silicone孔往返磨耗後COF維持穩定，Mn≥1000劣化。測試方法：通過4.14mm silicone孔(Shore 60A)往返25次(共50次通過)，Harland FTS 200g clamp測初始/磨耗後/離水10min後COF",
+      "value_to_project": "PEGDA分子量是耐磨關鍵數據。Bioteque的SR344(Mn508)/SR610(Mn742)在甜蜜區",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/US10850009B2/en"
+      },
+      "related_patents": [
+        "US9138510"
+      ],
+      "patent_notes": "P12(US9138510)的姊妹專利。提供了50次往返磨耗的定量數據",
+      "patentResults": {
+        "full": {
+          "summary": "Coloplast PVP+PEGDA UV固化塗層的50次往返磨耗實測：PEGDA Mn250-700維持低COF，Mn≥1000劣化。配方：PVP 95-98wt% + benzophenone 2-5wt%（乾重比）。溶液固含量3-8wt%",
+          "examples": [
+            {
+              "name": "PEGDA Mn250 配方（最佳耐磨）",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "有具體50次磨耗循環數據、Harland FTS測試條件、PEGDA分子量對照實驗",
+              "substrate": "PVC/polyolefin 導尿管",
+              "formulation": {
+                "primer": "可選",
+                "topcoat": "PVP K90 + PEGDA Mn250 (SR344) + benzophenone 2-5wt%（乾重比）/ ethanol:water"
+              },
+              "process": {
+                "surface_prep": "可選plasma",
+                "coating_method": "Dip coating",
+                "drying": "乾燥",
+                "curing": "UV 200-800nm, 10 min"
+              },
+              "results": {
+                "friction": "初始COF低（具體數值在圖表中）",
+                "adhesion": "50次silicone孔磨耗後維持",
+                "wca": "未明示",
+                "durability": "50次磨耗+10min離水後仍維持低COF ✅",
+                "other": "PEGDA Mn250和Mn700均通過50次磨耗；Mn1000和Mn6000劣化"
+              }
+            },
+            {
+              "name": "PEGDA Mn6000 配方（耐磨最差）",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "對照組，證明長鏈PEGDA交聯密度不足→耐磨差",
+              "substrate": "同上",
+              "formulation": {
+                "primer": "同上",
+                "topcoat": "PVP K90 + PEGDA Mn6000 + benzophenone / ethanol:water"
+              },
+              "process": {
+                "surface_prep": "同上",
+                "coating_method": "同上",
+                "drying": "同上",
+                "curing": "同上"
+              },
+              "results": {
+                "friction": "初始COF低",
+                "adhesion": "50次磨耗後明顯升高",
+                "wca": "未明示",
+                "durability": "50次磨耗後COF上升+離水10min後進一步劣化 ❌",
+                "other": "PEGDA分子量越大→交聯網眼越大→水膨潤過度→磨耗後脫落"
+              }
+            }
+          ],
+          "key_claims": [
+            "PVP+PEGDA UV固化親水塗層，PEGDA分子量250-700為最佳範圍",
+            "50次往返磨耗測試方法：4.14mm silicone孔(Shore 60A)，浸水狀態",
+            "測量三種COF：初始(30s泡水) / 磨耗後 / 離水10min後(dry-out)",
+            "配方乾重比：PVP 95-98% + photoinitiator 2-5%；溶液固含量3-8%"
+          ],
+          "actionable_insights": [
+            "PEGDA Mn250-700是耐磨甜蜜區：交聯密度足夠但仍有親水性",
+            "Bioteque的SR344(PEGDA Mn508)和SR610(Mn508-742)剛好落在此甜蜜區 ✅",
+            "50次silicone孔磨耗是可複製的測試方法，建議Bioteque建立此標準",
+            "PVP佔乾重95-98%但PEGDA交聯劑只佔2-5%→你的經驗「PVP≤20%」是溶液比例，乾重比例PVP確實是絕大多數",
+            "Dye uptake test（染料吸附）可評估磨耗後塗層完整性"
+          ],
+          "red_flags": [
+            "50次磨耗是專利中找到的最高循環數，仍偏少*",
+            "PVP乾重95-98%極高，與你的經驗有差異→可能配方比例表述不同（溶液vs乾重）*",
+            "Benzophenone游離殘留風險仍需10993-18驗證"
+          ],
+          "vs_database": "P12(US9138510)的姊妹專利。P12提供雙層配方和COF 0.02N基準，本專利提供PEGDA分子量vs耐磨的定量數據。兩者互補",
+          "bioteque_relevance": "直接可用：(1) PEGDA Mn250-700是耐磨甜蜜區→驗證SR344/SR610選擇正確 (2) 50次磨耗測試方法可直接採用 (3) 乾重比PVP:PI=95-98:2-5→配方參考基準"
         }
       }
     }
