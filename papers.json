@@ -201,6 +201,53 @@
       "value_to_project": "polyelectrolyte 延長保濕時間的配方機制",
       "links": {
         "patents": "https://patents.google.com/patent/EP1957130B1/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "DSM 家族的面塗層變體專利（P01底塗+P02面塗一起構成完整系統）。核心：polyether primer + PVP+polyelectrolyte面塗+benzophenone UV交聯。與P01互補，一個保護底塗一個保護面塗",
+          "examples": [
+            {
+              "name": "PVC 14Fr Pebax 導管",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "與P01共享實施例基礎，有具體基材和測試方法，但配方比例寬泛",
+              "substrate": "PVC / Pebax 導管",
+              "formulation": {
+                "primer": "Polyether diol 交聯網絡（Norrish I, Irgacure 2959）",
+                "topcoat": "PVP + polyelectrolyte（PAA Na salt）+ benzophenone（Norrish II）"
+              },
+              "process": {
+                "surface_prep": "未明示",
+                "coating_method": "Dip coating",
+                "drying": "未明示",
+                "curing": "UV（Norrish I 底塗 + Norrish II 面塗）"
+              },
+              "results": {
+                "friction": "未在摘要中",
+                "adhesion": "未在摘要中",
+                "wca": "未明示",
+                "durability": "gamma滅菌後維持",
+                "other": "dry-out time 延長（polyelectrolyte保水）"
+              }
+            }
+          ],
+          "key_claims": [
+            "非離子親水高分子(PVP)+polyelectrolyte組合面塗",
+            "Benzophenone Norrish II型UV交聯",
+            "與P01的polyether primer搭配構成完整雙層系統"
+          ],
+          "actionable_insights": [
+            "Dry-out time概念：polyelectrolyte(PAA Na)的離子水合延長塗層離水後潤滑時間",
+            "Pebax基材已驗證可行",
+            "2026/12/11到期後polyelectrolyte配方可自由使用"
+          ],
+          "red_flags": [
+            "Polyelectrolyte種類列了一大串但實際只測1-2種→預言式",
+            "5-100%比例範圍→預言式"
+          ],
+          "vs_database": "P02與P01是同一DSM家族，P01保護底塗+雙層結構，P02保護面塗配方（PVP+polyelectrolyte）。P03(WO2009112548A1)是更早期的國際公開版本。三者構成DSM專利壁壘",
+          "bioteque_relevance": "迴避風險低：不加polyelectrolyte即可迴避。重要：2026/12/11到期！2027年起可自由使用PAA Na延長dry-out的配方"
+        }
       }
     },
     {
@@ -393,6 +440,55 @@
       "value_to_project": "完整即用型配方:溶劑比例+UV參數+滅菌",
       "links": {
         "patents": "https://patents.justia.com/patent/9138510"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Coloplast的滅菌即用導管專利：PVP K90 + Esacure KIP 150（高分子型Type I光起始劑）+ gamma butyrolactone溶劑 + UV 200-300nm交聯。創新點是塗層在溼潤PVP溶液中進行gamma/e-beam滅菌，滅菌後即可使用",
+          "examples": [
+            {
+              "name": "PVC導管雙層PVP UV交聯",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "有具體配方比例(5:0.05:94.95)、溫度(70°C)、UV時間(5min)、波長(200-300nm)、摩擦力數據(0.02N)",
+              "substrate": "PVC catheter",
+              "formulation": {
+                "primer": "PVP K90 5份 + Esacure KIP 150 0.05份 / ethanol:gamma-butyrolactone溶劑",
+                "topcoat": "PVP 5份 + urea 1份 / ethanol:gamma-butyrolactone(85:15) — 較低交聯度面塗"
+              },
+              "process": {
+                "surface_prep": "無（直接dip coat）",
+                "coating_method": "兩次dip coating（primer→乾燥→topcoat→乾燥）",
+                "drying": "室溫1min + 70°C 30min",
+                "curing": "UV 200-300nm, 5-6 min"
+              },
+              "results": {
+                "friction": "0.02 N（ASTM D 1894-93 修改版）",
+                "adhesion": "高耐磨耗",
+                "wca": "未明示",
+                "durability": "gamma滅菌後維持潤滑性和drain-off time",
+                "other": "drain-off time > 3 min（離水後仍潤滑）；在溼潤PVP溶液中滅菌"
+              }
+            }
+          ],
+          "key_claims": [
+            "使用Esacure KIP 150高分子型光起始劑（低遷移、低萃出）",
+            "雙層PVP：高交聯底塗+低交聯面塗（不同交聯度控制潤滑/耐磨平衡）",
+            "溼態PVP溶液中gamma/e-beam滅菌→即用型",
+            "UV 200-300nm短波交聯"
+          ],
+          "actionable_insights": [
+            "Esacure KIP 150是你剛討論的高分子型光起始劑！此專利證實KIP 150用於醫材PVP塗層的可行性",
+            "雙層不同交聯度策略：底塗高交聯(耐磨)+面塗低交聯(高潤滑)→解決潤滑vs耐磨矛盾",
+            "0.02N摩擦力是極低的基準值，可作為Bioteque目標"
+          ],
+          "red_flags": [
+            "UV 200-300nm是短波UVC/UVB，Bioteque的LED UV是365/405nm→波長不相容",
+            "Esacure KIP 150吸收峰在250-330nm，405nm LED效率極低*",
+            "需確認此專利是否已過期（1998年申請，可能已到期）*"
+          ],
+          "vs_database": "與P01(DSM)比：P12用PVP自交聯（KIP 150 Type I），P01用benzophenone H抽取（Type II），技術路徑不同。P12的0.02N COF比P01的≤20g更優。P12的雙層不同交聯度策略是獨特貢獻",
+          "bioteque_relevance": "核心啟發：底塗高交聯+面塗低交聯的雙層策略。但KIP 150需要短波UV(200-300nm)，Bioteque的LED UV(365/405nm)不適用。如改用405nm可激發的Type I光起始劑（如TPO-L），可複製此雙層策略"
+        }
       }
     },
     {
@@ -488,6 +584,54 @@
       "value_to_project": "商用級浸塗dwell time與UV參數",
       "links": {
         "patents": "https://patents.justia.com/patent/10857324"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "C.R.Bard的導尿管專利：PAA(聚丙烯酸)+PEG+glycerin配方，具吸濕/親水特性。創新點是可加UV固化silicone膜作為無觸感外層（touchless layer）。可e-beam/EtO滅菌",
+          "examples": [
+            {
+              "name": "PAA+PEG+glycerin導尿管塗層",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "Claims有具體配方描述，但比例範圍寬泛",
+              "substrate": "Silicone導尿管（C.R.Bard產品線）",
+              "formulation": {
+                "primer": "可選第二層親水塗層（底塗）",
+                "topcoat": "PAA hydrogel + glycerin + PEG + 水 — 吸濕親水配方"
+              },
+              "process": {
+                "surface_prep": "未明示",
+                "coating_method": "塗覆",
+                "drying": "未明示",
+                "curing": "可選UV固化silicone外膜"
+              },
+              "results": {
+                "friction": "潤滑（具體數據在全文中）",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "e-beam/EtO滅菌相容",
+                "other": "touchless layer：UV silicone外膜可滑動→使用時推開露出潤滑層"
+              }
+            }
+          ],
+          "key_claims": [
+            "PAA+glycerin+PEG親水吸濕配方（不同於PVP路線）",
+            "UV固化silicone外膜作為touchless layer",
+            "non-adhesion（抗包裝黏著）特性"
+          ],
+          "actionable_insights": [
+            "Touchless layer概念：UV silicone外膜在包裝時防止塗層黏著包材，使用時推開→可解決Bioteque塗層黏包裝的問題*",
+            "PAA+PEG配方是PVP路線的替代方案",
+            "glycerin作為保濕劑延長dry-out"
+          ],
+          "red_flags": [
+            "PAA配方與PVP配方完全不同路線，Bioteque需重新驗證",
+            "Silicone基材與TPU基材附著機制不同*",
+            "具體比例在Claims中但範圍寬泛"
+          ],
+          "vs_database": "與P01(DSM PVP路線)完全不同的配方思路。P18用PAA+PEG，P01用PVP+polyelectrolyte。與P24(US6610035 PEG hydrogel)有相似之處。C.R.Bard是泌尿導管市場領導者，此專利代表矽膠導管的主流塗層方向",
+          "bioteque_relevance": "直接借鏡價值中等：Bioteque主攻TPU+PVP路線，PAA路線是備選。但touchless layer（UV silicone外膜）概念可考慮解決包裝黏著問題。glycerin保濕延長dry-out也可加入配方評估"
+        }
       }
     },
     {
@@ -1227,6 +1371,54 @@
       "value_to_project": "plasma+silane primer附著促進(TPU適用)",
       "links": {
         "patents": "https://patents.google.com/patent/US6458867B1/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Boston Scientific的plasma+silane primer路線：先plasma活化管材內壁→silane/silicone oligomer反應性primer→PVP/PVA潤滑面塗。解決管材內壁塗層附著難題",
+          "examples": [
+            {
+              "name": "Plasma + silane primer + PVP 內壁塗層",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Boston Scientific(Scimed)商業化專利，有具體製程描述和ASTM測試",
+              "substrate": "導管內壁（tubular member，PTFE/PE/nylon等）",
+              "formulation": {
+                "primer": "Silane或silicone oligomer — 具有疏水+親水雙官能基（amine/amide/carboxyl/hydroxyl），與基材共價鍵結",
+                "topcoat": "水溶性潤滑塗層（PVP或PVA）— 與silane primer的親水基團結合"
+              },
+              "process": {
+                "surface_prep": "Plasma處理 — 活化管材內壁引入極性基團",
+                "coating_method": "內壁塗覆（針對細管腔的特殊挑戰）",
+                "drying": "未明示",
+                "curing": "Silane自交聯"
+              },
+              "results": {
+                "friction": "潤滑（ASTM D 1894測試）",
+                "adhesion": "silane共價鍵結→高附著",
+                "wca": "未明示",
+                "durability": "不會被水沖走（won't wash away）",
+                "other": "可減小管徑→降低profile→提升traceability"
+              }
+            }
+          ],
+          "key_claims": [
+            "Plasma活化+silane/silicone oligomer反應性primer",
+            "Silane雙官能基：疏水端鍵結基材+親水端鍵結PVP",
+            "針對管材內壁的塗層解決方案"
+          ],
+          "actionable_insights": [
+            "Plasma+silane是經典的表面活化+primer路線，與Bioteque的plasma前處理思路吻合",
+            "Silane雙官能基概念：一端抓基材、一端抓PVP→可評估GLYMO等silane",
+            "內壁塗層技術：如果Bioteque需要塗導管內壁，此專利是參考"
+          ],
+          "red_flags": [
+            "TPU表面缺乏足夠-OH基團，silane直接用在TPU上效果可能不佳→需先plasma或PDA",
+            "Silane對水敏感，配製和儲存有限制",
+            "此專利可能已過期（1999年申請+20年=2019年）*"
+          ],
+          "vs_database": "與Bioteque的plasma路線最相關。P22用plasma+silane，Bioteque計畫用plasma+PDA或plasma+benzophenone。Silane是P22的primer，PDA是A2的primer，benzophenone是P01的面塗交聯劑。三者可組合*",
+          "bioteque_relevance": "高度相關：Bioteque已有air plasma設備。Silane primer（如GLYMO）可作為PDA之外的另一個primer候選。但TPU的-OH不足是已知限制，建議plasma活化後再用silane。此專利可能已過期（1999+20=2019），如已過期則可自由參考"
+        }
       }
     },
     {
@@ -1252,6 +1444,53 @@
       "value_to_project": "PEO底層提升耐磨的雙層配方思路",
       "links": {
         "patents": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/8287890"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "PEO底層+PVP面層雙層結構：底層PEO提供與基材的錨固（溶脹咬合），面層PVP提供潤滑。不需要UV或化學交聯，靠物理纏繞。已過期*",
+          "examples": [
+            {
+              "name": "PEO primer + PVP topcoat 雙層",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "有具體雙層塗覆描述，但詳細數據需讀全文",
+              "substrate": "導管（通用）",
+              "formulation": {
+                "primer": "PEO（polyethylene oxide）溶液 — 溶脹咬合基材表面",
+                "topcoat": "PVP K90 溶液 — 與PEO層互穿纏繞"
+              },
+              "process": {
+                "surface_prep": "未明示",
+                "coating_method": "Dip coating（兩步）",
+                "drying": "每層分別乾燥",
+                "curing": "物理乾燥（無UV、無化學交聯）"
+              },
+              "results": {
+                "friction": "潤滑性良好（具體數據在全文中）",
+                "adhesion": "PEO溶脹基材提供附著",
+                "wca": "未明示",
+                "durability": "耐磨耗性可能不足（無交聯）*",
+                "other": ""
+              }
+            }
+          ],
+          "key_claims": [
+            "雙層結構：PEO底層溶脹咬合+PVP面層潤滑",
+            "不需要UV或化學交聯劑",
+            "PEO與基材間的溶脹互穿提供附著力"
+          ],
+          "actionable_insights": [
+            "PEO溶脹咬合概念：利用PEO對TPU的溶脹性產生物理錨固，可作為primer的備選思路",
+            "不需UV設備的簡化製程",
+            "但缺乏化學交聯→耐磨耗性可能不足，與Bioteque需求不符*"
+          ],
+          "red_flags": [
+            "無化學交聯的物理纏繞系統耐磨耗性存疑*",
+            "PEO對不同基材的溶脹效果差異大*"
+          ],
+          "vs_database": "與P01(DSM UV雙層)比：P05不需UV但缺乏交聯，耐磨耗性劣勢。與P06(Hydromer isocyanate)比：更簡單但附著機制不同。定位為最簡化的入門方案",
+          "bioteque_relevance": "參考價值：PEO溶脹咬合概念可測試，但Bioteque目標是高耐磨耗塗層，單純物理纏繞不足以滿足需求。建議作為對照組baseline"
+        }
       }
     },
     {
