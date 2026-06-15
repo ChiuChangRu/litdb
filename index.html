@@ -2371,11 +2371,36 @@ function onGraphClick(event) {
   const content = document.getElementById('graphDetailContent');
 
   if(closest.type==='tag') {
-    // 標籤節點：列出所有連結的文獻
+    // 標籤節點：列出所有連結的文獻 + 關聯分析
     const connected = [];
     graphEdges.forEach(e=>{
       if(e.tag===closest.id) connected.push(e.paper);
     });
+
+    // 分析這些文獻的其他共同標籤
+    const tagFreq = {};
+    connected.forEach(pid=>{
+      const p=DB.papers.find(x=>x.id===pid);
+      if(!p) return;
+      (p.tags||[]).forEach(t=>{
+        if(t!==closest.id) tagFreq[t] = (tagFreq[t]||0) + 1;
+      });
+    });
+    const sortedTags = Object.entries(tagFreq).sort((a,b)=>b[1]-a[1]);
+    const primaryTags = sortedTags.filter(([,c])=>c>=connected.length*0.5);
+    const secondaryTags = sortedTags.filter(([,c])=>c>=connected.length*0.25 && c<connected.length*0.5);
+    const minorTags = sortedTags.filter(([,c])=>c>=2 && c<connected.length*0.25).slice(0,8);
+
+    const tagBadge = (tag,count,bg) => `<span style="display:inline-block;background:${bg};padding:2px 8px;border-radius:4px;margin:2px;font-size:10px"><strong>${tag}</strong> <span style="opacity:0.6">${count}/${connected.length}</span></span>`;
+
+    const relationHtml = (primaryTags.length||secondaryTags.length) ? `
+      <div style="margin:10px 0;padding:10px;background:var(--card);border-radius:6px">
+        <div style="font-size:11px;font-weight:600;margin-bottom:6px">🔗 關聯標籤分析</div>
+        ${primaryTags.length?`<div style="margin-bottom:6px"><span style="font-size:10px;color:var(--accent);font-weight:600">🔴 主要關聯（>50% 共有）</span><br>${primaryTags.map(([t,c])=>tagBadge(t,c,'#fff0e6')).join('')}</div>`:''}
+        ${secondaryTags.length?`<div style="margin-bottom:6px"><span style="font-size:10px;color:var(--accent2);font-weight:600">🟡 次要關聯（25-50%）</span><br>${secondaryTags.map(([t,c])=>tagBadge(t,c,'#eaf5ef')).join('')}</div>`:''}
+        ${minorTags.length?`<div><span style="font-size:10px;color:var(--muted)">⚪ 少數關聯</span><br>${minorTags.map(([t,c])=>tagBadge(t,c,'var(--bg)')).join('')}</div>`:''}
+      </div>` : '';
+
     const paperCards = connected.map(pid=>{
       const p=DB.papers.find(x=>x.id===pid);
       if(!p) return '';
@@ -2392,7 +2417,8 @@ function onGraphClick(event) {
 
     content.innerHTML = `
       <div style="font-size:14px;font-weight:700;color:var(--accent);margin-bottom:8px">🏷 ${closest.id}</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">${connected.length} 篇文獻使用此標籤</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px">${connected.length} 篇文獻使用此標籤</div>
+      ${relationHtml}
       ${paperCards}`;
   } else {
     // 文獻節點：顯示完整內容
