@@ -955,12 +955,21 @@ async function searchPatentUnified(query) {
   
   try {
     const pvQuery = encodeURIComponent(JSON.stringify({"_text_any":{"patent_abstract":query}}));
-    const pvFields = encodeURIComponent(JSON.stringify(["patent_number","patent_title","patent_date","patent_abstract","assignee_organization","inventor_first_name","inventor_last_name","patent_type"]));
-    const pvUrl = `https://api.patentsview.org/patents/query?q=${pvQuery}&f=${pvFields}&o=${encodeURIComponent(JSON.stringify({"per_page":15,"matched_subentities_only":true}))}`;
+    const pvFields = encodeURIComponent(JSON.stringify(["patent_number","patent_title","patent_date","patent_abstract","assignee_organization","inventor_first_name","inventor_last_name"]));
+    const pvUrl = `https://api.patentsview.org/patents/query?q=${pvQuery}&f=${pvFields}&o=${encodeURIComponent(JSON.stringify({"per_page":15}))}`;
     
-    const r = await fetch(pvUrl);
+    // 透過 Worker 代理（避免 CORS）
+    let r;
+    if(cfg.proxy) {
+      const proxyBase = cfg.proxy.replace(/\/api$/,'');
+      r = await fetch(`${proxyBase}/fetch?url=${encodeURIComponent(pvUrl)}`);
+    } else {
+      r = await fetch(pvUrl);
+    }
     if(!r.ok) throw new Error('HTTP '+r.status);
-    const data = await r.json();
+    const rawText = await r.text();
+    let data;
+    try { data = JSON.parse(rawText); } catch(e) { throw new Error('回應格式錯誤'); }
     const patents = data.patents || [];
     
     if(!patents.length) {
