@@ -218,16 +218,53 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 </header>
 
 <div class="tabs">
+  <div class="tab" onclick="showView('search',this)">🔍 檢索</div>
   <div class="tab active" onclick="showView('browse',this)">📚 文庫 <span class="badge" id="browseCount">0</span></div>
   <div class="tab" onclick="showView('graph',this)">🕸 關係圖</div>
   <div class="tab" onclick="showView('gap',this)">🔥 缺口分析</div>
   <div class="tab" onclick="showView('compare',this)">📊 比較</div>
   <div class="tab" onclick="showView('report',this)">📋 報告</div>
   <div class="tab" onclick="showView('chat',this)">🤖 AI 對話</div>
-  <div class="tab" onclick="showView('add',this)">➕ 新增文獻</div>
+  <div class="tab" onclick="showView('add',this)">➕ 新增</div>
 </div>
 
 <div class="main">
+
+<!-- ═══════════════ VIEW: SEARCH ═══════════════ -->
+<div class="view" id="v-search">
+  <div style="max-width:1000px;margin:0 auto;padding:16px">
+    <div class="help-box" id="help-search">
+      <button class="close-help" onclick="this.parentElement.classList.add('hidden')">✕</button>
+      <h4>🔍 文獻與專利檢索 — 從外部資料庫搜尋並加入文庫</h4>
+      <strong>PubMed</strong>：搜尋生醫期刊論文（免費）。輸入英文關鍵字，如 <span class="tip">hydrophilic coating catheter PVP</span>。<br>
+      <strong>Google Patents</strong>：搜尋全球專利（免費）。輸入專利號如 <span class="tip">US8133580B2</span> 或關鍵字。<br>
+      <strong>DOI 匯入</strong>：貼上 DOI 直接匯入完整書目資料（免費）。如 <span class="tip">10.1016/j.biomaterials.2024.122745</span>。<br>
+      <strong>📎 書籤小工具</strong>：瀏覽任何網頁時一鍵收錄，請到「➕ 新增」分頁安裝。
+    </div>
+
+    <!-- 搜尋框 -->
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      <select id="searchSource" style="width:160px;font-size:13px;padding:10px;flex-shrink:0" onchange="updateSearchPlaceholder()">
+        <option value="pubmed">🔬 PubMed</option>
+        <option value="patent">📋 Google Patents</option>
+        <option value="doi">🔗 DOI 匯入</option>
+      </select>
+      <input type="text" id="searchInput" placeholder="輸入英文關鍵字搜尋 PubMed..." style="flex:1;font-size:13px;padding:10px" onkeydown="if(event.key==='Enter')doSearch()">
+      <button class="btn btn-p" onclick="doSearch()" style="padding:10px 24px;white-space:nowrap">搜尋</button>
+    </div>
+
+    <!-- PubMed 年份篩選 -->
+    <div id="searchFilters" style="display:flex;gap:12px;margin-bottom:12px;font-size:12px;align-items:center">
+      <label>年份起 <input type="number" id="searchYearFrom" value="2020" style="width:70px;padding:4px;font-size:12px"></label>
+      <label>年份迄 <input type="number" id="searchYearTo" value="2026" style="width:70px;padding:4px;font-size:12px"></label>
+      <label>筆數 <select id="searchMax" style="padding:4px;font-size:12px"><option>10</option><option selected>20</option><option>50</option></select></label>
+      <span id="searchStatus" style="margin-left:auto;color:var(--muted)"></span>
+    </div>
+
+    <!-- 搜尋結果 -->
+    <div id="searchResults"></div>
+  </div>
+</div>
 
 <!-- ═══════════════ VIEW: BROWSE ═══════════════ -->
 <div class="view active" id="v-browse">
@@ -603,6 +640,234 @@ function updateCostDisplay() {
 // ══════════════════════════════════════════════
 // REPORT: 開發策略報告產生器
 // ══════════════════════════════════════════════
+// ══════════════════════════════════════════════
+// SEARCH: 統一檢索入口
+// ══════════════════════════════════════════════
+function updateSearchPlaceholder() {
+  const src = document.getElementById('searchSource').value;
+  const input = document.getElementById('searchInput');
+  const filters = document.getElementById('searchFilters');
+  if(src==='pubmed') {
+    input.placeholder = '輸入英文關鍵字搜尋 PubMed... 如 hydrophilic coating catheter';
+    filters.style.display = 'flex';
+  } else if(src==='patent') {
+    input.placeholder = '輸入專利號（US8133580B2）或關鍵字搜尋 Google Patents';
+    filters.style.display = 'none';
+  } else {
+    input.placeholder = '輸入 DOI，如 10.1016/j.biomaterials.2024.122745';
+    filters.style.display = 'none';
+  }
+}
+
+async function doSearch() {
+  const src = document.getElementById('searchSource').value;
+  const q = document.getElementById('searchInput').value.trim();
+  if(!q) { toast('請輸入搜尋內容','error'); return; }
+
+  if(src==='pubmed') await searchPubMedUnified(q);
+  else if(src==='patent') await searchPatentUnified(q);
+  else if(src==='doi') await searchDOIUnified(q);
+}
+
+async function searchPubMedUnified(query) {
+  const statusEl = document.getElementById('searchStatus');
+  const resultsEl = document.getElementById('searchResults');
+  const yearFrom = document.getElementById('searchYearFrom').value;
+  const yearTo = document.getElementById('searchYearTo').value;
+  const maxResults = document.getElementById('searchMax').value;
+
+  statusEl.innerHTML = '<span class="spinner"></span> 搜尋 PubMed...';
+  resultsEl.innerHTML = '';
+
+  try {
+    const sr = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${encodeURIComponent(query)}&retmax=${maxResults}&sort=date&datetype=pdat&mindate=${yearFrom}&maxdate=${yearTo}&retmode=json`);
+    const sd = await sr.json();
+    const pmids = sd.esearchresult?.idlist || [];
+    const total = sd.esearchresult?.count || 0;
+
+    if(!pmids.length) { statusEl.textContent = '無結果'; resultsEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted)">找不到符合的文獻，請嘗試不同關鍵字</div>'; return; }
+
+    const fr = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=${pmids.join(',')}&retmode=xml`);
+    const xml = await fr.text();
+    const doc = new DOMParser().parseFromString(xml, 'text/xml');
+
+    const results = [...doc.querySelectorAll('PubmedArticle')].map(art => {
+      const pmid = art.querySelector('PMID')?.textContent||'';
+      const title = art.querySelector('ArticleTitle')?.textContent||'';
+      const abstract = [...art.querySelectorAll('AbstractText')].map(a=>a.textContent).join(' ');
+      const journal = art.querySelector('Journal Title')?.textContent || art.querySelector('MedlineJournalInfo MedlineTA')?.textContent || '';
+      const year = art.querySelector('PubDate Year')?.textContent||'';
+      const authors = [...art.querySelectorAll('Author')].slice(0,3).map(a=>{
+        const last=a.querySelector('LastName')?.textContent||'';
+        const fore=a.querySelector('ForeName')?.textContent||'';
+        return `${last} ${fore}`.trim();
+      }).join('; ');
+      const doiEl = [...art.querySelectorAll('ArticleId')].find(a=>a.getAttribute('IdType')==='doi');
+      const doi = doiEl?.textContent||'';
+      const inDB = DB.papers.some(p=>p.pmid===pmid);
+      return { pmid, title, authors, abstract, journal, year, doi, inDB };
+    });
+
+    statusEl.textContent = `找到 ${total} 筆，顯示 ${results.length} 筆`;
+    renderSearchResults(results, 'pubmed');
+  } catch(e) {
+    statusEl.textContent = '搜尋失敗：' + e.message;
+  }
+}
+
+async function searchPatentUnified(query) {
+  const statusEl = document.getElementById('searchStatus');
+  const resultsEl = document.getElementById('searchResults');
+
+  // 如果是專利號格式，直接抓取
+  const patentMatch = query.match(/^(US|EP|WO|CN|JP|KR)\d+/i);
+  if(patentMatch) {
+    statusEl.innerHTML = '<span class="spinner"></span> 抓取專利...';
+    const patentId = patentMatch[0];
+    const inDB = DB.papers.some(p=>(p.title||'').includes(patentId));
+
+    resultsEl.innerHTML = `
+      <div style="padding:16px;background:var(--card);border-radius:8px;border:1px solid var(--border)">
+        <div style="font-weight:600;font-size:14px;margin-bottom:8px">${patentId}</div>
+        <a href="https://patents.google.com/patent/${patentId}/en" target="_blank" style="color:var(--accent);font-size:12px">↗ 在 Google Patents 查看</a>
+        ${inDB ? '<div style="color:var(--accent2);font-size:12px;margin-top:4px">✓ 已在文庫中</div>' : `
+        <div style="margin-top:10px">
+          <button class="btn btn-p" onclick="addPatentToLibrary('${patentId}')" style="padding:8px 16px">➕ 加入文庫</button>
+        </div>`}
+      </div>`;
+    statusEl.textContent = '';
+    return;
+  }
+
+  // 關鍵字搜尋：開啟 Google Patents 搜尋頁
+  window.open(`https://patents.google.com/?q=${encodeURIComponent(query)}&oq=${encodeURIComponent(query)}`, '_blank');
+  statusEl.textContent = '已開啟 Google Patents 搜尋頁';
+  resultsEl.innerHTML = `<div style="padding:20px;text-align:center;color:var(--muted)">
+    Google Patents 已在新分頁開啟。<br>找到專利後，複製專利號（如 US8133580B2）回來搜尋即可加入文庫。<br>
+    或使用 <strong>📎 書籤小工具</strong> 在專利頁面直接收錄。
+  </div>`;
+}
+
+async function searchDOIUnified(query) {
+  const statusEl = document.getElementById('searchStatus');
+  const resultsEl = document.getElementById('searchResults');
+
+  let doi = query.replace(/^https?:\/\/doi\.org\//,'').replace(/^doi:/i,'').trim();
+  statusEl.innerHTML = '<span class="spinner"></span> 查詢 Crossref...';
+
+  try {
+    const r = await fetch(`https://api.crossref.org/works/${encodeURIComponent(doi)}`);
+    if(!r.ok) throw new Error('DOI 未找到');
+    const data = await r.json();
+    const w = data.message;
+
+    const title = (w.title||[])[0]||'';
+    const authors = (w.author||[]).slice(0,4).map(a=>`${a.family||''} ${(a.given||'').charAt(0)}`.trim()).join('; ');
+    const year = w.published?.['date-parts']?.[0]?.[0]||'';
+    const journal = (w['container-title']||[])[0]||'';
+    const abstract = (w.abstract||'').replace(/<[^>]+>/g,' ').trim().slice(0,400);
+    const inDB = DB.papers.some(p=>p.doi===doi);
+
+    const results = [{ title, authors, abstract, journal, year, doi, inDB, pmid:'' }];
+    statusEl.textContent = '找到 1 筆';
+    renderSearchResults(results, 'doi');
+  } catch(e) {
+    statusEl.textContent = 'DOI 查詢失敗：' + e.message;
+    resultsEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--danger)">找不到此 DOI，請確認格式</div>';
+  }
+}
+
+function renderSearchResults(results, source) {
+  const el = document.getElementById('searchResults');
+  el.innerHTML = results.map((r,i) => {
+    const bgStyle = r.inDB ? 'opacity:0.5;border-left:3px solid var(--accent2)' : 'border-left:3px solid var(--border)';
+    return `<div style="padding:12px;margin-bottom:8px;background:var(--card);border-radius:6px;${bgStyle}">
+      <div style="font-weight:600;font-size:13px;line-height:1.4">${r.title}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">${r.authors||''} · ${r.journal||''} · ${r.year||''}</div>
+      ${r.abstract?`<div style="font-size:11px;color:var(--muted);margin-top:6px;padding:6px 8px;background:var(--bg);border-radius:4px;max-height:80px;overflow-y:auto">${r.abstract.slice(0,250)}${r.abstract.length>250?'...':''}</div>`:''}
+      <div style="display:flex;gap:6px;margin-top:8px;align-items:center">
+        ${r.inDB ? '<span style="color:var(--accent2);font-size:11px;font-weight:600">✓ 已在文庫中</span>' :
+          `<button class="btn btn-p" style="padding:4px 12px;font-size:11px" onclick="addSearchResult(${i},'${source}')">➕ 加入文庫</button>
+           ${cfg.proxy?`<button class="btn btn-s" style="padding:4px 12px;font-size:11px" onclick="addSearchResultWithAI(${i},'${source}')">🤖 AI 標籤加入</button>`:''}`}
+        ${r.pmid?`<a href="https://pubmed.ncbi.nlm.nih.gov/${r.pmid}/" target="_blank" style="font-size:11px;color:var(--accent)">↗ PubMed</a>`:''}
+        ${r.doi?`<a href="https://doi.org/${r.doi}" target="_blank" style="font-size:11px;color:var(--accent)">↗ DOI</a>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  // 存到暫存供加入使用
+  window._searchResults = results;
+}
+
+function addSearchResult(idx, source) {
+  const r = window._searchResults?.[idx];
+  if(!r) return;
+  const prefix = source==='patent'?'P':'A';
+  const maxNum = DB.papers.filter(p=>p.id.startsWith(prefix)).map(p=>parseInt(p.id.slice(1))||0).reduce((a,b)=>Math.max(a,b),0);
+  const newId = prefix + String(maxNum+1).padStart(2,'0');
+
+  const paper = {
+    id: newId, title: r.title, authors: r.authors||'', year: parseInt(r.year)||null,
+    venue: r.journal||'', doi: r.doi||null, pmid: r.pmid||null,
+    doc_type: '期刊論文', access: r.abstract?'開放摘要':'付費',
+    tags: [], purpose: '', abstract_note: (r.abstract||'').slice(0,400),
+    value_to_project: '', links: r.pmid?{pubmed:`https://pubmed.ncbi.nlm.nih.gov/${r.pmid}/`}:r.doi?{doi:`https://doi.org/${r.doi}`}:{}
+  };
+  DB.papers.push(paper);
+  saveDB(); onDBLoaded();
+  r.inDB = true;
+  renderSearchResults(window._searchResults, source);
+  toast(`已加入 ${newId}: ${r.title.slice(0,30)}...`,'success');
+}
+
+async function addSearchResultWithAI(idx, source) {
+  const r = window._searchResults?.[idx];
+  if(!r||!cfg.proxy) return;
+  // 先加入基本資料
+  addSearchResult(idx, source);
+  // 再用 AI 補標籤
+  const p = DB.papers[DB.papers.length-1];
+  const text = `${p.title}\n${p.abstract_note}\n${p.venue} ${p.year}`;
+  try {
+    const resp = await fetch(cfg.proxy, {
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,
+        system:'你是醫材文獻分類專家。回傳純JSON。繁體中文。',
+        messages:[{role:'user',content:`分類此文獻，回傳純JSON：{"tags":["標籤1","標籤2"],"purpose":"收錄目的15字","value_to_project":"對專案價值20字"}
+可用標籤：${Object.values(DB.meta.tag_dictionary||{}).flat().join(',')}
+文獻：${text.slice(0,800)}`}]})
+    });
+    const data = await resp.json();
+    trackUsage(data);
+    let raw = data.content?.[0]?.text||'';
+    raw = raw.replace(/```json|```/g,'').trim();
+    const ai = JSON.parse(raw);
+    if(ai.tags) p.tags = ai.tags;
+    if(ai.purpose) p.purpose = ai.purpose;
+    if(ai.value_to_project) p.value_to_project = ai.value_to_project;
+    saveDB();
+    toast(`${p.id} AI 標籤完成`,'success');
+  } catch(e) { console.warn('AI tag failed:', e); }
+}
+
+function addPatentToLibrary(patentId) {
+  const maxNum = DB.papers.filter(p=>p.id.startsWith('P')).map(p=>parseInt(p.id.slice(1))||0).reduce((a,b)=>Math.max(a,b),0);
+  const newId = 'P' + String(maxNum+1).padStart(2,'0');
+  const paper = {
+    id: newId, title: `Patent ${patentId}`, authors: '', year: null,
+    venue: '', doi: null, pmid: null, doc_type: '專利', access: '專利全文',
+    tags: [], purpose: '', abstract_note: '',
+    value_to_project: '', links: {google_patents:`https://patents.google.com/patent/${patentId}/en`}
+  };
+  DB.papers.push(paper);
+  saveDB(); onDBLoaded();
+  toast(`已加入 ${newId}: ${patentId}`,'success');
+  document.getElementById('searchResults').innerHTML = `<div style="padding:16px;background:var(--card);border-radius:8px;border-left:3px solid var(--accent2)">
+    <div style="color:var(--accent2);font-weight:600">✅ ${patentId} 已加入文庫（${newId}）</div>
+    <div style="font-size:11px;color:var(--muted);margin-top:4px">可到文庫中點「🧪 專利分析」做完整分析</div>
+  </div>`;
+}
+
 // ══════════════════════════════════════════════
 // BATCH ANALYSIS: 批次自動分析（睡前點一下）
 // ══════════════════════════════════════════════
@@ -1147,7 +1412,7 @@ let previousView = null;
 function goBack() {
   if(!previousView) return;
   const tabs = document.querySelectorAll('.tab');
-  const viewMap = {browse:0, graph:1, gap:2, compare:3, report:4, chat:5, add:6};
+  const viewMap = {search:0, browse:1, graph:2, gap:3, compare:4, report:5, chat:6, add:7};
   const idx = viewMap[previousView];
   if(idx!==undefined && tabs[idx]) {
     showView(previousView, tabs[idx]);
