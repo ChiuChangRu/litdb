@@ -679,6 +679,70 @@ function updateCostDisplay() {
 // REPORT: 開發策略報告產生器
 // ══════════════════════════════════════════════
 // ══════════════════════════════════════════════
+// NOTES: 筆記系統
+// ══════════════════════════════════════════════
+function getNotes() {
+  try { return JSON.parse(localStorage.getItem('litdb_notes')||'{}'); } catch(e) { return {}; }
+}
+function saveNotes(notes) {
+  localStorage.setItem('litdb_notes', JSON.stringify(notes));
+}
+function addNote(paperId) {
+  const text = prompt('📝 寫下你的筆記（可包含想加入計畫書的觀點）：');
+  if(!text) return;
+  const notes = getNotes();
+  if(!notes[paperId]) notes[paperId] = [];
+  notes[paperId].push({
+    text: text,
+    time: new Date().toISOString().slice(0,16).replace('T',' '),
+    forPlan: false
+  });
+  saveNotes(notes);
+  document.getElementById('notes_'+paperId).innerHTML = renderNotes(paperId);
+  toast('筆記已儲存','success');
+}
+function deleteNote(paperId, idx) {
+  const notes = getNotes();
+  if(notes[paperId]) { notes[paperId].splice(idx,1); saveNotes(notes); }
+  document.getElementById('notes_'+paperId).innerHTML = renderNotes(paperId);
+}
+function toggleNoteForPlan(paperId, idx) {
+  const notes = getNotes();
+  if(notes[paperId]?.[idx]) {
+    notes[paperId][idx].forPlan = !notes[paperId][idx].forPlan;
+    saveNotes(notes);
+    document.getElementById('notes_'+paperId).innerHTML = renderNotes(paperId);
+  }
+}
+function renderNotes(paperId) {
+  const notes = getNotes();
+  const list = notes[paperId] || [];
+  if(!list.length) return '<div style="color:var(--muted);font-size:11px">閱讀時隨手記錄觀點，之後可引用到報告中</div>';
+  return list.map((n,i)=>`
+    <div style="padding:6px 8px;margin-bottom:4px;background:${n.forPlan?'#fff8e6':'var(--bg)'};border-radius:4px;border-left:3px solid ${n.forPlan?'var(--accent)':'var(--border)'}">
+      <div style="font-size:12px;line-height:1.5">${n.text}</div>
+      <div style="display:flex;gap:6px;align-items:center;margin-top:3px">
+        <span style="font-size:9px;color:var(--muted)">${n.time}</span>
+        <button style="font-size:9px;color:${n.forPlan?'var(--accent)':'var(--muted)'};background:none;border:none;cursor:pointer;padding:0" onclick="toggleNoteForPlan('${paperId}',${i})">${n.forPlan?'⭐ 列入計畫書':'☆ 列入計畫書'}</button>
+        <button style="font-size:9px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0" onclick="deleteNote('${paperId}',${i})">🗑</button>
+      </div>
+    </div>`).join('');
+}
+function getAllPlanNotes() {
+  const notes = getNotes();
+  const planNotes = [];
+  Object.entries(notes).forEach(([paperId, list])=>{
+    list.forEach(n=>{
+      if(n.forPlan) {
+        const p = DB.papers.find(x=>x.id===paperId);
+        planNotes.push({ paperId, title: p?.title||'', text: n.text, time: n.time });
+      }
+    });
+  });
+  return planNotes;
+}
+
+// ══════════════════════════════════════════════
 // FILTER: 頂部標籤篩選
 // ══════════════════════════════════════════════
 let activeFilters = { type:new Set(), sub:new Set(), cure:new Set(), app:new Set(), status:new Set() };
@@ -2008,6 +2072,14 @@ function showDetail(i) {
       }).join('')}
       <button class="btn btn-s" onclick="showPatentAnalysis(${i})" style="width:100%;margin-top:8px">🔄 重新分析 / 其他模式</button>
     </div>` : ''}
+    <!-- 筆記區 -->
+    <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:12px;font-weight:600;color:var(--accent)">📝 筆記</span>
+        <button class="btn btn-s" style="font-size:10px;padding:2px 8px" onclick="addNote('${p.id}')">+ 新增</button>
+      </div>
+      <div id="notes_${p.id}" style="font-size:12px">${renderNotes(p.id)}</div>
+    </div>
     <div id="citeTree_${i}"></div>
   `;
 
