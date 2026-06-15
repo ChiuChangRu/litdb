@@ -240,7 +240,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
       <button class="close-help" onclick="this.parentElement.classList.add('hidden')">✕</button>
       <h4>🔍 文獻與專利檢索 — 從外部資料庫搜尋並加入文庫</h4>
       <strong>PubMed</strong>：搜尋生醫期刊論文（免費）。輸入英文關鍵字，如 <span class="tip">hydrophilic coating catheter PVP</span>。<br>
-      <strong>Google Patents</strong>：搜尋全球專利（免費）。輸入專利號如 <span class="tip">US8133580B2</span> 或關鍵字。<br>
+      <strong>Google Patents / USPTO</strong>：搜尋美國專利（PatentsView API，免費）。輸入專利號如 <span class="tip">US8133580B2</span> 或英文關鍵字如 <span class="tip">hydrophilic coating catheter</span>。<br>
       <strong>DOI 匯入</strong>：貼上 DOI 直接匯入完整書目資料（免費）。如 <span class="tip">10.1016/j.biomaterials.2024.122745</span>。<br>
       <strong>📎 書籤小工具</strong>：瀏覽任何網頁時一鍵收錄，請到「➕ 新增」分頁安裝。
     </div>
@@ -793,7 +793,7 @@ function updateSearchPlaceholder() {
     input.placeholder = '輸入英文關鍵字搜尋 PubMed... 如 hydrophilic coating catheter';
     filters.style.display = 'flex';
   } else if(src==='patent') {
-    input.placeholder = '輸入專利號（US8133580B2）或關鍵字搜尋 Google Patents';
+    input.placeholder = '輸入專利號（US8133580B2）或英文關鍵字搜尋 USPTO';
     filters.style.display = 'none';
   } else {
     input.placeholder = '輸入 DOI，如 10.1016/j.biomaterials.2024.122745';
@@ -950,26 +950,88 @@ async function searchPatentUnified(query) {
     return;
   }
 
-  // 關鍵字搜尋：透過 Google Patents URL 構造搜尋
-  statusEl.innerHTML = '<span class="spinner"></span> 搜尋 Google Patents...';
-  const searchUrl = `https://patents.google.com/?q=${encodeURIComponent(query)}&oq=${encodeURIComponent(query)}`;
+  // 關鍵字搜尋：用 PatentsView API（免費、無需 API key）
+  statusEl.innerHTML = '<span class="spinner"></span> 搜尋 PatentsView（USPTO）...';
   
-  resultsEl.innerHTML = `
-    <div style="padding:20px;background:var(--card);border-radius:8px;border:1px solid var(--border)">
-      <div style="font-size:13px;font-weight:600;margin-bottom:10px">🔍 Google Patents 搜尋：「${query}」</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:12px">
-        Google Patents 不提供 API，請在下方連結中找到專利號後回來輸入：
-      </div>
-      <a href="${searchUrl}" target="_blank" class="btn btn-p" style="display:inline-block;padding:8px 16px;text-decoration:none">↗ 開啟 Google Patents 搜尋頁</a>
-      <div style="margin-top:12px;padding:10px;background:var(--bg);border-radius:4px;font-size:11px;color:var(--muted)">
-        <strong>💡 操作方式：</strong><br>
-        1. 點上方按鈕開啟 Google Patents<br>
-        2. 找到目標專利，複製專利號（如 US8133580B2）<br>
-        3. 回來貼上專利號搜尋 → 自動抓取全文+翻譯<br>
-        或使用 <strong>📎 書籤小工具</strong> 在專利頁面直接收錄
-      </div>
-    </div>`;
-  statusEl.textContent = '';
+  try {
+    const pvQuery = encodeURIComponent(JSON.stringify({"_text_any":{"patent_abstract":query}}));
+    const pvFields = encodeURIComponent(JSON.stringify(["patent_number","patent_title","patent_date","patent_abstract","assignee_organization","inventor_first_name","inventor_last_name","patent_type"]));
+    const pvUrl = `https://api.patentsview.org/patents/query?q=${pvQuery}&f=${pvFields}&o=${encodeURIComponent(JSON.stringify({"per_page":15,"matched_subentities_only":true}))}`;
+    
+    const r = await fetch(pvUrl);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const data = await r.json();
+    const patents = data.patents || [];
+    
+    if(!patents.length) {
+      statusEl.textContent = '無結果';
+      resultsEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">PatentsView 找不到符合的美國專利。<br>嘗試不同關鍵字，或直接輸入專利號（如 US12037560B2）。</div>';
+      return;
+    }
+    
+    statusEl.textContent = `找到 ${data.total_patent_count||patents.length} 筆（顯示 ${patents.length} 筆）`;
+    
+    resultsEl.innerHTML = patents.map((pt,i) => {
+      const pNum = 'US' + pt.patent_number;
+      const title = pt.patent_title || '';
+      const abstract = pt.patent_abstract || '';
+      const date = pt.patent_date || '';
+      const assignee = (pt.assignees||[]).map(a=>a.assignee_organization).filter(Boolean).join(', ') || '—';
+      const inventors = (pt.inventors||[]).slice(0,3).map(inv=>`${inv.inventor_last_name||''} ${(inv.inventor_first_name||'').charAt(0)}`).join('; ');
+      const inDB = DB.papers.some(p=>(p.title||'').includes(pt.patent_number) || (p.title||'').includes(pNum));
+      
+      return `<div style="display:flex;gap:10px;padding:12px;margin-bottom:6px;background:var(--card);border-radius:6px;${inDB?'border-left:3px solid var(--accent2);opacity:0.6':'border-left:3px solid var(--border)'}">
+        <div style="flex:1">
+          <div style="display:flex;gap:4px;margin-bottom:4px;flex-wrap:wrap;align-items:center">
+            <span class="tag tag-orange">專利</span>
+            <span style="font-weight:700;color:var(--accent)">${pNum}</span>
+            <span style="font-size:10px;color:var(--muted)">${date}</span>
+          </div>
+          <div style="font-weight:600;font-size:13px;margin-bottom:4px">${title}</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px">
+            <span style="background:#fff0e6;color:#b85c2a;padding:1px 4px;border-radius:3px;font-size:10px">${assignee}</span>
+            <span style="font-size:10px;margin-left:4px">${inventors}</span>
+          </div>
+          ${abstract?`<div style="font-size:11px;color:var(--muted);max-height:60px;overflow:hidden;padding:4px 6px;background:var(--bg);border-radius:4px">${abstract.slice(0,200)}${abstract.length>200?'...':''}</div>`:''}
+          <div style="display:flex;gap:6px;margin-top:6px;align-items:center">
+            ${inDB?'<span style="color:var(--accent2);font-size:11px;font-weight:600">✓ 已在文庫</span>':`
+              <button class="btn btn-p" style="padding:4px 10px;font-size:11px" onclick="addPatentFromPV(${i})">➕ 加入文庫</button>
+              ${cfg.proxy?`<button class="btn btn-s" style="padding:4px 10px;font-size:11px" onclick="addPatentFromPV(${i},true)">🤖 AI 標籤</button>`:''}`}
+            <a href="https://patents.google.com/patent/US${pt.patent_number}/en" target="_blank" style="font-size:10px;color:var(--accent)">↗ Google Patents</a>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+    
+    // 存到暫存
+    window._pvResults = patents;
+    
+  } catch(e) {
+    statusEl.textContent = '搜尋失敗：' + e.message;
+    resultsEl.innerHTML = `<div style="padding:20px;text-align:center;color:var(--danger)">PatentsView API 錯誤。<br>你也可以直接輸入專利號（如 US12037560B2）搜尋。</div>`;
+  }
+}
+
+function addPatentFromPV(idx, withAI) {
+  const pt = window._pvResults?.[idx];
+  if(!pt) return;
+  const pNum = 'US' + pt.patent_number;
+  const title = pt.patent_title || pNum;
+  const abstract = pt.patent_abstract || '';
+  const assignee = (pt.assignees||[]).map(a=>a.assignee_organization).filter(Boolean).join(', ');
+  const inventors = (pt.inventors||[]).slice(0,3).map(inv=>`${inv.inventor_last_name||''} ${(inv.inventor_first_name||'').charAt(0)}`).join('; ');
+  const year = pt.patent_date ? parseInt(pt.patent_date.slice(0,4)) : null;
+  
+  addPatentToLibraryFull(pNum, `${title} (${pNum})`, abstract, withAI);
+  
+  // 補充更多欄位
+  const p = DB.papers[DB.papers.length-1];
+  if(p) {
+    p.authors = `${inventors}${assignee?' / '+assignee:''}`;
+    p.year = year;
+    p.venue = 'Google Patents';
+    saveDB();
+  }
 }
 
 function addPatentToLibraryFull(patentId, title, abstract, withAI) {
