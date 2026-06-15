@@ -366,6 +366,18 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
       <button class="btn btn-p" onclick="generateReport()">🤖 AI 產生報告（~NT$1）</button>
     </div>
 
+    <!-- 批次分析（睡前點一下）-->
+    <div style="background:var(--card);border:1px solid var(--accent);border-radius:8px;padding:16px;margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--accent)">🌙 批次分析（睡前點一下）</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">自動分析所有未分析的文獻，電腦保持開啟即可。每篇自動存檔，中途斷電不會遺失。</div>
+        </div>
+        <button class="btn btn-p" onclick="batchAnalyzeAll()" style="white-space:nowrap;padding:10px 20px">🤖 開始批次分析</button>
+      </div>
+      <div id="batchStatus" style="margin-top:8px;font-size:12px;color:var(--muted)"></div>
+    </div>
+
     <!-- 基本資訊（可編輯）-->
     <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px">
       <div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:10px">基本資訊</div>
@@ -582,6 +594,85 @@ function updateCostDisplay() {
 // ══════════════════════════════════════════════
 // REPORT: 開發策略報告產生器
 // ══════════════════════════════════════════════
+// ══════════════════════════════════════════════
+// BATCH ANALYSIS: 批次自動分析（睡前點一下）
+// ══════════════════════════════════════════════
+let batchRunning = false;
+
+async function batchAnalyzeAll() {
+  if(batchRunning){toast('批次分析已在執行中','error');return}
+  if(!cfg.proxy){toast('請先設定 Claude API Proxy URL','error');return}
+
+  const unanalyzed = DB.papers.filter(p=>!p.patentResults || Object.keys(p.patentResults).length===0);
+  if(!unanalyzed.length){toast('所有文獻都已分析完成！','success');return}
+
+  const est = (unanalyzed.length * 0.15).toFixed(1);
+  const mins = Math.ceil(unanalyzed.length * 8 / 60);
+  if(!confirm(`即將分析 ${unanalyzed.length} 篇未分析文獻\n預估費用：~NT$${est}\n預估時間：~${mins} 分鐘\n\n電腦保持開啟，可以去睡覺了 😴`)) return;
+
+  batchRunning = true;
+  const statusEl = document.getElementById('batchStatus');
+  let done=0, fail=0;
+
+  for(const p of unanalyzed) {
+    if(!batchRunning) break; // 中斷
+
+    statusEl.innerHTML = `<span class="spinner"></span> 分析中：${p.id}（${done+1}/${unanalyzed.length}）<br>
+      <span style="color:var(--accent2)">✅ ${done} 完成</span> · <span style="color:var(--danger)">❌ ${fail} 失敗</span>
+      <br><button class="btn btn-s" onclick="batchRunning=false" style="margin-top:4px">⏹ 停止</button>`;
+
+    try {
+      const text = (p.abstract_note||'') + '\n' + (p.purpose||'') + '\n' + (p.value_to_project||'');
+      if(!text.trim()) { fail++; continue; }
+
+      const isPatent = p.doc_type==='專利';
+      const relatedPapers = DB.papers
+        .filter(x=>x.id!==p.id && (x.tags||[]).some(t=>(p.tags||[]).includes(t)))
+        .slice(0,3)
+        .map(x=>`[${x.id}] ${x.title}: ${(x.abstract_note||'').slice(0,100)}`)
+        .join('\n');
+
+      const prompt = isPatent ?
+        `分析專利技術內容。辨識真實vs預言式實施例，評估可信度。
+專利：${p.title}\n標籤：${(p.tags||[]).join(', ')}\n相關：${relatedPapers||'無'}\n內容：${text.slice(0,2000)}
+回傳純JSON：{"summary":"一句話","examples":[{"name":"","is_real":true,"credibility":"高/中/低","credibility_reason":"","substrate":"","formulation":{"primer":"","topcoat":""},"process":{"surface_prep":"","coating_method":"","drying":"","curing":""},"results":{"friction":"","adhesion":"","wca":"","durability":"","other":""}}],"key_claims":["claim白話"],"actionable_insights":["可借鏡"],"red_flags":["可疑"],"bioteque_relevance":"建議"}` :
+        `分析文獻技術內容，提取配方/製程/性能數據。
+文獻：${p.title}\n標籤：${(p.tags||[]).join(', ')}\n相關：${relatedPapers||'無'}\n內容：${text.slice(0,2000)}
+回傳純JSON：{"summary":"一句話","examples":[{"name":"","is_real":true,"credibility":"高/中/低","credibility_reason":"","substrate":"","formulation":{"primer":"","topcoat":""},"process":{"surface_prep":"","coating_method":"","drying":"","curing":""},"results":{"friction":"","adhesion":"","wca":"","durability":"","other":""}}],"key_claims":["核心貢獻"],"actionable_insights":["可借鏡"],"red_flags":["注意"],"bioteque_relevance":"建議"}`;
+
+      const r = await fetch(cfg.proxy, {
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:2000,
+          system:'你是醫材親水塗層技術分析專家。回傳精簡純JSON，繁體中文。沒有的欄位省略。',
+          messages:[{role:'user',content:prompt}]})
+      });
+      const data = await r.json();
+      trackUsage(data);
+      let raw = data.content?.[0]?.text||'';
+      raw = raw.replace(/```json|```/g,'').trim();
+      if(!raw.endsWith('}')){ const lb=raw.lastIndexOf('}'); if(lb>0) raw=raw.slice(0,lb+1); }
+      const analysis = JSON.parse(raw);
+
+      if(!p.patentResults) p.patentResults = {};
+      p.patentResults.full = analysis;
+      done++;
+      saveDB(); // 每篇存一次，防斷電
+    } catch(e) {
+      console.warn(`${p.id} 分析失敗:`, e);
+      fail++;
+    }
+
+    // 間隔 5 秒避免限流
+    await new Promise(r=>setTimeout(r,5000));
+  }
+
+  batchRunning = false;
+  statusEl.innerHTML = `✅ 批次分析完成！<br>
+    <span style="color:var(--accent2)">成功 ${done} 篇</span> · <span style="color:var(--danger)">失敗 ${fail} 篇</span> · 
+    <span style="color:var(--muted)">共 ${unanalyzed.length} 篇</span>`;
+  toast(`批次分析完成：${done} 成功 / ${fail} 失敗`,'success');
+}
+
 function buildReportSummary() {
   const el = document.getElementById('rptDataSummary');
   if(!el) return;
