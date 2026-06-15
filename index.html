@@ -210,19 +210,17 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
   <span style="font-size:10px;color:rgba(255,255,255,0.7)">v3.2 · 2026-06-15</span>
   <button id="backBtn" class="btn btn-s" style="display:none;padding:2px 10px;font-size:11px;color:#fff;border-color:rgba(255,255,255,0.4)" onclick="goBack()">← 返回</button>
   <span style="font-size:12px;color:rgba(255,255,255,0.85)">親水塗層文獻知識管理</span>
-  <div class="header-r">
-    <span id="gUserLabel" style="font-size:12px;color:#ffeedd;display:none"></span>
-    <button class="btn btn-s" id="gSignInBtn" onclick="googleSignIn()" style="color:#fff;border-color:rgba(255,255,255,0.4)">G 登入 Google</button>
-    <button class="btn btn-s" id="gSaveBtn" style="display:none;color:#fff;border-color:rgba(255,255,255,0.4)" onclick="saveToSheets()">📊 存到 Sheets</button>
-    <button class="btn btn-s" id="gLoadBtn" style="display:none;color:#fff;border-color:rgba(255,255,255,0.4)" onclick="loadFromSheets()">📂 從 Sheets 載入</button>
-    <button class="btn btn-s" id="gOutBtn" style="display:none;color:#fff;border-color:rgba(255,255,255,0.4)" onclick="googleSignOut()">登出</button>
-    <span style="color:rgba(255,255,255,0.3)">|</span>
-    <span id="costDisplay" style="font-size:11px;color:#ffeedd;cursor:pointer" onclick="if(confirm('重置費用計算？')){{costData={calls:0,input_tokens:0,output_tokens:0};localStorage.setItem(COST_KEY,JSON.stringify(costData));updateCostDisplay();toast('已重置','success')}}}" title="點擊重置">0 次 ≈ NT$0</span>
-    <span style="color:rgba(255,255,255,0.3)">|</span>
-    <span id="dbStats" style="color:rgba(255,255,255,0.85)">—</span>
-    <button class="btn btn-s" onclick="openSettings()" style="color:#fff;border-color:rgba(255,255,255,0.4)">⚙</button>
-    <button class="btn btn-s" onclick="exportDB()" style="color:#fff;border-color:rgba(255,255,255,0.4)">⬇ 匯出</button>
-    <label class="btn btn-s" style="cursor:pointer;color:#fff;border-color:rgba(255,255,255,0.4)">⬆ 匯入<input type="file" accept=".json" style="display:none" onchange="importDB(event)"></label>
+  <div class="header-r" style="gap:8px">
+    <span id="gUserLabel" style="font-size:11px;color:#fff;display:none"></span>
+    <button class="btn btn-s" id="gSignInBtn" onclick="googleSignIn()" style="color:#fff;border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.15)">G 登入 Google</button>
+    <button class="btn btn-s" id="gSaveBtn" style="display:none;color:#fff;border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.15)" onclick="saveToSheets()">📊 Sheets</button>
+    <button class="btn btn-s" id="gLoadBtn" style="display:none;color:#fff;border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.15)" onclick="loadFromSheets()">📂 載入</button>
+    <button class="btn btn-s" id="gOutBtn" style="display:none;color:#fff;border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.15)" onclick="googleSignOut()">登出</button>
+    <span id="costDisplay" style="font-size:11px;color:#ffeedd;cursor:pointer;background:rgba(0,0,0,0.15);padding:2px 8px;border-radius:4px" onclick="if(confirm('重置費用計算？')){{costData={calls:0,input_tokens:0,output_tokens:0};localStorage.setItem(COST_KEY,JSON.stringify(costData));updateCostDisplay();toast('已重置','success')}}}" title="點擊重置">0 次 ≈ NT$0</span>
+    <span id="dbStats" style="font-size:11px;color:#ffeedd;background:rgba(0,0,0,0.15);padding:2px 8px;border-radius:4px">—</span>
+    <button class="btn btn-s" onclick="openSettings()" style="color:#fff;border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.15)">⚙</button>
+    <button class="btn btn-s" onclick="exportDB()" style="color:#fff;border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.15)">⬇</button>
+    <label class="btn btn-s" style="cursor:pointer;color:#fff;border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.15)">⬆<input type="file" accept=".json" style="display:none" onchange="importDB(event)"></label>
   </div>
 </header>
 
