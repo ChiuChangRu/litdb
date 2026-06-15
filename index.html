@@ -289,7 +289,8 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
       <span id="graphThreshVal" style="font-size:11px;color:var(--muted)">1</span>
       <span id="graphInfo" style="font-size:11px;color:var(--muted);margin-left:auto"></span>
     </div>
-    <canvas id="graphCanvas" width="1200" height="550" onclick="onGraphClick(event)"></canvas>
+    <canvas id="graphCanvas" width="1200" height="550" onclick="onGraphClick(event)" onmousemove="onGraphHover(event)" onmouseleave="hideGraphTooltip()"></canvas>
+    <div id="graphTooltip" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;line-height:1.6;max-width:350px;box-shadow:0 4px 16px rgba(0,0,0,0.12);pointer-events:none;z-index:500"></div>
     <div class="graph-legend" id="graphLegend"></div>
     <div id="graphDetail" style="padding:10px 14px;font-size:12px;color:var(--muted);display:none"></div>
   </div>
@@ -2358,6 +2359,76 @@ function onGraphClick(event) {
     detail.innerHTML = `<strong>📄 [${closest.id}]</strong> ${p?.title||''}<br>${tags}<br><span style="color:var(--muted)">${p?.purpose||''}</span>`;
   }
   detail.style.display='block';
+}
+
+let hoverTimeout = null;
+function onGraphHover(event) {
+  const canvas = document.getElementById('graphCanvas');
+  const rect = canvas.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+  const tooltip = document.getElementById('graphTooltip');
+
+  let closest = null, minDist = 25;
+  graphNodes.forEach(n=>{
+    const dx=n.x-x, dy=n.y-y;
+    const dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist<minDist){minDist=dist;closest=n}
+  });
+
+  if(!closest) {
+    tooltip.style.display='none';
+    canvas.style.cursor='default';
+    return;
+  }
+
+  canvas.style.cursor='pointer';
+
+  // 組合 tooltip 內容
+  let html = '';
+  if(closest.type==='paper') {
+    const p = DB.papers.find(x=>x.id===closest.id);
+    if(!p) return;
+    const org = extractOrg(p);
+    const r = p.patentResults?.full||{};
+    const ex = r.examples?.[0]||{};
+    const hasA = p.patentResults && Object.keys(p.patentResults).length>0;
+
+    html = `<div style="font-weight:700;color:var(--accent);margin-bottom:4px">[${p.id}] ${p.doc_type} ${hasA?'✅':''}</div>
+      <div style="font-weight:600;margin-bottom:4px">${p.title}</div>
+      ${org?`<span style="background:#fff0e6;color:#b85c2a;padding:1px 6px;border-radius:3px;font-size:10px">${org}</span> `:''}
+      ${p.year?`<span style="font-size:10px;color:var(--muted)">${p.year}</span>`:''}<br>
+      ${p.abstract_note?`<div style="margin-top:4px;color:var(--muted);font-size:11px">${p.abstract_note.slice(0,150)}${p.abstract_note.length>150?'...':''}</div>`:''}
+      ${r.summary?`<div style="margin-top:4px;color:var(--accent2);font-size:11px">💡 ${r.summary}</div>`:''}
+      ${ex.results?.friction?`<div style="font-size:10px;margin-top:2px">COF: <strong>${ex.results.friction}</strong></div>`:''}
+      ${ex.results?.wca?`<div style="font-size:10px">WCA: <strong>${ex.results.wca}</strong></div>`:''}
+      <div style="margin-top:4px;font-size:10px">${(p.tags||[]).slice(0,5).map(t=>`<span style="background:var(--card);padding:1px 4px;border-radius:2px;margin-right:2px">${t}</span>`).join('')}</div>`;
+  } else {
+    // Tag 節點
+    const connected = [];
+    graphEdges.forEach(e=>{
+      if(e.tag===closest.id) connected.push(e.paper);
+    });
+    html = `<div style="font-weight:700;color:var(--accent);margin-bottom:4px">🏷 ${closest.id}</div>
+      <div style="font-size:11px;color:var(--muted)">${connected.length} 篇文獻使用此標籤</div>
+      <div style="margin-top:4px;font-size:11px">${connected.slice(0,8).map(pid=>{
+        const p=DB.papers.find(x=>x.id===pid);
+        return p?`[${pid}] ${p.title.slice(0,30)}...`:'';
+      }).filter(Boolean).join('<br>')}</div>
+      ${connected.length>8?`<div style="font-size:10px;color:var(--muted)">...還有 ${connected.length-8} 篇</div>`:''}`;
+  }
+
+  tooltip.innerHTML = html;
+  tooltip.style.display = 'block';
+  // 定位在滑鼠旁邊
+  const tx = event.clientX + 15;
+  const ty = event.clientY - 10;
+  tooltip.style.left = Math.min(tx, window.innerWidth - 370) + 'px';
+  tooltip.style.top = Math.min(ty, window.innerHeight - 250) + 'px';
+}
+
+function hideGraphTooltip() {
+  document.getElementById('graphTooltip').style.display='none';
 }
 
 // ══════════════════════════════════════════════
