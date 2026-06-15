@@ -220,6 +220,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
   <div class="tab" onclick="showView('graph',this)">🕸 關係圖</div>
   <div class="tab" onclick="showView('gap',this)">🔥 缺口分析</div>
   <div class="tab" onclick="showView('compare',this)">📊 比較</div>
+  <div class="tab" onclick="showView('report',this)">📋 報告</div>
   <div class="tab" onclick="showView('chat',this)">🤖 AI 對話</div>
   <div class="tab" onclick="showView('add',this)">➕ 新增文獻</div>
 </div>
@@ -354,6 +355,57 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
       <span id="compareStats" style="font-size:12px;color:var(--muted)"></span>
     </div>
     <div id="compareResults"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ VIEW: REPORT ═══════════════ -->
+<div class="view" id="v-report">
+  <div style="max-width:1000px;margin:0 auto;padding:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3 style="font-size:16px;color:var(--accent)">📋 開發策略報告產生器</h3>
+      <button class="btn btn-p" onclick="generateReport()">🤖 AI 產生報告（~NT$1）</button>
+    </div>
+
+    <!-- 基本資訊（可編輯）-->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:10px">基本資訊</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div><label style="font-size:11px;color:var(--muted)">公司名稱</label><input type="text" id="rptCompany" placeholder="（請填入公司名稱）" style="font-size:13px"></div>
+        <div><label style="font-size:11px;color:var(--muted)">計畫名稱</label><input type="text" id="rptTitle" value="次世代親水性塗層開發計畫" style="font-size:13px"></div>
+        <div><label style="font-size:11px;color:var(--muted)">目標產品</label><input type="text" id="rptProduct" value="TPU 導管（輸尿管支架/Pigtail/泌尿導管）" style="font-size:13px"></div>
+        <div><label style="font-size:11px;color:var(--muted)">基材</label><input type="text" id="rptSubstrate" value="Pellethane 2363 TPU（聚醚型）" style="font-size:13px"></div>
+        <div><label style="font-size:11px;color:var(--muted)">現有設備</label><input type="text" id="rptEquipment" value="air plasma, LED UV (365/405nm), dip coating, Harland FTS" style="font-size:13px"></div>
+        <div><label style="font-size:11px;color:var(--muted)">撰寫人</label><input type="text" id="rptAuthor" placeholder="（請填入）" style="font-size:13px"></div>
+      </div>
+    </div>
+
+    <!-- 報告章節選擇 -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:10px">報告章節（勾選要產生的）</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px">
+        <label><input type="checkbox" id="rptSec1" checked> 1. 專利風險與迴避分析</label>
+        <label><input type="checkbox" id="rptSec2" checked> 2. 技術路線比較（分群比較）</label>
+        <label><input type="checkbox" id="rptSec3" checked> 3. 配方候選與性能基準</label>
+        <label><input type="checkbox" id="rptSec4" checked> 4. Primer/底塗策略建議</label>
+        <label><input type="checkbox" id="rptSec5" checked> 5. 供應商比較（Plan A）</label>
+        <label><input type="checkbox" id="rptSec6" checked> 6. 自主開發建議（Plan B）</label>
+        <label><input type="checkbox" id="rptSec7" checked> 7. 驗證項目與目標值</label>
+        <label><input type="checkbox" id="rptSec8"> 8. 抗結痂/抗菌方向（Phase 3）</label>
+      </div>
+    </div>
+
+    <!-- 資料庫數據摘要（自動填入）-->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:10px">資料庫數據（自動彙整）</div>
+      <div id="rptDataSummary" style="font-size:12px;color:var(--muted)">載入中...</div>
+    </div>
+
+    <!-- 報告輸出 -->
+    <div id="rptOutput" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:16px;font-size:13px;line-height:1.8">
+    </div>
+
+    <div style="display:flex;gap:8px;justify-content:center" id="rptActions" style="display:none">
+    </div>
   </div>
 </div>
 
@@ -528,7 +580,163 @@ function updateCostDisplay() {
 }
 
 // ══════════════════════════════════════════════
+// REPORT: 開發策略報告產生器
+// ══════════════════════════════════════════════
+function buildReportSummary() {
+  const el = document.getElementById('rptDataSummary');
+  if(!el) return;
+  const analyzed = DB.papers.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0);
+  const patents = DB.papers.filter(p=>p.doc_type==='專利');
+  const analyzedPatents = patents.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0);
+
+  // 收集所有性能數據
+  const frictions = [], adhesions = [], wcas = [];
+  analyzed.forEach(p=>{
+    const r = p.patentResults?.full?.examples?.[0]?.results||{};
+    if(r.friction) frictions.push(`${p.id}: ${r.friction}`);
+    if(r.adhesion) adhesions.push(`${p.id}: ${r.adhesion}`);
+    if(r.wca) wcas.push(`${p.id}: ${r.wca}`);
+  });
+
+  el.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:10px">
+      <div style="text-align:center;padding:10px;background:var(--bg);border-radius:6px"><div style="font-size:22px;font-weight:700;color:var(--accent)">${DB.papers.length}</div><div style="font-size:10px;color:var(--muted)">文獻總數</div></div>
+      <div style="text-align:center;padding:10px;background:var(--bg);border-radius:6px"><div style="font-size:22px;font-weight:700;color:var(--accent2)">${analyzed.length}</div><div style="font-size:10px;color:var(--muted)">已分析</div></div>
+      <div style="text-align:center;padding:10px;background:var(--bg);border-radius:6px"><div style="font-size:22px;font-weight:700;color:var(--warn)">${analyzedPatents.length}/${patents.length}</div><div style="font-size:10px;color:var(--muted)">專利已分析/總數</div></div>
+    </div>
+    <div style="margin-bottom:6px"><strong>摩擦數據：</strong>${frictions.join('、')||'（尚無）'}</div>
+    <div style="margin-bottom:6px"><strong>附著力數據：</strong>${adhesions.join('、')||'（尚無）'}</div>
+    <div style="margin-bottom:6px"><strong>接觸角數據：</strong>${wcas.join('、')||'（尚無）'}</div>
+    <div style="color:var(--accent);font-size:11px;margin-top:8px">💡 分析越多文獻，報告數據越完整。目前已分析 ${analyzed.length} 篇。</div>`;
+}
+
+async function generateReport() {
+  if(!cfg.proxy){toast('請先設定 Claude API Proxy URL','error');return}
+
+  const company = document.getElementById('rptCompany').value.trim() || '________（公司名稱）';
+  const title = document.getElementById('rptTitle').value.trim();
+  const product = document.getElementById('rptProduct').value.trim();
+  const substrate = document.getElementById('rptSubstrate').value.trim();
+  const equipment = document.getElementById('rptEquipment').value.trim();
+  const author = document.getElementById('rptAuthor').value.trim() || '________';
+
+  // 收集已分析文獻的數據
+  const analyzed = DB.papers.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0);
+  const dataLines = analyzed.map(p=>{
+    const r = p.patentResults?.full||{};
+    const ex = r.examples?.[0]||{};
+    return `[${p.id}] ${p.title} (${p.doc_type})
+摘要:${r.summary||p.abstract_note||''}
+底塗:${ex.formulation?.primer||'—'} 面塗:${ex.formulation?.topcoat||'—'}
+固化:${ex.process?.curing||'—'}
+COF:${ex.results?.friction||'—'} 附著:${ex.results?.adhesion||'—'} WCA:${ex.results?.wca||'—'}
+可借鏡:${(r.actionable_insights||[]).join('; ')}
+${p.doc_type==='專利'?'迴避:'+((r.key_claims||[]).join('; ')):''}`;
+  }).join('\n---\n');
+
+  // 勾選的章節
+  const sections = [];
+  if(document.getElementById('rptSec1')?.checked) sections.push('1.專利風險與迴避分析：列出有效專利的claim範圍、迴避方案、難度。標示已過期和即將過期的專利');
+  if(document.getElementById('rptSec2')?.checked) sections.push('2.技術路線比較：按固化方式（UV/熱固/自聚合）分群，比較各路線的配方、性能、優缺點');
+  if(document.getElementById('rptSec3')?.checked) sections.push('3.配方候選與性能基準：從文獻數據彙整最佳COF、附著力、WCA作為開發目標');
+  if(document.getElementById('rptSec4')?.checked) sections.push('4.Primer/底塗策略：比較PDA/WPU/benzophenone/plasma等底塗方案的優缺點和適用性');
+  if(document.getElementById('rptSec5')?.checked) sections.push('5.供應商比較(Plan A)：列出Biocoat/Hydromer/DSM/Surmodics/Freudenberg的技術特點和合作模式');
+  if(document.getElementById('rptSec6')?.checked) sections.push('6.自主開發建議(Plan B)：基於文獻分析推薦的配方主線和實驗設計');
+  if(document.getElementById('rptSec7')?.checked) sections.push('7.驗證項目與目標值：WCA/COF/附著力/耐久性的具體數值目標（引用文獻來源）');
+  if(document.getElementById('rptSec8')?.checked) sections.push('8.抗結痂/抗菌方向：SBMA/MPC/chitosan/Zn²⁺的文獻依據和導入時程');
+
+  const output = document.getElementById('rptOutput');
+  output.style.display = 'block';
+  output.innerHTML = '<div class="cite-loading" style="padding:40px"><span class="spinner"></span> AI 產生開發策略報告中...</div>';
+
+  try {
+    const r = await fetch(cfg.proxy, {
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:4000,
+        system:`你是醫療器材親水塗層開發策略顧問。根據文獻分析數據，產生結構化的開發策略報告。
+規則：
+1. 繁體中文
+2. 每個章節用 ## 標題
+3. 數據必須引用文獻ID如[P01][G12]
+4. 不確定的推論標(*)
+5. 公司名稱用「${company}」
+6. 簡潔務實，不要學術廢話
+7. 每個章節 3-8 句，精煉`,
+        messages:[{role:'user',content:`請根據以下文獻分析數據，產生開發策略報告。
+
+公司：${company}
+計畫：${title}
+目標產品：${product}
+基材：${substrate}
+現有設備：${equipment}
+
+已分析文獻（${analyzed.length}篇）：
+${dataLines.slice(0,3000)}
+
+需要產生的章節：
+${sections.join('\n')}
+
+每章節引用具體文獻ID和數據。`}]})
+    });
+    const data = await r.json();
+    trackUsage(data);
+    let text = data.content?.[0]?.text||'';
+    if(!text) throw new Error('AI 無回應');
+
+    // Markdown 簡易轉 HTML
+    text = text.replace(/^## (.+)$/gm, '<h3 style="color:var(--accent);margin:20px 0 8px;font-size:15px;border-bottom:2px solid var(--accent);padding-bottom:4px">$1</h3>');
+    text = text.replace(/^### (.+)$/gm, '<h4 style="color:var(--text);margin:12px 0 6px;font-size:13px">$1</h4>');
+    text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/\[([A-Z]\d+)\]/g, '<span style="color:var(--accent2);font-weight:600">[$1]</span>');
+    text = text.replace(/\n/g, '<br>');
+
+    const header = `<div style="text-align:center;padding:16px 0;border-bottom:2px solid var(--accent);margin-bottom:16px">
+      <div style="font-size:11px;color:var(--muted)">${company}</div>
+      <div style="font-size:18px;font-weight:700;color:var(--text);margin:4px 0">${title}</div>
+      <div style="font-size:12px;color:var(--muted)">${product} · ${substrate}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">撰寫：${author} · 日期：${new Date().toISOString().slice(0,10)} · 基於 ${analyzed.length} 篇文獻分析</div>
+    </div>`;
+
+    output.innerHTML = header + text;
+
+    document.getElementById('rptActions').innerHTML = `
+      <button class="btn btn-p" onclick="copyReport()">📋 複製報告</button>
+      <button class="btn btn-s" onclick="downloadReport()">⬇ 下載 Markdown</button>`;
+    document.getElementById('rptActions').style.display = 'flex';
+
+    toast('報告產生完成','success');
+  } catch(e) {
+    output.innerHTML = `<div style="color:var(--danger);padding:20px">報告產生失敗：${e.message}</div>`;
+  }
+}
+
+function copyReport() {
+  const el = document.getElementById('rptOutput');
+  if(!el) return;
+  const text = el.innerText;
+  navigator.clipboard.writeText(text).then(()=>toast('已複製到剪貼簿','success')).catch(()=>toast('複製失敗','error'));
+}
+
+function downloadReport() {
+  const el = document.getElementById('rptOutput');
+  if(!el) return;
+  const text = el.innerText;
+  const blob = new Blob([text], {type:'text/markdown;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `開發策略報告_${new Date().toISOString().slice(0,10)}.md`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('已下載','success');
+}
+
+// 切到報告分頁時自動更新摘要
+const origShowView = window.showView;
+
+// ══════════════════════════════════════════════
 // COMPARE: 自動分群比較
+// ══════════════════════════════════════════════
 // ══════════════════════════════════════════════
 function buildCompare() {
   const groupBy = document.getElementById('compareGroupBy').value;
@@ -835,7 +1043,7 @@ function saveDB() {
 // UI Helpers
 // ══════════════════════════════════════════════
 function toast(m,t=''){const e=document.getElementById('toast');e.textContent=m;e.className='show '+t;clearTimeout(e._t);e._t=setTimeout(()=>e.className='',3000)}
-function showView(id,el){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('v-'+id).classList.add('active');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');if(id==='graph')buildGraph();if(id==='gap')buildHeatmaps()}
+function showView(id,el){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('v-'+id).classList.add('active');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');if(id==='graph')buildGraph();if(id==='gap')buildHeatmaps();if(id==='compare')buildCompare();if(id==='report')buildReportSummary()}
 function openSettings(){document.getElementById('settingsModal').classList.add('show')}
 function closeSettings(){document.getElementById('settingsModal').classList.remove('show')}
 function saveSettings(){cfg.proxy=document.getElementById('cfgProxy').value.trim();cfg.dataUrl=document.getElementById('cfgDataUrl').value.trim();localStorage.setItem(CFG_KEY,JSON.stringify(cfg));closeSettings();toast('已儲存','success')}
