@@ -582,7 +582,12 @@
       "value_to_project": "商用對標:UV vs 熱固雙路線供應商",
       "links": {
         "news": "https://www.prnewswire.com/news-releases/biocoat-incs-hydak-uv-hydrophilic-coating-awarded-uspto-patent-301592650.html"
-      }
+      },
+      "related_patents": [
+        "US20110200828A1",
+        "US20130323291A1"
+      ],
+      "patent_notes": "HYDAK UV 2022年獲美國專利（專利號未公開*）。bi-laminar平台：acrylic base-coat (Hydak B-500, polyisocyanate+aziridine交聯) + PAA top-coat。UV+Thermal雙固化。已用於2件FDA 510(k)血管導管"
     },
     {
       "id": "C02",
@@ -605,7 +610,9 @@
       "value_to_project": "最新商用UV單步塗料技術對標",
       "links": {
         "product": "https://www.freudenbergmedical.com/technologies/coatings/hydrophilic-coating"
-      }
+      },
+      "related_patents": [],
+      "patent_notes": "2026年最新UV固化塗層，結合表面化學與醫材製造。具體專利號未公開*"
     },
     {
       "id": "C03",
@@ -628,7 +635,11 @@
       "value_to_project": "商用對標:血管介入塗層市場領導",
       "links": {
         "ref": "https://www.marketsandmarkets.com/Market-Reports/hydrophilic-coating-market-22810170.html"
-      }
+      },
+      "related_patents": [
+        "US20230285641A1"
+      ],
+      "patent_notes": "Photolink™ UV共價接枝（光接枝，常溫固化）。Preside 2023年上市，已獲510(k)。每年~40件專利。basecoat: PVP+hydrophobic polymer(PBMA), topcoat: photo-reactive PVP+crosslinker"
     },
     {
       "id": "C04",
@@ -649,7 +660,11 @@
       "value_to_project": "商用對標:全方案供應商(含設備)",
       "links": {
         "ref": "https://www.grandviewresearch.com/industry-analysis/medical-device-hydrophilic-coatings-market-report"
-      }
+      },
+      "related_patents": [
+        "US5160790A"
+      ],
+      "patent_notes": "US5160790A（P06，已過期）是isocyanate+PVP熱固化路線鼻祖。HydrUV為UV固化版本。40+年歷史"
     },
     {
       "id": "A1",
@@ -1106,7 +1121,12 @@
       "value_to_project": "專利↔商用對照:DSM技術落地產品",
       "links": {
         "ref": "https://www.grandviewresearch.com/industry-analysis/medical-device-hydrophilic-coatings-market-report"
-      }
+      },
+      "related_patents": [
+        "US8133580B2",
+        "EP1957130B1"
+      ],
+      "patent_notes": "US8133580B2（P01，有效至2029）+ EP1957130B1（P03，2026/12到期）。polyether primer + PVP+polyelectrolyte面塗"
     },
     {
       "id": "C07",
@@ -1129,7 +1149,9 @@
       "value_to_project": "製程設備+測試儀器供應商(已採購FTS可對接)",
       "links": {
         "ref": "http://www.harlandmedical.com/about-us-test-equipment/"
-      }
+      },
+      "related_patents": [],
+      "patent_notes": "提供塗層+設備+製程開發整合方案。具體專利號未公開*"
     },
     {
       "id": "P22",
