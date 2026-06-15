@@ -465,7 +465,7 @@
                 "friction": "0.02 N（ASTM D 1894-93 修改版）",
                 "adhesion": "高耐磨耗",
                 "wca": "未明示",
-                "durability": "US10850009: PEGDA Mn250-700在50次silicone孔往返磨耗後COF維持；Mn≥1000劣化。原專利US9138510: gamma滅菌後維持",
+                "durability": "50次往返磨耗後COF維持（PEGDA Mn250-700）；Mn≥1000劣化。gamma滅菌後維持。drain-off time>3min",
                 "other": "drain-off time > 3 min（離水後仍潤滑）；在溼潤PVP溶液中滅菌"
               }
             }
@@ -481,7 +481,8 @@
             "雙層不同交聯度策略：底塗高交聯(耐磨)+面塗低交聯(高潤滑)→解決潤滑vs耐磨矛盾",
             "0.02N摩擦力是極低的基準值，可作為Bioteque目標",
             "Coloplast另一專利US10850009有50次往返磨耗數據：PEGDA Mn250-700在50次後COF維持低位，Mn≥1000開始劣化",
-            "PEGDA分子量是耐磨關鍵：Mn越小→交聯密度越高→耐磨越好。Bioteque的SR344(Mn508)/SR610(Mn508-742)落在甜蜜區"
+            "PEGDA分子量是耐磨關鍵：Mn越小→交聯密度越高→耐磨越好。Bioteque的SR344(Mn508)/SR610(Mn508-742)落在甜蜜區",
+            "Coloplast US10850009B2 耐磨測試：50次往返磨耗（25 back-and-forth through silicone孔）。PEGDA Mn250-700維持低COF，Mn≥1000劣化。Bioteque用SR344(Mn508)/SR610(Mn508-742)剛好在甜蜜區"
           ],
           "red_flags": [
             "UV 200-300nm是短波UVC/UVB，Bioteque的LED UV是365/405nm→波長不相容",
