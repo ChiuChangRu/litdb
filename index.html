@@ -45,8 +45,8 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 
 /* ═══ VIEW 1: BROWSE ═══ */
 .browse-layout{display:flex;flex-direction:column;height:calc(100vh - 130px);overflow:hidden}
-.browse-filters{padding:6px 8px;background:var(--card);border-bottom:1px solid var(--border);overflow-x:auto;white-space:nowrap;flex-shrink:0}
-.browse-filters .filter-group{display:inline-flex;gap:2px;margin-right:8px;align-items:center;vertical-align:middle}
+.browse-filters{padding:6px 8px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0;white-space:normal}
+.browse-filters .filter-group{display:inline-flex;gap:2px;margin-right:6px;margin-bottom:3px;align-items:center;vertical-align:middle;flex-wrap:wrap}
 .browse-filters .filter-label{font-size:9px;color:var(--muted);font-weight:600;margin-right:1px}
 .browse-filters .ftag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;cursor:pointer;border:1px solid var(--border);background:var(--bg);color:var(--text);transition:all 0.15s}
 .browse-filters .ftag:hover{border-color:var(--accent)}
