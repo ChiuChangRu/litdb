@@ -223,7 +223,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 
 <div class="tabs">
   <div class="tab" onclick="showView('search',this)">🔍 檢索</div>
-  <div class="tab active" onclick="showView('browse',this)">📚 文庫 <span class="badge" id="browseCount">0</span></div>
+  <div class="tab active" onclick="showView('browse',this)">📚 文庫 <span class="badge" id="browseCount">0</span><span class="badge" id="analyzedCount" style="background:var(--accent2)">0</span></div>
   <div class="tab" onclick="showView('analysis',this)">📊 分析</div>
   <div class="tab" onclick="showView('report',this)">📋 報告</div>
 </div>
@@ -686,8 +686,32 @@ function updateSearchPlaceholder() {
 
 async function doSearch() {
   const src = document.getElementById('searchSource').value;
-  const q = document.getElementById('searchInput').value.trim();
+  let q = document.getElementById('searchInput').value.trim();
   if(!q) { toast('請輸入搜尋內容','error'); return; }
+
+  // 偵測中文 → 自動翻譯成英文
+  const hasChinese = /[\u4e00-\u9fff]/.test(q);
+  if(hasChinese && cfg.proxy) {
+    const statusEl = document.getElementById('searchStatus');
+    statusEl.innerHTML = '<span class="spinner"></span> 翻譯中文為英文...';
+    try {
+      const r = await fetch(cfg.proxy, {
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:100,
+          messages:[{role:'user',content:`把以下中文醫材/生醫搜尋詞翻譯成 PubMed/Google Patents 適用的英文關鍵字（只回傳英文，不要解釋）：${q}`}]})
+      });
+      const data = await r.json();
+      trackUsage(data);
+      const translated = data.content?.[0]?.text?.trim()||'';
+      if(translated) {
+        statusEl.innerHTML = `🌐 已翻譯：<strong>${q}</strong> → <strong>${translated}</strong>`;
+        q = translated;
+      }
+    } catch(e) { console.warn('Translation failed:', e); }
+  } else if(hasChinese && !cfg.proxy) {
+    toast('需設定 Claude API Proxy URL 才能翻譯中文','error');
+    return;
+  }
 
   if(src==='pubmed') await searchPubMedUnified(q);
   else if(src==='patent') await searchPatentUnified(q);
@@ -744,33 +768,131 @@ async function searchPatentUnified(query) {
   const statusEl = document.getElementById('searchStatus');
   const resultsEl = document.getElementById('searchResults');
 
-  // 如果是專利號格式，直接抓取
-  const patentMatch = query.match(/^(US|EP|WO|CN|JP|KR)\d+/i);
+  // 專利號格式：直接透過 Worker 抓取
+  const patentMatch = query.match(/(US|EP|WO|CN|JP|KR)[\d\w]+/i);
   if(patentMatch) {
-    statusEl.innerHTML = '<span class="spinner"></span> 抓取專利...';
     const patentId = patentMatch[0];
     const inDB = DB.papers.some(p=>(p.title||'').includes(patentId));
+    statusEl.innerHTML = '<span class="spinner"></span> 透過 Worker 抓取專利...';
+
+    let title='', abstract='', claims='';
+    try {
+      const proxyBase = cfg.proxy.replace(/\/api$/,'');
+      const r = await fetch(`${proxyBase}/fetch?url=${encodeURIComponent(`https://patents.google.com/patent/${patentId}/en`)}`);
+      if(r.ok) {
+        const html = await r.text();
+        const doc = new DOMParser().parseFromString(html,'text/html');
+        title = doc.querySelector('title')?.textContent?.replace(' - Google Patents','').trim() || patentId;
+        const absEl = doc.querySelector('.abstract, [itemprop=abstract]');
+        abstract = absEl?.textContent?.trim()?.slice(0,500) || '';
+        const clEl = doc.querySelector('.claims, [itemprop=claims]');
+        claims = clEl?.textContent?.trim()?.slice(0,300) || '';
+      }
+    } catch(e) { console.warn('Patent fetch failed:', e); }
+
+    if(!title || title===patentId) title = `Patent ${patentId}`;
+    statusEl.textContent = '找到 1 筆';
+
+    // 翻譯摘要
+    let translatedAbstract = '';
+    if(abstract && cfg.proxy) {
+      try {
+        const tr = await fetch(cfg.proxy, {
+          method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,
+            messages:[{role:'user',content:`翻譯為繁體中文（技術術語保留英文），只回傳翻譯：${abstract.slice(0,400)}`}]})
+        });
+        const td = await tr.json();
+        trackUsage(td);
+        translatedAbstract = td.content?.[0]?.text?.trim()||'';
+      } catch(e) {}
+    }
 
     resultsEl.innerHTML = `
-      <div style="padding:16px;background:var(--card);border-radius:8px;border:1px solid var(--border)">
-        <div style="font-weight:600;font-size:14px;margin-bottom:8px">${patentId}</div>
-        <a href="https://patents.google.com/patent/${patentId}/en" target="_blank" style="color:var(--accent);font-size:12px">↗ 在 Google Patents 查看</a>
-        ${inDB ? '<div style="color:var(--accent2);font-size:12px;margin-top:4px">✓ 已在文庫中</div>' : `
-        <div style="margin-top:10px">
-          <button class="btn btn-p" onclick="addPatentToLibrary('${patentId}')" style="padding:8px 16px">➕ 加入文庫</button>
-        </div>`}
+      <div style="display:flex;gap:12px">
+        <div style="flex:1;padding:16px;background:var(--card);border-radius:8px;border:1px solid var(--border);${inDB?'border-left:3px solid var(--accent2);opacity:0.6':'border-left:3px solid var(--border)'}">
+          <div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap;align-items:center">
+            <span class="tag tag-orange">專利</span>
+            <span style="font-weight:700;color:var(--accent)">${patentId}</span>
+          </div>
+          <div style="font-weight:600;font-size:14px;margin-bottom:8px">${title}</div>
+          ${abstract?`<div style="font-size:12px;color:var(--muted);margin-bottom:6px;padding:8px;background:var(--bg);border-radius:4px"><strong>Abstract:</strong> ${abstract.slice(0,300)}${abstract.length>300?'...':''}</div>`:''}
+          ${claims?`<div style="font-size:11px;color:var(--muted);margin-bottom:8px"><strong>Claims (partial):</strong> ${claims.slice(0,200)}...</div>`:''}
+          <div style="display:flex;gap:8px;align-items:center">
+            ${inDB?'<span style="color:var(--accent2);font-size:12px;font-weight:600">✓ 已在文庫中</span>':`
+              <button class="btn btn-p" style="padding:6px 14px;font-size:12px" onclick="addPatentToLibraryFull('${patentId}',\`${title.replace(/`/g,"'")}\`,\`${abstract.slice(0,300).replace(/`/g,"'")}\`)">➕ 加入文庫</button>
+              ${cfg.proxy?`<button class="btn btn-s" style="padding:6px 14px;font-size:12px" onclick="addPatentToLibraryFull('${patentId}',\`${title.replace(/`/g,"'")}\`,\`${abstract.slice(0,300).replace(/`/g,"'")}\`,true)">🤖 AI 標籤加入</button>`:''}`}
+            <a href="https://patents.google.com/patent/${patentId}/en" target="_blank" style="font-size:11px;color:var(--accent)">↗ Google Patents</a>
+          </div>
+        </div>
+        ${translatedAbstract?`<div style="width:40%;padding:16px;background:var(--card);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:6px">🌐 中文翻譯</div>
+          <div style="font-size:12px;line-height:1.6">${translatedAbstract}</div>
+        </div>`:''}
       </div>`;
-    statusEl.textContent = '';
     return;
   }
 
-  // 關鍵字搜尋：開啟 Google Patents 搜尋頁
-  window.open(`https://patents.google.com/?q=${encodeURIComponent(query)}&oq=${encodeURIComponent(query)}`, '_blank');
-  statusEl.textContent = '已開啟 Google Patents 搜尋頁';
-  resultsEl.innerHTML = `<div style="padding:20px;text-align:center;color:var(--muted)">
-    Google Patents 已在新分頁開啟。<br>找到專利後，複製專利號（如 US8133580B2）回來搜尋即可加入文庫。<br>
-    或使用 <strong>📎 書籤小工具</strong> 在專利頁面直接收錄。
-  </div>`;
+  // 關鍵字搜尋：透過 Google Patents URL 構造搜尋
+  statusEl.innerHTML = '<span class="spinner"></span> 搜尋 Google Patents...';
+  const searchUrl = `https://patents.google.com/?q=${encodeURIComponent(query)}&oq=${encodeURIComponent(query)}`;
+  
+  resultsEl.innerHTML = `
+    <div style="padding:20px;background:var(--card);border-radius:8px;border:1px solid var(--border)">
+      <div style="font-size:13px;font-weight:600;margin-bottom:10px">🔍 Google Patents 搜尋：「${query}」</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px">
+        Google Patents 不提供 API，請在下方連結中找到專利號後回來輸入：
+      </div>
+      <a href="${searchUrl}" target="_blank" class="btn btn-p" style="display:inline-block;padding:8px 16px;text-decoration:none">↗ 開啟 Google Patents 搜尋頁</a>
+      <div style="margin-top:12px;padding:10px;background:var(--bg);border-radius:4px;font-size:11px;color:var(--muted)">
+        <strong>💡 操作方式：</strong><br>
+        1. 點上方按鈕開啟 Google Patents<br>
+        2. 找到目標專利，複製專利號（如 US8133580B2）<br>
+        3. 回來貼上專利號搜尋 → 自動抓取全文+翻譯<br>
+        或使用 <strong>📎 書籤小工具</strong> 在專利頁面直接收錄
+      </div>
+    </div>`;
+  statusEl.textContent = '';
+}
+
+function addPatentToLibraryFull(patentId, title, abstract, withAI) {
+  const maxNum = DB.papers.filter(p=>p.id.startsWith('P')).map(p=>parseInt(p.id.slice(1))||0).reduce((a,b)=>Math.max(a,b),0);
+  const newId = 'P' + String(maxNum+1).padStart(2,'0');
+  const paper = {
+    id: newId, title: title || `Patent ${patentId}`, authors: '', year: null,
+    venue: '', doi: null, pmid: null, doc_type: '專利', access: '專利全文',
+    tags: [], purpose: '', abstract_note: abstract||'',
+    value_to_project: '', links: {google_patents:`https://patents.google.com/patent/${patentId}/en`}
+  };
+  DB.papers.push(paper);
+  saveDB(); onDBLoaded();
+  toast(`已加入 ${newId}: ${patentId}`,'success');
+
+  if(withAI && cfg.proxy) {
+    // AI 標籤
+    (async()=>{
+      try {
+        const resp = await fetch(cfg.proxy, {
+          method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,
+            system:'你是醫材文獻分類專家。回傳純JSON。繁體中文。',
+            messages:[{role:'user',content:`分類此專利，回傳純JSON：{"tags":["標籤1","標籤2"],"purpose":"收錄目的15字","value_to_project":"對專案價值20字"}
+可用標籤：${Object.values(DB.meta.tag_dictionary||{}).flat().join(',')}
+專利：${title}\n${abstract}`}]})
+        });
+        const data = await resp.json();
+        trackUsage(data);
+        let raw = data.content?.[0]?.text||'';
+        raw = raw.replace(/```json|```/g,'').trim();
+        const ai = JSON.parse(raw);
+        if(ai.tags) paper.tags = ai.tags;
+        if(ai.purpose) paper.purpose = ai.purpose;
+        if(ai.value_to_project) paper.value_to_project = ai.value_to_project;
+        saveDB();
+        toast(`${newId} AI 標籤完成`,'success');
+      } catch(e) { console.warn('AI tag failed:', e); }
+    })();
+  }
 }
 
 async function searchDOIUnified(query) {
@@ -1418,6 +1540,8 @@ async function loadDB() {
 function onDBLoaded() {
   document.getElementById('dbStats').textContent = `${DB.papers.length} 篇文獻`;
   document.getElementById('browseCount').textContent = DB.papers.length;
+  const _ac = DB.papers.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0).length;
+  document.getElementById('analyzedCount').textContent = '✅'+_ac;
   buildFilters();
   filterPapers();
   renderCtx();
@@ -1427,6 +1551,8 @@ function saveDB() {
   localStorage.setItem('litdb_data', JSON.stringify(DB));
   document.getElementById('dbStats').textContent = `${DB.papers.length} 篇文獻`;
   document.getElementById('browseCount').textContent = DB.papers.length;
+  const _ac = DB.papers.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0).length;
+  document.getElementById('analyzedCount').textContent = '✅'+_ac;
 }
 
 // ══════════════════════════════════════════════
