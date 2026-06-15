@@ -293,8 +293,10 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
       <canvas id="graphCanvas" width="1200" height="550" onclick="onGraphClick(event)"></canvas>
       <div class="graph-legend" id="graphLegend"></div>
     </div>
-    <div id="graphDetailPanel" style="width:320px;flex-shrink:0;border-left:1px solid var(--border);overflow-y:auto;max-height:600px;padding:12px;display:none">
-      <div id="graphDetailContent" style="font-size:12px;line-height:1.6"></div>
+    <div id="graphDetailPanel" style="width:320px;flex-shrink:0;border-left:1px solid var(--border);overflow-y:auto;max-height:600px;padding:12px">
+      <div id="graphDetailContent" style="font-size:12px;line-height:1.6">
+        <div style="text-align:center;padding:30px 10px;color:var(--muted)">← 點擊泡泡圖中的節點<br>查看文獻內容或標籤關聯</div>
+      </div>
     </div>
   </div>
   <div id="graphDetail" style="display:none"></div>
@@ -2337,16 +2339,14 @@ function onGraphClick(event) {
 
   if(!closest){
     drawGraph(ctx,W,H,null);
-    document.getElementById('graphDetailPanel').style.display='none';
+    document.getElementById('graphDetailContent').innerHTML = '<div style="text-align:center;padding:30px 10px;color:var(--muted)">← 點擊泡泡圖中的節點<br>查看文獻內容或標籤關聯</div>';
     return;
   }
 
   drawGraph(ctx,W,H,closest.id);
 
   // 右側面板顯示詳情
-  const panel = document.getElementById('graphDetailPanel');
   const content = document.getElementById('graphDetailContent');
-  panel.style.display = 'block';
 
   if(closest.type==='tag') {
     // 標籤節點：列出所有連結的文獻
