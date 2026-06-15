@@ -558,7 +558,59 @@
       "value_to_project": "最新UV topcoat專利,claims作迴避設計參考",
       "links": {
         "patents": "https://patents.google.com/patent/US12037560B2/en"
-      }
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Biocoat HYDAK UV 面塗核心專利：benzophenone 共聚合進高分子骨架（非外加），UV照射自交聯+與basecoat交聯。水/醇溶劑系統（無有機溶劑）。耐gamma/e-beam/EtO滅菌。有效至2041年",
+          "examples": [
+            {
+              "name": "Bi-laminar UV 面塗系統",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "已核准專利(B2)，有具體Claims和實施例。Biocoat已商業化(HYDAK)，已有FDA 510(k)前案",
+              "substrate": "醫療器材通用（catheters, guidewires, implants）",
+              "formulation": {
+                "primer": "Biocoat bi-laminar basecoat（參照US20110200828A1，acrylic primer含OH/COOH基團，polyisocyanate+aziridine交聯）",
+                "topcoat": "共聚物：4-methacryloxy-2-hydroxybenzophenone（光引發）+ N-(2-hydroxyethyl)acrylamide + acrylic acid，比例40:1~200:1，水/醇溶劑"
+              },
+              "process": {
+                "surface_prep": "basecoat塗覆+乾燥",
+                "coating_method": "Dip coating（水/水-醇溶液）",
+                "drying": "乾燥",
+                "curing": "UV照射（benzophenone在骨架中原位產生自由基→交聯）"
+              },
+              "results": {
+                "friction": "COF降低>95%（HYDAK商業數據）",
+                "adhesion": "bi-laminar basecoat確保附著",
+                "wca": "未明示",
+                "durability": "耐gamma/e-beam/EtO滅菌後性能維持",
+                "other": "抗血栓性（改善PTT）；水性系統無有機溶劑殘留風險"
+              }
+            }
+          ],
+          "key_claims": [
+            "Photo radical generator（benzophenone型）共聚合進高分子骨架，非外加光起始劑",
+            "親水單體:光引發單體比例 20:1~500:1（優選40:1~200:1）",
+            "水/水-醇溶劑系統（無有機溶劑），Mw 20,000~800,000"
+          ],
+          "actionable_insights": [
+            "Bioteque用外加benzophenone+PVP/PEGDA完全不侵權（非共聚合）",
+            "水/醇溶劑系統可參考，降低DMAc殘留風險",
+            "滅菌後性能測試應納入Phase 2驗證（gamma/e-beam/EtO）"
+          ],
+          "red_flags": [
+            "專利有效至2041年，還有15年，不可使用共聚合benzophenone技術",
+            "Biocoat已被Integer Holdings收購（2026/1），專利執行力增強",
+            "底塗專利US20110200828A1需另查是否已核准及Claims範圍"
+          ],
+          "vs_database": "此專利是C01(Biocoat HYDAK)的核心UV面塗技術。與P01(DSM)比：DSM用外加benzophenone做H抽取，Biocoat用共聚合benzophenone做原位交聯，技術路徑不同。與P06(Hydromer)比：完全不同世代，P06是isocyanate熱固化。Bioteque的技術路線（外加benzophenone+PVP）與此專利不衝突",
+          "bioteque_relevance": "迴避風險極低：Bioteque用外加benzophenone+PVP/PEGDA，非共聚合，不侵權。商業意義：Biocoat被Integer收購代表HYDAK已被大廠背書，是Plan A外購的強候選。可借鏡：水性配方、滅菌耐性測試"
+        }
+      },
+      "related_patents": [
+        "US20110200828A1"
+      ],
+      "patent_notes": "Biocoat HYDAK UV面塗核心專利。2026/1轉讓給Integer Hydrophilic Technologies LLC。benzophenone共聚合進高分子骨架（非外加）"
     },
     {
       "id": "C01",
@@ -585,7 +637,8 @@
       },
       "related_patents": [
         "US20110200828A1",
-        "US20130323291A1"
+        "US20130323291A1",
+        "US12037560B2"
       ],
       "patent_notes": "HYDAK UV 2022年獲美國專利（專利號未公開*）。bi-laminar平台：acrylic base-coat (Hydak B-500, polyisocyanate+aziridine交聯) + PAA top-coat。UV+Thermal雙固化。已用於2件FDA 510(k)血管導管"
     },
