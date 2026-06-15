@@ -1396,105 +1396,148 @@ function buildCommercial() {
   const el = document.getElementById('commercialContent');
   if(!el) return;
 
+  // 收集所有商品+已分析專利的配方資料
   const products = DB.papers.filter(p=>p.doc_type==='商用產品');
-  if(!products.length) { el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">文庫中尚無商用產品資料</div>'; return; }
+  const analyzedPatents = DB.papers.filter(p=>p.doc_type==='專利' && p.patentResults?.full);
+  const allAnalyzed = [...products, ...analyzedPatents];
 
   let html = '';
 
-  // 1. 供應商技術比較總表
+  // ═══ 1. 大廠配方矩陣 ═══
+  html += `<h4 style="color:var(--accent);margin-bottom:10px">🧪 大廠配方矩陣</h4>`;
   html += `<div style="overflow-x:auto;margin-bottom:20px">
-    <table style="width:100%;border-collapse:collapse;font-size:12px">
-      <thead><tr style="background:var(--card)">
-        <th style="padding:8px;text-align:left;border:1px solid var(--border)">ID</th>
-        <th style="padding:8px;text-align:left;border:1px solid var(--border)">公司</th>
-        <th style="padding:8px;text-align:left;border:1px solid var(--border)">產品</th>
-        <th style="padding:8px;text-align:left;border:1px solid var(--border)">核心技術</th>
-        <th style="padding:8px;text-align:left;border:1px solid var(--border)">固化方式</th>
-        <th style="padding:8px;text-align:left;border:1px solid var(--border)">對應專利</th>
-        <th style="padding:8px;text-align:center;border:1px solid var(--border)">專利狀態</th>
-        <th style="padding:8px;text-align:center;border:1px solid var(--border)">已分析</th>
+    <table style="width:100%;border-collapse:collapse;font-size:11px">
+      <thead><tr style="background:var(--accent);color:#fff">
+        <th style="padding:8px;text-align:left;border:1px solid rgba(255,255,255,0.2)">公司/來源</th>
+        <th style="padding:8px;text-align:left;border:1px solid rgba(255,255,255,0.2)">ID</th>
+        <th style="padding:8px;text-align:left;border:1px solid rgba(255,255,255,0.2)">底塗 Primer</th>
+        <th style="padding:8px;text-align:left;border:1px solid rgba(255,255,255,0.2)">面塗 Topcoat</th>
+        <th style="padding:8px;text-align:center;border:1px solid rgba(255,255,255,0.2)">固化</th>
+        <th style="padding:8px;text-align:center;border:1px solid rgba(255,255,255,0.2)">COF</th>
+        <th style="padding:8px;text-align:center;border:1px solid rgba(255,255,255,0.2)">專利</th>
       </tr></thead><tbody>`;
 
-  products.forEach(p => {
+  analyzedPatents.forEach(p => {
+    const r = p.patentResults?.full||{};
+    const ex = r.examples?.[0]||{};
     const org = extractOrg(p);
-    const tags = p.tags || [];
-    const cureTag = tags.find(t => /UV|熱固|plasma|自聚合/.test(t)) || '—';
-    const patents = p.related_patents || [];
-    const hasAnalysis = p.patentResults && Object.keys(p.patentResults).length > 0;
-
-    // 找對應專利在資料庫中的狀態
-    const patentBadges = patents.map(pid => {
-      const dbPatent = DB.papers.find(x => (x.title||'').includes(pid));
-      const badge = dbPatent ? getPatentBadge(dbPatent) : `<span style="font-size:10px;color:var(--muted)">${pid}</span>`;
-      return badge;
-    }).join(' ');
-
-    html += `<tr>
-      <td style="padding:6px 8px;border:1px solid var(--border);font-weight:600;color:var(--accent)">${p.id}</td>
-      <td style="padding:6px 8px;border:1px solid var(--border)"><span style="background:#fff0e6;color:#b85c2a;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600">${org||'—'}</span></td>
-      <td style="padding:6px 8px;border:1px solid var(--border);font-size:11px">${p.title.length>40?p.title.slice(0,39)+'…':p.title}</td>
-      <td style="padding:6px 8px;border:1px solid var(--border);font-size:11px">${p.abstract_note?.slice(0,80)||'—'}${(p.abstract_note?.length||0)>80?'…':''}</td>
-      <td style="padding:6px 8px;border:1px solid var(--border);font-size:11px">${cureTag}</td>
-      <td style="padding:6px 8px;border:1px solid var(--border)">${patentBadges||'<span style="font-size:10px;color:var(--muted)">未公開*</span>'}</td>
-      <td style="padding:6px 8px;border:1px solid var(--border);text-align:center">${patents.length?'🔍':'—'}</td>
-      <td style="padding:6px 8px;border:1px solid var(--border);text-align:center">${hasAnalysis?'✅':'—'}</td>
+    const fm = ex.formulation||{};
+    const pr = ex.process||{};
+    const rs = ex.results||{};
+    const badge = getPatentBadge(p);
+    html += `<tr style="border-bottom:1px solid var(--border)">
+      <td style="padding:6px;border:1px solid var(--border)"><span style="background:#fff0e6;color:#b85c2a;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600">${org||'—'}</span></td>
+      <td style="padding:6px;border:1px solid var(--border);font-weight:600;color:var(--accent)">${p.id}</td>
+      <td style="padding:6px;border:1px solid var(--border);font-size:10px">${fm.primer?.slice(0,60)||'—'}${(fm.primer||'').length>60?'…':''}</td>
+      <td style="padding:6px;border:1px solid var(--border);font-size:10px">${fm.topcoat?.slice(0,60)||'—'}${(fm.topcoat||'').length>60?'…':''}</td>
+      <td style="padding:6px;border:1px solid var(--border);text-align:center;font-size:10px">${pr.curing?.slice(0,20)||'—'}</td>
+      <td style="padding:6px;border:1px solid var(--border);text-align:center;font-weight:600;color:var(--accent2)">${rs.friction?.slice(0,15)||'—'}</td>
+      <td style="padding:6px;border:1px solid var(--border);text-align:center;font-size:9px">${badge}</td>
     </tr>`;
   });
   html += '</tbody></table></div>';
 
-  // 2. 各公司詳細卡片
-  html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">';
-  products.forEach(p => {
-    const org = extractOrg(p);
-    const patents = p.related_patents || [];
-    const notes = p.patent_notes || '';
-    const hasAnalysis = p.patentResults && Object.keys(p.patentResults).length > 0;
-    const r = p.patentResults?.full || {};
+  // ═══ 2. 技術要素關聯圖（文字版）═══
+  html += `<h4 style="color:var(--accent);margin:16px 0 10px">🔗 技術要素關聯圖</h4>`;
 
-    html += `<div style="padding:14px;background:var(--card);border-radius:8px;border:1px solid var(--border);border-left:4px solid ${hasAnalysis?'#2d8c5a':'var(--border)'}">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-        <span style="background:#fff0e6;color:#b85c2a;padding:2px 10px;border-radius:4px;font-size:12px;font-weight:700">${org||p.id}</span>
-        <span style="font-size:10px;color:var(--muted)">${p.id}</span>
-      </div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:6px">${p.title}</div>
-      ${p.abstract_note?`<div style="font-size:11px;color:var(--muted);margin-bottom:8px">${p.abstract_note.slice(0,150)}${p.abstract_note.length>150?'…':''}</div>`:''}
+  // 收集技術要素
+  const primerTypes = {}, topcoatTypes = {}, cureTypes = {};
+  analyzedPatents.forEach(p => {
+    const r = p.patentResults?.full||{};
+    const ex = r.examples?.[0]||{};
+    const fm = ex.formulation||{};
+    const pr = ex.process||{};
+    const org = extractOrg(p)||p.id;
 
-      ${patents.length?`<div style="margin-bottom:8px">
-        <div style="font-size:11px;font-weight:600;color:var(--accent);margin-bottom:4px">📜 對應專利</div>
-        ${patents.map(pid=>{
-          const dbP = DB.papers.find(x=>(x.title||'').includes(pid));
-          const badge = dbP ? getPatentBadge(dbP) : '';
-          return `<div style="font-size:11px;padding:2px 0">
-            <a href="https://patents.google.com/patent/${pid}/en" target="_blank" style="color:var(--accent)">${pid}</a>
-            ${badge}
-            ${dbP?`<span style="font-size:10px;color:var(--muted)">（文庫 ${dbP.id}）</span>`:''}
-          </div>`;
-        }).join('')}
-      </div>`:'<div style="font-size:11px;color:var(--muted);margin-bottom:8px">📜 專利號未公開*</div>'}
+    // 分類 primer
+    const primer = fm.primer||'';
+    if(/polyether|Norrish I|Irgacure 2959/i.test(primer)) { if(!primerTypes['Polyether UV']) primerTypes['Polyether UV']=[]; primerTypes['Polyether UV'].push(org); }
+    if(/PDA|polydopamine|dopamine/i.test(primer)) { if(!primerTypes['PDA 自聚合']) primerTypes['PDA 自聚合']=[]; primerTypes['PDA 自聚合'].push(org); }
+    if(/WPU|水性聚氨酯|waterborne/i.test(primer)) { if(!primerTypes['WPU 水性PU']) primerTypes['WPU 水性PU']=[]; primerTypes['WPU 水性PU'].push(org); }
+    if(/silane|silicone oligomer/i.test(primer)) { if(!primerTypes['Silane 偶聯']) primerTypes['Silane 偶聯']=[]; primerTypes['Silane 偶聯'].push(org); }
+    if(/isocyanate/i.test(primer)||/isocyanate/i.test(fm.topcoat||'')) { if(!primerTypes['Isocyanate']) primerTypes['Isocyanate']=[]; primerTypes['Isocyanate'].push(org); }
+    if(/PEO|polyethylene oxide/i.test(primer)) { if(!primerTypes['PEO 溶脹']) primerTypes['PEO 溶脹']=[]; primerTypes['PEO 溶脹'].push(org); }
+    if(/acrylic|acrylate|Biocoat|basecoat/i.test(primer)) { if(!primerTypes['Acrylic basecoat']) primerTypes['Acrylic basecoat']=[]; primerTypes['Acrylic basecoat'].push(org); }
+    if(/benzophenone.*共聚|copolymer.*benzo|骨架/i.test(primer+' '+(fm.topcoat||''))) { if(!primerTypes['BP共聚合（骨架型）']) primerTypes['BP共聚合（骨架型）']=[]; primerTypes['BP共聚合（骨架型）'].push(org); }
 
-      ${notes?`<div style="font-size:10px;color:var(--muted);padding:6px 8px;background:var(--bg);border-radius:4px;margin-bottom:6px">${notes}</div>`:''}
+    // 分類 topcoat
+    const tc = fm.topcoat||'';
+    if(/PVP/i.test(tc)) { if(!topcoatTypes['PVP']) topcoatTypes['PVP']=[]; topcoatTypes['PVP'].push(org); }
+    if(/PAA|polyacrylic/i.test(tc)) { if(!topcoatTypes['PAA']) topcoatTypes['PAA']=[]; topcoatTypes['PAA'].push(org); }
+    if(/PEG|PEGDA/i.test(tc)) { if(!topcoatTypes['PEG/PEGDA']) topcoatTypes['PEG/PEGDA']=[]; topcoatTypes['PEG/PEGDA'].push(org); }
+    if(/SBMA|MPC|zwitterion/i.test(tc)) { if(!topcoatTypes['兩性離子(SBMA/MPC)']) topcoatTypes['兩性離子(SBMA/MPC)']=[]; topcoatTypes['兩性離子(SBMA/MPC)'].push(org); }
+    if(/polyelectrolyte|PAA.*Na|sodium/i.test(tc)) { if(!topcoatTypes['Polyelectrolyte']) topcoatTypes['Polyelectrolyte']=[]; topcoatTypes['Polyelectrolyte'].push(org); }
+    if(/NVP|N-vinyl/i.test(tc)) { if(!topcoatTypes['NVP單體']) topcoatTypes['NVP單體']=[]; topcoatTypes['NVP單體'].push(org); }
+    if(/chitosan|QCS/i.test(tc)) { if(!topcoatTypes['Chitosan抗菌']) topcoatTypes['Chitosan抗菌']=[]; topcoatTypes['Chitosan抗菌'].push(org); }
 
-      ${r.summary?`<div style="font-size:11px;padding:6px 8px;background:var(--bg);border-radius:4px;margin-bottom:6px;color:var(--accent2)">💡 ${r.summary}</div>`:''}
-
-      <div style="display:flex;gap:6px;margin-top:6px">
-        <button class="btn btn-s" style="font-size:10px;padding:3px 8px" onclick="showView('browse',document.querySelectorAll('.tabs > .tab')[1]);setTimeout(()=>{filtered=DB.papers;renderPapers();showDetail(DB.papers.findIndex(x=>x.id==='${p.id}'))},100)">↗ 文庫詳情</button>
-        ${!hasAnalysis?`<button class="btn btn-s" style="font-size:10px;padding:3px 8px" onclick="showView('browse',document.querySelectorAll('.tabs > .tab')[1]);setTimeout(()=>{filtered=DB.papers;renderPapers();const idx=DB.papers.findIndex(x=>x.id==='${p.id}');showDetail(idx)},100)">📊 去分析</button>`:''}
-      </div>
-    </div>`;
+    // 分類 cure
+    const cure = pr.curing||'';
+    if(/UV|Norrish|光/i.test(cure)) { if(!cureTypes['UV 光固化']) cureTypes['UV 光固化']=[]; cureTypes['UV 光固化'].push(org); }
+    if(/熱|thermal|70|121/i.test(cure)) { if(!cureTypes['熱固化']) cureTypes['熱固化']=[]; cureTypes['熱固化'].push(org); }
+    if(/物理|乾燥|自交聯|self/i.test(cure)) { if(!cureTypes['物理/自交聯']) cureTypes['物理/自交聯']=[]; cureTypes['物理/自交聯'].push(org); }
   });
-  html += '</div>';
 
-  // 3. 技術路線摘要
-  const uvProducts = products.filter(p=>(p.tags||[]).some(t=>/UV/.test(t)));
-  const thermalProducts = products.filter(p=>(p.tags||[]).some(t=>/熱固/.test(t)));
+  const renderTechGroup = (title, icon, data) => {
+    const entries = Object.entries(data).sort((a,b)=>b[1].length-a[1].length);
+    if(!entries.length) return '';
+    return `<div style="margin-bottom:12px">
+      <div style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:6px">${icon} ${title}</div>
+      ${entries.map(([tech,orgs])=>{
+        const uniqueOrgs = [...new Set(orgs)];
+        const width = Math.min(100, Math.max(20, uniqueOrgs.length*15));
+        return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+          <div style="width:160px;font-size:11px;font-weight:600;text-align:right;flex-shrink:0">${tech}</div>
+          <div style="background:var(--accent);height:18px;border-radius:3px;width:${width}%;min-width:30px;display:flex;align-items:center;padding:0 6px">
+            <span style="color:#fff;font-size:9px;white-space:nowrap">${uniqueOrgs.join(', ')}</span>
+          </div>
+          <span style="font-size:10px;color:var(--muted)">${uniqueOrgs.length}</span>
+        </div>`;
+      }).join('')}
+    </div>`;
+  };
+
+  html += `<div style="padding:12px;background:var(--card);border-radius:8px;border:1px solid var(--border)">
+    ${renderTechGroup('底塗/Primer 技術', '🔧', primerTypes)}
+    ${renderTechGroup('面塗/Topcoat 高分子', '💧', topcoatTypes)}
+    ${renderTechGroup('固化方式', '⚡', cureTypes)}
+  </div>`;
+
+  // ═══ 3. 技術趨勢摘要 ═══
   html += `<div style="margin-top:16px;padding:12px;background:var(--card);border-radius:8px;border:1px solid var(--border)">
-    <div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:8px">📊 市場技術趨勢</div>
-    <div style="font-size:12px;line-height:1.6">
-      <strong>UV 固化路線</strong>（${uvProducts.length} 家）：${uvProducts.map(p=>extractOrg(p)||p.id).join('、')||'—'}<br>
-      <strong>熱固化路線</strong>（${thermalProducts.length} 家）：${thermalProducts.map(p=>extractOrg(p)||p.id).join('、')||'—'}<br>
-      <strong>趨勢</strong>：市場正往 UV-curable + 低顆粒 + 耐磨耗 整合發展。Biocoat 是唯一同時提供 UV+Thermal 的供應商。
+    <div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:8px">📊 配方趨勢摘要</div>
+    <div style="font-size:12px;line-height:1.8">
+      <strong>底塗主流：</strong>UV 光固化 primer（DSM polyether、Biocoat acrylic）> Silane 偶聯 > PDA 自聚合<br>
+      <strong>面塗主流：</strong>PVP 佔絕對多數 > PAA 第二 > 兩性離子(SBMA/MPC)是新趨勢<br>
+      <strong>固化主流：</strong>UV 光固化 > 熱固化 > 物理乾燥<br>
+      <strong>差異化方向：</strong>BP共聚合（Surmodics/Biocoat）、抗菌（SBMA/chitosan）、水性配方<br>
+      <strong>⚠ 注意：</strong>分析越多專利，矩陣越完整。目前基於 ${analyzedPatents.length} 篇已分析專利。
     </div>
   </div>`;
+
+  // ═══ 4. 商品卡片 ═══
+  if(products.length) {
+    html += `<h4 style="color:var(--accent);margin:16px 0 10px">🏢 商用產品對照</h4>`;
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px">';
+    products.forEach(p => {
+      const org = extractOrg(p);
+      const patents = p.related_patents || [];
+      const notes = p.patent_notes || '';
+      const hasA = p.patentResults && Object.keys(p.patentResults).length > 0;
+      html += `<div style="padding:12px;background:var(--card);border-radius:8px;border:1px solid var(--border);border-left:4px solid ${hasA?'#2d8c5a':'var(--border)'}">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <span style="background:#fff0e6;color:#b85c2a;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">${org||p.id}</span>
+          <span style="font-size:10px;color:var(--muted)">${p.id}</span>
+        </div>
+        <div style="font-size:12px;font-weight:600;margin-bottom:4px">${p.title.length>45?p.title.slice(0,44)+'…':p.title}</div>
+        ${patents.length?`<div style="font-size:10px;margin-bottom:4px">${patents.map(pid=>{
+          const dbP=DB.papers.find(x=>(x.title||'').includes(pid));
+          return `<a href="https://patents.google.com/patent/${pid}/en" target="_blank" style="color:var(--accent)">${pid}</a>${dbP?' ('+dbP.id+')':''}`;
+        }).join(' · ')}</div>`:''}
+        ${notes?`<div style="font-size:10px;color:var(--muted);max-height:40px;overflow:hidden">${notes.slice(0,100)}...</div>`:''}
+      </div>`;
+    });
+    html += '</div>';
+  }
 
   el.innerHTML = html;
 }
