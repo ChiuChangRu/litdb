@@ -2127,6 +2127,308 @@
       "links": {
         "doi": "https://doi.org/10.1021/acs.langmuir.6c01452"
       }
+    },
+    {
+      "id": "P30",
+      "title": "Lubricious coating (US7141246 / Cook Medical PVP+PU+isocyanate+抗菌)",
+      "authors": "Houghton PE / Cook Medical",
+      "year": 2006,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "PVP",
+        "isocyanate",
+        "熱固化",
+        "導管catheter",
+        "通用biomaterial"
+      ],
+      "purpose": "Cook Medical 親水塗層核心專利（PVP+PU interpolymer+抗菌釋放）",
+      "abstract_note": "PVP+polyurethane interpolymer（isocyanate交聯），加入抗菌添加劑（chlorhexidine/silver）可緩釋。與Hydromer P06同源的熱固化路線。可能已過期（2006+20=2026）*",
+      "value_to_project": "Cook的PVP+isocyanate熱固化路線，與P06(Hydromer)同源。加入抗菌緩釋是差異化",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/US7141246/en"
+      },
+      "related_patents": [
+        "US6645483",
+        "US7402620"
+      ],
+      "patent_notes": "Cook Medical家族專利：US6645483(2003)→US7141246(2006)→US7402620(2008)。PVP+PU interpolymer+抗菌添加劑。熱固化路線",
+      "patentResults": {
+        "full": {
+          "summary": "Cook Medical的PVP+polyurethane interpolymer熱固化塗層，與Hydromer(P06)同源。核心差異化：加入抗菌添加劑(chlorhexidine/silver)可緩釋。用於導管、支架輸送系統",
+          "examples": [
+            {
+              "name": "PVP+PU interpolymer+抗菌",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Cook Medical商業化專利，有具體配方和製程描述",
+              "substrate": "導管/支架輸送系統（PE/PTFE/nylon等）",
+              "formulation": {
+                "primer": "不需要或polyurethane底塗",
+                "topcoat": "PVP + polyurethane interpolymer（polyisocyanate交聯）+ 可選抗菌添加劑（chlorhexidine/silver/triclosan）"
+              },
+              "process": {
+                "surface_prep": "未明示",
+                "coating_method": "Dip/spray coating",
+                "drying": "熱乾燥",
+                "curing": "熱固化（polyisocyanate+polyol交聯）"
+              },
+              "results": {
+                "friction": "潤滑（具體數據在全文中）",
+                "adhesion": "PU interpolymer提供附著",
+                "wca": "未明示",
+                "durability": "良好（PU交聯網絡）",
+                "other": "抗菌添加劑可緩釋；可加Vitamin E提升保存穩定性"
+              }
+            }
+          ],
+          "key_claims": [
+            "PVP+polyurethane interpolymer（isocyanate交聯）親水塗層",
+            "可添加抗菌劑（chlorhexidine/silver）藥物緩釋",
+            "用於導管內壁+支架輸送系統"
+          ],
+          "actionable_insights": [
+            "Cook的PVP+isocyanate路線與P06(Hydromer)同源，兩者都是熱固化PVP-PU interpolymer",
+            "抗菌添加劑緩釋概念可參考（Phase 3抗菌方向）",
+            "Vitamin E作為抗氧化保存穩定劑的做法可借鏡"
+          ],
+          "red_flags": [
+            "可能已過期（2006+17=2023年）*需確認",
+            "isocyanate殘留風險與P06相同",
+            "抗菌劑緩釋需完整生物相容性評估"
+          ],
+          "vs_database": "與P06(Hydromer)同源的熱固化PVP-PU路線。差異化在抗菌添加劑。與P01(DSM UV雙層)完全不同世代。Cook走熱固化+抗菌，DSM走UV+polyelectrolyte",
+          "bioteque_relevance": "如已過期可自由參考。抗菌緩釋概念可在Phase 3導入。但Bioteque主線是UV固化，Cook的熱固化路線作為備援參考"
+        }
+      }
+    },
+    {
+      "id": "C10",
+      "title": "SLIP-COAT™ Hydrophilic Coating (Argon Medical)",
+      "authors": "Argon Medical Devices",
+      "year": 2024,
+      "venue": "Argon Medical",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "商用產品",
+      "access": "商業資料",
+      "tags": [
+        "PVP",
+        "熱固化",
+        "導管catheter",
+        "通用biomaterial"
+      ],
+      "purpose": "Argon Medical自有親水塗層品牌，特色是可塗導管內壁",
+      "abstract_note": "SLIP-COAT熱固化親水塗層。吸收水分後表面變滑。比PTFE更潤滑。熱固化→可塗導管內壁（UV有line-of-sight限制做不到）。可客製化潤滑度和持久性",
+      "value_to_project": "Argon是內壁塗層專家。如果Bioteque需要塗導管內壁，熱固化是必要路線",
+      "links": {
+        "website": "https://www.argonmedical.com/product/slip-coat-hydrophilic-coating/"
+      },
+      "related_patents": [],
+      "patent_notes": "SLIP-COAT™具體專利號未公開。推測使用Hydromer授權技術或自有配方*。Argon也提供塗覆設備和OEM服務",
+      "patentResults": {
+        "full": {
+          "summary": "Argon Medical的SLIP-COAT™熱固化親水塗層，核心賣點是可塗導管內壁（UV的line-of-sight限制做不到）。吸收水分後潤滑，可客製化",
+          "examples": [
+            {
+              "name": "SLIP-COAT™",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "商業化產品有實際應用，但具體配方未公開",
+              "substrate": "導管（內壁+外壁）",
+              "formulation": {
+                "primer": "未公開*",
+                "topcoat": "親水高分子（推測PVP系*）吸收水分後潤滑"
+              },
+              "process": {
+                "surface_prep": "未公開*",
+                "coating_method": "Dip/spray/注入內腔",
+                "drying": "未公開",
+                "curing": "熱固化（非UV→可塗內壁）"
+              },
+              "results": {
+                "friction": "比PTFE更潤滑",
+                "adhesion": "未公開",
+                "wca": "未公開",
+                "durability": "可客製化持久性",
+                "other": "可塗導管內壁是獨特賣點"
+              }
+            }
+          ],
+          "key_claims": [
+            "熱固化→可塗覆導管內壁（UV做不到）",
+            "可客製化潤滑度和持久時間",
+            "也提供塗覆設備和OEM代工"
+          ],
+          "actionable_insights": [
+            "內壁塗層需求：如果Bioteque有導管內壁需要潤滑，熱固化是必要路線（UV有line-of-sight限制）",
+            "Argon也賣塗覆設備，可評估整套採購方案（Plan A）",
+            "SLIP-COAT定位類似Hydromer，但更專注導管內壁"
+          ],
+          "red_flags": [
+            "具體配方和專利完全未公開，無法做技術分析*",
+            "可能是Hydromer授權或類似的PVP+isocyanate系統*"
+          ],
+          "vs_database": "與C04(Hydromer)定位類似但更專注內壁。與C07(Harland)比：Argon賣塗層，Harland賣設備。Argon的內壁塗層能力是獨特賣點",
+          "bioteque_relevance": "如果Bioteque產品需要導管內壁潤滑，Argon是Plan A供應商候選。但Bioteque目前主攻外壁UV塗層，內壁需求較低*"
+        }
+      }
+    },
+    {
+      "id": "P31",
+      "title": "Lubricious coating with antimicrobial release (US7402620 / Cook续案)",
+      "authors": "Houghton PE / Cook Medical",
+      "year": 2008,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "PVP",
+        "isocyanate",
+        "熱固化",
+        "導管catheter",
+        "抗菌antimicrobial"
+      ],
+      "purpose": "Cook Medical塗層續案，強化抗菌添加劑配方",
+      "abstract_note": "US7141246續案。PVP+PU interpolymer+抗菌（chlorhexidine/triclosan/silver）。強調抗菌劑在含水環境中以pharmaceutically acceptable方式釋放",
+      "value_to_project": "抗菌塗層配方參考（Phase 3方向），Cook的抗菌+潤滑整合方案",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/US7402620/en"
+      },
+      "related_patents": [
+        "US7141246",
+        "US6645483"
+      ],
+      "patent_notes": "Cook家族第三代。新增抗菌緩釋和Vitamin E保存穩定性",
+      "patentResults": {
+        "full": {
+          "summary": "Cook Medical塗層續案：PVP+PU interpolymer熱固化 + 抗菌添加劑（chlorhexidine/triclosan/silver）pharmaceutically acceptable釋放",
+          "examples": [
+            {
+              "name": "抗菌PVP-PU塗層",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "已核准專利(B2)，但具體釋放數據需讀全文",
+              "substrate": "導管/gastroenteric tubes/endotracheal tubes",
+              "formulation": {
+                "primer": "PU primer",
+                "topcoat": "PVP+PU interpolymer+抗菌劑（chlorhexidine 0.1-5%或silver或triclosan）+Vitamin E"
+              },
+              "process": {
+                "surface_prep": "可選plasma",
+                "coating_method": "Dip/spray",
+                "drying": "熱乾燥",
+                "curing": "熱固化（isocyanate交聯）"
+              },
+              "results": {
+                "friction": "潤滑",
+                "adhesion": "PU interpolymer",
+                "wca": "未明示",
+                "durability": "良好",
+                "other": "抗菌劑可控釋放；Vitamin E抗氧化保存"
+              }
+            }
+          ],
+          "key_claims": [
+            "PVP+PU+抗菌劑三合一塗層",
+            "Chlorhexidine/triclosan/silver可控釋放",
+            "Vitamin E保存穩定劑"
+          ],
+          "actionable_insights": [
+            "抗菌+潤滑整合方案是Phase 3方向的參考",
+            "Chlorhexidine在導管抗菌有豐富臨床數據",
+            "Vitamin E作為塗層保存穩定劑的做法簡單可行"
+          ],
+          "red_flags": [
+            "Triclosan已被FDA限制使用*",
+            "抗菌劑緩釋的生物相容性評估複雜",
+            "此專利可能2028年到期（2008+20）*"
+          ],
+          "vs_database": "Cook家族P30→P31的延伸。與P18(Bard PAA+PEG)完全不同路線。與G12(長春工大QCS+SBMA抗菌)比：Cook用小分子藥物釋放，G12用高分子殺菌",
+          "bioteque_relevance": "Phase 3抗菌方向的重要參考。Chlorhexidine+PVP塗層在臨床上有大量前案。但Bioteque目前先做Phase 1-2（潤滑+耐磨），抗菌是後續"
+        }
+      }
+    },
+    {
+      "id": "P32",
+      "title": "Lubricious coatings for medical devices (US20090048537 / Merit-InterV echogenic+lubricious)",
+      "authors": "Merit Medical (InterV)",
+      "year": 2009,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "PVP",
+        "活檢針",
+        "穿刺針",
+        "導管catheter",
+        "導線guidewire"
+      ],
+      "purpose": "Merit Medical(InterV)潤滑+超音波回聲複合塗層，用於活檢針和導管",
+      "abstract_note": "PVP基親水潤滑層+echogenic微粒（聚合物微球含氣體）複合結構。可同時提供潤滑性和超音波可視性。用於biopsy needle, catheter, guidewire, trocar等",
+      "value_to_project": "Merit的echogenic+lubricious雙功能塗層概念，穿刺針開發可參考",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/US20090048537A1/en"
+      },
+      "related_patents": [
+        "WO2007089761A2"
+      ],
+      "patent_notes": "InterV（後被Merit收購）的echogenic塗層專利。A1公開，超過5年未見B版本→可能已放棄*",
+      "patentResults": {
+        "full": {
+          "summary": "Merit Medical(InterV)的雙功能塗層：PVP親水潤滑層+echogenic微粒（氣體封裝聚合物微球）。用於活檢針和導管，同時提供潤滑和超音波可視",
+          "examples": [
+            {
+              "name": "Lubricious echogenic複合塗層",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "有具體技術描述，但A1公開超過5年未核准*",
+              "substrate": "Biopsy needle, catheter, guidewire, trocar（不鏽鋼/nitinol/PE/PP/PVC/silicone）",
+              "formulation": {
+                "primer": "可選primer",
+                "topcoat": "PVP或PVA親水層+echogenic微粒（isopentane/氟碳化合物封裝聚合物微球）"
+              },
+              "process": {
+                "surface_prep": "未明示",
+                "coating_method": "多層塗覆（潤滑層+echogenic層可分開或混合）",
+                "drying": "未明示",
+                "curing": "未明示"
+              },
+              "results": {
+                "friction": "潤滑（具體數據未見）",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "未明示",
+                "other": "超音波下可視（echogenic微粒提供回聲信號）；可加染料/顏料/放射性標記"
+              }
+            }
+          ],
+          "key_claims": [
+            "PVP/PVA潤滑層+echogenic聚合物微球（含氣體）複合結構",
+            "微球材料：isopentane/isobutane/氟碳化合物/空氣/氮氣封裝",
+            "適用biopsy needle/catheter/guidewire/trocar多種器材"
+          ],
+          "actionable_insights": [
+            "Echogenic+lubricious雙功能概念：穿刺針產品可考慮（超音波可視+潤滑）",
+            "多層結構：潤滑底層+echogenic面層（或反過來）的設計彈性",
+            "此專利可能已失效（A1超過5年未核准）→技術可參考*"
+          ],
+          "red_flags": [
+            "A1公開2009年，超過5年未見B版本→極可能已放棄或被駁回*",
+            "Echogenic微球的製程複雜度高",
+            "潤滑性能數據缺乏"
+          ],
+          "vs_database": "與P25(WO2007089761)是同家族。Merit的TEMNO系列重點在針體結構不在塗層。與其他塗層專利(P01/P06/P12)比：Merit加入echogenic是獨特差異化",
+          "bioteque_relevance": "穿刺針開發的參考方向。如果Bioteque穿刺針需要超音波可視+潤滑，此複合塗層概念可借鏡。但目前Bioteque主攻導管親水塗層，穿刺針是延伸應用"
+        }
+      }
     }
   ]
 }
