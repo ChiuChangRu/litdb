@@ -51,6 +51,10 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 .col-right{width:50%;flex-shrink:0}
 .col-resize{width:5px;cursor:col-resize;background:var(--border);flex-shrink:0;transition:background 0.15s}
 .col-resize:hover,.col-resize.dragging{background:var(--accent);opacity:0.6}
+.analysis-sub{background:var(--bg);border:1px solid var(--border);color:var(--muted);font-size:12px;padding:6px 14px;cursor:pointer}
+.analysis-sub.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.analysis-subview{display:none}
+.analysis-subview.active{display:block}
 .filter-panel .field{margin-bottom:10px}
 .filter-panel label{font-size:11px;color:var(--muted);font-weight:600;display:block;margin-bottom:4px}
 .tag-cloud{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
@@ -220,12 +224,8 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 <div class="tabs">
   <div class="tab" onclick="showView('search',this)">🔍 檢索</div>
   <div class="tab active" onclick="showView('browse',this)">📚 文庫 <span class="badge" id="browseCount">0</span></div>
-  <div class="tab" onclick="showView('graph',this)">🕸 關係圖</div>
-  <div class="tab" onclick="showView('gap',this)">🔥 缺口分析</div>
-  <div class="tab" onclick="showView('compare',this)">📊 比較</div>
+  <div class="tab" onclick="showView('analysis',this)">📊 分析</div>
   <div class="tab" onclick="showView('report',this)">📋 報告</div>
-  <div class="tab" onclick="showView('chat',this)">🤖 AI 對話</div>
-  <div class="tab" onclick="showView('add',this)">➕ 新增</div>
 </div>
 
 <div class="main">
@@ -263,6 +263,18 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 
     <!-- 搜尋結果 -->
     <div id="searchResults"></div>
+
+    <!-- 手動新增入口 -->
+    <div style="margin-top:16px;padding:12px;background:var(--card);border-radius:8px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--accent)">📎 其他收錄方式</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">手動填寫表單新增、或使用書籤小工具從任何網頁一鍵收錄</div>
+      </div>
+      <button class="btn btn-s" onclick="document.getElementById('v-add').style.display='block';document.getElementById('v-search').querySelector('.view')?.scrollIntoView()" style="white-space:nowrap">➕ 手動新增</button>
+    </div>
+
+    <!-- 嵌入新增表單（可展開）-->
+    <div id="addFormInSearch" style="display:none;margin-top:12px"></div>
   </div>
 </div>
 
@@ -304,8 +316,21 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
   </div>
 </div>
 
+<!-- ═══════════════ VIEW: ANALYSIS (wrapper) ═══════════════ -->
+<div class="view" id="v-analysis">
+  <div style="display:flex;gap:4px;padding:8px 16px;background:var(--card);border-bottom:1px solid var(--border);flex-wrap:wrap">
+    <button class="btn btn-s analysis-sub active" onclick="showAnalysisTab('graph',this)">🕸 關係圖</button>
+    <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('gap',this)">🔥 缺口分析</button>
+    <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('compare',this)">📊 比較</button>
+    <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('chat',this)">🤖 AI 對話</button>
+  </div>
+  <div id="analysisContent">
+    <!-- sub-views rendered here -->
+  </div>
+</div>
+
 <!-- ═══════════════ VIEW: GRAPH ═══════════════ -->
-<div class="view" id="v-graph">
+<div class="view" id="v-graph" style="display:none">
   <div class="help-box" id="help-graph">
     <button class="close-help" onclick="this.parentElement.classList.add('hidden')">✕</button>
     <h4>🕸 關係圖 — Paper ↔ Tag 二部圖</h4>
@@ -342,7 +367,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 </div>
 
 <!-- ═══════════════ VIEW: GAP ═══════════════ -->
-<div class="view" id="v-gap">
+<div class="view" id="v-gap" style="display:none">
   <div class="help-box" id="help-gap">
     <button class="close-help" onclick="this.parentElement.classList.add('hidden')">✕</button>
     <h4>🔥 缺口分析 — 找出知識盲區</h4>
@@ -376,7 +401,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 </div>
 
 <!-- ═══════════════ VIEW: COMPARE ═══════════════ -->
-<div class="view" id="v-compare">
+<div class="view" id="v-compare" style="display:none">
   <div class="help-box" id="help-compare">
     <button class="close-help" onclick="this.parentElement.classList.add('hidden')">✕</button>
     <h4>📊 自動分群比較 — 不用勾選，選維度就跑</h4>
@@ -468,7 +493,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 </div>
 
 <!-- ═══════════════ VIEW: AI CHAT ═══════════════ -->
-<div class="view" id="v-chat">
+<div class="view" id="v-chat" style="display:none">
   <div class="help-box" id="help-chat">
     <button class="close-help" onclick="this.parentElement.classList.add('hidden')">✕</button>
     <h4>🤖 AI 對話 — 你的文獻顧問（每次約 $0.001）</h4>
@@ -1226,7 +1251,7 @@ function renderCompareGroups(groups, container, allPapers) {
       const rowBg = hasA ? '' : 'opacity:0.5';
       const shortTitle = (p.title||'').length > 35 ? p.title.slice(0,34)+'…' : p.title;
 
-      html += `<tr style="cursor:pointer;${rowBg}" onclick="showView('browse',document.querySelectorAll('.tab')[0]);setTimeout(()=>{const idx=DB.papers.findIndex(x=>x.id==='${p.id}');filtered=DB.papers;renderPapers();if(idx>=0)showDetail(idx)},100)" title="${p.title}">
+      html += `<tr style="cursor:pointer;${rowBg}" onclick="showView('browse',document.querySelectorAll('.tabs > .tab')[1]);setTimeout(()=>{const idx=DB.papers.findIndex(x=>x.id==='${p.id}');filtered=DB.papers;renderPapers();if(idx>=0)showDetail(idx)},100)" title="${p.title}">
         <td style="padding:6px 8px;border:1px solid var(--border);font-weight:600;color:var(--accent);white-space:nowrap">${p.id} ${hasA?'✅':''}</td>
         <td style="padding:6px 8px;border:1px solid var(--border)">${org?`<span style="background:#fff0e6;color:#b85c2a;padding:1px 4px;border-radius:3px;font-size:10px">${org}</span>`:'—'}</td>
         <td style="padding:6px 8px;border:1px solid var(--border);font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${shortTitle}</td>
@@ -1409,10 +1434,11 @@ function saveDB() {
 // ══════════════════════════════════════════════
 function toast(m,t=''){const e=document.getElementById('toast');e.textContent=m;e.className='show '+t;clearTimeout(e._t);e._t=setTimeout(()=>e.className='',3000)}
 let previousView = null;
+let currentAnalysisTab = 'graph';
 function goBack() {
   if(!previousView) return;
-  const tabs = document.querySelectorAll('.tab');
-  const viewMap = {search:0, browse:1, graph:2, gap:3, compare:4, report:5, chat:6, add:7};
+  const tabs = document.querySelectorAll('.tabs > .tab');
+  const viewMap = {search:0, browse:1, analysis:2, report:3};
   const idx = viewMap[previousView];
   if(idx!==undefined && tabs[idx]) {
     showView(previousView, tabs[idx]);
@@ -1422,11 +1448,47 @@ function goBack() {
 }
 function showView(id,el){
   const currentView = document.querySelector('.view.active')?.id?.replace('v-','');
-  if(currentView && currentView!==id) previousView = currentView;
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('v-'+id).classList.add('active');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');if(id==='graph')buildGraph();if(id==='gap')buildHeatmaps();if(id==='compare')buildCompare();if(id==='report')buildReportSummary();
-  // 顯示/隱藏返回按鈕
+  if(currentView && currentView!==id && !['graph','gap','compare','chat'].includes(currentView)) previousView = currentView;
+  // 隱藏所有 view
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  // 顯示目標 view
+  const target = document.getElementById('v-'+id);
+  if(target) target.classList.add('active');
+  // 更新 tab 高亮
+  document.querySelectorAll('.tabs > .tab').forEach(t=>t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  // 觸發各 view 的初始化
+  if(id==='graph') buildGraph();
+  if(id==='gap') buildHeatmaps();
+  if(id==='compare') buildCompare();
+  if(id==='report') buildReportSummary();
+  // 分析總頁：顯示子分頁
+  if(id==='analysis') {
+    showAnalysisTab(currentAnalysisTab);
+  }
+  // 返回按鈕
   const backBtn = document.getElementById('backBtn');
   if(backBtn) backBtn.style.display = previousView ? 'block' : 'none';
+}
+
+function showAnalysisTab(subId, btn) {
+  currentAnalysisTab = subId;
+  // 隱藏所有分析子 view
+  ['graph','gap','compare','chat'].forEach(id=>{
+    const el = document.getElementById('v-'+id);
+    if(el) { el.classList.remove('active'); el.style.display = 'none'; }
+  });
+  // 顯示目標子 view
+  const target = document.getElementById('v-'+subId);
+  if(target) { target.style.display = 'block'; }
+  // 更新子分頁按鈕高亮
+  document.querySelectorAll('.analysis-sub').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  else document.querySelectorAll('.analysis-sub').forEach(b=>{ if(b.textContent.includes(subId==='graph'?'關係圖':subId==='gap'?'缺口':subId==='compare'?'比較':'AI'))b.classList.add('active'); });
+  // 觸發初始化
+  if(subId==='graph') buildGraph();
+  if(subId==='gap') buildHeatmaps();
+  if(subId==='compare') buildCompare();
 }
 function openSettings(){document.getElementById('settingsModal').classList.add('show')}
 function closeSettings(){document.getElementById('settingsModal').classList.remove('show')}
@@ -2672,7 +2734,7 @@ function onGraphClick(event) {
       const org = extractOrg(p);
       const hasA = p.patentResults && Object.keys(p.patentResults).length>0;
       const r = p.patentResults?.full||{};
-      return `<div style="padding:8px;margin-bottom:6px;background:var(--card);border-radius:6px;border-left:3px solid ${hasA?'#2d8c5a':'var(--border)'}; cursor:pointer" onclick="showView('browse',document.querySelectorAll('.tab')[0]);setTimeout(()=>{filtered=DB.papers;renderPapers();showDetail(DB.papers.findIndex(x=>x.id==='${pid}'))},100)">
+      return `<div style="padding:8px;margin-bottom:6px;background:var(--card);border-radius:6px;border-left:3px solid ${hasA?'#2d8c5a':'var(--border)'}; cursor:pointer" onclick="showView('browse',document.querySelectorAll('.tabs > .tab')[1]);setTimeout(()=>{filtered=DB.papers;renderPapers();showDetail(DB.papers.findIndex(x=>x.id==='${pid}'))},100)">
         <div style="font-weight:600;color:var(--accent);font-size:11px">[${pid}] ${p.doc_type} ${hasA?'✅':''}</div>
         <div style="font-size:11px;margin-top:2px">${p.title.slice(0,50)}${p.title.length>50?'...':''}</div>
         ${org?`<span style="background:#fff0e6;color:#b85c2a;padding:1px 4px;border-radius:3px;font-size:9px">${org}</span>`:''}
@@ -2728,7 +2790,7 @@ function onGraphClick(event) {
       ${p.abstract_note?`<div style="font-size:11px;color:var(--muted);margin-bottom:8px;padding:6px 8px;background:var(--card);border-radius:4px">${p.abstract_note.slice(0,200)}${p.abstract_note.length>200?'...':''}</div>`:''}
       ${analysisHtml}
       <div style="margin-top:8px">${tags}</div>
-      <button class="btn btn-s" style="width:100%;margin-top:10px" onclick="showView('browse',document.querySelectorAll('.tab')[0]);setTimeout(()=>{filtered=DB.papers;renderPapers();showDetail(DB.papers.findIndex(x=>x.id==='${p.id}'))},100)">↗ 跳到文庫查看完整資料</button>`;
+      <button class="btn btn-s" style="width:100%;margin-top:10px" onclick="showView('browse',document.querySelectorAll('.tabs > .tab')[1]);setTimeout(()=>{filtered=DB.papers;renderPapers();showDetail(DB.papers.findIndex(x=>x.id==='${p.id}'))},100)">↗ 跳到文庫查看完整資料</button>`;
   }
 }
 
@@ -3060,7 +3122,7 @@ function appendMsg(html, type) {
 
 function clearChat(){chatHistory=[];document.getElementById('chatMessages').innerHTML='<div class="msg msg-ai">對話已清空。請繼續提問。</div>'}
 function prefillChat(text){showView('chat',document.querySelectorAll('.tab')[3]);document.getElementById('chatInput').value=text;document.getElementById('chatInput').focus()}
-function highlightPaper(id){showView('browse',document.querySelectorAll('.tab')[0]);document.getElementById('fKw').value=id;filterPapers()}
+function highlightPaper(id){showView('browse',document.querySelectorAll('.tabs > .tab')[1]);document.getElementById('fKw').value=id;filterPapers()}
 
 // ══════════════════════════════════════════════
 // BATCH: PubMed Search for bulk add
