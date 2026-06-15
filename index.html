@@ -2232,7 +2232,8 @@ function buildGraph() {
     nodes.push(n); nodeMap[pid]=n;
   });
 
-  document.getElementById('graphInfo').textContent = `${activePapers.size} 篇 · ${activeTags.size} 標籤 · ${filteredEdges.length} 連結（${graphPapers.length===DB.papers.length?'全部':'篩選後'}）`;
+  const catLabels = {'':'全部標籤',substrate:'基材',hydrophilic_polymer:'親水高分子',cure_method:'固化方式',anchor_primer:'錨固劑',application:'應用',performance:'性能指標'};
+  document.getElementById('graphInfo').innerHTML = `<span style="background:var(--accent);color:#fff;padding:2px 8px;border-radius:4px;font-weight:600">${catLabels[catFilter]||'全部標籤'}</span> ${activePapers.size} 篇 · ${activeTags.size} 標籤 · ${filteredEdges.length} 連結${graphPapers.length!==DB.papers.length?' （篩選後）':''}`;
 
   // Force simulation
   for(let iter=0;iter<300;iter++){
