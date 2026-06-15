@@ -343,8 +343,13 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
         <option value="substrate">基材</option>
         <option value="anchor_primer">底塗/錨固</option>
         <option value="hydrophilic_polymer">親水高分子</option>
-        <option value="application">應用</option>
+        <option value="application">應用/適應症</option>
+        <option value="org">公司/機構</option>
+        <option value="patent_status">專利狀態</option>
+        <option value="year_range">年份區間</option>
+        <option value="performance">性能指標</option>
         <option value="doc_type">文獻類型</option>
+        <option value="analysis_status">分析狀態</option>
       </select>
       <span id="compareStats" style="font-size:12px;color:var(--muted)"></span>
     </div>
@@ -528,52 +533,91 @@ function updateCostDisplay() {
 function buildCompare() {
   const groupBy = document.getElementById('compareGroupBy').value;
   const dict = DB.meta.tag_dictionary || {};
-  const dimValues = dict[groupBy] || [];
   const container = document.getElementById('compareResults');
 
-  // 只取有分析結果的文獻
-  const analyzed = DB.papers.filter(p => p.patentResults && Object.keys(p.patentResults).length > 0);
+  // 比較用所有文獻（不只已分析的），但標示哪些有分析
+  const allPapers = DB.papers;
 
-  if(!analyzed.length) {
-    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">尚無已分析的文獻。請先在文庫中對文獻做「🧪 專利分析」或「📊 技術分析」。</div>';
+  if(!allPapers.length) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">資料庫為空</div>';
     return;
   }
 
-  // 特殊處理 doc_type（不從 tags 分群）
+  let groups = {};
+
+  // 特殊維度處理
   if(groupBy === 'doc_type') {
-    const groups = {};
-    analyzed.forEach(p => {
+    allPapers.forEach(p => {
       const key = p.doc_type || '其他';
       if(!groups[key]) groups[key] = [];
       groups[key].push(p);
     });
-    renderCompareGroups(groups, container, analyzed);
-    return;
-  }
-
-  // 按 tag 分群
-  const groups = {};
-  analyzed.forEach(p => {
-    const tags = p.tags || [];
-    let matched = false;
-    dimValues.forEach(v => {
-      if(tags.includes(v)) {
-        if(!groups[v]) groups[v] = [];
-        groups[v].push(p);
-        matched = true;
+  } else if(groupBy === 'org') {
+    // 按公司/機構分群
+    allPapers.forEach(p => {
+      const org = extractOrg(p) || '未標示';
+      if(!groups[org]) groups[org] = [];
+      groups[org].push(p);
+    });
+  } else if(groupBy === 'patent_status') {
+    allPapers.forEach(p => {
+      let key;
+      if(p.doc_type !== '專利') { key = '非專利'; }
+      else {
+        const m = (p.title||'').match(/(US\d+B\d?|EP\d+B\d?)/i);
+        const yr = p.year || 0;
+        if(m && yr && (yr+20) > new Date().getFullYear()) key = '🔒 有效專利';
+        else if(m && yr && (yr+20) <= new Date().getFullYear()) key = '✓ 已過期專利';
+        else key = '📋 申請中/公開';
+      }
+      if(!groups[key]) groups[key] = [];
+      groups[key].push(p);
+    });
+  } else if(groupBy === 'year_range') {
+    allPapers.forEach(p => {
+      const yr = p.year || 0;
+      let key;
+      if(yr >= 2020) key = '2020-2026（近期）';
+      else if(yr >= 2010) key = '2010-2019';
+      else if(yr >= 2000) key = '2000-2009';
+      else if(yr > 0) key = '2000 以前';
+      else key = '年份不明';
+      if(!groups[key]) groups[key] = [];
+      groups[key].push(p);
+    });
+  } else if(groupBy === 'analysis_status') {
+    allPapers.forEach(p => {
+      const has = p.patentResults && Object.keys(p.patentResults).length > 0;
+      const key = has ? '✅ 已分析' : '🔴 未分析';
+      if(!groups[key]) groups[key] = [];
+      groups[key].push(p);
+    });
+  } else {
+    // 標籤維度（substrate, cure_method, anchor_primer, hydrophilic_polymer, application, performance）
+    const dimValues = dict[groupBy] || [];
+    allPapers.forEach(p => {
+      const tags = p.tags || [];
+      let matched = false;
+      dimValues.forEach(v => {
+        if(tags.includes(v)) {
+          if(!groups[v]) groups[v] = [];
+          groups[v].push(p);
+          matched = true;
+        }
+      });
+      if(!matched) {
+        if(!groups['其他']) groups['其他'] = [];
+        groups['其他'].push(p);
       }
     });
-    if(!matched) {
-      if(!groups['其他']) groups['其他'] = [];
-      groups['其他'].push(p);
-    }
-  });
+  }
 
-  renderCompareGroups(groups, container, analyzed);
+  renderCompareGroups(groups, container, allPapers);
 }
 
-function renderCompareGroups(groups, container, analyzed) {
-  document.getElementById('compareStats').textContent = `${analyzed.length} 篇已分析 · ${Object.keys(groups).length} 群`;
+function renderCompareGroups(groups, container, allPapers) {
+  const analyzedCount = allPapers.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0).length;
+  document.getElementById('compareStats').textContent = `${allPapers.length} 篇文獻 · ${analyzedCount} 篇已分析 · ${Object.keys(groups).length} 群`;
 
   let html = '';
   Object.entries(groups).sort((a,b) => b[1].length - a[1].length).forEach(([group, papers]) => {
@@ -585,37 +629,40 @@ function renderCompareGroups(groups, container, analyzed) {
         <table style="width:100%;border-collapse:collapse;font-size:12px">
           <thead>
             <tr style="background:var(--card)">
-              <th style="padding:8px;text-align:left;border:1px solid var(--border);white-space:nowrap;min-width:60px">ID</th>
-              <th style="padding:8px;text-align:left;border:1px solid var(--border);min-width:80px">機構</th>
-              <th style="padding:8px;text-align:left;border:1px solid var(--border);min-width:100px">底塗</th>
-              <th style="padding:8px;text-align:left;border:1px solid var(--border);min-width:120px">面塗</th>
-              <th style="padding:8px;text-align:left;border:1px solid var(--border);min-width:80px">固化</th>
-              <th style="padding:8px;text-align:center;border:1px solid var(--border);min-width:70px">COF/摩擦</th>
-              <th style="padding:8px;text-align:center;border:1px solid var(--border);min-width:70px">附著力</th>
-              <th style="padding:8px;text-align:center;border:1px solid var(--border);min-width:60px">WCA</th>
-              <th style="padding:8px;text-align:center;border:1px solid var(--border);min-width:50px">抗菌</th>
-              <th style="padding:8px;text-align:center;border:1px solid var(--border);min-width:60px">狀態</th>
+              <th style="padding:8px;text-align:left;border:1px solid var(--border);white-space:nowrap">ID</th>
+              <th style="padding:8px;text-align:left;border:1px solid var(--border)">機構</th>
+              <th style="padding:8px;text-align:left;border:1px solid var(--border)">標題</th>
+              <th style="padding:8px;text-align:left;border:1px solid var(--border)">底塗</th>
+              <th style="padding:8px;text-align:left;border:1px solid var(--border)">面塗</th>
+              <th style="padding:8px;text-align:left;border:1px solid var(--border)">固化</th>
+              <th style="padding:8px;text-align:center;border:1px solid var(--border)">COF</th>
+              <th style="padding:8px;text-align:center;border:1px solid var(--border)">附著力</th>
+              <th style="padding:8px;text-align:center;border:1px solid var(--border)">WCA</th>
+              <th style="padding:8px;text-align:center;border:1px solid var(--border)">狀態</th>
             </tr>
           </thead>
           <tbody>`;
 
     papers.forEach(p => {
+      const hasA = p.patentResults && Object.keys(p.patentResults).length > 0;
       const r = p.patentResults?.full || {};
       const ex = r.examples?.[0] || {};
       const res = ex.results || {};
       const org = extractOrg(p);
       const patBadge = getPatentBadge(p);
+      const rowBg = hasA ? '' : 'opacity:0.5';
+      const shortTitle = (p.title||'').length > 35 ? p.title.slice(0,34)+'…' : p.title;
 
-      html += `<tr style="cursor:pointer" onclick="showView('browse',document.querySelectorAll('.tab')[0]);setTimeout(()=>{const idx=filtered.findIndex(x=>x.id==='${p.id}');if(idx>=0)showDetail(idx)},100)" title="${p.title}">
-        <td style="padding:6px 8px;border:1px solid var(--border);font-weight:600;color:var(--accent)">${p.id}</td>
-        <td style="padding:6px 8px;border:1px solid var(--border)"><span style="background:#fff0e6;color:#b85c2a;padding:1px 4px;border-radius:3px;font-size:10px">${org||'—'}</span></td>
+      html += `<tr style="cursor:pointer;${rowBg}" onclick="showView('browse',document.querySelectorAll('.tab')[0]);setTimeout(()=>{const idx=DB.papers.findIndex(x=>x.id==='${p.id}');filtered=DB.papers;renderPapers();if(idx>=0)showDetail(idx)},100)" title="${p.title}">
+        <td style="padding:6px 8px;border:1px solid var(--border);font-weight:600;color:var(--accent);white-space:nowrap">${p.id} ${hasA?'✅':''}</td>
+        <td style="padding:6px 8px;border:1px solid var(--border)">${org?`<span style="background:#fff0e6;color:#b85c2a;padding:1px 4px;border-radius:3px;font-size:10px">${org}</span>`:'—'}</td>
+        <td style="padding:6px 8px;border:1px solid var(--border);font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${shortTitle}</td>
         <td style="padding:6px 8px;border:1px solid var(--border);font-size:11px">${ex.formulation?.primer||'—'}</td>
         <td style="padding:6px 8px;border:1px solid var(--border);font-size:11px">${ex.formulation?.topcoat||'—'}</td>
         <td style="padding:6px 8px;border:1px solid var(--border);font-size:11px">${ex.process?.curing||'—'}</td>
         <td style="padding:6px 8px;border:1px solid var(--border);text-align:center;font-weight:600;color:var(--accent2)">${res.friction||'—'}</td>
         <td style="padding:6px 8px;border:1px solid var(--border);text-align:center">${res.adhesion||'—'}</td>
         <td style="padding:6px 8px;border:1px solid var(--border);text-align:center">${res.wca||'—'}</td>
-        <td style="padding:6px 8px;border:1px solid var(--border);text-align:center">${res.other?.includes('抗菌')||res.other?.includes('antibacterial')?'✅':'—'}</td>
         <td style="padding:6px 8px;border:1px solid var(--border);text-align:center;font-size:10px">${patBadge||'—'}</td>
       </tr>`;
     });
@@ -623,9 +670,8 @@ function renderCompareGroups(groups, container, analyzed) {
     html += `</tbody></table></div></div>`;
   });
 
-  // 底部加 AI 深度比較按鈕
   html += `<div style="text-align:center;padding:16px">
-    <span style="font-size:12px;color:var(--muted)">數據來自已分析文獻，分析越多比較越完整。</span>
+    <span style="font-size:12px;color:var(--muted)">✅ = 已分析（有配方/性能數據），半透明 = 未分析。分析越多比較越完整。</span>
   </div>`;
 
   container.innerHTML = html;
@@ -1823,8 +1869,10 @@ function buildGraph() {
   const edges = [];
   const tagCount = {};
   const paperTagCount = {};
+  // 使用篩選後的文獻（若有），否則全部
+  const graphPapers = (filtered && filtered.length) ? filtered : DB.papers;
 
-  DB.papers.forEach(p => {
+  graphPapers.forEach(p => {
     const tags = (p.tags||[]).filter(t=>validTags.has(t));
     paperTagCount[p.id] = tags.length;
     tags.forEach(t => {
@@ -1852,12 +1900,12 @@ function buildGraph() {
 
   // Paper 節點
   [...activePapers].forEach(pid => {
-    const p = DB.papers.find(x=>x.id===pid);
+    const p = graphPapers.find(x=>x.id===pid);
     const n = {id:pid, type:'paper', docType:p?.doc_type||'', count:paperTagCount[pid]||1, x:Math.random()*W, y:Math.random()*H, vx:0, vy:0, highlight:false, title:(p?.title||'').slice(0,30)};
     nodes.push(n); nodeMap[pid]=n;
   });
 
-  document.getElementById('graphInfo').textContent = `${activePapers.size} 篇文獻 · ${activeTags.size} 個標籤 · ${filteredEdges.length} 條連結`;
+  document.getElementById('graphInfo').textContent = `${activePapers.size} 篇 · ${activeTags.size} 標籤 · ${filteredEdges.length} 連結（${graphPapers.length===DB.papers.length?'全部':'篩選後'}）`;
 
   // Force simulation
   for(let iter=0;iter<300;iter++){
