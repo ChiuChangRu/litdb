@@ -44,11 +44,16 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* ═══ VIEW 1: BROWSE ═══ */
-.browse-layout{display:flex;gap:0;height:calc(100vh - 130px);overflow:hidden}
-.browse-col{overflow-y:auto;padding:8px;min-width:120px}
-.col-left{width:16.6%;flex-shrink:0}
-.col-mid{width:33.3%;flex-shrink:0}
-.col-right{width:50%;flex-shrink:0}
+.browse-layout{display:flex;flex-direction:column;height:calc(100vh - 130px);overflow:hidden}
+.browse-filters{padding:8px 12px;background:var(--card);border-bottom:1px solid var(--border);overflow-x:auto;white-space:nowrap}
+.browse-filters .filter-group{display:inline-flex;gap:3px;margin-right:12px;align-items:center;vertical-align:middle}
+.browse-filters .filter-label{font-size:10px;color:var(--muted);font-weight:600;margin-right:2px}
+.browse-filters .ftag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;cursor:pointer;border:1px solid var(--border);background:var(--bg);color:var(--text);transition:all 0.15s}
+.browse-filters .ftag:hover{border-color:var(--accent)}
+.browse-filters .ftag.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.browse-columns{display:flex;flex:1;overflow:hidden}
+.col-mid{width:50%;flex-shrink:0;overflow-y:auto;padding:8px}
+.col-right{width:50%;flex-shrink:0;overflow-y:auto;padding:8px}
 .col-resize{width:5px;cursor:col-resize;background:var(--border);flex-shrink:0;transition:background 0.15s}
 .col-resize:hover,.col-resize.dragging{background:var(--accent);opacity:0.6}
 .analysis-sub{background:var(--bg);border:1px solid var(--border);color:var(--muted);font-size:12px;padding:6px 14px;cursor:pointer}
@@ -192,7 +197,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 .batch-zh{margin-top:6px;padding:8px 10px;background:var(--surface);border-left:3px solid var(--accent2);border-radius:0 4px 4px 0;font-size:12px;color:var(--text);line-height:1.6}
 .batch-actions{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
 .batch-check{flex-shrink:0;margin-top:2px;accent-color:var(--accent2)}
-@media(max-width:900px){.browse-layout{flex-direction:column}.browse-col{width:100%!important}.col-resize{display:none}.chat-layout,.add-layout{grid-template-columns:1fr}}
+@media(max-width:900px){.browse-columns{flex-direction:column}.col-mid,.col-right{width:100%!important}.col-resize{display:none}.browse-filters{white-space:normal}.chat-layout,.add-layout{grid-template-columns:1fr}}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+TC:wght@400;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
@@ -286,31 +291,34 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
     用左側篩選器快速鎖定目標：選<span class="tip">基材</span>看 TPU/Pebax 專屬文獻，選<span class="tip">固化方式</span>比較 UV 與熱固路線。點「💡 對專案價值」看每篇對 Bioteque 的具體意義。點<span class="tip">📌 釘選到AI</span>可在「AI 對話」分頁針對這些文獻提問。
   </div>
   <div class="browse-layout" id="browseLayout">
-    <div class="filter-panel panel browse-col col-left" id="colLeft">
-      <div class="panel-h">🔍 篩選</div>
-      <div style="padding:12px">
-        <div class="field"><label>關鍵字</label><input type="text" id="fKw" placeholder="多關鍵字用逗號/空白/分號分隔（OR）" oninput="filterPapers()"></div>
-        <div class="field"><label>文獻類型</label><select id="fType" onchange="filterPapers()"><option value="">全部</option></select></div>
-        <div class="field"><label>基材</label><select id="fSub" onchange="filterPapers()"><option value="">全部</option></select></div>
-        <div class="field"><label>固化方式</label><select id="fCure" onchange="filterPapers()"><option value="">全部</option></select></div>
-        <div class="field"><label>應用</label><select id="fApp" onchange="filterPapers()"><option value="">全部</option></select></div>
-        <div class="field"><label>排序</label><select id="fSort" onchange="filterPapers()"><option value="id">編號</option><option value="year-desc">年份新→舊</option><option value="year-asc">年份舊→新</option><option value="tags">標籤數多→少</option></select></div>
-        <div class="field"><label>技術分析</label><select id="fPatentStatus" onchange="filterPapers()"><option value="">全部</option><option value="analyzed">✅ 已分析</option><option value="not-analyzed">🔴 未分析（專利）</option><option value="patent-only">專利（全部）</option></select></div>
-        <hr style="border:none;border-top:1px solid var(--border);margin:10px 0">
-        <label style="font-size:11px;color:var(--muted);font-weight:600">標籤快篩</label>
-        <div class="tag-cloud" id="tagCloud"></div>
+    <!-- 頂部篩選列 -->
+    <div class="browse-filters" id="browseFilters">
+      <input type="text" id="fKw" placeholder="🔍 關鍵字搜尋..." oninput="filterPapers()" style="width:140px;padding:4px 8px;font-size:11px;border-radius:4px;border:1px solid var(--border);vertical-align:middle;margin-right:8px">
+      <span class="filter-group" id="fTypeGroup"><span class="filter-label">類型</span></span>
+      <span class="filter-group" id="fSubGroup"><span class="filter-label">基材</span></span>
+      <span class="filter-group" id="fCureGroup"><span class="filter-label">固化</span></span>
+      <span class="filter-group" id="fAppGroup"><span class="filter-label">應用</span></span>
+      <span class="filter-group" id="fStatusGroup"><span class="filter-label">分析</span>
+        <span class="ftag" data-filter="status" data-value="analyzed" onclick="toggleFilter(this)">✅已分析</span>
+        <span class="ftag" data-filter="status" data-value="not-analyzed" onclick="toggleFilter(this)">🔴未分析</span>
+        <span class="ftag" data-filter="status" data-value="patent-only" onclick="toggleFilter(this)">專利</span>
+      </span>
+      <span class="filter-group"><span class="filter-label">排序</span>
+        <select id="fSort" onchange="filterPapers()" style="padding:2px 6px;font-size:11px;border-radius:4px;border:1px solid var(--border)"><option value="id">編號</option><option value="year-desc">年份↓</option><option value="year-asc">年份↑</option></select>
+      </span>
+    </div>
+    <!-- 雙欄：文獻列表 + 詳情 -->
+    <div class="browse-columns">
+      <div class="panel col-mid" id="colMid" style="display:flex;flex-direction:column">
+        <div class="panel-h"><span id="filterCount">0 篇</span></div>
+        <div class="paper-list" id="paperList"></div>
       </div>
-    </div>
-    <div class="col-resize" onmousedown="startResize(event,0)"></div>
-    <div class="panel browse-col col-mid" id="colMid" style="display:flex;flex-direction:column">
-      <div class="panel-h"><span id="filterCount">0 篇</span></div>
-      <div class="paper-list" id="paperList"></div>
-    </div>
-    <div class="col-resize" onmousedown="startResize(event,1)"></div>
-    <div class="panel browse-col col-right" id="colRight" style="display:flex;flex-direction:column">
-      <div class="panel-h">📖 文獻詳情</div>
-      <div class="detail-panel" id="detailPanel">
-        <div class="detail-empty">← 點擊文獻卡片查看詳情<br><br>包含中文精華摘要、對專案價值、標籤與原文連結</div>
+      <div class="col-resize" onmousedown="startResize(event,0)"></div>
+      <div class="panel col-right" id="colRight" style="display:flex;flex-direction:column">
+        <div class="panel-h">📖 文獻詳情</div>
+        <div class="detail-panel" id="detailPanel">
+          <div class="detail-empty">← 點擊文獻卡片查看詳情<br><br>包含中文精華摘要、對專案價值、標籤與原文連結</div>
+        </div>
       </div>
     </div>
   </div>
@@ -675,7 +683,47 @@ function updateCostDisplay() {
 // REPORT: 開發策略報告產生器
 // ══════════════════════════════════════════════
 // ══════════════════════════════════════════════
-// SEARCH: 統一檢索入口
+// FILTER: 頂部標籤篩選
+// ══════════════════════════════════════════════
+let activeFilters = { type:new Set(), sub:new Set(), cure:new Set(), app:new Set(), status:new Set() };
+
+function buildFilterTags() {
+  const dict = DB.meta.tag_dictionary || {};
+  // 文獻類型
+  const types = [...new Set(DB.papers.map(p=>p.doc_type).filter(Boolean))];
+  const typeGroup = document.getElementById('fTypeGroup');
+  if(typeGroup) typeGroup.innerHTML = '<span class="filter-label">類型</span>' + types.map(t=>`<span class="ftag" data-filter="type" data-value="${t}" onclick="toggleFilter(this)">${t}</span>`).join('');
+
+  // 基材
+  const subGroup = document.getElementById('fSubGroup');
+  const subs = (dict.substrate||[]).filter(t=>DB.papers.some(p=>(p.tags||[]).includes(t)));
+  if(subGroup) subGroup.innerHTML = '<span class="filter-label">基材</span>' + subs.map(t=>`<span class="ftag" data-filter="sub" data-value="${t}" onclick="toggleFilter(this)">${t}</span>`).join('');
+
+  // 固化
+  const cureGroup = document.getElementById('fCureGroup');
+  const cures = (dict.cure_method||[]).filter(t=>DB.papers.some(p=>(p.tags||[]).includes(t)));
+  if(cureGroup) cureGroup.innerHTML = '<span class="filter-label">固化</span>' + cures.map(t=>`<span class="ftag" data-filter="cure" data-value="${t}" onclick="toggleFilter(this)">${t}</span>`).join('');
+
+  // 應用
+  const appGroup = document.getElementById('fAppGroup');
+  const apps = (dict.application||[]).filter(t=>DB.papers.some(p=>(p.tags||[]).includes(t)));
+  if(appGroup) appGroup.innerHTML = '<span class="filter-label">應用</span>' + apps.map(t=>`<span class="ftag" data-filter="app" data-value="${t}" onclick="toggleFilter(this)">${t}</span>`).join('');
+}
+
+function toggleFilter(el) {
+  const filter = el.dataset.filter;
+  const value = el.dataset.value;
+  if(activeFilters[filter].has(value)) {
+    activeFilters[filter].delete(value);
+    el.classList.remove('active');
+  } else {
+    activeFilters[filter].add(value);
+    el.classList.add('active');
+  }
+  filterPapers();
+}
+
+// ══════════════════════════════════════════════
 // ══════════════════════════════════════════════
 function updateSearchPlaceholder() {
   const src = document.getElementById('searchSource').value;
@@ -1520,8 +1568,9 @@ function renderCompareGroups(groups, container, allPapers) {
 // ══════════════════════════════════════════════
 function startResize(e, idx) {
   e.preventDefault();
-  const layout = document.getElementById('browseLayout');
-  const cols = layout.querySelectorAll('.browse-col');
+  const layout = document.querySelector('.browse-columns');
+  if(!layout) return;
+  const cols = layout.querySelectorAll('.col-mid, .col-right');
   const handle = e.target;
   handle.classList.add('dragging');
   const totalW = layout.clientWidth - 10; // 扣除兩個 resize handle 5px*2
@@ -1755,28 +1804,12 @@ function allTags(){const s=new Set();DB.papers.forEach(p=>(p.tags||[]).forEach(t
 // BROWSE: Filters
 // ══════════════════════════════════════════════
 function buildFilters() {
-  const dict = DB.meta.tag_dictionary || {};
-  const types = dict.doc_type || [...new Set(DB.papers.map(p=>p.doc_type).filter(Boolean))];
-  const subs = dict.substrate || [];
-  const cures = dict.cure_method || [];
-  const apps = dict.application || [];
-
-  fillSelect('fType', types);
-  fillSelect('fSub', subs);
-  fillSelect('fCure', cures);
-  fillSelect('fApp', apps);
-
-  // Tag cloud
-  const tagCounts = {};
-  DB.papers.forEach(p=>(p.tags||[]).forEach(t=>{tagCounts[t]=(tagCounts[t]||0)+1}));
-  const sorted = Object.entries(tagCounts).sort((a,b)=>b[1]-a[1]).slice(0,30);
-  document.getElementById('tagCloud').innerHTML = sorted.map(([t,c])=>
-    `<button class="tag-btn${activeTags.has(t)?' active':''}" onclick="toggleTag('${t}',this)">${t} ${c}</button>`
-  ).join('');
+  buildFilterTags();
 }
 
 function fillSelect(id, opts) {
   const el = document.getElementById(id);
+  if(!el) return;
   const cur = el.value;
   el.innerHTML = '<option value="">全部</option>' + opts.map(o=>`<option>${o}</option>`).join('');
   el.value = cur;
@@ -1789,29 +1822,28 @@ function toggleTag(t,btn) {
 }
 
 function filterPapers() {
-  const kw = document.getElementById('fKw').value.toLowerCase();
-  const type = document.getElementById('fType').value;
-  const sub = document.getElementById('fSub').value;
-  const cure = document.getElementById('fCure').value;
-  const app = document.getElementById('fApp').value;
-  const sort = document.getElementById('fSort').value;
-  const patentStatus = document.getElementById('fPatentStatus').value;
+  const kw = document.getElementById('fKw')?.value?.toLowerCase()||'';
+  const sort = document.getElementById('fSort')?.value||'id';
 
   filtered = DB.papers.filter(p => {
-    if(type && p.doc_type !== type) return false;
+    // 類型篩選（多選 OR）
+    if(activeFilters.type.size && !activeFilters.type.has(p.doc_type)) return false;
+    // 標籤篩選（多選 OR：有任一個就顯示）
     const tags = p.tags || [];
-    if(sub && !tags.includes(sub)) return false;
-    if(cure && !tags.includes(cure)) return false;
-    if(app && !tags.includes(app)) return false;
-    if(activeTags.size && ![...activeTags].every(t=>tags.includes(t))) return false;
-    // 專利分析狀態篩選
-    if(patentStatus) {
+    if(activeFilters.sub.size && ![...activeFilters.sub].some(t=>tags.includes(t))) return false;
+    if(activeFilters.cure.size && ![...activeFilters.cure].some(t=>tags.includes(t))) return false;
+    if(activeFilters.app.size && ![...activeFilters.app].some(t=>tags.includes(t))) return false;
+    // 分析狀態
+    if(activeFilters.status.size) {
       const isPatent = p.doc_type === '專利';
       const hasAnalysis = p.patentResults && Object.keys(p.patentResults).length > 0;
-      if(patentStatus === 'analyzed' && !hasAnalysis) return false;
-      if(patentStatus === 'not-analyzed' && !(isPatent && !hasAnalysis)) return false;
-      if(patentStatus === 'patent-only' && !isPatent) return false;
+      if(activeFilters.status.has('analyzed') && !hasAnalysis) return false;
+      if(activeFilters.status.has('not-analyzed') && hasAnalysis) return false;
+      if(activeFilters.status.has('patent-only') && !isPatent) return false;
     }
+    // 舊的 activeTags 相容
+    if(activeTags.size && ![...activeTags].every(t=>tags.includes(t))) return false;
+    // 關鍵字
     if(kw) {
       const hay = `${p.title} ${p.abstract_note} ${p.purpose} ${p.value_to_project} ${tags.join(' ')} ${p.authors} ${p.id} ${p.venue||''}`.toLowerCase();
       const terms = kw.split(/[,;，；\s]+/).map(s=>s.trim()).filter(Boolean);
