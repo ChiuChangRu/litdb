@@ -1577,6 +1577,13 @@ function showView(id,el){
   if(currentView && currentView!==id && !['graph','gap','compare','chat'].includes(currentView)) previousView = currentView;
   // 隱藏所有 view
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  // 切離分析時，強制隱藏所有子 view
+  if(id!=='analysis') {
+    ['graph','gap','compare','chat'].forEach(sid=>{
+      const el=document.getElementById('v-'+sid);
+      if(el) el.style.display='none';
+    });
+  }
   // 顯示目標 view
   const target = document.getElementById('v-'+id);
   if(target) target.classList.add('active');
