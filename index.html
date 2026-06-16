@@ -633,6 +633,25 @@ function updateCostDisplay() {
 // ══════════════════════════════════════════════
 // REPORT: 開發策略報告產生器
 // ══════════════════════════════════════════════
+function deletePaper(paperId) {
+  const p = DB.papers.find(x=>x.id===paperId);
+  if(!p) return;
+  if(!confirm(`確定要刪除這篇文獻嗎？\n\n${paperId}: ${p.title.slice(0,60)}\n\n此動作無法復原（除非從 Google Sheets 重新載入）`)) return;
+  
+  const idx = DB.papers.findIndex(x=>x.id===paperId);
+  if(idx<0) return;
+  DB.papers.splice(idx, 1);
+  
+  // 同時刪除該文獻的筆記
+  const notes = getNotes();
+  delete notes[paperId];
+  saveNotes(notes);
+  
+  saveDB(); onDBLoaded();
+  document.getElementById('detailPanel').innerHTML = '<div class="detail-empty">文獻已刪除</div>';
+  toast(`已刪除 ${paperId}`,'success');
+}
+
 // ══════════════════════════════════════════════
 // NOTES: 筆記系統
 // ══════════════════════════════════════════════
@@ -999,6 +1018,14 @@ function addPatentFromPV(idx, withAI) {
 }
 
 function addPatentToLibraryFull(patentId, title, abstract, withAI) {
+  // 重複偵測：專利號比對
+  const dup = DB.papers.find(p => (p.title||'').includes(patentId));
+  if(dup) {
+    if(!confirm(`此專利已在文庫中（${dup.id}: ${dup.title.slice(0,40)}...）\n\n仍要加入嗎？`)) {
+      return;
+    }
+  }
+  
   const maxNum = DB.papers.filter(p=>p.id.startsWith('P')).map(p=>parseInt(p.id.slice(1))||0).reduce((a,b)=>Math.max(a,b),0);
   const newId = 'P' + String(maxNum+1).padStart(2,'0');
   const paper = {
@@ -1092,6 +1119,22 @@ function renderSearchResults(results, source) {
 function addSearchResult(idx, source) {
   const r = window._searchResults?.[idx];
   if(!r) return;
+  
+  // 重複偵測：DOI、PMID、標題（normalized）三重檢查
+  const titleN = (r.title||'').toLowerCase().replace(/[^\w\u4e00-\u9fff]/g,'').slice(0,80);
+  const dup = DB.papers.find(p => 
+    (r.doi && p.doi === r.doi) ||
+    (r.pmid && p.pmid === r.pmid) ||
+    (titleN && (p.title||'').toLowerCase().replace(/[^\w\u4e00-\u9fff]/g,'').slice(0,80) === titleN)
+  );
+  if(dup) {
+    if(!confirm(`此文獻可能已在文庫中（${dup.id}: ${dup.title.slice(0,40)}...）\n\n仍要加入嗎？`)) {
+      r.inDB = true;
+      renderSearchResults(window._searchResults, source);
+      return;
+    }
+  }
+  
   const prefix = source==='patent'?'P':'A';
   const maxNum = DB.papers.filter(p=>p.id.startsWith(prefix)).map(p=>parseInt(p.id.slice(1))||0).reduce((a,b)=>Math.max(a,b),0);
   const newId = prefix + String(maxNum+1).padStart(2,'0');
@@ -2130,6 +2173,7 @@ function showDetail(i) {
     <div style="display:flex;gap:6px;margin-top:16px;flex-wrap:wrap">
       <button class="btn btn-s" onclick="pinPaper('${p.id}')">📌 釘選到 AI</button>
       ${link?`<a href="${link}" target="_blank" class="btn btn-s">↗ 開啟原文</a>`:''}
+      <button class="btn btn-s" onclick="deletePaper('${p.id}')" style="color:var(--danger);border-color:var(--danger);margin-left:auto">🗑 刪除</button>
       ${p.doc_type==='專利'?`<button class="btn btn-p" onclick="showPatentAnalysis(${i})">🧪 專利分析</button>`:`<button class="btn btn-s" onclick="showPaperAnalysis(${i})">📊 技術分析</button>`}
       <button class="btn btn-p" onclick="loadCiteTree(${i})" style="margin-left:auto">🌳 引文樹</button>
     </div>
