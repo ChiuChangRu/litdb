@@ -1681,6 +1681,117 @@ function buildCommercial() {
 // ══════════════════════════════════════════════
 // ══════════════════════════════════════════════
 function buildCompare() {
+  const el = document.getElementById('compareContent');
+  if(!el) return;
+
+  // 新增：抗結痂對比快速入口
+  let html = `<div style="margin-bottom:20px;padding:12px;background:var(--accent);border-radius:8px">
+    <div style="color:#fff;font-weight:600;margin-bottom:8px">💧 抗結痂/抗菌策略對比</div>
+    <button class="btn" onclick="compareEncrustation()" style="background:#fff;color:var(--accent);padding:6px 12px;font-size:12px;margin-right:4px">🔬 U系列 vs 親水塗層</button>
+    <button class="btn btn-s" onclick="compareAntimicrobial()" style="padding:6px 12px;font-size:12px">🦠 抗菌材料對比</button>
+    <div style="font-size:11px;color:rgba(255,255,255,0.8);margin-top:6px">或手動選擇下方文獻進行逐一對比</div>
+  </div>`;
+
+  // 原有的文獻選擇器
+  html += `<div style="margin-bottom:16px">
+    <div style="font-size:12px;font-weight:600;margin-bottom:8px">📋 選擇要對比的文獻</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:6px;max-height:120px;overflow-y:auto">`;
+  DB.papers.forEach(p=>{
+    const sel = selected.has(p.id);
+    html += `<button class="btn ${sel?'btn-p':'btn-s'}" style="padding:6px;font-size:11px;text-align:center" onclick="toggleCompareSelect('${p.id}')">${p.id}</button>`;
+  });
+  html += `</div></div>`;
+
+  // 對比矩陣
+  const selected = window.compareSelected || new Set();
+  if(selected.size>1) {
+    const papers = [...selected].map(id=>DB.papers.find(p=>p.id===id)).filter(Boolean);
+    
+    html += `<div style="margin-top:20px">
+      <div style="font-size:13px;font-weight:600;margin-bottom:10px">🔍 對比矩陣</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:11px">
+          <thead><tr style="background:var(--card)">
+            <th style="padding:8px;text-align:left;border:1px solid var(--border)">維度</th>
+            ${papers.map(p=>`<th style="padding:6px;border:1px solid var(--border);text-align:center;font-weight:600;color:var(--accent)">${p.id}</th>`).join('')}
+          </tr></thead>
+          <tbody>`;
+    
+    // 對比維度
+    const dimensions = [
+      {name:'基本資料',fields:['doc_type','year']},
+      {name:'配方',fields:['substrate','primer','topcoat']},
+      {name:'固化',fields:['curing']},
+      {name:'潤滑性',fields:['friction','wca']},
+      {name:'附著力',fields:['adhesion']},
+      {name:'耐磨耗',fields:['durability']},
+      {name:'抗菌/抗結痂',fields:['antimicrobial','antifouling','encrustation_reduction']},
+      {name:'可信度',fields:['credibility']}
+    ];
+
+    dimensions.forEach(dim=>{
+      html += `<tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:8px;background:var(--bg);font-weight:600;border:1px solid var(--border)">${dim.name}</td>`;
+      papers.forEach(p=>{
+        const ex = p.patentResults?.full?.examples?.[0]||{};
+        const vals = dim.fields.map(f=>{
+          if(f==='doc_type') return p.doc_type;
+          if(f==='year') return p.year;
+          if(f==='substrate') return ex.substrate||'—';
+          if(f==='primer') return ex.formulation?.primer?.slice(0,40)||'—';
+          if(f==='topcoat') return ex.formulation?.topcoat?.slice(0,40)||'—';
+          if(f==='curing') return ex.process?.curing?.slice(0,30)||'—';
+          if(f==='friction') return ex.results?.friction||'—';
+          if(f==='wca') return ex.results?.wca||'—';
+          if(f==='adhesion') return ex.results?.adhesion?.slice(0,30)||'—';
+          if(f==='durability') return ex.results?.durability?.slice(0,40)||'—';
+          if(f==='antimicrobial') return ex.results?.antimicrobial?.slice(0,40)||'—';
+          if(f==='antifouling') return ex.results?.antifouling?.slice(0,40)||'—';
+          if(f==='encrustation_reduction') return ex.results?.encrustation_reduction||'—';
+          if(f==='credibility') return ex.credibility||'—';
+          return '—';
+        }).filter(v=>v!=='—').join(' / ') || '—';
+        html += `<td style="padding:6px;border:1px solid var(--border);font-size:10px">${vals}</td>`;
+      });
+      html += `</tr>`;
+    });
+    html += `</tbody></table></div>`;
+  }
+
+  el.innerHTML = html;
+}
+
+// 抗結痂對比快速入口
+function compareEncrustation() {
+  window.compareSelected = new Set();
+  // 自動選U系列 + 部分親水塗層
+  const autoSelect = ['U01','U06','U07','U09','P01','P12','P26'];
+  autoSelect.forEach(id=>{
+    if(DB.papers.find(p=>p.id===id)) window.compareSelected.add(id);
+  });
+  buildCompare();
+  document.getElementById('compareContent').scrollIntoView({behavior:'smooth'});
+}
+
+// 抗菌材料對比
+function compareAntimicrobial() {
+  window.compareSelected = new Set();
+  const autoSelect = ['U04','U06','U08','U10','G12','P30','P31'];
+  autoSelect.forEach(id=>{
+    if(DB.papers.find(p=>p.id===id)) window.compareSelected.add(id);
+  });
+  buildCompare();
+  document.getElementById('compareContent').scrollIntoView({behavior:'smooth'});
+}
+
+function toggleCompareSelect(id) {
+  if(!window.compareSelected) window.compareSelected = new Set();
+  if(window.compareSelected.has(id)) window.compareSelected.delete(id);
+  else window.compareSelected.add(id);
+  buildCompare();
+}
+
+function buildCompare() {
   const groupBy = document.getElementById('compareGroupBy').value;
   const dict = DB.meta.tag_dictionary || {};
   const container = document.getElementById('compareResults');
