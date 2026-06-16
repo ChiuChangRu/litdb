@@ -290,6 +290,12 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
             <span class="ftag" data-filter="status" data-value="not-analyzed" onclick="toggleFilter(this)">🔴</span>
             <span class="ftag" data-filter="status" data-value="patent-only" onclick="toggleFilter(this)">專利</span>
           </span>
+          <span class="filter-group" id="fTopicGroup"><span class="filter-label">主題</span>
+            <span class="ftag" data-filter="topic" data-value="encrustation" onclick="toggleFilter(this)">💧 抗結痂</span>
+            <span class="ftag" data-filter="topic" data-value="antimicrobial" onclick="toggleFilter(this)">🦠 抗菌</span>
+            <span class="ftag" data-filter="topic" data-value="lubricity" onclick="toggleFilter(this)">✨ 潤滑</span>
+            <span class="ftag" data-filter="topic" data-value="adhesion" onclick="toggleFilter(this)">🔧 附著</span>
+          </span>
           <select id="fSort" onchange="filterPapers()" style="padding:2px 4px;font-size:10px;border-radius:4px;border:1px solid var(--border);vertical-align:middle"><option value="id-desc">最新加入</option><option value="id">ID↑</option><option value="year-desc">年↓</option><option value="year-asc">年↑</option></select>
         </div>
         <div class="panel-h"><span id="filterCount">0 篇</span></div>
@@ -719,7 +725,7 @@ function getAllPlanNotes() {
 // ══════════════════════════════════════════════
 // FILTER: 頂部標籤篩選
 // ══════════════════════════════════════════════
-let activeFilters = { type:new Set(), sub:new Set(), cure:new Set(), app:new Set(), status:new Set() };
+let activeFilters = { type:new Set(), sub:new Set(), cure:new Set(), app:new Set(), status:new Set(), topic:new Set() };
 
 function buildFilterTags() {
   const dict = DB.meta.tag_dictionary || {};
@@ -2012,6 +2018,18 @@ function filterPapers() {
       if(activeFilters.status.has('analyzed') && !hasAnalysis) return false;
       if(activeFilters.status.has('not-analyzed') && hasAnalysis) return false;
       if(activeFilters.status.has('patent-only') && !isPatent) return false;
+    }
+    // 主題篩選（多選 OR，跨欄位匹配）
+    if(activeFilters.topic.size) {
+      const hay = `${p.title} ${p.abstract_note||''} ${p.purpose||''} ${p.value_to_project||''} ${tags.join(' ')} ${p.id}`.toLowerCase();
+      const topicMatch = [...activeFilters.topic].some(topic => {
+        if(topic==='encrustation') return /encrustation|結痂|biofilm|生物膜|conditioning film|sbma|mpc|zwitterion|抗汙|antifouling|chitosan|propolis|hyaluron|heparin|前列腺結石|尿|urinary|ureteral|輸尿管|stent/i.test(hay) || p.id.startsWith('U');
+        if(topic==='antimicrobial') return /antimicrobial|抗菌|antibacterial|silver|chlorhexidine|chitosan|propolis|copper|biocidal|antibiofilm/i.test(hay);
+        if(topic==='lubricity') return /lubricity|潤滑|friction|cof|滑度|lubricious|harland|tribology/i.test(hay);
+        if(topic==='adhesion') return /adhesion|附著|primer|底塗|錨固|anchor|grafting|接枝|silane|pda|polydopamine|covalent|coupling/i.test(hay);
+        return false;
+      });
+      if(!topicMatch) return false;
     }
     // 舊的 activeTags 相容
     if(activeTags.size && ![...activeTags].every(t=>tags.includes(t))) return false;
