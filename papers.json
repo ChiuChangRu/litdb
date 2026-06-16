@@ -2538,6 +2538,254 @@
           "bioteque_relevance": "直接可用：(1) PEGDA Mn250-700是耐磨甜蜜區→驗證SR344/SR610選擇正確 (2) 50次磨耗測試方法可直接採用 (3) 乾重比PVP:PI=95-98:2-5→配方參考基準"
         }
       }
+    },
+    {
+      "id": "U01",
+      "title": "Ureteral Stent Encrustation: Epidemiology, Pathophysiology, Management and Current Technology",
+      "authors": "Tomer N; Garden E; Small A; Palese M / Mount Sinai",
+      "year": 2020,
+      "venue": "J Urol",
+      "doi": "10.1097/JU.0000000000001343",
+      "pmid": "32856981",
+      "doc_type": "綜述review",
+      "access": "付費",
+      "tags": [
+        "輸尿管支架",
+        "encrustation",
+        "biofilm",
+        "綜述review"
+      ],
+      "purpose": "輸尿管支架結痂機制+管理策略完整綜述",
+      "abstract_note": "結痂機制：dwell time + 患者風險因子 + conditioning film + biofilm + mineral deposition。提出新治療演算法。識別高風險患者+多模式移除技術",
+      "value_to_project": "理解結痂發生機制的基礎綜述。設計抗結痂塗層前必讀",
+      "links": {
+        "doi": "https://doi.org/10.1097/JU.0000000000001343",
+        "pubmed": "https://pubmed.ncbi.nlm.nih.gov/32856981/"
+      }
+    },
+    {
+      "id": "U02",
+      "title": "New Stent Technologies",
+      "authors": "Janssen P; Tailly T / Ghent University",
+      "year": 2021,
+      "venue": "Urol Clin North Am",
+      "doi": "10.1016/j.ucl.2021.08.004",
+      "pmid": "34776051",
+      "doc_type": "綜述review",
+      "access": "付費",
+      "tags": [
+        "輸尿管支架",
+        "biomaterial",
+        "coating",
+        "綜述review"
+      ],
+      "purpose": "輸尿管支架技術全景：設計、材料、塗層",
+      "abstract_note": "全面回顧：stent architecture/design + biomaterials + coatings 三條改進路徑。針對副作用（UTI/結痂/疼痛/血尿）的解決方案",
+      "value_to_project": "技術全景圖。比 Tomer 2020 更新且涵蓋更廣",
+      "links": {
+        "doi": "https://doi.org/10.1016/j.ucl.2021.08.004",
+        "pubmed": "https://pubmed.ncbi.nlm.nih.gov/34776051/"
+      }
+    },
+    {
+      "id": "U03",
+      "title": "Application, Advancement, and Complication of Ureteral Stent and Encrustation: A Major Complication",
+      "authors": "Bhardwaj M; Ingole N / Jawaharlal Nehru Medical College",
+      "year": 2022,
+      "venue": "Cureus",
+      "doi": "10.7759/cureus.28639",
+      "pmid": "36196322",
+      "doc_type": "綜述review",
+      "access": "開放全文",
+      "tags": [
+        "輸尿管支架",
+        "encrustation",
+        "風險因子",
+        "綜述review"
+      ],
+      "purpose": "結痂的風險因子與管理策略綜述",
+      "abstract_note": "三個技術維度：材料/設計/表面塗層。dwell time是最關鍵風險因子。bacteriuria/urolithiasis/DM/CKD/反覆UTI患者風險高",
+      "value_to_project": "開放全文，可直接下載閱讀。臨床風險因子完整列表",
+      "links": {
+        "doi": "https://doi.org/10.7759/cureus.28639",
+        "pmc": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9524851/"
+      }
+    },
+    {
+      "id": "U04",
+      "title": "Natural biopolymers in the fabrication and coating of ureteral stent: An overview",
+      "authors": "Khan SA; Rahman ZU; Xu G / Guangzhou Medical Univ",
+      "year": 2024,
+      "venue": "Biomater Adv",
+      "doi": "10.1016/j.bioadv.2024.214009",
+      "pmid": "39216319",
+      "doc_type": "綜述review",
+      "access": "付費",
+      "tags": [
+        "輸尿管支架",
+        "chitosan",
+        "alginate",
+        "natural polymer",
+        "綜述review"
+      ],
+      "purpose": "天然生物聚合物（alginate/chitosan）製造和塗層輸尿管支架的回顧",
+      "abstract_note": "Alginate主要用於製造支架本體，Chitosan主要用於塗層抗菌。但抗菌效率不足+塗層附著不完整是限制。生物可降解+抗菌+生物相容性的潛力",
+      "value_to_project": "若Bioteque要做天然材料抗菌塗層，此篇是入門。Chitosan可作為Phase 3抗菌候選",
+      "links": {
+        "doi": "https://doi.org/10.1016/j.bioadv.2024.214009",
+        "pubmed": "https://pubmed.ncbi.nlm.nih.gov/39216319/"
+      }
+    },
+    {
+      "id": "U05",
+      "title": "New insights into the prevention of ureteral stents encrustation",
+      "authors": "Guo H; Yuan JB / Xiangya Hospital",
+      "year": 2023,
+      "venue": "Open Med (Wars)",
+      "doi": "10.1515/med-2023-0854",
+      "pmid": "38075034",
+      "doc_type": "綜述review",
+      "access": "開放全文",
+      "tags": [
+        "輸尿管支架",
+        "encrustation",
+        "conditioning film",
+        "biofilm",
+        "綜述review"
+      ],
+      "purpose": "結痂預防策略更新（2023最新）",
+      "abstract_note": "兩大結痂路徑：conditioning film + biofilm pathway。從結石形成的病理機制出發。結構/材料/bio-coating三方向預防",
+      "value_to_project": "最新綜述（2023），開放全文。對於Bioteque的Phase 3抗結痂方向極有參考價值",
+      "links": {
+        "doi": "https://doi.org/10.1515/med-2023-0854",
+        "pmc": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10710215/"
+      }
+    },
+    {
+      "id": "U06",
+      "title": "Comparison of Superhydrophilic, Liquid-Like, Liquid-Infused, and Superhydrophobic Surfaces in Preventing CAUTI and Encrustation",
+      "authors": "Teng X; Yao C; McCoy CP; Zhang S / Queen's Univ Belfast",
+      "year": 2024,
+      "venue": "ACS Biomater Sci Eng",
+      "doi": "10.1021/acsbiomaterials.3c01577",
+      "pmid": "38183269",
+      "doc_type": "期刊論文",
+      "access": "付費",
+      "tags": [
+        "導尿管",
+        "zwitterionic",
+        "superhydrophilic",
+        "抗菌antimicrobial",
+        "encrustation"
+      ],
+      "purpose": "四種抗汙染表面比較：superhydrophilic zwitterionic vs liquid-like vs liquid-infused vs superhydrophobic",
+      "abstract_note": "Superhydrophilic zwitterionic塗層表現最佳：fibrinogen沉積減72.3%，細菌附著減75%+。COF從0.63降至0.35。但無法殺菌→長期效力受限",
+      "value_to_project": "極高價值！zwitterionic的SBMA/MPC策略量化數據。Bioteque SBMA/MPC方向（計畫書6.5.1）的關鍵文獻",
+      "links": {
+        "doi": "https://doi.org/10.1021/acsbiomaterials.3c01577",
+        "pmc": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10865292/"
+      }
+    },
+    {
+      "id": "U07",
+      "title": "Silicone-hydrocoated ureteral stents encrustation and biofilm formation after 3-week dwell time",
+      "authors": "Barghouthy Y; Wiseman O; Traxer O / Hospital Tenon Paris",
+      "year": 2021,
+      "venue": "World J Urol",
+      "doi": "10.1007/s00345-021-03646-0",
+      "pmid": "33688992",
+      "doc_type": "期刊論文",
+      "access": "付費",
+      "tags": [
+        "輸尿管支架",
+        "silicone",
+        "hydrocoat",
+        "encrustation",
+        "臨床試驗"
+      ],
+      "purpose": "Coloplast Imajinhydro（hydrocoated silicone）vs Boston Scientific Percuflex Plus臨床比較",
+      "abstract_note": "141位病人多中心隨機試驗，3週留置。Silicone hydrocoated：biofilm 0.93 vs Percuflex 1.24（p=0.0021）；mineral encrustation 0.78 vs 1.22（p=0.0048）。Silicone顯著優於polymer",
+      "value_to_project": "極重要的臨床對照數據！證實silicone+hydrophilic coating的結痂率比Boston Scientific Percuflex Plus更低。是商業產品的臨床PoC",
+      "links": {
+        "doi": "https://doi.org/10.1007/s00345-021-03646-0",
+        "pubmed": "https://pubmed.ncbi.nlm.nih.gov/33688992/"
+      }
+    },
+    {
+      "id": "U08",
+      "title": "In vitro and in vivo study of antibacterial and anti-encrustation coating on ureteric stents (propolis EEP)",
+      "authors": "Zhao Y; Chen G; Yang L / Sichuan Univ",
+      "year": 2024,
+      "venue": "BJU Int",
+      "doi": "10.1111/bju.16326",
+      "pmid": "38459675",
+      "doc_type": "期刊論文",
+      "access": "付費",
+      "tags": [
+        "輸尿管支架",
+        "propolis",
+        "Proteus mirabilis",
+        "抗菌antimicrobial",
+        "encrustation"
+      ],
+      "purpose": "蜂膠（propolis）塗層在PU輸尿管支架的抗菌+抗結痂評估（in vivo大鼠Proteus mirabilis模型）",
+      "abstract_note": "EEP（propolis ethanol extract）塗層：>90%抑制biofilm，抑菌可達3個月。大鼠in vivo顯著減少細菌/結石/鹽沉積。biocompatible",
+      "value_to_project": "天然抗菌塗層案例。但商業化難度高+標準化困難。可作為差異化研究方向參考",
+      "links": {
+        "doi": "https://doi.org/10.1111/bju.16326",
+        "pubmed": "https://pubmed.ncbi.nlm.nih.gov/38459675/"
+      }
+    },
+    {
+      "id": "U09",
+      "title": "Inner surface modification of ureteral stent PU tubes by plasma-enhanced CVD to reduce encrustation and biofilm",
+      "authors": "Lim H; Chung JH; Han DH / Sungkyunkwan Univ + Samsung Medical",
+      "year": 2022,
+      "venue": "Biofouling",
+      "doi": "10.1080/08927014.2022.2087513",
+      "pmid": "35707890",
+      "doc_type": "期刊論文",
+      "access": "付費",
+      "tags": [
+        "輸尿管支架",
+        "plasma",
+        "CVD",
+        "PU基材",
+        "encrustation"
+      ],
+      "purpose": "PU管材內壁plasma-CVD表面改質：Ar/O/CH4三種比較",
+      "abstract_note": "尿液浸泡15天結果：Ar+O（hydrophilic）→結痂和biofilm增加；CH4（疏水）→減少5倍以上。挑戰「親水=抗結痂」的傳統認知*",
+      "value_to_project": "重要的反證！純粹的hydrophilic表面在尿液環境下未必抗結痂。需考慮zwitterionic等更專一的抗汙染表面。對Bioteque的塗層策略有重大影響",
+      "links": {
+        "doi": "https://doi.org/10.1080/08927014.2022.2087513",
+        "pubmed": "https://pubmed.ncbi.nlm.nih.gov/35707890/"
+      }
+    },
+    {
+      "id": "U10",
+      "title": "Heparin/poly-l-lysine-copper coating for surface functionalization of ureteral stent",
+      "authors": "Awonusi BO; Yang K; Zhao J / Chinese Academy of Sciences",
+      "year": 2022,
+      "venue": "Regen Biomater",
+      "doi": "10.1093/rb/rbac083",
+      "pmid": "36338173",
+      "doc_type": "期刊論文",
+      "access": "開放全文",
+      "tags": [
+        "輸尿管支架",
+        "heparin",
+        "poly-l-lysine",
+        "copper",
+        "抗菌antimicrobial",
+        "encrustation"
+      ],
+      "purpose": "Heparin/PLL/Cu奈米粒子塗層的in vivo大鼠評估（28天感染膀胱模型）",
+      "abstract_note": "NPs（heparin+poly-l-lysine+Cu）塗層：減少細菌附著+urease量+結晶沉積。28天大鼠in vivo顯著減少host發炎",
+      "value_to_project": "三合一複合塗層思路：抗凝（heparin）+陽離子殺菌（PLL）+金屬離子（Cu）。可作為Phase 3抗菌方向參考。開放全文",
+      "links": {
+        "doi": "https://doi.org/10.1093/rb/rbac083",
+        "pmc": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9629973/"
+      }
     }
   ]
 }
