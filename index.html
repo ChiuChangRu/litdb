@@ -434,7 +434,10 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
           <div style="font-size:13px;font-weight:600;color:var(--accent)">🌙 批次分析（睡前點一下）</div>
           <div style="font-size:11px;color:var(--muted);margin-top:4px">自動分析所有未分析的文獻，電腦保持開啟即可。每篇自動存檔，中途斷電不會遺失。</div>
         </div>
-        <button class="btn btn-p" onclick="batchAnalyzeAll()" style="white-space:nowrap;padding:10px 20px">🤖 開始批次分析</button>
+        <div style="display:flex;gap:6px;flex-direction:column">
+          <button class="btn btn-p" onclick="batchAnalyzeEncrustation()" style="white-space:nowrap;padding:8px 16px;font-size:12px">💧 抗結痂 10 篇（~NT$3）</button>
+          <button class="btn btn-s" onclick="batchAnalyzeAll()" style="white-space:nowrap;padding:6px 16px;font-size:11px">🤖 全部未分析（~NT$9）</button>
+        </div>
       </div>
       <div id="batchStatus" style="margin-top:8px;font-size:12px;color:var(--muted)"></div>
     </div>
@@ -1211,6 +1214,88 @@ function addPatentToLibrary(patentId) {
 // BATCH ANALYSIS: 批次自動分析（睡前點一下）
 // ══════════════════════════════════════════════
 let batchRunning = false;
+
+// 抗結痂專用批次分析（U系列 + 含抗結痂關鍵字的未分析文獻）
+async function batchAnalyzeEncrustation() {
+  if(batchRunning){toast('批次分析已在執行中','error');return}
+  if(!cfg.proxy){toast('請先設定 Claude API Proxy URL','error');return}
+
+  // 篩選：U系列 + 含抗結痂相關關鍵字的未分析文獻
+  const candidates = DB.papers.filter(p=>{
+    if(p.patentResults && Object.keys(p.patentResults).length>0) return false;
+    const hay = `${p.title} ${p.abstract_note||''} ${(p.tags||[]).join(' ')} ${p.id}`.toLowerCase();
+    return p.id.startsWith('U') ||
+      /encrustation|結痂|biofilm|生物膜|zwitterion|sbma|mpc|antifouling|stent|輸尿管|chitosan|propolis/i.test(hay);
+  });
+
+  if(!candidates.length){toast('沒有未分析的抗結痂文獻','success');return}
+
+  const est = (candidates.length * 0.3).toFixed(1);
+  const mins = Math.ceil(candidates.length * 8 / 60);
+  if(!confirm(`💧 抗結痂專題分析\n\n即將分析 ${candidates.length} 篇相關文獻\n預估費用：~NT$${est}\n預估時間：~${mins} 分鐘\n\n包含：${candidates.map(p=>p.id).join(', ')}\n\n保持瀏覽器開啟即可`)) return;
+
+  batchRunning = true;
+  const statusEl = document.getElementById('batchStatus');
+  let done=0, fail=0;
+
+  for(const p of candidates) {
+    if(!batchRunning) break;
+
+    statusEl.innerHTML = `<span class="spinner"></span> 💧 分析中：${p.id}（${done+1}/${candidates.length}）<br>
+      <span style="color:var(--accent2)">✅ ${done} 完成</span> · <span style="color:var(--danger)">❌ ${fail} 失敗</span>
+      <br><button class="btn btn-s" onclick="batchRunning=false" style="margin-top:4px">⏹ 停止</button>`;
+
+    try {
+      const text = (p.abstract_note||'') + '\n' + (p.purpose||'') + '\n' + (p.value_to_project||'');
+      if(!text.trim()) { fail++; continue; }
+
+      const isPatent = p.doc_type==='專利';
+
+      // 抗結痂專用 prompt：強調機制+材料+性能對比
+      const prompt = `分析這篇抗結痂/輸尿管相關文獻。重點：
+1. 結痂/biofilm的形成機制是什麼？
+2. 用了什麼材料/塗層策略？
+3. 親水性 vs 抗結痂的關係（有時親水反而促進結痂！）
+4. 具體性能數據（細菌減少%、結晶減少%、in vitro/in vivo）
+5. 對Bioteque輸尿管支架塗層設計的具體啟示
+
+文獻：${p.title}
+${isPatent?'專利':'文獻'}類型，標籤：${(p.tags||[]).join(', ')}
+內容：${text.slice(0,2500)}
+
+回傳純JSON：{"summary":"一句話","examples":[{"name":"","is_real":true,"credibility":"高/中/低","credibility_reason":"","substrate":"","formulation":{"primer":"","topcoat":""},"process":{"surface_prep":"","coating_method":"","drying":"","curing":""},"results":{"friction":"","adhesion":"","wca":"","durability":"","antifouling":"","antimicrobial":"","encrustation_reduction":"","other":""}}],"mechanism":"結痂機制","key_findings":["關鍵發現"],"actionable_insights":["對Bioteque的具體建議"],"red_flags":["注意事項"],"vs_database":"與資料庫其他文獻的關係","bioteque_relevance":"對Bioteque輸尿管支架的建議"}`;
+
+      const r = await fetch(cfg.proxy, {
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:2500,
+          system:'你是醫材輸尿管支架抗結痂塗層專家。回傳精簡純JSON，繁體中文。注意：親水性不一定等於抗結痂，zwitterionic才是真正的抗汙染策略。沒有的欄位省略。',
+          messages:[{role:'user',content:prompt}]})
+      });
+      const data = await r.json();
+      trackUsage(data);
+      let raw = data.content?.[0]?.text||'';
+      raw = raw.replace(/```json|```/g,'').trim();
+      if(!raw.endsWith('}')){ const lb=raw.lastIndexOf('}'); if(lb>0) raw=raw.slice(0,lb+1); }
+      const analysis = JSON.parse(raw);
+
+      if(!p.patentResults) p.patentResults = {};
+      p.patentResults.full = analysis;
+      done++;
+      saveDB();
+    } catch(e) {
+      console.warn(`${p.id} 分析失敗:`, e);
+      fail++;
+    }
+
+    await new Promise(r=>setTimeout(r,5000));
+  }
+
+  batchRunning = false;
+  statusEl.innerHTML = `✅ 抗結痂專題分析完成！<br>
+    <span style="color:var(--accent2)">成功 ${done} 篇</span> · <span style="color:var(--danger)">失敗 ${fail} 篇</span><br>
+    <span style="color:var(--muted)">明天看看結果，然後修計畫書 §6.6 抗結痂方向</span>`;
+  toast(`抗結痂分析完成：${done} 成功 / ${fail} 失敗`,'success');
+}
 
 async function batchAnalyzeAll() {
   if(batchRunning){toast('批次分析已在執行中','error');return}
