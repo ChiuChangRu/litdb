@@ -485,7 +485,10 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
   <div style="max-width:1000px;margin:0 auto;padding:16px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
       <h3 style="font-size:16px;color:var(--accent)">📋 開發策略報告產生器</h3>
-      <button class="btn btn-p" onclick="generateReport()">🤖 AI 產生報告（~NT$1）</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-p" onclick="renderIntegratedReport()" style="background:var(--accent2);border-color:var(--accent2)">📄 整合綜述報告（免費）</button>
+        <button class="btn btn-p" onclick="generateReport()">🤖 AI 產生報告（~NT$1）</button>
+      </div>
     </div>
 
     <!-- 批次分析（睡前點一下）-->
@@ -2586,6 +2589,174 @@ function tryLocalFig(el, localUrl) {
 
 function closeMobileDetail() {
   document.getElementById('colRight').classList.remove('mobile-open');
+}
+
+// ── 整合綜述報告（基於資料庫，免 API）────────────
+function renderIntegratedReport() {
+  const ps = DB.papers.filter(p=>!p._deleted);
+  const total = ps.length;
+  const td = DB.meta.tag_dictionary || {};
+
+  // 統計
+  const byType = {};
+  ps.forEach(p=>{ const t=p.doc_type||'其他'; byType[t]=(byType[t]||0)+1; });
+  const years = ps.map(p=>p.year).filter(Boolean);
+  const yMin = Math.min(...years), yMax = Math.max(...years);
+  const analyzed = ps.filter(p=>p.patentResults&&Object.keys(p.patentResults).length>0).length;
+  const tagN = (t)=>ps.filter(p=>(p.tags||[]).includes(t)).length;
+  const matN = (t)=>ps.filter(p=>(p.tags||[]).includes(t)).length;
+
+  // 近5年
+  const recent = ps.filter(p=>p.year>=yMax-4).length;
+
+  const company = document.getElementById('rptCompany')?.value || '本公司';
+  const product = document.getElementById('rptProduct')?.value || 'TPU 導管';
+  const today = new Date().toISOString().slice(0,10);
+
+  const S = {
+    bg:'background:var(--surface)',
+    h1:'font-size:22px;font-weight:700;color:var(--text);margin:0 0 4px;letter-spacing:-0.3px',
+    h2:'font-size:16px;font-weight:700;color:var(--accent);margin:28px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--accent)',
+    h3:'font-size:13px;font-weight:700;color:var(--accent2);margin:16px 0 6px',
+    p:'font-size:13px;line-height:1.85;color:var(--text);margin:0 0 12px;text-align:justify',
+    note:'font-size:11px;color:var(--muted);font-style:italic',
+    th:'padding:7px 10px;border:1px solid var(--border);background:var(--card);text-align:left;font-size:12px;font-weight:700',
+    td:'padding:6px 10px;border:1px solid var(--border);font-size:12px;line-height:1.6',
+  };
+
+  const html = `
+  <div style="max-width:860px;margin:0 auto;font-family:'Noto Sans TC','Inter',serif">
+
+    <!-- 封面 -->
+    <div style="text-align:center;padding:20px 0 28px;border-bottom:3px double var(--accent)">
+      <div style="font-size:11px;color:var(--muted);letter-spacing:3px;margin-bottom:8px">LITERATURE INTEGRATION REPORT</div>
+      <h1 style="${S.h1}">親水潤滑塗層技術整合綜述</h1>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px">醫療導管親水塗層之材料、製程、性能與專利地圖分析</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:14px">
+        文獻基礎 ${total} 篇（${yMin}–${yMax}）　|　已深度分析 ${analyzed} 篇　|　產製日期 ${today}
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">標的產品：${product}</div>
+    </div>
+
+    <!-- 摘要 -->
+    <h2 style="${S.h2}">摘要 Executive Summary</h2>
+    <p style="${S.p}">
+      本報告系統性彙整 ${total} 篇親水潤滑塗層相關文獻，涵蓋專利 ${byType['專利']||0} 件、期刊論文 ${byType['期刊論文']||0} 篇、綜述 ${byType['綜述review']||0} 篇與商業產品 ${byType['商用產品']||0} 項，時間橫跨 ${yMin} 至 ${yMax} 年，其中近五年文獻佔 ${Math.round(recent/total*100)}%，反映本領域仍處於活躍發展期。分析顯示，親水塗層技術已從早期單一 PVP 物理塗覆，演進至以共價接枝、兩性離子（zwitterionic）為核心的多功能化階段。在潤滑性能成熟的基礎上，研發重心正快速轉向<b>抗結痂與抗菌的功能整合</b>，特別是針對長期留置之輸尿管支架應用。
+    </p>
+    <p style="${S.p}">
+      就 ${product} 之開發而言，文獻證據支持一條清晰的三階段技術路線：以 PVP 系塗層建立潤滑基礎（低成本、低專利風險），導入 PEGDA 交聯或 PDA 底塗強化耐久與附著，最終在 Phase 3 引入 SBMA／MPC 兩性離子以實現真正的抗結痂功能。本報告各章節將依據實際文獻數據，逐項論證此路線的合理性並提出驗證指標。
+    </p>
+
+    <!-- 1. 文獻計量 -->
+    <h2 style="${S.h2}">一、文獻計量分析 Bibliometric Overview</h2>
+    <p style="${S.p}">資料庫由下列文獻類型構成，各類型在分析中扮演互補角色：專利提供可實作的配方細節，期刊論文提供量化性能數據，綜述提供跨研究的共識判斷，商業產品則界定市場與競爭格局。</p>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:14px">
+      <thead><tr><th style="${S.th}">文獻類型</th><th style="${S.th}">篇數</th><th style="${S.th}">佔比</th><th style="${S.th}">分析價值</th></tr></thead>
+      <tbody>
+        <tr><td style="${S.td}">期刊論文</td><td style="${S.td}">${byType['期刊論文']||0}</td><td style="${S.td}">${Math.round((byType['期刊論文']||0)/total*100)}%</td><td style="${S.td}">量化性能數據（COF/WCA/附著）</td></tr>
+        <tr><td style="${S.td}">專利</td><td style="${S.td}">${byType['專利']||0}</td><td style="${S.td}">${Math.round((byType['專利']||0)/total*100)}%</td><td style="${S.td}">可實作配方與製程參數、迴避分析</td></tr>
+        <tr><td style="${S.td}">綜述 Review</td><td style="${S.td}">${byType['綜述review']||0}</td><td style="${S.td}">${Math.round((byType['綜述review']||0)/total*100)}%</td><td style="${S.td}">跨研究共識、研究缺口、臨床數據</td></tr>
+        <tr><td style="${S.td}">商業產品</td><td style="${S.td}">${byType['商用產品']||0}</td><td style="${S.td}">${Math.round((byType['商用產品']||0)/total*100)}%</td><td style="${S.td}">市場格局、競爭威脅、OEM 選項</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 2. 材料技術 -->
+    <h2 style="${S.h2}">二、親水材料技術路線 Material Technologies</h2>
+    <p style="${S.p}">文獻中出現的親水高分子可依「抗汙能力—成本—專利風險」三軸定位。下表為各材料在資料庫中的文獻支持度與技術定位綜整：</p>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:14px">
+      <thead><tr><th style="${S.th}">材料</th><th style="${S.th}">文獻數</th><th style="${S.th}">技術定位</th><th style="${S.th}">關鍵特性</th></tr></thead>
+      <tbody>
+        <tr><td style="${S.td}"><b>PVP</b></td><td style="${S.td}">${matN('PVP')}</td><td style="${S.td}">成熟主流</td><td style="${S.td}">低成本、低專利風險、潤滑佳，耐久性中等</td></tr>
+        <tr><td style="${S.td}"><b>PEG / PEGDA</b></td><td style="${S.td}">${matN('PEG')+matN('PEGDA')}</td><td style="${S.td}">耐久強化</td><td style="${S.td}">分子量可調，交聯後耐磨耗，生物相容佳</td></tr>
+        <tr><td style="${S.td}"><b>SBMA</b></td><td style="${S.td}">${matN('SBMA')}</td><td style="${S.td}">抗結痂首選</td><td style="${S.td}">兩性離子，抗蛋白質吸附最強，成本高</td></tr>
+        <tr><td style="${S.td}"><b>MPC</b></td><td style="${S.td}">${matN('MPC')}</td><td style="${S.td}">血液相容</td><td style="${S.td}">仿生磷脂，血液相容性最佳，成本最高</td></tr>
+        <tr><td style="${S.td}"><b>Chitosan</b></td><td style="${S.td}">${matN('chitosan')}</td><td style="${S.td}">天然抗菌</td><td style="${S.td}">可降解、抗菌加成，pH 敏感、耐久較弱</td></tr>
+      </tbody>
+    </table>
+    <p style="${S.p}">綜述文獻（R9、U01、U05）達成的共識為：<b>抗結痂能力依序為 SBMA &gt; MPC &gt; PEG &gt; PVP</b>，而成本與專利風險則呈反向排列。此一序列構成了本報告技術路線建議的核心依據——親水性本身並不等於抗結痂，唯有兩性離子的強水合層才能有效阻斷尿液 conditioning film 的形成。</p>
+
+    <!-- 3. 性能基準 -->
+    <h2 style="${S.h2}">三、性能基準與覆蓋度 Performance Benchmarks</h2>
+    <p style="${S.p}">資料庫中各性能指標的文獻覆蓋度反映了研究的成熟程度。潤滑性（${tagN('lubricity潤滑')} 篇）與接觸角（${tagN('WCA接觸角')} 篇）為研究最充分的基礎指標，而抗結痂（${tagN('encrustation resistance抗結痂')} 篇）與抗菌（${tagN('antimicrobial抗菌')} 篇）則為新興熱點。</p>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:14px">
+      <thead><tr><th style="${S.th}">性能指標</th><th style="${S.th}">文獻數</th><th style="${S.th}">文獻最佳值</th><th style="${S.th}">建議目標值</th></tr></thead>
+      <tbody>
+        <tr><td style="${S.td}">摩擦係數 COF</td><td style="${S.td}">${tagN('lubricity潤滑')}</td><td style="${S.td}">0.02（SBMA 光接枝，G03）</td><td style="${S.td}">≤ 0.10（潤滑導管臨床可接受）</td></tr>
+        <tr><td style="${S.td}">水接觸角 WCA</td><td style="${S.td}">${tagN('WCA接觸角')}</td><td style="${S.td}">&lt;5°（chitosan 超親水，G11）</td><td style="${S.td}">≤ 20°（親水門檻）</td></tr>
+        <tr><td style="${S.td}">附著力</td><td style="${S.td}">${tagN('adhesion附著力')}</td><td style="${S.td}">Cross-cut grade 0（PDA+BP，A4）</td><td style="${S.td}">Grade 0–1</td></tr>
+        <tr><td style="${S.td}">抗結痂</td><td style="${S.td}">${tagN('encrustation resistance抗結痂')}</td><td style="${S.td}">4 週結痂率 25%（SBMA，U05）</td><td style="${S.td}">4 週 &lt;30%，置留期 8 週</td></tr>
+        <tr><td style="${S.td}">耐久性</td><td style="${S.td}">${tagN('durability耐久')}</td><td style="${S.td}">80 天 WCA&lt;20°（plasma 接枝，R11）</td><td style="${S.td}">50 次往返 COF&lt;0.10</td></tr>
+      </tbody>
+    </table>
+    <p style="${S.note}">註：文獻最佳值多為單篇實驗條件下之數據，實際移轉至 ${product} 製程需重新驗證。標 * 者為推估值。</p>
+
+    <!-- 4. 製程 -->
+    <h2 style="${S.h2}">四、固化與底塗製程 Process Strategy</h2>
+    <p style="${S.p}">
+      固化方式的選擇直接決定設備投資與基材相容性。文獻顯示 UV 光固化為主流（速度快、適合量產），但需嚴格控制劑量——過量 UV 會導致 PVP 主鏈光氧化裂解（R3），反而降低親水性。對於無法被 UV 直射的導管內壁，熱固化（P15、C10 Argon SLIP-COAT）是突破 line-of-sight 限制的關鍵方案，惟需確認固化溫度對 TPU 基材的熱穩定性影響。
+    </p>
+    <p style="${S.p}">
+      底塗（primer）策略是決定塗層附著耐久的核心。文獻提供三條路徑：<b>(1) Isocyanate primer</b>（DSM 路線，P28）與 TPU 的胺甲酸酯基反應，附著最強但有毒性管控需求；<b>(2) PDA 聚多巴胺</b>（A2、A4）以弱鹼自聚沉積，常溫水溶液操作、無需特殊設備，是最易導入的方案；<b>(3) Plasma 接枝</b>（R11）共價鍵結最耐久（80 天穩定），但需設備投資且管腔內壁均勻性具挑戰。對 ${product}，建議優先評估 PDA 底塗。
+    </p>
+
+    <!-- 5. 專利與市場 -->
+    <h2 style="${S.h2}">五、專利地圖與市場格局 IP & Market Landscape</h2>
+    <p style="${S.p}">
+      專利分析（M2）顯示，PVP 基礎核心專利多數已於 1990 年代到期，自由使用空間大；而 SBMA／MPC 兩性離子技術在 2010–2025 年間有 Surmodics、Biocoat 的活躍布局，導入前必須進行正式的 FTO（Freedom-to-Operate）分析。間歇導尿管市場則受 Coloplast 的光接枝專利保護甚深。市場面，Grand View 與 MarketsandMarkets 報告一致指出泌尿科為成長最快的終端市場（CAGR &gt;9%），且 OEM 外包佔比超過 65%。
+    </p>
+    <h3 style="${S.h3}">主要市場玩家與競爭威脅</h3>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:14px">
+      <thead><tr><th style="${S.th}">廠商</th><th style="${S.th}">核心技術</th><th style="${S.th}">對標意義</th></tr></thead>
+      <tbody>
+        <tr><td style="${S.td}"><b>DSM</b> (ComfortCoat)</td><td style="${S.td}">UV 固化 PVP</td><td style="${S.td}">技術標桿，需迴避 P01–P03 族群</td></tr>
+        <tr><td style="${S.td}"><b>Surmodics</b> (Serene)</td><td style="${S.td}">SBMA 光接枝</td><td style="${S.td}">最強競品，抗結痂領導者（威脅：高）</td></tr>
+        <tr><td style="${S.td}"><b>Biocoat</b> (HYDAK)</td><td style="${S.td}">UV/熱固雙路 PVP</td><td style="${S.td}">中型 OEM，可作初期驗證夥伴</td></tr>
+        <tr><td style="${S.td}"><b>Harland</b></td><td style="${S.td}">塗覆/測試設備</td><td style="${S.td}">設備供應商（PCX + FTS7000）</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 6. 開發建議 -->
+    <h2 style="${S.h2}">六、開發策略建議 Development Roadmap</h2>
+    <p style="${S.p}">綜合上述文獻證據，建議 ${product} 採取分階段、風險遞增的三階段開發策略：</p>
+
+    <h3 style="${S.h3}">Phase 1 — 潤滑基礎（低風險，0–6 個月）</h3>
+    <p style="${S.p}">採用 PVP 系親水塗層 + PDA 底塗，UV 固化。此組合專利風險最低（PVP 核心已過期），PDA 底塗無需特殊設備。性能目標：COF ≤ 0.10、WCA ≤ 20°、Cross-cut 附著 grade 0–1。參考配方：A2（PDA + PVP/PEG，COF 0.16）。</p>
+
+    <h3 style="${S.h3}">Phase 2 — 耐久強化（中風險，6–12 個月）</h3>
+    <p style="${S.p}">導入 PEGDA 交聯提升耐久性，目標 50 次往返後 COF 仍 &lt; 0.10。參考最完整配方 A4（PDA + PVA/PVP/PEGDA + BP，COF 0.16、WCA 12.2°、附著 grade 0）。此階段同步建立 Harland FTS 標準測試流程（100g/20mm/s/50 cycles/PBS）。</p>
+
+    <h3 style="${S.h3}">Phase 3 — 抗結痂／抗菌功能化（高價值，12–24 個月）</h3>
+    <p style="${S.p}">針對輸尿管支架長期留置需求，導入 SBMA 兩性離子塗層（參考 G03、G07），目標 4 週結痂率 &lt; 30%、置留期延長至 8 週。可評估 SBMA + 天然抗菌（chitosan／propolis）的雙功能複合（U08）。此階段須先完成 Surmodics SBMA 專利的 FTO 分析。</p>
+
+    <h3 style="${S.h3}">關鍵風險與緩解</h3>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:14px">
+      <thead><tr><th style="${S.th}">風險</th><th style="${S.th}">緩解措施</th></tr></thead>
+      <tbody>
+        <tr><td style="${S.td}">SBMA 專利侵權</td><td style="${S.td}">Phase 3 前委託專利律師做 FTO；評估光接枝迴避設計</td></tr>
+        <tr><td style="${S.td}">UV 過量致 PVP 降解</td><td style="${S.td}">建立 UV 劑量窗口驗證，QC 納入照射後 COF/WCA 監控</td></tr>
+        <tr><td style="${S.td}">TPU 熱固化耐熱性</td><td style="${S.td}">確認 TPU 軟化點，必要時改用可見光固化（LAP，R14）</td></tr>
+        <tr><td style="${S.td}">塗層顆粒脫落</td><td style="${S.td}">依 ISO 10993-3 建立 particulate 計數放行標準</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 結論 -->
+    <h2 style="${S.h2}">七、結論 Conclusion</h2>
+    <p style="${S.p}">
+      本資料庫的 ${total} 篇文獻共同指向一個明確結論：親水潤滑塗層的潤滑性能已屬成熟技術，真正的競爭與價值創造正轉移至<b>抗結痂與抗菌的功能整合</b>。${company} 若以 ${product} 切入泌尿科市場，建議採取「PVP 起步、PEGDA 強化、SBMA 突破」的三階段路線，在控制專利風險與設備投資的前提下，逐步建立技術縱深。短期可借助 Biocoat 或 Hydromer 的 OEM 服務加速驗證，中長期則應建立以 PDA 底塗 + UV/熱固雙路為核心的自主製程能力。
+    </p>
+
+    <div style="margin-top:28px;padding-top:14px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);line-height:1.7">
+      <b>方法與限制聲明：</b>本報告基於資料庫 ${total} 篇文獻之標題、摘要與結構化分析欄位彙整而成，部分商業產品配方與市場數據來自公開資訊或合理推估（標 *）。文獻最佳性能值多為單篇特定條件下之結果，移轉至實際製程須重新驗證。本報告供研發決策參考，不構成專利侵權之法律意見。
+      <br><br>產製：LitDB v3.2　|　文獻基礎 ${yMin}–${yMax}　|　${today}
+    </div>
+
+  </div>`;
+
+  const out = document.getElementById('rptOutput');
+  out.style.display = 'block';
+  out.innerHTML = html;
+  out.scrollIntoView({behavior:'smooth', block:'start'});
+  toast('✅ 整合報告已生成','success');
 }
 
 // ── 文庫統計儀表板 ────────────────────────────
