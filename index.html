@@ -1852,28 +1852,41 @@ function renderCompareGroups(groups, container, allPapers) {
   const analyzedCount = allPapers.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0).length;
   document.getElementById('compareStats').textContent = `${allPapers.length} 篇文獻 · ${analyzedCount} 篇已分析 · ${Object.keys(groups).length} 群`;
 
+  const ENCRUST_KEY = '💧 抗結痂';
+
   let html = '';
   Object.entries(groups).sort((a,b) => b[1].length - a[1].length).forEach(([group, papers]) => {
+    const isEncrust = group === ENCRUST_KEY;
+
+    const thead = isEncrust
+      ? `<th style="padding:8px;text-align:left;border:1px solid var(--border);white-space:nowrap">ID</th>
+         <th style="padding:8px;text-align:left;border:1px solid var(--border)">機構</th>
+         <th style="padding:8px;text-align:left;border:1px solid var(--border)">標題</th>
+         <th style="padding:8px;text-align:left;border:1px solid var(--border)">抗汙材料</th>
+         <th style="padding:8px;text-align:left;border:1px solid var(--border)">機制</th>
+         <th style="padding:8px;text-align:center;border:1px solid var(--border)">抗結垢</th>
+         <th style="padding:8px;text-align:center;border:1px solid var(--border)">抗菌</th>
+         <th style="padding:8px;text-align:center;border:1px solid var(--border)">COF</th>
+         <th style="padding:8px;text-align:center;border:1px solid var(--border)">WCA</th>
+         <th style="padding:8px;text-align:center;border:1px solid var(--border)">狀態</th>`
+      : `<th style="padding:8px;text-align:left;border:1px solid var(--border);white-space:nowrap">ID</th>
+         <th style="padding:8px;text-align:left;border:1px solid var(--border)">機構</th>
+         <th style="padding:8px;text-align:left;border:1px solid var(--border)">標題</th>
+         <th style="padding:8px;text-align:left;border:1px solid var(--border)">底塗</th>
+         <th style="padding:8px;text-align:left;border:1px solid var(--border)">面塗</th>
+         <th style="padding:8px;text-align:left;border:1px solid var(--border)">固化</th>
+         <th style="padding:8px;text-align:center;border:1px solid var(--border)">COF</th>
+         <th style="padding:8px;text-align:center;border:1px solid var(--border)">附著力</th>
+         <th style="padding:8px;text-align:center;border:1px solid var(--border)">WCA</th>
+         <th style="padding:8px;text-align:center;border:1px solid var(--border)">狀態</th>`;
+
     html += `<div style="margin-bottom:20px">
       <div style="font-size:14px;font-weight:700;color:var(--accent);padding:8px 12px;background:var(--card);border-radius:8px 8px 0 0;border:1px solid var(--border);border-bottom:2px solid var(--accent)">
         ${group}（${papers.length} 篇）
       </div>
       <div style="overflow-x:auto;border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px">
         <table style="width:100%;border-collapse:collapse;font-size:12px">
-          <thead>
-            <tr style="background:var(--card)">
-              <th style="padding:8px;text-align:left;border:1px solid var(--border);white-space:nowrap">ID</th>
-              <th style="padding:8px;text-align:left;border:1px solid var(--border)">機構</th>
-              <th style="padding:8px;text-align:left;border:1px solid var(--border)">標題</th>
-              <th style="padding:8px;text-align:left;border:1px solid var(--border)">底塗</th>
-              <th style="padding:8px;text-align:left;border:1px solid var(--border)">面塗</th>
-              <th style="padding:8px;text-align:left;border:1px solid var(--border)">固化</th>
-              <th style="padding:8px;text-align:center;border:1px solid var(--border)">COF</th>
-              <th style="padding:8px;text-align:center;border:1px solid var(--border)">附著力</th>
-              <th style="padding:8px;text-align:center;border:1px solid var(--border)">WCA</th>
-              <th style="padding:8px;text-align:center;border:1px solid var(--border)">狀態</th>
-            </tr>
-          </thead>
+          <thead><tr style="background:var(--card)">${thead}</tr></thead>
           <tbody>`;
 
     papers.forEach(p => {
@@ -1881,21 +1894,32 @@ function renderCompareGroups(groups, container, allPapers) {
       const r = p.patentResults?.full || {};
       const ex = r.examples?.[0] || {};
       const res = ex.results || {};
+      const fm = ex.formulation || {};
       const org = extractOrg(p);
       const patBadge = getPatentBadge(p);
       const rowBg = hasA ? '' : 'opacity:0.5';
       const shortTitle = (p.title||'').length > 35 ? p.title.slice(0,34)+'…' : p.title;
+      const clickNav = `showView('browse',document.querySelectorAll('.tabs > .tab')[1]);setTimeout(()=>{const idx=DB.papers.findIndex(x=>x.id==='${p.id}');filtered=DB.papers;renderPapers();if(idx>=0)showDetail(idx)},100)`;
 
-      html += `<tr style="cursor:pointer;${rowBg}" onclick="showView('browse',document.querySelectorAll('.tabs > .tab')[1]);setTimeout(()=>{const idx=DB.papers.findIndex(x=>x.id==='${p.id}');filtered=DB.papers;renderPapers();if(idx>=0)showDetail(idx)},100)" title="${p.title}">
+      const tds = isEncrust
+        ? `<td style="padding:6px 8px;border:1px solid var(--border);font-size:11px">${ex.substrate||fm.topcoat||'—'}</td>
+           <td style="padding:6px 8px;border:1px solid var(--border);font-size:11px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${r.mechanism||''}">${r.mechanism||(r.key_findings?.[0])||'—'}</td>
+           <td style="padding:6px 8px;border:1px solid var(--border);text-align:center;font-size:11px;color:${res.encrustation_reduction&&res.encrustation_reduction!=='—'?'#1a7040':'inherit'}">${res.encrustation_reduction||res.antifouling||'—'}</td>
+           <td style="padding:6px 8px;border:1px solid var(--border);text-align:center;font-size:11px">${res.antimicrobial||'—'}</td>
+           <td style="padding:6px 8px;border:1px solid var(--border);text-align:center;font-weight:600;color:var(--accent2)">${res.friction||'—'}</td>
+           <td style="padding:6px 8px;border:1px solid var(--border);text-align:center">${res.wca||'—'}</td>`
+        : `<td style="padding:6px 8px;border:1px solid var(--border);font-size:11px">${fm.primer||'—'}</td>
+           <td style="padding:6px 8px;border:1px solid var(--border);font-size:11px">${fm.topcoat||'—'}</td>
+           <td style="padding:6px 8px;border:1px solid var(--border);font-size:11px">${ex.process?.curing||'—'}</td>
+           <td style="padding:6px 8px;border:1px solid var(--border);text-align:center;font-weight:600;color:var(--accent2)">${res.friction||'—'}</td>
+           <td style="padding:6px 8px;border:1px solid var(--border);text-align:center">${res.adhesion||'—'}</td>
+           <td style="padding:6px 8px;border:1px solid var(--border);text-align:center">${res.wca||'—'}</td>`;
+
+      html += `<tr style="cursor:pointer;${rowBg}" onclick="${clickNav}" title="${p.title}">
         <td style="padding:6px 8px;border:1px solid var(--border);font-weight:600;color:var(--accent);white-space:nowrap">${p.id} ${hasA?'✅':''}</td>
         <td style="padding:6px 8px;border:1px solid var(--border)">${org?`<span style="background:#fff0e6;color:#b85c2a;padding:1px 4px;border-radius:3px;font-size:10px">${org}</span>`:'—'}</td>
         <td style="padding:6px 8px;border:1px solid var(--border);font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${shortTitle}</td>
-        <td style="padding:6px 8px;border:1px solid var(--border);font-size:11px">${ex.formulation?.primer||'—'}</td>
-        <td style="padding:6px 8px;border:1px solid var(--border);font-size:11px">${ex.formulation?.topcoat||'—'}</td>
-        <td style="padding:6px 8px;border:1px solid var(--border);font-size:11px">${ex.process?.curing||'—'}</td>
-        <td style="padding:6px 8px;border:1px solid var(--border);text-align:center;font-weight:600;color:var(--accent2)">${res.friction||'—'}</td>
-        <td style="padding:6px 8px;border:1px solid var(--border);text-align:center">${res.adhesion||'—'}</td>
-        <td style="padding:6px 8px;border:1px solid var(--border);text-align:center">${res.wca||'—'}</td>
+        ${tds}
         <td style="padding:6px 8px;border:1px solid var(--border);text-align:center;font-size:10px">${patBadge||'—'}</td>
       </tr>`;
     });
@@ -1904,7 +1928,7 @@ function renderCompareGroups(groups, container, allPapers) {
   });
 
   html += `<div style="text-align:center;padding:16px">
-    <span style="font-size:12px;color:var(--muted)">✅ = 已分析（有配方/性能數據），半透明 = 未分析。分析越多比較越完整。</span>
+    <span style="font-size:12px;color:var(--muted)">✅ = 已分析，半透明 = 未分析。💧 抗結痂群組顯示：抗汙材料 / 機制 / 抗結垢 / 抗菌 / COF / WCA。</span>
   </div>`;
 
   container.innerHTML = html;
