@@ -2592,9 +2592,8 @@ function closeMobileDetail() {
 function renderLibraryStats(papers) {
   const el = document.getElementById('libraryStatsPanel');
   if(!el) return;
-  // 如果 detail panel 已有內容（正在看某篇），不蓋掉
-  const dp = document.getElementById('detailPanel');
-  if(dp && dp.querySelector('.detail-section')) return;
+  // 如果 libraryStatsPanel 已被 showDetail 清空代表正在看文獻
+  if(!el || el.parentElement.querySelector('.detail-section')) return;
 
   const ps = (papers||filtered||DB.papers).filter(p=>!p._deleted);
   const total = ps.length;
@@ -2629,8 +2628,19 @@ function renderLibraryStats(papers) {
   const topTags = Object.entries(tagCnt).sort((a,b)=>b[1]-a[1]).slice(0,16);
 
   // ── 性能指標覆蓋 ──
-  const perfTags = ['lubricity潤滑','WCA接觸角','antifouling抗汙','antimicrobial抗菌','encrustation resistance抗結痂','biocompatibility'];
-  const perfCoverage = perfTags.map(t=>({tag:t, n:ps.filter(p=>(p.tags||[]).includes(t)).length}));
+  const PERF_DISPLAY = [
+    {tag:'lubricity潤滑',       label:'潤滑 (COF)'},
+    {tag:'COF<0.1',             label:'COF < 0.1'},
+    {tag:'WCA接觸角',           label:'WCA 接觸角'},
+    {tag:'WCA<20°',             label:'WCA < 20°'},
+    {tag:'adhesion附著力',      label:'附著力'},
+    {tag:'antifouling抗汙',     label:'抗汙/抗結痂'},
+    {tag:'antimicrobial抗菌',   label:'抗菌'},
+    {tag:'encrustation resistance抗結痂', label:'encrustation 抗結痂'},
+    {tag:'biocompatibility',    label:'生物相容性'},
+    {tag:'hemocompatibility血液相容', label:'血液相容'},
+  ];
+  const perfCoverage = PERF_DISPLAY.map(({tag,label})=>({tag, label, n:ps.filter(p=>(p.tags||[]).includes(tag)).length}));
 
   el.innerHTML = `
   <div style="padding:14px 4px">
@@ -2694,11 +2704,11 @@ function renderLibraryStats(papers) {
     <!-- 性能指標覆蓋 -->
     <div style="margin-bottom:14px">
       <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:6px">性能指標覆蓋</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
-        ${perfCoverage.map(({tag,n})=>`
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
+        ${perfCoverage.map(({tag,n,label})=>`
           <div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 8px;cursor:pointer" onclick="document.getElementById('fKw').value='${tag}';filterPapers()">
-            <div style="font-size:10px;font-weight:600;color:var(--text)">${tag.replace('潤滑','').replace('接觸角','').replace('抗汙','').replace('抗菌','').replace('抗結痂','')}</div>
-            <div style="font-size:14px;font-weight:700;color:${n>15?'var(--accent2)':n>5?'var(--accent)':'var(--muted)'}">${n}<span style="font-size:10px;color:var(--muted)"> 篇</span></div>
+            <div style="font-size:10px;font-weight:600;color:var(--text)">${label}</div>
+            <div style="font-size:14px;font-weight:700;color:${n>20?'var(--accent2)':n>8?'var(--accent)':'var(--muted)'}">${n}<span style="font-size:10px;color:var(--muted)"> 篇</span></div>
           </div>`).join('')}
       </div>
     </div>
@@ -4245,14 +4255,17 @@ function buildHeatmaps() {
   buildFunctionHeatmap('heatmapWrap8', sub, funcGoals, '基材','功能目標');
 }
 
-// 判定一篇文獻涵蓋哪些功能目標（跨欄位關鍵字）
+// 判定一篇文獻涵蓋哪些功能目標（優先用 tag，fallback 用 regex）
 function paperFunctionGoals(p) {
-  const hay = `${p.title} ${p.abstract_note||''} ${p.purpose||''} ${p.value_to_project||''} ${(p.tags||[]).join(' ')} ${p.id}`.toLowerCase();
+  const tags = new Set(p.tags||[]);
   const goals = [];
-  if(/lubric|潤滑|friction|cof|滑度|harland|tribolog/i.test(hay)) goals.push('潤滑');
-  if(ENCRUST_RE.test(hay) || p.id.startsWith('U')) goals.push('抗結痂');
-  if(/antimicrob|抗菌|antibacter|silver|chlorhexidine|chitosan|propolis|copper|biocid|antibiofilm|殺菌/i.test(hay)) goals.push('抗菌');
-  if(/adhesion|附著|primer|底塗|錨固|anchor|grafting|接枝|silane|pda|polydopamine|covalent|coupling/i.test(hay)) goals.push('附著');
+  // Tag-based（與統計儀表板/關係圖完全一致）
+  if(tags.has('lubricity潤滑')||tags.has('COF<0.1')) goals.push('潤滑');
+  if(tags.has('encrustation resistance抗結痂')||tags.has('antifouling抗汙')) goals.push('抗結痂');
+  if(tags.has('antimicrobial抗菌')) goals.push('抗菌');
+  if(tags.has('adhesion附著力')) goals.push('附著');
+  // Fallback：有分析但 tag 未補全時，用 regex 補救
+  if(!goals.includes('抗結痂') && (ENCRUST_RE.test(p.title)||p.id.startsWith('U'))) goals.push('抗結痂');
   return goals;
 }
 
