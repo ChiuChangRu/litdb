@@ -343,6 +343,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
           <option value="cure_method">固化方式</option>
           <option value="anchor_primer">錨固劑</option>
           <option value="application">應用</option>
+          <option value="indication">適應症</option>
           <option value="performance">性能指標</option>
         </select>
         <label style="font-size:11px;color:var(--muted);margin-left:12px">最少連結</label>
@@ -3173,7 +3174,7 @@ function buildGraph() {
   const W = canvas.offsetWidth, H = 550;
 
   const dict = DB.meta.tag_dictionary||{};
-  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',performance:'#2980b9',market_trend:'#7f8c8d',doc_type:'#8a7e72',access:'#8a7e72'};
+  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9',market_trend:'#7f8c8d',doc_type:'#8a7e72',access:'#8a7e72'};
   const tagCat = {};
   Object.entries(dict).forEach(([cat,tags])=>tags.forEach(t=>{tagCat[t]=cat}));
 
@@ -3225,7 +3226,7 @@ function buildGraph() {
     nodes.push(n); nodeMap[pid]=n;
   });
 
-  const catLabels = {'':'全部標籤',substrate:'基材',hydrophilic_polymer:'親水高分子',cure_method:'固化方式',anchor_primer:'錨固劑',application:'應用',performance:'性能指標'};
+  const catLabels = {'':'全部標籤',substrate:'基材',hydrophilic_polymer:'親水高分子',cure_method:'固化方式',anchor_primer:'錨固劑',application:'應用',indication:'適應症',performance:'性能指標'};
   document.getElementById('graphInfo').innerHTML = `<select onchange="document.getElementById('graphTagCat').value=this.value;buildGraph()" style="background:var(--accent);color:#fff;border:none;padding:3px 8px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer">${Object.entries(catLabels).map(([k,v])=>`<option value="${k}" ${k===catFilter?'selected':''}>${v}</option>`).join('')}</select> ${activePapers.size} 篇 · ${activeTags.size} 標籤 · ${filteredEdges.length} 連結${graphPapers.length!==DB.papers.length?' （篩選後）':''}`;
 
   // Force simulation
@@ -3269,7 +3270,7 @@ function buildGraph() {
 
 function drawGraph(ctx, W, H, highlightId) {
   const dict = DB.meta.tag_dictionary||{};
-  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',performance:'#2980b9',market_trend:'#7f8c8d',doc_type:'#8a7e72',access:'#8a7e72'};
+  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9',market_trend:'#7f8c8d',doc_type:'#8a7e72',access:'#8a7e72'};
   const tagCat = {};
   Object.entries(dict).forEach(([cat,tags])=>tags.forEach(t=>{tagCat[t]=cat}));
 
