@@ -2682,13 +2682,50 @@ function exportExcel() {
   toast('✅ Excel 匯出成功','success');
 }
 
+// ── 化學品 CAS / CID 對照表 ─────────────────
+const CHEM_DB = {
+  "PVP":             {name:"Polyvinylpyrrolidone",       cas:"9003-39-8",    cid:"6917"},
+  "PEG":             {name:"Polyethylene glycol",         cas:"25322-68-3",   cid:"174"},
+  "PEGDA":           {name:"PEG diacrylate",              cas:"26570-48-9",   cid:"697997"},
+  "PVA":             {name:"Polyvinyl alcohol",           cas:"9002-89-5",    cid:"11199"},
+  "PEO":             {name:"Poly(ethylene oxide)",        cas:"25322-68-3",   cid:"174"},
+  "SBMA":            {name:"Sulfobetaine methacrylate",   cas:"3635-01-6",    cid:"71477"},
+  "MPC":             {name:"2-MPC (phospholipid monomer)",cas:"67881-98-5",   cid:"73400"},
+  "HEMA":            {name:"Hydroxyethyl methacrylate",   cas:"868-77-9",     cid:"13360"},
+  "PAA":             {name:"Poly(acrylic acid)",          cas:"9003-01-4",    cid:"1302"},
+  "hyaluronic acid": {name:"Hyaluronic acid",             cas:"9004-61-9",    cid:"3084050"},
+  "heparin":         {name:"Heparin",                     cas:"9041-08-1",    cid:"772"},
+  "chitosan":        {name:"Chitosan",                    cas:"9012-76-4",    cid:"71853"},
+  "alginate":        {name:"Sodium alginate",             cas:"9005-38-3",    cid:"5102882"},
+  "cellulose":       {name:"Hydroxyethyl cellulose",      cas:"9004-62-0",    cid:"24750"},
+  "poly-l-lysine":   {name:"Poly-L-lysine",               cas:"25988-63-0",   cid:"74334"},
+  "benzophenone":    {name:"Benzophenone",                cas:"119-61-9",     cid:"3102"},
+  "PDA-polydopamine":{name:"Dopamine HCl",                cas:"62-31-7",      cid:"65340"},
+  "HDI":             {name:"Hexamethylene diisocyanate",  cas:"822-06-0",     cid:"8192"},
+  "IPDI":            {name:"Isophorone diisocyanate",     cas:"4098-71-9",    cid:"16585"},
+  "isocyanate":      {name:"Hexamethylene diisocyanate",  cas:"822-06-0",     cid:"8192"},
+  "APTES":           {name:"3-Aminopropyltriethoxysilane",cas:"919-30-2",     cid:"12604"},
+  "silane":          {name:"3-Aminopropyltriethoxysilane",cas:"919-30-2",     cid:"12604"},
+  "I-2959":          {name:"Irgacure 2959",               cas:"106797-53-9",  cid:"119084"},
+  "DMPA":            {name:"Dimethoxy phenylacetophenone", cas:"24650-42-8",  cid:"14374"},
+  "LAP":             {name:"Lithium phenyl phosphinate",  cas:"119313-12-1",  cid:"9908089"},
+  "TMPTA":           {name:"Trimethylolpropane triacrylate",cas:"15625-89-5", cid:"15469"},
+  "HDDA":            {name:"1,6-Hexanediol diacrylate",   cas:"13048-33-4",   cid:"68539"},
+  "TEGDA":           {name:"Tetraethylene glycol diacrylate",cas:"17831-71-9",cid:"643789"},
+  "UDMA":            {name:"Urethane dimethacrylate",     cas:"72869-86-4",   cid:"642935"},
+  "GMA":             {name:"Glycidyl methacrylate",       cas:"106-91-2",     cid:"7355"},
+  "DADMAC":          {name:"Diallyldimethylammonium chloride",cas:"7398-69-8",cid:"16541"},
+  "PEI":             {name:"Polyethylenimine",            cas:"9002-98-6",    cid:"2723950"},
+  "copper":          {name:"Copper sulfate",              cas:"7758-99-8",    cid:"24462"},
+  "propolis":        {name:"Caffeic acid (propolis)",     cas:"331-39-5",     cid:"689043"},
+  "QCS":             {name:"Quaternized chitosan",        cas:"83512-85-0",   cid:"71853"},
+  "zwitterionic":    {name:"Carboxybetaine methacrylate", cas:"3978-88-5",    cid:"76929"},
+  "PEGMA":           {name:"PEG methyl ether methacrylate",cas:"26915-72-0", cid:"25608"},
+  "PTHF":            {name:"Polytetrahydrofuran",         cas:"25190-06-1",   cid:"174"},
+};
+
 // ── PubChem 化學結構 ──────────────────────────
 const CHEM_CATS = ['hydrophilic_polymer','anchor_primer'];
-const PUBCHEM_NAME_MAP = {
-  'PDA-polydopamine':'dopamine','PUA':'polyurethane acrylate','PEGDA':'poly(ethylene glycol) diacrylate',
-  'PEO':'poly(ethylene oxide)','PVP':'polyvinylpyrrolidone','PVA':'polyvinyl alcohol',
-  'PEG':'polyethylene glycol','PEGMA':'poly(ethylene glycol) methacrylate'
-};
 
 async function loadChemStructures(p, i) {
   const el = document.getElementById('chemStructures_' + i);
@@ -2701,30 +2738,48 @@ async function loadChemStructures(p, i) {
 
   el.innerHTML = `<div class="detail-section">
     <div class="detail-section-title">⚗️ 化學結構</div>
-    <div id="chemGrid_${i}" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px"></div>
+    <div id="chemGrid_${i}" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px"></div>
   </div>`;
   const grid = document.getElementById('chemGrid_' + i);
 
   for(const name of targets) {
-    const query = PUBCHEM_NAME_MAP[name] || name;
     const card = document.createElement('div');
-    card.style.cssText = 'text-align:center;font-size:10px;color:var(--muted);width:120px';
-    card.innerHTML = `<div style="font-size:10px;color:var(--muted);margin-bottom:2px">${name}</div><div style="font-size:9px;color:var(--border)">載入中…</div>`;
+    card.style.cssText = 'text-align:center;font-size:10px;color:var(--muted);width:170px';
+    card.innerHTML = `<div style="font-size:11px;font-weight:600;color:var(--text);margin-bottom:3px">${name}</div><div style="font-size:9px;color:var(--muted)">載入中…</div>`;
     grid.appendChild(card);
 
+    const db_entry = CHEM_DB[name] || CHEM_DB[name.toLowerCase()];
+
     try {
-      const cidRes = await fetch(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${encodeURIComponent(query)}/cids/JSON`);
-      if(!cidRes.ok) throw new Error('not found');
-      const cidData = await cidRes.json();
-      const cid = cidData.IdentifierList?.CID?.[0];
-      if(!cid) throw new Error('no cid');
-      const imgUrl = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${cid}/PNG?record_type=2d&image_size=small`;
-      const pubUrl = `https://pubchem.ncbi.nlm.nih.gov/compound/${cid}`;
-      card.innerHTML = `<div style="font-size:10px;font-weight:600;color:var(--text);margin-bottom:2px">${name}</div>
-        <a href="${pubUrl}" target="_blank" title="PubChem CID ${cid}">
-          <img src="${imgUrl}" style="width:160px;height:130px;object-fit:contain;border:1px solid var(--border);border-radius:6px;background:#fff" onerror="this.parentElement.parentElement.innerHTML='<span style=font-size:10px;color:var(--muted)>${name}<br>無結構資料</span>'">
+      let imgUrl, linkUrl, subtitle;
+
+      if(db_entry?.cid) {
+        // 優先用 CID → PubChem PNG（最可靠）
+        const cid = db_entry.cid;
+        imgUrl = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${cid}/PNG?record_type=2d&image_size=medium`;
+        linkUrl = `https://pubchem.ncbi.nlm.nih.gov/compound/${cid}`;
+        subtitle = `CAS ${db_entry.cas}`;
+      } else if(db_entry?.cas) {
+        // 備用：CAS → NCI CACTUS（渲染較好）
+        imgUrl = `https://cactus.nci.nih.gov/chemical/structure/${encodeURIComponent(db_entry.cas)}/image?width=320&height=260&linewidth=2&symbolfontsize=14&bgcolor=white`;
+        linkUrl = `https://cactus.nci.nih.gov/chemical/structure/${encodeURIComponent(db_entry.cas)}/names`;
+        subtitle = `CAS ${db_entry.cas}`;
+      } else {
+        // 最後備用：名稱 → NCI CACTUS
+        const query = name.replace(/^PDA-/,'dopamine').replace(/^poly-l-lysine$/i,'poly-L-lysine');
+        imgUrl = `https://cactus.nci.nih.gov/chemical/structure/${encodeURIComponent(query)}/image?width=320&height=260&linewidth=2&symbolfontsize=14&bgcolor=white`;
+        linkUrl = `https://cactus.nci.nih.gov/chemical/structure/${encodeURIComponent(query)}/image`;
+        subtitle = db_entry?.name || name;
+      }
+
+      card.innerHTML = `
+        <div style="font-size:11px;font-weight:600;color:var(--text);margin-bottom:3px">${name}</div>
+        <a href="${linkUrl}" target="_blank">
+          <img src="${imgUrl}" style="width:160px;height:130px;object-fit:contain;border:1px solid var(--border);border-radius:6px;background:#fff"
+            onerror="this.src='https://cactus.nci.nih.gov/chemical/structure/${encodeURIComponent(db_entry?.name||name)}/image?width=320&height=260&linewidth=2&bgcolor=white';this.onerror=null;">
         </a>
-        <div style="font-size:9px;color:var(--muted)">CID ${cid}</div>`;
+        <div style="font-size:9px;color:var(--muted);margin-top:2px">${subtitle}</div>
+        ${db_entry?.name ? `<div style="font-size:9px;color:var(--muted)">${db_entry.name}</div>` : ''}`;
     } catch(e) {
       card.innerHTML = `<div style="font-size:10px;color:var(--muted)">${name}<br><span style="font-size:9px">無結構資料</span></div>`;
     }
