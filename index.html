@@ -826,7 +826,7 @@ async function doSearch() {
     try {
       const r = await fetch(cfg.proxy, {
         method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:100,
+        body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:100,
           messages:[{role:'user',content:`把以下中文醫材/生醫搜尋詞翻譯成 PubMed/Google Patents 適用的英文關鍵字（只回傳英文，不要解釋）：${q}`}]})
       });
       const data = await r.json();
@@ -928,7 +928,7 @@ async function searchPatentUnified(query) {
       try {
         const tr = await fetch(cfg.proxy, {
           method:'POST',headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,
+          body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,
             messages:[{role:'user',content:`翻譯為繁體中文（技術術語保留英文），只回傳翻譯：${abstract.slice(0,400)}`}]})
         });
         const td = await tr.json();
@@ -1082,7 +1082,7 @@ function addPatentToLibraryFull(patentId, title, abstract, withAI) {
       try {
         const resp = await fetch(cfg.proxy, {
           method:'POST',headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,
+          body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,
             system:'你是醫材文獻分類專家。回傳純JSON。繁體中文。',
             messages:[{role:'user',content:`分類此專利，回傳純JSON：{"tags":["標籤1","標籤2"],"purpose":"收錄目的15字","value_to_project":"對專案價值20字"}
 可用標籤：${Object.values(DB.meta.tag_dictionary||{}).flat().join(',')}
@@ -1202,7 +1202,7 @@ async function addSearchResultWithAI(idx, source) {
   try {
     const resp = await fetch(cfg.proxy, {
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,
         system:'你是醫材文獻分類專家。回傳純JSON。繁體中文。',
         messages:[{role:'user',content:`分類此文獻，回傳純JSON：{"tags":["標籤1","標籤2"],"purpose":"收錄目的15字","value_to_project":"對專案價值20字"}
 可用標籤：${Object.values(DB.meta.tag_dictionary||{}).flat().join(',')}
@@ -1296,7 +1296,7 @@ ${isPatent?'專利':'文獻'}類型，標籤：${(p.tags||[]).join(', ')}
 
       const r = await fetch(cfg.proxy, {
         method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:2500,
+        body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:2500,
           system:'你是醫材輸尿管支架抗結痂塗層專家。回傳精簡純JSON，繁體中文。注意：親水性不一定等於抗結痂，zwitterionic才是真正的抗汙染策略。沒有的欄位省略。',
           messages:[{role:'user',content:prompt}]})
       });
@@ -1369,7 +1369,7 @@ async function batchAnalyzeAll() {
 
       const r = await fetch(cfg.proxy, {
         method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:2000,
+        body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:2000,
           system:'你是醫材親水塗層技術分析專家。回傳精簡純JSON，繁體中文。沒有的欄位省略。',
           messages:[{role:'user',content:prompt}]})
       });
@@ -1470,7 +1470,7 @@ ${p.doc_type==='專利'?'迴避:'+((r.key_claims||[]).join('; ')):''}`;
   try {
     const r = await fetch(cfg.proxy, {
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:4000,
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:4000,
         system:`你是醫療器材親水塗層開發策略顧問。根據文獻分析數據，產生結構化的開發策略報告。
 規則：
 1. 繁體中文
@@ -2598,7 +2598,7 @@ async function runPaperAnalysis(i) {
   try {
     const r = await fetch(cfg.proxy, {
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:4000,
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:4000,
         system:'你是醫材親水塗層技術分析專家。回傳精簡的純JSON，不含markdown fence。繁體中文。沒有的欄位不要填空字串，直接省略。',
         messages:[{role:'user',content:`分析以下文獻的技術內容，提取可用於 Bioteque（邦特生物科技）R&D 的情報。
 
@@ -2892,7 +2892,7 @@ ${relatedPatents||'無'}
   try {
     const r = await fetch(cfg.proxy, {
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:4000,
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:4000,
         system:'你是專利分析專家。回傳精簡的純JSON，不含markdown fence。每個欄位用繁體中文，盡量簡短。',
         messages:[{role:'user',content:prompt}]})
     });
@@ -3812,7 +3812,7 @@ Bioteque 現有能力：TPU/Pebax 基材、air plasma 前處理、LED UV 固化�
   try {
     const r = await fetch(cfg.proxy, {
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1200,messages})
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1200,messages})
     });
     const data = await r.json();
     trackUsage(data);
@@ -3937,7 +3937,7 @@ async function translateBatch(i) {
   try {
     const r = await fetch(cfg.proxy, {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({model:'claude-haiku-4-5-20251001', max_tokens:600,
+      body: JSON.stringify({model:'claude-sonnet-4-6', max_tokens:600,
         messages:[{role:'user',content:`將以下醫學文獻摘要翻譯成繁體中文，保留專業術語原文（括號附註）。簡潔精確，不超過200字。\n\n${p.abstract.slice(0,1200)}`}]})
     });
     const data = await r.json();
@@ -4002,7 +4002,7 @@ async function batchAIEnrich() {
     try {
       const r = await fetch(cfg.proxy,{
         method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,
+        body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,
           messages:[{role:'user',content:`你是醫材親水塗層文獻分類專家。根據以下摘要，從有效標籤中選擇適用的，並寫出 purpose 和 value_to_project。
 
 有效標籤：${allValidTags.join(', ')}
@@ -4141,7 +4141,7 @@ async function aiParseAdd() {
   try {
     const r = await fetch(cfg.proxy, {
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:800,
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:800,
         messages:[{role:'user',content:`你是醫材親水塗層文獻分析專家。解析以下文獻資訊，回傳純 JSON（不含 markdown fence）：
 
 有效標籤列表：${allValidTags.join(', ')}
