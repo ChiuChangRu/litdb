@@ -354,7 +354,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
         </div>
         <div class="panel-h">📖 文獻詳情</div>
         <div class="detail-panel" id="detailPanel">
-          <div class="detail-empty">← 點擊文獻卡片查看詳情<br><br>包含中文精華摘要、對專案價值、標籤與原文連結</div>
+          <div id="libraryStatsPanel"></div>
         </div>
       </div>
     </div>
@@ -2378,6 +2378,7 @@ function filterPapers() {
 
   document.getElementById('filterCount').textContent = `${filtered.length} / ${DB.papers.length} 篇`;
   renderPapers();
+  renderLibraryStats(filtered);
 }
 
 function renderPapers() {
@@ -2469,6 +2470,8 @@ function getPatentBadge(p) {
 function toggleValue(id){document.getElementById(id)?.classList.toggle('show')}
 
 function showDetail(i) {
+  const statsEl = document.getElementById('libraryStatsPanel');
+  if(statsEl) statsEl.innerHTML = '';
   const p = filtered[i];
   if(!p) return;
   const link = p.links ? Object.values(p.links)[0] : '';
@@ -2583,6 +2586,136 @@ function tryLocalFig(el, localUrl) {
 
 function closeMobileDetail() {
   document.getElementById('colRight').classList.remove('mobile-open');
+}
+
+// ── 文庫統計儀表板 ────────────────────────────
+function renderLibraryStats(papers) {
+  const el = document.getElementById('libraryStatsPanel');
+  if(!el) return;
+  // 如果 detail panel 已有內容（正在看某篇），不蓋掉
+  const dp = document.getElementById('detailPanel');
+  if(dp && dp.querySelector('.detail-section')) return;
+
+  const ps = (papers||filtered||DB.papers).filter(p=>!p._deleted);
+  const total = ps.length;
+  if(!total) { el.innerHTML = '<div class="detail-empty">無符合文獻</div>'; return; }
+
+  // ── 基礎計數 ──
+  const analyzed = ps.filter(p=>p.patentResults&&Object.keys(p.patentResults).length>0).length;
+  const withAbstract = ps.filter(p=>p.abstract_note&&p.abstract_note.length>30).length;
+
+  // ── 類型分布 ──
+  const byType = {};
+  ps.forEach(p=>{ const t=p.doc_type||'未知'; byType[t]=(byType[t]||0)+1; });
+  const typeColors = {'專利':'#c0392b','期刊論文':'#2d8c5a','綜述review':'#2980b9','商用產品':'#e86c3a','會議論文':'#8e44ad','臨床試驗':'#16a085'};
+
+  // ── 年份分布 ──
+  const byYear = {};
+  ps.forEach(p=>{ if(p.year){ byYear[p.year]=(byYear[p.year]||0)+1; }});
+  const years = Object.keys(byYear).sort();
+  const maxYearCnt = Math.max(...Object.values(byYear));
+
+  // ── 機構分布 ──
+  const byOrg = {};
+  ps.forEach(p=>{
+    const org = extractOrg(p);
+    if(org && org.length>1) byOrg[org]=(byOrg[org]||0)+1;
+  });
+  const topOrgs = Object.entries(byOrg).sort((a,b)=>b[1]-a[1]).slice(0,8);
+
+  // ── 頂標籤 ──
+  const tagCnt = {};
+  ps.forEach(p=>(p.tags||[]).forEach(t=>{ tagCnt[t]=(tagCnt[t]||0)+1; }));
+  const topTags = Object.entries(tagCnt).sort((a,b)=>b[1]-a[1]).slice(0,16);
+
+  // ── 性能指標覆蓋 ──
+  const perfTags = ['lubricity潤滑','WCA接觸角','antifouling抗汙','antimicrobial抗菌','encrustation resistance抗結痂','biocompatibility'];
+  const perfCoverage = perfTags.map(t=>({tag:t, n:ps.filter(p=>(p.tags||[]).includes(t)).length}));
+
+  el.innerHTML = `
+  <div style="padding:14px 4px">
+
+    <!-- 頂部數字卡 -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px">
+      ${[
+        ['📄','篇', total, ''],
+        ['✅','已分析', analyzed, `${Math.round(analyzed/total*100)}%`],
+        ['📝','有摘要', withAbstract, `${Math.round(withAbstract/total*100)}%`]
+      ].map(([icon,label,n,pct])=>`
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center">
+          <div style="font-size:18px;font-weight:700;color:var(--accent)">${n}</div>
+          <div style="font-size:9px;color:var(--muted)">${label}${pct?` (${pct})`:''}</div>
+        </div>`).join('')}
+    </div>
+
+    <!-- 文獻類型 -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:6px">文獻類型</div>
+      ${Object.entries(byType).sort((a,b)=>b[1]-a[1]).map(([type,n])=>{
+        const pct = Math.round(n/total*100);
+        const col = typeColors[type]||'#888';
+        return `<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:11px">
+          <div style="width:80px;color:var(--text);flex-shrink:0">${type}</div>
+          <div style="flex:1;background:#f0ede8;border-radius:3px;height:14px;position:relative;overflow:hidden">
+            <div style="background:${col};width:${pct}%;height:100%;border-radius:3px;transition:width .4s"></div>
+          </div>
+          <div style="min-width:46px;text-align:right;color:var(--muted)">${n} (${pct}%)</div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <!-- 年份分布 -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:6px">年份分布</div>
+      <div style="display:flex;align-items:flex-end;gap:3px;height:60px;padding-bottom:2px">
+        ${years.map(y=>{
+          const n = byYear[y];
+          const h = Math.round(n/maxYearCnt*52)+8;
+          return `<div style="display:flex;flex-direction:column;align-items:center;flex:1;cursor:pointer" onclick="document.getElementById('fKw').value='${y}';filterPapers()">
+            <div style="font-size:9px;color:var(--muted)">${n}</div>
+            <div style="width:100%;background:var(--accent);border-radius:2px 2px 0 0;height:${h}px;opacity:0.75;transition:opacity .2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.75"></div>
+            <div style="font-size:8px;color:var(--muted);writing-mode:vertical-lr;transform:rotate(180deg);margin-top:2px">${y}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+
+    <!-- 機構分布 -->
+    ${topOrgs.length ? `
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:6px">機構/公司 Top ${topOrgs.length}</div>
+      ${topOrgs.map(([org,n])=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid var(--border);font-size:11px;cursor:pointer" onclick="document.getElementById('fKw').value='${org}';filterPapers()">
+          <span style="color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px">${org}</span>
+          <span style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1px 7px;font-size:10px;font-weight:600;color:var(--accent);flex-shrink:0">${n}</span>
+        </div>`).join('')}
+    </div>` : ''}
+
+    <!-- 性能指標覆蓋 -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:6px">性能指標覆蓋</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+        ${perfCoverage.map(({tag,n})=>`
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 8px;cursor:pointer" onclick="document.getElementById('fKw').value='${tag}';filterPapers()">
+            <div style="font-size:10px;font-weight:600;color:var(--text)">${tag.replace('潤滑','').replace('接觸角','').replace('抗汙','').replace('抗菌','').replace('抗結痂','')}</div>
+            <div style="font-size:14px;font-weight:700;color:${n>15?'var(--accent2)':n>5?'var(--accent)':'var(--muted)'}">${n}<span style="font-size:10px;color:var(--muted)"> 篇</span></div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <!-- 熱門標籤 -->
+    <div>
+      <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:6px">高頻標籤</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">
+        ${topTags.map(([t,n])=>`
+          <span style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:2px 8px;font-size:10px;cursor:pointer" onclick="document.getElementById('fKw').value='${t}';filterPapers()">
+            ${t} <b style="color:var(--accent)">${n}</b>
+          </span>`).join('')}
+      </div>
+    </div>
+
+    <div style="text-align:center;padding:12px 0 4px;font-size:10px;color:var(--muted)">點擊任一項目即可篩選 · 點文獻卡片查看詳情</div>
+  </div>`;
 }
 
 // ── 商業產品專屬渲染 ──────────────────────────
