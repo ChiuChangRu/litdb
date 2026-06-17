@@ -1179,6 +1179,51 @@
             "OEM成本需談判*"
           ],
           "bioteque_relevance": "若Bioteque短期需商業化，Biocoat OEM是最快路線；長期自製參考A2/A4配方"
+        },
+        "commercial": {
+          "company": "Biocoat",
+          "product": "HYDAK",
+          "hq": "Horsham, PA, USA",
+          "founded": 1991,
+          "business_model": "OEM塗層服務 + 配方授權",
+          "market_position": "北美中型塗層廠，心血管/泌尿科主力",
+          "coating_technology": {
+            "type": "UV / 熱固化雙路 PVP 基親水塗層",
+            "primer": "HYDAK底塗（配方保密）",
+            "topcoat": "PVP 基親水高分子",
+            "curing": "UV 或 熱固化（客戶選擇）",
+            "substrates": [
+              "PVC",
+              "TPU",
+              "Pebax",
+              "矽膠",
+              "金屬"
+            ],
+            "performance_claims": {
+              "cof": "<0.10",
+              "wca": "<20°",
+              "durability": "通過 ISO 10993"
+            }
+          },
+          "regulatory": {
+            "iso": [
+              "ISO 13485",
+              "ISO 10993"
+            ],
+            "fda": "510(k) 支援（OEM 客戶）",
+            "ce": "MDR 相容"
+          },
+          "applications": [
+            "導管",
+            "guidewire",
+            "輸尿管支架",
+            "導尿管"
+          ],
+          "differentiator": "雙路固化靈活性（UV 設備不足的客戶可選熱固）；IDTE Pinch Test 白皮書共同作者",
+          "weakness": "配方保密，客戶依賴性高；規模小於 DSM/Surmodics",
+          "pricing_tier": "中等（OEM 服務費 $0.5-2/件*）",
+          "competitive_threat_to_bioteque": "低（非台灣市場主力）",
+          "collaboration_opportunity": "可評估作為 Bioteque 初期 OEM 驗證夥伴"
         }
       }
     },
@@ -1252,6 +1297,51 @@
             "OEM費用需洽詢"
           ],
           "bioteque_relevance": "Freudenberg OEM是備選方案；單步製程概念值得Bioteque自製時參考"
+        },
+        "commercial": {
+          "company": "Freudenberg Medical",
+          "product": "LUBRITEQ",
+          "hq": "Freudenberg Group, Germany（醫療部門 Lewiston, ME, USA）",
+          "founded": 1849,
+          "business_model": "CDMO（合約製造+材料供應）",
+          "market_position": "歐洲最強醫材製造集團旗下，塗層+製造一體化",
+          "coating_technology": {
+            "type": "UV 固化合成 hydrogel，客製化配方",
+            "primer": "專有（配方保密）",
+            "topcoat": "合成 hydrogel（可依應用客製）",
+            "curing": "UV（含 UV-B/UV-C 管腔固化）",
+            "substrates": [
+              "TPU",
+              "PVC",
+              "Pebax",
+              "矽膠"
+            ],
+            "performance_claims": {
+              "cof": "極低（具體未公開）",
+              "wca": "<20°",
+              "durability": "臨床驗證"
+            }
+          },
+          "regulatory": {
+            "iso": [
+              "ISO 13485",
+              "ISO 10993",
+              "ISO 14971"
+            ],
+            "fda": "FDA 認可製造商",
+            "ce": "CE MDR 合規"
+          },
+          "applications": [
+            "心血管導管",
+            "神經導管",
+            "泌尿科導管",
+            "guidewire"
+          ],
+          "differentiator": "單步塗覆（節省製程）；管腔內壁 UV-B/UV-C 固化技術；CDMO 整合（塗層+組裝一條龍）",
+          "weakness": "配方完全不透明；CDMO 模式綁定深",
+          "pricing_tier": "高（完整 CDMO 服務）",
+          "competitive_threat_to_bioteque": "中（若 Bioteque 進歐洲市場）",
+          "collaboration_opportunity": "管腔內壁塗層技術可向 Freudenberg 學習，或評估技術授權*"
         }
       }
     },
@@ -1330,6 +1420,53 @@
             "Surmodics專利布局廣，需迴避設計*"
           ],
           "bioteque_relevance": "Serene是直接競爭對手技術；Bioteque若要進入輸尿管支架市場，必須對標此產品"
+        },
+        "commercial": {
+          "company": "Surmodics",
+          "product": "Serene",
+          "hq": "Eden Prairie, MN, USA",
+          "founded": 1979,
+          "business_model": "塗層技術授權 + OEM 服務 + 自有醫材",
+          "market_position": "全球前三親水塗層廠，兩性離子技術領導者",
+          "coating_technology": {
+            "type": "SBMA 兩性離子 UV 光接枝塗層",
+            "primer": "專有光接枝底層",
+            "topcoat": "SBMA 兩性離子聚合物",
+            "curing": "UV 光接枝（photografting）",
+            "substrates": [
+              "PVC",
+              "TPU",
+              "矽膠",
+              "金屬",
+              "PTFE"
+            ],
+            "performance_claims": {
+              "cof": "<0.05",
+              "wca": "<10°",
+              "encrustation_reduction": ">60%",
+              "durability": "臨床多年驗證"
+            }
+          },
+          "regulatory": {
+            "iso": [
+              "ISO 13485",
+              "ISO 10993"
+            ],
+            "fda": "510(k) 多項認可",
+            "ce": "CE MDR"
+          },
+          "applications": [
+            "輸尿管支架",
+            "導尿管",
+            "血管導管",
+            "心臟瓣膜"
+          ],
+          "differentiator": "SBMA 兩性離子技術護城河深；photografting 比物理塗覆耐久 3 倍+；臨床抗結痂數據最強",
+          "weakness": "IP 布局廣，競爭者難以複製；成本高於 PVP 路線",
+          "pricing_tier": "高溢價（授權費 + OEM 服務費）",
+          "competitive_threat_to_bioteque": "高（直接競品，特別是輸尿管支架市場）",
+          "ip_risk": "Surmodics SBMA photografting 專利族群需做 FTO 分析再進入",
+          "collaboration_opportunity": "短期不建議（直接競爭）；長期可評估授權"
         }
       }
     },
@@ -1403,6 +1540,48 @@
             "Hydromer已被更新技術廠商部分取代*"
           ],
           "bioteque_relevance": "法規諮詢資源；短期可購買Hydromer配方評估，長期自製"
+        },
+        "commercial": {
+          "company": "Hydromer",
+          "product": "Lubricious Coatings（多品項）",
+          "hq": "Branchburg, NJ, USA",
+          "founded": 1980,
+          "business_model": "配方銷售 + 法規顧問 + 小量 OEM",
+          "market_position": "產業元老，技術廣但規模小，利基市場",
+          "coating_technology": {
+            "type": "多種親水塗層（PVP/PEG/抗菌/抗血栓）",
+            "primer": "依基材選配",
+            "topcoat": "PVP 基或客製化",
+            "curing": "UV 或熱固",
+            "substrates": [
+              "聚合物",
+              "金屬",
+              "玻璃（通用）"
+            ],
+            "performance_claims": {
+              "cof": "顯著降低",
+              "wca": "<30°"
+            }
+          },
+          "regulatory": {
+            "iso": [
+              "ISO 13485",
+              "ISO 9001"
+            ],
+            "fda": "FDA 登記製造商",
+            "ce": "CE 相容"
+          },
+          "applications": [
+            "導管",
+            "guidewire",
+            "注射器",
+            "通用醫材"
+          ],
+          "differentiator": "1980 創立，產業最老牌；提供法規顧問服務；小批量靈活",
+          "weakness": "規模小，品牌影響力下降；技術未跟上兩性離子趨勢",
+          "pricing_tier": "中低（配方銷售模式）",
+          "competitive_threat_to_bioteque": "低",
+          "collaboration_opportunity": "法規顧問服務值得評估；可購買配方用於快速原型驗證"
         }
       }
     },
@@ -3139,6 +3318,56 @@
             "dsm-firmenich合併後授權政策可能改變*"
           ],
           "bioteque_relevance": "Bioteque的直接對標技術；P01-P03配方分析是迴避設計的起點"
+        },
+        "commercial": {
+          "company": "DSM / dsm-firmenich",
+          "product": "ComfortCoat",
+          "hq": "Heerlen, Netherlands（合併後 dsm-firmenich）",
+          "founded": 1902,
+          "business_model": "材料供應 + 配方授權（全球最大親水塗層授權商）",
+          "market_position": "全球市占率第一*，P01-P03 專利族群核心持有者",
+          "coating_technology": {
+            "type": "UV 固化 PVP 基雙層塗層（業界標準配方）",
+            "primer": "DSM 底塗（含 isocyanate/acrylate 官能基）",
+            "topcoat": "PVP + 交聯劑 UV 固化",
+            "curing": "UV（Harland 設備）",
+            "substrates": [
+              "PVC",
+              "TPU",
+              "Pebax",
+              "矽膠",
+              "金屬（多數醫材基材）"
+            ],
+            "performance_claims": {
+              "cof": "<0.10",
+              "wca": "<20°",
+              "durability": "業界基準",
+              "particulate": "通過法規"
+            }
+          },
+          "regulatory": {
+            "iso": [
+              "ISO 13485",
+              "ISO 10993",
+              "ISO 14971"
+            ],
+            "fda": "多項 510(k) 支援",
+            "ce": "EU MDR 合規"
+          },
+          "applications": [
+            "導管",
+            "guidewire",
+            "輸尿管支架",
+            "導尿管",
+            "球囊",
+            "穿刺針"
+          ],
+          "differentiator": "全球最廣泛授權；P01-P03 核心配方；與 Harland 設備完美整合；法規文件完整",
+          "weakness": "dsm-firmenich 合併後策略轉向，醫療事業部定位未明*；PVP 技術無法差異化",
+          "pricing_tier": "中高（授權費 + 材料供應）",
+          "competitive_threat_to_bioteque": "高（技術標桿，需迴避其核心IP）",
+          "ip_risk": "DSM P01/P02/P03 族群部分仍有效，需確認台灣/目標市場有效性",
+          "collaboration_opportunity": "可購買 ComfortCoat 材料作性能基準比對；長期若 Bioteque 自製需確保迴避"
         }
       }
     },
@@ -3207,6 +3436,43 @@
             "維修保養需依賴Harland服務*"
           ],
           "bioteque_relevance": "Bioteque設備採購路線圖：PCX dip coater + FTS7000是最法規友好的組合"
+        },
+        "commercial": {
+          "company": "Harland Medical Systems",
+          "product": "PCX Dip Coater + FTS7000 測試系統",
+          "hq": "Eden Prairie, MN, USA（Cork, Ireland 歐洲據點）",
+          "founded": 1991,
+          "business_model": "塗層設備製造 + 測試設備 + 製程顧問",
+          "market_position": "親水塗層設備業界標準，與 DSM/Biocoat 緊密整合",
+          "coating_technology": {
+            "type": "Dip coating 設備（非塗層材料供應商）",
+            "primer": "N/A",
+            "topcoat": "N/A（設備商，不提供塗層材料）",
+            "curing": "UV 固化系統整合（與 Phoseon/Heraeus 光源搭配）",
+            "substrates": [
+              "適用所有可 dip 塗覆的醫材"
+            ],
+            "performance_claims": {
+              "equipment": "PCX/RDX-XL，程式化dip速度/UV劑量",
+              "testing": "FTS7000最高精度COF"
+            }
+          },
+          "regulatory": {
+            "iso": [
+              "ISO 13485"
+            ],
+            "fda": "設備符合 GMP"
+          },
+          "applications": [
+            "導管生產線",
+            "guidewire生產線",
+            "品質測試"
+          ],
+          "differentiator": "FTS7000 是行業最精準 COF 測試設備；PCX 系列可程式化生產；法規文件可直接用於 FDA/CE",
+          "weakness": "只賣設備，不提供塗層材料；初始投資高（$200K+*）",
+          "pricing_tier": "高（設備購置成本 $50K-300K*）",
+          "competitive_threat_to_bioteque": "無（設備商，潛在供應商）",
+          "collaboration_opportunity": "Bioteque 自建產線的首選設備方案：PCX dip coater + FTS7000 COF 測試"
         }
       }
     },
@@ -3583,6 +3849,41 @@
             "技術資料不透明*"
           ],
           "bioteque_relevance": "小批量樣品製作的備選OEM廠商"
+        },
+        "commercial": {
+          "company": "AST Products",
+          "product": "LubriLAST",
+          "hq": "Billerica, MA, USA",
+          "founded": 1990,
+          "business_model": "小型 OEM 塗層服務",
+          "market_position": "利基市場，小批量靈活，規模有限",
+          "coating_technology": {
+            "type": "親水潤滑塗層（具體配方未公開）",
+            "primer": "依基材",
+            "topcoat": "親水高分子",
+            "curing": "UV 或熱固",
+            "substrates": [
+              "多種醫材基材"
+            ],
+            "performance_claims": {
+              "cof": "降低",
+              "wca": "<30°*"
+            }
+          },
+          "regulatory": {
+            "iso": [
+              "ISO 13485"
+            ]
+          },
+          "applications": [
+            "導管",
+            "通用醫材"
+          ],
+          "differentiator": "小批量靈活；快速交期",
+          "weakness": "技術資料不透明；規模小，供應穩定性風險",
+          "pricing_tier": "中（小批量溢價）",
+          "competitive_threat_to_bioteque": "低",
+          "collaboration_opportunity": "樣品驗證快速 OEM 選項"
         }
       }
     },
@@ -3788,6 +4089,40 @@
             "產業整合可能影響Bioteque的OEM選擇*"
           ],
           "bioteque_relevance": "歐洲市場進入策略參考；歐盟MDR法規可借助Harland Cork本地支援"
+        },
+        "commercial": {
+          "company": "Surmodics + Harland Medical（產業動態）",
+          "product": "Serene / Harland Cork 歐洲據點",
+          "hq": "愛爾蘭 Cork（Harland 歐洲）",
+          "founded": 2022,
+          "business_model": "產業整合動態：Surmodics 歐洲擴張 + Harland 歐洲服務據點",
+          "market_position": "歐洲市場的兩強布局加速",
+          "coating_technology": {
+            "type": "Surmodics Serene（SBMA）+ Harland 設備整合",
+            "primer": "Surmodics 專有",
+            "topcoat": "SBMA 兩性離子",
+            "curing": "UV photografting",
+            "substrates": [
+              "血管介入導管",
+              "guidewire"
+            ],
+            "performance_claims": {
+              "cof": "<0.05",
+              "wca": "<10°"
+            }
+          },
+          "regulatory": {
+            "ce": "EU MDR 完整支援"
+          },
+          "applications": [
+            "血管介入",
+            "泌尿科"
+          ],
+          "differentiator": "Surmodics 技術 × Harland 設備 × 愛爾蘭地理位置（EU製造優勢）",
+          "weakness": "產業動態，非單一產品",
+          "pricing_tier": "高",
+          "competitive_threat_to_bioteque": "高（若進歐洲市場）",
+          "collaboration_opportunity": "監測 Harland Cork 設備服務，歐洲認證支援潛在合作"
         }
       }
     },
@@ -5321,6 +5656,46 @@
           ],
           "vs_database": "與C04(Hydromer)定位類似但更專注內壁。與C07(Harland)比：Argon賣塗層，Harland賣設備。Argon的內壁塗層能力是獨特賣點",
           "bioteque_relevance": "如果Bioteque產品需要導管內壁潤滑，Argon是Plan A供應商候選。但Bioteque目前主攻外壁UV塗層，內壁需求較低*"
+        },
+        "commercial": {
+          "company": "Argon Medical Devices",
+          "product": "SLIP-COAT™",
+          "hq": "Frisco, TX, USA",
+          "founded": 2008,
+          "business_model": "醫材製造商（非純塗層廠），塗層自製用於自家產品",
+          "market_position": "特殊：熱固化管腔內壁塗層技術，解決 UV line-of-sight 限制",
+          "coating_technology": {
+            "type": "熱固化親水塗層（無 UV，可塗管腔內壁）",
+            "primer": "未公開*",
+            "topcoat": "親水高分子（推測 PVP 系*）",
+            "curing": "熱固化（無需 UV，突破 line-of-sight 限制）",
+            "substrates": [
+              "導管內壁（關鍵差異化）",
+              "Pebax",
+              "TPU"
+            ],
+            "performance_claims": {
+              "cof": "未公開",
+              "wca": "未公開",
+              "inner_lumen": "✅ 可塗內壁（UV無法達到的位置）"
+            }
+          },
+          "regulatory": {
+            "iso": [
+              "ISO 13485"
+            ],
+            "fda": "510(k)"
+          },
+          "applications": [
+            "導管內腔",
+            "引流管",
+            "輸尿管支架內壁"
+          ],
+          "differentiator": "熱固化突破 UV line-of-sight 限制；內壁塗層是最大差異化；對 Bioteque 極具參考價值",
+          "weakness": "配方不透明；熱固化溫度對 TPU 基材影響需確認",
+          "pricing_tier": "未公開（自用產品，非 OEM）",
+          "competitive_threat_to_bioteque": "中（間接競品）",
+          "collaboration_opportunity": "熱固化內壁塗層技術是 Bioteque 的重要學習對象；U09 的 PU 內壁改性文獻對應此應用"
         }
       }
     },
