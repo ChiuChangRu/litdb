@@ -211,7 +211,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 <header>
   <div class="logo" onclick="location.reload()" style="cursor:pointer;color:#fff" title="重新整理">Lit<span style="color:#ffeedd">DB</span></div>
   <span style="font-size:10px;color:rgba(255,255,255,0.7)">v3.2 · 2026-06-15</span>
-  <button id="backBtn" class="btn btn-s" style="display:none;padding:2px 10px;font-size:11px;color:#fff;border-color:rgba(255,255,255,0.4)" onclick="goBack()">← 返回</button>
+  <button id="backBtn" class="btn btn-s" style="display:none;padding:2px 10px;font-size:11px;color:var(--accent);border-color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.85)" onclick="goBack()">← 返回</button>
   <span style="font-size:12px;color:rgba(255,255,255,0.85)">親水塗層文獻知識管理</span>
   <div class="header-r" style="gap:8px">
     <span id="gUserLabel" style="font-size:11px;color:#fff;display:none"></span>
@@ -2168,6 +2168,7 @@ function saveDB() {
 // ══════════════════════════════════════════════
 function toast(m,t=''){const e=document.getElementById('toast');e.textContent=m;e.className='show '+t;clearTimeout(e._t);e._t=setTimeout(()=>e.className='',3000)}
 let previousView = null;
+let savedScrollTop = 0;
 let currentAnalysisTab = 'graph';
 function goBack() {
   if(!previousView) return;
@@ -2178,10 +2179,18 @@ function goBack() {
     showView(previousView, tabs[idx]);
     previousView = null;
     document.getElementById('backBtn').style.display = 'none';
+    // 恢復離開前的滾動位置
+    const list = document.getElementById('paperList');
+    if(list) requestAnimationFrame(()=>{ list.scrollTop = savedScrollTop; });
   }
 }
 function showView(id,el){
   const currentView = document.querySelector('.view.active')?.id?.replace('v-','');
+  // 離開文庫時記錄滾動位置
+  if(currentView === 'browse') {
+    const list = document.getElementById('paperList');
+    if(list) savedScrollTop = list.scrollTop;
+  }
   if(currentView && currentView!==id && !['graph','gap','compare','chat'].includes(currentView)) previousView = currentView;
   // 隱藏所有 view
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
@@ -2342,8 +2351,9 @@ function renderPapers() {
     // 專利狀態
     const patentBadge = getPatentBadge(p);
 
-    return `<div class="paper-card${p._deleted?' deleted':''}" id="pc_${i}" onclick="showDetail(${i});document.querySelectorAll('.paper-card').forEach(c=>c.classList.remove('active'));this.classList.add('active')" style="${analysisStyle}">
-      <div style="display:flex;gap:4px;margin-bottom:4px;flex-wrap:wrap;align-items:center">
+    return `<div class="paper-card${p._deleted?' deleted':''}" id="pc_${i}" onclick="showDetail(${i});document.querySelectorAll('.paper-card').forEach(c=>c.classList.remove('active'));this.classList.add('active')" style="${analysisStyle};position:relative">
+      <button onclick="event.stopPropagation();deletePaper('${p.id}')" title="${p._deleted?'永久刪除':'刪除'}" style="position:absolute;top:7px;right:7px;background:none;border:none;cursor:pointer;font-size:12px;color:var(--muted);padding:1px 3px;border-radius:3px;line-height:1;opacity:0.5" onmouseover="this.style.opacity=1;this.style.color='var(--danger)'" onmouseout="this.style.opacity=0.5;this.style.color='var(--muted)'">${p._deleted?'⛔':'🗑'}</button>
+      <div style="display:flex;gap:4px;margin-bottom:4px;flex-wrap:wrap;align-items:center;padding-right:20px">
         <span class="tag ${typeColor}">${p.doc_type||''}</span>
         <span class="tag tag-gray">${p.id}</span>
         ${p.year?`<span class="tag tag-gray">${p.year}</span>`:''}
