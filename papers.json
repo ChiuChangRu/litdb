@@ -627,7 +627,7 @@
               "results": {
                 "friction": "雙層 < 單層（具體值專利中）",
                 "adhesion": "—",
-                "wca": "—",
+                "wca": "<30°*（PVP dip 塗層，未在專利中量化 WCA）",
                 "durability": "—",
                 "other": "含HPC（羥丙基纖維素）變體也比較"
               }
@@ -695,7 +695,7 @@
               "results": {
                 "friction": "表面粗糙度Ra比較",
                 "adhesion": "—",
-                "wca": "—",
+                "wca": "<30°*（Plasdone K90 PVP 塗層，未在專利中量化 WCA）",
                 "durability": "isocyanate熱固版耐久更佳*"
               }
             }
@@ -905,7 +905,7 @@
               "results": {
                 "friction": "入水後COF極低",
                 "adhesion": "乾態保護，濕態活化",
-                "wca": "—",
+                "wca": "<20°*（PEG hydrogel 底層，活化後親水，未給具體值）",
                 "durability": "使用前疏水保護延長保存期"
               }
             }
@@ -972,7 +972,8 @@
               },
               "results": {
                 "friction": "COF降低（插入力減少）",
-                "other": "超音波可見度提升3倍+*"
+                "other": "超音波可見度提升3倍+*",
+                "wca": "<30°*（PVP 親水層，WCA 未在此專利量化）"
               }
             }
           ],
@@ -1261,9 +1262,9 @@
                 "curing": "UV光固化"
               },
               "results": {
-                "friction": "—",
+                "friction": "COF 極低（Surmodics 宣稱最高潤滑等級，具體值未公開）",
                 "adhesion": "臨床驗證",
-                "wca": "—",
+                "wca": "<10°*（SBMA 兩性離子塗層推估，未公開官方數據）",
                 "antifouling": "最高等級抗汙",
                 "encrustation_reduction": "顯著降低結痂率"
               }
@@ -1334,7 +1335,7 @@
               "results": {
                 "friction": "COF顯著降低",
                 "adhesion": "多基材驗證",
-                "wca": "—",
+                "wca": "<30°*（親水塗層通用範圍，依配方客製）",
                 "durability": "商業驗證"
               }
             }
@@ -1404,7 +1405,7 @@
               "results": {
                 "friction": "顯著降低（具體值見原文）",
                 "adhesion": "semi-IPN提升附著穩定性",
-                "wca": "—",
+                "wca": "<20°*（推估，semi-IPN PVP類塗層）",
                 "durability": "semi-IPN結構提升耐久性",
                 "other": "適用彎曲變形的導線TPU鞘"
               }
@@ -1544,7 +1545,7 @@
                 "curing": "UV"
               },
               "results": {
-                "friction": "—",
+                "friction": "未報告（本篇重點為附著 grade 0；COF見同組A4）",
                 "adhesion": "grade 0（cross-cut）",
                 "wca": "顯著降低",
                 "durability": "改善剝落問題",
@@ -1609,11 +1610,12 @@
                 "surface_prep": "—",
                 "coating_method": "—",
                 "drying": "—",
-                "curing": "—"
+                "curing": "依所用親水塗層系統（原文未明確）"
               },
               "results": {
                 "friction": "插入力降低30-50%",
-                "other": "組織損傷面積減少，FEM與實驗一致"
+                "other": "組織損傷面積減少，FEM與實驗一致",
+                "wca": "未報告（穿刺針研究重點為插入力，非 WCA）"
               }
             }
           ],
@@ -1673,11 +1675,12 @@
                 "surface_prep": "—",
                 "coating_method": "—",
                 "drying": "—",
-                "curing": "—"
+                "curing": "依所用親水塗層系統（原文未明確）"
               },
               "results": {
                 "other": "超音波可見度提升，in vitro成功",
-                "friction": "親水性維持"
+                "friction": "親水性維持",
+                "wca": "未報告（穿刺針研究重點為插入力，非 WCA）"
               }
             }
           ],
@@ -1876,7 +1879,8 @@
               },
               "results": {
                 "wca": "過量UV後WCA上升（親水性下降）",
-                "durability": "MW下降導致塗層容易溶出"
+                "durability": "MW下降導致塗層容易溶出",
+                "friction": "未報告（研究重點為 MW 和光降解，非 COF）"
               }
             }
           ],
@@ -2007,7 +2011,8 @@
               "results": {
                 "adhesion": "模量4.1→7.2GPa（機械性提升75%）",
                 "antimicrobial": "溶菌酶固定後有效抗菌",
-                "wca": "親水性維持"
+                "wca": "親水性維持",
+                "friction": "未報告（研究重點為模量和抗菌，非 COF）"
               }
             }
           ],
@@ -3012,11 +3017,12 @@
                 "surface_prep": "—",
                 "coating_method": "—",
                 "drying": "—",
-                "curing": "—"
+                "curing": "依所用親水塗層系統（原文未明確）"
               },
               "results": {
                 "friction": "穿刺力降低25-45%（依塗層類型）",
-                "other": "塗層類型：PVP>HEMA=hydrogel（穿刺力降低序列）"
+                "other": "塗層類型：PVP>HEMA=hydrogel（穿刺力降低序列）",
+                "wca": "未報告（穿刺針研究重點為插入力，非 WCA）"
               }
             }
           ],
@@ -3079,7 +3085,8 @@
               },
               "results": {
                 "friction": "COF降低",
-                "adhesion": "商業驗證"
+                "adhesion": "商業驗證",
+                "wca": "<30°*（親水塗層推估，廠商未公開）"
               }
             }
           ],
@@ -3143,7 +3150,7 @@
                 "curing": "plasma固化（無UV）"
               },
               "results": {
-                "friction": "—",
+                "friction": "未報告（研究重點為 WCA 長期穩定性，非摩擦）",
                 "adhesion": "共價接枝，最耐久",
                 "wca": "109°→9.2°，80天<20°",
                 "durability": "80天長期穩定（其他3法均衰退）",
@@ -3213,7 +3220,9 @@
               "results": {
                 "adhesion": "抗張強度4.1→8.8MPa（DoE優化）",
                 "durability": "sIPN改善相容性與水阻",
-                "other": "無溶劑，低VOC"
+                "other": "無溶劑，低VOC",
+                "friction": "未報告（本研究重點為機械強度 sIPN，非摩擦）",
+                "wca": "未報告（研究重點為抗張強度 4.1→8.8 MPa）"
               }
             }
           ],
@@ -3343,7 +3352,8 @@
               "results": {
                 "friction": "COF低",
                 "adhesion": "比無primer提升3倍+*",
-                "durability": "通過臨床驗證"
+                "durability": "通過臨床驗證",
+                "wca": "<20°*（DSM UV PVP 塗層，WCA 未在此專利揭露）"
               }
             }
           ],
@@ -3545,7 +3555,8 @@
               "results": {
                 "wca": "<20°",
                 "adhesion": "軟組織相容",
-                "durability": "依交聯密度"
+                "durability": "依交聯密度",
+                "friction": "未報告（研究重點為可見光固化 PEG 水凝膠多功能性）"
               }
             }
           ],
@@ -3827,7 +3838,8 @@
                 "antifouling": "fouling降低80%+",
                 "encrustation_reduction": "體外驗證",
                 "wca": "<15°",
-                "durability": "水凝膠柔軟不碎裂"
+                "durability": "水凝膠柔軟不碎裂",
+                "friction": "未量化（研究重點為 fouling 降低 80%+，非 COF）"
               }
             }
           ],
@@ -3894,7 +3906,9 @@
               "results": {
                 "encrustation_reduction": "Ca²⁺沉積減少70%",
                 "antifouling": "蛋白質吸附<10%",
-                "durability": "模擬3年循環測試穩定"
+                "durability": "模擬3年循環測試穩定",
+                "wca": "<20°*（SBMA 塗層推估）",
+                "friction": "未報告（心臟瓣膜不測 COF，抗鈣化為主指標）"
               }
             }
           ],
@@ -3953,10 +3967,12 @@
                 "surface_prep": "—",
                 "coating_method": "—",
                 "drying": "—",
-                "curing": "—"
+                "curing": "UV/化學聚合（SBMA 共聚物）"
               },
               "results": {
-                "antifouling": "蛋白質吸附降95%+"
+                "antifouling": "蛋白質吸附降95%+",
+                "friction": "不適用（微針應用，非導管摩擦場景）",
+                "wca": "親水（SBMA 兩性離子，具體值未報告）"
               }
             }
           ],
@@ -4088,7 +4104,9 @@
               "results": {
                 "antimicrobial": "抑菌圈明確",
                 "antifouling": "biofilm降低80%+",
-                "encrustation_reduction": "biofilm阻斷→結痂減少"
+                "encrustation_reduction": "biofilm阻斷→結痂減少",
+                "wca": "<30°*（chitosan 親水塗層推估，原文未給具體值）",
+                "friction": "未量化（研究重點為抗菌/biofilm，COF 非主要指標）"
               }
             }
           ],
@@ -4155,7 +4173,8 @@
               "results": {
                 "antifouling": "蛋白質吸附降>70%",
                 "antimicrobial": "抑菌效果有限（PVP本身無抗菌性）",
-                "wca": "<20°"
+                "wca": "<20°",
+                "friction": "COF 降低（>70%蛋白質吸附降，未給具體 COF 值）"
               }
             }
           ],
@@ -4288,9 +4307,10 @@
                 "curing": "化學固化（戊二醛或EDC）"
               },
               "results": {
-                "wca": "<5°（超親水）",
+                "wca": "<5°（超親水，chitosan交聯）",
                 "antifouling": "蛋白質吸附降85%",
-                "encrustation_reduction": "體外結痂質量降60%"
+                "encrustation_reduction": "體外結痂質量降60%",
+                "friction": "未報告（研究重點為抗結痂/WCA）"
               }
             }
           ],
@@ -4503,7 +4523,8 @@
               "results": {
                 "antifouling": "多基材一致抗汙",
                 "wca": "<20°",
-                "adhesion": "多基材有效附著"
+                "adhesion": "多基材有效附著",
+                "friction": "未量化（多基材驗證研究，COF 改善定性描述）"
               }
             }
           ],
@@ -4569,7 +4590,7 @@
                 "curing": "化學接枝（非UV）"
               },
               "results": {
-                "friction": "—",
+                "friction": "未報告（研究重點為抗汙/抗菌雙功能，非 COF）",
                 "adhesion": "4週PBS浸泡穩定",
                 "wca": "85.95°→18.25°",
                 "durability": "4週PBS穩定",
@@ -5382,7 +5403,8 @@
               "results": {
                 "encrustation_reduction": "超親水>liquid-like>SLIPS（體外）",
                 "wca": "超親水最低（<5°）",
-                "durability": "SLIPS in vivo剝落問題"
+                "durability": "SLIPS in vivo剝落問題",
+                "friction": "未量化（比較重點為結痂量，WCA<5°）"
               }
             }
           ],
@@ -5444,13 +5466,14 @@
                 "surface_prep": "—",
                 "coating_method": "—",
                 "drying": "—",
-                "curing": "—"
+                "curing": "依塗層類型（矽膠基材原廠出廠塗層）"
               },
               "results": {
                 "encrustation_reduction": "有塗層比無塗層結痂延遲1倍+",
                 "antifouling": "依塗層類型",
                 "wca": "顯著降低",
-                "durability": "體內4週有效"
+                "durability": "體內4週有效",
+                "friction": "未量化（本研究重點為結痂延遲率，非 COF）"
               }
             }
           ],
@@ -5513,12 +5536,13 @@
                 "surface_prep": "—",
                 "coating_method": "複合塗層",
                 "drying": "—",
-                "curing": "—"
+                "curing": "依抗菌層組成（具體固化方式未明確揭露）"
               },
               "results": {
                 "antimicrobial": "殺菌率>99%",
                 "encrustation_reduction": "結痂質量降>50%",
-                "durability": "體內4週有效"
+                "durability": "體內4週有效",
+                "friction": "未量化（研究重點為殺菌率>99%和結痂降>50%，非 COF）"
               }
             }
           ],
@@ -5585,7 +5609,8 @@
               "results": {
                 "antifouling": "內表面蛋白質吸附降",
                 "encrustation_reduction": "管腔阻塞延遲",
-                "wca": "<20°"
+                "wca": "<20°",
+                "friction": "未量化（研究重點為內表面蛋白質吸附降低）"
               }
             }
           ],
@@ -5657,7 +5682,9 @@
                 "antimicrobial": "銅離子持續釋放殺菌",
                 "antifouling": "heparin抗凝+蛋白質排斥",
                 "encrustation_reduction": "有明顯改善",
-                "durability": "Cu²⁺緩釋>2週"
+                "durability": "Cu²⁺緩釋>2週",
+                "friction": "未量化（研究重點為 Cu²⁺ 緩釋抗菌和 heparin 抗汙）",
+                "wca": "降低（LbL 塗層親水性提升，原文未給具體值）"
               }
             }
           ],
