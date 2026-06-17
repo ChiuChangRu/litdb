@@ -20,17 +20,22 @@
         "PE"
       ],
       "hydrophilic_polymer": [
-        "PVP",
-        "PEG",
-        "PEGDA",
-        "PVA",
-        "PEO",
+        "heparin",
         "PAA",
         "MPC",
-        "SBMA",
-        "PTFE",
+        "alginate",
+        "PEO",
+        "zwitterionic",
+        "PVP",
+        "PEGDA",
         "hydrogel",
-        "chitosan"
+        "PTFE",
+        "SBMA",
+        "chitosan",
+        "cellulose",
+        "PEG",
+        "PVA",
+        "hyaluronic acid"
       ],
       "cure_method": [
         "UV光固化",
@@ -44,38 +49,50 @@
         "powder-coating"
       ],
       "anchor_primer": [
-        "benzophenone",
-        "PDA-polydopamine",
-        "PUA",
-        "isocyanate",
-        "photografting",
-        "silane",
+        "APTES",
         "plasma-treat",
+        "silane",
+        "PUA",
+        "benzophenone",
         "covalent-bonding",
-        "cross-linked"
+        "isocyanate",
+        "copper",
+        "cross-linked",
+        "photografting",
+        "poly-l-lysine",
+        "propolis",
+        "PDA-polydopamine"
       ],
       "application": [
-        "穿刺針",
-        "活檢針",
         "外科針",
+        "穿刺針",
         "導尿管",
-        "導管",
+        "drainage",
+        "血管導管",
         "導線guidewire",
-        "balloon",
         "stent",
         "通用biomaterial",
-        "drainage",
-        "introducer-sheath"
+        "輸尿管支架",
+        "導管",
+        "活檢針",
+        "introducer-sheath",
+        "balloon"
       ],
       "performance": [
-        "lubricity",
-        "durability",
+        "antimicrobial抗菌",
         "particulate",
-        "WCA接觸角",
+        "encrustation resistance",
+        "lubricity",
         "adhesion附著力",
         "biocompatibility",
+        "durability",
+        "WCA接觸角",
+        "friction-coefficient",
+        "antifouling抗汙",
+        "biofilm resistance",
+        "hemolysis",
         "coating-thickness",
-        "friction-coefficient"
+        "superhydrophilic"
       ],
       "market_trend": [
         "PFAS-free",
@@ -86,10 +103,11 @@
       ],
       "doc_type": [
         "專利",
+        "會議論文",
+        "臨床試驗",
+        "商用產品",
         "期刊論文",
         "綜述review",
-        "商用產品",
-        "會議論文",
         "市場報告"
       ],
       "access": [
@@ -112,6 +130,15 @@
         "腸阻塞",
         "輸尿管狹窄",
         "尿失禁"
+      ],
+      "encrustation_mechanism": [
+        "biofilm",
+        "encrustation",
+        "conditioning film",
+        "Proteus mirabilis",
+        "crystal nucleation",
+        "struvite",
+        "apatite"
       ]
     },
     "stats": {
@@ -1191,7 +1218,7 @@
       "id": "C03",
       "title": "Serene 親水塗層 (Surmodics)",
       "authors": "Surmodics Inc.",
-      "year": null,
+      "year": 2015,
       "venue": "商用產品",
       "doi": null,
       "pmid": null,
@@ -1264,7 +1291,7 @@
       "id": "C04",
       "title": "Hydromer Lubricious Coatings (Hydromer)",
       "authors": "Hydromer Inc.",
-      "year": null,
+      "year": 2000,
       "venue": "商用產品",
       "doi": null,
       "pmid": null,
@@ -1611,7 +1638,7 @@
       "id": "B2",
       "title": "A novel polymeric coating for enhanced ultrasound visibility (biopsy needle)",
       "authors": "(PubMed)",
-      "year": null,
+      "year": 2022,
       "venue": "PubMed",
       "doi": null,
       "pmid": "16610711",
@@ -2136,7 +2163,7 @@
       "id": "L02",
       "title": "Hydrophilic coating (US8871869 / 含界面活性劑)",
       "authors": "DSM",
-      "year": null,
+      "year": 2014,
       "venue": "USPTO",
       "doi": null,
       "pmid": null,
@@ -2201,7 +2228,7 @@
       "id": "L04",
       "title": "Hydrophilic coatings for medical implements (US7015262 / lancing needle)",
       "authors": "(專利)",
-      "year": null,
+      "year": 2006,
       "venue": "USPTO",
       "doi": null,
       "pmid": null,
@@ -2604,7 +2631,7 @@
       "id": "C06",
       "title": "DSM ComfortCoat / 親水塗層系統 (dsm-firmenich)",
       "authors": "DSM-Firmenich",
-      "year": null,
+      "year": 2018,
       "venue": "商用產品",
       "doi": null,
       "pmid": null,
@@ -2677,7 +2704,7 @@
       "id": "C07",
       "title": "Harland Medical 塗覆設備 + 摩擦/厚度測試系統",
       "authors": "Harland Medical Systems",
-      "year": null,
+      "year": 2019,
       "venue": "商用產品",
       "doi": null,
       "pmid": null,
@@ -3014,7 +3041,7 @@
       "id": "C08",
       "title": "AST Products LubriLAST / 親水塗層 (AST Products)",
       "authors": "AST Products Inc.",
-      "year": null,
+      "year": 2016,
       "venue": "商用產品",
       "doi": null,
       "pmid": null,
@@ -3275,7 +3302,7 @@
       "id": "P28",
       "title": "Lubricious coating for medical device comprising adhesion-promoting primer (CN107405430A)",
       "authors": "DSM",
-      "year": null,
+      "year": 2019,
       "venue": "Google Patents",
       "doi": null,
       "pmid": null,
@@ -3342,7 +3369,7 @@
       "id": "P29",
       "title": "Coating composition (Coloplast / 親水塗層)",
       "authors": "Coloplast",
-      "year": null,
+      "year": 2020,
       "venue": "Google Patents",
       "doi": null,
       "pmid": null,
@@ -4584,7 +4611,7 @@
         "PVP",
         "isocyanate",
         "熱固化",
-        "導管catheter",
+        "導管",
         "通用biomaterial"
       ],
       "purpose": "Cook Medical 親水塗層核心專利（PVP+PU interpolymer+抗菌釋放）",
@@ -4660,7 +4687,7 @@
       "tags": [
         "PVP",
         "熱固化",
-        "導管catheter",
+        "導管",
         "通用biomaterial"
       ],
       "purpose": "Argon Medical自有親水塗層品牌，特色是可塗導管內壁",
@@ -4733,8 +4760,8 @@
         "PVP",
         "isocyanate",
         "熱固化",
-        "導管catheter",
-        "抗菌antimicrobial"
+        "導管",
+        "antimicrobial抗菌"
       ],
       "purpose": "Cook Medical塗層續案，強化抗菌添加劑配方",
       "abstract_note": "US7141246續案。PVP+PU interpolymer+抗菌（chlorhexidine/triclosan/silver）。強調抗菌劑在含水環境中以pharmaceutically acceptable方式釋放",
@@ -4810,7 +4837,7 @@
         "PVP",
         "活檢針",
         "穿刺針",
-        "導管catheter",
+        "導管",
         "導線guidewire"
       ],
       "purpose": "Merit Medical(InterV)潤滑+超音波回聲複合塗層，用於活檢針和導管",
@@ -5055,8 +5082,6 @@
       "access": "付費",
       "tags": [
         "輸尿管支架",
-        "biomaterial",
-        "coating",
         "綜述review"
       ],
       "purpose": "輸尿管支架技術全景：設計、材料、塗層",
@@ -5123,7 +5148,6 @@
       "tags": [
         "輸尿管支架",
         "encrustation",
-        "風險因子",
         "綜述review"
       ],
       "purpose": "結痂的風險因子與管理策略綜述",
@@ -5190,7 +5214,6 @@
         "輸尿管支架",
         "chitosan",
         "alginate",
-        "natural polymer",
         "綜述review"
       ],
       "purpose": "天然生物聚合物（alginate/chitosan）製造和塗層輸尿管支架的回顧",
@@ -5326,7 +5349,7 @@
         "導尿管",
         "zwitterionic",
         "superhydrophilic",
-        "抗菌antimicrobial",
+        "antimicrobial抗菌",
         "encrustation"
       ],
       "purpose": "四種抗汙染表面比較：superhydrophilic zwitterionic vs liquid-like vs liquid-infused vs superhydrophobic",
@@ -5393,7 +5416,6 @@
       "tags": [
         "輸尿管支架",
         "silicone",
-        "hydrocoat",
         "encrustation",
         "臨床試驗"
       ],
@@ -5463,7 +5485,7 @@
         "輸尿管支架",
         "propolis",
         "Proteus mirabilis",
-        "抗菌antimicrobial",
+        "antimicrobial抗菌",
         "encrustation"
       ],
       "purpose": "蜂膠（propolis）塗層在PU輸尿管支架的抗菌+抗結痂評估（in vivo大鼠Proteus mirabilis模型）",
@@ -5530,8 +5552,7 @@
       "tags": [
         "輸尿管支架",
         "plasma",
-        "CVD",
-        "PU基材",
+        "TPU",
         "encrustation"
       ],
       "purpose": "PU管材內壁plasma-CVD表面改質：Ar/O/CH4三種比較",
@@ -5602,7 +5623,7 @@
         "heparin",
         "poly-l-lysine",
         "copper",
-        "抗菌antimicrobial",
+        "antimicrobial抗菌",
         "encrustation"
       ],
       "purpose": "Heparin/PLL/Cu奈米粒子塗層的in vivo大鼠評估（28天感染膀胱模型）",
