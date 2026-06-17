@@ -201,6 +201,57 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 .batch-actions{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
 .batch-check{flex-shrink:0;margin-top:2px;accent-color:var(--accent2)}
 @media(max-width:900px){.browse-columns{flex-direction:column}.col-mid,.col-right{width:100%!important}.col-resize{display:none}.browse-filters{white-space:normal}.chat-layout,.add-layout{grid-template-columns:1fr}}
+
+/* ── 手機版 ≤600px ── */
+@media(max-width:600px){
+  /* Header 精簡：只保留 logo + 返回 + 右側 icon */
+  header{padding:6px 12px;gap:8px}
+  header .header-r{gap:4px}
+  /* 隱藏非必要 header 元素 */
+  header > span:not(#costDisplay):not(#dbStats){display:none!important}
+  #costDisplay{font-size:10px;padding:1px 5px}
+  #dbStats{font-size:10px;padding:1px 5px}
+  #gSignInBtn,#gSaveBtn,#gLoadBtn,#gOutBtn,#gUserLabel{display:none!important}
+  /* Tab：縮短文字 */
+  .tabs{gap:0}
+  .tab{font-size:12px;padding:8px 10px;flex:1;text-align:center;white-space:nowrap}
+  /* 隱藏 tab 文字，只保留 emoji */
+  .tab-text{display:none}
+  /* main 縮 padding */
+  .main{padding:8px}
+  /* 文庫：清單全寬，detail panel 改為底部滑入覆蓋 */
+  .browse-columns{flex-direction:column!important;height:auto!important}
+  .col-left{width:100%!important;min-width:0!important}
+  .col-mid{display:none!important}
+  .col-right{
+    position:fixed!important;bottom:0!important;left:0!important;right:0!important;
+    width:100%!important;height:85dvh!important;
+    border-radius:16px 16px 0 0!important;
+    box-shadow:0 -4px 24px rgba(0,0,0,0.18)!important;
+    transform:translateY(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
+    z-index:200;overflow-y:auto!important;
+    background:var(--surface)!important;
+  }
+  .col-right.mobile-open{transform:translateY(0)!important}
+  /* detail panel 內加關閉把手 */
+  .detail-handle{display:block!important}
+  /* 卡片更大點擊區 */
+  .paper-card{padding:12px 10px;margin-bottom:6px}
+  /* 按鈕放大觸控區 */
+  .btn{min-height:36px;font-size:13px}
+  /* filter tags 換行 */
+  .browse-filters{flex-wrap:wrap!important}
+  /* 分析 tab 子選單 */
+  .analysis-tabs{flex-wrap:wrap!important;gap:4px!important}
+  .analysis-tabs .btn{font-size:11px;padding:5px 8px}
+  /* 比較表格 */
+  .compare-table-wrap{overflow-x:auto}
+  /* modal */
+  .mobile-hide{display:none!important}
+  .detail-panel{position:static!important;max-height:none!important}
+  .modal{width:95vw!important;padding:14px!important}
+  .patent-modal-body{width:98vw!important;max-width:none!important}
+}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+TC:wght@400;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
@@ -212,7 +263,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
   <div class="logo" onclick="location.reload()" style="cursor:pointer;color:#fff" title="重新整理">Lit<span style="color:#ffeedd">DB</span></div>
   <span style="font-size:10px;color:rgba(255,255,255,0.7)">v3.2 · 2026-06-15</span>
   <button id="backBtn" class="btn btn-s" style="display:none;padding:2px 10px;font-size:11px;color:var(--accent);border-color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.85)" onclick="goBack()">← 返回</button>
-  <span style="font-size:12px;color:rgba(255,255,255,0.85)">親水塗層文獻知識管理</span>
+  <span class="mobile-hide" style="font-size:12px;color:rgba(255,255,255,0.85)">親水塗層文獻知識管理</span>
   <div class="header-r" style="gap:8px">
     <span id="gUserLabel" style="font-size:11px;color:#fff;display:none"></span>
     <button class="btn btn-s" id="gSignInBtn" onclick="googleSignIn()" style="color:#fff;border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.15)">G 登入 Google</button>
@@ -228,10 +279,10 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 </header>
 
 <div class="tabs">
-  <div class="tab" onclick="showView('search',this)">🔍 檢索</div>
-  <div class="tab active" onclick="showView('browse',this)">📚 文庫 <span class="badge" id="browseCount">0</span><span class="badge" id="analyzedCount" style="background:var(--accent2)">0</span></div>
-  <div class="tab" onclick="showView('analysis',this)">📊 分析</div>
-  <div class="tab" onclick="showView('report',this)">📋 報告</div>
+  <div class="tab" onclick="showView('search',this)">🔍<span class="tab-text"> 檢索</span></div>
+  <div class="tab active" onclick="showView('browse',this)">📚<span class="tab-text"> 文庫</span> <span class="badge" id="browseCount">0</span><span class="badge" id="analyzedCount" style="background:var(--accent2)">0</span></div>
+  <div class="tab" onclick="showView('analysis',this)">📊<span class="tab-text"> 分析</span></div>
+  <div class="tab" onclick="showView('report',this)">📋<span class="tab-text"> 報告</span></div>
 </div>
 
 <div class="main">
@@ -307,6 +358,10 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
       </div>
       <div class="col-resize" onmousedown="startResize(event,0)"></div>
       <div class="panel col-right" id="colRight" style="display:flex;flex-direction:column">
+        <div class="detail-handle" style="display:none;text-align:center;padding:8px 0 4px;cursor:pointer" onclick="closeMobileDetail()">
+          <div style="width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 4px"></div>
+          <span style="font-size:11px;color:var(--muted)">關閉</span>
+        </div>
         <div class="panel-h">📖 文獻詳情</div>
         <div class="detail-panel" id="detailPanel">
           <div class="detail-empty">← 點擊文獻卡片查看詳情<br><br>包含中文精華摘要、對專案價值、標籤與原文連結</div>
@@ -2518,6 +2573,11 @@ function showDetail(i) {
     }
   }
   loadChemStructures(p, i);
+  // 手機：滑入 detail panel
+  if(window.innerWidth <= 600) {
+    document.getElementById('colRight').classList.add('mobile-open');
+    document.getElementById('colRight').scrollTop = 0;
+  }
 }
 
 function tryLocalFig(el, localUrl) {
@@ -2525,6 +2585,10 @@ function tryLocalFig(el, localUrl) {
   img.onload = () => { el.src = localUrl; };
   img.onerror = () => { el.parentElement.innerHTML = ''; };
   img.src = localUrl;
+}
+
+function closeMobileDetail() {
+  document.getElementById('colRight').classList.remove('mobile-open');
 }
 
 // ── PubChem 化學結構 ──────────────────────────
