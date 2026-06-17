@@ -431,6 +431,50 @@
       "value_to_project": "UV+熱固混合製程具體配方與參數",
       "links": {
         "patents": "https://patents.google.com/patent/US6221425B1/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "PVA面塗+HDI-TMPTA-PEG-BP底塗UV固化，冠狀擴張balloon導管，具體製程參數齊全",
+          "examples": [
+            {
+              "name": "HDI/PEG/BP primer + PVA topcoat UV",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "專利實施例，有溫度/UV劑量具體參數",
+              "substrate": "balloon導管（冠狀擴張）",
+              "formulation": {
+                "primer": "HDI trimer+TMPTA+PEG+benzophenone+DMPA",
+                "topcoat": "PVA水溶液"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "dip",
+                "drying": "110°F 20秒",
+                "curing": "UV 50mW/cm²"
+              },
+              "results": {
+                "friction": "COF顯著降低",
+                "wca": "<20°",
+                "adhesion": "balloon充放氣循環穩定"
+              }
+            }
+          ],
+          "mechanism": "TMPTA提供多官能基交聯，PEG增親水性，BP UV接枝到基材；PVA面塗提供潤滑水膜",
+          "key_findings": [
+            "50mW/cm² UV是有效固化最低劑量",
+            "PVA面塗免交聯，塗層最外層親水性最好",
+            "110°F短乾燥避免PEG氧化"
+          ],
+          "actionable_insights": [
+            "P08提供完整底塗配方比例，直接可作Bioteque試製起點",
+            "PVA面塗免UV設備，適合快速原型"
+          ],
+          "red_flags": [
+            "HDI有毒性需防護",
+            "balloon充放氣應力對塗層的耐久需額外驗證"
+          ],
+          "bioteque_relevance": "最詳細的UV底塗製程參數參考；PEG-BP底塗+PVA面塗組合值得直接試製"
+        }
       }
     },
     {
@@ -600,6 +644,52 @@
       "value_to_project": "浸塗速度/時間參數+表面粗糙度策略",
       "links": {
         "patents": "https://patents.google.com/patent/US20150038947A1/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "PVC導管Plasdone K90+ESACURE KIP150 UV固化，比較表面粗糙度，isocyanate熱固替代版本",
+          "examples": [
+            {
+              "name": "Plasdone K90/ESACURE KIP150 UV on PVC",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "專利實施例，含dip速度等具體參數",
+              "substrate": "PVC導管",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "Plasdone K90（PVP）+ESACURE KIP150 / 乙醇:GBL 85:15"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "dip 20mm/s ~20秒",
+                "drying": "室溫 1分鐘",
+                "curing": "UV光固化"
+              },
+              "results": {
+                "friction": "表面粗糙度Ra比較",
+                "adhesion": "—",
+                "wca": "—",
+                "durability": "isocyanate熱固版耐久更佳*"
+              }
+            }
+          ],
+          "mechanism": "KIP150水溶性光起始劑引發PVP交聯；isocyanate版本與基材共價結合更耐久",
+          "key_findings": [
+            "ESACURE KIP150是PVP UV固化良好選擇",
+            "GBL（γ-butyrolactone）溶劑比乙醇低毒性*",
+            "dip速度20mm/s是標準拉升速度"
+          ],
+          "actionable_insights": [
+            "KIP150作光起始劑比I-2959水溶性更好",
+            "20mm/s dip速度可作Bioteque製程基準",
+            "熱固版本適合不耐UV照射的基材"
+          ],
+          "red_flags": [
+            "GBL溶劑殘留需驗證",
+            "KIP150殘留生物安全評估*"
+          ],
+          "bioteque_relevance": "提供PVP UV固化光起始劑選擇依據，ESACURE KIP150可與I-2959比較"
+        }
       }
     },
     {
@@ -624,6 +714,50 @@
       "value_to_project": "PVP 乾燥前處理+熱固配方細節",
       "links": {
         "patents": "https://patents.google.com/patent/US20110144579A1/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "PU/PVP熱固雙層塗層：isocyanate+polyol+PVP熱固，PVP需預乾燥<0.5%水分，適spray/brush",
+          "examples": [
+            {
+              "name": "PU/PVP isocyanate熱固塗層",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "專利，製程細節詳細",
+              "substrate": "導管/balloon",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "isocyanate+polyol+PVP熱固成PU/PVP互穿"
+              },
+              "process": {
+                "surface_prep": "PVP預乾燥220°F數小時（水分<0.5%）",
+                "coating_method": "dip/spray/brush",
+                "drying": "220°F乾燥",
+                "curing": "熱固化（無UV）"
+              },
+              "results": {
+                "friction": "潤滑性良好",
+                "adhesion": "PU/PVP互穿附著佳",
+                "wca": "<30°"
+              }
+            }
+          ],
+          "mechanism": "isocyanate-NCO基與PVP/polyol交聯形成PU網絡，PVP均勻分散其中；高水分會消耗NCO基影響固化",
+          "key_findings": [
+            "PVP需嚴格乾燥（<0.5%水分）否則影響固化",
+            "熱固化不需UV設備，設備投資低",
+            "PU/PVP互穿網絡比純PVP附著更好"
+          ],
+          "actionable_insights": [
+            "若Bioteque無UV設備，P15熱固方案可先導入",
+            "PVP乾燥步驟必須加入SOP"
+          ],
+          "red_flags": [
+            "isocyanate毒性需安全管控",
+            "熱固溫度（220°F=104°C）對TPU基材可能有影響*"
+          ],
+          "bioteque_relevance": "無UV設備時的替代方案；注意TPU在104°C的熱穩定性需確認"
+        }
       }
     },
     {
@@ -720,6 +854,51 @@
       "value_to_project": "hybrid top coat 控制吸濕時機設計",
       "links": {
         "patents": "https://patents.justia.com/patent/6610035"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Hydrogel底層+疏水面塗防premature吸濕，入水後面塗溶解，PEG分子量100-20000調控",
+          "examples": [
+            {
+              "name": "Hydrogel+疏水protective topcoat",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "專利，創新雙層設計",
+              "substrate": "導管/balloon",
+              "formulation": {
+                "primer": "PEG/MPEG hydrogel底層",
+                "topcoat": "含親水surfactant的疏水保護層"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "dip雙層",
+                "drying": "—",
+                "curing": "UV"
+              },
+              "results": {
+                "friction": "入水後COF極低",
+                "adhesion": "乾態保護，濕態活化",
+                "wca": "—",
+                "durability": "使用前疏水保護延長保存期"
+              }
+            }
+          ],
+          "mechanism": "疏水面塗在乾態防止hydrogel過早吸濕（包裝期間）；插入體內遇水後面塗溶解→hydrogel活化潤滑",
+          "key_findings": [
+            "雙層設計解決hydrogel包裝保存問題",
+            "PEG MW 100-20000覆蓋不同潤滑性需求",
+            "Surfactant carrier使面塗入水後快速溶解"
+          ],
+          "actionable_insights": [
+            "Bioteque若用hydrogel塗層，P24的疏水保護層概念可直接應用到包裝設計",
+            "延長shelf life，減少保濕包裝需求"
+          ],
+          "red_flags": [
+            "面塗溶解速率需控制（太快=保護不足，太慢=活化延遲）*",
+            "surfactant生物安全性需評估"
+          ],
+          "bioteque_relevance": "解決Bioteque親水塗層包裝問題的重要概念；建議列入包裝驗證考量"
+        }
       }
     },
     {
@@ -743,6 +922,49 @@
       "value_to_project": "活檢針親水塗層claims與針型範圍",
       "links": {
         "patents": "https://patents.google.com/patent/WO2007089761A2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "親水潤滑+echogenic回聲雙功能活檢針塗層，親水層下嵌微氣泡/微粒增超音波可見度",
+          "examples": [
+            {
+              "name": "Lubricious+echogenic dual coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "專利，活檢針直接應用",
+              "substrate": "活檢針/trocar 16G/18G",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "PVP親水層+echogenic微結構"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "dip兩層",
+                "drying": "—",
+                "curing": "UV"
+              },
+              "results": {
+                "friction": "COF降低（插入力減少）",
+                "other": "超音波可見度提升3倍+*"
+              }
+            }
+          ],
+          "mechanism": "親水層降低插入摩擦；微氣泡/微粒強散射超音波；兩功能分層不互相干擾",
+          "key_findings": [
+            "雙功能塗層對超音波引導穿刺有直接臨床意義",
+            "echogenic結構在親水層下，不影響潤滑性",
+            "適合超音波引導活檢"
+          ],
+          "actionable_insights": [
+            "Bioteque活檢針若要進超音波引導市場，P25是直接參考",
+            "echogenic層可用現有微粒（PMMA/尼龍粒）達成*"
+          ],
+          "red_flags": [
+            "微粒脫落風險需驗證",
+            "超音波頻率與粒徑匹配需優化*"
+          ],
+          "bioteque_relevance": "Bioteque活檢針高階版本可加入echogenic功能提升競爭差異化"
+        }
       }
     },
     {
@@ -918,7 +1140,52 @@
         "product": "https://www.freudenbergmedical.com/technologies/coatings/hydrophilic-coating"
       },
       "related_patents": [],
-      "patent_notes": "2026年最新UV固化塗層，結合表面化學與醫材製造。具體專利號未公開*"
+      "patent_notes": "2026年最新UV固化塗層，結合表面化學與醫材製造。具體專利號未公開*",
+      "patentResults": {
+        "full": {
+          "summary": "Freudenberg LUBRITEQ：UV固化客製化合成hydrogel，單步塗覆，臨床驗證，主要OEM廠商",
+          "examples": [
+            {
+              "name": "LUBRITEQ UV hydrogel coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "上市商業產品",
+              "substrate": "導管/guidewire",
+              "formulation": {
+                "primer": "專有",
+                "topcoat": "合成hydrogel（客製化）"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "單步dip",
+                "drying": "—",
+                "curing": "UV固化"
+              },
+              "results": {
+                "friction": "COF顯著降低",
+                "adhesion": "臨床驗證",
+                "wca": "<20°",
+                "durability": "通過法規要求"
+              }
+            }
+          ],
+          "mechanism": "合成hydrogel網絡鎖水提供潤滑；UV單步固化提高生產效率",
+          "key_findings": [
+            "單步塗覆比兩步效率高",
+            "Freudenberg有完整法規支援",
+            "UV-B/UV-C均可，視內腔幾何選擇"
+          ],
+          "actionable_insights": [
+            "Bioteque若選OEM，Freudenberg是Biocoat/Surmodics外的第三選擇",
+            "單步製程可評估用於Bioteque生產線"
+          ],
+          "red_flags": [
+            "客製化配方保密*",
+            "OEM費用需洽詢"
+          ],
+          "bioteque_relevance": "Freudenberg OEM是備選方案；單步製程概念值得Bioteque自製時參考"
+        }
+      }
     },
     {
       "id": "C03",
@@ -1016,7 +1283,52 @@
       "related_patents": [
         "US5160790A"
       ],
-      "patent_notes": "US5160790A（P06，已過期）是isocyanate+PVP熱固化路線鼻祖。HydrUV為UV固化版本。40+年歷史"
+      "patent_notes": "US5160790A（P06，已過期）是isocyanate+PVP熱固化路線鼻祖。HydrUV為UV固化版本。40+年歷史",
+      "patentResults": {
+        "full": {
+          "summary": "Hydromer：1980年創立，最早親水塗層商業化，跨基材/用途，含法規支援服務",
+          "examples": [
+            {
+              "name": "Hydromer潤滑塗層系統",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "創始廠商，40年商業驗證",
+              "substrate": "聚合物/金屬/玻璃（通用）",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "多種親水塗層配方"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "dip/spray",
+                "drying": "—",
+                "curing": "UV或熱固"
+              },
+              "results": {
+                "friction": "COF顯著降低",
+                "adhesion": "多基材驗證",
+                "wca": "—",
+                "durability": "商業驗證"
+              }
+            }
+          ],
+          "mechanism": "通用親水塗層技術平台，涵蓋潤滑/抗血栓/抗菌多功能",
+          "key_findings": [
+            "Hydromer是行業最老牌廠商",
+            "提供FDA/ISO法規顧問服務",
+            "可客製抗菌/抗血栓複合塗層"
+          ],
+          "actionable_insights": [
+            "Bioteque初期可採購Hydromer配方快速驗證",
+            "Hydromer的法規服務可加速510(k)"
+          ],
+          "red_flags": [
+            "配方保密，自製需重開發",
+            "Hydromer已被更新技術廠商部分取代*"
+          ],
+          "bioteque_relevance": "法規諮詢資源；短期可購買Hydromer配方評估，長期自製"
+        }
+      }
     },
     {
       "id": "A1",
@@ -1251,6 +1563,48 @@
       "links": {
         "doi": "https://doi.org/10.3390/coatings10020178",
         "fulltext": "https://www.mdpi.com/2079-6412/10/2/178"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "FEM穿刺模型+體外驗證：親水塗層降低活檢針插入力，量化摩擦對組織損傷的影響",
+          "examples": [
+            {
+              "name": "親水塗層穿刺針FEM+體外",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "期刊，FEM+實驗雙驗證",
+              "substrate": "穿刺針/活檢針",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "生醫親水塗層（超潤滑）"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "—"
+              },
+              "results": {
+                "friction": "插入力降低30-50%",
+                "other": "組織損傷面積減少，FEM與實驗一致"
+              }
+            }
+          ],
+          "mechanism": "親水塗層降低針-軟組織界面COF→插入力減少→組織損傷減少→準確度提升",
+          "key_findings": [
+            "塗層對穿刺針的臨床意義已量化",
+            "FEM可預測不同塗層的穿刺性能",
+            "插入力降低直接減少術後疼痛*"
+          ],
+          "actionable_insights": [
+            "Bioteque穿刺針/活檢針需建立插入力測試（類FEM）",
+            "ISO 11135/ASTM F2132可參考"
+          ],
+          "red_flags": [
+            "FEM假設理想材料，實際組織差異大*"
+          ],
+          "bioteque_relevance": "Bioteque活檢針性能測試設計依據；插入力是比COF更直接的臨床指標"
+        }
       }
     },
     {
@@ -1273,6 +1627,50 @@
       "value_to_project": "活檢針親水+回聲塗層實作參考",
       "links": {
         "pubmed": "https://pubmed.ncbi.nlm.nih.gov/16610711/"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "動態起泡聚合物塗層增強超音波可見度：親水基質+起泡劑，針定位+活檢雙功能",
+          "examples": [
+            {
+              "name": "Echogenic polymer coating with foaming agent",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "期刊，in vitro驗證",
+              "substrate": "穿刺針/活檢針",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "親水高分子+起泡劑複合塗層"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "—"
+              },
+              "results": {
+                "other": "超音波可見度提升，in vitro成功",
+                "friction": "親水性維持"
+              }
+            }
+          ],
+          "mechanism": "塗層中起泡劑在超音波壓力下釋放微氣泡，強化聲波散射",
+          "key_findings": [
+            "動態起泡比靜態微粒echogenic效果更強",
+            "潛力：血管/心血管/骨科多用途",
+            "親水性不受起泡劑影響"
+          ],
+          "actionable_insights": [
+            "B2與P25概念互補：一用微粒一用起泡劑",
+            "Bioteque若開發超音波引導針，兩種方案都應評估"
+          ],
+          "red_flags": [
+            "起泡劑釋放量不穩定*",
+            "氣泡大小控制困難*",
+            "in vivo尚未驗證"
+          ],
+          "bioteque_relevance": "Bioteque超音波可視化針的備選技術，比P25的微粒方案更動態但更難控制"
+        }
       }
     },
     {
@@ -1295,6 +1693,48 @@
       "links": {
         "doi": "https://doi.org/10.3390/polym12051073",
         "fulltext": "https://www.mdpi.com/2073-4360/12/5/1073"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "水溶性光起始劑生醫應用綜述：Type I（I-2959）vs Type II（BP），毒性/溶解度/效率比較",
+          "examples": [
+            {
+              "name": "水溶性光起始劑比較",
+              "is_real": false,
+              "credibility": "高",
+              "credibility_reason": "系統性綜述",
+              "substrate": "通用",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "含水溶性PI的塗層"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "UV/可見光"
+              },
+              "results": {
+                "other": "I-2959: 低毒、UV 365nm; BP: 高效但難溶; LAP: 可見光相容"
+              }
+            }
+          ],
+          "mechanism": "Type I：單分子裂解產生自由基；Type II：雙分子奪氫反應（BP即屬此類）",
+          "key_findings": [
+            "I-2959（Irgacure 2959）是生醫最常用，低毒",
+            "BP效率高但水溶性差，需助溶",
+            "LAP（Lithium Phenyl Phosphinate）可見光固化新選擇"
+          ],
+          "actionable_insights": [
+            "Bioteque UV固化PI選擇：I-2959（安全）> KIP150（效率）> BP（接枝）",
+            "可見光固化（LAP）未來方向，對TPU基材更溫和*"
+          ],
+          "red_flags": [
+            "PI殘留必須<0.1%（ISO 10993-17）",
+            "BP難溶於水，需ethanol助溶（TPU表面相容性需測試）"
+          ],
+          "bioteque_relevance": "Bioteque配方設計選PI的直接依據；建議先用I-2959，需要接枝效果時加BP"
+        }
       }
     },
     {
@@ -1386,6 +1826,50 @@
       "value_to_project": "UV劑量不是越高越好,建dose-lubricity曲線",
       "links": {
         "doi": "https://doi.org/10.1016/j.polymdegradstab.2009.09.007"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "PVP UV光降解風險：過高UV劑量使PVP主鏈氧化裂解，MW下降，親水性劣化",
+          "examples": [
+            {
+              "name": "PVP UV光氧化研究",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "期刊，有MW與親水性定量",
+              "substrate": "PVP塗層（通用）",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "PVP"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "UV（過量）"
+              },
+              "results": {
+                "wca": "過量UV後WCA上升（親水性下降）",
+                "durability": "MW下降導致塗層容易溶出"
+              }
+            }
+          ],
+          "mechanism": "UV激發O2攻擊PVP主鏈→pyrrolidone環開環→MW下降→COF上升，WCA上升",
+          "key_findings": [
+            "UV劑量存在最佳視窗：不足=交聯不完全，過量=PVP降解",
+            "N2保護可抑制光氧化*",
+            "最佳UV dose需實驗確定"
+          ],
+          "actionable_insights": [
+            "Bioteque UV製程需驗證最佳UV劑量範圍",
+            "建議N2或Ar保護氣氛下UV照射（若可能）",
+            "QC需包含UV照射後的COF和WCA監控"
+          ],
+          "red_flags": [
+            "UV劑量過量是常見製程失敗原因",
+            "不同UV燈強度/距離需重新驗證"
+          ],
+          "bioteque_relevance": "Bioteque UV製程SOP關鍵控制點：UV劑量監控是必要QC項目"
+        }
       }
     },
     {
@@ -1406,6 +1890,49 @@
       "value_to_project": "UV收縮應力對附著裂紋的間接影響",
       "links": {
         "scholar": "https://scholar.google.com/scholar?q=Shrinkage+of+UV+oligomers+and+monomers+RadTech+2014"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "UV固化收縮對塗層附著影響：oligomer/monomer選擇影響收縮應力，間接影響耐磨耗",
+          "examples": [
+            {
+              "name": "UV收縮應力研究",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "會議論文，部分數據",
+              "substrate": "通用UV塗層",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "UV oligomer+monomer"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "UV"
+              },
+              "results": {
+                "adhesion": "收縮大→應力大→附著力下降",
+                "durability": "收縮大→龜裂→脫落"
+              }
+            }
+          ],
+          "mechanism": "UV聚合收縮（體積收縮2-10%）在界面產生應力；應力超過附著力→剝落",
+          "key_findings": [
+            "高官能基monomer收縮大，附著力反而差",
+            "PEG基oligomer收縮最小",
+            "HDDA收縮大但常被過度使用"
+          ],
+          "actionable_insights": [
+            "Bioteque底塗配方選低收縮oligomer（PEG-DA, TEGDA）",
+            "TMPTA/HDDA比例需優化減少收縮"
+          ],
+          "red_flags": [
+            "收縮率難在lab直接測量*",
+            "模擬曲率基材上應力更複雜*"
+          ],
+          "bioteque_relevance": "Bioteque UV底塗配方優化參考：優先低收縮oligomer，平衡交聯密度與附著"
+        }
       }
     },
     {
@@ -1429,6 +1956,50 @@
       "links": {
         "doi": "https://doi.org/10.1080/14686996.2019.1667737",
         "fulltext": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6818115/"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "BP交聯PVP電紡纖維：BP為交聯劑UV光交聯PVP，模量4.1→7.2GPa，固定溶菌酶抗菌",
+          "examples": [
+            {
+              "name": "BP-crosslinked PVP electrospun fibers",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "期刊，有模量和抗菌定量",
+              "substrate": "電紡纖維（可外推塗層）",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "PVP + benzophenone UV交聯"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "electrospinning",
+                "drying": "—",
+                "curing": "UV（BP交聯）"
+              },
+              "results": {
+                "adhesion": "模量4.1→7.2GPa（機械性提升75%）",
+                "antimicrobial": "溶菌酶固定後有效抗菌",
+                "wca": "親水性維持"
+              }
+            }
+          ],
+          "mechanism": "BP在UV下奪取PVP的H，PVP鏈間交聯；同時BP的C=O可與蛋白質（溶菌酶）共價固定",
+          "key_findings": [
+            "BP可同時作交聯劑和蛋白質固定劑",
+            "UV交聯後PVP機械性顯著提升",
+            "固定溶菌酶是無毒抗菌策略"
+          ],
+          "actionable_insights": [
+            "若Bioteque要在塗層固定抗菌蛋白質，BP-UV方案無需化學修飾",
+            "PVP+BP塗層後UV可同時完成交聯和蛋白質固定（單步）*"
+          ],
+          "red_flags": [
+            "溶菌酶對Gram-（大腸桿菌）效果弱*",
+            "電紡纖維與dip塗層製程不同，需重新優化"
+          ],
+          "bioteque_relevance": "進階功能化選項：Bioteque若要在PVP塗層加入抗菌酶，BP-UV單步固定方案"
+        }
       }
     },
     {
@@ -1450,6 +2021,48 @@
       "value_to_project": "競爭格局與供應商地圖",
       "links": {
         "ref": "https://www.marketsandmarkets.com/Market-Reports/hydrophilic-coating-market-22810170.html"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "親水塗層市場報告（MarketsandMarkets）：2027達225億，主要廠商/基材/終端分析",
+          "examples": [
+            {
+              "name": "親水塗層全球市場",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "市場研究報告，數字可能有偏差*",
+              "substrate": "通用",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "—"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "—"
+              },
+              "results": {
+                "other": "市場2027: $22.5B；主要廠商: Hydromer/Harland/Surmodics/DSM/Biocoat/Teleflex"
+              }
+            }
+          ],
+          "mechanism": "市場分析，非實驗",
+          "key_findings": [
+            "心血管介入是最大終端市場",
+            "泌尿科成長最快（支架/導尿管）",
+            "OEM外包趨勢明顯"
+          ],
+          "actionable_insights": [
+            "Bioteque進入泌尿科市場時機好（成長最快）",
+            "OEM vs 自製：市場規模夠大，自製ROI可行"
+          ],
+          "red_flags": [
+            "市場報告數字常被誇大*",
+            "COVID後市場預測偏差大*"
+          ],
+          "bioteque_relevance": "業務開發依據：泌尿科是高成長市場，Bioteque輸尿管支架/導尿管塗層策略正確"
+        }
       }
     },
     {
@@ -1538,6 +2151,50 @@
       "value_to_project": "surfactant配方+Harland FTS驗收標準",
       "links": {
         "patents": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/8871869"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "含surfactant的UV固化親水塗層，Harland FTS初始潤滑≤20g，搭配含polyelectrolyte的wetting fluid",
+          "examples": [
+            {
+              "name": "Surfactant-containing UV lubricious coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "專利，有Harland FTS測試數值",
+              "substrate": "導管（通用）",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "UV固化塗層+surfactant"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "dip",
+                "drying": "—",
+                "curing": "UV"
+              },
+              "results": {
+                "friction": "Harland FTS 1 cycle ≤20g（極低）",
+                "wca": "<15°",
+                "durability": "搭配wetting fluid延長潤滑"
+              }
+            }
+          ],
+          "mechanism": "Surfactant降低表面張力增潤滑性；polyelectrolyte wetting fluid增加界面水膜厚度",
+          "key_findings": [
+            "≤20g是Harland FTS極佳表現",
+            "Wetting fluid輔助延長潤滑期",
+            "Surfactant比例影響長期穩定性（可能流失）*"
+          ],
+          "actionable_insights": [
+            "Bioteque若用Harland設備，以20g為初始COF目標",
+            "Wetting fluid策略可用於Bioteque導管套裝包裝設計"
+          ],
+          "red_flags": [
+            "Surfactant溶出率需ISO 10993測試",
+            "Wetting fluid增加耗材成本"
+          ],
+          "bioteque_relevance": "Bioteque導管套裝可搭配wetting fluid提升使用體驗，參考L02設計"
+        }
       }
     },
     {
@@ -1559,6 +2216,50 @@
       "value_to_project": "穿刺針hydrogel潤滑+primer需求",
       "links": {
         "patents": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/7015262"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "pHEMA hydrogel改善穿刺針潤滑：acrylic hydrogel on 塑膠/金屬針，需primer前處理",
+          "examples": [
+            {
+              "name": "pHEMA on biopsy needle",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "專利，穿刺針直接應用",
+              "substrate": "穿刺針（塑膠/金屬）",
+              "formulation": {
+                "primer": "primer layer（依基材）",
+                "topcoat": "pHEMA或其他acrylic hydrogel"
+              },
+              "process": {
+                "surface_prep": "表面primer處理",
+                "coating_method": "dip",
+                "drying": "—",
+                "curing": "UV或化學"
+              },
+              "results": {
+                "friction": "插入力降低",
+                "adhesion": "primer確保附著",
+                "wca": "<20°"
+              }
+            }
+          ],
+          "mechanism": "pHEMA高吸水性（含水量38%）形成潤滑水膜；primer解決金屬/塑膠難附著問題",
+          "key_findings": [
+            "pHEMA是穿刺針塗層成熟材料",
+            "金屬針需特殊primer（silane/isocyanate）",
+            "透明塗層不影響超音波可見度*"
+          ],
+          "actionable_insights": [
+            "Bioteque金屬活檢針塗層參考L04 silane primer方案",
+            "pHEMA含水量可調（調整HEMA/EGDMA比例）"
+          ],
+          "red_flags": [
+            "pHEMA在彎折針上可能龜裂*",
+            "金屬針primer選擇需依金屬種類（鈦/不鏽鋼不同）"
+          ],
+          "bioteque_relevance": "Bioteque金屬穿刺針/活檢針的塗層primer方案依據"
+        }
       }
     },
     {
@@ -1788,6 +2489,48 @@
       "value_to_project": "pinch test 參數設定對驗收的影響",
       "links": {
         "pdf": "https://vivitrolabs.com/wp-content/uploads/2020/10/Hydrophilic-Coating-Friction-Test.pdf"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Pinch Test白皮書（Biocoat/ViVitro）：非標準摩擦測試方法論，IDTE系統，參數敏感性",
+          "examples": [
+            {
+              "name": "Pinch Test摩擦測試方法",
+              "is_real": false,
+              "credibility": "高",
+              "credibility_reason": "行業標準白皮書",
+              "substrate": "通用導管",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "—"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "—"
+              },
+              "results": {
+                "friction": "不同夾力/速度/循環數下COF差異>50%"
+              }
+            }
+          ],
+          "mechanism": "測試方法文件：夾力、速度、循環次數是Pinch Test三大參數",
+          "key_findings": [
+            "測試條件不標準化導致廠商間數據不可比",
+            "IDTE（Immersed Dip Test Equipment）是業界參考系統",
+            "建議固定：夾力100g、速度20mm/s、循環數50"
+          ],
+          "actionable_insights": [
+            "Bioteque建立COF測試SOP時採用：100g/20mm/s/50cycles作標準",
+            "向Biocoat申請IDTE系統demo或採購"
+          ],
+          "red_flags": [
+            "自建測試台需與IDTE數據比對校正",
+            "測試液體（PBS vs人工尿液）影響結果"
+          ],
+          "bioteque_relevance": "Bioteque COF測試SOP直接依據；先採購或自建符合IDTE規範的測試設備"
+        }
       }
     },
     {
@@ -1883,7 +2626,52 @@
         "US8133580B2",
         "EP1957130B1"
       ],
-      "patent_notes": "US8133580B2（P01，有效至2029）+ EP1957130B1（P03，2026/12到期）。polyether primer + PVP+polyelectrolyte面塗"
+      "patent_notes": "US8133580B2（P01，有效至2029）+ EP1957130B1（P03，2026/12到期）。polyether primer + PVP+polyelectrolyte面塗",
+      "patentResults": {
+        "full": {
+          "summary": "DSM ComfortCoat：市場主導品牌，UV固化PVP系統，Bioteque主要競品技術來源（P01-P03系列）",
+          "examples": [
+            {
+              "name": "DSM ComfortCoat",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "上市主流商業產品",
+              "substrate": "導管/guidewire（通用）",
+              "formulation": {
+                "primer": "DSM proprietary",
+                "topcoat": "UV固化PVP基系統"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "dip",
+                "drying": "—",
+                "curing": "UV"
+              },
+              "results": {
+                "friction": "行業標準COF",
+                "adhesion": "全球臨床驗證",
+                "wca": "<20°",
+                "durability": "通過510(k)/CE"
+              }
+            }
+          ],
+          "mechanism": "UV固化PVP網絡，DSM獨家配方優化附著與潤滑性",
+          "key_findings": [
+            "P01/P02/P03專利群均來自DSM，是行業標竿配方",
+            "ComfortCoat OEM全球最大市占*",
+            "dsm-firmenich近年整合強化供應鏈"
+          ],
+          "actionable_insights": [
+            "Bioteque自製塗層應以ComfortCoat性能為基準",
+            "DSM可提供OEM，也可授權配方*（需洽談）"
+          ],
+          "red_flags": [
+            "DSM配方受專利保護*（但核心P01等已接近過期）",
+            "dsm-firmenich合併後授權政策可能改變*"
+          ],
+          "bioteque_relevance": "Bioteque的直接對標技術；P01-P03配方分析是迴避設計的起點"
+        }
+      }
     },
     {
       "id": "C07",
@@ -1908,7 +2696,50 @@
         "ref": "http://www.harlandmedical.com/about-us-test-equipment/"
       },
       "related_patents": [],
-      "patent_notes": "提供塗層+設備+製程開發整合方案。具體專利號未公開*"
+      "patent_notes": "提供塗層+設備+製程開發整合方案。具體專利號未公開*",
+      "patentResults": {
+        "full": {
+          "summary": "Harland Medical塗覆設備+測試系統：PCX/RDX-XL dip coater, FTS5000-7000摩擦測試",
+          "examples": [
+            {
+              "name": "Harland設備系統",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "業界標準設備廠商",
+              "substrate": "導管/guidewire（通用）",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "—"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "Harland dip coating系統",
+                "drying": "—",
+                "curing": "UV（設備內建）"
+              },
+              "results": {
+                "friction": "FTS7000最高精度COF測試",
+                "other": "CTS1100塗層厚度，TTS1000 trackability"
+              }
+            }
+          ],
+          "mechanism": "設備規格文件，非實驗",
+          "key_findings": [
+            "FTS5000/6000/7000是行業標準COF測試設備",
+            "PCX系列可程式化dip速度/UV劑量/溫度",
+            "Harland Cork歐洲據點強化歐洲供應"
+          ],
+          "actionable_insights": [
+            "Bioteque若自建生產線，優先評估Harland PCX+FTS7000組合",
+            "FTS7000數據可直接用於510(k)/法規文件"
+          ],
+          "red_flags": [
+            "設備投資成本高（FTS7000 ~$100K+）*",
+            "維修保養需依賴Harland服務*"
+          ],
+          "bioteque_relevance": "Bioteque設備採購路線圖：PCX dip coater + FTS7000是最法規友好的組合"
+        }
+      }
     },
     {
       "id": "P22",
@@ -2072,6 +2903,48 @@
       "value_to_project": "市場趨勢:低VOC配方+OEM外包模式",
       "links": {
         "ref": "https://www.grandviewresearch.com/industry-analysis/medical-device-hydrophilic-coatings-market-report"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Grand View Research市場報告：微創手術驅動需求，低VOC/生物相容趨勢，OEM外包主流",
+          "examples": [
+            {
+              "name": "醫材親水塗層全球市場（GVR）",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "市場研究報告",
+              "substrate": "通用",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "—"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "—"
+              },
+              "results": {
+                "other": "CAGR 8-10%；心血管/神經/泌尿三大終端"
+              }
+            }
+          ],
+          "mechanism": "市場分析，非實驗",
+          "key_findings": [
+            "低VOC塗層是法規趨勢（歐盟REACH）",
+            "生物可降解塗層長遠方向",
+            "泌尿科OEM需求最快增長"
+          ],
+          "actionable_insights": [
+            "Bioteque應優先使用低VOC溶劑（乙醇>GBL>THF）",
+            "泌尿科OEM是進入市場的快速路線"
+          ],
+          "red_flags": [
+            "VOC法規各地不同，需依銷售市場確認",
+            "市場數字需交叉比對M1報告"
+          ],
+          "bioteque_relevance": "市場趨勢確認：Bioteque泌尿科方向正確；溶劑選擇需符合REACH低VOC要求"
+        }
       }
     },
     {
@@ -2093,6 +2966,48 @@
       "value_to_project": "穿刺針FEM模型補充(與B1互補)",
       "links": {
         "page": "https://www.sciencedirect.com/science/article/pii/S2212827120300688"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "生醫親水塗層針穿刺力FEM+體外研究：塗層種類影響穿刺力，同B1方向，有具體穿刺數據",
+          "examples": [
+            {
+              "name": "親水塗層針穿刺力研究",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "期刊，有具體穿刺力數值",
+              "substrate": "穿刺針",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "生醫親水塗層"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "—"
+              },
+              "results": {
+                "friction": "穿刺力降低25-45%（依塗層類型）",
+                "other": "塗層類型：PVP>HEMA=hydrogel（穿刺力降低序列）"
+              }
+            }
+          ],
+          "mechanism": "塗層降低針-組織摩擦係數→插入力減少→組織損傷減少；PVP塗層效果最佳",
+          "key_findings": [
+            "PVP塗層穿刺力降低最大（25-45%）",
+            "塗層厚度影響穿刺力（過厚反而增加）",
+            "FEM可快速預測不同配方效果"
+          ],
+          "actionable_insights": [
+            "Bioteque穿刺針性能目標：穿刺力降低>30%",
+            "塗層厚度≤10µm為最佳範圍*"
+          ],
+          "red_flags": [
+            "軟組織材料FEM假設影響準確性*"
+          ],
+          "bioteque_relevance": "Bioteque活檢針/穿刺針塗層性能基準：>30%穿刺力降低；配合B1作設計依據"
+        }
       }
     },
     {
@@ -2114,6 +3029,48 @@
       "value_to_project": "商用供應商地圖補充",
       "links": {
         "ref": "https://www.marketsandmarkets.com/ResearchInsight/hydrophilic-coating-market.asp"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "AST Products LubriLAST：小型OEM塗層廠商，提供親水潤滑塗層，市場補充資訊",
+          "examples": [
+            {
+              "name": "LubriLAST親水塗層",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "上市商業產品，規模較小",
+              "substrate": "導管（通用）",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "親水潤滑塗層"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "dip",
+                "drying": "—",
+                "curing": "UV或熱固"
+              },
+              "results": {
+                "friction": "COF降低",
+                "adhesion": "商業驗證"
+              }
+            }
+          ],
+          "mechanism": "標準親水塗層技術",
+          "key_findings": [
+            "AST Products是小型專業塗層廠商",
+            "可能提供更靈活的小批量OEM",
+            "技術細節未公開"
+          ],
+          "actionable_insights": [
+            "Bioteque若需小批量初始OEM，AST比DSM/Surmodics更靈活*"
+          ],
+          "red_flags": [
+            "規模小，供應穩定性風險*",
+            "技術資料不透明*"
+          ],
+          "bioteque_relevance": "小批量樣品製作的備選OEM廠商"
+        }
       }
     },
     {
@@ -2205,6 +3162,50 @@
       "value_to_project": "無溶劑UV PU-acrylate sIPN(環保配方方向)",
       "links": {
         "ref": "https://www.nature.com/articles/s41598-025-04739-1"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "無溶劑UV固化waterborne PU-acrylate sIPN：PTHF+IPDI骨架，DoE優化強度4.1→8.8MPa，低VOC",
+          "examples": [
+            {
+              "name": "Waterborne WPUA sIPN UV coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "期刊，DoE優化有具體數據",
+              "substrate": "通用（waterborne塗層）",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "WPUA（waterborne PU-acrylate）semi-IPN"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "UV"
+              },
+              "results": {
+                "adhesion": "抗張強度4.1→8.8MPa（DoE優化）",
+                "durability": "sIPN改善相容性與水阻",
+                "other": "無溶劑，低VOC"
+              }
+            }
+          ],
+          "mechanism": "PTHF軟段提供柔韌性；IPDI硬段提供強度；UDMA引入acrylate可UV交聯；sIPN兩網絡互穿增強",
+          "key_findings": [
+            "無溶劑waterborne符合REACH低VOC要求",
+            "sIPN比純PU或純PA附著性更好",
+            "DoE可快速找最佳配方"
+          ],
+          "actionable_insights": [
+            "Bioteque UV底塗使用waterborne PUA可同時滿足低VOC和強附著",
+            "PTHF+IPDI+UDMA是可直接試製的底塗配方骨架"
+          ],
+          "red_flags": [
+            "WPUA分散液穩定性受pH/溫度影響*",
+            "UDMA生物安全需評估"
+          ],
+          "bioteque_relevance": "Bioteque低VOC底塗配方選擇：WPUA sIPN是環保+高性能的未來方向"
+        }
       }
     },
     {
@@ -2227,6 +3228,47 @@
       "value_to_project": "亞太/歐洲供應鏈據點資訊",
       "links": {
         "ref": "https://www.marketsandmarkets.com/Market-Reports/hydrophilic-coating-market-22810170.html"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "產業動態：Surmodics Serene用於血管介入，Harland Medical 2022在愛爾蘭設歐洲總部",
+          "examples": [
+            {
+              "name": "產業動態記錄",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "事實性產業動態",
+              "substrate": "導管/guidewire",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "Serene兩性離子"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "—"
+              },
+              "results": {
+                "other": "Serene臨床應用血管介入；Harland Cork供應歐洲市場"
+              }
+            }
+          ],
+          "mechanism": "產業動態，非實驗",
+          "key_findings": [
+            "Harland歐洲據點強化歐洲法規服務",
+            "Surmodics Serene持續擴展臨床適應症",
+            "兩大廠商聯合影響歐洲市場格局"
+          ],
+          "actionable_insights": [
+            "Bioteque若進入歐洲市場，Harland Cork是當地設備供應商",
+            "Serene + Harland組合是歐洲最完整解決方案"
+          ],
+          "red_flags": [
+            "產業整合可能影響Bioteque的OEM選擇*"
+          ],
+          "bioteque_relevance": "歐洲市場進入策略參考；歐盟MDR法規可借助Harland Cork本地支援"
+        }
       }
     },
     {
@@ -2250,6 +3292,50 @@
       "value_to_project": "附著促進primer配方補充(DSM家族)",
       "links": {
         "patents": "https://patents.google.com/patent/CN107405430A/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "DSM系列含adhesion-promoting primer的UV固化潤滑塗層：primer明確強化附著，配方族系延伸",
+          "examples": [
+            {
+              "name": "DSM adhesion primer UV coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "專利，DSM核心配方族",
+              "substrate": "導管（通用）",
+              "formulation": {
+                "primer": "adhesion-promoting primer（含isocyanate或silane）",
+                "topcoat": "UV固化PVP/親水層"
+              },
+              "process": {
+                "surface_prep": "先塗primer，乾燥",
+                "coating_method": "dip雙層",
+                "drying": "—",
+                "curing": "UV"
+              },
+              "results": {
+                "friction": "COF低",
+                "adhesion": "比無primer提升3倍+*",
+                "durability": "通過臨床驗證"
+              }
+            }
+          ],
+          "mechanism": "Primer與基材表面形成共價鍵（isocyanate-OH, silane-OH）；頂塗與primer物理/化學相互滲透",
+          "key_findings": [
+            "Primer是DSM配方族的核心差異化",
+            "Isocyanate primer對TPU基材效果最佳",
+            "P28是P01/P13的進化版本"
+          ],
+          "actionable_insights": [
+            "Bioteque TPU基材建議：先isocyanate primer→再UV PVP頂塗（P28路線）",
+            "可作迴避DSM的參考：改用PDA primer替代isocyanate*"
+          ],
+          "red_flags": [
+            "Isocyanate毒性管控",
+            "DSM P28可能仍在專利保護期*"
+          ],
+          "bioteque_relevance": "Bioteque TPU+UV的雙層架構直接參考；primer選擇：isocyanate（P28路線）vs PDA（A2路線）"
+        }
       }
     },
     {
@@ -2273,6 +3359,51 @@
       "value_to_project": "競品導尿管大廠塗層專利",
       "links": {
         "patents": "https://patents.google.com/patent/WO2008071796A2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Coloplast光接枝親水塗層：photografting為基礎的導尿管塗層，間歇導尿管市場龍頭",
+          "examples": [
+            {
+              "name": "Coloplast photografting coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "上市主流產品，全球市占最大*",
+              "substrate": "間歇導尿管（PVC/TPU）",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "光接枝PVP/親水高分子"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "photografting UV接枝",
+                "drying": "—",
+                "curing": "UV光接枝"
+              },
+              "results": {
+                "friction": "COF極低（<0.1）",
+                "adhesion": "共價接枝，最高耐久",
+                "wca": "<10°",
+                "durability": "臨床驗證多年"
+              }
+            }
+          ],
+          "mechanism": "UV照射在聚合物表面產生自由基，親水高分子共價接枝；非塗覆，是真正的表面改性",
+          "key_findings": [
+            "Photografting比塗覆更耐久（共價vs物理）",
+            "Coloplast是間歇導尿管市場龍頭（SpeediCath）",
+            "光接枝技術是Coloplast核心IP"
+          ],
+          "actionable_insights": [
+            "Bioteque若做間歇導尿管，必須以Coloplast為對標",
+            "光接枝需UV設備，但耐久性遠超物理塗覆"
+          ],
+          "red_flags": [
+            "Coloplast光接枝IP範圍廣，需詳細迴避分析*",
+            "光接枝設備與dip塗覆設備不同，需額外投資"
+          ],
+          "bioteque_relevance": "間歇導尿管競爭對手最高技術；若Bioteque進入此市場，需光接枝技術或專利迴避"
+        }
       }
     },
     {
@@ -2296,6 +3427,50 @@
       "value_to_project": "DSM配方家族延伸版本",
       "links": {
         "patents": "https://patents.google.com/patent/US8957125B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "DSM親水塗層配方（US8133580延伸）：UV固化PVP系統，DSM核心專利族成員",
+          "examples": [
+            {
+              "name": "DSM UV PVP塗層配方",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "DSM核心配方專利",
+              "substrate": "導管（通用）",
+              "formulation": {
+                "primer": "DSM proprietary primer",
+                "topcoat": "UV固化PVP配方"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "dip",
+                "drying": "—",
+                "curing": "UV"
+              },
+              "results": {
+                "friction": "行業標準COF",
+                "adhesion": "臨床驗證",
+                "wca": "<20°"
+              }
+            }
+          ],
+          "mechanism": "UV PVP交聯，專利配方比例",
+          "key_findings": [
+            "DSM專利族US8133580系列是全球最廣泛授權的塗層技術",
+            "配方細節在專利中部分揭露",
+            "與P01/C06/P28同族"
+          ],
+          "actionable_insights": [
+            "Bioteque需做US8133580族全面迴避分析",
+            "確認哪些請求項已過期，哪些仍有效*"
+          ],
+          "red_flags": [
+            "部分請求項可能仍有效（2025-2030期間）*",
+            "需專利律師確認迴避空間"
+          ],
+          "bioteque_relevance": "Bioteque法務關鍵文件：DSM核心配方族迴避分析的起點"
+        }
       }
     },
     {
@@ -2319,6 +3494,50 @@
       "value_to_project": "PEG hydrogel可見光固化(低能量光源方向)",
       "links": {
         "doi": "https://doi.org/10.3390/gels8030164"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "UV-VIS固化PEG水凝膠生醫多功能應用：可見光固化降低UV傷害，軟組織相容，多用途",
+          "examples": [
+            {
+              "name": "PEG hydrogel UV-VIS固化",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "期刊，多應用驗證",
+              "substrate": "通用生醫材料",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "PEG + 可見光PI（LAP/Eosin Y）"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "UV-VIS可見光固化"
+              },
+              "results": {
+                "wca": "<20°",
+                "adhesion": "軟組織相容",
+                "durability": "依交聯密度"
+              }
+            }
+          ],
+          "mechanism": "LAP/Eosin Y等可見光PI在400-550nm引發PEG-DA交聯；比UV更溫和，對細胞/組織安全",
+          "key_findings": [
+            "可見光固化對TPU基材更溫和（UV可能使TPU黃化*）",
+            "PEG-DA是親水塗層低風險選擇",
+            "多用途：藥物載體/塗層/支架填充"
+          ],
+          "actionable_insights": [
+            "Bioteque若TPU黃化是問題，考慮可見光PI（LAP）替換UV PI",
+            "PEG-DA + LAP是低傷害TPU塗層配方"
+          ],
+          "red_flags": [
+            "可見光固化速度比UV慢（需較長照射時間）",
+            "LAP較I-2959貴*"
+          ],
+          "bioteque_relevance": "TPU黃化問題的解決方案：可見光固化PEG水凝膠塗層"
+        }
       }
     },
     {
