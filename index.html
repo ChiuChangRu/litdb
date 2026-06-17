@@ -2532,7 +2532,8 @@ function showDetail(i) {
     ${(p.patentResults && Object.keys(p.patentResults).length) ? `
     <div style="margin-top:12px">
       ${Object.entries(p.patentResults).map(([mode,r])=>{
-        const modeLabels = {full:'📊 完整分析',avoidance:'🚧 迴避設計',formulation:'🧪 配方萃取',feasibility:'🏭 可行性評估',compare:'🔄 對比分析'};
+        const modeLabels = {full:'📊 完整分析',avoidance:'🚧 迴避設計',formulation:'🧪 配方萃取',feasibility:'🏭 可行性評估',compare:'🔄 對比分析',review:'📚 綜述分析'};
+        if(mode==='review') return renderReviewResult(r);
         return `<div style="margin-bottom:6px;font-size:11px;color:var(--accent2);font-weight:600">${modeLabels[mode]||mode}</div>` + renderPatentResult(r);
       }).join('')}
       <button class="btn btn-s" onclick="${p.doc_type==='專利'?`showPatentAnalysis(${i})`:`showPaperAnalysis(${i})`}" style="width:100%;margin-top:8px">🔄 重新分析 / 其他模式</button>
@@ -2581,6 +2582,126 @@ function tryLocalFig(el, localUrl) {
 
 function closeMobileDetail() {
   document.getElementById('colRight').classList.remove('mobile-open');
+}
+
+// ── Review Article 專屬渲染 ───────────────────
+function renderReviewResult(r) {
+  if(!r) return '';
+  const S = (v) => v||'—';
+  const tag = (txt, color='#e86c3a') =>
+    `<span style="display:inline-block;background:${color}22;color:${color};padding:1px 7px;border-radius:4px;font-size:11px;margin:2px 2px 2px 0;font-weight:600">${txt}</span>`;
+
+  // Technologies compared 表格
+  let techTable = '';
+  if(r.technologies_compared?.length) {
+    techTable = `
+    <div style="margin-bottom:10px">
+      <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:6px">📊 技術比較</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:11px">
+          <thead><tr style="background:var(--card)">
+            <th style="padding:5px 8px;border:1px solid var(--border);text-align:left">材料</th>
+            <th style="padding:5px 8px;border:1px solid var(--border);text-align:center">篇數</th>
+            ${r.technologies_compared[0]?.cof_range?'<th style="padding:5px 8px;border:1px solid var(--border);text-align:center">COF 範圍</th>':''}
+            ${r.technologies_compared[0]?.wca_range?'<th style="padding:5px 8px;border:1px solid var(--border);text-align:center">WCA</th>':''}
+            <th style="padding:5px 8px;border:1px solid var(--border);text-align:left">結論</th>
+          </tr></thead>
+          <tbody>
+          ${r.technologies_compared.map(t=>`
+            <tr>
+              <td style="padding:5px 8px;border:1px solid var(--border);font-weight:600;color:var(--accent);white-space:nowrap">${t.material}</td>
+              <td style="padding:5px 8px;border:1px solid var(--border);text-align:center;color:var(--muted)">${t.n_studies||'—'}</td>
+              ${r.technologies_compared[0]?.cof_range?`<td style="padding:5px 8px;border:1px solid var(--border);text-align:center;font-family:monospace">${t.cof_range||'—'}</td>`:''}
+              ${r.technologies_compared[0]?.wca_range?`<td style="padding:5px 8px;border:1px solid var(--border);text-align:center">${t.wca_range||'—'}</td>`:''}
+              <td style="padding:5px 8px;border:1px solid var(--border);font-size:10px">${t.verdict||'—'}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+  }
+
+  // Clinical data 統計
+  let clinicalHtml = '';
+  const cd = r.clinical_data;
+  if(cd && Object.keys(cd).length) {
+    const cdEntries = Object.entries(cd).filter(([k,v])=>v!==undefined&&v!=='');
+    if(cdEntries.length) {
+      clinicalHtml = `<div style="margin-bottom:10px">
+        <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:6px">📈 關鍵數據</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          ${cdEntries.map(([k,v])=>`
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 10px;text-align:center">
+              <div style="font-size:16px;font-weight:700;color:var(--accent)">${typeof v==='number'&&v<1?(v*100).toFixed(0)+'%':v}</div>
+              <div style="font-size:9px;color:var(--muted);margin-top:1px">${k.replace(/_/g,' ')}</div>
+            </div>`).join('')}
+        </div>
+      </div>`;
+    }
+  }
+
+  // Evidence pyramid
+  let evidenceHtml = '';
+  const ep = r.evidence_pyramid;
+  if(ep && Object.keys(ep).length && !ep.market_data && !ep.patent_analysis && !ep.testing_methodology) {
+    evidenceHtml = `<div style="margin-bottom:10px">
+      <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:6px">🔬 證據等級分布</div>
+      <div style="display:flex;gap:8px;align-items:flex-end;height:50px">
+        ${[['in_vitro','#e86c3a'],['animal','#d4a030'],['clinical','#2d8c5a']].map(([k,col])=>ep[k]?`
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1">
+          <div style="font-size:10px;font-weight:700;color:${col}">${ep[k]}%</div>
+          <div style="width:100%;background:${col};border-radius:3px 3px 0 0;height:${ep[k]*0.4}px;min-height:4px"></div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px">${k==='in_vitro'?'體外':k==='animal'?'動物':'臨床'}</div>
+        </div>`:''
+        ).join('')}
+      </div>
+    </div>`;
+  }
+
+  // Best for
+  let bestHtml = '';
+  if(r.best_for && Object.keys(r.best_for).length) {
+    bestHtml = `<div style="margin-bottom:10px">
+      <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:5px">🏆 各場景最佳方案</div>
+      ${Object.entries(r.best_for).map(([k,v])=>`
+        <div style="display:flex;gap:6px;margin-bottom:3px;font-size:11px">
+          <span style="color:var(--muted);min-width:100px;flex-shrink:0">${k.replace(/_/g,' ')}：</span>
+          <span style="color:var(--text);font-weight:600">${v}</span>
+        </div>`).join('')}
+    </div>`;
+  }
+
+  return `
+  <div style="border-top:2px solid var(--accent2);padding-top:10px;margin-top:4px">
+    <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:8px">📚 綜述分析</div>
+
+    <div style="font-size:11px;color:var(--muted);margin-bottom:8px;background:var(--card);padding:7px 10px;border-radius:6px">
+      ${r.scope||''}
+      ${r.n_papers_covered>0?`<span style="margin-left:8px;font-weight:600;color:var(--accent)">涵蓋 ${r.n_papers_covered} 篇</span>`:''}
+    </div>
+
+    ${techTable}${clinicalHtml}${evidenceHtml}
+
+    ${r.consensus?.length?`
+    <div style="margin-bottom:10px">
+      <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:5px">✅ 多篇共識</div>
+      ${r.consensus.map(c=>`<div style="display:flex;gap:5px;margin-bottom:3px;font-size:11px"><span style="color:var(--accent2);flex-shrink:0">▸</span><span>${c}</span></div>`).join('')}
+    </div>`:''}
+
+    ${r.research_gaps?.length?`
+    <div style="margin-bottom:10px">
+      <div style="font-size:11px;font-weight:700;color:#c0392b;margin-bottom:5px">🔍 研究缺口</div>
+      ${r.research_gaps.map(g=>`<div style="display:flex;gap:5px;margin-bottom:3px;font-size:11px"><span style="color:#c0392b;flex-shrink:0">▸</span><span>${g}</span></div>`).join('')}
+    </div>`:''}
+
+    ${bestHtml}
+
+    ${r.bioteque_strategic_value?`
+    <div style="background:#eaf5ef;border-left:3px solid var(--accent2);padding:8px 10px;border-radius:0 6px 6px 0;font-size:11px">
+      <div style="font-weight:700;color:var(--accent2);margin-bottom:3px">🎯 Bioteque 策略意義</div>
+      <div style="color:var(--text)">${r.bioteque_strategic_value}</div>
+    </div>`:''}
+  </div>`;
 }
 
 // ── Excel 匯出 ──────────────────────────────
