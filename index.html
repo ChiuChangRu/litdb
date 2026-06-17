@@ -452,6 +452,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
         </div>
         <div style="display:flex;gap:6px;flex-direction:column">
           <button class="btn btn-p" onclick="batchAnalyzeEncrustation()" style="white-space:nowrap;padding:8px 16px;font-size:12px">💧 抗結痂 10 篇（~NT$3）</button>
+          <button class="btn btn-p" onclick="batchAnalyzeTpu()" style="white-space:nowrap;padding:8px 16px;font-size:12px;background:var(--accent2);border-color:var(--accent2)">🧬 TPU 8 篇（~NT$2）</button>
           <button class="btn btn-s" onclick="batchAnalyzeAll()" style="white-space:nowrap;padding:6px 16px;font-size:11px">🤖 全部未分析（~NT$9）</button>
         </div>
       </div>
@@ -1244,6 +1245,71 @@ function addPatentToLibrary(patentId) {
 // BATCH ANALYSIS: 批次自動分析（睡前點一下）
 // ══════════════════════════════════════════════
 let batchRunning = false;
+
+// TPU 專用批次分析（tags 含 TPU 且未分析）
+async function batchAnalyzeTpu() {
+  if(batchRunning){toast('批次分析已在執行中','error');return}
+  if(!cfg.proxy){toast('請先設定 Claude API Proxy URL','error');return}
+
+  const candidates = DB.papers.filter(p => {
+    if(p.patentResults && Object.keys(p.patentResults).length>0) return false;
+    return (p.tags||[]).includes('TPU') && !p._deleted;
+  });
+
+  if(!candidates.length){toast('沒有未分析的 TPU 文獻','success');return}
+
+  const est = (candidates.length * 0.25).toFixed(1);
+  const mins = Math.ceil(candidates.length * 0.7);
+  if(!confirm(`🧬 TPU 專題分析\n\n即將分析 ${candidates.length} 篇 TPU 相關文獻\n預估費用：~NT$${est}\n預估時間：~${mins} 分鐘\n\n包含：${candidates.map(p=>p.id).join(', ')}\n\n保持瀏覽器開啟即可`)) return;
+
+  batchRunning = true;
+  const statusEl = document.getElementById('batchStatus');
+  let done=0, fail=0;
+
+  for(const p of candidates) {
+    const text = p.abstract_note || p.purpose || p.title || '';
+    statusEl.innerHTML = `🧬 TPU 分析中 [${done+fail+1}/${candidates.length}] ${p.id}…`;
+
+    const isPatent = p.doc_type === '專利';
+    const prompt = `分析這篇 TPU 相關${isPatent?'專利':'文獻'}，重點：
+1. TPU 基材特性（硬鏈段/軟鏈段比例、Shore 硬度、加工性）
+2. 親水塗層對 TPU 的附著問題（primer 是否需要？adhesion 數據？）
+3. 固化條件（UV/熱固）對 TPU 熱穩定性的影響
+4. 與 PVC、Pebax 比較時 TPU 的優劣
+
+回傳純JSON：{"summary":"一句話","examples":[{"name":"","is_real":true,"credibility":"高/中/低","credibility_reason":"","substrate":"TPU規格","formulation":{"primer":"","topcoat":""},"process":{"surface_prep":"","coating_method":"","drying":"","curing":""},"results":{"friction":"","adhesion":"","wca":"","durability":"","other":""}}],"tpu_advantages":"TPU相對PVC/Pebax的優點","tpu_challenges":"TPU塗層挑戰","key_claims":["核心貢獻"],"actionable_insights":["可借鏡做法"],"red_flags":["注意"],"bioteque_relevance":"對Bioteque TPU導管塗層的建議"}`;
+
+    try {
+      const resp = await fetch(cfg.proxy, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          model:'claude-sonnet-4-6', max_tokens:2000,
+          system:'你是醫材 TPU 導管塗層專家。回傳精簡純JSON，繁體中文。沒有的欄位省略。',
+          messages:[{role:'user',content:`${isPatent?'專利':'文獻'}：${p.title}\n摘要：${text.slice(0,2000)}`}]
+        })
+      });
+      const data = await resp.json();
+      let raw = data.content[0].text.trim();
+      raw = raw.replace(/```json|```/g,'').trim();
+      const analysis = JSON.parse(raw);
+      if(!p.patentResults) p.patentResults = {};
+      p.patentResults.full = analysis;
+      done++;
+      await saveDB();
+      toast(`✅ ${p.id} 分析完成`,'success');
+    } catch(e) {
+      fail++;
+      toast(`❌ ${p.id} 失敗：${e.message}`,'error');
+    }
+    await new Promise(r=>setTimeout(r,1200));
+  }
+
+  batchRunning = false;
+  statusEl.innerHTML = `✅ TPU 批次分析完成！<br>
+    <span style="color:var(--accent2)">成功 ${done} 篇 / 失敗 ${fail} 篇</span><br>
+    <span style="color:var(--muted)">切到「分析 > 比較」查看 TPU 基材群組</span>`;
+  toast(`TPU 分析完成：${done} 成功 / ${fail} 失敗`,'success');
+}
 
 // 抗結痂專用批次分析（U系列 + 含抗結痂關鍵字的未分析文獻）
 async function batchAnalyzeEncrustation() {
@@ -2404,13 +2470,13 @@ function showDetail(i) {
       <button class="btn btn-p" onclick="loadCiteTree(${i})" style="margin-left:auto">🌳 引文樹</button>
     </div>
     <div id="patentAnalysis_${i}"></div>
-    ${(p.doc_type==='專利' && p.patentResults && Object.keys(p.patentResults).length) ? `
+    ${(p.patentResults && Object.keys(p.patentResults).length) ? `
     <div style="margin-top:12px">
       ${Object.entries(p.patentResults).map(([mode,r])=>{
         const modeLabels = {full:'📊 完整分析',avoidance:'🚧 迴避設計',formulation:'🧪 配方萃取',feasibility:'🏭 可行性評估',compare:'🔄 對比分析'};
         return `<div style="margin-bottom:6px;font-size:11px;color:var(--accent2);font-weight:600">${modeLabels[mode]||mode}</div>` + renderPatentResult(r);
       }).join('')}
-      <button class="btn btn-s" onclick="showPatentAnalysis(${i})" style="width:100%;margin-top:8px">🔄 重新分析 / 其他模式</button>
+      <button class="btn btn-s" onclick="${p.doc_type==='專利'?`showPatentAnalysis(${i})`:`showPaperAnalysis(${i})`}" style="width:100%;margin-top:8px">🔄 重新分析 / 其他模式</button>
     </div>` : ''}
     <!-- 筆記區 -->
     <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:10px">
@@ -2489,7 +2555,7 @@ async function loadChemStructures(p, i) {
       const pubUrl = `https://pubchem.ncbi.nlm.nih.gov/compound/${cid}`;
       card.innerHTML = `<div style="font-size:10px;font-weight:600;color:var(--text);margin-bottom:2px">${name}</div>
         <a href="${pubUrl}" target="_blank" title="PubChem CID ${cid}">
-          <img src="${imgUrl}" style="width:110px;height:90px;object-fit:contain;border:1px solid var(--border);border-radius:4px;background:#fff" onerror="this.parentElement.parentElement.innerHTML='<span style=font-size:10px;color:var(--muted)>${name}<br>無結構資料</span>'">
+          <img src="${imgUrl}" style="width:160px;height:130px;object-fit:contain;border:1px solid var(--border);border-radius:6px;background:#fff" onerror="this.parentElement.parentElement.innerHTML='<span style=font-size:10px;color:var(--muted)>${name}<br>無結構資料</span>'">
         </a>
         <div style="font-size:9px;color:var(--muted)">CID ${cid}</div>`;
     } catch(e) {
