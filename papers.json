@@ -90,9 +90,7 @@
         "encrustation resistance抗結痂",
         "biocompatibility",
         "hemocompatibility血液相容",
-        "particulate顆粒",
-        "biofilm resistance",
-        "superhydrophilic"
+        "particulate顆粒"
       ],
       "market_trend": [
         "PFAS-free",
@@ -166,6 +164,7 @@
         "adhesion附著力",
         "benzophenone",
         "durability耐久",
+        "encrustation resistance抗結痂",
         "isocyanate",
         "lubricity潤滑",
         "導尿管"
@@ -384,6 +383,7 @@
       "tags": [
         "COF<0.1",
         "PVP",
+        "adhesion附著力",
         "isocyanate",
         "lubricity潤滑",
         "導管",
@@ -460,6 +460,7 @@
         "UV光固化",
         "WCA<20°",
         "WCA接觸角",
+        "adhesion附著力",
         "balloon",
         "benzophenone",
         "durability耐久",
@@ -683,6 +684,7 @@
         "PVP",
         "UV光固化",
         "WCA接觸角",
+        "adhesion附著力",
         "durability耐久",
         "isocyanate",
         "熱固化"
@@ -825,6 +827,8 @@
         "PAA",
         "PEG",
         "UV光固化",
+        "adhesion附著力",
+        "encrustation resistance抗結痂",
         "lubricity潤滑",
         "silicone",
         "導尿管"
@@ -1117,7 +1121,9 @@
         "UV光固化",
         "WCA<20°",
         "WCA接觸角",
+        "adhesion附著力",
         "biocompatibility",
+        "encrustation resistance抗結痂",
         "lubricity潤滑",
         "stent",
         "導管",
@@ -1359,6 +1365,7 @@
         "COF<0.1",
         "WCA<20°",
         "WCA接觸角",
+        "adhesion附著力",
         "antifouling抗汙",
         "encrustation resistance抗結痂",
         "lubricity潤滑",
@@ -1954,6 +1961,7 @@
       "access": "開放全文",
       "tags": [
         "UV光固化",
+        "adhesion附著力",
         "benzophenone"
       ],
       "purpose": "光起始劑選型核心(水溶/低毒/光源)",
@@ -2073,7 +2081,9 @@
         "PEG",
         "PVP",
         "UV光固化",
+        "antimicrobial抗菌",
         "biocompatibility",
+        "encrustation resistance抗結痂",
         "導管"
       ],
       "purpose": "商用視角整理UV固化親水材料角色",
@@ -2399,6 +2409,7 @@
       "doc_type": "綜述review",
       "access": "開放摘要",
       "tags": [
+        "lubricity潤滑",
         "導管"
       ],
       "purpose": "親水塗層市場全景與主要廠商",
@@ -2505,6 +2516,9 @@
       "access": "開放全文",
       "tags": [
         "UV光固化",
+        "adhesion附著力",
+        "antifouling抗汙",
+        "encrustation resistance抗結痂",
         "isocyanate",
         "plasma-treat",
         "stent",
@@ -2838,6 +2852,7 @@
         "PVA",
         "PVP",
         "WCA接觸角",
+        "antimicrobial抗菌",
         "durability耐久",
         "encrustation resistance抗結痂",
         "lubricity潤滑",
@@ -3125,6 +3140,7 @@
       "tags": [
         "PEG",
         "PVP",
+        "antifouling抗汙",
         "encrustation resistance抗結痂",
         "lubricity潤滑",
         "stent",
@@ -3635,6 +3651,7 @@
       "access": "開放摘要",
       "tags": [
         "biocompatibility",
+        "lubricity潤滑",
         "導管"
       ],
       "purpose": "市場驅動力與廠商;低VOC法規趨勢",
@@ -3734,6 +3751,7 @@
       "access": "開放摘要",
       "tags": [
         "WCA接觸角",
+        "lubricity潤滑",
         "活檢針",
         "穿刺針"
       ],
@@ -3902,6 +3920,7 @@
         "TPU",
         "WCA<20°",
         "WCA接觸角",
+        "adhesion附著力",
         "durability耐久",
         "lubricity潤滑",
         "photografting",
@@ -4041,6 +4060,7 @@
       "doc_type": "商用產品",
       "access": "產品頁",
       "tags": [
+        "lubricity潤滑",
         "導管",
         "導線guidewire"
       ],
@@ -4214,6 +4234,7 @@
         "UV光固化",
         "WCA<20°",
         "WCA接觸角",
+        "adhesion附著力",
         "durability耐久",
         "lubricity潤滑",
         "photografting",
@@ -4427,6 +4448,7 @@
         "WCA接觸角",
         "adhesion附著力",
         "antifouling抗汙",
+        "encrustation resistance抗結痂",
         "lubricity潤滑",
         "導管"
       ],
@@ -4494,10 +4516,12 @@
       "tags": [
         "MPC",
         "TPU",
+        "adhesion附著力",
         "antifouling抗汙",
         "antimicrobial抗菌",
         "biocompatibility",
         "durability耐久",
+        "encrustation resistance抗結痂",
         "hemocompatibility血液相容",
         "isocyanate",
         "lubricity潤滑",
@@ -4574,6 +4598,7 @@
         "SBMA",
         "WCA<20°",
         "WCA接觸角",
+        "adhesion附著力",
         "antifouling抗汙",
         "durability耐久",
         "encrustation resistance抗結痂",
@@ -4794,6 +4819,7 @@
         "antifouling抗汙",
         "biocompatibility",
         "durability耐久",
+        "encrustation resistance抗結痂",
         "lubricity潤滑"
       ],
       "purpose": "SBMA塗層14天長期穩定性數據",
@@ -4858,6 +4884,7 @@
         "WCA<20°",
         "WCA接觸角",
         "antifouling抗汙",
+        "antimicrobial抗菌",
         "biocompatibility",
         "encrustation resistance抗結痂",
         "hydrogel",
@@ -4928,6 +4955,7 @@
         "PDA-polydopamine",
         "PVC",
         "WCA接觸角",
+        "adhesion附著力",
         "antifouling抗汙",
         "antimicrobial抗菌",
         "biocompatibility",
@@ -5010,6 +5038,7 @@
         "antifouling抗汙",
         "antimicrobial抗菌",
         "biocompatibility",
+        "encrustation resistance抗結痂",
         "lubricity潤滑"
       ],
       "purpose": "PDA+PVP在PP基材的附著與抗菌",
@@ -5149,6 +5178,7 @@
         "WCA<20°",
         "WCA接觸角",
         "antifouling抗汙",
+        "antimicrobial抗菌",
         "biocompatibility",
         "chitosan",
         "encrustation resistance抗結痂",
@@ -5224,8 +5254,10 @@
         "UV光固化",
         "WCA接觸角",
         "adhesion附著力",
+        "antifouling抗汙",
         "antimicrobial抗菌",
         "chitosan",
+        "encrustation resistance抗結痂",
         "lubricity潤滑",
         "導管"
       ],
@@ -5303,6 +5335,7 @@
         "antifouling抗汙",
         "biocompatibility",
         "durability耐久",
+        "encrustation resistance抗結痂",
         "hemocompatibility血液相容",
         "lubricity潤滑",
         "導管"
@@ -5376,6 +5409,7 @@
         "adhesion附著力",
         "antifouling抗汙",
         "biocompatibility",
+        "encrustation resistance抗結痂",
         "hemocompatibility血液相容",
         "lubricity潤滑",
         "導管"
@@ -5446,10 +5480,12 @@
         "PDA-polydopamine",
         "TPU",
         "WCA接觸角",
+        "adhesion附著力",
         "antifouling抗汙",
         "antimicrobial抗菌",
         "biocompatibility",
         "durability耐久",
+        "encrustation resistance抗結痂",
         "lubricity潤滑"
       ],
       "purpose": "2026最新PU表面MPC抗菌雙功能塗層",
@@ -6099,6 +6135,8 @@
       "doc_type": "綜述review",
       "access": "付費",
       "tags": [
+        "antifouling抗汙",
+        "antimicrobial抗菌",
         "encrustation resistance抗結痂",
         "綜述review",
         "輸尿管支架"
@@ -6316,7 +6354,10 @@
       "doc_type": "綜述review",
       "access": "付費",
       "tags": [
+        "adhesion附著力",
         "alginate",
+        "antifouling抗汙",
+        "antimicrobial抗菌",
         "biocompatibility",
         "chitosan",
         "encrustation resistance抗結痂",
@@ -6439,6 +6480,8 @@
       "doc_type": "綜述review",
       "access": "開放全文",
       "tags": [
+        "antifouling抗汙",
+        "antimicrobial抗菌",
         "biofilm",
         "conditioning film",
         "encrustation",
@@ -6567,10 +6610,13 @@
       "tags": [
         "WCA<20°",
         "WCA接觸角",
+        "adhesion附著力",
+        "antifouling抗汙",
         "antimicrobial抗菌",
         "durability耐久",
         "encrustation",
         "encrustation resistance抗結痂",
+        "lubricity潤滑",
         "zwitterionic",
         "導尿管"
       ],
@@ -6786,6 +6832,7 @@
         "WCA接觸角",
         "antifouling抗汙",
         "encrustation",
+        "encrustation resistance抗結痂",
         "plasma",
         "輸尿管支架"
       ],
@@ -6854,6 +6901,7 @@
       "doc_type": "期刊論文",
       "access": "開放全文",
       "tags": [
+        "adhesion附著力",
         "antifouling抗汙",
         "antimicrobial抗菌",
         "copper",
