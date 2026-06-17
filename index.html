@@ -2365,6 +2365,8 @@ function showDetail(i) {
       <div class="detail-tags">${tags}</div>
     </div>
 
+    <div id="chemStructures_${i}"></div>
+
     ${link?`<div class="detail-section">
       <div class="detail-section-title">🔗 連結</div>
       <a href="${link}" target="_blank" class="detail-link">↗ ${link.length>50?link.slice(0,50)+'…':link}</a>
@@ -2413,6 +2415,7 @@ function showDetail(i) {
       img.src = localUrl;
     }
   }
+  loadChemStructures(p, i);
 }
 
 function tryLocalFig(el, localUrl) {
@@ -2420,6 +2423,55 @@ function tryLocalFig(el, localUrl) {
   img.onload = () => { el.src = localUrl; };
   img.onerror = () => { el.parentElement.innerHTML = ''; };
   img.src = localUrl;
+}
+
+// ── PubChem 化學結構 ──────────────────────────
+const CHEM_CATS = ['hydrophilic_polymer','anchor_primer'];
+const PUBCHEM_NAME_MAP = {
+  'PDA-polydopamine':'dopamine','PUA':'polyurethane acrylate','PEGDA':'poly(ethylene glycol) diacrylate',
+  'PEO':'poly(ethylene oxide)','PVP':'polyvinylpyrrolidone','PVA':'polyvinyl alcohol',
+  'PEG':'polyethylene glycol','PEGMA':'poly(ethylene glycol) methacrylate'
+};
+
+async function loadChemStructures(p, i) {
+  const el = document.getElementById('chemStructures_' + i);
+  if(!el) return;
+  const dict = DB.meta.tag_dictionary || {};
+  const chemTags = new Set();
+  CHEM_CATS.forEach(cat => (dict[cat]||[]).forEach(t => chemTags.add(t)));
+  const targets = (p.tags||[]).filter(t => chemTags.has(t));
+  if(!targets.length) return;
+
+  el.innerHTML = `<div class="detail-section">
+    <div class="detail-section-title">⚗️ 化學結構</div>
+    <div id="chemGrid_${i}" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px"></div>
+  </div>`;
+  const grid = document.getElementById('chemGrid_' + i);
+
+  for(const name of targets) {
+    const query = PUBCHEM_NAME_MAP[name] || name;
+    const card = document.createElement('div');
+    card.style.cssText = 'text-align:center;font-size:10px;color:var(--muted);width:120px';
+    card.innerHTML = `<div style="font-size:10px;color:var(--muted);margin-bottom:2px">${name}</div><div style="font-size:9px;color:var(--border)">載入中…</div>`;
+    grid.appendChild(card);
+
+    try {
+      const cidRes = await fetch(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${encodeURIComponent(query)}/cids/JSON`);
+      if(!cidRes.ok) throw new Error('not found');
+      const cidData = await cidRes.json();
+      const cid = cidData.IdentifierList?.CID?.[0];
+      if(!cid) throw new Error('no cid');
+      const imgUrl = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${cid}/PNG?record_type=2d&image_size=small`;
+      const pubUrl = `https://pubchem.ncbi.nlm.nih.gov/compound/${cid}`;
+      card.innerHTML = `<div style="font-size:10px;font-weight:600;color:var(--text);margin-bottom:2px">${name}</div>
+        <a href="${pubUrl}" target="_blank" title="PubChem CID ${cid}">
+          <img src="${imgUrl}" style="width:110px;height:90px;object-fit:contain;border:1px solid var(--border);border-radius:4px;background:#fff" onerror="this.parentElement.parentElement.innerHTML='<span style=font-size:10px;color:var(--muted)>${name}<br>無結構資料</span>'">
+        </a>
+        <div style="font-size:9px;color:var(--muted)">CID ${cid}</div>`;
+    } catch(e) {
+      card.innerHTML = `<div style="font-size:10px;color:var(--muted)">${name}<br><span style="font-size:9px">無結構資料</span></div>`;
+    }
+  }
 }
 
 // ══════════════════════════════════════════════
