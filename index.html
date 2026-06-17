@@ -243,6 +243,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+TC:wght@400;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
@@ -262,6 +263,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
     <span id="dbStats" style="font-size:11px;color:#ffeedd;background:rgba(0,0,0,0.15);padding:2px 8px;border-radius:4px">—</span>
     <button class="btn btn-s" onclick="openSettings()" style="color:#fff;border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.15)">⚙</button>
     <button class="btn btn-s" onclick="exportDB()" style="color:#fff;border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.15)">⬇</button>
+    <button class="btn btn-s" onclick="exportExcel()" style="color:#fff;border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.15)" title="匯出分析報告 Excel">📊</button>
     <label class="btn btn-s" style="cursor:pointer;color:#fff;border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.15)">⬆<input type="file" accept=".json" style="display:none" onchange="importDB(event)"></label>
   </div>
 </header>
@@ -1973,8 +1975,9 @@ function renderCompareGroups(groups, container, allPapers) {
       ? `<th style="padding:8px;text-align:left;border:1px solid var(--border);white-space:nowrap">ID</th>
          <th style="padding:8px;text-align:left;border:1px solid var(--border)">機構</th>
          <th style="padding:8px;text-align:left;border:1px solid var(--border)">標題</th>
-         <th style="padding:8px;text-align:left;border:1px solid var(--border)">抗汙材料</th>
-         <th style="padding:8px;text-align:left;border:1px solid var(--border)">機制</th>
+         <th style="padding:8px;text-align:left;border:1px solid var(--border)">底塗／Primer</th>
+         <th style="padding:8px;text-align:left;border:1px solid var(--border)">面塗材料</th>
+         <th style="padding:8px;text-align:left;border:1px solid var(--border)">固化方式</th>
          <th style="padding:8px;text-align:center;border:1px solid var(--border)">抗結垢</th>
          <th style="padding:8px;text-align:center;border:1px solid var(--border)">抗菌</th>
          <th style="padding:8px;text-align:center;border:1px solid var(--border)">COF</th>
@@ -2013,9 +2016,10 @@ function renderCompareGroups(groups, container, allPapers) {
       const clickNav = `showView('browse',document.querySelectorAll('.tabs > .tab')[1]);setTimeout(()=>{const idx=DB.papers.findIndex(x=>x.id==='${p.id}');filtered=DB.papers;renderPapers();if(idx>=0)showDetail(idx)},100)`;
 
       const tds = isEncrust
-        ? `<td style="padding:6px 8px;border:1px solid var(--border);font-size:11px">${ex.substrate||fm.topcoat||'—'}</td>
-           <td style="padding:6px 8px;border:1px solid var(--border);font-size:11px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${r.mechanism||''}">${r.mechanism||(r.key_findings?.[0])||'—'}</td>
-           <td style="padding:6px 8px;border:1px solid var(--border);text-align:center;font-size:11px;color:${res.encrustation_reduction&&res.encrustation_reduction!=='—'?'#1a7040':'inherit'}">${res.encrustation_reduction||res.antifouling||'—'}</td>
+        ? `<td style="padding:6px 8px;border:1px solid var(--border);font-size:11px;max-width:120px" title="${fm.primer||''}">${fm.primer||'—'}</td>
+           <td style="padding:6px 8px;border:1px solid var(--border);font-size:11px;max-width:140px;font-weight:600;color:#1a4060" title="${fm.topcoat||''}">${fm.topcoat||'—'}</td>
+           <td style="padding:6px 8px;border:1px solid var(--border);font-size:11px;white-space:nowrap">${ex.process?.curing||'—'}</td>
+           <td style="padding:6px 8px;border:1px solid var(--border);text-align:center;font-size:11px;color:${res.encrustation_reduction&&res.encrustation_reduction!=='—'?'#1a7040':'inherit'}" title="${res.antifouling||''}">${res.encrustation_reduction||res.antifouling||'—'}</td>
            <td style="padding:6px 8px;border:1px solid var(--border);text-align:center;font-size:11px">${res.antimicrobial||'—'}</td>
            <td style="padding:6px 8px;border:1px solid var(--border);text-align:center;font-weight:600;color:var(--accent2)">${res.friction||'—'}</td>
            <td style="padding:6px 8px;border:1px solid var(--border);text-align:center">${res.wca||'—'}</td>`
@@ -2039,7 +2043,7 @@ function renderCompareGroups(groups, container, allPapers) {
   });
 
   html += `<div style="text-align:center;padding:16px">
-    <span style="font-size:12px;color:var(--muted)">✅ = 已分析，半透明 = 未分析。💧 抗結痂群組顯示：抗汙材料 / 機制 / 抗結垢 / 抗菌 / COF / WCA。</span>
+    <span style="font-size:12px;color:var(--muted)">✅ = 已分析，半透明 = 未分析。💧 抗結痂群組顯示：底塗Primer ／ 面塗材料 ／ 固化方式 ／ 抗結垢 ／ 抗菌 ／ COF ／ WCA。</span>
   </div>`;
 
   container.innerHTML = html;
@@ -2577,6 +2581,105 @@ function tryLocalFig(el, localUrl) {
 
 function closeMobileDetail() {
   document.getElementById('colRight').classList.remove('mobile-open');
+}
+
+// ── Excel 匯出 ──────────────────────────────
+function exportExcel() {
+  if(!window.XLSX){toast('SheetJS 尚未載入，請稍後再試','error');return}
+  const wb = XLSX.utils.book_new();
+  const papers = DB.papers.filter(p=>!p._deleted);
+
+  // ── Sheet 1：全部文獻 ──
+  const all = papers.map(p=>({
+    'ID': p.id, '類型': p.doc_type, '年份': p.year||'',
+    '標題': p.title||'', '期刊/來源': p.venue||'',
+    '作者/機構': p.authors||'', '標籤': (p.tags||[]).join(', '),
+    '目的': p.purpose||'', '專案價值': p.value_to_project||'',
+    '已分析': p.patentResults&&Object.keys(p.patentResults).length>0?'✅':'—',
+    '摘要': (p.abstract_note||'').slice(0,200)
+  }));
+  const ws1 = XLSX.utils.json_to_sheet(all);
+  ws1['!cols'] = [{wch:6},{wch:8},{wch:6},{wch:50},{wch:20},{wch:25},{wch:30},{wch:30},{wch:30},{wch:6},{wch:50}];
+  XLSX.utils.book_append_sheet(wb, ws1, '全部文獻');
+
+  // ── Sheet 2：配方分析（所有已分析文獻）──
+  const analyzed = papers.filter(p=>p.patentResults?.full).map(p=>{
+    const r = p.patentResults.full;
+    const ex = r.examples?.[0]||{};
+    const fm = ex.formulation||{};
+    const proc = ex.process||{};
+    const res = ex.results||{};
+    return {
+      'ID':p.id,'類型':p.doc_type,'年份':p.year||'','標題':p.title||'',
+      '機構/作者':p.authors||'',
+      '一句話摘要':r.summary||'',
+      '底塗/Primer':fm.primer||'—',
+      '面塗材料':fm.topcoat||'—',
+      '基材':ex.substrate||'—',
+      '前處理':proc.surface_prep||'—',
+      '塗覆方式':proc.coating_method||'—',
+      '固化方式':proc.curing||'—',
+      'COF/摩擦':res.friction||'—',
+      '附著力':res.adhesion||'—',
+      'WCA接觸角':res.wca||'—',
+      '耐久性':res.durability||'—',
+      '抗汙/抗結垢':res.antifouling||res.encrustation_reduction||'—',
+      '抗菌':res.antimicrobial||'—',
+      '可信度':`${ex.credibility||'—'} ${ex.credibility_reason||''}`.trim(),
+      '對Bioteque建議':(r.bioteque_relevance||r.actionable_insights?.[0]||'—'),
+      '注意事項':(r.red_flags||[]).join('；')||'—',
+    };
+  });
+  const ws2 = XLSX.utils.json_to_sheet(analyzed);
+  ws2['!cols'] = [{wch:6},{wch:8},{wch:6},{wch:40},{wch:20},{wch:40},{wch:25},{wch:30},{wch:15},{wch:20},{wch:12},{wch:15},{wch:20},{wch:15},{wch:10},{wch:20},{wch:25},{wch:15},{wch:15},{wch:40},{wch:40}];
+  XLSX.utils.book_append_sheet(wb, ws2, '配方分析');
+
+  // ── Sheet 3：抗結痂比較 ──
+  import_re = /encrustation|結痂|biofilm|生物膜|conditioning film|sbma|mpc|zwitterion|抗汙|antifouling|chitosan|propolis|hyaluron|heparin|urinary|ureteral|輸尿管|stent/i;
+  const encrust = papers.filter(p=>{
+    const hay=`${p.title} ${p.abstract_note||''} ${p.purpose||''} ${(p.tags||[]).join(' ')} ${p.id}`;
+    return (import_re.test(hay)||p.id.startsWith('U')) && p.patentResults?.full;
+  }).map(p=>{
+    const r=p.patentResults.full; const ex=r.examples?.[0]||{};
+    const fm=ex.formulation||{}; const proc=ex.process||{}; const res=ex.results||{};
+    return {
+      'ID':p.id,'類型':p.doc_type,'標題':p.title||'',
+      '底塗/Primer':fm.primer||'—',
+      '面塗材料':fm.topcoat||'—',
+      '固化方式':proc.curing||'—',
+      '結痂機制':r.mechanism||'—',
+      '抗結垢率':res.encrustation_reduction||'—',
+      '抗汙效果':res.antifouling||'—',
+      '抗菌':res.antimicrobial||'—',
+      'COF':res.friction||'—',
+      'WCA':res.wca||'—',
+      '對Bioteque建議':r.bioteque_relevance||'—',
+    };
+  });
+  const ws3 = XLSX.utils.json_to_sheet(encrust);
+  ws3['!cols'] = [{wch:6},{wch:8},{wch:40},{wch:25},{wch:30},{wch:15},{wch:40},{wch:20},{wch:20},{wch:15},{wch:15},{wch:10},{wch:40}];
+  XLSX.utils.book_append_sheet(wb, ws3, '抗結痂比較');
+
+  // ── Sheet 4：TPU 配方比較 ──
+  const tpu = papers.filter(p=>(p.tags||[]).includes('TPU') && p.patentResults?.full).map(p=>{
+    const r=p.patentResults.full; const ex=r.examples?.[0]||{};
+    const fm=ex.formulation||{}; const proc=ex.process||{}; const res=ex.results||{};
+    return {
+      'ID':p.id,'類型':p.doc_type,'標題':p.title||'',
+      '底塗/Primer':fm.primer||'—','面塗材料':fm.topcoat||'—',
+      '固化方式':proc.curing||'—',
+      'COF':res.friction||'—','附著力':res.adhesion||'—','WCA':res.wca||'—',
+      'TPU優勢':r.tpu_advantages||'—','TPU挑戰':r.tpu_challenges||'—',
+      '對Bioteque建議':r.bioteque_relevance||'—',
+    };
+  });
+  const ws4 = XLSX.utils.json_to_sheet(tpu);
+  ws4['!cols'] = [{wch:6},{wch:8},{wch:40},{wch:25},{wch:30},{wch:15},{wch:15},{wch:15},{wch:10},{wch:35},{wch:35},{wch:40}];
+  XLSX.utils.book_append_sheet(wb, ws4, 'TPU配方比較');
+
+  const date = new Date().toISOString().slice(0,10);
+  XLSX.writeFile(wb, `LitDB_分析報告_${date}.xlsx`);
+  toast('✅ Excel 匯出成功','success');
 }
 
 // ── PubChem 化學結構 ──────────────────────────
