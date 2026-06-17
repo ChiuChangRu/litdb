@@ -316,7 +316,6 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 <div class="view" id="v-analysis">
   <div style="display:flex;gap:4px;padding:8px 16px;background:var(--card);border-bottom:1px solid var(--border);flex-wrap:wrap">
     <button class="btn btn-s analysis-sub active" onclick="showAnalysisTab('graph',this)">🕸 關係圖</button>
-    <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('encrustation',this)">💧 抗結痂</button>
     <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('gap',this)">🔥 缺口分析</button>
     <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('compare',this)">📊 比較</button>
     <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('commercial',this)">🏢 商業分析</button>
@@ -360,13 +359,6 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 </div>
 
 <!-- ═══════════════ VIEW: GAP ═══════════════ -->
-<div class="view" id="v-encrustation" style="display:none">
-  <div style="padding:16px;background:var(--card);border-radius:8px;margin-bottom:16px">
-    <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--accent)">💧 抗結痂策略分析</div>
-    <div id="encrusationContent" style="min-height:400px"></div>
-  </div>
-</div>
-
 <div class="view" id="v-gap" style="display:none">
   <div class="panel">
     <div class="panel-h">① 基材 × 固化方式</div>
@@ -393,6 +385,16 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
     <div class="panel-h">⑥ 親水高分子 × 錨固劑/底塗</div>
     <div class="heatmap-wrap" id="heatmapWrap6"></div>
   </div>
+  <div class="panel" style="margin-top:16px;border:2px solid var(--accent)">
+    <div class="panel-h" style="color:var(--accent)">⑦ 應用 × 功能目標（潤滑/抗結痂/抗菌/附著）</div>
+    <div style="font-size:11px;color:var(--muted);padding:4px 12px">找出哪些應用還缺抗結痂或抗菌方案 — 空白格 = 開發機會</div>
+    <div class="heatmap-wrap" id="heatmapWrap7"></div>
+  </div>
+  <div class="panel" style="margin-top:16px;border:2px solid var(--accent)">
+    <div class="panel-h" style="color:var(--accent)">⑧ 基材 × 功能目標</div>
+    <div style="font-size:11px;color:var(--muted);padding:4px 12px">找出哪些基材還沒有抗結痂/抗菌驗證</div>
+    <div class="heatmap-wrap" id="heatmapWrap8"></div>
+  </div>
 </div>
 
 <!-- ═══════════════ VIEW: COMPARE ═══════════════ -->
@@ -406,6 +408,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
         <option value="anchor_primer">底塗/錨固</option>
         <option value="hydrophilic_polymer">親水高分子</option>
         <option value="application">應用/適應症</option>
+        <option value="func_goal">⭐ 功能目標（潤滑/抗結痂/抗菌/附著）</option>
         <option value="org">公司/機構</option>
         <option value="patent_status">專利狀態</option>
         <option value="year_range">年份區間</option>
@@ -1534,112 +1537,6 @@ const origShowView = window.showView;
 // ══════════════════════════════════════════════
 // COMMERCIAL: 商業產品分析
 // ══════════════════════════════════════════════
-// ══════════════════════════════════════════════
-// ENCRUSTATION: 抗結痂策略分析
-// ══════════════════════════════════════════════
-function buildEncrusationAnalysis() {
-  const el = document.getElementById('encrusationContent');
-  if(!el) return;
-
-  // 收集抗結痂相關文獻
-  const u_papers = DB.papers.filter(p=>p.id.startsWith('U')).sort((a,b)=>parseInt(a.id.slice(1))-parseInt(b.id.slice(1)));
-  const analyzed = u_papers.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0);
-  const pending = u_papers.filter(p=>!analyzed.includes(p));
-
-  let html = '';
-
-  // 1. 進度概覽
-  html += `<div style="padding:12px;background:var(--bg);border-radius:8px;margin-bottom:12px">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <div>
-        <div style="font-size:13px;font-weight:600;margin-bottom:4px">📊 分析進度</div>
-        <div style="font-size:11px;color:var(--muted)">${analyzed.length}/${u_papers.length} 篇已分析</div>
-      </div>
-      <div style="width:120px;height:8px;background:var(--border);border-radius:4px;overflow:hidden">
-        <div style="width:${analyzed.length/u_papers.length*100}%;height:100%;background:var(--accent2)"></div>
-      </div>
-    </div>
-  </div>`;
-
-  if(analyzed.length===0) {
-    html += `<div style="padding:20px;text-align:center;color:var(--muted)">
-      <span style="font-size:32px;display:block;margin-bottom:8px">💧</span>
-      <strong>10 篇抗結痂文獻尚未分析</strong><br>
-      <span style="font-size:12px">點右上「📋 報告」→ 「💧 抗結痂 10 篇」來快速分析</span>
-    </div>`;
-  } else {
-    // 2. 已分析文獻表格
-    html += `<div style="margin-bottom:16px">
-      <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--accent)">已分析（${analyzed.length} 篇）</div>
-      <div style="overflow-x:auto">
-        <table style="width:100%;border-collapse:collapse;font-size:11px">
-          <thead><tr style="background:var(--accent);color:#fff">
-            <th style="padding:6px 8px;text-align:left;border:1px solid rgba(255,255,255,0.2)">ID</th>
-            <th style="padding:6px 8px;text-align:left;border:1px solid rgba(255,255,255,0.2)">標題</th>
-            <th style="padding:6px 8px;text-align:left;border:1px solid rgba(255,255,255,0.2)">核心機制</th>
-            <th style="padding:6px 8px;text-align:center;border:1px solid rgba(255,255,255,0.2)">對 Bioteque 價值</th>
-          </tr></thead>
-          <tbody>`;
-    
-    analyzed.forEach(p => {
-      const r = p.patentResults?.full||{};
-      const mech = r.mechanism||'—';
-      const value = p.value_to_project||'—';
-      html += `<tr style="border-bottom:1px solid var(--border)">
-        <td style="padding:6px 8px;font-weight:600;color:var(--accent)">${p.id}</td>
-        <td style="padding:6px 8px">${p.title.slice(0,45)}...</td>
-        <td style="padding:6px 8px;font-size:10px">${mech.slice(0,50)}${mech.length>50?'...':''}</td>
-        <td style="padding:6px 8px;text-align:center"><button class="btn btn-s" style="padding:3px 8px;font-size:10px" onclick="showDetail(DB.papers.findIndex(x=>x.id==='${p.id}'))">查看</button></td>
-      </tr>`;
-    });
-    html += `</tbody></table></div>`;
-  }
-
-  // 3. 策略對比卡片（針對已分析的）
-  if(analyzed.length>0) {
-    html += `<div style="margin-top:16px;padding:12px;background:var(--bg);border-radius:8px">
-      <div style="font-size:12px;font-weight:600;margin-bottom:10px;color:var(--accent)">🔬 三大抗結痂策略對比</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
-        <div style="padding:10px;background:var(--card);border-radius:6px;border-left:4px solid #ff6b6b">
-          <div style="font-weight:600;margin-bottom:6px;color:#ff6b6b">1. 親水性塗層（PVP）</div>
-          <div style="font-size:11px;color:var(--muted)">傳統方案，但親水≠抗結痂</div>
-          <div style="font-size:10px;color:var(--danger);margin-top:4px">⚠️ 高 dwell time 仍會結痂</div>
-        </div>
-        <div style="padding:10px;background:var(--card);border-radius:6px;border-left:4px solid #4ecdc4">
-          <div style="font-weight:600;margin-bottom:6px;color:#4ecdc4">2. 兩性離子塗層（SBMA/MPC）</div>
-          <div style="font-size:11px;color:var(--muted)">真正的抗汙染策略</div>
-          <div style="font-size:10px;color:var(--accent2);margin-top:4px">✅ 減少 >70% 結晶/細菌</div>
-        </div>
-        <div style="padding:10px;background:var(--card);border-radius:6px;border-left:4px solid #95e1d3">
-          <div style="font-weight:600;margin-bottom:6px;color:#95e1d3">3. 複合策略（抗菌+抗汙）</div>
-          <div style="font-size:11px;color:var(--muted)">Heparin/Cu/Propolis 組合</div>
-          <div style="font-size:10px;color:#95e1d3;margin-top:4px">💡 同時抗菌+抗結痂</div>
-        </div>
-      </div>
-    </div>`;
-  }
-
-  // 4. 對 Bioteque 計畫的建議
-  html += `<div style="margin-top:16px;padding:12px;background:#fff3cd;border-radius:8px;border-left:4px solid #ffc107">
-    <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:#856404">📋 對計畫書 §6.6 的建議</div>
-    <ul style="font-size:11px;color:#856404;margin:0;padding-left:20px;line-height:1.6">
-      <li>不要只強調「親水潤滑」，要強調「兩性離子抗汙」（SBMA/MPC）</li>
-      <li>加入 Phase 3 抗結痂評估：${analyzed.length>0?'已有參考數據':'需搜集更多 PoC'}</li>
-      <li>臨床競品參考：Coloplast Imajinhydro（silicone+hydrocoat）結痂率最低</li>
-      ${analyzed.length>0?`<li>✅ 已有 ${analyzed.length} 篇文獻支撐，可直接引用</li>`:''}
-    </ul>
-  </div>`;
-
-  // 5. 待分析篇數提醒
-  if(pending.length>0) {
-    html += `<div style="margin-top:16px;padding:12px;background:var(--card);border-radius:8px;text-align:center;color:var(--muted)">
-      <span style="font-size:11px">還有 <strong>${pending.length} 篇</strong>待分析：${pending.map(p=>p.id).join(', ')}</span>
-    </div>`;
-  }
-
-  el.innerHTML = html;
-}
-
 function buildCommercial() {
   const el = document.getElementById('commercialContent');
   if(!el) return;
@@ -1795,117 +1692,6 @@ function buildCommercial() {
 // ══════════════════════════════════════════════
 // ══════════════════════════════════════════════
 function buildCompare() {
-  const el = document.getElementById('compareContent');
-  if(!el) return;
-
-  // 新增：抗結痂對比快速入口
-  let html = `<div style="margin-bottom:20px;padding:12px;background:var(--accent);border-radius:8px">
-    <div style="color:#fff;font-weight:600;margin-bottom:8px">💧 抗結痂/抗菌策略對比</div>
-    <button class="btn" onclick="compareEncrustation()" style="background:#fff;color:var(--accent);padding:6px 12px;font-size:12px;margin-right:4px">🔬 U系列 vs 親水塗層</button>
-    <button class="btn btn-s" onclick="compareAntimicrobial()" style="padding:6px 12px;font-size:12px">🦠 抗菌材料對比</button>
-    <div style="font-size:11px;color:rgba(255,255,255,0.8);margin-top:6px">或手動選擇下方文獻進行逐一對比</div>
-  </div>`;
-
-  // 原有的文獻選擇器
-  html += `<div style="margin-bottom:16px">
-    <div style="font-size:12px;font-weight:600;margin-bottom:8px">📋 選擇要對比的文獻</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:6px;max-height:120px;overflow-y:auto">`;
-  DB.papers.forEach(p=>{
-    const sel = selected.has(p.id);
-    html += `<button class="btn ${sel?'btn-p':'btn-s'}" style="padding:6px;font-size:11px;text-align:center" onclick="toggleCompareSelect('${p.id}')">${p.id}</button>`;
-  });
-  html += `</div></div>`;
-
-  // 對比矩陣
-  const selected = window.compareSelected || new Set();
-  if(selected.size>1) {
-    const papers = [...selected].map(id=>DB.papers.find(p=>p.id===id)).filter(Boolean);
-    
-    html += `<div style="margin-top:20px">
-      <div style="font-size:13px;font-weight:600;margin-bottom:10px">🔍 對比矩陣</div>
-      <div style="overflow-x:auto">
-        <table style="width:100%;border-collapse:collapse;font-size:11px">
-          <thead><tr style="background:var(--card)">
-            <th style="padding:8px;text-align:left;border:1px solid var(--border)">維度</th>
-            ${papers.map(p=>`<th style="padding:6px;border:1px solid var(--border);text-align:center;font-weight:600;color:var(--accent)">${p.id}</th>`).join('')}
-          </tr></thead>
-          <tbody>`;
-    
-    // 對比維度
-    const dimensions = [
-      {name:'基本資料',fields:['doc_type','year']},
-      {name:'配方',fields:['substrate','primer','topcoat']},
-      {name:'固化',fields:['curing']},
-      {name:'潤滑性',fields:['friction','wca']},
-      {name:'附著力',fields:['adhesion']},
-      {name:'耐磨耗',fields:['durability']},
-      {name:'抗菌/抗結痂',fields:['antimicrobial','antifouling','encrustation_reduction']},
-      {name:'可信度',fields:['credibility']}
-    ];
-
-    dimensions.forEach(dim=>{
-      html += `<tr style="border-bottom:1px solid var(--border)">
-        <td style="padding:8px;background:var(--bg);font-weight:600;border:1px solid var(--border)">${dim.name}</td>`;
-      papers.forEach(p=>{
-        const ex = p.patentResults?.full?.examples?.[0]||{};
-        const vals = dim.fields.map(f=>{
-          if(f==='doc_type') return p.doc_type;
-          if(f==='year') return p.year;
-          if(f==='substrate') return ex.substrate||'—';
-          if(f==='primer') return ex.formulation?.primer?.slice(0,40)||'—';
-          if(f==='topcoat') return ex.formulation?.topcoat?.slice(0,40)||'—';
-          if(f==='curing') return ex.process?.curing?.slice(0,30)||'—';
-          if(f==='friction') return ex.results?.friction||'—';
-          if(f==='wca') return ex.results?.wca||'—';
-          if(f==='adhesion') return ex.results?.adhesion?.slice(0,30)||'—';
-          if(f==='durability') return ex.results?.durability?.slice(0,40)||'—';
-          if(f==='antimicrobial') return ex.results?.antimicrobial?.slice(0,40)||'—';
-          if(f==='antifouling') return ex.results?.antifouling?.slice(0,40)||'—';
-          if(f==='encrustation_reduction') return ex.results?.encrustation_reduction||'—';
-          if(f==='credibility') return ex.credibility||'—';
-          return '—';
-        }).filter(v=>v!=='—').join(' / ') || '—';
-        html += `<td style="padding:6px;border:1px solid var(--border);font-size:10px">${vals}</td>`;
-      });
-      html += `</tr>`;
-    });
-    html += `</tbody></table></div>`;
-  }
-
-  el.innerHTML = html;
-}
-
-// 抗結痂對比快速入口
-function compareEncrustation() {
-  window.compareSelected = new Set();
-  // 自動選U系列 + 部分親水塗層
-  const autoSelect = ['U01','U06','U07','U09','P01','P12','P26'];
-  autoSelect.forEach(id=>{
-    if(DB.papers.find(p=>p.id===id)) window.compareSelected.add(id);
-  });
-  buildCompare();
-  document.getElementById('compareContent').scrollIntoView({behavior:'smooth'});
-}
-
-// 抗菌材料對比
-function compareAntimicrobial() {
-  window.compareSelected = new Set();
-  const autoSelect = ['U04','U06','U08','U10','G12','P30','P31'];
-  autoSelect.forEach(id=>{
-    if(DB.papers.find(p=>p.id===id)) window.compareSelected.add(id);
-  });
-  buildCompare();
-  document.getElementById('compareContent').scrollIntoView({behavior:'smooth'});
-}
-
-function toggleCompareSelect(id) {
-  if(!window.compareSelected) window.compareSelected = new Set();
-  if(window.compareSelected.has(id)) window.compareSelected.delete(id);
-  else window.compareSelected.add(id);
-  buildCompare();
-}
-
-function buildCompare() {
   const groupBy = document.getElementById('compareGroupBy').value;
   const dict = DB.meta.tag_dictionary || {};
   const container = document.getElementById('compareResults');
@@ -1966,6 +1752,21 @@ function buildCompare() {
       const key = has ? '✅ 已分析' : '🔴 未分析';
       if(!groups[key]) groups[key] = [];
       groups[key].push(p);
+    });
+  } else if(groupBy === 'func_goal') {
+    // 功能目標分群（一篇可同時屬於多個功能）
+    allPapers.forEach(p => {
+      const goals = paperFunctionGoals(p);
+      if(!goals.length) {
+        if(!groups['（無明確功能標示）']) groups['（無明確功能標示）'] = [];
+        groups['（無明確功能標示）'].push(p);
+      } else {
+        goals.forEach(g => {
+          const key = {'潤滑':'✨ 潤滑','抗結痂':'💧 抗結痂','抗菌':'🦠 抗菌','附著':'🔧 附著'}[g]||g;
+          if(!groups[key]) groups[key] = [];
+          groups[key].push(p);
+        });
+      }
     });
   } else {
     // 標籤維度（substrate, cure_method, anchor_primer, hydrophilic_polymer, application, performance）
@@ -2263,7 +2064,7 @@ function showView(id,el){
 function showAnalysisTab(subId, btn) {
   currentAnalysisTab = subId;
   // 隱藏所有分析子 view
-  ['graph','encrustation','gap','compare','chat','commercial'].forEach(id=>{
+  ['graph','gap','compare','chat','commercial'].forEach(id=>{
     const el = document.getElementById('v-'+id);
     if(el) { el.classList.remove('active'); el.style.display = 'none'; }
   });
@@ -2273,10 +2074,9 @@ function showAnalysisTab(subId, btn) {
   // 更新子分頁按鈕高亮
   document.querySelectorAll('.analysis-sub').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
-  else document.querySelectorAll('.analysis-sub').forEach(b=>{ if(b.textContent.includes(subId==='graph'?'關係圖':subId==='encrustation'?'抗結痂':subId==='gap'?'缺口':subId==='compare'?'比較':subId==='commercial'?'商業':'AI'))b.classList.add('active'); });
+  else document.querySelectorAll('.analysis-sub').forEach(b=>{ if(b.textContent.includes(subId==='graph'?'關係圖':subId==='gap'?'缺口':subId==='compare'?'比較':subId==='commercial'?'商業':'AI'))b.classList.add('active'); });
   // 觸發初始化
   if(subId==='graph') buildGraph();
-  if(subId==='encrustation') buildEncrusationAnalysis();
   if(subId==='gap') buildHeatmaps();
   if(subId==='compare') buildCompare();
   if(subId==='commercial') buildCommercial();
@@ -3677,6 +3477,65 @@ function buildHeatmaps() {
   buildOneHeatmap('heatmapWrap4', app,    cure,   '應用','固化方式');
   buildOneHeatmap('heatmapWrap5', sub,    anchor, '基材','錨固劑');
   buildOneHeatmap('heatmapWrap6', poly,   anchor, '親水高分子','錨固劑');
+
+  // ⑦⑧ 功能目標維度（抗結痂/抗菌/潤滑/附著）— 用關鍵字動態判定
+  const funcGoals = ['潤滑','抗結痂','抗菌','附著'];
+  buildFunctionHeatmap('heatmapWrap7', app, funcGoals, '應用','功能目標');
+  buildFunctionHeatmap('heatmapWrap8', sub, funcGoals, '基材','功能目標');
+}
+
+// 判定一篇文獻涵蓋哪些功能目標（跨欄位關鍵字）
+function paperFunctionGoals(p) {
+  const hay = `${p.title} ${p.abstract_note||''} ${p.purpose||''} ${p.value_to_project||''} ${(p.tags||[]).join(' ')} ${p.id}`.toLowerCase();
+  const ex = p.patentResults?.full?.examples?.[0]?.results||{};
+  const exHay = JSON.stringify(ex).toLowerCase();
+  const goals = [];
+  if(/lubric|潤滑|friction|cof|滑度|harland|tribolog/i.test(hay+exHay)) goals.push('潤滑');
+  if(/encrustation|結痂|biofilm|生物膜|zwitterion|sbma|mpc|antifoul|抗汙|conditioning film/i.test(hay+exHay) || p.id.startsWith('U')) goals.push('抗結痂');
+  if(/antimicrob|抗菌|antibacter|silver|chlorhexidine|chitosan|propolis|copper|biocid|antibiofilm|殺菌/i.test(hay+exHay)) goals.push('抗菌');
+  if(/adhesion|附著|primer|底塗|錨固|anchor|grafting|接枝|silane|pda|polydopamine|covalent|coupling/i.test(hay+exHay)) goals.push('附著');
+  return goals;
+}
+
+// 功能目標專用熱圖（行=標籤，列=功能目標）
+function buildFunctionHeatmap(wrapperId, rows, goals, rowLabel, colLabel) {
+  const wrap = document.getElementById(wrapperId);
+  if(!wrap) return;
+  const matrix = {};
+  rows.forEach(r=>{matrix[r]={};goals.forEach(g=>matrix[r][g]=[])});
+
+  DB.papers.forEach(p=>{
+    const tags = p.tags||[];
+    const pg = paperFunctionGoals(p);
+    rows.forEach(r=>{ if(tags.includes(r)) pg.forEach(g=>{ if(matrix[r][g]) matrix[r][g].push(p); })});
+  });
+
+  let html = `<table class="heatmap"><tr><th>${rowLabel} \\ ${colLabel}</th>${goals.map(g=>`<th>${g}</th>`).join('')}<th>小計</th></tr>`;
+  rows.forEach(r=>{
+    let rowSum = 0;
+    html += `<tr><th style="text-align:left">${r}</th>`;
+    goals.forEach(g=>{
+      const v = matrix[r][g].length;
+      rowSum += v;
+      const cls = v===0?'cell-0':v===1?'cell-1':v===2?'cell-2':'cell-many';
+      html += `<td class="${cls}" onclick="showFuncGapDetail('${r}','${g}')" title="${r} × ${g}: ${v} 篇">${v||'·'}</td>`;
+    });
+    html += `<td style="color:var(--muted)">${rowSum}</td></tr>`;
+  });
+  html += '</table>';
+  wrap.innerHTML = html;
+}
+
+function showFuncGapDetail(r, g) {
+  const papers = DB.papers.filter(p=>(p.tags||[]).includes(r) && paperFunctionGoals(p).includes(g));
+  const el = document.getElementById('gapDetail');
+  if(!papers.length) {
+    el.innerHTML = `<h4 style="color:var(--warn)">⚠ 缺口：${r} × ${g}</h4><p style="font-size:13px;color:var(--muted);margin-top:8px">資料庫中沒有同時涵蓋「${r}」基材/應用且具備「${g}」功能的文獻。這可能是值得開發或搜尋的方向。</p>
+    <button class="btn btn-p" style="margin-top:8px" onclick="prefillChat('我想找在 ${r} 上實現 ${g} 功能的塗層方案，目前資料庫是空白，請建議搜尋關鍵字與技術方向')">🤖 問 AI 建議</button>`;
+  } else {
+    el.innerHTML = `<h4 style="color:var(--accent2)">${r} × ${g}：${papers.length} 篇</h4><div style="margin-top:8px">${papers.map(p=>`<div style="padding:4px 0;font-size:13px;cursor:pointer" onclick="showView('browse',document.querySelectorAll('.tabs > .tab')[1]);setTimeout(()=>{filtered=DB.papers;renderPapers();showDetail(DB.papers.findIndex(x=>x.id==='${p.id}'))},100)"><span class="tag tag-gray">${p.id}</span> ${p.title}</div>`).join('')}</div>`;
+  }
+  el.classList.add('show');
 }
 
 function buildOneHeatmap(wrapperId, rows, cols, rowLabel, colLabel) {
