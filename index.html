@@ -76,6 +76,9 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 .paper-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
 .paper-actions{display:flex;gap:6px;margin-top:8px}
 .paper-card.active{border-color:var(--accent2);background:#f0e8dc}
+.paper-card.deleted{opacity:0.45;border-left:4px solid var(--danger) !important;background:repeating-linear-gradient(135deg,var(--card),var(--card) 10px,#fdf0ed 10px,#fdf0ed 12px)}
+.paper-card.deleted .paper-title{text-decoration:line-through;color:var(--muted)}
+.deleted-badge{background:var(--danger);color:#fff;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:700}
 
 /* Detail panel */
 .detail-panel{position:sticky;top:80px;max-height:calc(100vh - 100px);overflow-y:auto;padding:16px}
@@ -297,6 +300,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
             <span class="ftag" data-filter="topic" data-value="adhesion" onclick="toggleFilter(this)">🔧 附著</span>
           </span>
           <select id="fSort" onchange="filterPapers()" style="padding:2px 4px;font-size:10px;border-radius:4px;border:1px solid var(--border);vertical-align:middle"><option value="id-desc">最新加入</option><option value="id">ID↑</option><option value="year-desc">年↓</option><option value="year-asc">年↑</option></select>
+          <span class="filter-group"><span class="ftag" id="fShowDeleted" data-filter="deleted" data-value="show" onclick="this.classList.toggle('active');filterPapers()" style="background:#fdf0ed;color:var(--danger);border-color:var(--danger)">🗑 已刪除 <span id="deletedCount">0</span></span></span>
         </div>
         <div class="panel-h"><span id="filterCount">0 篇</span></div>
         <div class="paper-list" id="paperList"></div>
@@ -656,20 +660,34 @@ function updateCostDisplay() {
 function deletePaper(paperId) {
   const p = DB.papers.find(x=>x.id===paperId);
   if(!p) return;
-  if(!confirm(`確定要刪除這篇文獻嗎？\n\n${paperId}: ${p.title.slice(0,60)}\n\n此動作無法復原（除非從 Google Sheets 重新載入）`)) return;
-  
-  const idx = DB.papers.findIndex(x=>x.id===paperId);
-  if(idx<0) return;
-  DB.papers.splice(idx, 1);
-  
-  // 同時刪除該文獻的筆記
-  const notes = getNotes();
-  delete notes[paperId];
-  saveNotes(notes);
-  
+  if(p._deleted) {
+    // 已標記刪除 → 永久刪除
+    if(!confirm(`⚠️ 永久刪除這篇文獻？\n\n${paperId}: ${p.title.slice(0,60)}\n\n此動作無法復原！`)) return;
+    const idx = DB.papers.findIndex(x=>x.id===paperId);
+    if(idx<0) return;
+    DB.papers.splice(idx, 1);
+    const notes = getNotes();
+    delete notes[paperId];
+    saveNotes(notes);
+    saveDB(); onDBLoaded();
+    document.getElementById('detailPanel').innerHTML = '<div class="detail-empty">文獻已永久刪除</div>';
+    toast(`已永久刪除 ${paperId}`,'success');
+  } else {
+    // 標記刪除（軟刪除）
+    p._deleted = true;
+    p._deletedAt = new Date().toISOString();
+    saveDB(); onDBLoaded();
+    toast(`已標記刪除 ${paperId}（可復原）`,'success');
+  }
+}
+
+function restorePaper(paperId) {
+  const p = DB.papers.find(x=>x.id===paperId);
+  if(!p) return;
+  delete p._deleted;
+  delete p._deletedAt;
   saveDB(); onDBLoaded();
-  document.getElementById('detailPanel').innerHTML = '<div class="detail-empty">文獻已刪除</div>';
-  toast(`已刪除 ${paperId}`,'success');
+  toast(`已復原 ${paperId}`,'success');
 }
 
 // ══════════════════════════════════════════════
@@ -1385,9 +1403,9 @@ async function batchAnalyzeAll() {
 function buildReportSummary() {
   const el = document.getElementById('rptDataSummary');
   if(!el) return;
-  const analyzed = DB.papers.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0);
-  const patents = DB.papers.filter(p=>p.doc_type==='專利');
-  const analyzedPatents = patents.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0);
+  const analyzed = DB.papers.filter(p=>!p._deleted && p.patentResults && Object.keys(p.patentResults).length>0);
+  const patents = DB.papers.filter(p=>!p._deleted && p.doc_type==='專利');
+  const analyzedPatents = patents.filter(p=>!p._deleted && p.patentResults && Object.keys(p.patentResults).length>0);
 
   // 收集所有性能數據
   const frictions = [], adhesions = [], wcas = [];
@@ -1420,8 +1438,8 @@ async function generateReport() {
   const equipment = document.getElementById('rptEquipment').value.trim();
   const author = document.getElementById('rptAuthor').value.trim() || '________';
 
-  // 收集已分析文獻的數據
-  const analyzed = DB.papers.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0);
+  // 收集已分析文獻的數據（排除已刪除）
+  const analyzed = DB.papers.filter(p=>!p._deleted && p.patentResults && Object.keys(p.patentResults).length>0);
   const dataLines = analyzed.map(p=>{
     const r = p.patentResults?.full||{};
     const ex = r.examples?.[0]||{};
@@ -1499,9 +1517,19 @@ ${sections.join('\n')}
 
     output.innerHTML = header + text;
 
+    // 存到 localStorage
+    const reportData = {
+      html: header + text,
+      date: new Date().toISOString(),
+      company, title, product, substrate,
+      analyzedCount: analyzed.length
+    };
+    localStorage.setItem('litdb_report_saved', JSON.stringify(reportData));
+
     document.getElementById('rptActions').innerHTML = `
       <button class="btn btn-p" onclick="copyReport()">📋 複製報告</button>
-      <button class="btn btn-s" onclick="downloadReport()">⬇ 下載 Markdown</button>`;
+      <button class="btn btn-s" onclick="downloadReport()">⬇ 下載 Markdown</button>
+      <button class="btn btn-s" onclick="clearSavedReport()" style="color:var(--danger);border-color:var(--danger)">🗑 清除暫存</button>`;
     document.getElementById('rptActions').style.display = 'flex';
 
     toast('報告產生完成','success');
@@ -1529,6 +1557,34 @@ function downloadReport() {
   a.click();
   URL.revokeObjectURL(url);
   toast('已下載','success');
+}
+
+function loadSavedReport() {
+  try {
+    const saved = localStorage.getItem('litdb_report_saved');
+    if(!saved) return;
+    const data = JSON.parse(saved);
+    const output = document.getElementById('rptOutput');
+    if(!output || output.innerHTML.trim()) return; // 不覆蓋剛產生的
+    output.style.display = 'block';
+    output.innerHTML = `<div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px 12px;margin-bottom:12px;font-size:11px;color:var(--muted)">
+      📄 暫存報告（${new Date(data.date).toLocaleDateString('zh-TW')} 產生，基於 ${data.analyzedCount} 篇分析）
+    </div>` + data.html;
+    document.getElementById('rptActions').innerHTML = `
+      <button class="btn btn-p" onclick="copyReport()">📋 複製報告</button>
+      <button class="btn btn-s" onclick="downloadReport()">⬇ 下載 Markdown</button>
+      <button class="btn btn-s" onclick="clearSavedReport()" style="color:var(--danger);border-color:var(--danger)">🗑 清除暫存</button>`;
+    document.getElementById('rptActions').style.display = 'flex';
+  } catch(e) {}
+}
+
+function clearSavedReport() {
+  localStorage.removeItem('litdb_report_saved');
+  document.getElementById('rptOutput').style.display = 'none';
+  document.getElementById('rptOutput').innerHTML = '';
+  document.getElementById('rptActions').innerHTML = '';
+  document.getElementById('rptActions').style.display = 'none';
+  toast('已清除暫存報告','success');
 }
 
 // 切到報告分頁時自動更新摘要
@@ -1995,9 +2051,11 @@ async function loadDB() {
 }
 
 function onDBLoaded() {
-  document.getElementById('dbStats').textContent = `${DB.papers.length} 篇文獻`;
-  document.getElementById('browseCount').textContent = DB.papers.length;
-  const _ac = DB.papers.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0).length;
+  const active = DB.papers.filter(p=>!p._deleted);
+  const deleted = DB.papers.length - active.length;
+  document.getElementById('dbStats').textContent = `${active.length} 篇文獻${deleted?` (${deleted} 已刪除)`:''}`;
+  document.getElementById('browseCount').textContent = active.length;
+  const _ac = active.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0).length;
   document.getElementById('analyzedCount').textContent = '✅'+_ac;
   buildFilters();
   filterPapers();
@@ -2006,9 +2064,11 @@ function onDBLoaded() {
 
 function saveDB() {
   localStorage.setItem('litdb_data', JSON.stringify(DB));
-  document.getElementById('dbStats').textContent = `${DB.papers.length} 篇文獻`;
-  document.getElementById('browseCount').textContent = DB.papers.length;
-  const _ac = DB.papers.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0).length;
+  const active = DB.papers.filter(p=>!p._deleted);
+  const deleted = DB.papers.length - active.length;
+  document.getElementById('dbStats').textContent = `${active.length} 篇文獻${deleted?` (${deleted} 已刪除)`:''}`;
+  document.getElementById('browseCount').textContent = active.length;
+  const _ac = active.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0).length;
   document.getElementById('analyzedCount').textContent = '✅'+_ac;
 }
 
@@ -2051,7 +2111,7 @@ function showView(id,el){
   if(id==='graph') buildGraph();
   if(id==='gap') buildHeatmaps();
   if(id==='compare') buildCompare();
-  if(id==='report') buildReportSummary();
+  if(id==='report') { buildReportSummary(); loadSavedReport(); }
   // 分析總頁：顯示子分頁
   if(id==='analysis') {
     showAnalysisTab(currentAnalysisTab);
@@ -2113,8 +2173,17 @@ function toggleTag(t,btn) {
 function filterPapers() {
   const kw = document.getElementById('fKw')?.value?.toLowerCase()||'';
   const sort = document.getElementById('fSort')?.value||'id';
+  const showDeleted = document.getElementById('fShowDeleted')?.classList.contains('active');
+
+  // 更新已刪除計數
+  const deletedN = DB.papers.filter(p=>p._deleted).length;
+  const dc = document.getElementById('deletedCount');
+  if(dc) dc.textContent = deletedN;
 
   filtered = DB.papers.filter(p => {
+    // 軟刪除篩選：預設隱藏，點開才顯示（且只顯示已刪除的）
+    if(showDeleted) { if(!p._deleted) return false; }
+    else { if(p._deleted) return false; }
     // 類型篩選（多選 OR）
     if(activeFilters.type.size && !activeFilters.type.has(p.doc_type)) return false;
     // 標籤篩選（多選 OR：有任一個就顯示）
@@ -2182,11 +2251,12 @@ function renderPapers() {
     // 專利狀態
     const patentBadge = getPatentBadge(p);
 
-    return `<div class="paper-card" id="pc_${i}" onclick="showDetail(${i});document.querySelectorAll('.paper-card').forEach(c=>c.classList.remove('active'));this.classList.add('active')" style="${analysisStyle}">
+    return `<div class="paper-card${p._deleted?' deleted':''}" id="pc_${i}" onclick="showDetail(${i});document.querySelectorAll('.paper-card').forEach(c=>c.classList.remove('active'));this.classList.add('active')" style="${analysisStyle}">
       <div style="display:flex;gap:4px;margin-bottom:4px;flex-wrap:wrap;align-items:center">
         <span class="tag ${typeColor}">${p.doc_type||''}</span>
         <span class="tag tag-gray">${p.id}</span>
         ${p.year?`<span class="tag tag-gray">${p.year}</span>`:''}
+        ${p._deleted?`<span class="deleted-badge">🗑 已標記刪除</span>`:''}
         ${patentBadge}
         ${orgBadge}
       </div>
@@ -2302,7 +2372,7 @@ function showDetail(i) {
     <div style="display:flex;gap:6px;margin-top:16px;flex-wrap:wrap">
       <button class="btn btn-s" onclick="pinPaper('${p.id}')">📌 釘選到 AI</button>
       ${link?`<a href="${link}" target="_blank" class="btn btn-s">↗ 開啟原文</a>`:''}
-      <button class="btn btn-s" onclick="deletePaper('${p.id}')" style="color:var(--danger);border-color:var(--danger);margin-left:auto">🗑 刪除</button>
+      ${p._deleted?`<button class="btn btn-s" onclick="restorePaper('${p.id}')" style="color:var(--accent2);border-color:var(--accent2)">♻ 復原</button><button class="btn btn-s" onclick="deletePaper('${p.id}')" style="color:var(--danger);border-color:var(--danger)">⛔ 永久刪除</button>`:`<button class="btn btn-s" onclick="deletePaper('${p.id}')" style="color:var(--danger);border-color:var(--danger);margin-left:auto">🗑 刪除</button>`}
       ${p.doc_type==='專利'?`<button class="btn btn-p" onclick="showPatentAnalysis(${i})">🧪 專利分析</button>`:`<button class="btn btn-s" onclick="showPaperAnalysis(${i})">📊 技術分析</button>`}
       <button class="btn btn-p" onclick="loadCiteTree(${i})" style="margin-left:auto">🌳 引文樹</button>
     </div>
