@@ -204,25 +204,22 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 
 /* ── 手機版 ≤600px ── */
 @media(max-width:600px){
-  /* Header 精簡：只保留 logo + 返回 + 右側 icon */
-  header{padding:6px 12px;gap:8px}
-  header .header-r{gap:4px}
-  /* 隱藏非必要 header 元素 */
-  header > span:not(#costDisplay):not(#dbStats){display:none!important}
-  #costDisplay{font-size:10px;padding:1px 5px}
-  #dbStats{font-size:10px;padding:1px 5px}
+  header{padding:6px 10px;gap:6px;flex-wrap:nowrap}
+  header .header-r{gap:3px;flex-shrink:0}
+  .mobile-hide{display:none!important}
+  #costDisplay{font-size:10px;padding:1px 5px;white-space:nowrap!important}
+  #dbStats{font-size:10px;padding:1px 5px;white-space:nowrap!important}
+  #backBtn{white-space:nowrap!important;padding:3px 8px!important;font-size:11px!important}
   #gSignInBtn,#gSaveBtn,#gLoadBtn,#gOutBtn,#gUserLabel{display:none!important}
-  /* Tab：縮短文字 */
+  header .btn-s{padding:4px 7px!important;font-size:13px!important;min-height:auto!important}
   .tabs{gap:0}
-  .tab{font-size:12px;padding:8px 10px;flex:1;text-align:center;white-space:nowrap}
-  /* 隱藏 tab 文字，只保留 emoji */
+  .tab{font-size:13px;padding:8px 6px;flex:1;text-align:center;white-space:nowrap}
   .tab-text{display:none}
-  /* main 縮 padding */
-  .main{padding:8px}
-  /* 文庫：清單全寬，detail panel 改為底部滑入覆蓋 */
+  .main{padding:6px}
   .browse-columns{flex-direction:column!important;height:auto!important}
-  .col-left{width:100%!important;min-width:0!important}
-  .col-mid{display:none!important}
+  .col-left{display:none!important}
+  .col-resize{display:none!important}
+  .col-mid{width:100%!important;min-width:0!important;display:block!important}
   .col-right{
     position:fixed!important;bottom:0!important;left:0!important;right:0!important;
     width:100%!important;height:85dvh!important;
@@ -233,22 +230,13 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
     background:var(--surface)!important;
   }
   .col-right.mobile-open{transform:translateY(0)!important}
-  /* detail panel 內加關閉把手 */
   .detail-handle{display:block!important}
-  /* 卡片更大點擊區 */
-  .paper-card{padding:12px 10px;margin-bottom:6px}
-  /* 按鈕放大觸控區 */
-  .btn{min-height:36px;font-size:13px}
-  /* filter tags 換行 */
-  .browse-filters{flex-wrap:wrap!important}
-  /* 分析 tab 子選單 */
-  .analysis-tabs{flex-wrap:wrap!important;gap:4px!important}
-  .analysis-tabs .btn{font-size:11px;padding:5px 8px}
-  /* 比較表格 */
-  .compare-table-wrap{overflow-x:auto}
-  /* modal */
-  .mobile-hide{display:none!important}
   .detail-panel{position:static!important;max-height:none!important}
+  .paper-card{padding:12px 10px;margin-bottom:6px}
+  .graph-controls label{white-space:nowrap!important;font-size:12px}
+  .graph-controls select{font-size:12px;max-width:130px}
+  .analysis-tabs{flex-wrap:wrap!important;gap:4px!important}
+  .analysis-tabs .btn{font-size:11px!important;padding:5px 8px!important}
   .modal{width:95vw!important;padding:14px!important}
   .patent-modal-body{width:98vw!important;max-width:none!important}
 }
