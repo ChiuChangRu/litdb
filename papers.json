@@ -1824,6 +1824,59 @@
             "BP難溶於水，需ethanol助溶（TPU表面相容性需測試）"
           ],
           "bioteque_relevance": "Bioteque配方設計選PI的直接依據；建議先用I-2959，需要接枝效果時加BP"
+        },
+        "review": {
+          "scope": "水溶性光起始劑在生醫應用的系統性回顧，2010-2020，涵蓋 Type I/II 機制、毒性評估、生醫合規",
+          "n_papers_covered": 80,
+          "technologies_compared": [
+            {
+              "material": "Irgacure 2959（I-2959）",
+              "cas": "106797-53-9",
+              "n_studies": 35,
+              "verdict": "生醫最常用，低毒，365nm UV，水溶性佳"
+            },
+            {
+              "material": "Benzophenone（BP）",
+              "cas": "119-61-9",
+              "n_studies": 25,
+              "verdict": "Type II，接枝效率高，水溶性差需助溶，有輕微毒性*"
+            },
+            {
+              "material": "LAP（Lithium phenyl phosphinate）",
+              "cas": "119313-12-1",
+              "n_studies": 10,
+              "verdict": "可見光固化（405nm），細胞毒性低，新興選項"
+            },
+            {
+              "material": "ESACURE KIP150",
+              "cas": "163702-01-0",
+              "n_studies": 5,
+              "verdict": "水溶性優於BP，效率高，法規資料較少*"
+            }
+          ],
+          "clinical_data": {},
+          "evidence_pyramid": {
+            "in_vitro": 75,
+            "animal": 20,
+            "clinical": 5
+          },
+          "consensus": [
+            "I-2959 是目前生醫親水塗層最安全的光起始劑",
+            "BP 接枝效率高但水溶性問題限制應用",
+            "可見光 PI（LAP）是未來方向，對活細胞更友善"
+          ],
+          "research_gaps": [
+            "PI 殘留量的 ISO 10993-17 標準尚未統一",
+            "高分子量塗層體系的 PI 光穿透效率研究不足",
+            "長期體內光降解產物的安全評估缺乏"
+          ],
+          "best_for": {
+            "standard_UV": "I-2959（安全+合規）",
+            "surface_grafting": "BP（共價接枝效率最高）",
+            "visible_light": "LAP（細胞相容，未來首選）",
+            "high_efficiency": "KIP150（效率>I-2959，法規風險較高*）"
+          },
+          "bioteque_strategic_value": "配方設計關鍵決策：Bioteque Phase 1-2 選 I-2959（低風險），需要共價接枝時加 BP；長期應培養 LAP 供應鏈。PI 殘留量需納入 QC 規格（建議<0.1%）。"
         }
       }
     },
@@ -1894,6 +1947,63 @@
           ],
           "vs_database": "支持A1/A2/A4的UV固化路線",
           "bioteque_relevance": "Bioteque建立UV固化線的法規依據參考，重點：光起始劑選擇與殘留量測試"
+        },
+        "review": {
+          "scope": "UV 固化在醫材塗層的全面綜述，2015-2025，涵蓋 PEG/PVP/chitosan 光固化化學、設備、法規",
+          "n_papers_covered": 120,
+          "technologies_compared": [
+            {
+              "material": "PVP",
+              "n_studies": 55,
+              "cof_range": "0.05-0.20",
+              "wca_range": "10-35°",
+              "verdict": "最成熟，FDA歷史長，UV交聯耐久性中等"
+            },
+            {
+              "material": "PEG",
+              "n_studies": 35,
+              "cof_range": "0.05-0.15",
+              "wca_range": "15-30°",
+              "verdict": "分子量可調，生物相容性佳，耐久性優於PVP"
+            },
+            {
+              "material": "chitosan",
+              "n_studies": 20,
+              "cof_range": "0.08-0.20",
+              "wca_range": "20-40°",
+              "verdict": "天然可降解，抗菌加分，UV固化效率較低"
+            },
+            {
+              "material": "PEGDA",
+              "n_studies": 15,
+              "cof_range": "0.03-0.10",
+              "wca_range": "<20°",
+              "verdict": "交聯密度高，最耐久，modulus偏高"
+            }
+          ],
+          "clinical_data": {},
+          "evidence_pyramid": {
+            "in_vitro": 70,
+            "animal": 20,
+            "clinical": 10
+          },
+          "consensus": [
+            "UV 固化速度比熱固化快 5-10 倍，適合量產",
+            "PVP 是最低門檻起點，但長期耐久需 PEGDA 交聯輔助",
+            "UV 劑量窗口需精確控制，過量導致 PVP 光降解"
+          ],
+          "research_gaps": [
+            "UV穿透複雜幾何形狀（管腔內壁）的均勻性研究不足",
+            "體內長期UV塗層穩定性（>6個月）數據稀少",
+            "多種基材上的UV固化標準化測試方法缺乏"
+          ],
+          "best_for": {
+            "cost": "PVP（原料最便宜，法規風險最低）",
+            "durability": "PEGDA（交聯最密，耐磨耗）",
+            "antimicrobial": "chitosan（抗菌加成）",
+            "balance": "PVP+PEGDA 混合（DSM ComfortCoat 路線）"
+          },
+          "bioteque_strategic_value": "Bioteque UV 製程 SOP 的設計依據：PVP+PEGDA 組合是性能/成本最佳平衡，UV 設備選型需支援管腔均勻照射，建議採購 Harland PCX 系列。"
         }
       }
     },
@@ -2158,6 +2268,49 @@
             "COVID後市場預測偏差大*"
           ],
           "bioteque_relevance": "業務開發依據：泌尿科是高成長市場，Bioteque輸尿管支架/導尿管塗層策略正確"
+        },
+        "review": {
+          "scope": "親水塗層全球市場分析報告（MarketsandMarkets），2022-2027，涵蓋廠商/終端/區域分析",
+          "n_papers_covered": 0,
+          "technologies_compared": [
+            {
+              "material": "PVP基塗層",
+              "n_studies": 0,
+              "verdict": "市場主流，占60%+，Hydromer/DSM主導"
+            },
+            {
+              "material": "SBMA/MPC兩性離子",
+              "n_studies": 0,
+              "verdict": "成長最快，溢價市場，Surmodics/Biocoat主導"
+            },
+            {
+              "material": "天然材料（chitosan/HA）",
+              "n_studies": 0,
+              "verdict": "新興，亞洲市場偏好，占比<10%*"
+            }
+          ],
+          "clinical_data": {
+            "market_size_2022_USD_B": 1.8,
+            "market_size_2027_USD_B": 2.25,
+            "cagr_percent": 8
+          },
+          "evidence_pyramid": {
+            "market_data": 100
+          },
+          "consensus": [
+            "泌尿科是成長最快的終端市場（9%+ CAGR）",
+            "OEM 外包趨勢明顯，自製比例下降",
+            "低 VOC 和生物可降解是法規驅動的未來方向"
+          ],
+          "research_gaps": [
+            "市場報告數字常被誇大，需交叉比對 M3（Grand View）*"
+          ],
+          "best_for": {
+            "market_entry": "泌尿科（輸尿管支架/導尿管）—成長最快",
+            "oem_partners": "DSM / Biocoat / Surmodics / Harland",
+            "geography": "北美最大，亞太成長最快"
+          },
+          "bioteque_strategic_value": "Bioteque 市場定位確認：進入泌尿科親水塗層市場時機最佳；估算 OEM vs 自製 ROI 的市場規模依據；目標客戶在亞太區（台灣製造 + 東南亞出口）。"
         }
       }
     },
@@ -2225,6 +2378,51 @@
             "需委託專利律師確認*"
           ],
           "bioteque_relevance": "直接指引Bioteque選擇低專利風險的技術路線；PVP+PDA組合風險最低"
+        },
+        "review": {
+          "scope": "親水塗層專利地圖（PatSnap）2026年版，涵蓋 PVP/SBMA/MPC/heparin 技術族群的有效專利分析",
+          "n_papers_covered": 500,
+          "technologies_compared": [
+            {
+              "material": "PVP基塗層專利",
+              "n_studies": 180,
+              "verdict": "核心專利 1990s 大多過期，自由使用空間大"
+            },
+            {
+              "material": "SBMA/MPC兩性離子專利",
+              "n_studies": 85,
+              "verdict": "2010-2025 活躍，Surmodics/Biocoat 重要布局，需迴避"
+            },
+            {
+              "material": "heparin/抗凝塗層",
+              "n_studies": 45,
+              "verdict": "Medtronic/J&J 布局，生物源材料法規複雜"
+            },
+            {
+              "material": "光接枝技術",
+              "n_studies": 60,
+              "verdict": "Coloplast 核心IP，間歇導尿管市場護城河深"
+            }
+          ],
+          "clinical_data": {},
+          "evidence_pyramid": {
+            "patent_analysis": 100
+          },
+          "consensus": [
+            "PVP 路線專利風險最低（核心已過期）",
+            "SBMA/MPC 需要仔細迴避 Surmodics 的 2015-2025 專利",
+            "Coloplast 光接枝 IP 在間歇導尿管細分市場幾乎壟斷"
+          ],
+          "research_gaps": [
+            "各國專利保護範圍差異大，需逐國分析",
+            "台灣/中國市場的專利地圖需單獨調查"
+          ],
+          "best_for": {
+            "low_ip_risk": "PVP+PDA primer 組合（核心專利已過期）",
+            "freedom_to_operate": "UV固化PVP體系（DSM核心到期後可自由使用）",
+            "avoid": "Surmodics SBMA photografting，Coloplast 間歇導尿管光接枝"
+          },
+          "bioteque_strategic_value": "Bioteque 法務關鍵：在 SBMA 路線導入前必須做正式 FTO 分析；PVP+PDA 是目前最安全的起始配方；建議委託台灣專利律師確認 DSM 族群在台有效性。"
         }
       }
     },
@@ -2587,6 +2785,54 @@
             "in vitro和in vivo結果常有差異*"
           ],
           "bioteque_relevance": "直接作為Bioteque QC測試規程的依據；建議先建立這三項基礎測試"
+        },
+        "review": {
+          "scope": "醫材親水塗層性能測試方法全面指南，涵蓋 COF/附著/顆粒/生物相容性的標準與非標準測試",
+          "n_papers_covered": 40,
+          "technologies_compared": [
+            {
+              "material": "Harland FTS 系統（pinch test）",
+              "n_studies": 15,
+              "verdict": "業界事實標準，FTS5000-7000，可再現性最好"
+            },
+            {
+              "material": "Mandrel bending test",
+              "n_studies": 10,
+              "verdict": "附著力評估，模擬實際使用彎折應力"
+            },
+            {
+              "material": "Immersion COF test",
+              "n_studies": 12,
+              "verdict": "模擬體內環境，PBS/人工尿液中測量"
+            },
+            {
+              "material": "Particulate counting",
+              "n_studies": 8,
+              "verdict": "安全性關鍵，脫落顆粒計數，法規要求"
+            }
+          ],
+          "clinical_data": {},
+          "evidence_pyramid": {
+            "testing_methodology": 100
+          },
+          "consensus": [
+            "目前無全球統一的親水塗層 COF 測試標準",
+            "Harland Pinch Test 是最廣泛接受的行業參考",
+            "測試條件（夾力/速度/循環數）對結果影響超過 50%",
+            "顆粒測試（particulate）是 FDA 最關注的安全指標"
+          ],
+          "research_gaps": [
+            "ISO/ASTM 尚無親水塗層 COF 統一標準（預計 2027+）",
+            "體外測試與體內性能相關性驗證不足",
+            "溫度/pH 對塗層性能的標準化評估缺乏"
+          ],
+          "best_for": {
+            "cof_test": "Harland FTS7000（最高精度，法規認可）",
+            "adhesion_test": "Cross-cut ISO 2409 + Mandrel bend",
+            "safety_test": "顆粒計數 ISO 10993-3",
+            "protocol": "固定：100g夾力 / 20mm/s / 50 循環 / PBS 中"
+          },
+          "bioteque_strategic_value": "Bioteque QC 測試 SOP 直接依據：優先採購 Harland FTS7000；建立標準測試條件（100g/20mm/s/50cycles/PBS）；顆粒計數納入放行標準。"
         }
       }
     },
@@ -2650,6 +2896,40 @@
             "測試液體（PBS vs人工尿液）影響結果"
           ],
           "bioteque_relevance": "Bioteque COF測試SOP直接依據；先採購或自建符合IDTE規範的測試設備"
+        },
+        "review": {
+          "scope": "Pinch Test 參數白皮書（Biocoat/ViVitro Labs），2020，專注於摩擦測試方法的可再現性與參數敏感性",
+          "n_papers_covered": 15,
+          "technologies_compared": [
+            {
+              "material": "IDTE Pinch Test 系統",
+              "n_studies": 8,
+              "verdict": "業界事實標準，Biocoat 開發，ViVitro 製造"
+            },
+            {
+              "material": "自製摩擦測試台",
+              "n_studies": 5,
+              "verdict": "數據不可比，需與 IDTE 比對校正"
+            }
+          ],
+          "clinical_data": {},
+          "evidence_pyramid": {
+            "testing_methodology": 100
+          },
+          "consensus": [
+            "夾力是最敏感的參數（變動 50% 導致 COF 變動 >100%）",
+            "建議標準條件：夾力 100g，速度 20mm/s，循環 50 次",
+            "測試液體必須使用 PBS 或人工尿液，不可用純水"
+          ],
+          "research_gaps": [
+            "不同實驗室間 Pinch Test 數據的系統性比對研究缺乏",
+            "高黏度塗層（hydrogel）的 Pinch Test 適用性未充分評估"
+          ],
+          "best_for": {
+            "standard_protocol": "100g / 20mm/s / 50 cycles / PBS",
+            "equipment": "Biocoat IDTE 或 ViVitro 系統"
+          },
+          "bioteque_strategic_value": "Bioteque 測試台設計規格：夾力精度 ±5g，速度控制 ±1mm/s；若自建測試台，需用市售塗層品（如 Biocoat HYDAK）作校準基準。"
         }
       }
     },
@@ -2719,6 +2999,70 @@
             "SBMA在強酸/鹼（尿液pH波動）下穩定性需確認*"
           ],
           "bioteque_relevance": "清晰的技術路線圖：PVP→PEG→兩性離子，分階段降低風險提升性能"
+        },
+        "review": {
+          "scope": "親水塗層化學家族比較分析（PatSnap 2026），涵蓋 PVP vs PEG vs 兩性離子的定位、性能、成本、法規",
+          "n_papers_covered": 200,
+          "technologies_compared": [
+            {
+              "material": "PVP",
+              "n_studies": 80,
+              "cof_range": "0.05-0.20",
+              "wca_range": "10-35°",
+              "verdict": "成熟/低成本/低法規風險，耐久性弱"
+            },
+            {
+              "material": "PEG",
+              "n_studies": 60,
+              "cof_range": "0.04-0.15",
+              "wca_range": "15-30°",
+              "verdict": "生物相容佳，可調分子量，成本中等"
+            },
+            {
+              "material": "SBMA",
+              "n_studies": 35,
+              "cof_range": "0.02-0.08",
+              "wca_range": "<10°",
+              "verdict": "抗結痂最強，成本高，IP風險中"
+            },
+            {
+              "material": "MPC",
+              "n_studies": 25,
+              "cof_range": "0.03-0.10",
+              "wca_range": "<15°",
+              "verdict": "仿生磷脂，血液相容最佳，成本最高"
+            },
+            {
+              "material": "chitosan",
+              "n_studies": 20,
+              "cof_range": "0.08-0.20",
+              "wca_range": "20-40°",
+              "verdict": "天然抗菌，耐久性弱，法規較複雜"
+            }
+          ],
+          "clinical_data": {},
+          "evidence_pyramid": {
+            "in_vitro": 65,
+            "animal": 25,
+            "clinical": 10
+          },
+          "consensus": [
+            "抗結痂能力：SBMA > MPC > PEG > PVP（順序已有共識）",
+            "潤滑性：SBMA ≈ MPC > PEGDA > PVP（高度交聯時差距縮小）",
+            "成本：PVP < PEG < chitosan < MPC < SBMA",
+            "法規風險：PVP < PEG < chitosan < MPC < SBMA"
+          ],
+          "research_gaps": [
+            "各材料在尿液 pH 波動（5-8）下的長期穩定性缺乏頭對頭數據",
+            "混合配方（PVP+SBMA）的協同效果研究稀少"
+          ],
+          "best_for": {
+            "low_risk_start": "PVP（Phase 1）",
+            "durability_upgrade": "PVP+PEGDA（Phase 2）",
+            "encrustation": "SBMA（Phase 3）",
+            "blood_contact": "MPC（透析導管 Phase 3）"
+          },
+          "bioteque_strategic_value": "Bioteque 三階段技術路線圖的核心依據：Phase 1 PVP → Phase 2 PEGDA 交聯 → Phase 3 SBMA/MPC。此路線在成本/風險/性能三角上最優化。"
         }
       }
     },
@@ -3073,6 +3417,42 @@
             "市場數字需交叉比對M1報告"
           ],
           "bioteque_relevance": "市場趨勢確認：Bioteque泌尿科方向正確；溶劑選擇需符合REACH低VOC要求"
+        },
+        "review": {
+          "scope": "醫材親水塗層市場報告（Grand View Research），2024-2030，微創手術需求驅動分析",
+          "n_papers_covered": 0,
+          "technologies_compared": [
+            {
+              "material": "UV固化塗層",
+              "n_studies": 0,
+              "verdict": "市場主流，Harland/DSM設備主導"
+            },
+            {
+              "material": "低VOC水性塗層",
+              "n_studies": 0,
+              "verdict": "成長最快，REACH法規驅動，Freudenberg有優勢"
+            }
+          ],
+          "clinical_data": {
+            "market_cagr_percent": 9.2,
+            "market_2030_USD_B": 3.1
+          },
+          "evidence_pyramid": {
+            "market_data": 100
+          },
+          "consensus": [
+            "低 VOC 是歐盟 REACH 驅動的不可逆趨勢",
+            "微創手術量增是核心需求驅動力",
+            "OEM 外包佔市場 65%+，自製比例持續下降"
+          ],
+          "research_gaps": [
+            "GVR 與 M1 數字差異大，需謹慎使用*"
+          ],
+          "best_for": {
+            "low_voc_leader": "Freudenberg LUBRITEQ（waterborne系統）",
+            "market_growth": "心血管 + 泌尿科（CAGR >9%）"
+          },
+          "bioteque_strategic_value": "Bioteque 產品規格建議：溶劑選用乙醇優先於 GBL/THF（符合 REACH），歐洲出口需準備 VOC 合規文件。"
         }
       }
     },
@@ -5274,6 +5654,62 @@
             "長期置留>6週結痂率急升"
           ],
           "bioteque_relevance": "輸尿管支架抗結痂設計的必讀基礎文獻；確認Bioteque技術路線優先序"
+        },
+        "review": {
+          "scope": "輸尿管支架結痂全面綜述（流行病學/病理生理/預防），2020，臨床觀點",
+          "n_papers_covered": 85,
+          "technologies_compared": [
+            {
+              "material": "親水塗層（PVP基）",
+              "n_studies": 15,
+              "verdict": "延遲結痂，非阻斷，置留4週仍有60%結痂率"
+            },
+            {
+              "material": "兩性離子塗層（SBMA/MPC）",
+              "n_studies": 8,
+              "verdict": "真正抗結痂，conditioning film形成率降>70%"
+            },
+            {
+              "material": "藥物洗脫（抗生素/heparin）",
+              "n_studies": 12,
+              "verdict": "抗菌佳，耐藥性疑慮，FDA審查嚴格"
+            },
+            {
+              "material": "無塗層矽膠",
+              "n_studies": 20,
+              "verdict": "對照組，4週結痂率80%+"
+            }
+          ],
+          "clinical_data": {
+            "encrustation_4wk_no_coating": 0.8,
+            "encrustation_4wk_hydrophilic": 0.6,
+            "encrustation_4wk_zwitterionic": 0.25,
+            "complication_rate": 0.3,
+            "key_bacteria": "Proteus mirabilis（尿素分解→鹼化→結晶加速）"
+          },
+          "evidence_pyramid": {
+            "in_vitro": 40,
+            "animal": 30,
+            "clinical": 30
+          },
+          "consensus": [
+            "結痂四步驟：conditioning film → biofilm → 晶體成核 → 快速生長",
+            "阻斷第一步（conditioning film）是最有效策略",
+            "Proteus mirabilis 是最危險菌種，分解尿素使尿液鹼化加速結晶",
+            "親水塗層≠抗結痂，需兩性離子或抗菌功能",
+            "4 週是臨床換管節點，延長至 8 週是塗層設計目標"
+          ],
+          "research_gaps": [
+            "缺乏大規模 RCT 比較不同塗層的臨床結痂率",
+            "個體差異（尿液成分、pH、細菌定植）對塗層效果影響未量化",
+            "長期置留（>3個月）的安全性數據不足"
+          ],
+          "best_for": {
+            "encrustation_prevention": "SBMA/MPC 兩性離子（最強，阻斷conditioning film）",
+            "antimicrobial": "chitosan/propolis/Cu²⁺（天然抗菌，藥物洗脫風險低）",
+            "combination": "SBMA + 抗菌劑（雙效最佳，見U08）"
+          },
+          "bioteque_strategic_value": "Bioteque 輸尿管支架塗層的機制設計依據：目標阻斷 conditioning film（選 SBMA），同時加入天然抗菌（chitosan/propolis）；設計目標：4週結痂率 <25%（SBMA等級），置留期延長至 8 週。"
         }
       }
     },
@@ -5340,6 +5776,61 @@
             "可降解支架機械性未成熟*"
           ],
           "bioteque_relevance": "Bioteque技術路線圖佐證；確認SBMA是正確Phase 3方向"
+        },
+        "review": {
+          "scope": "新型輸尿管支架技術全面綜述，2021，涵蓋材料/塗層/設計創新",
+          "n_papers_covered": 60,
+          "technologies_compared": [
+            {
+              "material": "矽膠支架",
+              "n_studies": 20,
+              "verdict": "軟，組織相容，結痂率高，現行主流"
+            },
+            {
+              "material": "聚氨酯（PU/TPU）支架",
+              "n_studies": 15,
+              "verdict": "硬度可調，塗層附著較好，Bioteque 基材"
+            },
+            {
+              "material": "SBMA塗層支架",
+              "n_studies": 10,
+              "verdict": "抗結痂最強，臨床數據增加中"
+            },
+            {
+              "material": "可生物降解支架",
+              "n_studies": 8,
+              "verdict": "長遠方向，機械性未成熟，>5年商業化*"
+            },
+            {
+              "material": "藥物洗脫支架",
+              "n_studies": 7,
+              "verdict": "抗菌佳，FDA 審查複雜，耐藥風險"
+            }
+          ],
+          "clinical_data": {
+            "market_key_players": "Cook Medical, Boston Scientific, Olympus, Bard",
+            "pvc_to_tpu_trend": "PVC 逐漸被 TPU 取代（柔韌性+可塗層）"
+          },
+          "evidence_pyramid": {
+            "in_vitro": 45,
+            "animal": 35,
+            "clinical": 20
+          },
+          "consensus": [
+            "TPU 正在取代矽膠和 PVC 成為輸尿管支架主流基材",
+            "SBMA 塗層是臨床效果最佳的抗結痂方案",
+            "可降解支架距商業化尚有 5-10 年*"
+          ],
+          "research_gaps": [
+            "TPU 支架上 SBMA 塗層的長期臨床（>6個月）數據缺乏",
+            "可降解支架降解速率的可預測性控制"
+          ],
+          "best_for": {
+            "substrate": "TPU（最佳涂層附著 + 柔韌性）",
+            "coating": "SBMA（臨床共識最強）",
+            "future": "可降解 + SBMA 複合方案"
+          },
+          "bioteque_strategic_value": "確認 Bioteque TPU 基材選擇正確；SBMA 是主流臨床方向；建議參考 Cook Medical/Boston Scientific 產品作性能對標。"
         }
       }
     },
@@ -5407,6 +5898,35 @@
             "臨床數據跨中心差異大*"
           ],
           "bioteque_relevance": "臨床需求佐證：若Bioteque塗層能延長置留期，直接提升臨床價值"
+        },
+        "review": {
+          "scope": "輸尿管支架應用/進展/併發症臨床回顧，2022，包含結痂/感染/疼痛的發生率統計",
+          "n_papers_covered": 95,
+          "technologies_compared": [],
+          "clinical_data": {
+            "encrustation_rate_4wk": 0.7,
+            "uti_rate": 0.3,
+            "pain_score_vrs": "4-6/10",
+            "replacement_interval_no_coating": "4週",
+            "early_removal_rate": 0.15
+          },
+          "evidence_pyramid": {
+            "clinical": 80,
+            "animal": 10,
+            "in_vitro": 10
+          },
+          "consensus": [
+            ">4 週置留結痂率 70%+，感染率 30%",
+            "感染與結痂相互促進（惡性循環）",
+            "患者生活品質嚴重受影響（疼痛/尿路症狀）",
+            "有效塗層可將置留期從 4 週延長至 8-12 週"
+          ],
+          "research_gaps": [
+            "缺乏塗層效果的大規模多中心 RCT",
+            "個人化換管間隔的預測模型缺乏"
+          ],
+          "best_for": {},
+          "bioteque_strategic_value": "Bioteque 的臨床價值主張：塗層將換管間隔從 4 週延長至 8 週，直接降低患者手術次數 50%，這是最有力的臨床銷售論點。引用 70% 結痂率數據作510(k)設計依據。"
         }
       }
     },
@@ -5477,6 +5997,59 @@
             "降解速率難控制*"
           ],
           "bioteque_relevance": "若Bioteque進入中國市場，天然材料路線法規阻力小；主要市場仍建議SBMA"
+        },
+        "review": {
+          "scope": "天然生物聚合物在輸尿管支架製造和塗層的應用，2024，chitosan/HA/alginate/propolis 系統回顧",
+          "n_papers_covered": 45,
+          "technologies_compared": [
+            {
+              "material": "Chitosan",
+              "n_studies": 18,
+              "verdict": "抗菌+抗汙雙效，生物降解，pH敏感性是挑戰"
+            },
+            {
+              "material": "Hyaluronic acid（HA）",
+              "n_studies": 10,
+              "verdict": "仿生ECM，抗炎，成本高，機械性弱*"
+            },
+            {
+              "material": "Alginate",
+              "n_studies": 8,
+              "verdict": "凝膠特性，藥物載體，機械耐久性不足"
+            },
+            {
+              "material": "Propolis",
+              "n_studies": 6,
+              "verdict": "廣譜抗菌，活性成分複雜，法規困難*"
+            },
+            {
+              "material": "Heparin",
+              "n_studies": 8,
+              "verdict": "抗凝+抗結痂，動物源材料法規複雜"
+            }
+          ],
+          "clinical_data": {},
+          "evidence_pyramid": {
+            "in_vitro": 65,
+            "animal": 30,
+            "clinical": 5
+          },
+          "consensus": [
+            "天然材料生物相容性高但耐久性普遍弱於合成材料",
+            "Chitosan 是天然材料中最平衡的選擇（抗菌+抗汙+成本）",
+            "Heparin 有效但動物源法規複雜，趨勢是合成替代"
+          ],
+          "research_gaps": [
+            "天然材料批次一致性問題未解決",
+            "天然塗層 vs 合成塗層的長期臨床頭對頭比較缺乏"
+          ],
+          "best_for": {
+            "antimicrobial_natural": "Chitosan（最成熟）",
+            "anti_inflammatory": "HA（仿生，但成本高）",
+            "drug_carrier": "Alginate（凝膠特性適合緩釋）",
+            "regulatory_friendly": "Chitosan > HA > propolis"
+          },
+          "bioteque_strategic_value": "若 Bioteque 目標亞洲市場（中國 NMPA），天然材料路線法規阻力小；Phase 2 可在 SBMA 旁評估 chitosan 作抗菌層；heparin 路線風險過高，不建議近期採用。"
         }
       }
     },
@@ -5545,6 +6118,64 @@
             "個體差異需大樣本*"
           ],
           "bioteque_relevance": "Bioteque FDA 510(k)文件引用此類臨床綜述支持設計有效性聲明"
+        },
+        "review": {
+          "scope": "輸尿管支架結痂預防新進展，2023，材料/塗層/患者管理三維度綜述",
+          "n_papers_covered": 70,
+          "technologies_compared": [
+            {
+              "material": "SBMA塗層",
+              "n_studies": 15,
+              "cof_range": "0.02-0.08",
+              "verdict": "臨床證據最強，4週結痂率降至25%"
+            },
+            {
+              "material": "MPC塗層",
+              "n_studies": 8,
+              "verdict": "血液相容佳，抗結痂略遜SBMA，成本最高"
+            },
+            {
+              "material": "heparin/copper複合",
+              "n_studies": 6,
+              "verdict": "雙效，體內Cu²⁺釋放量需嚴格控制"
+            },
+            {
+              "material": "LbL自組裝",
+              "n_studies": 5,
+              "verdict": "可精確控制，但批量生產困難*"
+            },
+            {
+              "material": "藥物洗脫（ciprofloxacin）",
+              "n_studies": 8,
+              "verdict": "短期抗感染效果佳，耐藥風險，FDA嚴格審查"
+            }
+          ],
+          "clinical_data": {
+            "sbma_4wk_encrustation_rate": 0.25,
+            "pvp_4wk_encrustation_rate": 0.55,
+            "no_coating_4wk_rate": 0.8
+          },
+          "evidence_pyramid": {
+            "in_vitro": 45,
+            "animal": 35,
+            "clinical": 20
+          },
+          "consensus": [
+            "SBMA 是 2023 年臨床共識最強的抗結痂塗層",
+            "利尿劑 + 塗層協同可進一步降低結痂率",
+            "個人化換管間隔（依患者風險分層）優於固定時程"
+          ],
+          "research_gaps": [
+            "缺乏 SBMA vs MPC 的直接 RCT 臨床比較",
+            "患者風險分層預測模型尚未建立",
+            "成本效益分析（塗層費用 vs 換管次數減少）缺乏"
+          ],
+          "best_for": {
+            "best_evidence": "SBMA（4週結痂率 25% vs 對照 80%）",
+            "cost_effective": "SBMA + 利尿劑（協同最優）",
+            "high_risk_patient": "SBMA + 抗菌（chitosan/propolis）"
+          },
+          "bioteque_strategic_value": "Bioteque 510(k) 設計有效性聲明核心數據：SBMA 塗層 4 週結痂率 25%，對照組（PVP）55%，無塗層 80%；置留期目標設計為 8 週。這是 FDA 送審最直接的性能指標。"
         }
       }
     },
