@@ -532,6 +532,50 @@
       "value_to_project": "TPU primer 配方與多版本摩擦比較",
       "links": {
         "patents": "https://patents.google.com/patent/WO1998058990A1/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "TPU溶解為primer溶液，dip後再塗PVP K90，UV固化比較單/雙層摩擦係數",
+          "examples": [
+            {
+              "name": "TPU+nitrocellulose primer / PVP K90 topcoat",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "WO專利實施例，有明確配方比較",
+              "substrate": "PVC導管（primer為TPU）",
+              "formulation": {
+                "primer": "醫療級TPU + nitrocellulose / THF溶液",
+                "topcoat": "PVP K90 水溶液"
+              },
+              "process": {
+                "surface_prep": "dip primer溶液",
+                "coating_method": "dip塗覆",
+                "drying": "60°C 15min",
+                "curing": "UV光固化"
+              },
+              "results": {
+                "friction": "雙層 < 單層（具體值專利中）",
+                "adhesion": "—",
+                "wca": "—",
+                "durability": "—",
+                "other": "含HPC（羥丙基纖維素）變體也比較"
+              }
+            }
+          ],
+          "tpu_advantages": "TPU本身作primer可與PVC基材和PVP親水層都有良好相容性，不需要額外化學接枝",
+          "tpu_challenges": "THF溶劑有毒性，需控制揮發；TPU/nitrocellulose配比影響附著強度",
+          "key_claims": [
+            "TPU+nitrocellulose作primer，PVC導管雙層親水塗層"
+          ],
+          "actionable_insights": [
+            "醫療級TPU直接作primer溶液，省去化學改性步驟",
+            "HPC加入PVP可調整塗層韌性"
+          ],
+          "red_flags": [
+            "1998年專利已過期，THF溶劑需評估安全性*"
+          ],
+          "bioteque_relevance": "若Bioteque用PVC基材，此TPU primer方案直接可借鏡；換TPU基材則需重評primer"
+        }
       }
     },
     {
@@ -906,6 +950,51 @@
       "value_to_project": "最直接的TPU+UV semi-IPN配方框架",
       "links": {
         "doi": "https://doi.org/10.1007/s11998-020-00455-9"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "PUA作transition layer增附著，PVP+PEGDA滲入UV固化成semi-IPN，用於TPU鞘覆nitinol導線",
+          "examples": [
+            {
+              "name": "PUA/PVP+PEGDA semi-IPN on TPU guidewire",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "2021期刊，TPU guidewire直接應用",
+              "substrate": "TPU sheath / nitinol guidewire",
+              "formulation": {
+                "primer": "PUA（polyurethane acrylate）transition layer",
+                "topcoat": "PVP + PEGDA UV交聯 semi-IPN"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "dip塗覆",
+                "drying": "—",
+                "curing": "UV光固化"
+              },
+              "results": {
+                "friction": "顯著降低（具體值見原文）",
+                "adhesion": "semi-IPN提升附著穩定性",
+                "wca": "—",
+                "durability": "semi-IPN結構提升耐久性",
+                "other": "適用彎曲變形的導線TPU鞘"
+              }
+            }
+          ],
+          "tpu_advantages": "PUA與TPU結構相似（都含urethane鍵），transition layer自然相容；semi-IPN結構耐機械疲勞",
+          "tpu_challenges": "PUA+PVP+PEGDA三成分比例需優化；UV能量需穿透TPU鞘層",
+          "key_claims": [
+            "PUA transition layer改善PVP對TPU附著",
+            "semi-IPN增加塗層耐久性"
+          ],
+          "actionable_insights": [
+            "PUA作primer直接利用urethane相容性，免plasma預處理",
+            "PEGDA交聯密度可調節PVP溶脹量"
+          ],
+          "red_flags": [
+            "semi-IPN製程需控制PVP/PEGDA滲入深度，過深影響TPU機械性*"
+          ],
+          "bioteque_relevance": "最直接的TPU+UV配方框架，PUA primer概念可直接移植到Bioteque TPU導管"
+        }
       }
     },
     {
@@ -931,6 +1020,52 @@
       "value_to_project": "PDA中間層替代BP primer+分子量數據",
       "links": {
         "page": "https://www.sciencedirect.com/science/article/abs/pii/S0301679X2400611X"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "PDA弱鹼自聚沉積TPU作黏著中間層，PVP/PEG多分子量正交優化，WCA降至7.4°，COF 0.16",
+          "examples": [
+            {
+              "name": "PDA/PVP+PEG UV固化 on TPU",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "2024期刊，正交設計有具體優化數據",
+              "substrate": "TPU介入導管",
+              "formulation": {
+                "primer": "PDA（polydopamine）弱鹼自聚沉積",
+                "topcoat": "PVP K30/K90 + PEG 400/4000/20000，I-2959光起始劑，UV固化"
+              },
+              "process": {
+                "surface_prep": "TPU表面弱鹼PDA沉積",
+                "coating_method": "dip塗覆",
+                "drying": "—",
+                "curing": "UV（I-2959）"
+              },
+              "results": {
+                "friction": "COF 0.4→0.16",
+                "adhesion": "cross-cut grade 0（最佳）",
+                "wca": "91.3°→7.4–28.3°（依分子量）",
+                "durability": "—",
+                "other": "正交L9優化PVP/PEG分子量與濃度"
+              }
+            }
+          ],
+          "tpu_advantages": "PDA在TPU表面自聚無需特殊設備，常溫水溶液操作；對TPU化學侵害最小",
+          "tpu_challenges": "PDA沉積時間需控制（過厚層間附著反而下降）；I-2959在PVP/PEG混合體系的固化效率需驗證",
+          "key_claims": [
+            "PDA替代benzophenone作TPU primer",
+            "PEG分子量影響WCA與COF，需正交優化"
+          ],
+          "actionable_insights": [
+            "PDA primer免plasma，直接弱鹼水溶液處理TPU 30–60min",
+            "PVP K90 + PEG 4000組合是COF最佳起點"
+          ],
+          "red_flags": [
+            "PDA沉積批次一致性差*，需嚴格控制pH與時間",
+            "低分子量PEG（400）會增加表面黏性*"
+          ],
+          "bioteque_relevance": "PDA primer是Bioteque最易導入的方案（無需UV底塗設備），建議先試PVP K90+PEG 4000+I-2959組合"
+        }
       }
     },
     {
@@ -957,6 +1092,52 @@
       "value_to_project": "最新(2025)正交優化+PVA-PVP附著機制",
       "links": {
         "page": "https://www.sciencedirect.com/science/article/abs/pii/S0300944025005491"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "冠狀導線塗層剝落不良事件背景下，PDA+UV固化PVA/PVP/PEGDA正交優化，提升附著至grade 0",
+          "examples": [
+            {
+              "name": "PDA/PVA+PVP+PEGDA UV固化 on TPU guidewire",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "2025期刊，實際不良事件改進背景",
+              "substrate": "TPU冠狀導線",
+              "formulation": {
+                "primer": "PDA沉積",
+                "topcoat": "PVA + PVP + PEGDA，UV固化"
+              },
+              "process": {
+                "surface_prep": "PDA弱鹼沉積",
+                "coating_method": "dip",
+                "drying": "—",
+                "curing": "UV"
+              },
+              "results": {
+                "friction": "—",
+                "adhesion": "grade 0（cross-cut）",
+                "wca": "顯著降低",
+                "durability": "改善剝落問題",
+                "other": "正交設計確定最優PVA/PVP/PEGDA比例"
+              }
+            }
+          ],
+          "tpu_advantages": "PVA加入PVP體系後交聯網絡更密，對TPU表面附著力提升明顯",
+          "tpu_challenges": "PVA需預先皂化處理；PVA/PVP比例對塗層韌性影響大，過多PVA變脆*",
+          "key_claims": [
+            "PVA加入PVP體系改善附著",
+            "正交設計找最優比例"
+          ],
+          "actionable_insights": [
+            "PVA+PVP+PEGDA三元體系比純PVP附著更佳",
+            "適合輸尿管支架等需高附著的TPU基材應用"
+          ],
+          "red_flags": [
+            "PVA比例過高時塗層可能吸水後膨脹剝離*",
+            "冠狀導線數據需謹慎外推到輸尿管支架TPU*"
+          ],
+          "bioteque_relevance": "若Bioteque TPU塗層有附著問題，加入PVA是值得試驗的低成本改進方向"
+        }
       }
     },
     {
@@ -1226,6 +1407,53 @@
       "value_to_project": "PDA+PEGDA+BP協同的具體配方數值",
       "links": {
         "page": "https://www.sciencedirect.com/science/article/abs/pii/S0300944025005491"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "PDA+PEGDA+BP協同機制，WCA 7.4°/12.2°，COF 0.16，cross-cut grade 0，最完整TPU UV塗層數據",
+          "examples": [
+            {
+              "name": "PDA+BP / PVA+PVP+PEGDA UV on TPU",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "2025期刊，最完整正交優化+具體數值",
+              "substrate": "TPU冠狀導線",
+              "formulation": {
+                "primer": "PDA沉積 + benzophenone（BP）協同",
+                "topcoat": "PVA + PVP + PEGDA，UV固化"
+              },
+              "process": {
+                "surface_prep": "PDA弱鹼沉積",
+                "coating_method": "dip",
+                "drying": "—",
+                "curing": "UV（BP光引發）"
+              },
+              "results": {
+                "friction": "COF 0.16（穩定）",
+                "adhesion": "cross-cut grade 0",
+                "wca": "最低7.4°，優化配方12.2°",
+                "durability": "—",
+                "other": "PDA+PEGDA+BP三者協同：PDA附著、PEGDA交聯、BP紫外接枝"
+              }
+            }
+          ],
+          "tpu_advantages": "BP光接枝直接與TPU表面共價鍵結，結合PDA物理錨定形成雙重固定機制",
+          "tpu_challenges": "BP需UV照射才能接枝，需控制UV劑量避免TPU降解",
+          "key_claims": [
+            "PDA+BP雙重primer機制",
+            "PVA/PVP/PEGDA最優比例已由正交設計確定"
+          ],
+          "actionable_insights": [
+            "PDA+BP雙重primer：PDA先沉積，BP加入topcoat液UV接枝到TPU",
+            "此配方是目前文獻最完整的TPU親水塗層數據，建議直接以此為Bioteque起點配方",
+            "COF 0.16可作Bioteque TPU導管性能目標基準"
+          ],
+          "red_flags": [
+            "BP有光毒性，需確保成品無殘留*",
+            "冠狀導線內徑/表面積與輸尿管支架不同，dip條件需重新優化"
+          ],
+          "bioteque_relevance": "這是最值得直接複製的TPU塗層配方：PDA沉積→PVA+PVP+PEGDA+BP UV固化，目標COF≤0.16，WCA≤15°"
+        }
       }
     },
     {
@@ -1597,6 +1825,52 @@
       "value_to_project": "TPU親水化方法比較;plasma接枝持久性數據",
       "links": {
         "ref": "https://ui.adsabs.harvard.edu/abs/2024ApSS..65459509X/abstract"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "4種TPU親水化方法比較：plasma接枝PVP最佳，WCA 109°→9.2°，80天後仍<20°",
+          "examples": [
+            {
+              "name": "Plasma誘導PVP接枝 on TPU",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "2024期刊，四方法直接比較有說服力",
+              "substrate": "TPU（原始WCA 109°）",
+              "formulation": {
+                "primer": "N2-Ar plasma預處理",
+                "topcoat": "PVP接枝聚合"
+              },
+              "process": {
+                "surface_prep": "N2-Ar plasma",
+                "coating_method": "plasma誘導接枝聚合",
+                "drying": "—",
+                "curing": "plasma固化（無UV）"
+              },
+              "results": {
+                "friction": "—",
+                "adhesion": "共價接枝，最耐久",
+                "wca": "109°→9.2°，80天<20°",
+                "durability": "80天長期穩定（其他3法均衰退）",
+                "other": "表面能72.4 mN/m（原TPU的2.8倍）"
+              }
+            }
+          ],
+          "tpu_advantages": "TPU表面有urethane基團，plasma活化後可高效接枝PVP，共價鍵比物理吸附穩定",
+          "tpu_challenges": "需plasma設備（Bioteque未必有）；接枝後TPU機械性質需確認；批量生產均勻性*",
+          "key_claims": [
+            "4法比較plasma接枝最持久",
+            "80天穩定性數據"
+          ],
+          "actionable_insights": [
+            "若Bioteque已有plasma設備：直接試N2-Ar plasma接枝PVP",
+            "若無plasma設備：R11數據可作justify採購plasma設備的依據"
+          ],
+          "red_flags": [
+            "plasma接枝均勻性在複雜形狀（導管內腔）有挑戰*",
+            "生產成本高於dip塗覆*"
+          ],
+          "bioteque_relevance": "plasma接枝是長期穩定性最佳方案，但需設備投資；短期建議先用PDA+UV，中期評估引入plasma"
+        }
       }
     },
     {
@@ -1783,6 +2057,55 @@
       "value_to_project": "MPC在PU導管的共價接枝法+完整in vivo數據，可評估MPC替代PVP的可行性",
       "links": {
         "doi": "https://doi.org/10.3390/polym12051131"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "diisocyanate活化PU後共價接枝bPEI-S-MPC，摩擦-30%、溶血-50%、兔體內抗血栓+抗菌",
+          "examples": [
+            {
+              "name": "NCO活化PU / bPEI-S-MPC共價接枝",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "2020期刊，有in vivo數據",
+              "substrate": "PU血管內導管（≈TPU）",
+              "formulation": {
+                "primer": "diisocyanate（NCO基）活化PU表面",
+                "topcoat": "bPEI-S-MPC複合物共價鍵結"
+              },
+              "process": {
+                "surface_prep": "diisocyanate表面活化",
+                "coating_method": "共價接枝",
+                "drying": "—",
+                "curing": "化學反應固化（非UV）"
+              },
+              "results": {
+                "friction": "降低30%",
+                "adhesion": "共價鍵，高耐久",
+                "wca": "顯著降低",
+                "durability": "—",
+                "antifouling": "蛋白質吸附阻抗",
+                "antimicrobial": "有抗菌活性",
+                "other": "兔體內抗血栓評分1.3 vs 對照3.3；溶血率降50%"
+              }
+            }
+          ],
+          "tpu_advantages": "TPU的urethane基可與isocyanate反應，共價接枝比物理吸附耐久；MPC仿生磷脂膜抗血栓",
+          "tpu_challenges": "isocyanate毒性高，需嚴格安全管控；bPEI-S-MPC合成複雜，難商業化*",
+          "key_claims": [
+            "MPC共價接枝PU達到抗血栓+抗菌+低摩擦三合一",
+            "兔體內驗證"
+          ],
+          "actionable_insights": [
+            "MPC是PVP以外最值得評估的親水功能材料，抗血栓性能遠優於PVP",
+            "若Bioteque透析導管或血管導管需抗血栓，MPC路線值得Phase 3研發"
+          ],
+          "red_flags": [
+            "MPC成本高於PVP 10-20倍*",
+            "isocyanate活化需嚴格安全規程",
+            "合成步驟複雜，短期難量產*"
+          ],
+          "bioteque_relevance": "MPC塗層對Bioteque透析導管或長期置留血管導管是重要未來方向；短期不急，但應列入Phase 3計畫"
+        }
       }
     },
     {
@@ -2146,6 +2469,54 @@
       "value_to_project": "2026最新！直接在PU(=TPU)上做MPC塗層；4週穩定性數據",
       "links": {
         "doi": "https://doi.org/10.1021/acs.langmuir.6c01452"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "2026最新：PDA/PEI預處理PU，MPC/DADMAC/GMA共聚物環氧接枝，WCA降至18.25°，4週PBS穩定，抗菌99%",
+          "examples": [
+            {
+              "name": "PDA+PEI / MPC-DADMAC-GMA共聚物接枝 on PU",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "2026最新期刊，4週穩定性測試",
+              "substrate": "PU（≈TPU）",
+              "formulation": {
+                "primer": "PDA + PEI（polyethylenimine）預處理",
+                "topcoat": "MPC/DADMAC/GMA共聚物，環氧開環接枝"
+              },
+              "process": {
+                "surface_prep": "PDA/PEI預處理",
+                "coating_method": "環氧開環接枝反應",
+                "drying": "—",
+                "curing": "化學接枝（非UV）"
+              },
+              "results": {
+                "friction": "—",
+                "adhesion": "4週PBS浸泡穩定",
+                "wca": "85.95°→18.25°",
+                "durability": "4週PBS穩定",
+                "antifouling": "蛋白質吸附阻抗",
+                "antimicrobial": "殺菌率99%",
+                "other": "DADMAC賦予抗菌性，MPC賦予抗汙性，雙功能"
+              }
+            }
+          ],
+          "tpu_advantages": "PDA/PEI在PU表面構建多功能平台，可接枝多種功能性共聚物；GMA環氧基對PEI的NH2有高反應性",
+          "tpu_challenges": "三元共聚物MPC/DADMAC/GMA合成需精確控制比例*；DADMAC（季銨鹽）長期生物安全性需驗證*",
+          "key_claims": [
+            "MPC+DADMAC雙功能共聚物在PU表面穩定接枝",
+            "2026最新4週穩定性"
+          ],
+          "actionable_insights": [
+            "PDA+PEI雙層primer比單層PDA對後續功能化反應更有利",
+            "若Bioteque輸尿管支架需抗菌功能，此MPC+DADMAC路線是2026最新依據"
+          ],
+          "red_flags": [
+            "DADMAC季銨鹽細胞毒性需評估*",
+            "GMA環氧開環反應速率對溫度敏感*"
+          ],
+          "bioteque_relevance": "對Bioteque長期置留輸尿管支架（抗結痂+抗菌需求）最具未來性；建議列入抗結痂Phase的補充方案"
+        }
       }
     },
     {
