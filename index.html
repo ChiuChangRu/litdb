@@ -2532,8 +2532,9 @@ function showDetail(i) {
     ${(p.patentResults && Object.keys(p.patentResults).length) ? `
     <div style="margin-top:12px">
       ${Object.entries(p.patentResults).map(([mode,r])=>{
-        const modeLabels = {full:'📊 完整分析',avoidance:'🚧 迴避設計',formulation:'🧪 配方萃取',feasibility:'🏭 可行性評估',compare:'🔄 對比分析',review:'📚 綜述分析'};
+        const modeLabels = {full:'📊 完整分析',avoidance:'🚧 迴避設計',formulation:'🧪 配方萃取',feasibility:'🏭 可行性評估',compare:'🔄 對比分析',review:'📚 綜述分析',commercial:'🏢 商業分析'};
         if(mode==='review') return renderReviewResult(r);
+        if(mode==='commercial') return renderCommercialResult(r);
         return `<div style="margin-bottom:6px;font-size:11px;color:var(--accent2);font-weight:600">${modeLabels[mode]||mode}</div>` + renderPatentResult(r);
       }).join('')}
       <button class="btn btn-s" onclick="${p.doc_type==='專利'?`showPatentAnalysis(${i})`:`showPaperAnalysis(${i})`}" style="width:100%;margin-top:8px">🔄 重新分析 / 其他模式</button>
@@ -2582,6 +2583,77 @@ function tryLocalFig(el, localUrl) {
 
 function closeMobileDetail() {
   document.getElementById('colRight').classList.remove('mobile-open');
+}
+
+// ── 商業產品專屬渲染 ──────────────────────────
+function renderCommercialResult(r) {
+  if(!r) return '';
+
+  const threatColor = {'高':'#c0392b','中':'#d4a030','低':'#2d8c5a'};
+  const threat = r.competitive_threat_to_bioteque||'';
+  const tColor = threatColor[threat] || '#888';
+
+  const techRows = Object.entries(r.coating_technology||{})
+    .filter(([k,v]) => k!=='performance_claims' && v && (!Array.isArray(v)||v.length))
+    .map(([k,v])=>{
+      const label = {type:'塗層類型',primer:'底塗/Primer',topcoat:'面塗材料',curing:'固化方式',substrates:'適用基材'}[k]||k;
+      const val = Array.isArray(v)?v.join('、'):v;
+      return `<tr><td style="padding:4px 8px;border:1px solid var(--border);color:var(--muted);white-space:nowrap;font-size:11px">${label}</td>
+               <td style="padding:4px 8px;border:1px solid var(--border);font-size:11px">${val}</td></tr>`;
+    }).join('');
+
+  const claims = r.coating_technology?.performance_claims||{};
+  const claimBadges = Object.entries(claims).map(([k,v])=>
+    `<span style="background:var(--card);border:1px solid var(--border);border-radius:5px;padding:3px 8px;font-size:11px"><b>${k}:</b> ${v}</span>`
+  ).join(' ');
+
+  return `
+  <div style="border-top:2px solid var(--accent);padding-top:10px;margin-top:4px">
+    <div style="font-size:11px;font-weight:700;color:var(--accent);margin-bottom:8px">🏢 商業分析</div>
+
+    <!-- 公司頭部 -->
+    <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;background:var(--card);padding:8px 10px;border-radius:8px">
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:700;color:var(--text)">${r.company}</div>
+        <div style="font-size:12px;color:var(--accent);font-weight:600">${r.product}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px">${r.hq} ${r.founded?`· 創立 ${r.founded}`:''}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-size:10px;color:var(--muted)">競爭威脅</div>
+        <div style="font-size:16px;font-weight:700;color:${tColor}">${threat||'—'}</div>
+        <div style="font-size:10px;color:var(--muted)">${r.pricing_tier||''}</div>
+      </div>
+    </div>
+
+    <!-- 商業模式 -->
+    ${r.business_model?`<div style="font-size:11px;margin-bottom:8px"><b>商業模式：</b>${r.business_model}</div>`:''}
+    ${r.market_position?`<div style="font-size:11px;margin-bottom:10px;color:var(--muted)">${r.market_position}</div>`:''}
+
+    <!-- 塗層技術 -->
+    ${techRows?`<div style="margin-bottom:10px">
+      <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:5px">⚗️ 塗層技術</div>
+      <table style="width:100%;border-collapse:collapse">${techRows}</table>
+      ${claimBadges?`<div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px">${claimBadges}</div>`:''}
+    </div>`:''}
+
+    <!-- 差異化 / 弱點 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+      ${r.differentiator?`<div style="background:#eaf5ef;border-radius:6px;padding:8px;font-size:11px">
+        <div style="font-weight:700;color:var(--accent2);margin-bottom:3px">✅ 差異化</div>
+        ${r.differentiator}</div>`:''}
+      ${r.weakness?`<div style="background:#fdf0ed;border-radius:6px;padding:8px;font-size:11px">
+        <div style="font-weight:700;color:var(--danger);margin-bottom:3px">⚠️ 弱點</div>
+        ${r.weakness}</div>`:''}
+    </div>
+
+    <!-- IP 風險 -->
+    ${r.ip_risk?`<div style="background:#fff8e6;border-left:3px solid #d4a030;padding:7px 10px;border-radius:0 6px 6px 0;font-size:11px;margin-bottom:8px">
+      <b style="color:#b8860b">⚖️ IP 風險：</b>${r.ip_risk}</div>`:''}
+
+    <!-- 合作機會 -->
+    ${r.collaboration_opportunity?`<div style="background:#eaf5ef;border-left:3px solid var(--accent2);padding:7px 10px;border-radius:0 6px 6px 0;font-size:11px">
+      <b style="color:var(--accent2)">🤝 合作機會：</b>${r.collaboration_opportunity}</div>`:''}
+  </div>`;
 }
 
 // ── Review Article 專屬渲染 ───────────────────
