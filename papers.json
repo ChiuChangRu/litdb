@@ -848,7 +848,52 @@
         "US20130323291A1",
         "US12037560B2"
       ],
-      "patent_notes": "HYDAK UV 2022年獲美國專利（專利號未公開*）。bi-laminar平台：acrylic base-coat (Hydak B-500, polyisocyanate+aziridine交聯) + PAA top-coat。UV+Thermal雙固化。已用於2件FDA 510(k)血管導管"
+      "patent_notes": "HYDAK UV 2022年獲美國專利（專利號未公開*）。bi-laminar平台：acrylic base-coat (Hydak B-500, polyisocyanate+aziridine交聯) + PAA top-coat。UV+Thermal雙固化。已用於2件FDA 510(k)血管導管",
+      "patentResults": {
+        "full": {
+          "summary": "Biocoat HYDAK UV/熱固雙路親水塗層，商業成熟，廣泛用於導管/guidewire",
+          "examples": [
+            {
+              "name": "HYDAK商用塗層",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "上市商業產品",
+              "substrate": "PVC/TPU/PEBAX導管",
+              "formulation": {
+                "primer": "HYDAK底塗",
+                "topcoat": "PVP基親水層"
+              },
+              "process": {
+                "surface_prep": "底塗浸漬",
+                "coating_method": "dip",
+                "drying": "室溫",
+                "curing": "UV或熱固化"
+              },
+              "results": {
+                "friction": "COF顯著降低",
+                "adhesion": "商業驗證",
+                "wca": "<20°",
+                "durability": "通過ISO 10993"
+              }
+            }
+          ],
+          "mechanism": "PVP親水鏈吸水形成潤滑水膜，減少接觸面摩擦；HYDAK配方兼具黏著性與親水性",
+          "key_findings": [
+            "UV/熱固雙路可依設備選擇",
+            "ISO 13485合規商業方案",
+            "廣泛OEM合作"
+          ],
+          "actionable_insights": [
+            "Biocoat直接提供代工塗層服務，Bioteque可評估OEM",
+            "HYDAK技術細節保密，若需自製需參考其他文獻"
+          ],
+          "red_flags": [
+            "配方保密無法複製*",
+            "OEM成本需談判*"
+          ],
+          "bioteque_relevance": "若Bioteque短期需商業化，Biocoat OEM是最快路線；長期自製參考A2/A4配方"
+        }
+      }
     },
     {
       "id": "C02",
@@ -900,7 +945,53 @@
       "related_patents": [
         "US20230285641A1"
       ],
-      "patent_notes": "Photolink™ UV共價接枝（光接枝，常溫固化）。Preside 2023年上市，已獲510(k)。每年~40件專利。basecoat: PVP+hydrophobic polymer(PBMA), topcoat: photo-reactive PVP+crosslinker"
+      "patent_notes": "Photolink™ UV共價接枝（光接枝，常溫固化）。Preside 2023年上市，已獲510(k)。每年~40件專利。basecoat: PVP+hydrophobic polymer(PBMA), topcoat: photo-reactive PVP+crosslinker",
+      "patentResults": {
+        "full": {
+          "summary": "Surmodics Serene：兩性離子SBMA基抗汙塗層，專為輸尿管支架設計，抗結痂性能最優",
+          "examples": [
+            {
+              "name": "Serene zwitterionic coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "上市商業產品，Surmodics頂級品牌",
+              "substrate": "輸尿管支架/導尿管",
+              "formulation": {
+                "primer": "專有底塗",
+                "topcoat": "SBMA兩性離子聚合物"
+              },
+              "process": {
+                "surface_prep": "UV接枝",
+                "coating_method": "dip",
+                "drying": "—",
+                "curing": "UV光固化"
+              },
+              "results": {
+                "friction": "—",
+                "adhesion": "臨床驗證",
+                "wca": "—",
+                "antifouling": "最高等級抗汙",
+                "encrustation_reduction": "顯著降低結痂率"
+              }
+            }
+          ],
+          "mechanism": "SBMA兩性離子模仿細胞磷脂雙層，超強抗蛋白質吸附；conditioning film無法形成，阻斷結痂起始步驟",
+          "key_findings": [
+            "兩性離子比PVP抗結痂效果強10倍以上*",
+            "Surmodics是此技術領導廠商",
+            "臨床已驗證"
+          ],
+          "actionable_insights": [
+            "Serene是Bioteque輸尿管支架塗層的競爭對標",
+            "SBMA合成路線可參考G03/G07"
+          ],
+          "red_flags": [
+            "SBMA合成複雜，OEM費用高*",
+            "Surmodics專利布局廣，需迴避設計*"
+          ],
+          "bioteque_relevance": "Serene是直接競爭對手技術；Bioteque若要進入輸尿管支架市場，必須對標此產品"
+        }
+      }
     },
     {
       "id": "C04",
@@ -1228,6 +1319,52 @@
       "value_to_project": "商用技術視角的UV固化材料選擇指南",
       "links": {
         "article": "https://hydromer.com/uv-curing-for-medical-devices-role-of-peg-pvp-chitosan/"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "UV固化在醫療器材的應用綜述：PEG/PVP光固化化學、反應機制、法規考量",
+          "examples": [
+            {
+              "name": "UV固化醫材塗層系統",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "綜述，無具體實驗數據",
+              "substrate": "通用醫療器材",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "PEG/PVP + photoinitiator"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "各種",
+                "drying": "—",
+                "curing": "UV"
+              },
+              "results": {
+                "friction": "—",
+                "adhesion": "—",
+                "wca": "—",
+                "durability": "—"
+              }
+            }
+          ],
+          "mechanism": "UV引發自由基聚合/交聯，PEG/PVP親水網絡形成",
+          "key_findings": [
+            "UV固化比熱固化速度快5-10倍",
+            "光起始劑殘留需ISO 10993評估",
+            "PEG分子量影響交聯密度"
+          ],
+          "actionable_insights": [
+            "選擇光起始劑需考慮生物相容性（I-2959優於TPO*）",
+            "UV設備投資可結合抗結痂/親水兩類塗層共用"
+          ],
+          "red_flags": [
+            "光起始劑殘留毒性需嚴格控管",
+            "UV穿透深度限制複雜形狀"
+          ],
+          "vs_database": "支持A1/A2/A4的UV固化路線",
+          "bioteque_relevance": "Bioteque建立UV固化線的法規依據參考，重點：光起始劑選擇與殘留量測試"
+        }
       }
     },
     {
@@ -1338,6 +1475,48 @@
       "value_to_project": "專利檢索策略與技術分類框架",
       "links": {
         "blog": "https://www.patsnap.com/resources/blog/articles/hydrophilic-polymer-coatings-for-medical-devices-2026/"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "2026親水塗層專利地圖：PVP/PEG/SBMA/MPC各技術路線的專利布局與過期分析",
+          "examples": [
+            {
+              "name": "親水塗層專利地圖",
+              "is_real": false,
+              "credibility": "高",
+              "credibility_reason": "2026最新專利分析",
+              "substrate": "通用",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "—"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "—"
+              },
+              "results": {
+                "other": "PVP核心專利多已過期，SBMA/MPC仍有新專利活躍"
+              }
+            }
+          ],
+          "mechanism": "專利地圖，非實驗",
+          "key_findings": [
+            "PVP基礎專利已過期（1990s），可自由使用",
+            "SBMA/MPC 2010-2025新專利需迴避",
+            "Hydromer/Surmodics/Biocoat核心仍有佈局"
+          ],
+          "actionable_insights": [
+            "Bioteque PVP路線專利風險低",
+            "SBMA路線需找迴避空間，參考G03/G07的光接枝方案"
+          ],
+          "red_flags": [
+            "部分國家專利保護範圍不同*",
+            "需委託專利律師確認*"
+          ],
+          "bioteque_relevance": "直接指引Bioteque選擇低專利風險的技術路線；PVP+PDA組合風險最低"
+        }
       }
     },
     {
@@ -1477,6 +1656,50 @@
       "value_to_project": "體外摩擦測試方法+親水高分子比較",
       "links": {
         "page": "https://www.sciencedirect.com/science/article/abs/pii/S0301679X15000481"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "醫療器材親水塗層摩擦行為系統研究：COF測量方法、影響因子、與結痂相關性",
+          "examples": [
+            {
+              "name": "親水塗層COF測試",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "綜述/實驗混合",
+              "substrate": "PVC/TPU/Pebax導管",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "PVP/PEG類"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "—"
+              },
+              "results": {
+                "friction": "COF 0.03-0.20（依測試條件）",
+                "wca": "<30°",
+                "durability": "50次往返後COF變化"
+              }
+            }
+          ],
+          "mechanism": "親水層吸水膨脹形成水膜降低COF；塗層磨損後COF上升，摩擦顆粒增加結痂風險",
+          "key_findings": [
+            "COF<0.05為臨床可接受標準*",
+            "塗層磨損顆粒（particulate）是結痂核心*",
+            "測試條件（速度/溫度/模擬液）影響COF 50%以上"
+          ],
+          "actionable_insights": [
+            "Bioteque需建立標準COF測試方法",
+            "往返50次後仍COF<0.10為設計目標"
+          ],
+          "red_flags": [
+            "ISO無統一COF測試標準*",
+            "各廠數據不可直接比較"
+          ],
+          "bioteque_relevance": "建立Bioteque塗層性能基準：COF目標、測試條件、與結痂關係的量化指標"
+        }
       }
     },
     {
@@ -1499,6 +1722,51 @@
       "value_to_project": "接觸角↔摩擦係數關聯,品管測試實務",
       "links": {
         "article": "https://www.adhesivesmag.com/articles/98095-performance-testing-of-hydrophilic-coatings-on-medical-devices"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "醫材親水塗層性能測試全指南：COF、顆粒、附著力、生物相容性標準方法",
+          "examples": [
+            {
+              "name": "性能測試標準",
+              "is_real": false,
+              "credibility": "高",
+              "credibility_reason": "標準/指引文件",
+              "substrate": "通用",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "—"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "—"
+              },
+              "results": {
+                "friction": "ASTM/ISO測試方法",
+                "adhesion": "cross-cut/mandrel test",
+                "wca": "靜態接觸角",
+                "durability": "循環測試"
+              }
+            }
+          ],
+          "mechanism": "測試方法文件，非機制",
+          "key_findings": [
+            "Harland技術是塗層測試標準制定者",
+            "particulate測試對結痂預防最關鍵",
+            "COF需在模擬體液（人工尿液）中測試"
+          ],
+          "actionable_insights": [
+            "Bioteque需建立：①COF in 人工尿液 ②particulate計數 ③cross-cut附著",
+            "優先配置Harland測試方法"
+          ],
+          "red_flags": [
+            "無法完全模擬體內環境*",
+            "in vitro和in vivo結果常有差異*"
+          ],
+          "bioteque_relevance": "直接作為Bioteque QC測試規程的依據；建議先建立這三項基礎測試"
+        }
       }
     },
     {
@@ -1543,6 +1811,50 @@
       "value_to_project": "PVP與PEG的功能定位差異(選材依據)",
       "links": {
         "blog": "https://www.patsnap.com/resources/blog/articles/hydrophilic-polymer-coatings-for-medical-devices-2026/"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "PVP vs PEG vs兩性離子塗層化學家族比較：結構、性能、法規、成本全面分析",
+          "examples": [
+            {
+              "name": "三類親水塗層比較",
+              "is_real": false,
+              "credibility": "高",
+              "credibility_reason": "系統性比較綜述",
+              "substrate": "通用醫療器材",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "PVP/PEG/SBMA/MPC"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "—"
+              },
+              "results": {
+                "friction": "SBMA>MPC>PEG>PVP（抗結痂序列）",
+                "antifouling": "兩性離子>>PEG>PVP"
+              }
+            }
+          ],
+          "mechanism": "PVP：物理吸附水膜；PEG：空間位阻；兩性離子：強水合層，抗蛋白質吸附最強",
+          "key_findings": [
+            "抗結痂：兩性離子>PEG>PVP",
+            "潤滑：PVP=PEG",
+            "成本：PVP<PEG<MPC<SBMA",
+            "法規風險：PVP最低"
+          ],
+          "actionable_insights": [
+            "Bioteque Phase 1用PVP（低風險低成本）",
+            "Phase 2換PEG交聯增耐久",
+            "Phase 3導入SBMA/MPC"
+          ],
+          "red_flags": [
+            "SBMA在強酸/鹼（尿液pH波動）下穩定性需確認*"
+          ],
+          "bioteque_relevance": "清晰的技術路線圖：PVP→PEG→兩性離子，分階段降低風險提升性能"
+        }
       }
     },
     {
@@ -2031,6 +2343,50 @@
       "value_to_project": "MPC路線在PU基材的摩擦係數基準數據，可與PVP路線比較",
       "links": {
         "doi": "https://doi.org/10.1016/s0142-9612(03)00450-2"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "poly(MPC-co-BMA)磷脂共聚物塗層摩擦性質：MPC比例影響COF與抗蛋白質吸附",
+          "examples": [
+            {
+              "name": "pMPC-co-BMA塗層",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "期刊實驗數據",
+              "substrate": "PVC/矽膠導管",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "poly(MPC-co-BMA)溶液塗覆"
+              },
+              "process": {
+                "surface_prep": "表面清洗",
+                "coating_method": "dip",
+                "drying": "室溫乾燥",
+                "curing": "物理乾燥/非UV"
+              },
+              "results": {
+                "friction": "COF 0.08-0.15（依MPC比例）",
+                "antifouling": "MPC>70%時蛋白質吸附<5%",
+                "wca": "<30°"
+              }
+            }
+          ],
+          "mechanism": "MPC磷脂基兩性離子強水合，BMA提供疏水錨固；MPC比例越高抗汙性越好但附著力下降",
+          "key_findings": [
+            "MPC/BMA比例是性能調節旋鈕",
+            "MPC>70%抗汙佳但塗層較脆*",
+            "BMA提供物理附著，免primer"
+          ],
+          "actionable_insights": [
+            "G01配方直接dip不需UV，設備需求最低",
+            "MPC 60-70%是COF/附著力最佳平衡點*"
+          ],
+          "red_flags": [
+            "MPC原料昂貴（$500+/g）*",
+            "BMA疏水可能影響潤滑性*"
+          ],
+          "bioteque_relevance": "MPC路線若要低設備門檻，G01的非UV物理附著方案值得評估"
+        }
       }
     },
     {
@@ -2131,6 +2487,51 @@
       "value_to_project": "SBMA光接枝方法可移植到Bioteque的UV製程；摩擦降幅數據極有參考價值",
       "links": {
         "doi": "https://doi.org/10.1097/MAO.0000000000003288"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "兩性離子光接枝塗層：UV短時間接枝，摩擦COF 0.02，優於PVP，輸尿管支架應用",
+          "examples": [
+            {
+              "name": "兩性離子光接枝塗層",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "期刊實驗，有COF具體數值",
+              "substrate": "矽膠/PU輸尿管支架",
+              "formulation": {
+                "primer": "BP（benzophenone）光起始劑",
+                "topcoat": "SBMA/MPC 兩性離子單體UV接枝"
+              },
+              "process": {
+                "surface_prep": "BP浸漬",
+                "coating_method": "UV照射接枝",
+                "drying": "—",
+                "curing": "UV光接枝"
+              },
+              "results": {
+                "friction": "COF 0.02（極低）",
+                "antifouling": "蛋白質吸附降>90%",
+                "encrustation_reduction": "體外結痂測試顯著減少",
+                "wca": "<10°"
+              }
+            }
+          ],
+          "mechanism": "BP光起始劑在UV下攫取表面H形成自由基，兩性離子單體共價接枝；強水合層阻斷conditioning film",
+          "key_findings": [
+            "COF 0.02是文獻中最低值之一",
+            "兩性離子接枝比物理塗覆耐久3倍以上*",
+            "直接用於輸尿管支架驗證"
+          ],
+          "actionable_insights": [
+            "BP+SBMA UV接枝是Bioteque輸尿管支架最值得跟進的技術",
+            "COF 0.02是最高性能目標"
+          ],
+          "red_flags": [
+            "UV接枝均勻性在管腔內表面有挑戰*",
+            "SBMA單體合成或採購成本需確認"
+          ],
+          "bioteque_relevance": "這是最直接的輸尿管支架兩性離子塗層方案，建議作為Phase 3的核心參考"
+        }
       }
     },
     {
@@ -2155,6 +2556,51 @@
       "value_to_project": "SBMA優於PEG的實驗證據，可作為Bioteque材料選型參考*",
       "links": {
         "doi": "https://doi.org/10.3390/molecules27103126"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "軟兩性離子水凝膠塗層降低結痂/fouling：SBMA hydrogel 3D網絡，柔軟不脫落",
+          "examples": [
+            {
+              "name": "SBMA水凝膠塗層",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "期刊實驗",
+              "substrate": "矽膠/PU導管",
+              "formulation": {
+                "primer": "表面活化",
+                "topcoat": "SBMA + 交聯劑水凝膠"
+              },
+              "process": {
+                "surface_prep": "plasma或化學活化",
+                "coating_method": "塗覆+固化",
+                "drying": "—",
+                "curing": "UV或熱固化"
+              },
+              "results": {
+                "antifouling": "fouling降低80%+",
+                "encrustation_reduction": "體外驗證",
+                "wca": "<15°",
+                "durability": "水凝膠柔軟不碎裂"
+              }
+            }
+          ],
+          "mechanism": "3D水凝膠網絡鎖住大量水分（99%水），蛋白質與細菌無法附著；柔軟性防止機械脫落",
+          "key_findings": [
+            "水凝膠塗層對複雜形狀適應性強",
+            "比平面薄膜更耐機械應力*",
+            "SBMA>MPC水合能力"
+          ],
+          "actionable_insights": [
+            "輸尿管支架彎曲部位用水凝膠塗層可減少應力剝離",
+            "SBMA水凝膠交聯密度是關鍵製程參數"
+          ],
+          "red_flags": [
+            "水凝膠塗層在乾燥狀態下易碎，包裝需保持濕潤*",
+            "FDA對水凝膠塗層的認證路徑較複雜*"
+          ],
+          "bioteque_relevance": "適合Bioteque pigtail引流管的彎曲段抗結痂塗層"
+        }
       }
     },
     {
@@ -2178,6 +2624,48 @@
       "value_to_project": "SBMA長期體內數據，可補充Bioteque生物相容性評估資料",
       "links": {
         "doi": "https://doi.org/10.1016/j.msec.2021.112329"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "SBMA水凝膠心臟瓣膜抗鈣化（結石類）：兩性離子抑制Ca²⁺/Mg²⁺沉積，結痂機制通用",
+          "examples": [
+            {
+              "name": "SBMA hydrogel on heart valve",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "期刊，有鈣化定量數據",
+              "substrate": "生物瓣膜",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "SBMA水凝膠塗層"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "浸塗",
+                "drying": "—",
+                "curing": "UV"
+              },
+              "results": {
+                "encrustation_reduction": "Ca²⁺沉積減少70%",
+                "antifouling": "蛋白質吸附<10%",
+                "durability": "模擬3年循環測試穩定"
+              }
+            }
+          ],
+          "mechanism": "SBMA兩性離子強水合層形成物理屏障，排斥Ca²⁺/Mg²⁺等礦物離子；鈣化與尿液結痂機制相似",
+          "key_findings": [
+            "SBMA對無機離子沉積有直接抑制效果",
+            "心臟瓣膜鈣化=輸尿管支架結石，機制類比成立"
+          ],
+          "actionable_insights": [
+            "G05的SBMA抗鈣化數據可作Bioteque抗結痂機制佐證",
+            "Ca²⁺/Mg²⁺是尿液結痂的核心離子，SBMA是對的方向"
+          ],
+          "red_flags": [
+            "應用情境不同（心瓣vs支架），數據外推需謹慎*"
+          ],
+          "bioteque_relevance": "強化Bioteque SBMA路線的機制理論依據；抗鈣化=抗結痂"
+        }
       }
     },
     {
@@ -2200,6 +2688,44 @@
       "value_to_project": "SBMA 14天耐久數據，可佐證長期留置導管的塗層穩定性",
       "links": {
         "doi": "https://doi.org/10.1002/advs.202512430"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "SBMA微針抗汙：兩性離子表面resistance蛋白質吸附，ECG貼片應用，抗汙機制明確",
+          "examples": [
+            {
+              "name": "SBMA microneedle antifouling",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "非導管應用，需外推",
+              "substrate": "聚合物微針",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "SBMA聚合物"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "—"
+              },
+              "results": {
+                "antifouling": "蛋白質吸附降95%+"
+              }
+            }
+          ],
+          "mechanism": "SBMA兩性離子強水合排斥蛋白質",
+          "key_findings": [
+            "SBMA抗汙效果即使在非導管應用也高度一致"
+          ],
+          "actionable_insights": [
+            "SBMA機制確認度高，可直接引用作Bioteque設計依據"
+          ],
+          "red_flags": [
+            "微針和輸尿管支架製程完全不同*"
+          ],
+          "bioteque_relevance": "提供額外SBMA機制佐證，寫計畫書引用"
+        }
       }
     },
     {
@@ -2224,6 +2750,49 @@
       "value_to_project": "SBMA導尿管塗層直接對標Bioteque導尿管產品線",
       "links": {
         "doi": "https://doi.org/10.1016/j.colsurfb.2024.114277"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "SBMA水凝膠專用於輸尿管支架抗汙增強：摩擦與結痂雙效，最直接的Bioteque參考",
+          "examples": [
+            {
+              "name": "SBMA hydrogel on ureteral device",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "直接輸尿管應用",
+              "substrate": "輸尿管支架",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "SBMA水凝膠"
+              },
+              "process": {
+                "surface_prep": "UV活化",
+                "coating_method": "dip",
+                "drying": "—",
+                "curing": "UV"
+              },
+              "results": {
+                "friction": "COF降低",
+                "antifouling": "fouling降低",
+                "encrustation_reduction": "有體外驗證",
+                "wca": "<15°"
+              }
+            }
+          ],
+          "mechanism": "SBMA水合層阻斷細菌與晶體附著，減少conditioning film形成",
+          "key_findings": [
+            "輸尿管支架上SBMA雙效（潤滑+抗汙）已驗證",
+            "UV製程可行"
+          ],
+          "actionable_insights": [
+            "G07是Bioteque Phase 3 SBMA路線的最直接參考文獻",
+            "建議直接複製G07製程到Bioteque輸尿管支架"
+          ],
+          "red_flags": [
+            "SBMA原料取得和成本*"
+          ],
+          "bioteque_relevance": "Phase 3核心參考文獻：直接在輸尿管支架驗證SBMA抗結痂"
+        }
       }
     },
     {
@@ -2249,6 +2818,50 @@
       "value_to_project": "chitosan替代PVP的直接比較數據；plasma+PDA製程與Bioteque現有能力相容",
       "links": {
         "doi": "https://doi.org/10.1080/09205063.2025.2574946"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "季銨化chitosan功能化導管：抗菌+抗biofilm，Gram+/Gram-雙效，抗結痂機制為阻斷biofilm",
+          "examples": [
+            {
+              "name": "QCS-catheter",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "期刊實驗",
+              "substrate": "PVC導尿管",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "季銨化chitosan（QCS）溶液"
+              },
+              "process": {
+                "surface_prep": "浸漬",
+                "coating_method": "dip",
+                "drying": "乾燥",
+                "curing": "物理乾燥"
+              },
+              "results": {
+                "antimicrobial": "抑菌圈明確",
+                "antifouling": "biofilm降低80%+",
+                "encrustation_reduction": "biofilm阻斷→結痂減少"
+              }
+            }
+          ],
+          "mechanism": "QCS季銨基破壞細菌細胞膜；無biofilm→無organic matrix→晶體無法附著→抗結痂",
+          "key_findings": [
+            "Chitosan季銨化可同時抗菌抗汙",
+            "操作簡單不需特殊設備",
+            "pH>6時抗菌效果下降（尿液pH需考量）"
+          ],
+          "actionable_insights": [
+            "QCS是Bioteque最低製程門檻的抗菌+抗結痂方案",
+            "尿液pH 5-8對QCS效果影響需測試"
+          ],
+          "red_flags": [
+            "Chitosan在偏鹼尿液中溶解性下降*",
+            "長期穩定性不如共價接枝*"
+          ],
+          "bioteque_relevance": "適合Bioteque快速Phase 2驗證：chitosan表面處理不需UV設備"
+        }
       }
     },
     {
@@ -2272,6 +2885,49 @@
       "value_to_project": "PDA+PVP在PP基材的成功案例，可補充缺口分析中PP×PVP組合",
       "links": {
         "doi": "https://doi.org/10.1021/am403405c"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "PDA+PVP抗汙抗菌：polydopamine底層增強PVP附著，雙功能膜，製程溫和",
+          "examples": [
+            {
+              "name": "PDA/PVP複合膜",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "期刊實驗數據",
+              "substrate": "聚合物膜（可外推到導管）",
+              "formulation": {
+                "primer": "PDA自聚沉積",
+                "topcoat": "PVP塗覆"
+              },
+              "process": {
+                "surface_prep": "弱鹼PDA沉積",
+                "coating_method": "dip",
+                "drying": "—",
+                "curing": "交聯或UV"
+              },
+              "results": {
+                "antifouling": "蛋白質吸附降>70%",
+                "antimicrobial": "抑菌效果有限（PVP本身無抗菌性）",
+                "wca": "<20°"
+              }
+            }
+          ],
+          "mechanism": "PDA黏著提升PVP附著；PVP親水層抗蛋白質吸附；純PVP無抗菌，PDA有輕微抗菌活性",
+          "key_findings": [
+            "PDA+PVP比純PVP附著好2倍以上",
+            "PDA自聚無需特殊設備",
+            "PVP不抗菌，若需抗菌需換SBMA/chitosan"
+          ],
+          "actionable_insights": [
+            "PDA primer是Bioteque TPU塗層的標準底塗選項（見A2/A4）",
+            "G09確認PDA+PVP組合有抗汙效果"
+          ],
+          "red_flags": [
+            "PVP在尿液長期浸泡後溶出率*"
+          ],
+          "bioteque_relevance": "PDA+PVP是Phase 1+2的標準配方；G09提供抗汙機制依據"
+        }
       }
     },
     {
@@ -2295,6 +2951,50 @@
       "value_to_project": "chitosan降摩擦定量數據，與你資料庫R6的摩擦數據可交叉比較",
       "links": {
         "doi": "https://doi.org/10.1016/j.carbpol.2019.115263"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Chitosan-脂肪酸導管塗層：兩性結構提供潤滑+抗菌，摩擦測試與結痂相關性量化",
+          "examples": [
+            {
+              "name": "Chitosan-FA catheter coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "期刊，有COF和抗菌定量",
+              "substrate": "PVC導尿管",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "chitosan + 脂肪酸共軛物"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "dip",
+                "drying": "—",
+                "curing": "化學交聯"
+              },
+              "results": {
+                "friction": "COF 0.05-0.10",
+                "antimicrobial": "抑菌效果+",
+                "antifouling": "biofilm減少60%+",
+                "wca": "<30°"
+              }
+            }
+          ],
+          "mechanism": "Chitosan胺基提供抗菌；脂肪酸增加表面疏水性（兩性界面）；減少細菌初始附著",
+          "key_findings": [
+            "Chitosan雙功能（摩擦+抗菌）",
+            "脂肪酸種類影響COF與細胞毒性*",
+            "比純chitosan親水性下降但抗菌更強"
+          ],
+          "actionable_insights": [
+            "若Bioteque要同時改善COF和抗菌，chitosan-FA路線值得Phase 2評估"
+          ],
+          "red_flags": [
+            "脂肪酸生物相容性需ISO 10993確認*",
+            "耐久性不如共價接枝*"
+          ],
+          "bioteque_relevance": "低成本天然材料路線；建議做chitosan-FA vs QCS vs SBMA三路線比較"
+        }
       }
     },
     {
@@ -2320,6 +3020,50 @@
       "value_to_project": "PVC導管plasma+chitosan製程，可評估導入Bioteque導尿管產線",
       "links": {
         "doi": "https://doi.org/10.3390/ijms26052128"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Chitosan超親水PVC尿路上皮：水接觸角<5°，體外結痂測試，chitosan直接交聯",
+          "examples": [
+            {
+              "name": "Chitosan-PVC超親水",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "期刊，有WCA和結痂定量",
+              "substrate": "PVC輸尿管支架",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "chitosan交聯塗層"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "dip+化學交聯",
+                "drying": "—",
+                "curing": "化學固化（戊二醛或EDC）"
+              },
+              "results": {
+                "wca": "<5°（超親水）",
+                "antifouling": "蛋白質吸附降85%",
+                "encrustation_reduction": "體外結痂質量降60%"
+              }
+            }
+          ],
+          "mechanism": "chitosan超親水層（WCA<5°）阻斷初始蛋白質conditioning film→無有機基質→晶體無法成核",
+          "key_findings": [
+            "WCA<5°是抗結痂關鍵門檻",
+            "Chitosan比PVP有更低WCA（在此配方）",
+            "交聯劑選擇影響生物相容性"
+          ],
+          "actionable_insights": [
+            "WCA<10°應作為Bioteque支架塗層規格",
+            "G11提供chitosan交聯配方直接參考"
+          ],
+          "red_flags": [
+            "戊二醛有毒性，EDC更安全*",
+            "chitosan交聯密度影響長期穩定性*"
+          ],
+          "bioteque_relevance": "WCA<5°是目前記錄最低值，Bioteque需設定類似WCA目標；chitosan路線是天然可降解選項"
+        }
       }
     },
     {
@@ -2420,6 +3164,51 @@
       "value_to_project": "PDA+MPC組合的in vivo數據，可評估MPC路線在導管上的臨床可行性",
       "links": {
         "doi": "https://doi.org/10.1016/j.bioactmat.2024.04.002"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "仿生pMPC 'armor'塗層血管導管：超強抗汙，模擬細胞膜磷脂結構",
+          "examples": [
+            {
+              "name": "pMPC armor on vascular catheter",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "期刊，有多項性能數據",
+              "substrate": "血管導管",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "pMPC（poly-MPC）塗層"
+              },
+              "process": {
+                "surface_prep": "surface activation",
+                "coating_method": "dip",
+                "drying": "—",
+                "curing": "UV或化學"
+              },
+              "results": {
+                "antifouling": "血小板附著降>90%",
+                "antimicrobial": "biofilm降低",
+                "wca": "<20°",
+                "friction": "COF改善"
+              }
+            }
+          ],
+          "mechanism": "MPC磷脂頭基模擬細胞外膜，免疫系統不識別，蛋白質吸附極低；'armor'=高密度接枝穩定",
+          "key_findings": [
+            "MPC比SBMA更仿生（磷脂vs兩性離子）",
+            "血管導管血液相容性最重要",
+            "高密度接枝耐久性更好"
+          ],
+          "actionable_insights": [
+            "MPC對Bioteque透析導管（血液接觸）更相關",
+            "pMPC armor概念：高密度接枝而非低密度塗覆"
+          ],
+          "red_flags": [
+            "MPC原料成本最高*",
+            "高密度接枝製程複雜*"
+          ],
+          "bioteque_relevance": "透析導管Phase 3考慮MPC armor方案；輸尿管支架優先SBMA"
+        }
       }
     },
     {
@@ -2444,6 +3233,49 @@
       "value_to_project": "10種基材通用性=TPU/silicone等Bioteque基材都可用；製程簡單水相操作",
       "links": {
         "doi": "https://doi.org/10.1002/advs.202502411"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "通用兩性離子塗層（多基材）：一種配方適用PVC/PU/矽膠，降低血液相容性/抗汙問題",
+          "examples": [
+            {
+              "name": "Universal zwitterionic coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "多基材驗證",
+              "substrate": "PVC/PU/矽膠（通用）",
+              "formulation": {
+                "primer": "通用底塗",
+                "topcoat": "SBMA/MPC共聚物"
+              },
+              "process": {
+                "surface_prep": "統一前處理",
+                "coating_method": "dip",
+                "drying": "—",
+                "curing": "UV"
+              },
+              "results": {
+                "antifouling": "多基材一致抗汙",
+                "wca": "<20°",
+                "adhesion": "多基材有效附著"
+              }
+            }
+          ],
+          "mechanism": "通用型底塗確保多材質附著；兩性離子頂塗提供抗汙性能",
+          "key_findings": [
+            "一種配方覆蓋多種基材降低開發成本",
+            "底塗通用性是設計重點",
+            "PVC/PU/矽膠同一製程"
+          ],
+          "actionable_insights": [
+            "Bioteque多種基材（TPU/PVC/矽膠）產品線可用通用塗層降低SKU",
+            "先驗證TPU，再外推其他基材"
+          ],
+          "red_flags": [
+            "通用性可能犧牲部分性能最佳化*"
+          ],
+          "bioteque_relevance": "Bioteque多品項產品線的最佳策略：開發通用兩性離子塗層方案"
+        }
       }
     },
     {
@@ -2946,6 +3778,50 @@
       "links": {
         "doi": "https://doi.org/10.1097/JU.0000000000001343",
         "pubmed": "https://pubmed.ncbi.nlm.nih.gov/32856981/"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "輸尿管支架結痂機制完整綜述：流行病學、pathophysiology、預防策略",
+          "examples": [
+            {
+              "name": "輸尿管支架結痂臨床研究",
+              "is_real": false,
+              "credibility": "高",
+              "credibility_reason": "系統性臨床綜述",
+              "substrate": "輸尿管支架（通用）",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "—"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "—"
+              },
+              "results": {
+                "encrustation_reduction": "與塗層材料相關",
+                "other": "80%支架4週後出現結痂*"
+              }
+            }
+          ],
+          "mechanism": "尿液conditioning film（蛋白質）→細菌biofilm→Ca/Mg鹽晶體成核→快速生長→阻塞/痛苦拔除",
+          "key_findings": [
+            "結痂起始：conditioning film形成（前24小時關鍵）",
+            "Proteus mirabilis是最危險結痂細菌（可鹼化尿液）",
+            "4週是重要臨床替換節點",
+            "親水性≠抗結痂，需兩性離子或抗菌功能"
+          ],
+          "actionable_insights": [
+            "Bioteque設計策略：阻斷conditioning film（SBMA）>殺菌（QCS）>親水（PVP）",
+            "支架置留期設計目標：抗結痂>4週"
+          ],
+          "red_flags": [
+            "尿液成分個體差異大，體外測試需用患者尿液*",
+            "長期置留>6週結痂率急升"
+          ],
+          "bioteque_relevance": "輸尿管支架抗結痂設計的必讀基礎文獻；確認Bioteque技術路線優先序"
+        }
       }
     },
     {
@@ -2970,6 +3846,49 @@
       "links": {
         "doi": "https://doi.org/10.1016/j.ucl.2021.08.004",
         "pubmed": "https://pubmed.ncbi.nlm.nih.gov/34776051/"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "新型輸尿管支架技術全覽：材料、塗層、設計創新，含抗結痂技術比較",
+          "examples": [
+            {
+              "name": "新型支架技術",
+              "is_real": false,
+              "credibility": "高",
+              "credibility_reason": "系統性技術綜述",
+              "substrate": "輸尿管支架",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "SBMA/MPC/heparin/chitosan等"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "—"
+              },
+              "results": {
+                "encrustation_reduction": "依塗層類型差異大"
+              }
+            }
+          ],
+          "mechanism": "多種策略：兩性離子（抗conditioning film）、抗菌（殺biofilm）、藥物洗脫（抑制成核）",
+          "key_findings": [
+            "SBMA/MPC塗層是目前最有效抗結痂策略",
+            "藥物洗脫（抗生素/抗真菌）有耐藥性疑慮",
+            "生物降解支架是長遠方向"
+          ],
+          "actionable_insights": [
+            "Bioteque近期重點：SBMA/MPC塗層",
+            "中期評估：chitosan/heparin天然材料",
+            "長遠關注：可降解支架材料"
+          ],
+          "red_flags": [
+            "藥物洗脫支架FDA審查更嚴格",
+            "可降解支架機械性未成熟*"
+          ],
+          "bioteque_relevance": "Bioteque技術路線圖佐證；確認SBMA是正確Phase 3方向"
+        }
       }
     },
     {
@@ -2994,6 +3913,48 @@
       "links": {
         "doi": "https://doi.org/10.7759/cureus.28639",
         "pmc": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9524851/"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "輸尿管支架應用、進展與併發症臨床回顧：結痂、感染、疼痛的發生率與處理",
+          "examples": [
+            {
+              "name": "支架臨床回顧",
+              "is_real": false,
+              "credibility": "高",
+              "credibility_reason": "臨床數據統計",
+              "substrate": "輸尿管支架",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "—"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "—"
+              },
+              "results": {
+                "encrustation_reduction": "—",
+                "other": "結痂發生率70%在>4週置留，感染率30%"
+              }
+            }
+          ],
+          "mechanism": "臨床觀察：長期置留→結痂→阻塞→泌尿道感染惡化",
+          "key_findings": [
+            ">4週置留結痂率70%+",
+            "感染與結痂相互促進",
+            "替換頻率應≤4週（若無塗層）"
+          ],
+          "actionable_insights": [
+            "Bioteque目標：有效塗層延長替換週期至8週+",
+            "抗菌+抗結痂雙效塗層可同時降低感染和結痂"
+          ],
+          "red_flags": [
+            "臨床數據跨中心差異大*"
+          ],
+          "bioteque_relevance": "臨床需求佐證：若Bioteque塗層能延長置留期，直接提升臨床價值"
+        }
       }
     },
     {
@@ -3019,6 +3980,50 @@
       "links": {
         "doi": "https://doi.org/10.1016/j.bioadv.2024.214009",
         "pubmed": "https://pubmed.ncbi.nlm.nih.gov/39216319/"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "天然生物聚合物（chitosan/HA/alginate）輸尿管支架塗層：抗結痂+生物相容+可降解",
+          "examples": [
+            {
+              "name": "天然生物聚合物塗層",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "綜述，部分數據",
+              "substrate": "輸尿管支架",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "chitosan/HA/alginate各種"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "dip/靜電層積",
+                "drying": "—",
+                "curing": "物理或化學交聯"
+              },
+              "results": {
+                "antifouling": "依材料",
+                "antimicrobial": "chitosan+",
+                "encrustation_reduction": "有限數據"
+              }
+            }
+          ],
+          "mechanism": "天然多醣親水基（-OH/-NH2）抗蛋白質；chitosan抗菌；HA仿生ECM減少免疫反應",
+          "key_findings": [
+            "天然材料生物相容性法規門檻低",
+            "抗結痂效果弱於SBMA*",
+            "HA+chitosan組合有協同效果"
+          ],
+          "actionable_insights": [
+            "天然材料路線適合法規保守市場（如中國NMPA）",
+            "HA可作Bioteque輸尿管支架的次要表面修飾"
+          ],
+          "red_flags": [
+            "天然材料批次一致性差*",
+            "降解速率難控制*"
+          ],
+          "bioteque_relevance": "若Bioteque進入中國市場，天然材料路線法規阻力小；主要市場仍建議SBMA"
+        }
       }
     },
     {
@@ -3044,6 +4049,48 @@
       "links": {
         "doi": "https://doi.org/10.1515/med-2023-0854",
         "pmc": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10710215/"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "輸尿管支架結痂預防新進展：材料、塗層、操作策略，2024最新臨床觀點",
+          "examples": [
+            {
+              "name": "結痂預防策略",
+              "is_real": false,
+              "credibility": "高",
+              "credibility_reason": "2024最新臨床綜述",
+              "substrate": "輸尿管支架",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "多種"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "—"
+              },
+              "results": {
+                "encrustation_reduction": "SBMA/MPC最佳，chitosan次之"
+              }
+            }
+          ],
+          "mechanism": "多管齊下：阻斷conditioning film + 殺菌 + 抑制晶體成核",
+          "key_findings": [
+            "2024最新：兩性離子塗層臨床證據最強",
+            "利尿劑+塗層協同防結痂",
+            "個人化置留時間管理"
+          ],
+          "actionable_insights": [
+            "Bioteque需準備臨床試驗設計：COF+結痂率+置留期三項指標",
+            "SBMA臨床證據充分，510(k)路線可能"
+          ],
+          "red_flags": [
+            "臨床試驗成本高",
+            "個體差異需大樣本*"
+          ],
+          "bioteque_relevance": "Bioteque FDA 510(k)文件引用此類臨床綜述支持設計有效性聲明"
+        }
       }
     },
     {
@@ -3069,6 +4116,49 @@
       "links": {
         "doi": "https://doi.org/10.1021/acsbiomaterials.3c01577",
         "pmc": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10865292/"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "超親水/液態/液態注入表面結痂比較：三種策略體外/體內結痂量化，SLIPS最差結果",
+          "examples": [
+            {
+              "name": "三種抗結痂表面比較",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "直接比較實驗，有定量數據",
+              "substrate": "輸尿管支架",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "超親水/LIS/liquid-like三種"
+              },
+              "process": {
+                "surface_prep": "各異",
+                "coating_method": "各異",
+                "drying": "—",
+                "curing": "各異"
+              },
+              "results": {
+                "encrustation_reduction": "超親水>liquid-like>SLIPS（體外）",
+                "wca": "超親水最低（<5°）",
+                "durability": "SLIPS in vivo剝落問題"
+              }
+            }
+          ],
+          "mechanism": "超親水：強水合排斥礦物；liquid-like：動態表面難附著；SLIPS：油膜隔離（但體內油被尿液沖走）",
+          "key_findings": [
+            "SLIPS在體內失效（油溶出）",
+            "超親水是最可靠長期方案",
+            "WCA<5°是抗結痂關鍵閾值"
+          ],
+          "actionable_insights": [
+            "Bioteque選超親水路線（SBMA/兩性離子）為正確",
+            "SLIPS不適合輸尿管支架（體內不穩定）"
+          ],
+          "red_flags": [
+            "體外結果≠體內，需in vivo驗證*"
+          ],
+          "bioteque_relevance": "直接確認Bioteque技術路線選擇：超親水（兩性離子）>其他策略"
+        }
       }
     },
     {
@@ -3094,6 +4184,50 @@
       "links": {
         "doi": "https://doi.org/10.1007/s00345-021-03646-0",
         "pubmed": "https://pubmed.ncbi.nlm.nih.gov/33688992/"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "矽膠-親水塗層輸尿管支架體外體內結痂研究：塗層類型對結痂速率的直接影響",
+          "examples": [
+            {
+              "name": "Silicone-hydrocoated ureteral stent",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "體外體內雙驗證",
+              "substrate": "矽膠輸尿管支架",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "親水塗層（具體類型不明）"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "—",
+                "drying": "—",
+                "curing": "—"
+              },
+              "results": {
+                "encrustation_reduction": "有塗層比無塗層結痂延遲1倍+",
+                "antifouling": "依塗層類型",
+                "wca": "顯著降低",
+                "durability": "體內4週有效"
+              }
+            }
+          ],
+          "mechanism": "親水塗層降低表面能→conditioning film減少→結痂延遲但非完全阻斷（PVP路線）",
+          "key_findings": [
+            "即使基本親水塗層也顯著延遲結痂",
+            "4週是觀察終點（臨床相關）",
+            "塗層類型影響大：兩性離子>>親水"
+          ],
+          "actionable_insights": [
+            "Bioteque Phase 1（PVP）即可延遲結痂；Phase 3（SBMA）才能真正抗結痂",
+            "必須做4週體外/體內測試"
+          ],
+          "red_flags": [
+            "矽膠≠TPU，基材轉換需重新驗證*"
+          ],
+          "bioteque_relevance": "Bioteque測試設計參考：4週體外人工尿液結痂量化測試為必做項目"
+        }
       }
     },
     {
@@ -3119,6 +4253,49 @@
       "links": {
         "doi": "https://doi.org/10.1111/bju.16326",
         "pubmed": "https://pubmed.ncbi.nlm.nih.gov/38459675/"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "抗菌抗結痂功能性支架體外體內驗證：藥物/抗菌材料複合塗層，雙功能量化",
+          "examples": [
+            {
+              "name": "抗菌+抗結痂複合支架",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "體外+體內雙驗證",
+              "substrate": "輸尿管支架",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "抗菌材料+抗結痂層複合"
+              },
+              "process": {
+                "surface_prep": "—",
+                "coating_method": "複合塗層",
+                "drying": "—",
+                "curing": "—"
+              },
+              "results": {
+                "antimicrobial": "殺菌率>99%",
+                "encrustation_reduction": "結痂質量降>50%",
+                "durability": "體內4週有效"
+              }
+            }
+          ],
+          "mechanism": "抗菌層殺死biofilm形成細菌→無biofilm基質→晶體成核受阻；兩功能相互增強",
+          "key_findings": [
+            "抗菌+抗結痂協同效果>單功能",
+            "Proteus mirabilis關鍵靶菌",
+            "體內4週驗證"
+          ],
+          "actionable_insights": [
+            "Bioteque Phase 3：SBMA（抗結痂）+ QCS/chitosan（抗菌）雙功能設計",
+            "可直接引用U08 in vivo數據作510(k)依據"
+          ],
+          "red_flags": [
+            "雙功能製程複雜，QC難度加倍*"
+          ],
+          "bioteque_relevance": "Phase 3雙功能支架的核心參考；提供in vivo數據，FDA申請重要依據"
+        }
       }
     },
     {
@@ -3144,6 +4321,51 @@
       "links": {
         "doi": "https://doi.org/10.1080/08927014.2022.2087513",
         "pubmed": "https://pubmed.ncbi.nlm.nih.gov/35707890/"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "PU輸尿管支架管腔內表面改性：內表面塗層比外表面更難但更關鍵（尿液流經）",
+          "examples": [
+            {
+              "name": "PU stent inner surface modification",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "期刊，直接相關",
+              "substrate": "PU輸尿管支架（≈TPU）",
+              "formulation": {
+                "primer": "—",
+                "topcoat": "表面改性"
+              },
+              "process": {
+                "surface_prep": "管腔內表面活化",
+                "coating_method": "灌注塗覆",
+                "drying": "—",
+                "curing": "UV或化學"
+              },
+              "results": {
+                "antifouling": "內表面蛋白質吸附降",
+                "encrustation_reduction": "管腔阻塞延遲",
+                "wca": "<20°"
+              }
+            }
+          ],
+          "mechanism": "管腔內表面是尿液直接接觸面，結痂起始點；內外兩面都需塗層",
+          "key_findings": [
+            "管腔內表面塗層更重要（直接接觸尿流）",
+            "灌注塗覆是內表面處理必要製程",
+            "PU基材直接相關Bioteque"
+          ],
+          "actionable_insights": [
+            "Bioteque必須同時處理內外表面",
+            "灌注製程需加入生產設備設計",
+            "U09製程可直接參考"
+          ],
+          "red_flags": [
+            "管腔內塗層厚度影響流量*",
+            "內外塗層固化條件可能衝突*"
+          ],
+          "bioteque_relevance": "直接相關：Bioteque PU輸尿管支架內表面製程設計依據"
+        }
       }
     },
     {
@@ -3170,6 +4392,52 @@
       "links": {
         "doi": "https://doi.org/10.1093/rb/rbac083",
         "pmc": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9629973/"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Heparin/poly-L-lysine/copper三層塗層：抗凝+抗菌+抗結痂，Cu²⁺緩釋機制",
+          "examples": [
+            {
+              "name": "Heparin/PLL/Cu複合塗層",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "期刊，三層複合驗證",
+              "substrate": "輸尿管支架",
+              "formulation": {
+                "primer": "heparin底層（靜電）",
+                "topcoat": "poly-L-lysine + CuSO4複合"
+              },
+              "process": {
+                "surface_prep": "靜電自組裝",
+                "coating_method": "Layer-by-Layer（LbL）",
+                "drying": "—",
+                "curing": "自組裝"
+              },
+              "results": {
+                "antimicrobial": "銅離子持續釋放殺菌",
+                "antifouling": "heparin抗凝+蛋白質排斥",
+                "encrustation_reduction": "有明顯改善",
+                "durability": "Cu²⁺緩釋>2週"
+              }
+            }
+          ],
+          "mechanism": "LbL靜電層積：heparin（陰離子）+PLL（陽離子）交替→Cu²⁺嵌入→緩慢釋放；heparin抗蛋白質吸附阻斷conditioning film",
+          "key_findings": [
+            "LbL無需特殊設備",
+            "Cu²⁺>2µg/mL有細胞毒性需控制劑量*",
+            "heparin+Cu協同效果>單一"
+          ],
+          "actionable_insights": [
+            "LbL技術門檻低，Bioteque可嘗試作快速原型",
+            "Cu²⁺釋放量需嚴格控制（毒性視窗窄）*"
+          ],
+          "red_flags": [
+            "Cu²⁺劑量窗口窄（抗菌vs毒性）*",
+            "LbL層間穩定性在動態尿液中的耐久性*",
+            "heparin來源（bovine/porcine）法規問題"
+          ],
+          "bioteque_relevance": "LbL heparin/copper可作Phase 2快速驗證概念；但長期需轉向更穩定的SBMA路線"
+        }
       }
     }
   ]
