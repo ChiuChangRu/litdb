@@ -628,6 +628,8 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 // STATE
 // ══════════════════════════════════════════════
 let DB = {meta:{},papers:[]};
+// 抗結痂統一關鍵字（文庫篩選 / 分析比較 / 批次分析 三處共用）
+const ENCRUST_RE = /encrustation|結痂|biofilm|生物膜|conditioning film|sbma|mpc|zwitterion|抗汙|antifouling|chitosan|propolis|hyaluron|heparin|前列腺結石|urinary|ureteral|輸尿管|stent/i;
 let filtered = [];
 let pinnedIds = new Set();
 let chatHistory = [];
@@ -1321,7 +1323,7 @@ async function batchAnalyzeEncrustation() {
     if(p.patentResults && Object.keys(p.patentResults).length>0) return false;
     const hay = `${p.title} ${p.abstract_note||''} ${(p.tags||[]).join(' ')} ${p.id}`.toLowerCase();
     return p.id.startsWith('U') ||
-      /encrustation|結痂|biofilm|生物膜|zwitterion|sbma|mpc|antifouling|stent|輸尿管|chitosan|propolis/i.test(hay);
+      ENCRUST_RE.test(hay);
   });
 
   if(!candidates.length){toast('沒有未分析的抗結痂文獻','success');return}
@@ -2303,7 +2305,7 @@ function filterPapers() {
     if(activeFilters.topic.size) {
       const hay = `${p.title} ${p.abstract_note||''} ${p.purpose||''} ${p.value_to_project||''} ${tags.join(' ')} ${p.id}`.toLowerCase();
       const topicMatch = [...activeFilters.topic].some(topic => {
-        if(topic==='encrustation') return /encrustation|結痂|biofilm|生物膜|conditioning film|sbma|mpc|zwitterion|抗汙|antifouling|chitosan|propolis|hyaluron|heparin|前列腺結石|尿|urinary|ureteral|輸尿管|stent/i.test(hay) || p.id.startsWith('U');
+        if(topic==='encrustation') return ENCRUST_RE.test(hay) || p.id.startsWith('U');
         if(topic==='antimicrobial') return /antimicrobial|抗菌|antibacterial|silver|chlorhexidine|chitosan|propolis|copper|biocidal|antibiofilm/i.test(hay);
         if(topic==='lubricity') return /lubricity|潤滑|friction|cof|滑度|lubricious|harland|tribology/i.test(hay);
         if(topic==='adhesion') return /adhesion|附著|primer|底塗|錨固|anchor|grafting|接枝|silane|pda|polydopamine|covalent|coupling/i.test(hay);
@@ -3710,13 +3712,11 @@ function buildHeatmaps() {
 // 判定一篇文獻涵蓋哪些功能目標（跨欄位關鍵字）
 function paperFunctionGoals(p) {
   const hay = `${p.title} ${p.abstract_note||''} ${p.purpose||''} ${p.value_to_project||''} ${(p.tags||[]).join(' ')} ${p.id}`.toLowerCase();
-  const ex = p.patentResults?.full?.examples?.[0]?.results||{};
-  const exHay = JSON.stringify(ex).toLowerCase();
   const goals = [];
-  if(/lubric|潤滑|friction|cof|滑度|harland|tribolog/i.test(hay+exHay)) goals.push('潤滑');
-  if(/encrustation|結痂|biofilm|生物膜|zwitterion|sbma|mpc|antifoul|抗汙|conditioning film/i.test(hay+exHay) || p.id.startsWith('U')) goals.push('抗結痂');
-  if(/antimicrob|抗菌|antibacter|silver|chlorhexidine|chitosan|propolis|copper|biocid|antibiofilm|殺菌/i.test(hay+exHay)) goals.push('抗菌');
-  if(/adhesion|附著|primer|底塗|錨固|anchor|grafting|接枝|silane|pda|polydopamine|covalent|coupling/i.test(hay+exHay)) goals.push('附著');
+  if(/lubric|潤滑|friction|cof|滑度|harland|tribolog/i.test(hay)) goals.push('潤滑');
+  if(ENCRUST_RE.test(hay) || p.id.startsWith('U')) goals.push('抗結痂');
+  if(/antimicrob|抗菌|antibacter|silver|chlorhexidine|chitosan|propolis|copper|biocid|antibiofilm|殺菌/i.test(hay)) goals.push('抗菌');
+  if(/adhesion|附著|primer|底塗|錨固|anchor|grafting|接枝|silane|pda|polydopamine|covalent|coupling/i.test(hay)) goals.push('附著');
   return goals;
 }
 
