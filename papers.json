@@ -79,19 +79,19 @@
         "balloon"
       ],
       "performance": [
-        "antimicrobial抗菌",
-        "particulate",
-        "encrustation resistance",
-        "lubricity",
-        "adhesion附著力",
-        "biocompatibility",
-        "durability",
+        "lubricity潤滑",
+        "COF<0.1",
         "WCA接觸角",
-        "friction-coefficient",
+        "WCA<20°",
+        "adhesion附著力",
+        "durability耐久",
         "antifouling抗汙",
+        "antimicrobial抗菌",
+        "encrustation resistance抗結痂",
+        "biocompatibility",
+        "hemocompatibility血液相容",
+        "particulate顆粒",
         "biofilm resistance",
-        "hemolysis",
-        "coating-thickness",
         "superhydrophilic"
       ],
       "market_trend": [
@@ -159,12 +159,16 @@
       "doc_type": "專利",
       "access": "專利全文",
       "tags": [
-        "PVP",
-        "導尿管",
-        "UV光固化",
         "PVC",
+        "PVP",
+        "UV光固化",
+        "WCA接觸角",
+        "adhesion附著力",
+        "benzophenone",
+        "durability耐久",
         "isocyanate",
-        "benzophenone"
+        "lubricity潤滑",
+        "導尿管"
       ],
       "purpose": "完整雙層 UV 塗層配方基準，Harland FTS 測試規格",
       "abstract_note": "雙層：內層 polyether primer (Norrish I, Irgacure 2959)，外層 PVP+polyelectrolyte (Norrish II, benzophenone)；總厚 2-10μm；摩擦力≤20g。PVC 14Fr 導管實例。",
@@ -233,9 +237,10 @@
       "access": "專利全文",
       "tags": [
         "PVP",
-        "導尿管",
+        "UV光固化",
+        "adhesion附著力",
         "isocyanate",
-        "UV光固化"
+        "導尿管"
       ],
       "purpose": "polyelectrolyte 對 dry-out time 與吸水速率的貢獻",
       "abstract_note": "polyelectrolyte(ionomer) 加入提升 dry-out time 與吸水速率。",
@@ -303,11 +308,13 @@
       "access": "專利全文",
       "tags": [
         "PVP",
-        "導管",
         "Pebax",
         "UV光固化",
+        "adhesion附著力",
         "benzophenone",
-        "isocyanate"
+        "isocyanate",
+        "lubricity潤滑",
+        "導管"
       ],
       "purpose": "Pebax 導管雙光起始劑配方 (Norrish I+II)",
       "abstract_note": "Pebax 7233 導管以 Harland 175-24 PCX coater 塗覆；含 Norrish I (Irgacure 2959) + Norrish II (benzophenone)；光起始劑總量 0.2-10wt%。",
@@ -375,10 +382,12 @@
       "doc_type": "專利",
       "access": "專利全文",
       "tags": [
+        "COF<0.1",
         "PVP",
         "isocyanate",
-        "熱固化",
-        "導管"
+        "lubricity潤滑",
+        "導管",
+        "熱固化"
       ],
       "purpose": "單步 isocyanate+PVP 熱固化",
       "abstract_note": "crosslinked PU+PVP 系統；單步製程改善雙層比例控制問題；isocyanate 與基材反應提升附著。",
@@ -445,13 +454,17 @@
       "doc_type": "專利",
       "access": "專利全文",
       "tags": [
-        "PVA",
-        "PEO",
         "PEG",
+        "PEO",
+        "PVA",
         "UV光固化",
+        "WCA<20°",
+        "WCA接觸角",
+        "balloon",
         "benzophenone",
-        "導管",
-        "balloon"
+        "durability耐久",
+        "lubricity潤滑",
+        "導管"
       ],
       "purpose": "UV底塗+熱固面塗的混合製程實例",
       "abstract_note": "底塗:HDI trimer+TMPTA+PEG+benzophenone+DMPA，110°F乾燥20s後UV照射(50mW/cm²);面塗:PVA浸塗,55°C烘15min。冠狀擴張導管。",
@@ -515,9 +528,12 @@
       "doc_type": "專利",
       "access": "專利全文",
       "tags": [
-        "PVP",
+        "COF<0.1",
         "PVC",
+        "PVP",
         "UV光固化",
+        "durability耐久",
+        "lubricity潤滑",
         "導尿管"
       ],
       "purpose": "市售即用型 PVP 兩層 UV 配方含滅菌",
@@ -593,10 +609,13 @@
       "doc_type": "專利",
       "access": "專利全文",
       "tags": [
-        "PVP",
         "PVC",
+        "PVP",
         "TPU",
-        "UV光固化"
+        "UV光固化",
+        "WCA接觸角",
+        "adhesion附著力",
+        "lubricity潤滑"
       ],
       "purpose": "TPU primer + PVP 多種配方比較",
       "abstract_note": "PVC導管dip醫療級TPU+nitrocellulose的THF primer,60°C 15min;再塗PVP K90;比較單塗/雙塗摩擦係數;含HPC(羥丙基纖維素)變體。",
@@ -660,9 +679,11 @@
       "doc_type": "專利",
       "access": "專利全文",
       "tags": [
-        "PVP",
         "PVC",
+        "PVP",
         "UV光固化",
+        "WCA接觸角",
+        "durability耐久",
         "isocyanate",
         "熱固化"
       ],
@@ -731,10 +752,13 @@
       "access": "專利全文",
       "tags": [
         "PVP",
+        "WCA接觸角",
+        "adhesion附著力",
+        "balloon",
         "isocyanate",
-        "熱固化",
+        "lubricity潤滑",
         "導管",
-        "balloon"
+        "熱固化"
       ],
       "purpose": "isocyanate+polyol+PVP 雙層熱固配方",
       "abstract_note": "第二層 isocyanate+polyol+PVP 熱固成 PU/PVP;PVP 吸濕需先乾燥(220°F數小時)降水分<0.5%避免與isocyanate反應;dip/spray/brush皆可。",
@@ -800,8 +824,9 @@
       "tags": [
         "PAA",
         "PEG",
-        "silicone",
         "UV光固化",
+        "lubricity潤滑",
+        "silicone",
         "導尿管"
       ],
       "purpose": "PAA/水/PEG浸塗時間+UV silicone面膜參數",
@@ -870,11 +895,15 @@
       "doc_type": "專利",
       "access": "專利全文",
       "tags": [
-        "hydrogel",
+        "COF<0.1",
         "PEG",
+        "WCA<20°",
+        "WCA接觸角",
+        "balloon",
+        "hydrogel",
+        "lubricity潤滑",
         "silicone",
-        "導管",
-        "balloon"
+        "導管"
       ],
       "purpose": "hydrogel底層+疏水面塗防過度吸濕",
       "abstract_note": "第一層hydrogel+第二層疏水面塗(防hydrogel過早吸濕);面塗含親水surfactant作carrier,入水後帶走面塗;PEG/MPEG分子量100-20000。",
@@ -939,10 +968,12 @@
       "doc_type": "專利",
       "access": "專利全文",
       "tags": [
-        "活檢針",
-        "穿刺針",
         "PVP",
-        "hydrogel"
+        "WCA接觸角",
+        "hydrogel",
+        "lubricity潤滑",
+        "活檢針",
+        "穿刺針"
       ],
       "purpose": "活檢針親水潤滑+超音波回聲雙功能",
       "abstract_note": "親水潤滑+echogenic回聲雙功能;適biopsy needle/trocar/catheter;先塗親水高分子再覆回聲結構(微氣泡/微粒);針型含骨髓/乳腺/軟組織活檢針16G/18G。",
@@ -1006,10 +1037,12 @@
       "doc_type": "專利",
       "access": "專利全文",
       "tags": [
-        "benzophenone",
-        "UV光固化",
         "PAA",
-        "通用biomaterial"
+        "UV光固化",
+        "adhesion附著力",
+        "benzophenone",
+        "hemocompatibility血液相容",
+        "lubricity潤滑"
       ],
       "purpose": "最新 UV topcoat 專利(2024,迴避設計)",
       "abstract_note": "MHB(4-Methacryloxy-2-hydroxy benzophenone)與HEAA及AA共聚成親水光活性高分子;lubricity<25gf,durability<50gf(Harland FTS pinch);UV固化;可作topcoat或添加劑。",
@@ -1082,10 +1115,14 @@
       "access": "產品頁",
       "tags": [
         "UV光固化",
-        "熱固化",
+        "WCA<20°",
+        "WCA接觸角",
+        "biocompatibility",
+        "lubricity潤滑",
+        "stent",
         "導管",
         "導線guidewire",
-        "stent"
+        "熱固化"
       ],
       "purpose": "唯一同時提供UV與熱固的商用塗料",
       "abstract_note": "HYDAK bi-laminar平台;唯一同時提供UV與熱固系統的供應商;訴求lubricity/durability/低particulate。品牌Hydak直接售塗料給客戶。",
@@ -1157,7 +1194,10 @@
       "access": "產品頁",
       "tags": [
         "UV光固化",
+        "WCA<20°",
+        "WCA接觸角",
         "hydrogel",
+        "lubricity潤滑",
         "導管",
         "導線guidewire"
       ],
@@ -1226,10 +1266,15 @@
       "doc_type": "商用產品",
       "access": "產品頁",
       "tags": [
-        "導管",
-        "導線guidewire",
+        "COF<0.1",
+        "WCA<20°",
+        "WCA接觸角",
+        "antifouling抗汙",
+        "encrustation resistance抗結痂",
+        "lubricity潤滑",
         "stent",
-        "通用biomaterial"
+        "導管",
+        "導線guidewire"
       ],
       "purpose": "血管介入用商用親水塗層品牌",
       "abstract_note": "Surmodics親水塗層品牌Serene;用於神經血管/結構心臟/冠狀/週邊血管介入的導管/導線/鞘/支架。",
@@ -1299,8 +1344,11 @@
       "doc_type": "商用產品",
       "access": "產品頁",
       "tags": [
-        "導管",
-        "通用biomaterial"
+        "WCA接觸角",
+        "antimicrobial抗菌",
+        "hemocompatibility血液相容",
+        "lubricity潤滑",
+        "導管"
       ],
       "purpose": "老牌親水塗料供應商(配方+設備+技術支援)",
       "abstract_note": "Hydromer(1980創立,北卡)FDA註冊ISO13485/9001;提供custom潤滑/抗血栓/抗菌塗料,跨polymer/金屬/玻璃;含塗覆設備與配方+法規支援。",
@@ -1369,11 +1417,15 @@
       "doc_type": "期刊論文",
       "access": "開放摘要",
       "tags": [
-        "TPU",
-        "PVP",
         "PEGDA",
         "PUA",
+        "PVP",
+        "TPU",
         "UV光固化",
+        "WCA<20°",
+        "WCA接觸角",
+        "adhesion附著力",
+        "durability耐久",
         "導線guidewire"
       ],
       "purpose": "TPU基材UV semi-IPN配方最直接參考",
@@ -1439,11 +1491,14 @@
       "doc_type": "期刊論文",
       "access": "付費",
       "tags": [
-        "TPU",
-        "PVP",
-        "PEG",
         "PDA-polydopamine",
+        "PEG",
+        "PVP",
+        "TPU",
         "UV光固化",
+        "WCA接觸角",
+        "adhesion附著力",
+        "lubricity潤滑",
         "導管"
       ],
       "purpose": "PDA中間層+PVP/PEG UV固化分子量優化",
@@ -1510,12 +1565,14 @@
       "doc_type": "期刊論文",
       "access": "付費",
       "tags": [
-        "TPU",
-        "PVP",
-        "PVA",
-        "PEGDA",
         "PDA-polydopamine",
+        "PEGDA",
+        "PVA",
+        "PVP",
+        "TPU",
         "UV光固化",
+        "adhesion附著力",
+        "lubricity潤滑",
         "導線guidewire"
       ],
       "purpose": "最新正交優化;PVA加入PVP體系附著提升",
@@ -1582,8 +1639,10 @@
       "doc_type": "期刊論文",
       "access": "開放全文",
       "tags": [
-        "穿刺針",
-        "活檢針"
+        "WCA接觸角",
+        "lubricity潤滑",
+        "活檢針",
+        "穿刺針"
       ],
       "purpose": "唯一直接對穿刺針親水塗層的開放全文",
       "abstract_note": "建FEM穿刺模型並體外實驗驗證;比較有/無親水超潤滑塗層穿刺力差異;降低針與軟組織摩擦。",
@@ -1647,9 +1706,10 @@
       "doc_type": "期刊論文",
       "access": "開放摘要",
       "tags": [
+        "WCA接觸角",
+        "hydrogel",
         "活檢針",
-        "穿刺針",
-        "hydrogel"
+        "穿刺針"
       ],
       "purpose": "活檢針親水基質+起泡劑回聲塗層",
       "abstract_note": "動態塗層:親水高分子基質+起泡劑;用於針精準進入定位與活檢取樣;in vitro成功;潛在用於血管/心血管/骨科。",
@@ -1778,11 +1838,11 @@
       "doc_type": "綜述review",
       "access": "開放全文",
       "tags": [
-        "UV光固化",
         "PEG",
         "PVP",
-        "導管",
-        "通用biomaterial"
+        "UV光固化",
+        "biocompatibility",
+        "導管"
       ],
       "purpose": "商用視角整理UV固化親水材料角色",
       "abstract_note": "整理PEG(塑化/增韌)、PVP、chitosan在UV固化親水塗層的角色;適合醫材;附多篇UV固化參考文獻。",
@@ -1849,7 +1909,9 @@
       "access": "付費",
       "tags": [
         "PVP",
-        "UV光固化"
+        "UV光固化",
+        "WCA接觸角",
+        "lubricity潤滑"
       ],
       "purpose": "PVP UV劑量上限與光氧化降解",
       "abstract_note": "UV致PVP主鏈氧化裂解;過高UV dose使分子量下降親水性劣化;需平衡交聯與降解。",
@@ -1914,7 +1976,8 @@
       "doc_type": "會議論文",
       "access": "開放全文",
       "tags": [
-        "UV光固化"
+        "UV光固化",
+        "adhesion附著力"
       ],
       "purpose": "UV固化收縮對附著/裂紋影響",
       "abstract_note": "UV固化收縮影響附著、裂紋與coating應力,對耐磨耗有間接影響。",
@@ -1979,7 +2042,9 @@
       "tags": [
         "PVP",
         "UV光固化",
-        "benzophenone"
+        "antimicrobial抗菌",
+        "benzophenone",
+        "lubricity潤滑"
       ],
       "purpose": "PVP+BP UV交聯提升表面穩定",
       "abstract_note": "BP為交聯劑對PVP UV光交聯,模量4.1→7.2GPa;固定溶菌酶抗菌。",
@@ -2045,8 +2110,7 @@
       "doc_type": "綜述review",
       "access": "開放摘要",
       "tags": [
-        "導管",
-        "通用biomaterial"
+        "導管"
       ],
       "purpose": "親水塗層市場全景與主要廠商",
       "abstract_note": "主要廠商:Hydromer/Harland/Surmodics/DSM/Biocoat/Teleflex等;市場2027達225億美元。基材/終端/區域分類。",
@@ -2108,12 +2172,12 @@
       "doc_type": "綜述review",
       "access": "開放全文",
       "tags": [
-        "導管",
-        "導線guidewire",
-        "stent",
+        "UV光固化",
         "isocyanate",
         "plasma-treat",
-        "UV光固化"
+        "stent",
+        "導管",
+        "導線guidewire"
       ],
       "purpose": "親水塗層專利檢索策略與技術分類",
       "abstract_note": "PVP/PEG/polyacrylamide常見;附著促進:isocyanate primer/plasma活化/UV交聯;檢索建議跨USPTO/EPO/WIPO;WCA<30°為親水標準。",
@@ -2175,8 +2239,13 @@
       "doc_type": "專利",
       "access": "專利全文",
       "tags": [
-        "導管",
-        "UV光固化"
+        "COF<0.1",
+        "UV光固化",
+        "WCA<20°",
+        "WCA接觸角",
+        "durability耐久",
+        "lubricity潤滑",
+        "導管"
       ],
       "purpose": "含surfactant的親水塗層配方+測試",
       "abstract_note": "配方含surfactant;固化得親水塗層;濕潤後lubricious;Harland FTS初始lubricity 1cycle≤20g;配wetting fluid含polyelectrolyte。",
@@ -2240,8 +2309,12 @@
       "doc_type": "專利",
       "access": "專利全文",
       "tags": [
-        "穿刺針",
-        "hydrogel"
+        "WCA<20°",
+        "WCA接觸角",
+        "adhesion附著力",
+        "hydrogel",
+        "lubricity潤滑",
+        "穿刺針"
       ],
       "purpose": "採血針acrylic hydrogel潤滑+primer",
       "abstract_note": "acrylic hydrogel(如pHEMA)改善針插入潤滑;塑膠/金屬針需primer或表面前處理。",
@@ -2305,13 +2378,17 @@
       "doc_type": "期刊論文",
       "access": "付費",
       "tags": [
-        "TPU",
-        "PVP",
-        "PVA",
-        "PEGDA",
         "PDA-polydopamine",
+        "PEGDA",
+        "PVA",
+        "PVP",
+        "TPU",
         "UV光固化",
+        "WCA接觸角",
+        "adhesion附著力",
         "benzophenone",
+        "durability耐久",
+        "lubricity潤滑",
         "導線guidewire"
       ],
       "purpose": "PDA+PEGDA+BP 協同;正交優化具體數值",
@@ -2379,10 +2456,16 @@
       "doc_type": "期刊論文",
       "access": "付費",
       "tags": [
-        "導管",
-        "PVP",
+        "COF<0.1",
+        "PEG",
         "PVA",
-        "PEG"
+        "PVP",
+        "WCA接觸角",
+        "durability耐久",
+        "encrustation resistance抗結痂",
+        "lubricity潤滑",
+        "particulate顆粒",
+        "導管"
       ],
       "purpose": "親水塗層體外摩擦測試系統+常用高分子整理",
       "abstract_note": "建體外tribology系統比較心血管導管外側親水塗層摩擦;常用:acrylic/PVA/PVP/PEG/多醣;含chitosan-脂肪酸衍生物降摩擦(0.53→0.35)。",
@@ -2446,9 +2529,14 @@
       "doc_type": "綜述review",
       "access": "開放全文",
       "tags": [
-        "導管",
+        "WCA接觸角",
+        "adhesion附著力",
+        "biocompatibility",
+        "encrustation resistance抗結痂",
+        "lubricity潤滑",
+        "particulate顆粒",
         "stent",
-        "通用biomaterial"
+        "導管"
       ],
       "purpose": "接觸角與摩擦係數關聯;品管測試方法",
       "abstract_note": "親水塗層接觸角極低或0;pinch test量摩擦係數;接觸角測量與摩擦係數高度相關,可快速作製程品管;比動物臨床測試實用。",
@@ -2513,8 +2601,8 @@
       "doc_type": "綜述review",
       "access": "開放全文",
       "tags": [
-        "導管",
-        "通用biomaterial"
+        "lubricity潤滑",
+        "導管"
       ],
       "purpose": "pinch test 參數對結果影響+客製測試",
       "abstract_note": "非標準摩擦測試方法可比較不同廠商配方與表面處理差異;IDTE系統pinch test;測試參數(夾力/速度/循環數)顯著影響結果。",
@@ -2576,10 +2664,12 @@
       "doc_type": "綜述review",
       "access": "開放全文",
       "tags": [
-        "PVP",
         "PEG",
-        "導管",
-        "stent"
+        "PVP",
+        "encrustation resistance抗結痂",
+        "lubricity潤滑",
+        "stent",
+        "導管"
       ],
       "purpose": "PVP(潤滑) vs PEG(抗沾黏) 化學家族定位",
       "abstract_note": "PEG最受研究的抗沾黏系統(steric repulsion);PVP優化潤滑(hydration-dependent friction),為導管主流;WCA<30°為親水標準。",
@@ -2643,10 +2733,13 @@
       "doc_type": "商用產品",
       "access": "產品頁",
       "tags": [
-        "導管",
-        "導線guidewire",
+        "PVP",
         "UV光固化",
-        "PVP"
+        "WCA<20°",
+        "WCA接觸角",
+        "lubricity潤滑",
+        "導管",
+        "導線guidewire"
       ],
       "purpose": "DSM商用親水塗層(本資料庫多篇專利的母公司)",
       "abstract_note": "DSM(現dsm-firmenich)為親水塗層市場主要廠商;本資料庫P01-P03等專利多出自DSM;商用UV固化PVP系統。",
@@ -2716,10 +2809,10 @@
       "doc_type": "商用產品",
       "access": "產品頁",
       "tags": [
-        "導管",
-        "導線guidewire",
         "UV光固化",
-        "通用biomaterial"
+        "lubricity潤滑",
+        "導管",
+        "導線guidewire"
       ],
       "purpose": "塗覆設備(PCX/RDX-XL)+FTS摩擦/CTS厚度測試",
       "abstract_note": "Harland提供dip coating+UV固化整合設備(PCX/RDX-XL系列);FTS5000/6000/7000摩擦測試;CTS1100塗層厚度測試;TTS1000 trackability。本資料庫多篇專利用其塗覆機。",
@@ -2784,10 +2877,12 @@
       "doc_type": "專利",
       "access": "專利全文",
       "tags": [
-        "silane",
+        "adhesion附著力",
+        "hydrogel",
+        "lubricity潤滑",
         "plasma-treat",
-        "導管",
-        "hydrogel"
+        "silane",
+        "導管"
       ],
       "purpose": "plasma+silane primer促進親水層附著",
       "abstract_note": "雙plasma處理基材接amine基→與PU prepolymer的isocyanate反應;silane(amino)固定親水高分子;提升均勻度與貨架穩定。",
@@ -2857,9 +2952,11 @@
       "tags": [
         "PEO",
         "PVP",
-        "導管",
+        "adhesion附著力",
         "balloon",
         "isocyanate",
+        "lubricity潤滑",
+        "導管",
         "熱固化"
       ],
       "purpose": "PEO耐磨底層+PVP潤滑面層雙層設計",
@@ -2927,8 +3024,8 @@
       "doc_type": "綜述review",
       "access": "開放摘要",
       "tags": [
-        "導管",
-        "通用biomaterial"
+        "biocompatibility",
+        "導管"
       ],
       "purpose": "市場驅動力與廠商;低VOC法規趨勢",
       "abstract_note": "驅動力:微創手術量增(心血管/神經血管/泌尿);法規重視生物相容與低VOC配方;OEM外包給專業塗料商。主要廠商Hydromer/DSM/Surmodics/Freudenberg/Biocoat/Harland等。",
@@ -2990,8 +3087,9 @@
       "doc_type": "期刊論文",
       "access": "開放摘要",
       "tags": [
-        "穿刺針",
-        "活檢針"
+        "WCA接觸角",
+        "活檢針",
+        "穿刺針"
       ],
       "purpose": "穿刺針有限元素模型+塗層影響(B1姊妹篇)",
       "abstract_note": "針活檢取病理診斷;針體表面潤滑度影響針與軟組織摩擦與組織損傷;簡化FEM穿刺模型+體外驗證;比較塗層vs傳統針穿刺過程。",
@@ -3054,8 +3152,9 @@
       "doc_type": "商用產品",
       "access": "產品頁",
       "tags": [
-        "導管",
-        "通用biomaterial"
+        "WCA接觸角",
+        "lubricity潤滑",
+        "導管"
       ],
       "purpose": "另一商用親水塗料供應商對標",
       "abstract_note": "AST Products為親水塗層市場廠商之一;提供醫材親水潤滑塗層。",
@@ -3118,10 +3217,14 @@
       "doc_type": "期刊論文",
       "access": "付費",
       "tags": [
-        "TPU",
         "PVP",
-        "plasma",
-        "photografting"
+        "TPU",
+        "WCA<20°",
+        "WCA接觸角",
+        "durability耐久",
+        "lubricity潤滑",
+        "photografting",
+        "plasma"
       ],
       "purpose": "TPU四種親水化方法比較(含plasma接枝)",
       "abstract_note": "比較4法:PVP塗覆/PVP浸泡/N2-Ar plasma/plasma誘導PVP接枝;TPU-g-PVP(plasma接枝)最佳;WCA 109°→9.2°,80天後仍<20°;表面能72.4mN/m(原TPU 2.8倍)。",
@@ -3189,6 +3292,8 @@
       "tags": [
         "PUA",
         "UV光固化",
+        "adhesion附著力",
+        "lubricity潤滑",
         "熱固化"
       ],
       "purpose": "無溶劑UV waterborne PU-acrylate semi-IPN",
@@ -3256,8 +3361,7 @@
       "access": "產品頁",
       "tags": [
         "導管",
-        "導線guidewire",
-        "通用biomaterial"
+        "導線guidewire"
       ],
       "purpose": "產業動態:Harland歐洲據點+Surmodics品牌",
       "abstract_note": "2022年9月Harland Medical於愛爾蘭Cork設歐洲總部(就近供應設備/材料/塗層技術);Surmodics親水塗層品牌Serene用於血管介入。",
@@ -3318,10 +3422,14 @@
       "doc_type": "專利",
       "access": "專利全文",
       "tags": [
-        "導管",
-        "UV光固化",
         "PVP",
-        "isocyanate"
+        "UV光固化",
+        "WCA<20°",
+        "WCA接觸角",
+        "adhesion附著力",
+        "isocyanate",
+        "lubricity潤滑",
+        "導管"
       ],
       "purpose": "含附著促進primer的潤滑塗層配方",
       "abstract_note": "DSM系列;含adhesion-promoting primer的潤滑塗層組合物;提升親水層與基材附著。",
@@ -3386,10 +3494,15 @@
       "doc_type": "專利",
       "access": "專利全文",
       "tags": [
+        "COF<0.1",
         "PVP",
-        "導尿管",
         "UV光固化",
-        "photografting"
+        "WCA<20°",
+        "WCA接觸角",
+        "durability耐久",
+        "lubricity潤滑",
+        "photografting",
+        "導尿管"
       ],
       "purpose": "Coloplast親水塗層(導尿管大廠)",
       "abstract_note": "Coloplast塗層組合物;光起始劑/photografting為基礎的親水塗層;用於間歇導尿管。",
@@ -3455,9 +3568,13 @@
       "access": "專利全文",
       "tags": [
         "PVP",
-        "導管",
         "UV光固化",
-        "benzophenone"
+        "WCA<20°",
+        "WCA接觸角",
+        "adhesion附著力",
+        "benzophenone",
+        "lubricity潤滑",
+        "導管"
       ],
       "purpose": "親水塗層配方(本資料庫DSM系列延伸)",
       "abstract_note": "DSM親水塗層配方;UV固化PVP系統;與US8133580同家族延伸。",
@@ -3523,8 +3640,9 @@
       "tags": [
         "PEG",
         "UV光固化",
-        "hydrogel",
-        "通用biomaterial"
+        "WCA<20°",
+        "WCA接觸角",
+        "hydrogel"
       ],
       "purpose": "UV-VIS可固化PEG hydrogel多功能化",
       "abstract_note": "PEG hydrogel在UV-VIS光固化的生醫多功能應用;可見光固化降低UV傷害。",
@@ -3589,11 +3707,13 @@
       "doc_type": "期刊論文",
       "access": "付費",
       "tags": [
+        "COF<0.1",
         "MPC",
-        "導管",
-        "dip-coating",
-        "friction-coefficient",
-        "lubricity"
+        "WCA接觸角",
+        "adhesion附著力",
+        "antifouling抗汙",
+        "lubricity潤滑",
+        "導管"
       ],
       "purpose": "MPC 塗層在 PU 導管的摩擦係數定量數據",
       "abstract_note": "poly(MPC-co-BMA) dip casting 2.5μm塗層在PU導管；濕態摩擦力從0.017降至0.004；AFM量測；展現hydration-dependent boundary lubrication。",
@@ -3659,11 +3779,14 @@
       "tags": [
         "MPC",
         "TPU",
-        "導管",
+        "antifouling抗汙",
+        "antimicrobial抗菌",
+        "biocompatibility",
+        "durability耐久",
+        "hemocompatibility血液相容",
         "isocyanate",
-        "covalent-bonding",
-        "lubricity",
-        "biocompatibility"
+        "lubricity潤滑",
+        "導管"
       ],
       "purpose": "MPC+bPEI共價接枝PU導管的多功能塗層",
       "abstract_note": "PU表面diisocyanate活化後接枝bPEI-S-MPC複合物；摩擦係數降30%、溶血率降50%；兔體內試驗抗血栓評分1.3 vs 3.3；具抗菌性。",
@@ -3732,12 +3855,16 @@
       "doc_type": "期刊論文",
       "access": "付費",
       "tags": [
+        "COF<0.1",
         "SBMA",
+        "WCA<20°",
+        "WCA接觸角",
+        "antifouling抗汙",
+        "durability耐久",
+        "encrustation resistance抗結痂",
+        "lubricity潤滑",
         "photografting",
-        "silicone",
-        "covalent-bonding",
-        "friction-coefficient",
-        "lubricity"
+        "silicone"
       ],
       "purpose": "SBMA光接枝塗層的摩擦係數降>90%定量數據",
       "abstract_note": "SBMA一步光聚合接枝於PDMS；摩擦係數降>90%；人體屍體耳蝸植入力降~40%；展現zwitterionic光接枝的臨床可行性。",
@@ -3802,11 +3929,15 @@
       "doc_type": "期刊論文",
       "access": "開放全文",
       "tags": [
-        "SBMA",
-        "hydrogel",
         "PEG",
-        "covalent-bonding",
-        "biocompatibility"
+        "SBMA",
+        "WCA<20°",
+        "WCA接觸角",
+        "antifouling抗汙",
+        "biocompatibility",
+        "encrustation resistance抗結痂",
+        "hydrogel",
+        "lubricity潤滑"
       ],
       "purpose": "SBMA vs PEG的抗異物反應比較+藥物釋放",
       "abstract_note": "poly(SBMA) hydrogel塗層與PEG比較；SBMA減少纖維母細胞和巨噬細胞黏附；WCA量測；可搭載Everolimus抗纖維化藥物釋放。",
@@ -3873,9 +4004,14 @@
       "access": "付費",
       "tags": [
         "SBMA",
-        "hydrogel",
+        "WCA<20°",
+        "WCA接觸角",
+        "antifouling抗汙",
         "biocompatibility",
-        "covalent-bonding"
+        "durability耐久",
+        "encrustation resistance抗結痂",
+        "hydrogel",
+        "lubricity潤滑"
       ],
       "purpose": "SBMA hydrogel的體內抗鈣化30天數據",
       "abstract_note": "SBMA+MAHA hybrid hydrogel塗層；接REDV肽促內皮化；30天皮下植入免疫反應和鈣化顯著降低。",
@@ -3940,8 +4076,10 @@
       "access": "開放全文",
       "tags": [
         "SBMA",
+        "antifouling抗汙",
         "biocompatibility",
-        "durability"
+        "durability耐久",
+        "lubricity潤滑"
       ],
       "purpose": "SBMA塗層14天長期穩定性數據",
       "abstract_note": "SBMA塗層微針電極；蛋白質吸附降84.2%，細菌黏附降98.6%；14天連續ECG監測穩定；機械強度可穿透人體皮膚。",
@@ -4002,10 +4140,14 @@
       "access": "付費",
       "tags": [
         "SBMA",
-        "導尿管",
-        "hydrogel",
+        "WCA<20°",
+        "WCA接觸角",
+        "antifouling抗汙",
         "biocompatibility",
-        "lubricity"
+        "encrustation resistance抗結痂",
+        "hydrogel",
+        "lubricity潤滑",
+        "導尿管"
       ],
       "purpose": "SBMA導尿管塗層的抗菌+潤滑雙功能",
       "abstract_note": "SBMA與HPA共聚；控制hydrogel膨脹提升機械穩定性；纖維蛋白原沉積降40%、生物膜覆蓋降4倍；對E.coli和P.mirabilis有效。",
@@ -4068,12 +4210,17 @@
       "doc_type": "期刊論文",
       "access": "付費",
       "tags": [
-        "chitosan",
-        "PVC",
         "PDA-polydopamine",
+        "PVC",
+        "WCA接觸角",
+        "antifouling抗汙",
+        "antimicrobial抗菌",
+        "biocompatibility",
+        "chitosan",
+        "encrustation resistance抗結痂",
+        "lubricity潤滑",
         "plasma-treat",
-        "導管",
-        "biocompatibility"
+        "導管"
       ],
       "purpose": "chitosan+PDA+plasma在PVC導管的三合一塗層",
       "abstract_note": "PVC表面O2 plasma活化→PDA塗覆→HTCC接枝；親水性提升減少尿道黏膜損傷；優於商用PVP-urea塗層PVC導管的抗菌效能。",
@@ -4139,10 +4286,16 @@
       "doc_type": "期刊論文",
       "access": "付費",
       "tags": [
-        "PVP",
-        "PP",
         "PDA-polydopamine",
-        "biocompatibility"
+        "PP",
+        "PVP",
+        "WCA<20°",
+        "WCA接觸角",
+        "adhesion附著力",
+        "antifouling抗汙",
+        "antimicrobial抗菌",
+        "biocompatibility",
+        "lubricity潤滑"
       ],
       "purpose": "PDA+PVP在PP基材的附著與抗菌",
       "abstract_note": "PP表面PDA塗覆後PVP透過氫鍵固定；WCA顯著降低；抗蛋白/油水分離；碘複合後抗菌；PVP-PDA非共價鍵結具長期穩定性。",
@@ -4206,10 +4359,14 @@
       "doc_type": "期刊論文",
       "access": "付費",
       "tags": [
+        "COF<0.1",
+        "WCA接觸角",
+        "antimicrobial抗菌",
+        "biocompatibility",
         "chitosan",
-        "導管",
-        "friction-coefficient",
-        "biocompatibility"
+        "encrustation resistance抗結痂",
+        "lubricity潤滑",
+        "導管"
       ],
       "purpose": "chitosan-脂肪酸衍生物降摩擦+抗菌",
       "abstract_note": "chitosan與linoleic/α-linolenic/dilinoleic acid同時N,O-酰化；摩擦係數0.53→0.35；E.coli降>80%；非毒非溶血；脂肪酸自組裝降摩擦。",
@@ -4273,12 +4430,15 @@
       "doc_type": "期刊論文",
       "access": "開放全文",
       "tags": [
-        "chitosan",
         "PVC",
-        "plasma-treat",
-        "導尿管",
+        "WCA<20°",
+        "WCA接觸角",
+        "antifouling抗汙",
         "biocompatibility",
-        "WCA接觸角"
+        "chitosan",
+        "encrustation resistance抗結痂",
+        "plasma-treat",
+        "導尿管"
       ],
       "purpose": "plasma處理PVC→chitosan塗覆的完整製程",
       "abstract_note": "H2 plasma+O2 plasma afterglow處理PVC→除氯→富氧官能基→chitosan水溶液浸塗；XPS確認均勻覆蓋；RT4泌尿上皮細胞活性提升。",
@@ -4343,14 +4503,16 @@
       "doc_type": "期刊論文",
       "access": "付費",
       "tags": [
-        "SBMA",
+        "COF<0.1",
         "PVP",
-        "chitosan",
-        "導管",
+        "SBMA",
         "UV光固化",
-        "lubricity",
+        "WCA接觸角",
         "adhesion附著力",
-        "WCA接觸角"
+        "antimicrobial抗菌",
+        "chitosan",
+        "lubricity潤滑",
+        "導管"
       ],
       "purpose": "WPU+SBMA+NVP+chitosan UV固化多功能塗層",
       "abstract_note": "WPU底塗→QCS/SBMA/NVP/ZnSO4 UV固化hydrogel；界面結合強度536N/m；WCA=24.6°；COF=0.0357；厚度可調；抗E.coli和S.aureus。",
@@ -4419,11 +4581,16 @@
       "access": "開放全文",
       "tags": [
         "MPC",
-        "導管",
         "PDA-polydopamine",
-        "covalent-bonding",
+        "WCA<20°",
+        "WCA接觸角",
+        "adhesion附著力",
+        "antifouling抗汙",
         "biocompatibility",
-        "lubricity"
+        "durability耐久",
+        "hemocompatibility血液相容",
+        "lubricity潤滑",
+        "導管"
       ],
       "purpose": "PDA啟發的pMPC共價接枝血管導管",
       "abstract_note": "phenol-polyamine膜啟發昆蟲硬化→pMPC自由基聚合接枝；super-hydrophilic；兔頸靜脈模型抗血栓；大鼠皮下抗感染；持久抗污。",
@@ -4489,10 +4656,14 @@
       "access": "開放全文",
       "tags": [
         "MPC",
-        "導管",
-        "covalent-bonding",
+        "WCA<20°",
+        "WCA接觸角",
+        "adhesion附著力",
+        "antifouling抗汙",
         "biocompatibility",
-        "通用biomaterial"
+        "hemocompatibility血液相容",
+        "lubricity潤滑",
+        "導管"
       ],
       "purpose": "通用型zwitterionic塗層適用10種基材",
       "abstract_note": "wet-adhesive引發劑polymer水相自組裝→pMPC接枝；適用10種基材包括PU/silicone/PTFE；寬pH範圍近零蛋白汙染；模擬血流穩定；可選擇性捕獲CTC。",
@@ -4557,11 +4728,14 @@
       "access": "付費",
       "tags": [
         "MPC",
-        "TPU",
         "PDA-polydopamine",
-        "covalent-bonding",
+        "TPU",
+        "WCA接觸角",
+        "antifouling抗汙",
+        "antimicrobial抗菌",
         "biocompatibility",
-        "WCA接觸角"
+        "durability耐久",
+        "lubricity潤滑"
       ],
       "purpose": "2026最新PU表面MPC抗菌雙功能塗層",
       "abstract_note": "MPC/DADMAC/GMA共聚物→PDA/PEI預處理PU→環氧開環接枝；WCA 85.95°→18.25°；蛋白吸附阻抗+殺菌99%；4週PBS浸泡穩定。",
@@ -4630,10 +4804,13 @@
       "access": "專利全文",
       "tags": [
         "PVP",
+        "adhesion附著力",
+        "antimicrobial抗菌",
+        "durability耐久",
         "isocyanate",
-        "熱固化",
+        "lubricity潤滑",
         "導管",
-        "通用biomaterial"
+        "熱固化"
       ],
       "purpose": "Cook Medical 親水塗層核心專利（PVP+PU interpolymer+抗菌釋放）",
       "abstract_note": "PVP+polyurethane interpolymer（isocyanate交聯），加入抗菌添加劑（chlorhexidine/silver）可緩釋。與Hydromer P06同源的熱固化路線。可能已過期（2006+20=2026）*",
@@ -4707,9 +4884,9 @@
       "access": "商業資料",
       "tags": [
         "PVP",
-        "熱固化",
+        "lubricity潤滑",
         "導管",
-        "通用biomaterial"
+        "熱固化"
       ],
       "purpose": "Argon Medical自有親水塗層品牌，特色是可塗導管內壁",
       "abstract_note": "SLIP-COAT熱固化親水塗層。吸收水分後表面變滑。比PTFE更潤滑。熱固化→可塗導管內壁（UV有line-of-sight限制做不到）。可客製化潤滑度和持久性",
@@ -4779,10 +4956,12 @@
       "access": "專利全文",
       "tags": [
         "PVP",
+        "adhesion附著力",
+        "antimicrobial抗菌",
         "isocyanate",
-        "熱固化",
+        "lubricity潤滑",
         "導管",
-        "antimicrobial抗菌"
+        "熱固化"
       ],
       "purpose": "Cook Medical塗層續案，強化抗菌添加劑配方",
       "abstract_note": "US7141246續案。PVP+PU interpolymer+抗菌（chlorhexidine/triclosan/silver）。強調抗菌劑在含水環境中以pharmaceutically acceptable方式釋放",
@@ -4856,10 +5035,12 @@
       "access": "專利全文",
       "tags": [
         "PVP",
-        "活檢針",
-        "穿刺針",
+        "adhesion附著力",
+        "lubricity潤滑",
         "導管",
-        "導線guidewire"
+        "導線guidewire",
+        "活檢針",
+        "穿刺針"
       ],
       "purpose": "Merit Medical(InterV)潤滑+超音波回聲複合塗層，用於活檢針和導管",
       "abstract_note": "PVP基親水潤滑層+echogenic微粒（聚合物微球含氣體）複合結構。可同時提供潤滑性和超音波可視性。用於biopsy needle, catheter, guidewire, trocar等",
@@ -4931,11 +5112,13 @@
       "doc_type": "專利",
       "access": "專利全文",
       "tags": [
-        "PVP",
         "PEG",
+        "PEGDA",
+        "PVP",
         "UV光固化",
-        "導尿管",
-        "PEGDA"
+        "durability耐久",
+        "lubricity潤滑",
+        "導尿管"
       ],
       "purpose": "Coloplast PVP+PEGDA配方的50次往返磨耗實測數據，PEGDA分子量vs耐磨性",
       "abstract_note": "PVP+PEGDA UV固化親水塗層。關鍵發現：PEGDA Mn250-700在50次silicone孔往返磨耗後COF維持穩定，Mn≥1000劣化。測試方法：通過4.14mm silicone孔(Shore 60A)往返25次(共50次通過)，Harland FTS 200g clamp測初始/磨耗後/離水10min後COF",
@@ -5034,10 +5217,13 @@
       "doc_type": "綜述review",
       "access": "付費",
       "tags": [
-        "輸尿管支架",
-        "encrustation",
+        "antimicrobial抗菌",
         "biofilm",
-        "綜述review"
+        "durability耐久",
+        "encrustation",
+        "encrustation resistance抗結痂",
+        "綜述review",
+        "輸尿管支架"
       ],
       "purpose": "輸尿管支架結痂機制+管理策略完整綜述",
       "abstract_note": "結痂機制：dwell time + 患者風險因子 + conditioning film + biofilm + mineral deposition。提出新治療演算法。識別高風險患者+多模式移除技術",
@@ -5102,8 +5288,9 @@
       "doc_type": "綜述review",
       "access": "付費",
       "tags": [
-        "輸尿管支架",
-        "綜述review"
+        "encrustation resistance抗結痂",
+        "綜述review",
+        "輸尿管支架"
       ],
       "purpose": "輸尿管支架技術全景：設計、材料、塗層",
       "abstract_note": "全面回顧：stent architecture/design + biomaterials + coatings 三條改進路徑。針對副作用（UTI/結痂/疼痛/血尿）的解決方案",
@@ -5167,9 +5354,11 @@
       "doc_type": "綜述review",
       "access": "開放全文",
       "tags": [
-        "輸尿管支架",
+        "durability耐久",
         "encrustation",
-        "綜述review"
+        "encrustation resistance抗結痂",
+        "綜述review",
+        "輸尿管支架"
       ],
       "purpose": "結痂的風險因子與管理策略綜述",
       "abstract_note": "三個技術維度：材料/設計/表面塗層。dwell time是最關鍵風險因子。bacteriuria/urolithiasis/DM/CKD/反覆UTI患者風險高",
@@ -5232,10 +5421,12 @@
       "doc_type": "綜述review",
       "access": "付費",
       "tags": [
-        "輸尿管支架",
-        "chitosan",
         "alginate",
-        "綜述review"
+        "biocompatibility",
+        "chitosan",
+        "encrustation resistance抗結痂",
+        "綜述review",
+        "輸尿管支架"
       ],
       "purpose": "天然生物聚合物（alginate/chitosan）製造和塗層輸尿管支架的回顧",
       "abstract_note": "Alginate主要用於製造支架本體，Chitosan主要用於塗層抗菌。但抗菌效率不足+塗層附著不完整是限制。生物可降解+抗菌+生物相容性的潛力",
@@ -5300,11 +5491,12 @@
       "doc_type": "綜述review",
       "access": "開放全文",
       "tags": [
-        "輸尿管支架",
-        "encrustation",
-        "conditioning film",
         "biofilm",
-        "綜述review"
+        "conditioning film",
+        "encrustation",
+        "encrustation resistance抗結痂",
+        "綜述review",
+        "輸尿管支架"
       ],
       "purpose": "結痂預防策略更新（2023最新）",
       "abstract_note": "兩大結痂路徑：conditioning film + biofilm pathway。從結石形成的病理機制出發。結構/材料/bio-coating三方向預防",
@@ -5367,11 +5559,14 @@
       "doc_type": "期刊論文",
       "access": "付費",
       "tags": [
-        "導尿管",
-        "zwitterionic",
-        "superhydrophilic",
+        "WCA<20°",
+        "WCA接觸角",
         "antimicrobial抗菌",
-        "encrustation"
+        "durability耐久",
+        "encrustation",
+        "encrustation resistance抗結痂",
+        "zwitterionic",
+        "導尿管"
       ],
       "purpose": "四種抗汙染表面比較：superhydrophilic zwitterionic vs liquid-like vs liquid-infused vs superhydrophobic",
       "abstract_note": "Superhydrophilic zwitterionic塗層表現最佳：fibrinogen沉積減72.3%，細菌附著減75%+。COF從0.63降至0.35。但無法殺菌→長期效力受限",
@@ -5436,10 +5631,13 @@
       "doc_type": "期刊論文",
       "access": "付費",
       "tags": [
-        "輸尿管支架",
-        "silicone",
+        "durability耐久",
         "encrustation",
-        "臨床試驗"
+        "encrustation resistance抗結痂",
+        "lubricity潤滑",
+        "silicone",
+        "臨床試驗",
+        "輸尿管支架"
       ],
       "purpose": "Coloplast Imajinhydro（hydrocoated silicone）vs Boston Scientific Percuflex Plus臨床比較",
       "abstract_note": "141位病人多中心隨機試驗，3週留置。Silicone hydrocoated：biofilm 0.93 vs Percuflex 1.24（p=0.0021）；mineral encrustation 0.78 vs 1.22（p=0.0048）。Silicone顯著優於polymer",
@@ -5505,11 +5703,14 @@
       "doc_type": "期刊論文",
       "access": "付費",
       "tags": [
-        "輸尿管支架",
-        "propolis",
         "Proteus mirabilis",
         "antimicrobial抗菌",
-        "encrustation"
+        "durability耐久",
+        "encrustation",
+        "encrustation resistance抗結痂",
+        "lubricity潤滑",
+        "propolis",
+        "輸尿管支架"
       ],
       "purpose": "蜂膠（propolis）塗層在PU輸尿管支架的抗菌+抗結痂評估（in vivo大鼠Proteus mirabilis模型）",
       "abstract_note": "EEP（propolis ethanol extract）塗層：>90%抑制biofilm，抑菌可達3個月。大鼠in vivo顯著減少細菌/結石/鹽沉積。biocompatible",
@@ -5574,10 +5775,13 @@
       "doc_type": "期刊論文",
       "access": "付費",
       "tags": [
-        "輸尿管支架",
-        "plasma",
         "TPU",
-        "encrustation"
+        "WCA<20°",
+        "WCA接觸角",
+        "antifouling抗汙",
+        "encrustation",
+        "plasma",
+        "輸尿管支架"
       ],
       "purpose": "PU管材內壁plasma-CVD表面改質：Ar/O/CH4三種比較",
       "abstract_note": "尿液浸泡15天結果：Ar+O（hydrophilic）→結痂和biofilm增加；CH4（疏水）→減少5倍以上。挑戰「親水=抗結痂」的傳統認知*",
@@ -5644,12 +5848,14 @@
       "doc_type": "期刊論文",
       "access": "開放全文",
       "tags": [
-        "輸尿管支架",
+        "antifouling抗汙",
+        "antimicrobial抗菌",
+        "copper",
+        "encrustation",
+        "encrustation resistance抗結痂",
         "heparin",
         "poly-l-lysine",
-        "copper",
-        "antimicrobial抗菌",
-        "encrustation"
+        "輸尿管支架"
       ],
       "purpose": "Heparin/PLL/Cu奈米粒子塗層的in vivo大鼠評估（28天感染膀胱模型）",
       "abstract_note": "NPs（heparin+poly-l-lysine+Cu）塗層：減少細菌附著+urease量+結晶沉積。28天大鼠in vivo顯著減少host發炎",
