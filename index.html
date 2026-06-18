@@ -3212,26 +3212,59 @@ function renderMarket() {
     '設備商（全路線）': {phase:'設備', color:'#8a7e72'},
   };
 
+  const MARKET_SEGMENTS = [
+    {id:'supplier', icon:'🧪', title:'原料 / 塗層供應商', color:'#2d8c5a', note:'可買、可合作、可授權或需迴避的 coating chemistry 來源',
+      names:['Hydromer','AST','Biocoat','Surmodics','Freudenberg','DSM','dsm-firmenich']},
+    {id:'competitor', icon:'⚔️', title:'產品競爭者 / 品牌端', color:'#c0392b', note:'導管、支架、guidewire 或成品端的直接/間接競爭與對標',
+      names:['Argon','Cook','Boston','Coloplast','Bard','BD','Teleflex']},
+    {id:'equipment', icon:'⚙️', title:'設備 / 製程夥伴', color:'#8a7e72', note:'塗覆、UV/熱固化、摩擦測試與量產驗證能力',
+      names:['Harland','ViVitro','equipment','coater','FTS','testing']}
+  ];
+
+  const hayOf = p => `${p.id||''} ${p.title||''} ${p.authors||''} ${p.venue||''} ${p.purpose||''} ${p.abstract_note||''} ${p.value_to_project||''} ${p.patentResults?.commercial?.company||''} ${p.patentResults?.commercial?.product||''}`.toLowerCase();
+  const countRelated = names => papers.filter(p=>names.some(n=>hayOf(p).includes(n.toLowerCase()))).length;
+  const findSegment = p => {
+    const hay = hayOf(p);
+    if(MARKET_SEGMENTS.find(s=>s.id==='equipment').names.some(n=>hay.includes(n.toLowerCase()))) return 'equipment';
+    if(MARKET_SEGMENTS.find(s=>s.id==='competitor').names.some(n=>hay.includes(n.toLowerCase()))) return 'competitor';
+    return 'supplier';
+  };
+  const segmentMap = Object.fromEntries(MARKET_SEGMENTS.map(s=>[s.id, []]));
+  commercials.forEach(p=>segmentMap[findSegment(p)].push({type:'commercial', paper:p}));
+
+  [
+    {company:'Cook Medical', product:'PVP+PU/isocyanate 抗菌塗層家族', names:['Cook Medical','Houghton PE'], role:'competitor'},
+    {company:'Boston Scientific', product:'Percuflex / plasma-silane primer 對標', names:['Boston Scientific','Scimed','Percuflex'], role:'competitor'},
+    {company:'ViVitro Labs', product:'Pinch test / IDTE 測試系統', names:['ViVitro','IDTE'], role:'equipment'}
+  ].forEach(v=>{
+    const n = countRelated(v.names);
+    const hasCommercial = commercials.some(p=>hayOf(p).includes(v.company.toLowerCase()));
+    if(n && !hasCommercial) segmentMap[v.role].push({...v, type:'entity', relatedCount:n});
+  });
+
   // 市場數字
   const mkData = [
     {n:'$1.8B',label:'市場規模（2022）',sub:'MarketsandMarkets'},
     {n:'9%+',label:'泌尿科 CAGR',sub:'成長最快終端'},
     {n:'65%+',label:'OEM 外包佔比',sub:'自製比例下降中'},
-    {n:'8家',label:'主要競爭玩家',sub:'資料庫涵蓋'},
+    {n:commercials.length+'家',label:'商用產品/玩家',sub:'文庫動態統計'},
   ];
 
   // 矩陣資料
-  const matrixRoutes = ['UV-BP','UV Type I','Zwitterionic','Isocyanate','設備商'];
-  const matrixPlayers = [
-    {name:'DSM', routes:['UV-BP'], strength:[3,0,0,1,0]},
-    {name:'Surmodics', routes:['Zwitterionic'], strength:[0,1,3,0,0]},
-    {name:'Biocoat', routes:['UV-BP','UV Type I'], strength:[2,2,0,0,0]},
-    {name:'Coloplast', routes:['Zwitterionic'], strength:[0,0,2,0,0]},
-    {name:'Freudenberg', routes:['UV Type I'], strength:[0,2,0,0,0]},
-    {name:'Hydromer', routes:['UV Type I'], strength:[0,1,0,0,0]},
-    {name:'Argon', routes:['Isocyanate'], strength:[0,0,0,2,0]},
-    {name:'Harland', routes:['設備商'], strength:[0,0,0,0,3]},
-  ];
+  const matrixRoutes = ['UV-BP','UV Type I','Zwitterionic','Isocyanate','設備/測試'];
+  const routeShort = r => r.includes('UV-BP')?'UV-BP':r.includes('UV Type I')?'UV Type I':r.includes('Zwitterionic')?'Zwitterionic':r.includes('Isocyanate')?'Isocyanate':r.includes('設備')?'設備/測試':'';
+  const routeStrength = routes => matrixRoutes.map(col=>{
+    const n = routes.filter(r=>routeShort(r)===col).length;
+    return Math.min(3, n ? Math.max(1,n) : 0);
+  });
+  const matrixPlayers = commercials.map(p=>{
+    const c = p.patentResults.commercial;
+    return {
+      name:(c.company||p.title||p.id).replace(/\s*\（.*?\）/g,'').slice(0,28),
+      role:MARKET_SEGMENTS.find(s=>s.id===findSegment(p))?.title.split(' ')[0]||'',
+      strength:routeStrength(ROUTE_MAP[p.id]||[])
+    };
+  });
 
   const threatColor = {
     '高（直接競品，特別是輸尿管支架市場）':'#e74c3c',
@@ -3242,6 +3275,82 @@ function renderMarket() {
     '低（非台灣市場主力）':'#2d8c5a',
     '低':'#2d8c5a',
     '無（設備商，潛在供應商）':'#8a7e72',
+  };
+
+  const marketCard = (item, seg) => {
+    if(item.type === 'entity') {
+      const abbr = item.company.split(/\s+/).map(x=>x[0]).join('').slice(0,3).toUpperCase();
+      return `<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer" onclick="goToMarketEntity('${item.company.replace(/'/g,"\\'")}')">
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border)">
+          <div style="width:48px;height:48px;border-radius:8px;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:${seg.color};flex-shrink:0">${abbr}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:var(--text)">${item.company}</div>
+            <div style="font-size:11px;color:${seg.color};font-weight:600">${item.product}</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:1px">文庫關聯 ${item.relatedCount} 篇</div>
+          </div>
+          <div style="font-size:10px;color:var(--muted);border:1px solid var(--border);border-radius:4px;padding:2px 6px">待建商用卡</div>
+        </div>
+        <div style="padding:10px 14px;font-size:11px;color:var(--muted);line-height:1.6">目前以專利、臨床或市場文獻呈現；點擊可篩出相關文庫項目。</div>
+      </div>`;
+    }
+
+    const p = item.paper;
+    const c = p.patentResults.commercial;
+    const tc = threatColor[c.competitive_threat_to_bioteque]||'#888';
+    const ABBR = ABBR_MAP[p.id]||c.company?.slice(0,3)||'?';
+    const routes = ROUTE_MAP[p.id]||[];
+    const tech = c.coating_technology||{};
+    const claims = Object.entries(tech.performance_claims||{}).slice(0,3);
+    const relatedCount = countRelated([c.company||'', c.product||'', p.title||''].filter(Boolean));
+    return `
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer" onclick="goToMarketPaper('${p.id}')">
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border)">
+          <div style="width:48px;height:48px;border-radius:8px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden">
+            <img src="${LOGO_MAP[p.id]||''}"
+              style="width:40px;height:40px;object-fit:contain;border-radius:4px"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+              alt="${c.company} logo">
+            <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--accent);background:var(--card)">${ABBR}</div>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:var(--text)">${c.company}</div>
+            <div style="font-size:11px;color:${seg.color};font-weight:600">${c.product}</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:1px">${c.hq||''} · 文庫 ${relatedCount} 篇</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:9px;color:var(--muted)">競爭威脅</div>
+            <div style="font-size:16px;font-weight:800;color:${tc}">${c.competitive_threat_to_bioteque?.split('（')[0]||'—'}</div>
+          </div>
+        </div>
+        <div style="padding:10px 14px">
+          <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px">
+            ${routes.map(r=>{
+              const pm = PHASE_MAP[r]||{};
+              return `<span style="background:${pm.color||'#888'}22;color:${pm.color||'#888'};font-size:10px;padding:2px 7px;border-radius:4px;font-weight:600">${pm.phase||''} · ${r}</span>`;
+            }).join('')}
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:6px">${tech.type||''}</div>
+          ${claims.length?`<div style="display:flex;gap:6px;flex-wrap:wrap">
+            ${claims.map(([k,v])=>`<span style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-size:10px"><b>${k}:</b> ${v}</span>`).join('')}
+          </div>`:''}
+          ${c.collaboration_opportunity?`<div style="margin-top:8px;font-size:10px;color:var(--accent2);border-top:1px solid var(--border);padding-top:6px">
+            🤝 ${c.collaboration_opportunity.slice(0,60)}${c.collaboration_opportunity.length>60?'…':''}
+          </div>`:''}
+        </div>
+      </div>`;
+  };
+
+  const segmentSection = seg => {
+    const items = segmentMap[seg.id] || [];
+    return `<section style="margin-bottom:24px">
+      <div style="display:flex;align-items:flex-end;gap:10px;margin-bottom:10px">
+        <div style="font-size:14px;font-weight:800;color:${seg.color}">${seg.icon} ${seg.title}</div>
+        <div style="font-size:11px;color:var(--muted)">${items.length} 個玩家 · ${seg.note}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px">
+        ${items.length ? items.map(item=>marketCard(item, seg)).join('') : `<div style="padding:18px;background:var(--card);border:1px dashed var(--border);border-radius:8px;color:var(--muted);font-size:12px">文庫目前沒有此類玩家資料</div>`}
+      </div>
+    </section>`;
   };
 
   el.innerHTML = `
@@ -3261,59 +3370,8 @@ function renderMarket() {
     </div>`).join('')}
   </div>
 
-  <!-- 區塊2：玩家卡片 -->
-  <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:10px">🏢 主要玩家</div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-bottom:28px">
-    ${commercials.map(p=>{
-      const c = p.patentResults.commercial;
-      const tc = threatColor[c.competitive_threat_to_bioteque]||'#888';
-      const ABBR = ABBR_MAP[p.id]||c.company?.slice(0,3)||'?';
-      const routes = ROUTE_MAP[p.id]||[];
-      const tech = c.coating_technology||{};
-      const claims = Object.entries(tech.performance_claims||{}).slice(0,3);
-      return `
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer" onclick="goToMarketPaper('${p.id}')">
-        <!-- Logo + 基本資訊 -->
-        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border)">
-          <div style="width:48px;height:48px;border-radius:8px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden">
-            <img src="${LOGO_MAP[p.id]||''}"
-              style="width:40px;height:40px;object-fit:contain;border-radius:4px"
-              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
-              alt="${c.company} logo">
-            <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--accent);background:var(--card)">${ABBR}</div>
-          </div>
-          <div style="flex:1;min-width:0">
-            <div style="font-size:13px;font-weight:700;color:var(--text)">${c.company}</div>
-            <div style="font-size:11px;color:var(--accent);font-weight:600">${c.product}</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:1px">${c.hq||''}</div>
-          </div>
-          <div style="text-align:right;flex-shrink:0">
-            <div style="font-size:9px;color:var(--muted)">競爭威脅</div>
-            <div style="font-size:16px;font-weight:800;color:${tc}">${c.competitive_threat_to_bioteque?.split('（')[0]||'—'}</div>
-          </div>
-        </div>
-        <div style="padding:10px 14px">
-          <!-- 路線標籤 -->
-          <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px">
-            ${routes.map(r=>{
-              const pm = PHASE_MAP[r]||{};
-              return `<span style="background:${pm.color||'#888'}22;color:${pm.color||'#888'};font-size:10px;padding:2px 7px;border-radius:4px;font-weight:600">${pm.phase||''} · ${r}</span>`;
-            }).join('')}
-          </div>
-          <!-- 塗層類型 -->
-          <div style="font-size:11px;color:var(--muted);margin-bottom:6px">${tech.type||''}</div>
-          <!-- 性能聲明 -->
-          ${claims.length?`<div style="display:flex;gap:6px;flex-wrap:wrap">
-            ${claims.map(([k,v])=>`<span style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-size:10px"><b>${k}:</b> ${v}</span>`).join('')}
-          </div>`:''}
-          <!-- 合作機會 -->
-          ${c.collaboration_opportunity?`<div style="margin-top:8px;font-size:10px;color:var(--accent2);border-top:1px solid var(--border);padding-top:6px">
-            🤝 ${c.collaboration_opportunity.slice(0,60)}${c.collaboration_opportunity.length>60?'…':''}
-          </div>`:''}
-        </div>
-      </div>`;
-    }).join('')}
-  </div>
+  <!-- 區塊2：市場角色分區 -->
+  ${MARKET_SEGMENTS.map(segmentSection).join('')}
 
   <!-- 區塊3：技術路線歸屬矩陣 -->
   <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:10px">📊 技術路線歸屬矩陣</div>
@@ -3329,7 +3387,7 @@ function renderMarket() {
         <tbody>
           ${matrixPlayers.map(pl=>`
           <tr>
-            <td style="padding:8px 14px;border:1px solid var(--border);font-weight:700">${pl.name}</td>
+            <td style="padding:8px 14px;border:1px solid var(--border);font-weight:700">${pl.name}<div style="font-size:9px;color:var(--muted);font-weight:400">${pl.role}</div></td>
             ${pl.strength.map(s=>`<td style="padding:8px;border:1px solid var(--border);text-align:center">
               ${s===3?'●●●':s===2?'●●':s===1?'●':'<span style="color:var(--border)">—</span>'}
             </td>`).join('')}
@@ -3729,6 +3787,33 @@ function goToMarketPaper(pid) {
   const c = p?.patentResults?.commercial || {};
   const label = `市場玩家：${c.company || p?.title || pid}`;
   goToPaper(pid, {focus:true, label, color:'#2d8c5a'});
+}
+
+function goToMarketEntity(name) {
+  const needle = String(name || '').toLowerCase();
+  const aliases = {
+    'cook medical':['cook medical','houghton pe'],
+    'boston scientific':['boston scientific','scimed','percuflex'],
+    'vivitro labs':['vivitro','idte']
+  }[needle] || [needle];
+  const matchedIds = (DB.papers || []).filter(p=>{
+    const hay = `${p.id||''} ${p.title||''} ${p.authors||''} ${p.venue||''} ${p.purpose||''} ${p.abstract_note||''} ${p.value_to_project||''}`.toLowerCase();
+    return aliases.some(a=>hay.includes(a));
+  }).map(p=>p.id);
+  const tabs = document.querySelectorAll('.tabs > .tab');
+  showView('browse', tabs[2]);
+  setTimeout(()=>{
+    activeRouteFilter = null;
+    activeLibraryFilter = {
+      id: name,
+      label: `市場玩家：${name}`,
+      color: '#c0392b',
+      paperIds: matchedIds,
+      note: '市場玩家關聯 — 顯示文庫中提到此公司的資料'
+    };
+    filterPapers();
+    if(filtered.length) showDetail(0);
+  }, 100);
 }
 
 function goToCompare() {
