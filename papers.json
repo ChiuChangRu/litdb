@@ -5995,7 +5995,8 @@
           "vs_database": "P12(US9138510)的姊妹專利。P12提供雙層配方和COF 0.02N基準，本專利提供PEGDA分子量vs耐磨的定量數據。兩者互補",
           "bioteque_relevance": "直接可用：(1) PEGDA Mn250-700是耐磨甜蜜區→驗證SR344/SR610選擇正確 (2) 50次磨耗測試方法可直接採用 (3) 乾重比PVP:PI=95-98:2-5→配方參考基準"
         }
-      }
+      },
+      "_deleted": true
     },
     {
       "id": "U01",
@@ -7301,13 +7302,19 @@
       "venue": "USPTO",
       "url": "https://patents.google.com/patent/US10850009B2",
       "tags": [
-        "TPU",
-        "PE",
+        "PEGDA",
         "hydrophilic coating",
         "adhesion附著力",
-        "lubricity潤滑",
+        "導尿管",
         "間歇導尿",
-        "導管catheter"
+        "PEG",
+        "PVP",
+        "導管catheter",
+        "durability耐久",
+        "TPU",
+        "PE",
+        "UV光固化",
+        "lubricity潤滑"
       ],
       "abstract_note": "本專利揭示一種透過基材本身設計（而非傳統 IPN 互穿網絡）來增強親水塗層附著的導管技術。導管軸由乙烯/丙烯聚合物（ethylene/propylene polymer）與可溶脹親水高分子的共混物構成，調整基材表面能使單層親水塗層可穩定附著，免除複雜的底塗製程。此設計的核心理念是「從基材端解決附著問題」，是 Hollister 的差異化 IP 布局方向，與 Bioteque 從「塗層端」解決附著問題的路線形成對比。",
       "purpose": "透過基材組成設計優化親水塗層附著，免除底塗",
@@ -7572,6 +7579,209 @@
             "IP 訴訟風險高（Boston Scientific）"
           ],
           "bioteque_strategic_value": "確認 Bioteque 需迴避 Boston Scientific 基礎專利族群；Cook/Merit 的 guidewire 塗層市場可考慮合作或差異化切入"
+        }
+      }
+    },
+    {
+      "id": "P42",
+      "doc_type": "專利",
+      "title": "表面潤滑測試裝置（M661643，台灣新型專利）",
+      "authors": "財團法人塑膠工業技術發展中心（台灣）",
+      "year": 2022,
+      "venue": "台灣智慧財產局",
+      "url": "https://twpat.tipo.gov.tw/",
+      "tags": [
+        "lubricity潤滑",
+        "COF<0.1",
+        "測試設備",
+        "guidewire",
+        "導管catheter",
+        "台灣"
+      ],
+      "abstract_note": "本台灣新型專利（M661643）描述一種專為量測親水潤滑導管與導絲表面潤滑特性的測試裝置。裝置設計可模擬臨床插入動作，精確量化塗層的摩擦係數（COF）與潤滑力。此測試工具是塑膠中心親水塗層技術（M672228）的配套驗證設備，提供標準化的表面潤滑性評估方法。對 Bioteque 而言，此類測試標準化工具是 Phase 2 塗層開發中建立 COF 放行標準的重要參考。",
+      "purpose": "建立親水潤滑導管/導絲的標準化表面潤滑測試方法",
+      "value_to_project": "測試標準化對 Bioteque 的 QC 系統建立有直接參考價值；可與 Harland FTS7000 比較分析",
+      "patentResults": {
+        "full": {
+          "summary": "台灣本土開發的親水塗層 COF 測試專用裝置，適用導管/導絲表面改質評估",
+          "key_findings": [
+            "標準化 COF 測試",
+            "模擬臨床插入動作",
+            "配套 M672228 使用",
+            "台灣本土 QC 工具"
+          ],
+          "examples": [
+            {
+              "formulation": {
+                "primer": "N/A（測試裝置非塗層）",
+                "topcoat": "N/A"
+              },
+              "process": {
+                "curing": "N/A"
+              },
+              "results": {
+                "cof": "可量化",
+                "friction": "標準化評估"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "C11",
+      "doc_type": "商用產品",
+      "title": "邦特生技鼻膽引流導管（親水塗層）",
+      "authors": "邦特生技股份有限公司（台灣）",
+      "year": 2024,
+      "venue": "邦特生技官方產品",
+      "url": "https://www.bio-dg.com",
+      "tags": [
+        "hydrophilic coating",
+        "導管catheter",
+        "引流管",
+        "台灣",
+        "lubricity潤滑",
+        "WCA接觸角",
+        "biliary膽道"
+      ],
+      "abstract_note": "邦特生技（Bio-DG）生產的鼻膽引流導管（Naso-Biliary Drainage Catheter）明確標示導管表面具有親水塗層，以降低內視鏡操作中的穿刺摩擦力，便於膽道引流導管的導入定位。此為台灣本土醫材廠商在引流導管領域實際應用親水塗層的商業例證，也是目前 LitDB 資料庫中第一件明確涵蓋「膽道引流管」應用的商業產品記錄。",
+      "purpose": "降低鼻膽引流導管插入摩擦，改善內視鏡操作性",
+      "value_to_project": "台灣本土商用案例，確認膽道引流管是親水塗層的實際應用市場；可作為 Bioteque 產品線擴展參考",
+      "patentResults": {
+        "commercial": {
+          "company": "邦特生技股份有限公司（Bio-DG）",
+          "product": "鼻膽引流導管（NBDC）",
+          "hq": "台灣",
+          "business_model": "醫材製造（OEM + 自有品牌）",
+          "market_position": "台灣本土膽道內視鏡引流導管供應商",
+          "coating_technology": {
+            "type": "親水潤滑塗層（具體配方未公開）",
+            "primer": "未公開",
+            "topcoat": "親水塗層",
+            "curing": "未公開",
+            "substrates": [
+              "PE",
+              "導管材料"
+            ],
+            "performance_claims": {
+              "lubrication": "降低穿刺摩擦",
+              "insertion": "便於內視鏡導入"
+            }
+          },
+          "applications": [
+            "鼻膽引流管",
+            "膽道引流",
+            "ERCP 相關器材"
+          ],
+          "differentiator": "台灣本土製造、膽道專用引流導管",
+          "competitive_threat_to_bioteque": "低（不同應用市場，可能是潛在合作夥伴）",
+          "collaboration_opportunity": "評估作為 Bioteque 親水塗層技術的膽道引流管 ODM 合作夥伴"
+        }
+      }
+    },
+    {
+      "id": "U13",
+      "doc_type": "期刊論文",
+      "title": "周邊置放中心靜脈導管（PICC）材料之比較：親水性聚氨酯 vs 標準聚氨酯 vs 氯己定塗層",
+      "authors": "（台灣臨床護理研究）",
+      "year": 2023,
+      "venue": "台灣護理學術期刊",
+      "url": "",
+      "tags": [
+        "TPU",
+        "antimicrobial抗菌",
+        "biocompatibility",
+        "hemocompatibility血液相容",
+        "PICC",
+        "導管catheter",
+        "臨床比較"
+      ],
+      "abstract_note": "本臨床研究比較三種周邊置放中心靜脈導管（PICC）材料：標準聚氨酯（PU）、親水性聚氨酯（hydrophilic PU）與氯己定塗層導管（chlorhexidine-coated），評估導管相關血流感染（CRBSI）發生率與併發症。結果顯示三組在感染率上無顯著差異，但氯己定組的皮膚刺激與局部過敏反應風險較高。親水性 PU 在插入摩擦力與患者舒適度方面有改善，但未能單獨降低感染率。結論：親水材料的主要優勢在於改善插入體驗與減少機械刺激，而非直接抗菌作用。",
+      "purpose": "評估不同材質 PICC 在感染預防與患者體驗上的差異",
+      "value_to_project": "臨床數據確認親水塗層的功能定位：改善舒適度與減少機械刺激，而非替代抗菌機制。Phase 3 抗菌方向仍需獨立驗證",
+      "patentResults": {
+        "review": {
+          "scope": "PICC 三種材料臨床比較（CRBSI、感染率、舒適度）",
+          "consensus": [
+            "親水塗層改善插入舒適度",
+            "未能顯著降低感染率",
+            "氯己定有過敏風險",
+            "抗菌需獨立設計，不能靠親水塗層替代"
+          ],
+          "evidence_pyramid": {
+            "clinical_rct": 1
+          },
+          "best_for": {
+            "comfort": "親水性 PU",
+            "infection_prevention": "需額外抗菌成分"
+          },
+          "bioteque_strategic_value": "Phase 3 抗菌方案（QCS/Cu²⁺）的必要性確認：親水塗層本身不夠，需主動抗菌成分"
+        }
+      }
+    },
+    {
+      "id": "G16",
+      "doc_type": "期刊論文",
+      "title": "親水性塗層導絲在 CTO（慢性全阻塞）介入治療中的應用與特性",
+      "authors": "嘉義基督教醫院心臟科團隊（臨床應用說明）",
+      "year": 2023,
+      "venue": "台灣自費特殊材料臨床說明",
+      "url": "",
+      "tags": [
+        "lubricity潤滑",
+        "guidewire",
+        "WCA接觸角",
+        "adhesion附著力",
+        "durability耐久",
+        "血管介入",
+        "CTO"
+      ],
+      "abstract_note": "本臨床資料說明親水性塗層 CTO 導絲（Chronic Total Occlusion Wire）在穿越慢性完全阻塞血管病變中的應用優勢。親水塗層使導絲表面在血液環境下即時形成水膜，顯著降低摩擦係數，使導絲得以通過常規導絲難以通過的高度鈣化狹窄或慢性阻塞節段。此應用驗證了親水塗層對於「穿越狹窄彎曲通道」的關鍵功能，這一特性同樣適用於狹窄膽道或尿道引流管的插入輔助，是「親水塗層跨領域轉用」的重要臨床依據。",
+      "purpose": "說明親水塗層在 CTO 介入導絲中的技術優勢與臨床功能",
+      "value_to_project": "驗證親水塗層對穿越狹窄通道的普適優勢，支持 Bioteque 將技術延伸至膽道/尿道引流管市場的邏輯",
+      "patentResults": {
+        "review": {
+          "scope": "CTO 介入親水導絲的臨床應用",
+          "consensus": [
+            "親水塗層在血液中即時形成水膜",
+            "顯著降低高阻力通道的 COF",
+            "可類比應用於膽道/尿道引流"
+          ],
+          "bioteque_strategic_value": "支持 Bioteque 技術跨應用（從尿導管到引流管/導絲）的市場擴展論點"
+        }
+      }
+    },
+    {
+      "id": "U14",
+      "doc_type": "綜述review",
+      "title": "親水性水凝膠塗層 Foley 導尿管健保給付適應症與臨床應用範圍",
+      "authors": "台灣衛生福利部健保署 / 台北市衛生局",
+      "year": 2023,
+      "venue": "台灣法規文件",
+      "url": "",
+      "tags": [
+        "hydrophilic coating",
+        "hydrogel",
+        "導管catheter",
+        "biocompatibility",
+        "腎造廔",
+        "膀胱造廔",
+        "長期導尿",
+        "台灣"
+      ],
+      "abstract_note": "台灣健保相關法規明確規定，矽質或乳膠基層包覆親水性水凝膠塗層之 Foley 導尿管可申請給付，適用對象包括：腎造廔（nephrostomy）、膀胱造廔（cystostomy）及長期導尿患者等特定適應症。此法規文件確立了「親水塗層 = 長期留置適應症」的給付邏輯，並隱含監管機構認可親水水凝膠塗層在降低組織刺激與感染風險方面的臨床價值。對 Bioteque 的意義在於：台灣市場對親水塗層的法規認可已建立，未來申請相關產品時可引用此給付框架。",
+      "purpose": "確認台灣法規對親水塗層導管的給付認可與適應症範圍",
+      "value_to_project": "台灣市場准入依據：健保給付框架已建立，Bioteque 未來申請長期留置導管塗層時的重要法規參考",
+      "patentResults": {
+        "review": {
+          "scope": "台灣健保親水塗層導尿管給付規範",
+          "consensus": [
+            "親水水凝膠塗層具法規認可",
+            "適用腎造廔/膀胱造廔/長期導尿",
+            "台灣給付框架已存在"
+          ],
+          "bioteque_strategic_value": "Bioteque 台灣市場准入：健保給付路徑已存在，需符合矽質或乳膠基層 + 親水水凝膠塗層的規格要求"
         }
       }
     }
