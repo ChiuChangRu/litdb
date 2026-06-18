@@ -899,7 +899,7 @@ function getAllPlanNotes() {
 let activeFilters = { type:new Set(), sub:new Set(), cure:new Set(), app:new Set(), status:new Set(), topic:new Set() };
 
 function buildFilterTags() {
-  const dict = DB.meta.tag_dictionary || {};
+  const dict = getTagDictionaryWithObserved();
   // 文獻類型
   const types = [...new Set(DB.papers.map(p=>p.doc_type).filter(Boolean))];
   const typeGroup = document.getElementById('fTypeGroup');
@@ -1806,8 +1806,9 @@ function buildCommercial() {
   if(!el) return;
 
   // 收集所有商品+已分析專利的配方資料
-  const products = DB.papers.filter(p=>p.doc_type==='商用產品');
-  const analyzedPatents = DB.papers.filter(p=>p.doc_type==='專利' && p.patentResults?.full);
+  const sourcePapers = activePapersForAnalysis();
+  const products = sourcePapers.filter(p=>p.doc_type==='商用產品');
+  const analyzedPatents = sourcePapers.filter(p=>p.doc_type==='專利' && p.patentResults?.full);
   const allAnalyzed = [...products, ...analyzedPatents];
 
   let html = '';
@@ -1912,14 +1913,28 @@ function buildCommercial() {
   </div>`;
 
   // ═══ 3. 技術趨勢摘要 ═══
+  const summarizeTech = data => {
+    const entries = Object.entries(data)
+      .map(([k,v])=>[k, [...new Set(v)].length])
+      .sort((a,b)=>b[1]-a[1]);
+    return entries.length ? entries.slice(0,4).map(([k,n])=>`${k}（${n}）`).join(' > ') : '資料不足';
+  };
+  const diffSignals = [
+    primerTypes['BP共聚合（骨架型）'] ? 'BP共聚合' : '',
+    topcoatTypes['兩性離子(SBMA/MPC)'] ? '兩性離子(SBMA/MPC)' : '',
+    topcoatTypes['Chitosan抗菌'] ? 'Chitosan抗菌' : '',
+    primerTypes['PDA 自聚合'] ? 'PDA 自聚合' : '',
+    primerTypes['WPU 水性PU'] ? '水性PU' : ''
+  ].filter(Boolean);
+
   html += `<div style="margin-top:16px;padding:12px;background:var(--card);border-radius:8px;border:1px solid var(--border)">
     <div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:8px">📊 配方趨勢摘要</div>
     <div style="font-size:12px;line-height:1.8">
-      <strong>底塗主流：</strong>UV 光固化 primer（DSM polyether、Biocoat acrylic）> Silane 偶聯 > PDA 自聚合<br>
-      <strong>面塗主流：</strong>PVP 佔絕對多數 > PAA 第二 > 兩性離子(SBMA/MPC)是新趨勢<br>
-      <strong>固化主流：</strong>UV 光固化 > 熱固化 > 物理乾燥<br>
-      <strong>差異化方向：</strong>BP共聚合（Surmodics/Biocoat）、抗菌（SBMA/chitosan）、水性配方<br>
-      <strong>⚠ 注意：</strong>分析越多專利，矩陣越完整。目前基於 ${analyzedPatents.length} 篇已分析專利。
+      <strong>底塗主流：</strong>${summarizeTech(primerTypes)}<br>
+      <strong>面塗主流：</strong>${summarizeTech(topcoatTypes)}<br>
+      <strong>固化主流：</strong>${summarizeTech(cureTypes)}<br>
+      <strong>差異化方向：</strong>${diffSignals.length ? diffSignals.join('、') : '資料不足，需補更多商用產品或專利分析'}<br>
+      <strong>⚠ 注意：</strong>此摘要由目前文庫重新計算；目前基於 ${analyzedPatents.length} 篇已分析專利、${products.length} 筆商用產品。
     </div>
   </div>`;
 
@@ -1957,11 +1972,11 @@ function buildCommercial() {
 // ══════════════════════════════════════════════
 function buildCompare() {
   const groupBy = document.getElementById('compareGroupBy').value;
-  const dict = DB.meta.tag_dictionary || {};
+  const dict = getTagDictionaryWithObserved();
   const container = document.getElementById('compareResults');
 
   // 比較用所有文獻（不只已分析的），但標示哪些有分析
-  const allPapers = DB.papers;
+  const allPapers = activePapersForAnalysis();
 
   if(!allPapers.length) {
     container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">資料庫為空</div>';
@@ -2302,6 +2317,7 @@ function onDBLoaded() {
   buildFilters();
   filterPapers();
   renderCtx();
+  refreshActiveAnalysis();
 }
 
 function saveDB() {
@@ -2589,7 +2605,7 @@ function showAnalysisTab(subId, btn) {
   // 更新子分頁按鈕高亮
   document.querySelectorAll('.analysis-sub').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
-  else document.querySelectorAll('.analysis-sub').forEach(b=>{ if(b.textContent.includes(subId==='graph'?'關係圖':subId==='gap'?'缺口':subId==='compare'?'比較':subId==='commercial'?'商業':'AI'))b.classList.add('active'); });
+  else document.querySelectorAll('.analysis-sub').forEach(b=>{ if(b.textContent.includes(subId==='graph'?'關聯圖':subId==='gap'?'缺口':subId==='compare'?'比較':subId==='commercial'?'商業':'AI'))b.classList.add('active'); });
   // 觸發初始化
   if(subId==='graph') buildGraph();
   if(subId==='kgraph') initKGraph();
@@ -2603,7 +2619,45 @@ function saveSettings(){cfg.proxy=document.getElementById('cfgProxy').value.trim
 function exportDB(){const b=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`litdb_${new Date().toISOString().slice(0,10)}.json`;a.click();toast('已匯出','success')}
 function importDB(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(d.papers)DB=d;else if(Array.isArray(d)){DB.papers=d}saveDB();onDBLoaded();toast(`已匯入 ${DB.papers.length} 篇`,'success')}catch(err){toast('匯入失敗','error')}};r.readAsText(f)}
 
-function allTags(){const s=new Set();DB.papers.forEach(p=>(p.tags||[]).forEach(t=>s.add(t)));return [...s].sort()}
+function allTags(){const s=new Set();activePapersForAnalysis().forEach(p=>(p.tags||[]).forEach(t=>s.add(t)));return [...s].sort()}
+
+function activePapersForAnalysis() {
+  return (DB.papers || []).filter(p=>!p._deleted);
+}
+
+function getTagDictionaryWithObserved() {
+  const dict = DB.meta.tag_dictionary || {};
+  const merged = {};
+  Object.entries(dict).forEach(([cat,tags])=>merged[cat] = [...new Set(tags || [])]);
+  if(!merged.other) merged.other = [];
+
+  const known = new Set(Object.values(merged).flat());
+  allTags().forEach(tag=>{
+    if(!known.has(tag)) merged.other.push(tag);
+  });
+  merged.other = [...new Set(merged.other)].sort();
+  return merged;
+}
+
+function getUsedTagsByCategory(cat) {
+  const dict = getTagDictionaryWithObserved();
+  const used = new Set(allTags());
+  return (dict[cat] || []).filter(t=>used.has(t));
+}
+
+function getTagCategoryMap() {
+  const tagCat = {};
+  Object.entries(getTagDictionaryWithObserved()).forEach(([cat,tags])=>{
+    (tags || []).forEach(t=>{ tagCat[t] = cat; });
+  });
+  return tagCat;
+}
+
+function refreshActiveAnalysis() {
+  const analysisActive = document.getElementById('v-analysis')?.classList.contains('active');
+  if(!analysisActive) return;
+  setTimeout(()=>showAnalysisTab(currentAnalysisTab), 50);
+}
 
 // ══════════════════════════════════════════════
 // BROWSE: Filters
@@ -2627,7 +2681,7 @@ function buildOneHeatmap(wrapperId, rows, cols, rowLabel, colLabel) {
   const paperMap = {};
   rows.forEach(r=>{matrix[r]={};cols.forEach(c=>{matrix[r][c]=0;paperMap[r+'||'+c]=[]})});
 
-  DB.papers.forEach(p=>{
+  activePapersForAnalysis().forEach(p=>{
     const tags = p.tags||[];
     rows.forEach(r=>{ if(tags.includes(r)) cols.forEach(c=>{ if(tags.includes(c)){matrix[r][c]++;paperMap[r+'||'+c].push(p)} })});
   });
@@ -2651,7 +2705,7 @@ function buildOneHeatmap(wrapperId, rows, cols, rowLabel, colLabel) {
 function prefillChat(text){showView('chat',document.querySelectorAll('.tab')[3]);document.getElementById('chatInput').value=text;document.getElementById('chatInput').focus()}
 
 function showFuncGapDetail(r, g) {
-  const papers = DB.papers.filter(p=>(p.tags||[]).includes(r) && paperFunctionGoals(p).includes(g));
+  const papers = activePapersForAnalysis().filter(p=>(p.tags||[]).includes(r) && paperFunctionGoals(p).includes(g));
   const el = document.getElementById('gapDetail');
   if(!papers.length) {
     el.innerHTML = `<h4 style="color:var(--warn)">⚠ 缺口：${r} × ${g}</h4><p style="font-size:13px;color:var(--muted);margin-top:8px">資料庫中沒有同時涵蓋「${r}」基材/應用且具備「${g}」功能的文獻。這可能是值得開發或搜尋的方向。</p>
@@ -2668,7 +2722,7 @@ function buildFunctionHeatmap(wrapperId, rows, goals, rowLabel, colLabel) {
   const matrix = {};
   rows.forEach(r=>{matrix[r]={};goals.forEach(g=>matrix[r][g]=[])});
 
-  DB.papers.forEach(p=>{
+  activePapersForAnalysis().forEach(p=>{
     const tags = p.tags||[];
     const pg = paperFunctionGoals(p);
     rows.forEach(r=>{ if(tags.includes(r)) pg.forEach(g=>{ if(matrix[r][g]) matrix[r][g].push(p); })});
@@ -2691,12 +2745,12 @@ function buildFunctionHeatmap(wrapperId, rows, goals, rowLabel, colLabel) {
 }
 
 function buildHeatmaps() {
-  const dict = DB.meta.tag_dictionary || {};
-  const sub = dict.substrate||[];
-  const poly = dict.hydrophilic_polymer||[];
-  const cure = dict.cure_method||[];
-  const anchor = dict.anchor_primer||[];
-  const app = dict.application||[];
+  const sub = getUsedTagsByCategory('substrate');
+  const poly = getUsedTagsByCategory('hydrophilic_polymer');
+  const cure = getUsedTagsByCategory('cure_method');
+  const anchor = getUsedTagsByCategory('anchor_primer');
+  const app = [...getUsedTagsByCategory('application'), ...getUsedTagsByCategory('indication')]
+    .filter((v,i,a)=>a.indexOf(v)===i);
 
   buildOneHeatmap('heatmapWrap',  sub,    cure,   '基材','固化方式');
   buildOneHeatmap('heatmapWrap2', app,    poly,   '應用','親水高分子');
@@ -2712,7 +2766,7 @@ function buildHeatmaps() {
 }
 
 function showGapDetail(r, c) {
-  const tags = DB.papers.filter(p=>(p.tags||[]).includes(r)&&(p.tags||[]).includes(c));
+  const tags = activePapersForAnalysis().filter(p=>(p.tags||[]).includes(r)&&(p.tags||[]).includes(c));
   const el = document.getElementById('gapDetail');
   if(!tags.length) {
     el.innerHTML = `<h4 style="color:var(--warn)">⚠ 缺口：${r} × ${c}</h4><p style="font-size:13px;color:var(--muted);margin-top:8px">資料庫中沒有同時涵蓋「${r}」和「${c}」的文獻。這可能是值得搜尋的方向。</p>
@@ -5426,10 +5480,8 @@ let graphNodes = [];
 let graphEdges = [];
 
 function drawGraph(ctx, W, H, highlightId) {
-  const dict = DB.meta.tag_dictionary||{};
-  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9',market_trend:'#7f8c8d',doc_type:'#8a7e72',access:'#8a7e72'};
-  const tagCat = {};
-  Object.entries(dict).forEach(([cat,tags])=>tags.forEach(t=>{tagCat[t]=cat}));
+  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9',market_trend:'#7f8c8d',doc_type:'#8a7e72',access:'#8a7e72',other:'#8a7e72'};
+  const tagCat = getTagCategoryMap();
 
   const nodeMap = {};
   graphNodes.forEach(n=>nodeMap[n.id]=n);
@@ -5505,10 +5557,9 @@ function buildGraph() {
   ctx.scale(dpr, dpr);
   const W = canvas.offsetWidth, H = 550;
 
-  const dict = DB.meta.tag_dictionary||{};
-  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9',market_trend:'#7f8c8d',doc_type:'#8a7e72',access:'#8a7e72'};
-  const tagCat = {};
-  Object.entries(dict).forEach(([cat,tags])=>tags.forEach(t=>{tagCat[t]=cat}));
+  const dict = getTagDictionaryWithObserved();
+  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9',market_trend:'#7f8c8d',doc_type:'#8a7e72',access:'#8a7e72',other:'#8a7e72'};
+  const tagCat = getTagCategoryMap();
 
   // 建立有效標籤集（依篩選）
   let validTags = new Set();
@@ -5523,7 +5574,7 @@ function buildGraph() {
   const tagCount = {};
   const paperTagCount = {};
   // 使用篩選後的文獻（若有），否則全部
-  const graphPapers = (filtered && filtered.length) ? filtered : DB.papers;
+  const graphPapers = (filtered && filtered.length) ? filtered.filter(p=>!p._deleted) : activePapersForAnalysis();
 
   graphPapers.forEach(p => {
     const tags = (p.tags||[]).filter(t=>validTags.has(t));
@@ -5558,7 +5609,7 @@ function buildGraph() {
     nodes.push(n); nodeMap[pid]=n;
   });
 
-  const catLabels = {'':'全部標籤',substrate:'基材',hydrophilic_polymer:'親水高分子',cure_method:'固化方式',anchor_primer:'錨固劑',application:'應用',indication:'適應症',performance:'性能指標'};
+  const catLabels = {'':'全部標籤',substrate:'基材',hydrophilic_polymer:'親水高分子',cure_method:'固化方式',anchor_primer:'錨固劑',application:'應用',indication:'適應症',performance:'性能指標',other:'其他標籤'};
   document.getElementById('graphInfo').innerHTML = `<select onchange="document.getElementById('graphTagCat').value=this.value;buildGraph()" style="background:var(--accent);color:#fff;border:none;padding:3px 8px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer">${Object.entries(catLabels).map(([k,v])=>`<option value="${k}" ${k===catFilter?'selected':''}>${v}</option>`).join('')}</select> ${activePapers.size} 篇 · ${activeTags.size} 標籤 · ${filteredEdges.length} 連結${graphPapers.length!==DB.papers.length?' （篩選後）':''}`;
 
   // Force simulation
