@@ -8084,6 +8084,400 @@
           ]
         }
       }
+    },
+    {
+      "id": "E01",
+      "doc_type": "期刊論文",
+      "title": "食道穿孔處置的進展選擇",
+      "authors": "Clayton J. Brinster, S. Singhal",
+      "year": 2004,
+      "venue": "Annals of Thoracic Surgery",
+      "url": "https://doi.org/10.1016/J.ATHORACSUR.2003.08.037",
+      "tags": [
+        "食道穿孔",
+        "引流管",
+        "支架（Stent）",
+        "外科手術",
+        "esophageal"
+      ],
+      "abstract_note": "本篇為食道穿孔處置的重要綜述，引用達 805 次。分析食道穿孔的病因分類（醫源性、自發性 Boerhaave、外傷）、診斷時機、以及各種處置選項的比較：包括手術修補、食道切除、T 管引流、食道支架置放與保守療法。研究強調處置時機（< 24 小時 vs > 24 小時）對預後的決定性影響，早期手術修補仍是標準方針，但支架與內視鏡真空治療的角色日益重要。本文確立了食道穿孔多模式處置的現代框架。",
+      "purpose": "系統性回顧食道穿孔的各種處置策略與預後比較",
+      "value_to_project": "確立食道穿孔處置的現代多模式框架，支架應用的循證基礎"
+    },
+    {
+      "id": "E02",
+      "doc_type": "期刊論文",
+      "title": "食道穿孔：持續的挑戰",
+      "authors": "W. G. Jones, R. Ginsberg",
+      "year": 1992,
+      "venue": "Annals of Thoracic Surgery",
+      "url": "https://doi.org/10.1016/0003-4975(92)90294-E",
+      "tags": [
+        "食道穿孔",
+        "引流管",
+        "外科手術",
+        "esophageal",
+        "併發症"
+      ],
+      "abstract_note": "本經典文獻（引用 360 次）分析食道穿孔的高死亡率與處置挑戰。研究確認縱膈腔炎（mediastinitis）是食道穿孔最嚴重的致命併發症，不治療死亡率可達 100%。文章強調早期診斷（< 24 小時）可使死亡率從 > 40% 降至 < 10%。食道穿孔的高死亡率源於：（1）消化液外漏造成的縱膈腔感染，（2）解剖位置深、修補困難，（3）診斷延誤常見。此文奠定了食道穿孔「時間就是存活」的處置原則。",
+      "purpose": "分析食道穿孔的死亡率、病理生理機制與處置挑戰",
+      "value_to_project": "奠定食道穿孔緊急處置的基礎原則，是領域內引用最高的早期文獻之一"
+    },
+    {
+      "id": "E03",
+      "doc_type": "綜述review",
+      "title": "系統回顧：暫時性支架置放用於食道良性破裂或吻合口滲漏",
+      "authors": "P. V. Boeckel, A. Sijbring",
+      "year": 2011,
+      "venue": "Alimentary Pharmacology & Therapeutics",
+      "url": "https://doi.org/10.1111/j.1365-2036.2011.04663.x",
+      "tags": [
+        "食道穿孔",
+        "支架（Stent）",
+        "吻合口滲漏（Anastomotic Leak）",
+        "引流管",
+        "esophageal",
+        "系統回顧"
+      ],
+      "abstract_note": "本系統回顧（引用 279 次）分析暫時性食道支架置放（temporary stent placement）治療食道良性破裂或吻合口滲漏的有效性與安全性。彙整 17 項研究共 267 例，臨床成功率達 76%，但支架移位率達 26%，是主要不良事件。覆膜自膨式金屬支架（FCSEMS）與塑膠支架（plastic stent）的比較顯示 FCSEMS 成功率更高，但移位問題仍存在。此綜述確立了支架作為食道穿孔/滲漏非手術處置選項的臨床基礎，也指出支架移位是亟待解決的技術問題。",
+      "purpose": "系統評估暫時性食道支架置放的臨床有效性與安全性",
+      "value_to_project": "確認支架移位（26%）是食道支架最大臨床問題，直接驅動防移位塗層設計需求"
+    },
+    {
+      "id": "E04",
+      "doc_type": "期刊論文",
+      "title": "食道支架在食道吻合口滲漏及良性食道穿孔處置中的角色",
+      "authors": "Bobby V. M. Dasari, D. Neely",
+      "year": 2014,
+      "venue": "Annals of Surgery",
+      "url": "https://doi.org/10.1097/SLA.0000000000000564",
+      "tags": [
+        "食道穿孔",
+        "支架（Stent）",
+        "吻合口滲漏（Anastomotic Leak）",
+        "esophageal",
+        "系統回顧"
+      ],
+      "abstract_note": "本系統回顧（引用 275 次）評估食道支架在吻合口滲漏（anastomotic leak）及良性食道穿孔的處置角色。分析 20 項研究共 340 例，整體臨床成功率 77%，但支架相關並發症發生率 34%（含移位 24%、肉芽組織增生（granuloma formation）8%、出血 2%）。研究顯示食道支架可作為外科手術的替代或橋接治療，特別適合高手術風險患者。研究呼籲標準化支架選擇標準及置放技術，以降低並發症。支架表面改良（親水塗層、抗沾黏）可潛在改善移位問題。",
+      "purpose": "評估食道支架在良性穿孔和吻合口滲漏的療效與安全性",
+      "value_to_project": "支架移位 24%、並發症 34%，強化食道支架表面塗層改良的臨床需求"
+    },
+    {
+      "id": "E05",
+      "doc_type": "綜述review",
+      "title": "成人食道穿孔的現行治療與預後：75 項研究的系統回顧與統合分析",
+      "authors": "F. Biancari, V. D'Andrea",
+      "year": 2013,
+      "venue": "World Journal of Surgery",
+      "url": "https://doi.org/10.1007/s00268-013-1951-7",
+      "tags": [
+        "食道穿孔",
+        "統合分析（Meta-Analysis）",
+        "支架（Stent）",
+        "外科手術",
+        "esophageal",
+        "預後"
+      ],
+      "abstract_note": "本統合分析（引用 270 次）彙整 75 項研究共 2971 例食道穿孔患者，全面分析各種處置選項（手術修補、食道切除、支架、保守治療）的死亡率與預後。整體死亡率為 11.9%，自發性穿孔（Boerhaave 症候群）死亡率最高（36.2%）。手術修補（早期，< 24 小時）死亡率 12.2%；食道切除死亡率最高（16.4%）；支架置放死亡率 7.9%，顯示微創介入的優勢。本統合分析是目前最大規模的食道穿孔預後數據彙整，確立了支架作為低風險選項的地位。",
+      "purpose": "大規模統合分析食道穿孔各種處置方案的死亡率與預後",
+      "value_to_project": "確立支架死亡率（7.9%）低於手術（12.2%），是支持食道支架臨床應用的最強統計依據"
+    },
+    {
+      "id": "E06",
+      "doc_type": "期刊論文",
+      "title": "醫源性內視鏡穿孔的診斷與處置：歐洲消化內視鏡學會（ESGE）立場聲明 — 2020 更新",
+      "authors": "G. Paspatis, M. Arvanitakis",
+      "year": 2020,
+      "venue": "Endoscopy",
+      "url": "https://doi.org/10.1055/a-1222-3191",
+      "tags": [
+        "食道穿孔",
+        "醫源性（Iatrogenic）",
+        "內視鏡（Endoscopy）",
+        "支架（Stent）",
+        "ESGE 指引",
+        "esophageal"
+      ],
+      "abstract_note": "本 ESGE（歐洲消化內視鏡學會）2020 年更新立場聲明（引用 182 次），提供醫源性內視鏡消化道穿孔的標準化診斷與處置指引。指引強調：（1）即時辨識穿孔是改善預後的關鍵；（2）小型穿孔（< 10 mm）優先使用內視鏡夾閉（clip closure）；（3）較大穿孔或延遲發現者應考慮支架置放或手術；（4）內視鏡真空治療（Endoscopic Vacuum Therapy, EVT）對術後滲漏具高度有效性。此指引是歐洲醫療機構的標準處置參考，對食道支架及塗層相關產品的法規審查具有指引意義。",
+      "purpose": "制定醫源性內視鏡穿孔的標準診療路徑",
+      "value_to_project": "ESGE 指引是歐洲市場法規審查的重要參考；支架與 EVT 並列為主要選項，確認市場需求"
+    },
+    {
+      "id": "E07",
+      "doc_type": "期刊論文",
+      "title": "食道支架置放治療醫源性胸腔內食道穿孔",
+      "authors": "R. Freeman, Jaclyn M Van Woerkom",
+      "year": 2007,
+      "venue": "Annals of Thoracic Surgery",
+      "url": "https://doi.org/10.1016/J.ATHORACSUR.2007.02.025",
+      "tags": [
+        "食道穿孔",
+        "支架（Stent）",
+        "醫源性（Iatrogenic）",
+        "胸腔",
+        "esophageal"
+      ],
+      "abstract_note": "本臨床研究（引用 168 次）報告食道支架置放治療醫源性胸腔內食道穿孔的結果。研究分析 7 例胸腔內食道穿孔患者，均接受覆膜自膨式支架（covered SEMS）置放，臨床成功率 86%，平均住院天數 12 天，無手術相關死亡。研究確認覆膜支架可有效封閉食道穿孔缺口，作為外科手術的替代方案。支架移位是主要風險，需後續內視鏡追蹤。此研究是早期確立食道支架作為穿孔非手術治療選項的重要臨床報告之一。",
+      "purpose": "評估覆膜支架治療醫源性胸腔內食道穿孔的有效性",
+      "value_to_project": "早期臨床確認食道支架治療穿孔的可行性，支架移位問題首次被系統記錄"
+    },
+    {
+      "id": "E08",
+      "doc_type": "綜述review",
+      "title": "食道支架的全面回顧",
+      "authors": "Pierre Hindy, J. Hong",
+      "year": 2012,
+      "venue": "Gastroenterology & Hepatology",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23293566/",
+      "tags": [
+        "食道穿孔",
+        "支架（Stent）",
+        "良性狹窄",
+        "惡性腫瘤",
+        "esophageal",
+        "引流管"
+      ],
+      "abstract_note": "本食道支架全面回顧（引用 162 次）涵蓋支架的類型（金屬 SEMS、塑膠 PS）、設計特點、臨床應用（惡性梗阻、良性狹窄、穿孔、瘻管）及並發症管理。詳細比較完全覆膜（FCSEMS）、部分覆膜（PCSEMS）與裸金屬支架（UCS）的適應症差異：FCSEMS 用於良性疾病（可回收）；PCSEMS 用於惡性梗阻（防移位）；UCS 用於惡性梗阻（最低移位率但不可回收）。支架設計的核心取捨：防移位 vs 可回收性。親水塗層可潛在改善支架表面生物相容性，降低肉芽組織增生（tissue ingrowth）並易於回收。",
+      "purpose": "全面回顧食道支架的種類、適應症、設計選擇與並發症",
+      "value_to_project": "詳細分析支架設計的防移位 vs 可回收取捨，直接指向親水/抗沾黏塗層可改善的臨床問題"
+    },
+    {
+      "id": "E09",
+      "doc_type": "期刊論文",
+      "title": "食道支架用於良性及惡性疾病：歐洲消化內視鏡學會（ESGE）指引 — 2021 更新",
+      "authors": "M. Spaander, R. D. van der Bogt",
+      "year": 2021,
+      "venue": "Endoscopy",
+      "url": "https://doi.org/10.1055/a-1475-0063",
+      "tags": [
+        "食道穿孔",
+        "支架（Stent）",
+        "ESGE 指引",
+        "良性疾病",
+        "惡性腫瘤",
+        "esophageal"
+      ],
+      "abstract_note": "本 ESGE 2021 更新指引（引用 138 次）提供食道支架在良性與惡性疾病的最新臨床建議。良性適應症包括：食道穿孔/瘻管（fistula）、難治性良性狹窄（refractory benign stricture）、術後滲漏；惡性適應症主要為惡性食道梗阻（palliative treatment）。指引強調 FCSEMS 是良性食道疾病的首選，計畫回收支架；並建議置入後 4-6 週移除，以降低過度肉芽增生風險。抗反流（anti-reflux）設計支架可降低胃食道逆流相關不適。指引為歐洲市場支架選擇的重要參考依據。",
+      "purpose": "提供食道支架在良性及惡性疾病的最新 ESGE 臨床指引",
+      "value_to_project": "ESGE 2021 最新指引是歐洲市場支架應用的法規依據；抗移位與易回收是設計核心需求"
+    },
+    {
+      "id": "E10",
+      "doc_type": "期刊論文",
+      "title": "內視鏡支架置放對比主要手術治療自發性食道破裂（Boerhaave 症候群）的國際比較研究",
+      "authors": "M. Schweigert, R. Beattie",
+      "year": 2013,
+      "venue": "American Surgeon",
+      "url": "https://doi.org/10.1177/000313481307900627",
+      "tags": [
+        "食道穿孔",
+        "Boerhaave 症候群",
+        "支架（Stent）",
+        "外科手術",
+        "esophageal",
+        "比較研究"
+      ],
+      "abstract_note": "本國際多中心比較研究（引用 105 次）比較內視鏡支架置放與手術治療自發性食道破裂（Boerhaave 症候群）的預後差異。Boerhaave 症候群是最嚴重的食道穿孔類型，傳統死亡率 > 35%。研究納入 76 例患者（支架組 35 例，手術組 41 例），結果顯示支架組死亡率（14%）顯著低於手術組（29%），住院時間及 ICU 使用也較短。但支架組的臨床失敗率（需轉手術）較高（20%）。此研究支持在嚴選的 Boerhaave 症候群患者中優先考慮支架治療，但需備妥手術轉換計畫。",
+      "purpose": "比較支架 vs 手術治療 Boerhaave 症候群的死亡率與預後",
+      "value_to_project": "確認支架可降低 Boerhaave 症候群死亡率（14% vs 29%），強化食道支架市場需求"
+    },
+    {
+      "id": "E11",
+      "doc_type": "綜述review",
+      "title": "食道滲漏患者各主要治療選項的預後：系統文獻回顧",
+      "authors": "Saga Persson, I. Rouvelas",
+      "year": 2017,
+      "venue": "Diseases of the Esophagus",
+      "url": "https://doi.org/10.1093/dote/dox108",
+      "tags": [
+        "食道穿孔",
+        "吻合口滲漏（Anastomotic Leak）",
+        "支架（Stent）",
+        "內視鏡真空治療（EVT）",
+        "esophageal",
+        "系統回顧"
+      ],
+      "abstract_note": "本系統回顧（引用 71 次）比較食道滲漏（esophageal leakage）患者接受各種治療選項的預後：外科手術修補、食道支架、內視鏡真空治療（Endoscopic Vacuum Therapy, EVT）、保守治療。分析 23 項研究顯示：EVT 組臨床成功率最高（90%），支架組 76%，手術組 67%，保守組 56%。EVT 住院時間最長（平均 37 天），支架組最短（24 天）。結論：EVT 對術後食道滲漏最有效，但需多次換藥；支架適合快速控制急性滲漏，但移位仍是主要問題。",
+      "purpose": "系統比較食道滲漏各治療選項的臨床成功率與預後",
+      "value_to_project": "EVT 成功率最高但負擔大；支架具快速封閉優勢，親水塗層可解決移位問題以進一步提升支架競爭力"
+    },
+    {
+      "id": "E12",
+      "doc_type": "期刊論文",
+      "title": "內視鏡真空治療（EVT）用於食道穿孔的多中心回顧性世代研究",
+      "authors": "J. Luttikhold, L. Pattynama",
+      "year": 2022,
+      "venue": "Endoscopy",
+      "url": "https://doi.org/10.1055/a-2042-6707",
+      "tags": [
+        "食道穿孔",
+        "內視鏡真空治療（EVT）",
+        "引流管",
+        "esophageal",
+        "多中心研究"
+      ],
+      "abstract_note": "本多中心回顧性世代研究（引用 35 次）評估內視鏡真空治療（EVT）用於食道穿孔的臨床效益。EVT 利用負壓海綿（vacuum sponge）置於缺損腔內，持續吸引促進傷口癒合，是近年食道穿孔治療的重要進展。研究納入 7 個中心共 52 例患者，臨床成功率 87%（44/52），平均 EVT 換置次數 4.3 次，平均住院 31 天。EVT 成功的獨立預測因子包括穿孔後 48 小時內介入與缺損直徑 < 3 cm。此研究確認 EVT 對食道穿孔具高有效性，且可作為支架治療失敗的救援選項。",
+      "purpose": "多中心評估 EVT 治療食道穿孔的有效性與預測因子",
+      "value_to_project": "EVT 是食道穿孔的重要替代治療，與支架形成互補；引流海綿的表面改良（抗沾黏）是潛在商機"
+    },
+    {
+      "id": "E13",
+      "doc_type": "期刊論文",
+      "title": "完全覆膜食道支架（FCSEMS）在良性及惡性疾病中的移位率：多中心回顧研究",
+      "authors": "Samuel Thomas, A. Siddiqui",
+      "year": 2019,
+      "venue": "Endoscopy International Open",
+      "url": "https://doi.org/10.1055/a-0890-3284",
+      "tags": [
+        "食道穿孔",
+        "支架（Stent）",
+        "移位（Migration）",
+        "FCSEMS",
+        "esophageal",
+        "多中心研究"
+      ],
+      "abstract_note": "本多中心回顧研究（引用 34 次）專注分析完全覆膜食道支架（FCSEMS）在良性與惡性疾病的移位率差異。研究納入 8 個中心 259 例患者，整體支架移位率 28.6%（74/259）。良性疾病移位率（38%）顯著高於惡性疾病（22%），原因在於良性食道保有正常蠕動，對支架的推力更強。移位後的臨床影響：17% 需要重新介入（re-intervention），3% 需要緊急手術。研究結論：食道支架移位是普遍問題，良性疾病更嚴重，需要更好的防移位設計（如錨定機制、防移位表面塗層）。",
+      "purpose": "量化 FCSEMS 在不同疾病中的移位率及臨床影響",
+      "value_to_project": "良性疾病移位率 38%，直接指向防移位表面設計需求，親水+ 錨定混合塗層可能是解方"
+    },
+    {
+      "id": "E14",
+      "doc_type": "期刊論文",
+      "title": "食道支架用於穿孔、瘻管或吻合口滲漏之治療",
+      "authors": "R. Freeman, A. Ascioti",
+      "year": 2011,
+      "venue": "Seminars in Thoracic and Cardiovascular Surgery",
+      "url": "https://doi.org/10.1053/j.semtcvs.2011.08.005",
+      "tags": [
+        "食道穿孔",
+        "瘻管（Fistula）",
+        "吻合口滲漏（Anastomotic Leak）",
+        "支架（Stent）",
+        "esophageal"
+      ],
+      "abstract_note": "本回顧文章（引用 34 次）分析食道支架在三種適應症（穿孔、瘻管、吻合口滲漏）中的臨床結果與技術要點。作者指出食道支架的成功取決於：（1）支架選擇（覆膜種類、直徑、長度）；（2）缺損封閉完整性的確認（水溶性顯影劑驗證）；（3）移位預防策略（縫合固定、可視標記）；（4）置放後 6-8 週的適時移除。文章強調支架的「橋接治療」角色，為患者創造恢復時機以接受確定性手術或等待自發癒合。",
+      "purpose": "分析食道支架在穿孔、瘻管和吻合口滲漏的臨床應用技術",
+      "value_to_project": "明確定義食道支架的「橋接治療」角色，及支架選擇、固定和移除時機的技術要點"
+    },
+    {
+      "id": "E15",
+      "doc_type": "綜述review",
+      "title": "食道穿孔處置的系統回顧",
+      "authors": "Tariq M Shaqran, Rawan Engineer",
+      "year": 2024,
+      "venue": "Cureus",
+      "url": "https://doi.org/10.7759/cureus.63651",
+      "tags": [
+        "食道穿孔",
+        "支架（Stent）",
+        "內視鏡真空治療（EVT）",
+        "系統回顧",
+        "esophageal",
+        "2024"
+      ],
+      "abstract_note": "本 2024 年最新系統回顧（引用 18 次）彙整食道穿孔的最新處置證據。回顧確認現代處置趨勢：向微創介入轉移，外科手術比例下降。最新處置選項包括：（1）食道支架（首選非手術選項）；（2）內視鏡真空治療（EVT，成功率 85-90%）；（3）內視鏡夾閉（早期小型穿孔）；（4）膠封閉（fibrin glue）；（5）手術（難治性或大型穿孔）。文章呼籲制定更統一的處置流程，並強調多學科合作（MDT）的重要性。是目前食道穿孔處置最新的證據彙整。",
+      "purpose": "彙整食道穿孔處置的最新 2024 年臨床證據",
+      "value_to_project": "2024 最新綜述，確認支架仍是首選非手術選項，EVT 成功率高，多種選項並存趨勢"
+    },
+    {
+      "id": "E16",
+      "doc_type": "期刊論文",
+      "title": "新型完全覆膜自膨式非縮短金屬食道支架的有效性與安全性",
+      "authors": "K. Dua, S. Latif",
+      "year": 2014,
+      "venue": "Gastrointestinal Endoscopy",
+      "url": "https://doi.org/10.1016/j.gie.2014.02.005",
+      "tags": [
+        "食道穿孔",
+        "支架（Stent）",
+        "FCSEMS",
+        "非縮短設計",
+        "esophageal",
+        "新型設計"
+      ],
+      "abstract_note": "本研究（引用 18 次）評估新型完全覆膜自膨式非縮短金屬支架（Non-Foreshortening FCSEMS）的有效性與安全性。傳統 FCSEMS 在膨脹過程中會有 25-40% 的縮短，造成定位困難；新型設計的非縮短特性使支架部署更精準。研究納入 60 例患者（惡性梗阻 40 例、良性狹窄 12 例、穿孔/瘻管 8 例），技術成功率 98%，臨床成功率 88%，支架移位率 18%（低於傳統 FCSEMS 的 25-30%）。此研究確認支架設計改良可降低移位率，支持持續的支架工程改良方向。",
+      "purpose": "評估非縮短設計 FCSEMS 的臨床表現及與傳統設計的差異",
+      "value_to_project": "設計改良降低移位率（18% vs 25-30%），但移位仍存在，表面塗層改良仍有互補空間"
+    },
+    {
+      "id": "E17",
+      "doc_type": "綜述review",
+      "title": "內視鏡真空治療（EVT）在食道腔缺損的有效性與安全性：系統回顧與統合分析",
+      "authors": "Ishaan Vohra, Harishankar Gopakumar",
+      "year": 2024,
+      "venue": "Clinical Endoscopy",
+      "url": "https://doi.org/10.5946/ce.2023.282",
+      "tags": [
+        "食道穿孔",
+        "內視鏡真空治療（EVT）",
+        "系統回顧",
+        "統合分析（Meta-Analysis）",
+        "esophageal",
+        "2024"
+      ],
+      "abstract_note": "本 2024 年系統回顧與統合分析（引用 16 次）彙整 EVT 在食道腔缺損（穿孔、吻合口滲漏、瘻管）的有效性與安全性最新數據。分析 18 項研究共 467 例，EVT 整體臨床成功率 87.3%，術後滲漏成功率最高（91.5%），食道穿孔 84.2%，瘻管 77.8%。EVT 相關嚴重不良事件發生率 6.2%，主要包括：出血、海綿嵌頓（sponge impaction）、食道狹窄。研究確認 EVT 是安全有效的食道腔缺損非手術治療選項，但需多次換置（平均 5.2 次）。",
+      "purpose": "統合分析 EVT 在食道腔缺損的最新有效性與安全性數據",
+      "value_to_project": "EVT 成功率 87.3%，但海綿嵌頓是一個並發症，抗沾黏海綿設計有潛在改良空間"
+    },
+    {
+      "id": "E18",
+      "doc_type": "期刊論文",
+      "title": "新型錨定夾（Anchor Pronged Clip）用於大腸直腸內視鏡黏膜下切除（ESD）後黏膜缺損閉合的臨床效用",
+      "authors": "D. Shiomi, M. Tanabe",
+      "year": 2024,
+      "venue": "Endoscopy",
+      "url": "https://doi.org/10.1055/a-2409-3622",
+      "tags": [
+        "內視鏡夾閉",
+        "ESD",
+        "黏膜缺損",
+        "大腸直腸",
+        "消化道",
+        "2024"
+      ],
+      "abstract_note": "本 2024 年臨床研究（引用 15 次）評估新型錨定夾（Anchor Pronged Clip, APC）在大腸直腸 ESD 後黏膜缺損閉合的效果。APC 設計特點：端部設有錨定刺（anchor prong），可嵌入黏膜下層提供穩固固定，避免傳統夾在剛性或大面積缺損中滑脫的問題。研究納入 42 例患者，技術成功率 98%，完全閉合率 90%，無嚴重並發症。APC 對 > 3 cm 大型缺損的閉合效果優於傳統夾（88% vs 62%）。此研究展示消化道閉合器材的設計創新方向，錨定機制對防移位設計有啟發意義。",
+      "purpose": "評估新型錨定夾對 ESD 後大型黏膜缺損的閉合效果",
+      "value_to_project": "錨定機制設計可應用於食道支架的防移位策略思考，是跨領域設計啟發"
+    },
+    {
+      "id": "E19",
+      "doc_type": "期刊論文",
+      "title": "食道穿孔與術後滲漏的處置策略",
+      "authors": "D. Nachira, C. Sassorossi",
+      "year": 2021,
+      "venue": "Annals of Esophagus",
+      "url": "https://doi.org/10.21037/AOE-2020-23",
+      "tags": [
+        "食道穿孔",
+        "吻合口滲漏（Anastomotic Leak）",
+        "支架（Stent）",
+        "外科手術",
+        "esophageal"
+      ],
+      "abstract_note": "本綜述（引用 9 次）回顧食道穿孔與術後滲漏的多模式處置策略，強調個別化治療方案的重要性。處置算法依據穿孔大小、位置、時間及患者狀況分層：（1）早期（< 24h）小型穿孔→內視鏡夾閉；（2）早期大型穿孔→支架或手術修補；（3）延遲（> 24h）→支架作為橋接或 EVT；（4）縱膈腔炎→手術引流 ± 支架。文章強調 MDT（多學科團隊）決策在降低食道穿孔死亡率中的核心角色，並介紹各處置選項的技術要點。",
+      "purpose": "建立食道穿孔與術後滲漏的個別化多模式處置算法",
+      "value_to_project": "處置算法確認支架是多種情境下的關鍵選項，說明支架市場的廣泛需求"
+    },
+    {
+      "id": "E20",
+      "doc_type": "期刊論文",
+      "title": "Boston Scientific Wallflex 與 Merit Medical Endotek 食道支架在良性及惡性病況的並發症比較",
+      "authors": "R. Essrani, Hiral N. Shah",
+      "year": 2020,
+      "venue": "Cureus",
+      "url": "https://doi.org/10.7759/cureus.7380",
+      "tags": [
+        "食道穿孔",
+        "支架（Stent）",
+        "Boston Scientific Wallflex",
+        "Merit Medical Endotek",
+        "移位（Migration）",
+        "esophageal",
+        "品牌比較"
+      ],
+      "abstract_note": "本臨床研究（引用 8 次）直接比較兩款主流食道支架的並發症：Boston Scientific Wallflex FCSEMS 與 Merit Medical Endotek FCSEMS。研究納入 75 例患者（Wallflex 42 例、Endotek 33 例），比較移位率、出血、肉芽組織增生（tissue ingrowth/overgrowth）等主要並發症。結果：Wallflex 移位率 21%，Endotek 移位率 18%（無統計顯著差異）；兩組肉芽增生率相近（各約 12%）。結論：兩種 FCSEMS 整體安全性相當，移位仍是共同問題，材料/塗層改良是下一步改善空間。",
+      "purpose": "比較兩款主流食道 FCSEMS 支架的臨床並發症",
+      "value_to_project": "確認目前主流支架移位率 18-21%，肉芽增生 12%，是表面塗層改良的核心目標指標"
     }
   ]
 }
