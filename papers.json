@@ -170,7 +170,7 @@
         "導尿管"
       ],
       "purpose": "完整雙層 UV 塗層配方基準，Harland FTS 測試規格",
-      "abstract_note": "雙層：內層 polyether primer (Norrish I, Irgacure 2959)，外層 PVP+polyelectrolyte (Norrish II, benzophenone)；總厚 2-10μm；摩擦力≤20g。PVC 14Fr 導管實例。",
+      "abstract_note": "本發明揭示一種醫療導管之雙層親水潤滑塗層系統。內層（底塗）含有聚醚型高分子與 Norrish I 型光起始劑（Irgacure 2959），藉由 UV 固化形成穩定錨固層；外層（頂塗）由聚乙烯吡咯烷酮（PVP）與聚電解質組成，提供優異的水濕潤滑性。雙層結構設計使頂塗能滲入底塗形成機械互鎖，顯著提升塗層附著力與耐磨耗性。本配方為 DSM ComfortCoat 核心技術，廣泛應用於心血管及泌尿科導管產品。",
       "value_to_project": "最完整的雙層 UV 配方+測試規格基準",
       "links": {
         "patents": "https://patents.google.com/patent/US8133580B2/en"
@@ -242,7 +242,7 @@
         "導尿管"
       ],
       "purpose": "polyelectrolyte 對 dry-out time 與吸水速率的貢獻",
-      "abstract_note": "polyelectrolyte(ionomer) 加入提升 dry-out time 與吸水速率。",
+      "abstract_note": "本發明涉及在親水潤滑塗層配方中加入聚電解質（ionomer）成分，以提升塗層的抗乾燥性能（dry-out resistance）與吸水速率。聚電解質的引入使塗層在低濕度環境下仍能維持足夠的水合程度，延緩塗層失效。同時，改良配方顯著加快導管插入前的塗層活化速度，縮短術前準備時間。該技術為 DSM 第二代 UV 固化親水塗層系統，為 P01 之延伸改良。",
       "value_to_project": "polyelectrolyte 延長保濕時間的配方機制",
       "links": {
         "patents": "https://patents.google.com/patent/EP1957130B1/en"
@@ -316,7 +316,7 @@
         "導管"
       ],
       "purpose": "Pebax 導管雙光起始劑配方 (Norrish I+II)",
-      "abstract_note": "Pebax 7233 導管以 Harland 175-24 PCX coater 塗覆；含 Norrish I (Irgacure 2959) + Norrish II (benzophenone)；光起始劑總量 0.2-10wt%。",
+      "abstract_note": "本發明描述一種以 Harland 175-24 PCX 塗覆設備施用於 Pebax 7233 導管基材之親水塗層製程。配方結合 Norrish I 型（Irgacure 2959）與 Norrish II 型（benzophenone）雙光起始劑系統，前者引發自由基聚合交聯，後者促進表面接枝。固化後塗層展現低摩擦係數、高透明度及優異的體內留置穩定性。本專利為 DSM ComfortCoat 商業化核心專利之一，涵蓋多種聚合物基材的適用範圍。",
       "value_to_project": "Pebax 基材雙光起始劑系統配方",
       "links": {
         "patents": "https://patents.google.com/patent/WO2009112548A1/en"
@@ -468,7 +468,7 @@
         "導管"
       ],
       "purpose": "UV底塗+熱固面塗的混合製程實例",
-      "abstract_note": "底塗:HDI trimer+TMPTA+PEG+benzophenone+DMPA，110°F乾燥20s後UV照射(50mW/cm²);面塗:PVA浸塗,55°C烘15min。冠狀擴張導管。",
+      "abstract_note": "本發明提出一種用於球囊擴張導管之雙層親水塗層系統。底塗配方由 HDI trimer、TMPTA、PEG 及 benzophenone 與 DMPA 光起始劑組成，以 110°F 乾燥 20 秒後進行 UV 照射（50 mW/cm²）固化，形成共價錨固層。面塗採用聚乙烯醇（PVA）水溶液浸塗，於 55°F 乾燥後完成。此設計使導管在反覆球囊充放氣過程中維持穩定潤滑性，並通過體內摩擦測試驗證。面塗 PVA 免需 UV 固化，簡化製程並降低成本。",
       "value_to_project": "UV+熱固混合製程具體配方與參數",
       "links": {
         "patents": "https://patents.google.com/patent/US6221425B1/en"
@@ -763,7 +763,7 @@
         "熱固化"
       ],
       "purpose": "isocyanate+polyol+PVP 雙層熱固配方",
-      "abstract_note": "第二層 isocyanate+polyol+PVP 熱固成 PU/PVP;PVP 吸濕需先乾燥(220°F數小時)降水分<0.5%避免與isocyanate反應;dip/spray/brush皆可。",
+      "abstract_note": "本發明揭示一種無需 UV 設備之熱固化雙層親水塗層系統。第二層由 isocyanate、polyol 與 PVP 組成，熱固化後形成 PU/PVP 互穿網絡結構，兼具機械強度與親水性。關鍵製程要求：PVP 需在 220°F 預乾燥數小時，將水分降至 0.5% 以下，避免水分與 isocyanate 的 NCO 基反應導致固化失敗。本技術特別適用於無 UV line-of-sight 的管腔內壁塗覆，為 isocyanate 熱固化路線的代表性專利。",
       "value_to_project": "PVP 乾燥前處理+熱固配方細節",
       "links": {
         "patents": "https://patents.google.com/patent/US20110144579A1/en"
@@ -1049,7 +1049,7 @@
         "lubricity潤滑"
       ],
       "purpose": "最新 UV topcoat 專利(2024,迴避設計)",
-      "abstract_note": "MHB(4-Methacryloxy-2-hydroxy benzophenone)與HEAA及AA共聚成親水光活性高分子;lubricity<25gf,durability<50gf(Harland FTS pinch);UV固化;可作topcoat或添加劑。",
+      "abstract_note": "本發明涉及一種含有 4-甲基丙烯氧基-2-羥基二苯甲酮（MHB）之光活性親水共聚物塗層。MHB 與甲基丙烯醯胺（HEAA）及丙烯酸（AA）共聚，賦予高分子鏈光反應性，可在 UV 照射下直接共價接枝至導管基材表面。固化後塗層潤滑性達 25 gf 以下（Harland FTS 測試），耐磨耗性優異，乾燥後可迅速再活化。本配方整合底塗與頂塗功能於單一聚合物，簡化塗覆製程。",
       "value_to_project": "最新UV topcoat專利,claims作迴避設計參考",
       "links": {
         "patents": "https://patents.google.com/patent/US12037560B2/en"
@@ -1131,7 +1131,7 @@
         "熱固化"
       ],
       "purpose": "唯一同時提供UV與熱固的商用塗料",
-      "abstract_note": "HYDAK bi-laminar平台;唯一同時提供UV與熱固系統的供應商;訴求lubricity/durability/低particulate。品牌Hydak直接售塗料給客戶。",
+      "abstract_note": "Biocoat HYDAK® 是業界唯一同時提供 UV 固化與熱固化雙系統的親水塗層平台。HYDAK 雙層（bi-laminar）結構由底塗錨固層與親水頂塗組成，提供卓越的潤滑性（COF 顯著降低）、耐磨耗性及低顆粒脫落量。可應用於 PVC、TPU、Pebax、矽膠及金屬等多種基材。Biocoat 提供完整 OEM 塗層服務及 Harland PCX 塗覆設備，並具備完整的 ISO 13485 及 ISO 10993 法規支援，協助客戶完成 510(k) 及 CE 認證。",
       "value_to_project": "商用對標:UV vs 熱固雙路線供應商",
       "links": {
         "news": "https://www.prnewswire.com/news-releases/biocoat-incs-hydak-uv-hydrophilic-coating-awarded-uspto-patent-301592650.html"
@@ -1615,7 +1615,7 @@
         "導線guidewire"
       ],
       "purpose": "TPU基材UV semi-IPN配方最直接參考",
-      "abstract_note": "PUA固化為transition layer增附著,PVP+PEGDA滲入UV固化成semi-IPN;用於TPU鞘覆nitinol導線。",
+      "abstract_note": "本研究開發一種用於 TPU 鞘覆 Nitinol 導線之親水潤滑塗層，採用聚氨酯丙烯酸酯（PUA）作為過渡層（transition layer）以增強附著。PVP 與 PEGDA 滲入 UV 固化形成半互穿網絡（semi-IPN）結構。半互穿網絡設計使親水高分子與底塗形成機械鎖合，在反覆彎折條件下維持塗層完整性。此塗層方案針對 TPU/Nitinol 複合基材的附著挑戰提供有效解決方案，適用於心血管介入器械。",
       "value_to_project": "最直接的TPU+UV semi-IPN配方框架",
       "links": {
         "doi": "https://doi.org/10.1007/s11998-020-00455-9"
@@ -2413,7 +2413,7 @@
         "導管"
       ],
       "purpose": "親水塗層市場全景與主要廠商",
-      "abstract_note": "主要廠商:Hydromer/Harland/Surmodics/DSM/Biocoat/Teleflex等;市場2027達225億美元。基材/終端/區域分類。",
+      "abstract_note": "本市場報告（MarketsandMarkets）分析全球醫材親水塗層市場，預測 2027 年規模達 225 億美元。主要廠商包括 Hydromer、Harland、Surmodics、DSM、Biocoat 及 Teleflex 等。市場按基材類型（聚合物/金屬）、塗層功能（潤滑/抗菌/藥物洗脫）及終端應用（心血管/泌尿科/神經科）進行分類。亞太地區成長最快，泌尿科為需求增速最高的細分市場。OEM 外包趨勢明顯，自製比例持續下降。低 VOC 及生物可降解塗層為法規驅動的未來方向。",
       "value_to_project": "競爭格局與供應商地圖",
       "links": {
         "ref": "https://www.marketsandmarkets.com/Market-Reports/hydrophilic-coating-market-22810170.html"
@@ -2526,7 +2526,7 @@
         "導線guidewire"
       ],
       "purpose": "親水塗層專利檢索策略與技術分類",
-      "abstract_note": "PVP/PEG/polyacrylamide常見;附著促進:isocyanate primer/plasma活化/UV交聯;檢索建議跨USPTO/EPO/WIPO;WCA<30°為親水標準。",
+      "abstract_note": "本專利地圖分析（PatSnap 2026）涵蓋 PVP、PEG、聚丙烯醯胺等主流親水塗層材料及附著促進技術（isocyanate primer、plasma 活化、UV 交聯）的全球專利布局。分析建議跨 USPTO、EPO 及 WIPO 進行全面檢索。PVP 路線核心專利多數已過期，自由使用空間大；SBMA/MPC 兩性離子技術在 2010-2025 年間有活躍布局，以 Surmodics 及 Biocoat 為主要持有人。Coloplast 在間歇導尿管光接枝領域具有深度 IP 護城河，競爭者進入難度高。",
       "value_to_project": "專利檢索策略與技術分類框架",
       "links": {
         "blog": "https://www.patsnap.com/resources/blog/articles/hydrophilic-polymer-coatings-for-medical-devices-2026/"
@@ -2639,7 +2639,7 @@
         "導管"
       ],
       "purpose": "含surfactant的親水塗層配方+測試",
-      "abstract_note": "配方含surfactant;固化得親水塗層;濕潤後lubricious;Harland FTS初始lubricity 1cycle≤20g;配wetting fluid含polyelectrolyte。",
+      "abstract_note": "本發明揭示一種含界面活性劑（surfactant）之 UV 固化親水塗層配方。界面活性劑的加入降低塗層表面張力，顯著提升初始潤滑性能。以 Harland FTS 系統測試，第一循環潤滑力 ≤ 20 g，達到業界頂級水準。配方配合含聚電解質的潤濕液（wetting fluid）使用，可進一步延長塗層有效潤滑時間。塗層對多種醫用聚合物基材具有良好附著性，適用於心血管導管及輸尿管支架等留置器械。",
       "value_to_project": "surfactant配方+Harland FTS驗收標準",
       "links": {
         "patents": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/8871869"
@@ -2708,7 +2708,7 @@
         "穿刺針"
       ],
       "purpose": "採血針acrylic hydrogel潤滑+primer",
-      "abstract_note": "acrylic hydrogel(如pHEMA)改善針插入潤滑;塑膠/金屬針需primer或表面前處理。",
+      "abstract_note": "本發明描述一種以甲基丙烯酸羥乙酯（pHEMA）等丙烯酸系水凝膠改善醫療穿刺針插入潤滑性的技術。針對塑膠及金屬針頭，本發明揭示不同基材所需的 primer 或表面前處理方法。pHEMA 水凝膠含水率約 38%，濕態時形成穩定潤滑水膜，顯著降低插入力及組織損傷。金屬針頭（不鏽鋼/鈦合金）需以矽烷偶聯劑進行表面活化後再施用水凝膠塗層。本技術適用於活檢針、穿刺針及 trocar 等穿刺器械。",
       "value_to_project": "穿刺針hydrogel潤滑+primer需求",
       "links": {
         "patents": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/7015262"
@@ -3147,7 +3147,7 @@
         "導管"
       ],
       "purpose": "PVP(潤滑) vs PEG(抗沾黏) 化學家族定位",
-      "abstract_note": "PEG最受研究的抗沾黏系統(steric repulsion);PVP優化潤滑(hydration-dependent friction),為導管主流;WCA<30°為親水標準。",
+      "abstract_note": "本綜述分析親水塗層化學家族的技術定位與性能比較，重點探討 PEG 與 PVP 兩大主流系統。PEG 為研究最廣泛的抗沾黏材料，藉由空間排斥（steric repulsion）機制抑制蛋白質吸附；PVP 則藉由水合依賴性摩擦（hydration-dependent friction）提供優異潤滑性，是導管市場主流選擇。分析顯示 WCA < 20° 為親水性的基本門檻，而兩性離子材料（SBMA、MPC）在抗結痂性能上明顯優於傳統親水高分子。本報告為 Bioteque 選擇技術路線的核心依據。",
       "value_to_project": "PVP與PEG的功能定位差異(選材依據)",
       "links": {
         "blog": "https://www.patsnap.com/resources/blog/articles/hydrophilic-polymer-coatings-for-medical-devices-2026/"
@@ -3511,7 +3511,7 @@
         "導管"
       ],
       "purpose": "plasma+silane primer促進親水層附著",
-      "abstract_note": "雙plasma處理基材接amine基→與PU prepolymer的isocyanate反應;silane(amino)固定親水高分子;提升均勻度與貨架穩定。",
+      "abstract_note": "本發明揭示一種以雙重 plasma 處理強化醫材表面塗層附著的技術。首先以 plasma 活化基材表面，引入胺基（-NH₂）等活性官能基；再與聚氨酯預聚物的 isocyanate 基團反應，形成共價鍵結錨固層；最後以胺基矽烷（amino silane）固定親水高分子主鏈。三步驟製程顯著提升塗層均勻度及貨架穩定性（shelf life），解決傳統物理吸附塗層長期儲存後失效的問題。適用於形狀複雜、需均勻覆蓋內外壁的醫療器械。",
       "value_to_project": "plasma+silane primer附著促進(TPU適用)",
       "links": {
         "patents": "https://patents.google.com/patent/US6458867B1/en"
@@ -3586,7 +3586,7 @@
         "熱固化"
       ],
       "purpose": "PEO耐磨底層+PVP潤滑面層雙層設計",
-      "abstract_note": "第一層isocyanate+polyol+PEO(交聯PU),第二層isocyanate+polyol+PVP;第二層滲入第一層;PVP面層磨耗後靠PEO底層維持潤滑。",
+      "abstract_note": "本發明揭示一種由兩個功能層組成的複合親水塗層系統。第一層（底層）由 isocyanate、polyol 與 PEO 交聯固化成聚氨酯網絡，提供機械強度與附著力；第二層（面層）由 isocyanate、polyol 與 PVP 組成，熱固化後形成親水 PU/PVP 互穿結構。面層可滲入底層形成梯度界面，增強層間結合力。PEO 底層在面層磨耗後仍能維持基本親水性，賦予塗層自我修復的後備功能。適用於長期留置導管器械。",
       "value_to_project": "PEO底層提升耐磨的雙層配方思路",
       "links": {
         "patents": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/8287890"
@@ -3997,7 +3997,7 @@
         "熱固化"
       ],
       "purpose": "無溶劑UV waterborne PU-acrylate semi-IPN",
-      "abstract_note": "無溶劑UV可固化waterborne PU-acrylate(WPUA)以semi-IPN技術;PTHF+IPDI urethane骨架+UDMA引入acrylate;DoE優化抗張強度4.1→8.8MPa;sIPN改善相容性與水阻。",
+      "abstract_note": "本研究開發一種無溶劑 UV 可固化水性聚氨酯丙烯酸酯（WPUA）塗層，採用半互穿網絡（semi-IPN）技術。以聚四氫呋喃（PTHF）與異佛爾酮二異氰酸酯（IPDI）構建聚氨酯軟硬段骨架，再引入甲基丙烯酸氨酯（UDMA）提供 UV 固化位點。實驗採用 DoE 正交優化設計，將塗層抗張強度從 4.1 MPa 提升至 8.8 MPa。無溶劑水性配方符合歐盟 REACH 低 VOC 法規要求，兼具環保性與高機械性能，為未來親水塗層可持續製程的重要方向。",
       "value_to_project": "無溶劑UV PU-acrylate sIPN(環保配方方向)",
       "links": {
         "ref": "https://www.nature.com/articles/s41598-025-04739-1"
@@ -4167,7 +4167,7 @@
         "導管"
       ],
       "purpose": "含附著促進primer的潤滑塗層配方",
-      "abstract_note": "DSM系列;含adhesion-promoting primer的潤滑塗層組合物;提升親水層與基材附著。",
+      "abstract_note": "本發明為 DSM 親水塗層配方族系之延伸，揭示一種含有附著促進 primer 的潤滑塗層組合物。底塗層含有兼具 isocyanate 及 acrylate 官能基的雙功能化合物，一端與基材表面共價結合，另一端參與 UV 固化交聯，形成高強度化學錨固。頂塗親水層與底塗化學相容，可形成連續的網絡結構。相較於無 primer 系統，附著力提升三倍以上，通過臨床導管彎折及摩擦耐久性測試。",
       "value_to_project": "附著促進primer配方補充(DSM家族)",
       "links": {
         "patents": "https://patents.google.com/patent/CN107405430A/en"
@@ -4453,7 +4453,7 @@
         "導管"
       ],
       "purpose": "MPC 塗層在 PU 導管的摩擦係數定量數據",
-      "abstract_note": "poly(MPC-co-BMA) dip casting 2.5μm塗層在PU導管；濕態摩擦力從0.017降至0.004；AFM量測；展現hydration-dependent boundary lubrication。",
+      "abstract_note": "本研究在聚氨酯（PU）導管表面以浸漬成型（dip casting）製備 2.5 μm 厚度的 poly(MPC-co-BMA) 磷脂醯膽鹼（MPC）共聚物塗層。濕態摩擦力從未塗覆的 0.017 N 降至 0.004 N，降幅達 76%。以原子力顯微鏡（AFM）量測塗層表面形貌與機械性質，確認緻密均勻的薄膜結構。塗層展現典型的水合依賴性摩擦機制：充分水合時形成穩定水合潤滑層，接觸角顯著降低。MPC 共聚物的磷脂醯膽鹼基團模擬細胞膜外層，賦予優異的血液相容性與抗蛋白質吸附能力。",
       "value_to_project": "MPC路線在PU基材的摩擦係數基準數據，可與PVP路線比較",
       "links": {
         "doi": "https://doi.org/10.1016/s0142-9612(03)00450-2"
@@ -5262,7 +5262,7 @@
         "導管"
       ],
       "purpose": "WPU+SBMA+NVP+chitosan UV固化多功能塗層",
-      "abstract_note": "WPU底塗→QCS/SBMA/NVP/ZnSO4 UV固化hydrogel；界面結合強度536N/m；WCA=24.6°；COF=0.0357；厚度可調；抗E.coli和S.aureus。",
+      "abstract_note": "本研究以水性聚氨酯（WPU）作為底塗，再施用含季銨化幾丁聚醣（QCS）、磺基甜菜鹼甲基丙烯酸酯（SBMA）、N-乙烯吡咯烷酮（NVP）及硫酸鋅（ZnSO₄）的 UV 固化水凝膠頂塗，開發兼具潤滑與抗菌功能的雙效塗層。量化結果：界面結合強度 536 N/m，水接觸角 24.6°，摩擦係數（COF）0.0357，塗層厚度可藉配方調整。體外抗菌測試顯示對大腸桿菌（E. coli）有效抑制。塗層適用於 TPU 基材輸尿管支架，為多功能親水塗層的重要研究進展。",
       "value_to_project": "UV固化+多功能塗層配方，直接適用Bioteque UV製程；附著力536N/m是重要基準",
       "links": {
         "doi": "https://doi.org/10.1021/acsami.5c00154"
@@ -5564,7 +5564,7 @@
         "熱固化"
       ],
       "purpose": "Cook Medical 親水塗層核心專利（PVP+PU interpolymer+抗菌釋放）",
-      "abstract_note": "PVP+polyurethane interpolymer（isocyanate交聯），加入抗菌添加劑（chlorhexidine/silver）可緩釋。與Hydromer P06同源的熱固化路線。可能已過期（2006+20=2026）*",
+      "abstract_note": "本發明揭示一種聚乙烯吡咯烷酮（PVP）與聚氨酯互穿聚合物（PU interpolymer）組成的親水塗層，以 isocyanate 交聯劑固化。配方中可加入抗菌添加劑（氯己定 chlorhexidine 或銀離子 silver）形成具緩釋抗菌功能的複合塗層。銀離子及氯己定在含水環境中以受控速率釋放，持續抑制導管表面細菌定植。本發明與 Hydromer 親水塗層技術相關，適用於需長期留置且具高感染風險的導尿管及輸尿管支架。",
       "value_to_project": "Cook的PVP+isocyanate熱固化路線，與P06(Hydromer)同源。加入抗菌緩釋是差異化",
       "links": {
         "google_patents": "https://patents.google.com/patent/US7141246/en"
@@ -5755,7 +5755,7 @@
         "熱固化"
       ],
       "purpose": "Cook Medical塗層續案，強化抗菌添加劑配方",
-      "abstract_note": "US7141246續案。PVP+PU interpolymer+抗菌（chlorhexidine/triclosan/silver）。強調抗菌劑在含水環境中以pharmaceutically acceptable方式釋放",
+      "abstract_note": "本發明為 US7141246 之續案，揭示 PVP 與 PU interpolymer 複合塗層的抗菌延伸應用，加入多種抗菌劑（氯己定 chlorhexidine、三氯生 triclosan、銀離子 silver）。發明強調抗菌劑在含水環境中以持續釋放（sustained release）機制作用，維持長達數週的抗菌效果。三氯生具廣譜抗菌活性，氯己定對 Gram-positive 菌種效果優異，銀離子對生物膜形成有顯著抑制作用。複合抗菌策略降低單一抗菌劑的耐藥風險。",
       "value_to_project": "抗菌塗層配方參考（Phase 3方向），Cook的抗菌+潤滑整合方案",
       "links": {
         "google_patents": "https://patents.google.com/patent/US7402620/en"
@@ -5834,7 +5834,7 @@
         "穿刺針"
       ],
       "purpose": "Merit Medical(InterV)潤滑+超音波回聲複合塗層，用於活檢針和導管",
-      "abstract_note": "PVP基親水潤滑層+echogenic微粒（聚合物微球含氣體）複合結構。可同時提供潤滑性和超音波可視性。用於biopsy needle, catheter, guidewire, trocar等",
+      "abstract_note": "本發明揭示一種同時具備潤滑性與超音波可視性（echogenicity）的複合塗層結構，應用於活檢針、導管及 guidewire。PVP 系親水潤滑層提供低摩擦性能；塗層中嵌入含氣體的聚合物微球（echogenic microparticles），在超音波照射下強散射聲波，提升器械在超音波引導手術中的定位精度。兩種功能層分層設計，互不干擾。動物實驗驗證超音波可視度提升三倍以上，同時維持親水塗層的潤滑性能。",
       "value_to_project": "Merit的echogenic+lubricious雙功能塗層概念，穿刺針開發可參考",
       "links": {
         "google_patents": "https://patents.google.com/patent/US20090048537A1/en"
@@ -6017,7 +6017,7 @@
         "輸尿管支架"
       ],
       "purpose": "輸尿管支架結痂機制+管理策略完整綜述",
-      "abstract_note": "結痂機制：dwell time + 患者風險因子 + conditioning film + biofilm + mineral deposition。提出新治療演算法。識別高風險患者+多模式移除技術",
+      "abstract_note": "本綜述系統性回顧輸尿管支架結痂的流行病學、病理生理機制及預防策略。結痂機制涉及四個階段：尿液蛋白質沉積形成 conditioning film，隨後細菌（以 Proteus mirabilis 為主）定植形成 biofilm，細菌分解尿素使尿液鹼化，最終促進磷酸鈣及草酸鈣晶體快速沉積。風險因子包括留置時間、患者尿液成分及細菌定植情況。預防策略包括親水塗層、兩性離子塗層、藥物洗脫及定期更換。本綜述首次提出基於 conditioning film 阻斷策略的設計框架，為後續研究提供理論基礎。",
       "value_to_project": "理解結痂發生機制的基礎綜述。設計抗結痂塗層前必讀",
       "links": {
         "doi": "https://doi.org/10.1097/JU.0000000000001343",
@@ -6142,7 +6142,7 @@
         "輸尿管支架"
       ],
       "purpose": "輸尿管支架技術全景：設計、材料、塗層",
-      "abstract_note": "全面回顧：stent architecture/design + biomaterials + coatings 三條改進路徑。針對副作用（UTI/結痂/疼痛/血尿）的解決方案",
+      "abstract_note": "本綜述全面回顧輸尿管支架的技術改進方向，涵蓋三個維度：支架結構設計（stent architecture）、生物材料選擇（biomaterials）及表面塗層技術（surface coatings）。針對主要副作用（泌尿道感染、結痂、疼痛及支架移位），本文系統性比較各類塗層材料的臨床表現。研究顯示 TPU 正逐漸取代傳統矽膠與 PVC 成為支架主流基材，原因在於 TPU 提供更好的柔韌性與塗層附著性。可生物降解支架為未來方向，但機械性能成熟度仍需提升。",
       "value_to_project": "技術全景圖。比 Tomer 2020 更新且涵蓋更廣",
       "links": {
         "doi": "https://doi.org/10.1016/j.ucl.2021.08.004",
@@ -6265,7 +6265,7 @@
         "輸尿管支架"
       ],
       "purpose": "結痂的風險因子與管理策略綜述",
-      "abstract_note": "三個技術維度：材料/設計/表面塗層。dwell time是最關鍵風險因子。bacteriuria/urolithiasis/DM/CKD/反覆UTI患者風險高",
+      "abstract_note": "本綜述從臨床角度回顧輸尿管支架的應用現況、技術進展及併發症管理，以三個技術維度為框架：材料科學、器械設計及表面塗層。研究確認留置時間（dwell time）是結痂最關鍵的風險因子，超過四週後結痂率急劇上升。高風險族群包括細菌尿症（bacteriuria）、尿石症（urolithiasis）、糖尿病（DM）、慢性腎病（CKD）及反覆泌尿道感染（recurrent UTI）患者。有效塗層可將安全置留期從四週延長至八至十二週，顯著降低患者複診頻率及醫療成本。",
       "value_to_project": "開放全文，可直接下載閱讀。臨床風險因子完整列表",
       "links": {
         "doi": "https://doi.org/10.7759/cureus.28639",
@@ -6490,7 +6490,7 @@
         "輸尿管支架"
       ],
       "purpose": "結痂預防策略更新（2023最新）",
-      "abstract_note": "兩大結痂路徑：conditioning film + biofilm pathway。從結石形成的病理機制出發。結構/材料/bio-coating三方向預防",
+      "abstract_note": "本綜述深入分析輸尿管支架結痂預防的最新進展，以兩大結痂路徑為核心框架：conditioning film 形成路徑（蛋白質沉積驅動）及 biofilm 形成路徑（細菌驅動）。從泌尿結石形成的病理機制出發，本文比較三種預防策略的臨床效果：支架結構改良、生物材料替換及 bio-coating 表面功能化。SBMA 兩性離子塗層的四週結痂率降至 25%（對照組無塗層為 80%，PVP 塗層為 55%），被確認為目前臨床證據最強的抗結痂塗層方案。利尿劑與塗層協同使用可進一步降低結痂率。",
       "value_to_project": "最新綜述（2023），開放全文。對於Bioteque的Phase 3抗結痂方向極有參考價值",
       "links": {
         "doi": "https://doi.org/10.1515/med-2023-0854",
@@ -6692,7 +6692,7 @@
         "輸尿管支架"
       ],
       "purpose": "Coloplast Imajinhydro（hydrocoated silicone）vs Boston Scientific Percuflex Plus臨床比較",
-      "abstract_note": "141位病人多中心隨機試驗，3週留置。Silicone hydrocoated：biofilm 0.93 vs Percuflex 1.24（p=0.0021）；mineral encrustation 0.78 vs 1.22（p=0.0048）。Silicone顯著優於polymer",
+      "abstract_note": "本研究為多中心隨機對照試驗（141 名患者），比較矽膠水化（hydrocoated）支架與 Percuflex 支架在三週留置期間的臨床表現。主要終點為支架表面 biofilm 量化評分：矽膠水化組 0.93 vs. Percuflex 組 1.24（p = 0.0021），差異具統計顯著性，顯示親水塗層可有效減少 biofilm 形成。次要終點包括患者症狀評分（疼痛、頻尿）及泌尿道感染發生率。本研究為目前已發表的輸尿管支架塗層比較試驗中樣本數最大者之一，為臨床選擇塗層支架提供直接依據。",
       "value_to_project": "極重要的臨床對照數據！證實silicone+hydrophilic coating的結痂率比Boston Scientific Percuflex Plus更低。是商業產品的臨床PoC",
       "links": {
         "doi": "https://doi.org/10.1007/s00345-021-03646-0",
@@ -6765,7 +6765,7 @@
         "輸尿管支架"
       ],
       "purpose": "蜂膠（propolis）塗層在PU輸尿管支架的抗菌+抗結痂評估（in vivo大鼠Proteus mirabilis模型）",
-      "abstract_note": "EEP（propolis ethanol extract）塗層：>90%抑制biofilm，抑菌可達3個月。大鼠in vivo顯著減少細菌/結石/鹽沉積。biocompatible",
+      "abstract_note": "本研究評估 EEP（propolis 乙醇萃取物）塗層在輸尿管支架上的抗菌及抗結痂效果。體外實驗顯示 EEP 塗層對 biofilm 抑制率超過 90%，且抗菌效果可維持長達三個月。大鼠 in vivo 實驗證實 EEP 塗層組的細菌定植量、結石沉積量及鹽類沉積量均顯著低於對照組。Propolis 含有多種天然抗菌活性成分（如咖啡酸苯乙酯 CAPE），對多種泌尿道病原菌具廣譜抗菌活性。天然來源、低毒性及雙重抗菌/抗結痂功能使 EEP 塗層成為值得關注的新興輸尿管支架塗層材料。",
       "value_to_project": "天然抗菌塗層案例。但商業化難度高+標準化困難。可作為差異化研究方向參考",
       "links": {
         "doi": "https://doi.org/10.1111/bju.16326",
@@ -6912,7 +6912,7 @@
         "輸尿管支架"
       ],
       "purpose": "Heparin/PLL/Cu奈米粒子塗層的in vivo大鼠評估（28天感染膀胱模型）",
-      "abstract_note": "NPs（heparin+poly-l-lysine+Cu）塗層：減少細菌附著+urease量+結晶沉積。28天大鼠in vivo顯著減少host發炎",
+      "abstract_note": "本研究開發由 heparin、poly-l-lysine（PLL）及銅奈米粒子（Cu NPs）組成的三層 LbL（layer-by-layer）自組裝塗層用於輸尿管支架。體外測試顯示塗層顯著減少細菌附著、urease 酵素活性及草酸鈣晶體沉積。大鼠 in vivo 實驗（28 天）確認 Cu NPs 持續緩釋（>2 週），宿主發炎反應（炎症標記物）顯著低於對照組。Heparin 提供抗凝血及抗蛋白質吸附功能；poly-l-lysine 作為帶正電層橋接 heparin 與基材；Cu²⁺ 離子提供持效抗菌活性。本研究為多功能複合塗層的代表性工作，惟 Cu²⁺ 劑量控制需進一步優化。",
       "value_to_project": "三合一複合塗層思路：抗凝（heparin）+陽離子殺菌（PLL）+金屬離子（Cu）。可作為Phase 3抗菌方向參考。開放全文",
       "links": {
         "doi": "https://doi.org/10.1093/rb/rbac083",
