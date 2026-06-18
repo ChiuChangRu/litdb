@@ -2424,107 +2424,36 @@ function paperFunctionGoals(p) {
 
 // ── 缺口分析 Heatmaps ─────────────────────────
 function buildHeatmaps() {
-  const papers = (filtered && filtered.length) ? filtered : DB.papers.filter(p=>!p._deleted);
   const dict = DB.meta.tag_dictionary || {};
+  const sub = dict.substrate||[];
+  const poly = dict.hydrophilic_polymer||[];
+  const cure = dict.cure_method||[];
+  const anchor = dict.anchor_primer||[];
+  const app = dict.application||[];
 
-  const catColors = {
-    substrate:'#e86c3a', hydrophilic_polymer:'#2d8c5a', cure_method:'#d4a030',
-    anchor_primer:'#c0392b', application:'#8e44ad', performance:'#2980b9', indication:'#16a085'
-  };
+  buildOneHeatmap('heatmapWrap',  sub,    cure,   '基材','固化方式');
+  buildOneHeatmap('heatmapWrap2', app,    poly,   '應用','親水高分子');
+  buildOneHeatmap('heatmapWrap3', sub,    poly,   '基材','親水高分子');
+  buildOneHeatmap('heatmapWrap4', app,    cure,   '應用','固化方式');
+  buildOneHeatmap('heatmapWrap5', sub,    anchor, '基材','錨固劑');
+  buildOneHeatmap('heatmapWrap6', poly,   anchor, '親水高分子','錨固劑');
 
-  function makeHeatmap(wrapId, catA, catB, title) {
-    const wrap = document.getElementById(wrapId);
-    if(!wrap) return;
-    const tagsA = dict[catA] || [];
-    const tagsB = dict[catB] || [];
-
-    // 只保留有文獻的標籤
-    const activeA = tagsA.filter(t => papers.some(p=>(p.tags||[]).includes(t)));
-    const activeB = tagsB.filter(t => papers.some(p=>(p.tags||[]).includes(t)));
-    if(!activeA.length || !activeB.length) { wrap.innerHTML='<div style="color:var(--muted);font-size:12px;padding:8px">資料不足</div>'; return; }
-
-    // 交叉計數
-    const matrix = {};
-    papers.forEach(p => {
-      const pA = (p.tags||[]).filter(t=>activeA.includes(t));
-      const pB = (p.tags||[]).filter(t=>activeB.includes(t));
-      pA.forEach(a => pB.forEach(b => { matrix[`${a}||${b}`] = (matrix[`${a}||${b}`]||0)+1; }));
-    });
-    const maxVal = Math.max(...Object.values(matrix), 1);
-
-    const colA = catColors[catA]||'#888', colB = catColors[catB]||'#888';
-    let html = `<div style="overflow-x:auto"><table style="border-collapse:collapse;font-size:11px;min-width:300px">
-      <thead><tr><th style="padding:4px 8px;background:var(--card);border:1px solid var(--border);font-size:10px;min-width:80px">${catA}<br>↓ / ${catB} →</th>
-      ${activeB.map(b=>`<th style="padding:4px 6px;border:1px solid var(--border);background:${colB}22;color:${colB};max-width:80px;font-size:10px;writing-mode:vertical-lr;transform:rotate(180deg);height:60px;text-align:left">${b}</th>`).join('')}
-      </tr></thead><tbody>
-      ${activeA.map(a=>`<tr>
-        <td style="padding:4px 8px;border:1px solid var(--border);background:${colA}22;color:${colA};font-size:10px;white-space:nowrap">${a}</td>
-        ${activeB.map(b=>{
-          const cnt = matrix[`${a}||${b}`]||0;
-          const pct = cnt/maxVal;
-          const bg = cnt===0?'var(--bg)':`rgba(${catA==='application'?'142,68,173':'46,140,90'},${0.1+pct*0.8})`;
-          return `<td style="padding:4px 6px;border:1px solid var(--border);text-align:center;background:${bg};cursor:${cnt?'pointer':'default'};color:${cnt?'#fff':'var(--muted)'};font-weight:${cnt?'700':'400'}" title="${a} × ${b}: ${cnt}篇" onclick="showGapDetail('${a}','${b}')">${cnt||''}</td>`;
-        }).join('')}
-      </tr>`).join('')}
-      </tbody></table></div>
-      <div style="font-size:10px;color:var(--muted);margin-top:4px">深色=文獻數多，點擊格子查看文獻列表</div>`;
-    wrap.innerHTML = html;
-  }
-
-  makeHeatmap('heatmapWrap',  'substrate',         'cure_method',        '基材 × 固化方式');
-  makeHeatmap('heatmapWrap2', 'application',        'hydrophilic_polymer','應用 × 親水高分子');
-  makeHeatmap('heatmapWrap3', 'substrate',          'hydrophilic_polymer','基材 × 親水高分子');
-  makeHeatmap('heatmapWrap4', 'application',        'cure_method',        '應用 × 固化方式');
-  makeHeatmap('heatmapWrap5', 'substrate',          'anchor_primer',      '基材 × 錨固劑/底塗');
-  makeHeatmap('heatmapWrap6', 'hydrophilic_polymer','anchor_primer',      '親水高分子 × 錨固劑/底塗');
-
-  // ⑦ 應用 × 功能目標（用 paperFunctionGoals）
-  const wrap7 = document.getElementById('heatmapWrap7');
-  if(wrap7) {
-    const goals = ['潤滑','抗結痂','抗菌','附著'];
-    const apps = (dict['application']||[]).filter(t=>papers.some(p=>(p.tags||[]).includes(t)));
-    const matrix7 = {};
-    papers.forEach(p => {
-      const pApps = (p.tags||[]).filter(t=>apps.includes(t));
-      const pGoals = paperFunctionGoals(p);
-      pApps.forEach(a => pGoals.forEach(g => { matrix7[`${a}||${g}`]=(matrix7[`${a}||${g}`]||0)+1; }));
-    });
-    const max7 = Math.max(...Object.values(matrix7),1);
-    wrap7.innerHTML = `<div style="overflow-x:auto"><table style="border-collapse:collapse;font-size:11px">
-      <thead><tr><th style="padding:4px 8px;border:1px solid var(--border);background:var(--card);font-size:10px">應用 / 功能目標</th>
-      ${goals.map(g=>`<th style="padding:4px 10px;border:1px solid var(--border);background:#2980b922;color:#2980b9;font-size:10px">${g}</th>`).join('')}</tr></thead>
-      <tbody>${apps.map(a=>`<tr><td style="padding:4px 8px;border:1px solid var(--border);background:#8e44ad22;color:#8e44ad;font-size:10px">${a}</td>
-        ${goals.map(g=>{const cnt=matrix7[`${a}||${g}`]||0;const bg=cnt?`rgba(41,128,185,${0.1+cnt/max7*0.8})`:'var(--bg)';return `<td style="padding:4px 8px;border:1px solid var(--border);text-align:center;background:${bg};color:${cnt?'#fff':'var(--muted)'};font-weight:700;cursor:${cnt?'pointer':'default'}" onclick="showGapDetail('${a}','${g}')">${cnt||''}</td>`;}).join('')}
-      </tr>`).join('')}</tbody></table></div>
-      <div style="font-size:10px;color:var(--muted);margin-top:4px">找出哪些應用缺乏抗結痂或抗菌方案 — 空白格 = 開發機會</div>`;
-  }
+  // ⑦⑧ 功能目標維度（抗結痂/抗菌/潤滑/附著）— 用關鍵字動態判定
+  const funcGoals = ['潤滑','抗結痂','抗菌','附著'];
+  buildFunctionHeatmap('heatmapWrap7', app, funcGoals, '應用','功能目標');
+  buildFunctionHeatmap('heatmapWrap8', sub, funcGoals, '基材','功能目標');
 }
 
-function showGapDetail(catA, catB) {
-  const papers_pool = (filtered && filtered.length) ? filtered : DB.papers.filter(p=>!p._deleted);
-  const goals = ['潤滑','抗結痂','抗菌','附著'];
-  let matches;
-  if(goals.includes(catB)) {
-    matches = papers_pool.filter(p=>(p.tags||[]).includes(catA) && paperFunctionGoals(p).includes(catB));
-  } else {
-    matches = papers_pool.filter(p=>(p.tags||[]).includes(catA) && (p.tags||[]).includes(catB));
-  }
+function showGapDetail(r, c) {
+  const tags = DB.papers.filter(p=>(p.tags||[]).includes(r)&&(p.tags||[]).includes(c));
   const el = document.getElementById('gapDetail');
-  if(!el) return;
-  el.style.display = 'block';
-  el.scrollIntoView({behavior:'smooth', block:'nearest'});
-  if(!matches.length) {
-    el.innerHTML = `<div style="color:var(--muted);text-align:center;padding:16px">⬜ <b>${catA} × ${catB}</b>：無文獻 — 潛在開發缺口</div>`;
-    return;
+  if(!tags.length) {
+    el.innerHTML = `<h4 style="color:var(--warn)">⚠ 缺口：${r} × ${c}</h4><p style="font-size:13px;color:var(--muted);margin-top:8px">資料庫中沒有同時涵蓋「${r}」和「${c}」的文獻。這可能是值得搜尋的方向。</p>
+    <button class="btn btn-p" style="margin-top:8px" onclick="prefillChat('我的文獻資料庫中 ${r} 和 ${c} 的交集是缺口，請建議可能的搜尋關鍵字和研究方向')">🤖 問 AI 建議</button>`;
+  } else {
+    el.innerHTML = `<h4 style="color:var(--accent2)">${r} × ${c}：${tags.length} 篇</h4><div style="margin-top:8px">${tags.map(p=>`<div style="padding:4px 0;font-size:13px"><span class="tag tag-gray">${p.id}</span> ${p.title}</div>`).join('')}</div>`;
   }
-  el.innerHTML = `
-    <div style="font-size:12px;font-weight:700;color:var(--accent2);margin-bottom:8px">${catA} × ${catB}：${matches.length} 篇</div>
-    ${matches.map(p=>`
-      <div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:11px;cursor:pointer" onclick="goToPaper('${p.id}')">
-        <span style="color:var(--accent);font-weight:700">[${p.id}]</span>
-        <span style="margin-left:4px">${p.title?.slice(0,60)||''}${(p.title?.length||0)>60?'…':''}</span>
-      </div>`).join('')}
-  `;
+  el.classList.add('show');
 }
 
 
@@ -5195,28 +5124,48 @@ function buildGraph() {
   const tagCat = {};
   Object.entries(dict).forEach(([cat,tags])=>tags.forEach(t=>{tagCat[t]=cat}));
 
+  // 建立有效標籤集（依篩選）
   let validTags = new Set();
-  if(catFilter) { (dict[catFilter]||[]).forEach(t=>validTags.add(t)); }
-  else { Object.values(dict).flat().forEach(t=>validTags.add(t)); }
+  if(catFilter) {
+    (dict[catFilter]||[]).forEach(t=>validTags.add(t));
+  } else {
+    Object.values(dict).flat().forEach(t=>validTags.add(t));
+  }
 
-  const edges = [], tagCount = {}, paperTagCount = {};
+  // 建立 Paper ↔ Tag 邊
+  const edges = [];
+  const tagCount = {};
+  const paperTagCount = {};
+  // 使用篩選後的文獻（若有），否則全部
   const graphPapers = (filtered && filtered.length) ? filtered : DB.papers;
 
   graphPapers.forEach(p => {
     const tags = (p.tags||[]).filter(t=>validTags.has(t));
     paperTagCount[p.id] = tags.length;
-    tags.forEach(t => { tagCount[t] = (tagCount[t]||0) + 1; edges.push({paper: p.id, tag: t}); });
+    tags.forEach(t => {
+      tagCount[t] = (tagCount[t]||0) + 1;
+      edges.push({paper: p.id, tag: t});
+    });
   });
 
+  // 過濾：標籤至少出現 threshold 次
   const activeTags = new Set(Object.entries(tagCount).filter(([,c])=>c>=threshold).map(([t])=>t));
   const filteredEdges = edges.filter(e=>activeTags.has(e.tag));
+
+  // 涉及的 papers
   const activePapers = new Set(filteredEdges.map(e=>e.paper));
 
-  const nodes = [], nodeMap = {};
+  // 建立節點
+  const nodes = [];
+  const nodeMap = {};
+
+  // Tag 節點
   [...activeTags].forEach(t => {
     const n = {id:t, type:'tag', cat:tagCat[t]||'', count:tagCount[t], x:W*0.3+Math.random()*W*0.4, y:Math.random()*H, vx:0, vy:0, highlight:false};
     nodes.push(n); nodeMap[t]=n;
   });
+
+  // Paper 節點
   [...activePapers].forEach(pid => {
     const p = graphPapers.find(x=>x.id===pid);
     const n = {id:pid, type:'paper', docType:p?.doc_type||'', count:paperTagCount[pid]||1, x:Math.random()*W, y:Math.random()*H, vx:0, vy:0, highlight:false, title:(p?.title||'').slice(0,30)};
@@ -5226,7 +5175,7 @@ function buildGraph() {
   const catLabels = {'':'全部標籤',substrate:'基材',hydrophilic_polymer:'親水高分子',cure_method:'固化方式',anchor_primer:'錨固劑',application:'應用',indication:'適應症',performance:'性能指標'};
   document.getElementById('graphInfo').innerHTML = `<select onchange="document.getElementById('graphTagCat').value=this.value;buildGraph()" style="background:var(--accent);color:#fff;border:none;padding:3px 8px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer">${Object.entries(catLabels).map(([k,v])=>`<option value="${k}" ${k===catFilter?'selected':''}>${v}</option>`).join('')}</select> ${activePapers.size} 篇 · ${activeTags.size} 標籤 · ${filteredEdges.length} 連結${graphPapers.length!==DB.papers.length?' （篩選後）':''}`;
 
-  // Force simulation（靜態，跑完再畫）
+  // Force simulation
   for(let iter=0;iter<300;iter++){
     for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++){
       let dx=nodes[j].x-nodes[i].x, dy=nodes[j].y-nodes[i].y;
@@ -5249,89 +5198,144 @@ function buildGraph() {
       n.x+=n.vx*0.25; n.y+=n.vy*0.25;
       n.vx*=0.82; n.vy*=0.82;
       n.x=Math.max(50,Math.min(W-50,n.x));
-      n.y=Math.max(50,Math.min(H-50,n.y));
+      n.y=Math.max(30,Math.min(H-30,n.y));
     });
   }
 
-  // 繪製
-  ctx.clearRect(0,0,W,H);
-  // 邊
-  filteredEdges.forEach(e=>{
-    const a=nodeMap[e.paper],b=nodeMap[e.tag];if(!a||!b)return;
-    ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
-    ctx.strokeStyle='rgba(180,174,165,0.4)'; ctx.lineWidth=0.8; ctx.stroke();
-  });
-  // 節點
-  nodes.forEach(n=>{
-    const col = n.type==='tag' ? (catColors[n.cat]||'#888') : '#8a7e72';
-    const r = n.type==='tag' ? Math.min(8+n.count*2,22) : 7;
-    ctx.beginPath();
-    if(n.type==='tag'){ ctx.arc(n.x,n.y,r,0,Math.PI*2); }
-    else { ctx.rect(n.x-6,n.y-6,12,12); }
-    ctx.fillStyle = col; ctx.fill();
-    ctx.strokeStyle='#fff'; ctx.lineWidth=1.2; ctx.stroke();
-    // 標籤文字
-    const label = n.type==='tag' ? (n.id.length>12?n.id.slice(0,11)+'…':n.id) : n.id;
-    ctx.fillStyle='#fff'; ctx.font=`bold ${n.type==='tag'?7:6}px sans-serif`;
-    ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillText(label,n.x,n.y);
-  });
+  graphNodes = nodes;
+  graphEdges = filteredEdges;
+  drawGraph(ctx, W, H, null);
 
-  // 圖例
-  const leg = document.getElementById('graphLegend');
-  if(leg){
-    const usedCats = [...new Set([...activeTags].map(t=>tagCat[t]).filter(Boolean))];
-    leg.innerHTML = usedCats.map(c=>`<span style="display:inline-flex;align-items:center;gap:3px;font-size:10px;margin-right:8px"><span style="width:8px;height:8px;border-radius:50%;background:${catColors[c]||'#888'};display:inline-block"></span>${c}</span>`).join('') +
-      '<span style="font-size:10px;display:inline-flex;align-items:center;gap:3px"><span style="width:8px;height:8px;background:#888;display:inline-block"></span>文獻</span>';
-  }
-
-  // 存供 click 使用
-  canvas._nodes = nodes;
-  canvas._nodeMap = nodeMap;
-  canvas._graphPapers = graphPapers;
+  // Legend
+  const legend = document.getElementById('graphLegend');
+  legend.innerHTML = `<span>◼ 文獻（方形）</span>` +
+    Object.entries(catColors).filter(([cat])=>!catFilter||cat===catFilter).map(([cat,col])=>
+      `<span><span class="legend-dot" style="background:${col}"></span>${cat}</span>`
+    ).join('');
 }
 
 function onGraphClick(event) {
   const canvas = document.getElementById('graphCanvas');
-  if(!canvas._nodes) return;
   const rect = canvas.getBoundingClientRect();
-  const dpr = window.devicePixelRatio||1;
-  const mx = (event.clientX - rect.left);
-  const my = (event.clientY - rect.top);
-  let hit = null;
-  for(const n of canvas._nodes){
-    const r = n.type==='tag' ? Math.min(8+n.count*2,22) : 8;
-    const dx=n.x-mx, dy=n.y-my;
-    if(Math.sqrt(dx*dx+dy*dy) <= r){ hit=n; break; }
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+
+  // 找最近的節點
+  let closest = null, minDist = 30;
+  graphNodes.forEach(n=>{
+    const dx=n.x-x, dy=n.y-y;
+    const dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist<minDist){minDist=dist;closest=n}
+  });
+
+  const ctx = canvas.getContext('2d');
+  const W = canvas.offsetWidth, H = 550;
+
+  if(!closest){
+    drawGraph(ctx,W,H,null);
+    document.getElementById('graphDetailContent').innerHTML = '<div style="text-align:center;padding:30px 10px;color:var(--muted)">← 點擊泡泡圖中的節點<br>查看文獻內容或標籤關聯</div>';
+    return;
   }
-  if(!hit){ document.getElementById('graphDetailContent').innerHTML='<div style="text-align:center;padding:30px 10px;color:var(--muted)">← 點擊泡泡圖中的節點<br>查看文獻內容或標籤關聯</div>'; return; }
 
-  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9'};
-  const dc = document.getElementById('graphDetailContent');
-  const dict = DB.meta.tag_dictionary||{};
+  drawGraph(ctx,W,H,closest.id);
 
-  if(hit.type==='tag'){
-    const papers = canvas._graphPapers.filter(p=>(p.tags||[]).includes(hit.id));
-    const cat = Object.entries(dict).find(([,tags])=>tags.includes(hit.id))?.[0]||'';
-    dc.innerHTML = `
-      <div style="background:${catColors[cat]||'#888'}22;border-left:3px solid ${catColors[cat]||'#888'};padding:8px 10px;border-radius:0 6px 6px 0;margin-bottom:10px">
-        <div style="font-weight:700;color:${catColors[cat]||'#888'}">${hit.id}</div>
-        <div style="font-size:10px;color:var(--muted)">${cat} · ${papers.length} 篇文獻</div>
-      </div>
-      ${papers.map(p=>`<div style="padding:4px 0;border-bottom:1px solid var(--border);cursor:pointer;font-size:11px" onclick="goToPaper('${p.id}')">
-        <span style="color:var(--accent);font-weight:700">[${p.id}]</span> ${p.title?.slice(0,50)||''}
-      </div>`).join('')}`;
+  // 右側面板顯示詳情
+  const content = document.getElementById('graphDetailContent');
+
+  if(closest.type==='tag') {
+    // 標籤節點：列出所有連結的文獻 + 關聯分析
+    const connected = [];
+    graphEdges.forEach(e=>{
+      if(e.tag===closest.id) connected.push(e.paper);
+    });
+
+    // 分析這些文獻的其他共同標籤
+    const tagFreq = {};
+    connected.forEach(pid=>{
+      const p=DB.papers.find(x=>x.id===pid);
+      if(!p) return;
+      (p.tags||[]).forEach(t=>{
+        if(t!==closest.id) tagFreq[t] = (tagFreq[t]||0) + 1;
+      });
+    });
+    const sortedTags = Object.entries(tagFreq).sort((a,b)=>b[1]-a[1]);
+    const primaryTags = sortedTags.filter(([,c])=>c>=connected.length*0.5);
+    const secondaryTags = sortedTags.filter(([,c])=>c>=connected.length*0.25 && c<connected.length*0.5);
+    const minorTags = sortedTags.filter(([,c])=>c>=2 && c<connected.length*0.25).slice(0,8);
+
+    const tagBadge = (tag,count,bg) => `<span style="display:inline-block;background:${bg};padding:2px 8px;border-radius:4px;margin:2px;font-size:10px"><strong>${tag}</strong> <span style="opacity:0.6">${count}/${connected.length}</span></span>`;
+
+    const relationHtml = (primaryTags.length||secondaryTags.length) ? `
+      <div style="margin:10px 0;padding:10px;background:var(--card);border-radius:6px">
+        <div style="font-size:11px;font-weight:600;margin-bottom:6px">🔗 關聯標籤分析</div>
+        ${primaryTags.length?`<div style="margin-bottom:6px"><span style="font-size:10px;color:var(--accent);font-weight:600">🔴 主要關聯（>50% 共有）</span><br>${primaryTags.map(([t,c])=>tagBadge(t,c,'#fff0e6')).join('')}</div>`:''}
+        ${secondaryTags.length?`<div style="margin-bottom:6px"><span style="font-size:10px;color:var(--accent2);font-weight:600">🟡 次要關聯（25-50%）</span><br>${secondaryTags.map(([t,c])=>tagBadge(t,c,'#eaf5ef')).join('')}</div>`:''}
+        ${minorTags.length?`<div><span style="font-size:10px;color:var(--muted)">⚪ 少數關聯</span><br>${minorTags.map(([t,c])=>tagBadge(t,c,'var(--bg)')).join('')}</div>`:''}
+      </div>` : '';
+
+    const paperCards = connected.map(pid=>{
+      const p=DB.papers.find(x=>x.id===pid);
+      if(!p) return '';
+      const org = extractOrg(p);
+      const hasA = p.patentResults && Object.keys(p.patentResults).length>0;
+      const r = p.patentResults?.full||{};
+      return `<div style="padding:8px;margin-bottom:6px;background:var(--card);border-radius:6px;border-left:3px solid ${hasA?'#2d8c5a':'var(--border)'}; cursor:pointer" onclick="showView('browse',document.querySelectorAll('.tabs > .tab')[1]);setTimeout(()=>{filtered=DB.papers;renderPapers();showDetail(DB.papers.findIndex(x=>x.id==='${pid}'))},100)">
+        <div style="font-weight:600;color:var(--accent);font-size:11px">[${pid}] ${p.doc_type} ${hasA?'✅':''}</div>
+        <div style="font-size:11px;margin-top:2px">${p.title.slice(0,50)}${p.title.length>50?'...':''}</div>
+        ${org?`<span style="background:#fff0e6;color:#b85c2a;padding:1px 4px;border-radius:3px;font-size:9px">${org}</span>`:''}
+        ${r.summary?`<div style="font-size:10px;color:var(--accent2);margin-top:3px">💡 ${r.summary.slice(0,60)}...</div>`:''}
+      </div>`;
+    }).filter(Boolean).join('');
+
+    content.innerHTML = `
+      <div style="font-size:14px;font-weight:700;color:var(--accent);margin-bottom:8px">🏷 ${closest.id}</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px">${connected.length} 篇文獻使用此標籤</div>
+      ${relationHtml}
+      ${paperCards}`;
   } else {
-    const p = canvas._graphPapers.find(x=>x.id===hit.id);
-    if(!p){ dc.innerHTML='找不到文獻'; return; }
-    dc.innerHTML = `
-      <div style="font-weight:700;color:var(--accent);margin-bottom:4px">[${p.id}] ${p.doc_type}</div>
-      <div style="font-size:11px;color:var(--text);margin-bottom:8px;line-height:1.5">${p.title||''}</div>
-      <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px">
-        ${(p.tags||[]).map(t=>{const cat=Object.entries(dict).find(([,tags])=>tags.includes(t))?.[0]||'';return `<span style="background:${catColors[cat]||'#888'}22;color:${catColors[cat]||'#888'};font-size:10px;padding:1px 6px;border-radius:4px">${t}</span>`;}).join('')}
+    // 文獻節點：顯示完整內容
+    const p = DB.papers.find(x=>x.id===closest.id);
+    if(!p) return;
+    const org = extractOrg(p);
+    const mainAuthor = extractMainAuthor(p);
+    const hasA = p.patentResults && Object.keys(p.patentResults).length>0;
+    const r = p.patentResults?.full||{};
+    const ex = r.examples?.[0]||{};
+    const tags = (p.tags||[]).map(t=>`<span class="tag tag-gray" style="font-size:10px">${t}</span>`).join(' ');
+    const patBadge = getPatentBadge(p);
+
+    let analysisHtml = '';
+    if(hasA) {
+      analysisHtml = `
+        ${r.summary?`<div style="padding:6px 8px;background:var(--card);border-radius:4px;margin-bottom:6px;font-weight:600;font-size:11px">💡 ${r.summary}</div>`:''}
+        ${ex.formulation?.primer?`<div style="font-size:11px"><strong>底塗：</strong>${ex.formulation.primer}</div>`:''}
+        ${ex.formulation?.topcoat?`<div style="font-size:11px"><strong>面塗：</strong>${ex.formulation.topcoat}</div>`:''}
+        ${ex.process?.curing?`<div style="font-size:11px"><strong>固化：</strong>${ex.process.curing}</div>`:''}
+        <div style="display:flex;gap:12px;margin-top:6px;font-size:11px">
+          ${ex.results?.friction?`<div><strong>COF</strong><br><span style="color:var(--accent2);font-weight:700">${ex.results.friction}</span></div>`:''}
+          ${ex.results?.adhesion?`<div><strong>附著</strong><br><span style="color:var(--accent2);font-weight:700">${ex.results.adhesion}</span></div>`:''}
+          ${ex.results?.wca?`<div><strong>WCA</strong><br><span style="color:var(--accent2);font-weight:700">${ex.results.wca}</span></div>`:''}
+        </div>
+        ${r.actionable_insights?`<div style="margin-top:8px;font-size:11px"><strong style="color:var(--accent2)">✅ 可借鏡</strong><br>${r.actionable_insights.map((x,i)=>(i+1)+'. '+x).join('<br>')}</div>`:''}
+        ${r.bioteque_relevance?`<div style="margin-top:6px;font-size:11px"><strong style="color:var(--accent)">🏭 建議</strong><br>${r.bioteque_relevance}</div>`:''}`;
+    }
+
+    content.innerHTML = `
+      <div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap;align-items:center">
+        <span class="tag ${p.doc_type==='專利'?'tag-orange':p.doc_type==='商用產品'?'tag-green':'tag-blue'}" style="font-size:10px">${p.doc_type}</span>
+        <span style="font-weight:700;color:var(--accent)">${p.id}</span>
+        ${p.year?`<span style="font-size:10px;color:var(--muted)">${p.year}</span>`:''}
+        ${patBadge}
       </div>
-      ${p.abstract_note?`<div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:8px">${p.abstract_note.slice(0,200)}…</div>`:''}
-      <button class="btn btn-s" onclick="goToPaper('${p.id}')" style="width:100%;font-size:11px">📄 查看完整分析</button>`;
+      <div style="font-size:13px;font-weight:600;margin-bottom:6px">${p.title}</div>
+      <div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap">
+        ${mainAuthor?`<span style="background:#eaf5ef;color:#1a7040;padding:1px 6px;border-radius:3px;font-size:10px">${mainAuthor}</span>`:''}
+        ${org?`<span style="background:#fff0e6;color:#b85c2a;padding:1px 6px;border-radius:3px;font-size:10px">${org}</span>`:''}
+      </div>
+      ${p.abstract_note?`<div style="font-size:11px;color:var(--muted);margin-bottom:8px;padding:6px 8px;background:var(--card);border-radius:4px">${p.abstract_note.slice(0,200)}${p.abstract_note.length>200?'...':''}</div>`:''}
+      ${analysisHtml}
+      <div style="margin-top:8px">${tags}</div>
+      <button class="btn btn-s" style="width:100%;margin-top:10px" onclick="showView('browse',document.querySelectorAll('.tabs > .tab')[1]);setTimeout(()=>{filtered=DB.papers;renderPapers();showDetail(DB.papers.findIndex(x=>x.id==='${p.id}'))},100)">↗ 跳到文庫查看完整資料</button>`;
   }
 }
 </script>
