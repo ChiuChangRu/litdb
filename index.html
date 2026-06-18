@@ -2749,88 +2749,149 @@ const ROUTE_DEFS = [
 
 let expandedRoute = null;
 
+// Phase 分組定義
+const PHASE_DEFS = [
+  {
+    id: 'phase1',
+    num: '1',
+    label: 'Primer / 表面改值',
+    en: 'Surface Modification',
+    color: '#d4a030',
+    bg: '#fff8e6',
+    border: '#f0c040',
+    timeframe: '0–6 個月',
+    goal: '建立化學錨固層，Cross-cut 附著 Grade 0–1',
+    problem: '現行 PVP 物理乾燥無附著力（Grade 3–4），反覆摩擦即脫落',
+    routes: ['R_PDA','R_PLASMA','R_ISO'],
+  },
+  {
+    id: 'phase2',
+    num: '2',
+    label: 'UV 光固化耐磨系統',
+    en: 'UV Photocuring — Replace Physical Drying',
+    color: '#2980b9',
+    bg: '#eaf4fb',
+    border: '#85c1e9',
+    timeframe: '6–12 個月',
+    goal: '取代物理乾燥，建立 UV 交聯網絡，50次往返 COF ≤ 0.10',
+    problem: '物理乾燥 PVP 無交聯：UV 光氧化裂解（R3）、吸水膨脹、顆粒脫落（R7）',
+    routes: ['R_UV1','R_UVBP'],
+  },
+  {
+    id: 'phase3',
+    num: '3',
+    label: '功能性強化',
+    en: 'Functional Enhancement — Antimicrobial & Anti-encrustation',
+    color: '#2d8c5a',
+    bg: '#eaf5ef',
+    border: '#82d4a8',
+    timeframe: '12–24 個月',
+    goal: '4 週結痂率 < 30%，殺菌率 > 99%（vs 無塗層 80% 結痂率）',
+    problem: 'PVP 延遲結痂但無法阻斷：conditioning film → biofilm → 晶體成核（U01）',
+    routes: ['R_ZW','R_MPC','R_NAT','R_LBL'],
+  },
+];
+
 function renderRoutes() {
   if(!DB.papers) return;
   const papers = DB.papers.filter(p=>!p._deleted);
   document.getElementById('rte_total').textContent = papers.length;
 
-  const maxCount = Math.max(...ROUTE_DEFS.map(r => countRoutePapers(r, papers)));
+  const maxCount = Math.max(...ROUTE_DEFS.map(r=>countRoutePapers(r,papers)));
 
-  document.getElementById('routeList').innerHTML = ROUTE_DEFS.map((r,idx) => {
-    const cnt = countRoutePapers(r, papers);
-    const barW = Math.round(cnt / maxCount * 100);
-    const isOpen = expandedRoute === r.id;
+  document.getElementById('routeList').innerHTML = PHASE_DEFS.map(phase => {
+    const phaseRoutes = ROUTE_DEFS.filter(r=>phase.routes.includes(r.id));
+    const phaseTotal = phaseRoutes.reduce((s,r)=>s+countRoutePapers(r,papers),0);
 
-    // 路線卡片
     return `
-    <div id="route_${r.id}" style="margin-bottom:10px;border-radius:10px;overflow:hidden;border:1px solid var(--border);box-shadow:${isOpen?'0 2px 12px rgba(0,0,0,0.08)':'none'}">
+    <div style="margin-bottom:24px;border-radius:12px;overflow:hidden;border:2px solid ${phase.border}">
 
-      <!-- 摺疊列 -->
-      <div onclick="toggleRoute('${r.id}')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;background:var(--card);transition:background .15s" onmouseover="this.style.background='var(--surface)'" onmouseout="this.style.background='var(--card)'">
-        <div style="width:4px;height:44px;background:${r.color};border-radius:2px;flex-shrink:0"></div>
-        <div style="flex:1;min-width:0">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
-            <span style="font-size:14px;font-weight:700;color:var(--text)">${r.label}</span>
-            <span style="font-size:11px;padding:2px 8px;border-radius:10px;background:${r.riskColor}22;color:${r.riskColor};font-weight:600;flex-shrink:0">${r.risk}風險</span>
-            <span style="font-size:11px;color:var(--muted);flex-shrink:0">${r.phase}</span>
+      <!-- Phase 標頭 -->
+      <div style="background:${phase.bg};padding:14px 18px;border-bottom:1px solid ${phase.border}">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <div style="width:32px;height:32px;border-radius:50%;background:${phase.color};color:#fff;font-size:16px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">${phase.num}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15px;font-weight:800;color:${phase.color}">${phase.label}</div>
+            <div style="font-size:11px;color:var(--muted)">${phase.en}</div>
           </div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <div style="flex:1;height:6px;background:#e5e2dc;border-radius:3px;overflow:hidden">
-              <div style="height:100%;background:${r.color};width:${barW}%;border-radius:3px;opacity:0.8"></div>
-            </div>
-            <span style="font-size:12px;font-weight:700;color:${r.color};min-width:50px;text-align:right">${cnt} 篇</span>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:11px;color:var(--muted)">時程</div>
+            <div style="font-size:12px;font-weight:700;color:${phase.color}">${phase.timeframe}</div>
           </div>
         </div>
-        <span style="font-size:16px;color:var(--muted);flex-shrink:0;transform:rotate(${isOpen?90:0}deg);transition:transform .2s"
-          >›</span>
+        <!-- 目標 / 問題 -->
+        <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="background:rgba(255,255,255,0.7);border-radius:6px;padding:7px 10px">
+            <div style="font-size:10px;font-weight:700;color:${phase.color};margin-bottom:2px">🎯 目標</div>
+            <div style="font-size:11px;color:var(--text);line-height:1.5">${phase.goal}</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.7);border-radius:6px;padding:7px 10px">
+            <div style="font-size:10px;font-weight:700;color:#c0392b;margin-bottom:2px">⚠️ 現況問題</div>
+            <div style="font-size:11px;color:var(--text);line-height:1.5">${phase.problem}</div>
+          </div>
+        </div>
       </div>
 
-      <!-- 展開內容 -->
-      ${isOpen ? `
-      <div style="background:var(--surface);border-top:1px solid var(--border);padding:16px 20px">
-        <p style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:14px">${r.summary}</p>
+      <!-- 路線列表 -->
+      <div style="background:var(--surface);padding:8px 10px;display:flex;flex-direction:column;gap:6px">
+        ${phaseRoutes.map(r=>{
+          const cnt = countRoutePapers(r,papers);
+          const barW = Math.round(cnt/maxCount*100);
+          const isOpen = expandedRoute === r.id;
+          return `
+          <div id="route_${r.id}" style="border-radius:8px;overflow:hidden;border:1px solid var(--border);background:var(--card)">
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
-
-          <!-- 核心材料 -->
-          <div>
-            <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:6px">⚗️ 核心材料</div>
-            <div style="display:flex;flex-wrap:wrap;gap:4px">
-              ${r.materials.map(m=>`<span style="background:#eaf5ef;color:#1a6040;padding:2px 8px;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer" onclick="goToLibraryFilter('${m}')">${m}</span>`).join('')}
+            <!-- 路線列 -->
+            <div onclick="toggleRoute('${r.id}')" style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer" onmouseover="this.style.background='var(--surface)'" onmouseout="this.style.background=''">
+              <div style="width:3px;height:36px;background:${r.color};border-radius:2px;flex-shrink:0"></div>
+              <div style="flex:1;min-width:0">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap">
+                  <span style="font-size:13px;font-weight:700;color:var(--text)">${r.label}</span>
+                  <span style="font-size:10px;padding:1px 7px;border-radius:8px;background:${r.riskColor}22;color:${r.riskColor};font-weight:600;white-space:nowrap">${r.risk}風險</span>
+                  <span style="font-size:10px;color:var(--muted);white-space:nowrap">${r.phase}</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px">
+                  <div style="flex:1;height:4px;background:#e5e2dc;border-radius:2px;overflow:hidden">
+                    <div style="height:100%;background:${r.color};width:${barW}%;border-radius:2px;opacity:0.75"></div>
+                  </div>
+                  <span style="font-size:11px;font-weight:700;color:${r.color};min-width:40px;text-align:right">${cnt} 篇</span>
+                </div>
+              </div>
+              <span style="font-size:14px;color:var(--muted);flex-shrink:0;transition:transform .2s;transform:rotate(${isOpen?90:0}deg)">›</span>
             </div>
-          </div>
 
-          <!-- 代表專利 -->
-          <div>
-            <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:6px">📄 代表專利</div>
-            ${r.patents.map(p=>{
-              const pid = p.match(/^(P\d+|L\d+)/)?.[1];
-              return `<div style="font-size:12px;color:var(--text);margin-bottom:3px;cursor:${pid?'pointer':'default'}" onclick="${pid?`goToPaper('${pid}')`:''}">
-                ${pid?`<span style="color:var(--accent);font-weight:600">${pid}</span> `:''}${p.replace(/^(P\d+|L\d+)\s*/,'')}</div>`;
-            }).join('')}
-          </div>
-
-          <!-- 性能基準 -->
-          <div>
-            <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:6px">📊 性能基準</div>
-            ${Object.entries(r.perf).map(([k,v])=>`
-              <div style="display:flex;gap:6px;margin-bottom:3px;font-size:12px">
-                <span style="color:var(--muted);min-width:55px;flex-shrink:0">${k}</span>
-                <span style="color:var(--text);font-weight:600">${v}</span>
-              </div>`).join('')}
-          </div>
-
-          <!-- 操作按鈕 -->
-          <div style="display:flex;flex-direction:column;gap:6px;justify-content:flex-end">
-            <button class="btn btn-s" onclick="goToLibraryFilter('${r.materials[0]}')" style="font-size:12px;text-align:left">
-              📚 查看相關文獻 (${cnt} 篇)
-            </button>
-            <button class="btn btn-s" onclick="goToCompare()" style="font-size:12px;text-align:left">
-              📊 跳到比較分析
-            </button>
-          </div>
-        </div>
-      </div>` : ''}
+            <!-- 展開內容 -->
+            ${isOpen ? `
+            <div style="background:var(--surface);border-top:1px solid var(--border);padding:14px 16px">
+              <p style="font-size:12px;color:var(--text);line-height:1.7;margin-bottom:12px">${r.summary}</p>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+                <div>
+                  <div style="font-size:10px;font-weight:700;color:var(--accent2);margin-bottom:5px">⚗️ 核心材料</div>
+                  <div style="display:flex;flex-wrap:wrap;gap:3px">
+                    ${r.materials.map(m=>`<span style="background:#eaf5ef;color:#1a6040;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600;cursor:pointer" onclick="goToLibraryFilter('${m}')">${m}</span>`).join('')}
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size:10px;font-weight:700;color:var(--accent2);margin-bottom:5px">📄 代表專利</div>
+                  ${r.patents.map(p=>{const pid=p.match(/^(P\d+|L\d+)/)?.[1];return `<div style="font-size:11px;margin-bottom:2px;cursor:${pid?'pointer':'default'}" onclick="${pid?`goToPaper('${pid}')`:''}"><span style="color:var(--accent);font-weight:600">${pid||''}</span> ${p.replace(/^(P\d+|L\d+)\s*/,'')}</div>`;}).join('')}
+                </div>
+                <div>
+                  <div style="font-size:10px;font-weight:700;color:var(--accent2);margin-bottom:5px">📊 性能基準</div>
+                  ${Object.entries(r.perf).map(([k,v])=>`<div style="display:flex;gap:5px;margin-bottom:2px;font-size:11px"><span style="color:var(--muted);min-width:50px;flex-shrink:0">${k}</span><span style="color:var(--text);font-weight:600">${v}</span></div>`).join('')}
+                </div>
+                <div style="display:flex;flex-direction:column;gap:5px;justify-content:flex-end">
+                  <button class="btn btn-s" onclick="goToLibraryFilter('${r.materials[0]}')" style="font-size:11px;text-align:left;padding:5px 10px">
+                    📚 相關文獻 (${cnt} 篇)
+                  </button>
+                  <button class="btn btn-s" onclick="goToCompare()" style="font-size:11px;text-align:left;padding:5px 10px">
+                    📊 比較分析
+                  </button>
+                </div>
+              </div>
+            </div>` : ''}
+          </div>`;
+        }).join('')}
+      </div>
     </div>`;
   }).join('');
 }
