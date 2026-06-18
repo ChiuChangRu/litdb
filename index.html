@@ -498,40 +498,66 @@ function doLogin(){
 
 <!-- ═══════════════ VIEW: GAP ═══════════════ -->
 <div class="view" id="v-gap" style="display:none">
-  <div class="panel">
-    <div class="panel-h">① 基材 × 固化方式</div>
-    <div class="heatmap-wrap" id="heatmapWrap"></div>
-  </div>
-  <div class="gap-detail" id="gapDetail"></div>
-  <div class="panel" style="margin-top:16px">
-    <div class="panel-h">② 應用 × 親水高分子</div>
-    <div class="heatmap-wrap" id="heatmapWrap2"></div>
-  </div>
-  <div class="panel" style="margin-top:16px">
-    <div class="panel-h">③ 基材 × 親水高分子</div>
-    <div class="heatmap-wrap" id="heatmapWrap3"></div>
-  </div>
-  <div class="panel" style="margin-top:16px">
-    <div class="panel-h">④ 應用 × 固化方式</div>
-    <div class="heatmap-wrap" id="heatmapWrap4"></div>
-  </div>
-  <div class="panel" style="margin-top:16px">
-    <div class="panel-h">⑤ 基材 × 錨固劑/底塗</div>
-    <div class="heatmap-wrap" id="heatmapWrap5"></div>
-  </div>
-  <div class="panel" style="margin-top:16px">
-    <div class="panel-h">⑥ 親水高分子 × 錨固劑/底塗</div>
-    <div class="heatmap-wrap" id="heatmapWrap6"></div>
-  </div>
-  <div class="panel" style="margin-top:16px;border:2px solid var(--accent)">
-    <div class="panel-h" style="color:var(--accent)">⑦ 應用 × 功能目標（潤滑/抗結痂/抗菌/附著）</div>
-    <div style="font-size:11px;color:var(--muted);padding:4px 12px">找出哪些應用還缺抗結痂或抗菌方案 — 空白格 = 開發機會</div>
-    <div class="heatmap-wrap" id="heatmapWrap7"></div>
-  </div>
-  <div class="panel" style="margin-top:16px;border:2px solid var(--accent)">
-    <div class="panel-h" style="color:var(--accent)">⑧ 基材 × 功能目標</div>
-    <div style="font-size:11px;color:var(--muted);padding:4px 12px">找出哪些基材還沒有抗結痂/抗菌驗證</div>
-    <div class="heatmap-wrap" id="heatmapWrap8"></div>
+  <div style="display:flex;height:calc(100vh - 130px);gap:0;overflow:hidden">
+
+    <!-- 左側：熱圖捲軸區 -->
+    <div style="flex:1;min-width:0;overflow-y:auto;padding:12px">
+
+      <div class="panel">
+        <div class="panel-h">① 基材 × 固化方式</div>
+        <div class="heatmap-wrap" id="heatmapWrap"></div>
+      </div>
+      <div class="panel" style="margin-top:10px">
+        <div class="panel-h">② 應用 × 親水高分子</div>
+        <div class="heatmap-wrap" id="heatmapWrap2"></div>
+      </div>
+      <div class="panel" style="margin-top:10px">
+        <div class="panel-h">③ 基材 × 親水高分子</div>
+        <div class="heatmap-wrap" id="heatmapWrap3"></div>
+      </div>
+      <div class="panel" style="margin-top:10px">
+        <div class="panel-h">④ 應用 × 固化方式</div>
+        <div class="heatmap-wrap" id="heatmapWrap4"></div>
+      </div>
+      <div class="panel" style="margin-top:10px">
+        <div class="panel-h">⑤ 基材 × 錨固劑/底塗</div>
+        <div class="heatmap-wrap" id="heatmapWrap5"></div>
+      </div>
+      <div class="panel" style="margin-top:10px">
+        <div class="panel-h">⑥ 親水高分子 × 錨固劑/底塗</div>
+        <div class="heatmap-wrap" id="heatmapWrap6"></div>
+      </div>
+      <div class="panel" style="margin-top:10px;border:2px solid var(--accent)">
+        <div class="panel-h" style="color:var(--accent)">⑦ 應用 × 功能目標（潤滑/抗結痂/抗菌/附著）</div>
+        <div style="font-size:11px;color:var(--muted);padding:4px 12px">找出哪些應用還缺抗結痂或抗菌方案 — 空白格 = 開發機會</div>
+        <div class="heatmap-wrap" id="heatmapWrap7"></div>
+      </div>
+      <div class="panel" style="margin-top:10px;border:2px solid var(--accent)">
+        <div class="panel-h" style="color:var(--accent)">⑧ 基材 × 功能目標</div>
+        <div style="font-size:11px;color:var(--muted);padding:4px 12px">找出哪些基材還沒有抗結痂/抗菌驗證</div>
+        <div class="heatmap-wrap" id="heatmapWrap8"></div>
+      </div>
+    </div>
+
+    <!-- 右側分隔 -->
+    <div style="width:4px;background:var(--border);flex-shrink:0;cursor:col-resize"></div>
+
+    <!-- 右側：關聯圖（固定高度，可互動）-->
+    <div style="width:460px;flex-shrink:0;display:flex;flex-direction:column;border-left:1px solid var(--border)">
+      <!-- 標題欄 -->
+      <div style="padding:8px 12px;border-bottom:1px solid var(--border);background:var(--card);flex-shrink:0">
+        <div style="font-size:12px;font-weight:700;color:var(--accent2)">🕸 標籤關聯圖</div>
+        <div id="gapGraphInfo" style="font-size:10px;color:var(--muted);margin-top:2px">← 點擊左側熱圖格子，顯示該子集的標籤關聯</div>
+      </div>
+      <!-- D3 圖 -->
+      <div style="flex:1;position:relative;overflow:hidden">
+        <svg id="gapGraphSvg" style="width:100%;height:100%"></svg>
+        <div id="gapGraphTooltip" style="display:none;position:absolute;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:6px 9px;font-size:11px;pointer-events:none;max-width:180px;box-shadow:0 2px 8px rgba(0,0,0,0.12);z-index:10"></div>
+      </div>
+      <!-- 詳情文獻列表 -->
+      <div id="gapDetail" style="max-height:200px;overflow-y:auto;border-top:1px solid var(--border);padding:8px 12px;font-size:11px;display:none"></div>
+    </div>
+
   </div>
 </div>
 
@@ -2382,6 +2408,7 @@ function showAnalysisTab(subId, btn) {
   });
   // 離開 kgraph 時停止 simulation
   if(subId !== 'kgraph' && kgSim) { kgSim.stop(); }
+  if(subId !== 'gap' && typeof gapGraphSim !== 'undefined' && gapGraphSim) { gapGraphSim.stop(); }
   // 隱藏 kgraph 浮動元素
   const kgd = document.getElementById('kgDetail');
   const kgt = document.getElementById('kgTooltip');
@@ -2507,23 +2534,143 @@ function showGapDetail(catA, catB) {
   const papers_pool = (filtered && filtered.length) ? filtered : DB.papers.filter(p=>!p._deleted);
   const dict = DB.meta.tag_dictionary || {};
   const goals = ['潤滑','抗結痂','抗菌','附著'];
+
   let matches;
   if(goals.includes(catB)) {
     matches = papers_pool.filter(p=>(p.tags||[]).includes(catA) && paperFunctionGoals(p).includes(catB));
   } else {
     matches = papers_pool.filter(p=>(p.tags||[]).includes(catA) && (p.tags||[]).includes(catB));
   }
-  const el = document.getElementById('gapDetail');
-  if(!el) return;
-  if(!matches.length) { el.style.display='none'; return; }
-  el.style.display='block';
-  el.innerHTML = `<div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:8px">
-    <div style="font-size:12px;font-weight:700;color:var(--accent2);margin-bottom:8px">${catA} × ${catB}：${matches.length} 篇</div>
-    ${matches.map(p=>`<div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:11px;cursor:pointer" onclick="goToPaper('${p.id}')">
-      <span style="color:var(--accent);font-weight:700">[${p.id}]</span> ${p.title?.slice(0,60)||''}
-    </div>`).join('')}
-  </div>`;
+
+  // 更新右側資訊
+  const infoEl = document.getElementById('gapGraphInfo');
+  if(infoEl) infoEl.textContent = `${catA} × ${catB}：${matches.length} 篇（點節點可查看文獻）`;
+
+  // 右側文獻列表
+  const detailEl = document.getElementById('gapDetail');
+  if(detailEl) {
+    if(matches.length) {
+      detailEl.style.display = 'block';
+      detailEl.innerHTML = `<div style="font-size:10px;font-weight:700;color:var(--accent2);margin-bottom:5px">${catA} × ${catB} 相關文獻</div>` +
+        matches.map(p=>`<div style="padding:3px 0;border-bottom:1px solid var(--border);cursor:pointer;font-size:11px" onclick="goToPaper('${p.id}')">
+          <span style="color:var(--accent);font-weight:700">[${p.id}]</span>
+          <span style="margin-left:4px;color:var(--text)">${p.title?.slice(0,45)||''}${(p.title?.length||0)>45?'…':''}</span>
+        </div>`).join('');
+    } else {
+      detailEl.style.display = 'block';
+      detailEl.innerHTML = `<div style="color:var(--muted);text-align:center;padding:12px">⬜ 此組合無文獻 — 潛在開發缺口！</div>`;
+    }
+  }
+
+  // 右側 D3 關聯圖（只用 matches 這幾篇）
+  buildGapGraph(matches, `${catA} × ${catB}`);
 }
+
+let gapGraphSim = null;
+
+function buildGapGraph(papers, label) {
+  if(!window.d3) return;
+  const svg = document.getElementById('gapGraphSvg');
+  if(!svg) return;
+  svg.innerHTML = '';
+
+  if(!papers || !papers.length) {
+    d3.select(svg).append('text').attr('x','50%').attr('y','50%').attr('text-anchor','middle')
+      .attr('fill','var(--muted)').attr('font-size',12).text('無文獻資料');
+    return;
+  }
+
+  const dict = DB.meta.tag_dictionary || {};
+  const catColors = {
+    substrate:'#e86c3a', hydrophilic_polymer:'#2d8c5a', cure_method:'#d4a030',
+    anchor_primer:'#c0392b', application:'#8e44ad', performance:'#2980b9', indication:'#16a085'
+  };
+  const tagCat = {};
+  Object.entries(dict).forEach(([cat,tags])=>tags.forEach(t=>{tagCat[t]=cat;}));
+
+  // 統計標籤
+  const tagCount = {};
+  papers.forEach(p=>(p.tags||[]).forEach(t=>{ tagCount[t]=(tagCount[t]||0)+1; }));
+  const activeTags = Object.entries(tagCount).filter(([,c])=>c>=1).map(([t])=>t);
+
+  // 節點
+  const nodes = [];
+  const nodeMap = {};
+  activeTags.forEach(t=>{
+    const n={id:t, type:'tag', cat:tagCat[t]||'', count:tagCount[t], label:t};
+    nodes.push(n); nodeMap[t]=n;
+  });
+  papers.forEach(p=>{
+    const n={id:p.id, type:'paper', count:(p.tags||[]).filter(t=>activeTags.includes(t)).length, label:p.id, title:p.title||p.id};
+    nodes.push(n); nodeMap[p.id]=n;
+  });
+
+  const edges = [];
+  papers.forEach(p=>{
+    (p.tags||[]).filter(t=>activeTags.includes(t)).forEach(t=>{
+      edges.push({source:p.id, target:t});
+    });
+  });
+
+  const W = svg.clientWidth||440, H = svg.clientHeight||300;
+  const d3svg = d3.select(svg).attr('viewBox',`0 0 ${W} ${H}`);
+  const g = d3svg.append('g');
+  const zoom = d3.zoom().scaleExtent([0.3,4]).on('zoom',e=>g.attr('transform',e.transform));
+  d3svg.call(zoom);
+
+  const link = g.append('g').selectAll('line').data(edges).join('line')
+    .attr('stroke','#ccc').attr('stroke-width',1).attr('stroke-opacity',0.6);
+
+  const node = g.append('g').selectAll('g').data(nodes).join('g')
+    .attr('cursor','pointer')
+    .call(d3.drag()
+      .on('start',(e,d)=>{if(!e.active)sim.alphaTarget(0.3).restart();d.fx=d.x;d.fy=d.y;})
+      .on('drag',(e,d)=>{d.fx=e.x;d.fy=e.y;})
+      .on('end',(e,d)=>{if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;}))
+    .on('click',(e,d)=>{
+      e.stopPropagation();
+      if(d.type==='paper') goToPaper(d.id);
+    })
+    .on('mouseover',(e,d)=>{
+      const tt=document.getElementById('gapGraphTooltip'); if(!tt) return;
+      tt.style.display='block';
+      tt.style.left=(e.offsetX+10)+'px'; tt.style.top=(e.offsetY-8)+'px';
+      tt.innerHTML = d.type==='tag'
+        ? `<b style="color:${catColors[d.cat]||'#888'}">${d.label}</b><br><span style="font-size:10px;color:var(--muted)">${d.count}/${papers.length} 篇</span>`
+        : `<b>[${d.id}]</b><br><span style="font-size:10px">${d.title.slice(0,50)}</span>`;
+    })
+    .on('mouseout',()=>{const tt=document.getElementById('gapGraphTooltip');if(tt)tt.style.display='none';});
+
+  node.each(function(d){
+    const el=d3.select(this);
+    const r=d.type==='tag'?Math.min(5+d.count*3,20):7;
+    if(d.type==='tag'){
+      el.append('circle').attr('r',r).attr('fill',catColors[d.cat]||'#888').attr('fill-opacity',0.88).attr('stroke','#fff').attr('stroke-width',1.5);
+    } else {
+      el.append('rect').attr('x',-7).attr('y',-7).attr('width',14).attr('height',14).attr('rx',2)
+        .attr('fill','#8a7e72').attr('fill-opacity',0.85).attr('stroke','#fff').attr('stroke-width',1);
+    }
+    el.append('text').attr('text-anchor','middle').attr('dominant-baseline','middle')
+      .attr('fill','#fff').attr('font-size','7px').attr('font-weight','700').attr('pointer-events','none')
+      .text(d.type==='tag'?(d.label.length>8?d.label.slice(0,7)+'…':d.label):d.id);
+  });
+
+  if(gapGraphSim) gapGraphSim.stop();
+  gapGraphSim = d3.forceSimulation(nodes)
+    .force('link',d3.forceLink(edges).id(d=>d.id).distance(50).strength(0.6))
+    .force('charge',d3.forceManyBody().strength(-80))
+    .force('center',d3.forceCenter(W/2,H/2).strength(0.1))
+    .force('collision',d3.forceCollide(d=>d.type==='tag'?Math.min(5+d.count*3,20)+6:12))
+    .alphaDecay(0.03)
+    .on('tick',()=>{
+      nodes.forEach(n=>{n.x=Math.max(15,Math.min(W-15,n.x));n.y=Math.max(15,Math.min(H-15,n.y));});
+      link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
+      node.attr('transform',d=>`translate(${d.x},${d.y})`);
+    });
+
+  d3svg.on('click',()=>{const tt=document.getElementById('gapGraphTooltip');if(tt)tt.style.display='none';});
+}
+
 
 // ── renderCtx（AI 對話上下文初始化）─────────────
 function renderCtx() {
