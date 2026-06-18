@@ -270,7 +270,8 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 </header>
 
 <div class="tabs">
-  <div class="tab active" onclick="showView('routes',this)">🛣<span class="tab-text"> 路線</span></div>
+  <div class="tab active" onclick="showView('market',this)">🏢<span class="tab-text"> 市場</span></div>
+  <div class="tab" onclick="showView('routes',this)">🛣<span class="tab-text"> 路線</span></div>
   <div class="tab" onclick="showView('search',this)">🔍<span class="tab-text"> 檢索</span></div>
   <div class="tab" onclick="showView('browse',this)">📚<span class="tab-text"> 文庫</span> <span class="badge" id="browseCount">0</span><span class="badge" id="analyzedCount" style="background:var(--accent2)">0</span></div>
   <div class="tab" onclick="showView('analysis',this)">📊<span class="tab-text"> 分析</span></div>
@@ -280,7 +281,13 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 <div class="main">
 
 <!-- ═══════════════ VIEW: SEARCH ═══════════════ -->
-<div class="view active" id="v-routes">
+<div class="view active" id="v-market">
+  <div style="max-width:1000px;margin:0 auto;padding:20px 16px" id="marketContent">
+    <div style="text-align:center;padding:40px;color:var(--muted)">載入中...</div>
+  </div>
+</div>
+
+<div class="view" id="v-routes">
   <div style="max-width:900px;margin:0 auto;padding:20px 16px">
 
     <!-- 標題 -->
@@ -2260,6 +2267,7 @@ async function loadDB() {
 }
 
 function onDBLoaded() {
+  renderMarket();
   if(document.getElementById('v-routes')?.classList.contains('active')||
      document.getElementById('v-routes')?.style.display!=='none') renderRoutes();
   const active = DB.papers.filter(p=>!p._deleted);
@@ -2293,7 +2301,7 @@ let currentAnalysisTab = 'graph';
 function goBack() {
   if(!previousView) return;
   const tabs = document.querySelectorAll('.tabs > .tab');
-  const viewMap = {routes:0, search:1, browse:2, analysis:3, report:4};
+  const viewMap = {market:0, routes:1, search:2, browse:3, analysis:4, report:5};
   const idx = viewMap[previousView];
   if(idx!==undefined && tabs[idx]) {
     showView(previousView, tabs[idx]);
@@ -2677,6 +2685,197 @@ function tryLocalFig(el, localUrl) {
 
 function closeMobileDetail() {
   document.getElementById('colRight').classList.remove('mobile-open');
+}
+
+// ── 市場玩家頁 ────────────────────────────────
+function renderMarket() {
+  const el = document.getElementById('marketContent');
+  if(!el) return;
+
+  const papers = DB.papers.filter(p=>!p._deleted);
+  const commercials = papers.filter(p=>p.doc_type==='商用產品' && p.patentResults?.commercial);
+
+  // 路線歸屬映射
+  const ROUTE_MAP = {
+    'C06': ['UV-BP Route'],
+    'C01': ['UV-BP Route','UV Type I Route'],
+    'C02': ['UV Type I Route'],
+    'C04': ['UV Type I Route'],
+    'C08': ['UV Type I Route'],
+    'C03': ['Zwitterionic Route'],
+    'C09': ['Zwitterionic Route'],
+    'C10': ['Isocyanate Route'],
+    'C07': ['設備商（全路線）'],
+  };
+
+  const PHASE_MAP = {
+    'UV-BP Route': {phase:'Phase 2', color:'#2980b9'},
+    'UV Type I Route': {phase:'Phase 2', color:'#2980b9'},
+    'Zwitterionic Route': {phase:'Phase 3', color:'#2d8c5a'},
+    'Isocyanate Route': {phase:'Phase 1', color:'#d4a030'},
+    'PDA Route': {phase:'Phase 1', color:'#d4a030'},
+    '設備商（全路線）': {phase:'設備', color:'#8a7e72'},
+  };
+
+  // 市場數字
+  const mkData = [
+    {n:'$1.8B',label:'市場規模（2022）',sub:'MarketsandMarkets'},
+    {n:'9%+',label:'泌尿科 CAGR',sub:'成長最快終端'},
+    {n:'65%+',label:'OEM 外包佔比',sub:'自製比例下降中'},
+    {n:'8家',label:'主要競爭玩家',sub:'資料庫涵蓋'},
+  ];
+
+  // 矩陣資料
+  const matrixRoutes = ['UV-BP','UV Type I','Zwitterionic','Isocyanate','設備商'];
+  const matrixPlayers = [
+    {name:'DSM', routes:['UV-BP'], strength:[3,0,0,1,0]},
+    {name:'Surmodics', routes:['Zwitterionic'], strength:[0,1,3,0,0]},
+    {name:'Biocoat', routes:['UV-BP','UV Type I'], strength:[2,2,0,0,0]},
+    {name:'Coloplast', routes:['Zwitterionic'], strength:[0,0,2,0,0]},
+    {name:'Freudenberg', routes:['UV Type I'], strength:[0,2,0,0,0]},
+    {name:'Hydromer', routes:['UV Type I'], strength:[0,1,0,0,0]},
+    {name:'Argon', routes:['Isocyanate'], strength:[0,0,0,2,0]},
+    {name:'Harland', routes:['設備商'], strength:[0,0,0,0,3]},
+  ];
+
+  const threatColor = {
+    '高（直接競品，特別是輸尿管支架市場）':'#e74c3c',
+    '高（若 Bioteque 進歐洲市場）':'#e74c3c',
+    '高（技術標桿，需迴避其核心IP）':'#e74c3c',
+    '中（若 Bioteque 進歐洲市場）':'#e67e22',
+    '中（間接競品）':'#e67e22',
+    '低（非台灣市場主力）':'#2d8c5a',
+    '低':'#2d8c5a',
+    '無（設備商，潛在供應商）':'#8a7e72',
+  };
+
+  el.innerHTML = `
+  <!-- 標題 -->
+  <div style="margin-bottom:20px">
+    <h2 style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px">市場玩家分析</h2>
+    <p style="font-size:13px;color:var(--muted)">親水塗層主要競爭廠商、技術路線歸屬與 Bioteque 競爭定位</p>
+  </div>
+
+  <!-- 區塊1：市場總覽 -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px">
+    ${mkData.map(d=>`
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center">
+      <div style="font-size:24px;font-weight:800;color:var(--accent)">${d.n}</div>
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-top:2px">${d.label}</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:2px">${d.sub}</div>
+    </div>`).join('')}
+  </div>
+
+  <!-- 區塊2：玩家卡片 -->
+  <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:10px">🏢 主要玩家</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-bottom:28px">
+    ${commercials.map(p=>{
+      const c = p.patentResults.commercial;
+      const tc = threatColor[c.competitive_threat_to_bioteque]||'#888';
+      const routes = ROUTE_MAP[p.id]||[];
+      const tech = c.coating_technology||{};
+      const claims = Object.entries(tech.performance_claims||{}).slice(0,3);
+      return `
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer" onclick="goToPaper('${p.id}')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:12px 14px;border-bottom:1px solid var(--border)">
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--text)">${c.company}</div>
+            <div style="font-size:11px;color:var(--accent);font-weight:600">${c.product}</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">${c.hq||''}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:9px;color:var(--muted)">競爭威脅</div>
+            <div style="font-size:16px;font-weight:800;color:${tc}">${c.competitive_threat_to_bioteque?.split('（')[0]||'—'}</div>
+          </div>
+        </div>
+        <div style="padding:10px 14px">
+          <!-- 路線標籤 -->
+          <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px">
+            ${routes.map(r=>{
+              const pm = PHASE_MAP[r]||{};
+              return `<span style="background:${pm.color||'#888'}22;color:${pm.color||'#888'};font-size:10px;padding:2px 7px;border-radius:4px;font-weight:600">${pm.phase||''} · ${r}</span>`;
+            }).join('')}
+          </div>
+          <!-- 塗層類型 -->
+          <div style="font-size:11px;color:var(--muted);margin-bottom:6px">${tech.type||''}</div>
+          <!-- 性能聲明 -->
+          ${claims.length?`<div style="display:flex;gap:6px;flex-wrap:wrap">
+            ${claims.map(([k,v])=>`<span style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-size:10px"><b>${k}:</b> ${v}</span>`).join('')}
+          </div>`:''}
+          <!-- 合作機會 -->
+          ${c.collaboration_opportunity?`<div style="margin-top:8px;font-size:10px;color:var(--accent2);border-top:1px solid var(--border);padding-top:6px">
+            🤝 ${c.collaboration_opportunity.slice(0,60)}${c.collaboration_opportunity.length>60?'…':''}
+          </div>`:''}
+        </div>
+      </div>`;
+    }).join('')}
+  </div>
+
+  <!-- 區塊3：技術路線歸屬矩陣 -->
+  <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:10px">📊 技術路線歸屬矩陣</div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:24px">
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead>
+          <tr style="background:var(--surface)">
+            <th style="padding:10px 14px;text-align:left;border:1px solid var(--border);min-width:120px">廠商</th>
+            ${matrixRoutes.map(r=>`<th style="padding:8px 10px;text-align:center;border:1px solid var(--border);font-size:11px;white-space:nowrap">${r}</th>`).join('')}
+          </tr>
+        </thead>
+        <tbody>
+          ${matrixPlayers.map(pl=>`
+          <tr>
+            <td style="padding:8px 14px;border:1px solid var(--border);font-weight:700">${pl.name}</td>
+            ${pl.strength.map(s=>`<td style="padding:8px;border:1px solid var(--border);text-align:center">
+              ${s===3?'●●●':s===2?'●●':s===1?'●':'<span style="color:var(--border)">—</span>'}
+            </td>`).join('')}
+          </tr>`).join('')}
+          <tr style="background:${`#2d8c5a`}18">
+            <td style="padding:8px 14px;border:1px solid var(--border);font-weight:700;color:#2d8c5a">Bioteque（目標）</td>
+            <td style="padding:8px;border:1px solid var(--border);text-align:center;color:var(--muted)">迴避</td>
+            <td style="padding:8px;border:1px solid var(--border);text-align:center;color:#2d8c5a;font-weight:700">●●● Phase 2</td>
+            <td style="padding:8px;border:1px solid var(--border);text-align:center;color:#2d8c5a;font-weight:700">●● Phase 3</td>
+            <td style="padding:8px;border:1px solid var(--border);text-align:center;color:#d4a030;font-weight:700">● Phase 1</td>
+            <td style="padding:8px;border:1px solid var(--border);text-align:center;color:var(--muted)">採購</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="padding:8px 14px;font-size:10px;color:var(--muted)">●●● 核心技術　●● 重要技術　● 輔助技術　— 未涉及</div>
+  </div>
+
+  <!-- 區塊4：Bioteque 定位建議 -->
+  <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:10px">🎯 Bioteque 競爭定位建議</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
+    <div style="background:#fff8e6;border:1px solid #f0c040;border-radius:10px;padding:14px">
+      <div style="font-size:11px;font-weight:700;color:#b8860b;margin-bottom:8px">⚠️ 避開（競爭過強）</div>
+      <div style="font-size:12px;color:var(--text);line-height:1.7">
+        <b>UV-BP Route</b>（DSM 主導）<br>
+        <b>SBMA Serene</b>（Surmodics IP）<br>
+        → FTO 分析優先
+      </div>
+    </div>
+    <div style="background:#eaf5ef;border:1px solid #82d4a8;border-radius:10px;padding:14px">
+      <div style="font-size:11px;font-weight:700;color:#1a6040;margin-bottom:8px">✅ 切入（空間充足）</div>
+      <div style="font-size:12px;color:var(--text);line-height:1.7">
+        <b>PDA + UV Type I Route</b><br>
+        專利風險低、配方自由度高<br>
+        → Phase 1–2 核心方向
+      </div>
+    </div>
+    <div style="background:#eaf4fb;border:1px solid #85c1e9;border-radius:10px;padding:14px">
+      <div style="font-size:11px;font-weight:700;color:#1a4a6e;margin-bottom:8px">🔭 佈局（長期差異化）</div>
+      <div style="font-size:12px;color:var(--text);line-height:1.7">
+        <b>SBMA（FTO後）+ Chitosan</b><br>
+        泌尿科抗結痂市場成長 9%+<br>
+        → Phase 3 核心方向
+      </div>
+    </div>
+  </div>
+
+  <div style="font-size:11px;color:var(--muted);text-align:center;padding:8px">
+    資料來源：LitDB 商業產品分析 C01–C10　|　市場數據：MarketsandMarkets / Grand View Research　|　點擊公司卡片查看完整分析
+  </div>`;
 }
 
 // ── Technology Routes 首頁 ───────────────────
