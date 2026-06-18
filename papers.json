@@ -6966,6 +6966,80 @@
           "bioteque_relevance": "LbL heparin/copper可作Phase 2快速驗證概念；但長期需轉向更穩定的SBMA路線"
         }
       }
+    },
+    {
+      "id": "M4",
+      "doc_type": "市場報告",
+      "title": "Catheter Coatings Market Size and Share | Industry Growth, 2019-2026 (Allied Market Research)",
+      "authors": "(AMR) Trupti Wadekar; Snehal Manjrekar; Eswara Prasad / Allied Market Research",
+      "year": 2020,
+      "venue": "Allied Market Research",
+      "url": "https://www.alliedmarketresearch.com/catheter-coatings-market",
+      "tags": [
+        "市場報告",
+        "hydrophilic coating",
+        "antimicrobial抗菌",
+        "drug-eluting",
+        "biocompatibility",
+        "導管catheter"
+      ],
+      "abstract_note": "全球導管塗層市場 2018年$918.9M，預測2026年達$1,527.3M，CAGR 6.50%。分類：材料（金屬/聚合物）、類型（親水/藥物洗脫/抗菌/其他）。北美最大市場，亞太成長最快。主要玩家：DSM、Surmodics、Biocoat、Hydromer、B.Braun、Covalon。",
+      "purpose": "了解導管塗層全球市場規模、成長驅動因子、區域分布與主要競爭玩家",
+      "value_to_project": "提供市場規模數字（$1.53B by 2026）、CAGR（6.5%）、競爭格局，補充 M1/M3 報告，是市場玩家頁的數據來源之一",
+      "patentResults": {
+        "review": {
+          "scope": "全球導管塗層市場分析，2019-2026，涵蓋材料/類型/區域/玩家",
+          "n_papers_covered": 0,
+          "technologies_compared": [
+            {
+              "material": "親水塗層 Hydrophilic",
+              "n_studies": 0,
+              "verdict": "市占最大，低摩擦、抗菌、生物相容，主流選擇"
+            },
+            {
+              "material": "藥物洗脫 Drug-eluting",
+              "n_studies": 0,
+              "verdict": "心血管/周邊動脈手術常用，抗感染/抗炎"
+            },
+            {
+              "material": "抗菌塗層 Antimicrobial",
+              "n_studies": 0,
+              "verdict": "CAUTI 需求驅動，成長快速"
+            },
+            {
+              "material": "金屬塗層 Metal",
+              "n_studies": 0,
+              "verdict": "多功能抗菌，延長使用壽命"
+            }
+          ],
+          "clinical_data": {
+            "market_2018_USD_M": 918.9,
+            "market_2026_USD_M": 1527.3,
+            "cagr_2019_2026_percent": 6.5,
+            "largest_region": "北美",
+            "fastest_growth_region": "亞太（Asia-Pacific）"
+          },
+          "evidence_pyramid": {
+            "market_data": 100
+          },
+          "consensus": [
+            "親水塗層是最大細分市場，低摩擦+生物相容性驅動",
+            "CAUTI（導管相關泌尿道感染）是最大需求驅動力",
+            "亞太區具最高成長CAGR（中國/日本市場開發中）",
+            "OEM外包和聚合物基塗層是主要趨勢"
+          ],
+          "research_gaps": [
+            "報告截止2020年，疫情後市場數字需更新（參考M1/M3）",
+            "未涵蓋兩性離子（SBMA/MPC）等新興技術路線"
+          ],
+          "best_for": {
+            "market_size": "全球導管塗層市場 $1.53B by 2026",
+            "fastest_segment": "抗菌塗層（Antimicrobial）",
+            "key_players": "DSM、Surmodics、Biocoat、Hydromer、B.Braun、Covalon"
+          },
+          "bioteque_strategic_value": "補充 M1/M3 市場數字，提供CAGR 6.5%、亞太高成長、CAUTI驅動等基礎數據。市場玩家清單含 LipoCoat BV 和 Covalon（LitDB 現有資料庫未涵蓋），可考慮後續補充分析。"
+        }
+      }
     }
   ]
 }
