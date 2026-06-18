@@ -2412,6 +2412,116 @@ function allTags(){const s=new Set();DB.papers.forEach(p=>(p.tags||[]).forEach(t
 // ══════════════════════════════════════════════
 // BROWSE: Filters
 // ══════════════════════════════════════════════
+// ── 缺口分析 Heatmaps ─────────────────────────
+function buildHeatmaps() {
+  const papers = (filtered && filtered.length) ? filtered : DB.papers.filter(p=>!p._deleted);
+  const dict = DB.meta.tag_dictionary || {};
+
+  const catColors = {
+    substrate:'#e86c3a', hydrophilic_polymer:'#2d8c5a', cure_method:'#d4a030',
+    anchor_primer:'#c0392b', application:'#8e44ad', performance:'#2980b9', indication:'#16a085'
+  };
+
+  function makeHeatmap(wrapId, catA, catB, title) {
+    const wrap = document.getElementById(wrapId);
+    if(!wrap) return;
+    const tagsA = dict[catA] || [];
+    const tagsB = dict[catB] || [];
+
+    // 只保留有文獻的標籤
+    const activeA = tagsA.filter(t => papers.some(p=>(p.tags||[]).includes(t)));
+    const activeB = tagsB.filter(t => papers.some(p=>(p.tags||[]).includes(t)));
+    if(!activeA.length || !activeB.length) { wrap.innerHTML='<div style="color:var(--muted);font-size:12px;padding:8px">資料不足</div>'; return; }
+
+    // 交叉計數
+    const matrix = {};
+    papers.forEach(p => {
+      const pA = (p.tags||[]).filter(t=>activeA.includes(t));
+      const pB = (p.tags||[]).filter(t=>activeB.includes(t));
+      pA.forEach(a => pB.forEach(b => { matrix[`${a}||${b}`] = (matrix[`${a}||${b}`]||0)+1; }));
+    });
+    const maxVal = Math.max(...Object.values(matrix), 1);
+
+    const colA = catColors[catA]||'#888', colB = catColors[catB]||'#888';
+    let html = `<div style="overflow-x:auto"><table style="border-collapse:collapse;font-size:11px;min-width:300px">
+      <thead><tr><th style="padding:4px 8px;background:var(--card);border:1px solid var(--border);font-size:10px;min-width:80px">${catA}<br>↓ / ${catB} →</th>
+      ${activeB.map(b=>`<th style="padding:4px 6px;border:1px solid var(--border);background:${colB}22;color:${colB};max-width:80px;font-size:10px;writing-mode:vertical-lr;transform:rotate(180deg);height:60px;text-align:left">${b}</th>`).join('')}
+      </tr></thead><tbody>
+      ${activeA.map(a=>`<tr>
+        <td style="padding:4px 8px;border:1px solid var(--border);background:${colA}22;color:${colA};font-size:10px;white-space:nowrap">${a}</td>
+        ${activeB.map(b=>{
+          const cnt = matrix[`${a}||${b}`]||0;
+          const pct = cnt/maxVal;
+          const bg = cnt===0?'var(--bg)':`rgba(${catA==='application'?'142,68,173':'46,140,90'},${0.1+pct*0.8})`;
+          return `<td style="padding:4px 6px;border:1px solid var(--border);text-align:center;background:${bg};cursor:${cnt?'pointer':'default'};color:${cnt?'#fff':'var(--muted)'};font-weight:${cnt?'700':'400'}" title="${a} × ${b}: ${cnt}篇" onclick="showGapDetail('${a}','${b}')">${cnt||''}</td>`;
+        }).join('')}
+      </tr>`).join('')}
+      </tbody></table></div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px">深色=文獻數多，點擊格子查看文獻列表</div>`;
+    wrap.innerHTML = html;
+  }
+
+  makeHeatmap('heatmapWrap',  'substrate',         'cure_method',        '基材 × 固化方式');
+  makeHeatmap('heatmapWrap2', 'application',        'hydrophilic_polymer','應用 × 親水高分子');
+  makeHeatmap('heatmapWrap3', 'substrate',          'hydrophilic_polymer','基材 × 親水高分子');
+  makeHeatmap('heatmapWrap4', 'application',        'cure_method',        '應用 × 固化方式');
+  makeHeatmap('heatmapWrap5', 'substrate',          'anchor_primer',      '基材 × 錨固劑/底塗');
+  makeHeatmap('heatmapWrap6', 'hydrophilic_polymer','anchor_primer',      '親水高分子 × 錨固劑/底塗');
+
+  // ⑦ 應用 × 功能目標（用 paperFunctionGoals）
+  const wrap7 = document.getElementById('heatmapWrap7');
+  if(wrap7) {
+    const goals = ['潤滑','抗結痂','抗菌','附著'];
+    const apps = (dict['application']||[]).filter(t=>papers.some(p=>(p.tags||[]).includes(t)));
+    const matrix7 = {};
+    papers.forEach(p => {
+      const pApps = (p.tags||[]).filter(t=>apps.includes(t));
+      const pGoals = paperFunctionGoals(p);
+      pApps.forEach(a => pGoals.forEach(g => { matrix7[`${a}||${g}`]=(matrix7[`${a}||${g}`]||0)+1; }));
+    });
+    const max7 = Math.max(...Object.values(matrix7),1);
+    wrap7.innerHTML = `<div style="overflow-x:auto"><table style="border-collapse:collapse;font-size:11px">
+      <thead><tr><th style="padding:4px 8px;border:1px solid var(--border);background:var(--card);font-size:10px">應用 / 功能目標</th>
+      ${goals.map(g=>`<th style="padding:4px 10px;border:1px solid var(--border);background:#2980b922;color:#2980b9;font-size:10px">${g}</th>`).join('')}</tr></thead>
+      <tbody>${apps.map(a=>`<tr><td style="padding:4px 8px;border:1px solid var(--border);background:#8e44ad22;color:#8e44ad;font-size:10px">${a}</td>
+        ${goals.map(g=>{const cnt=matrix7[`${a}||${g}`]||0;const bg=cnt?`rgba(41,128,185,${0.1+cnt/max7*0.8})`:'var(--bg)';return `<td style="padding:4px 8px;border:1px solid var(--border);text-align:center;background:${bg};color:${cnt?'#fff':'var(--muted)'};font-weight:700;cursor:${cnt?'pointer':'default'}" onclick="showGapDetail('${a}','${g}')">${cnt||''}</td>`;}).join('')}
+      </tr>`).join('')}</tbody></table></div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px">找出哪些應用缺乏抗結痂或抗菌方案 — 空白格 = 開發機會</div>`;
+  }
+}
+
+function showGapDetail(catA, catB) {
+  const papers_pool = (filtered && filtered.length) ? filtered : DB.papers.filter(p=>!p._deleted);
+  const dict = DB.meta.tag_dictionary || {};
+  const goals = ['潤滑','抗結痂','抗菌','附著'];
+  let matches;
+  if(goals.includes(catB)) {
+    matches = papers_pool.filter(p=>(p.tags||[]).includes(catA) && paperFunctionGoals(p).includes(catB));
+  } else {
+    matches = papers_pool.filter(p=>(p.tags||[]).includes(catA) && (p.tags||[]).includes(catB));
+  }
+  const el = document.getElementById('gapDetail');
+  if(!el) return;
+  if(!matches.length) { el.style.display='none'; return; }
+  el.style.display='block';
+  el.innerHTML = `<div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:8px">
+    <div style="font-size:12px;font-weight:700;color:var(--accent2);margin-bottom:8px">${catA} × ${catB}：${matches.length} 篇</div>
+    ${matches.map(p=>`<div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:11px;cursor:pointer" onclick="goToPaper('${p.id}')">
+      <span style="color:var(--accent);font-weight:700">[${p.id}]</span> ${p.title?.slice(0,60)||''}
+    </div>`).join('')}
+  </div>`;
+}
+
+// ── renderCtx（AI 對話上下文初始化）─────────────
+function renderCtx() {
+  // 初始化 AI 對話的 context 視窗（顯示資料庫統計）
+  const el = document.getElementById('ctxSummary');
+  if(!el || !DB.papers) return;
+  const papers = DB.papers.filter(p=>!p._deleted);
+  const analyzed = papers.filter(p=>p.patentResults&&Object.keys(p.patentResults).length>0).length;
+  el.textContent = `資料庫：${papers.length} 篇（已分析 ${analyzed} 篇）`;
+}
+
 function buildFilters() {
   buildFilterTags();
 }
