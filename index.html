@@ -246,8 +246,60 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<style>
+#loginOverlay{position:fixed;inset:0;z-index:9999;background:var(--bg,#faf8f5);display:flex;align-items:center;justify-content:center}
+#loginBox{background:#fff;border:1px solid #e5e2dc;border-radius:16px;padding:40px 36px;width:320px;box-shadow:0 8px 32px rgba(0,0,0,0.10);text-align:center}
+#loginBox h1{font-size:22px;font-weight:800;color:#e86c3a;margin-bottom:4px}
+#loginBox p{font-size:12px;color:#aaa;margin-bottom:24px}
+#loginBox input{width:100%;border:1px solid #e5e2dc;border-radius:8px;padding:10px 12px;font-size:14px;margin-bottom:10px;box-sizing:border-box;outline:none}
+#loginBox input:focus{border-color:#e86c3a}
+#loginBox button{width:100%;background:#e86c3a;color:#fff;border:none;border-radius:8px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px}
+#loginBox button:hover{background:#c95a2e}
+#loginErr{color:#e74c3c;font-size:12px;margin-top:8px;min-height:16px}
+</style>
 </head>
 <body>
+<div id="loginOverlay">
+  <div id="loginBox">
+    <h1>LitDB</h1>
+    <p>親水塗層文獻知識管理</p>
+    <input type="text" id="loginUser" placeholder="帳號" autocomplete="username">
+    <input type="password" id="loginPass" placeholder="密碼" autocomplete="current-password"
+      onkeydown="if(event.key==='Enter')doLogin()">
+    <button onclick="doLogin()">登入</button>
+    <div id="loginErr"></div>
+  </div>
+</div>
+
+<script>
+// ── 登入驗證 ──────────────────────────────────
+const AUTH_LIST = [
+  {u:'jeremy', p:'Bioteque2026'},
+  {u:'guest',  p:'LitDB888'},
+];
+
+(function(){
+  if(sessionStorage.getItem('litdb_auth')==='ok'){
+    document.getElementById('loginOverlay').style.display='none';
+  }
+})();
+
+function doLogin(){
+  const u = document.getElementById('loginUser').value.trim().toLowerCase();
+  const p = document.getElementById('loginPass').value;
+  const ok = AUTH_LIST.some(a=>a.u===u && a.p===p);
+  if(ok){
+    sessionStorage.setItem('litdb_auth','ok');
+    document.getElementById('loginOverlay').style.display='none';
+  } else {
+    document.getElementById('loginErr').textContent='帳號或密碼錯誤';
+    document.getElementById('loginPass').value='';
+    document.getElementById('loginPass').focus();
+  }
+}
+</script>
+
 
 <header>
   <div class="logo" onclick="location.reload()" style="cursor:pointer;color:#fff" title="重新整理">Lit<span style="color:#ffeedd">DB</span></div>
