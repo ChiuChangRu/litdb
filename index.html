@@ -2701,11 +2701,23 @@ function renderKGraph() {
 
   if(kgSim) kgSim.stop();
   kgSim = d3.forceSimulation(visNodes)
-    .force('link',d3.forceLink(visEdges).id(d=>d.id).distance(d=>({route:110,technology:85,mechanism:70,material:70,process:65,patent:60,company:80,performance:70,application:70}[d.target?.type||'']||80)).strength(0.4))
-    .force('charge',d3.forceManyBody().strength(d=>d.type==='root'?-800:d.type==='route'?-350:-150))
-    .force('center',d3.forceCenter(cx,cy).strength(0.04))
-    .force('collision',d3.forceCollide(d=>(KG_SIZES[d.type]||12)+10))
-    .alphaDecay(0.025);
+    .force('link',d3.forceLink(visEdges).id(d=>d.id).distance(d=>({route:100,technology:80,mechanism:65,material:65,process:60,patent:55,company:75,performance:65,application:65}[d.target?.type||'']||75)).strength(0.6))
+    .force('charge',d3.forceManyBody().strength(d=>d.type==='root'?-600:d.type==='route'?-250:-120))
+    .force('center',d3.forceCenter(cx,cy).strength(0.12))
+    .force('forceX',d3.forceX(cx).strength(0.06))
+    .force('forceY',d3.forceY(cy).strength(0.06))
+    .force('collision',d3.forceCollide(d=>(KG_SIZES[d.type]||12)+8))
+    .alphaDecay(0.03)
+    .on('tick',()=>{
+      // 邊界限制：節點不能飛出畫布
+      visNodes.forEach(n=>{
+        const r=(KG_SIZES[n.type]||12)+4;
+        n.x=Math.max(r,Math.min(W-r,n.x));
+        n.y=Math.max(r,Math.min(H-r,n.y));
+      });
+      link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
+      node.attr('transform',d=>`translate(${d.x},${d.y})`);
+    });
 
   const link = g.append('g').selectAll('line').data(visEdges).join('line')
     .attr('stroke',d=>edgeColors[d.type]||'#ccc')
@@ -2737,10 +2749,6 @@ function renderKGraph() {
       else{lines.forEach((l,i)=>el.append('tspan').attr('x',0).attr('dy',i===0?`${-(lines.length-1)*0.55}em`:'1.1em').text(l.length>9?l.slice(0,8)+'…':l));}
     });
 
-  kgSim.on('tick',()=>{
-    link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
-    node.attr('transform',d=>`translate(${d.x},${d.y})`);
-  });
   d3svg.on('click',()=>document.getElementById('kgDetail').style.display='none');
 }
 
