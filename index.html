@@ -2423,6 +2423,32 @@ function paperFunctionGoals(p) {
 }
 
 // ── 缺口分析 Heatmaps ─────────────────────────
+function buildOneHeatmap(wrapperId, rows, cols, rowLabel, colLabel) {
+  const matrix = {};
+  const paperMap = {};
+  rows.forEach(r=>{matrix[r]={};cols.forEach(c=>{matrix[r][c]=0;paperMap[r+'||'+c]=[]})});
+
+  DB.papers.forEach(p=>{
+    const tags = p.tags||[];
+    rows.forEach(r=>{ if(tags.includes(r)) cols.forEach(c=>{ if(tags.includes(c)){matrix[r][c]++;paperMap[r+'||'+c].push(p)} })});
+  });
+
+  let html = `<table class="heatmap"><tr><th>${rowLabel} \\ ${colLabel}</th>${cols.map(c=>`<th>${c}</th>`).join('')}<th>小計</th></tr>`;
+  rows.forEach(r=>{
+    let rowSum = 0;
+    html += `<tr><th style="text-align:left">${r}</th>`;
+    cols.forEach(c=>{
+      const v = matrix[r][c];
+      rowSum += v;
+      const cls = v===0?'cell-0':v===1?'cell-1':v===2?'cell-2':v>=3?'cell-many':'cell-3';
+      html += `<td class="${cls}" onclick="showGapDetail('${r}','${c}')" title="${r} × ${c}: ${v} 篇">${v||'·'}</td>`;
+    });
+    html += `<td style="color:var(--muted)">${rowSum}</td></tr>`;
+  });
+  html += '</table>';
+  document.getElementById(wrapperId).innerHTML = html;
+}
+
 function buildHeatmaps() {
   const dict = DB.meta.tag_dictionary || {};
   const sub = dict.substrate||[];
@@ -5106,6 +5132,74 @@ function quickAddFromS2(info) {
 // ══════════════════════════════════════════════
 let graphNodes = [];
 let graphEdges = [];
+
+function drawGraph(ctx, W, H, highlightId) {
+  const dict = DB.meta.tag_dictionary||{};
+  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9',market_trend:'#7f8c8d',doc_type:'#8a7e72',access:'#8a7e72'};
+  const tagCat = {};
+  Object.entries(dict).forEach(([cat,tags])=>tags.forEach(t=>{tagCat[t]=cat}));
+
+  const nodeMap = {};
+  graphNodes.forEach(n=>nodeMap[n.id]=n);
+
+  // 找出 highlight 的連結節點
+  const connected = new Set();
+  if(highlightId) {
+    connected.add(highlightId);
+    graphEdges.forEach(e=>{
+      if(e.paper===highlightId) connected.add(e.tag);
+      if(e.tag===highlightId) connected.add(e.paper);
+    });
+  }
+
+  ctx.clearRect(0,0,W,H);
+
+  // Edges
+  graphEdges.forEach(e=>{
+    const a=nodeMap[e.paper],b=nodeMap[e.tag];if(!a||!b)return;
+    const hl = highlightId && (connected.has(e.paper)&&connected.has(e.tag));
+    ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+    ctx.strokeStyle = hl ? 'rgba(232,108,58,0.6)' : highlightId ? 'rgba(200,190,180,0.08)' : 'rgba(180,160,140,0.2)';
+    ctx.lineWidth = hl ? 2 : 0.5;
+    ctx.stroke();
+  });
+
+  // Nodes
+  graphNodes.forEach(n=>{
+    const hl = !highlightId || connected.has(n.id);
+    const alpha = hl ? 1 : 0.15;
+    ctx.globalAlpha = alpha;
+
+    if(n.type==='tag') {
+      // 圓形 Tag 節點
+      const r = 5 + Math.min(n.count*2, 18);
+      const col = catColors[n.cat] || '#8a7e72';
+      ctx.beginPath();ctx.arc(n.x,n.y,r,0,Math.PI*2);
+      ctx.fillStyle=col;ctx.fill();
+      ctx.strokeStyle='rgba(0,0,0,0.15)';ctx.lineWidth=0.5;ctx.stroke();
+      ctx.fillStyle='#2a2420';ctx.font='600 11px Inter,sans-serif';ctx.textAlign='center';
+      ctx.fillText(n.id, n.x, n.y-r-4);
+    } else {
+      // 方形 Paper 節點
+      const s = 6 + Math.min(n.count*2, 12);
+      const docColor = n.docType==='專利'?'#d4a030':n.docType==='商用產品'?'#2d8c5a':'#e86c3a';
+      ctx.fillStyle=docColor;
+      ctx.fillRect(n.x-s/2, n.y-s/2, s, s);
+      ctx.strokeStyle='rgba(0,0,0,0.2)';ctx.lineWidth=0.5;
+      ctx.strokeRect(n.x-s/2, n.y-s/2, s, s);
+      ctx.fillStyle='#2a2420';ctx.font='500 9px JetBrains Mono,monospace';ctx.textAlign='center';
+      ctx.fillText(n.id, n.x, n.y-s/2-3);
+    }
+    ctx.globalAlpha = 1;
+  });
+
+  // Highlight 標籤
+  if(highlightId && nodeMap[highlightId]) {
+    const hn = nodeMap[highlightId];
+    ctx.fillStyle='var(--text)';ctx.font='700 13px Inter,sans-serif';ctx.textAlign='left';
+    ctx.fillText(`🔍 ${hn.id}${hn.title?' — '+hn.title:''}`, 10, H-10);
+  }
+}
 
 function buildGraph() {
   const catFilter = document.getElementById('graphTagCat').value;
