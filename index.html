@@ -2314,11 +2314,16 @@ function showView(id,el){
   if(currentView && currentView!==id && !['graph','gap','compare','chat'].includes(currentView)) previousView = currentView;
   // 隱藏所有 view
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  // 切離分析時，強制隱藏所有子 view
+  // 切離分析時，強制隱藏所有子 view（含 kgraph）
   if(id!=='analysis') {
-    ['graph','gap','compare','chat','commercial'].forEach(sid=>{
+    ['graph','gap','compare','chat','commercial','kgraph'].forEach(sid=>{
       const el=document.getElementById('v-'+sid);
       if(el) el.style.display='none';
+    });
+    // 停止知識圖譜 simulation 並清除浮動元素
+    if(typeof kgSim!=='undefined' && kgSim) kgSim.stop();
+    ['kgDetail','kgTooltip'].forEach(did=>{
+      const d=document.getElementById(did); if(d) d.style.display='none';
     });
   }
   // 顯示目標 view
@@ -2343,11 +2348,18 @@ function showView(id,el){
 
 function showAnalysisTab(subId, btn) {
   currentAnalysisTab = subId;
-  // 隱藏所有分析子 view
-  ['graph','gap','compare','chat','commercial'].forEach(id=>{
+  // 隱藏所有分析子 view（含 kgraph）
+  ['graph','gap','compare','chat','commercial','kgraph'].forEach(id=>{
     const el = document.getElementById('v-'+id);
     if(el) { el.classList.remove('active'); el.style.display = 'none'; }
   });
+  // 離開 kgraph 時停止 simulation
+  if(subId !== 'kgraph' && kgSim) { kgSim.stop(); }
+  // 隱藏 kgraph 浮動元素
+  const kgd = document.getElementById('kgDetail');
+  const kgt = document.getElementById('kgTooltip');
+  if(kgd) kgd.style.display='none';
+  if(kgt) kgt.style.display='none';
   // 顯示目標子 view
   const target = document.getElementById('v-'+subId);
   if(target) { target.style.display = 'block'; }
