@@ -2587,6 +2587,50 @@ function pickFulltextUrl(p) {
   return Object.values(links)[0] || '';
 }
 
+function sourceSearchLinks(p) {
+  const title = p.title || '';
+  const text = `${title} ${p.abstract_note||''} ${p.purpose||''} ${(p.tags||[]).join(' ')}`;
+  const links = [];
+  const add = (label, url) => links.push({label, url});
+  if(/Merit|SplashWire/i.test(text)) {
+    add('Google Patents: Merit hydrophilic guidewire', 'https://patents.google.com/?assignee=Merit+Medical&oq=Merit+Medical+hydrophilic+guidewire');
+    add('Merit Medical 官網', 'https://www.merit.com/');
+  }
+  if(/Cook/i.test(text)) {
+    add('Google Patents: Cook hydrophilic catheter', 'https://patents.google.com/?assignee=Cook+Medical&oq=Cook+Medical+hydrophilic+catheter');
+    add('Cook Medical 官網', 'https://www.cookmedical.com/');
+  }
+  if(/Boston|Scimed|US5876448/i.test(text)) {
+    add('Google Patents: Boston Scientific hydrophilic catheter', 'https://patents.google.com/?assignee=Boston+Scientific&oq=Boston+Scientific+hydrophilic+catheter');
+    add('US5876448', 'https://patents.google.com/patent/US5876448/en');
+    add('Boston Scientific 官網', 'https://www.bostonscientific.com/');
+  }
+  if(/Argon|Scorpion|SLIP-COAT/i.test(text)) {
+    add('Google Patents: Argon hydrophilic catheter', 'https://patents.google.com/?assignee=Argon+Medical&oq=Argon+Medical+hydrophilic+catheter');
+    add('Argon Medical 官網', 'https://www.argonmedical.com/');
+  }
+  if(!links.length) {
+    add('Google Patents 搜尋標題', `https://patents.google.com/?q=${encodeURIComponent(title || 'hydrophilic catheter coating')}`);
+    add('Google Scholar 搜尋標題', `https://scholar.google.com/scholar?q=${encodeURIComponent(title || 'hydrophilic catheter coating')}`);
+  }
+  return links;
+}
+
+function renderSourceLinks(p) {
+  const saved = Object.entries(p.links || {}).filter(([,url])=>url);
+  const savedHtml = saved.length ? saved.map(([k,url])=>
+    `<a href="${url}" target="_blank" class="detail-link">↗ ${escHtml(k)}：${escHtml(url.length>58?url.slice(0,58)+'…':url)}</a>`
+  ).join('<br>') : `<div style="font-size:12px;color:var(--muted);margin-bottom:6px">這筆資料目前沒有單一原始全文連結；若是內部彙整/競爭情報，請用下方搜尋入口回查原始專利或公司資料。</div>`;
+  const searchHtml = sourceSearchLinks(p).map(x=>
+    `<a href="${x.url}" target="_blank" class="detail-link">🔎 ${escHtml(x.label)}</a>`
+  ).join('<br>');
+  return `<div class="detail-section">
+    <div class="detail-section-title">🔗 原始來源 / 搜尋入口</div>
+    ${savedHtml}
+    <div style="margin-top:${saved.length?'8px':'2px'}">${searchHtml}</div>
+  </div>`;
+}
+
 function extractReadableTextFromHtml(html) {
   const doc = new DOMParser().parseFromString(html, 'text/html');
   doc.querySelectorAll('script,style,noscript,svg,nav,header,footer,form,aside').forEach(el=>el.remove());
@@ -3299,10 +3343,7 @@ function showDetail(i) {
 
     <div id="chemStructures_${i}"></div>
 
-    ${link?`<div class="detail-section">
-      <div class="detail-section-title">🔗 連結</div>
-      <a href="${link}" target="_blank" class="detail-link">↗ ${link.length>50?link.slice(0,50)+'…':link}</a>
-    </div>`:''}
+    ${renderSourceLinks(p)}
 
     <div style="display:flex;gap:6px;margin-top:16px;flex-wrap:wrap">
       <button class="btn btn-s" onclick="pinPaper('${p.id}')">📌 釘選到 AI</button>
