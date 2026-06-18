@@ -148,7 +148,7 @@
   "papers": [
     {
       "id": "P01",
-      "title": "Coating composition for a urinary catheter (US8133580B2)",
+      "title": "泌尿導管親水塗層組成物（US8133580B2）",
       "authors": "Dias et al. / DSM",
       "year": 2012,
       "venue": "Google Patents",
@@ -226,7 +226,7 @@
     },
     {
       "id": "P02",
-      "title": "Hydrophilic coating comprising a polyelectrolyte (EP1957130B1)",
+      "title": "含聚電解質（Polyelectrolyte）之親水塗層（EP1957130B1）",
       "authors": "Dias et al. / DSM",
       "year": 2013,
       "venue": "Google Patents",
@@ -297,7 +297,7 @@
     },
     {
       "id": "P03",
-      "title": "Hydrophilic coating (WO2009112548A1)",
+      "title": "親水塗層（WO2009112548A1）",
       "authors": "Rooijmans / DSM",
       "year": 2009,
       "venue": "Google Patents",
@@ -372,7 +372,7 @@
     },
     {
       "id": "P06",
-      "title": "Lubricious hydrogel coatings (US5160790 / 單步熱固化)",
+      "title": "潤滑水凝膠塗層 — 單步熱固化配方（US5160790）",
       "authors": "(專利)",
       "year": 1992,
       "venue": "USPTO",
@@ -445,7 +445,7 @@
     },
     {
       "id": "P08",
-      "title": "Lubricious hydrophilic coating for intracorporeal medical device (US6221425B1)",
+      "title": "體內醫療器材之潤滑親水塗層（US6221425B1）",
       "authors": "(專利)",
       "year": 2001,
       "venue": "Google Patents",
@@ -520,7 +520,7 @@
     },
     {
       "id": "P12",
-      "title": "Sterilized ready-to-use catheter (US9138510 / 兩層 PVP UV)",
+      "title": "即用型滅菌導管 — 雙層 PVP UV 固化（US9138510）",
       "authors": "(專利)",
       "year": 2015,
       "venue": "Justia",
@@ -601,7 +601,7 @@
     },
     {
       "id": "P13",
-      "title": "A hydrophilic coating and method (WO1998058990A1)",
+      "title": "親水塗層及製程方法（WO1998058990A1）",
       "authors": "(WO1998058990A1) / Coloplast A/S*",
       "year": 1998,
       "venue": "Google Patents",
@@ -671,7 +671,7 @@
     },
     {
       "id": "P14",
-      "title": "Medical device with hydrophilic coating (US20150038947A1)",
+      "title": "具親水塗層之醫療器材（US20150038947A1）",
       "authors": "(專利)",
       "year": 2015,
       "venue": "Google Patents",
@@ -744,7 +744,7 @@
     },
     {
       "id": "P15",
-      "title": "Hydrophilic coating (US20110144579A1 / 雙層 PU-PVP 熱固)",
+      "title": "雙層 PU-PVP 熱固化親水塗層（US20110144579A1）",
       "authors": "(專利)",
       "year": 2011,
       "venue": "Google Patents",
@@ -815,7 +815,7 @@
     },
     {
       "id": "P18",
-      "title": "Urinary catheter (US10857324 / C.R.Bard PAA-PEG)",
+      "title": "泌尿導管 — PAA-PEG 塗層（US10857324，C.R. Bard）",
       "authors": "C.R.Bard",
       "year": 2020,
       "venue": "Justia",
@@ -890,7 +890,7 @@
     },
     {
       "id": "P24",
-      "title": "Hydrophilic lubricity coating with hybrid top coat (US6610035B2)",
+      "title": "複合頂塗親水潤滑塗層 — 水凝膠底層 + 疏水保護面塗（US6610035B2）",
       "authors": "(專利)",
       "year": 2003,
       "venue": "Google Patents",
@@ -963,7 +963,7 @@
     },
     {
       "id": "P25",
-      "title": "Lubricious echogenic coatings (WO2007089761A2)",
+      "title": "聲學可視性潤滑塗層（Echogenic Lubricious Coating）（WO2007089761A2）",
       "authors": "(專利)",
       "year": 2007,
       "venue": "Google Patents",
@@ -1032,7 +1032,7 @@
     },
     {
       "id": "P26",
-      "title": "UV cure topcoatings for medical devices (US12037560B2)",
+      "title": "UV 固化醫療器材頂塗塗層（US12037560B2）",
       "authors": "(專利)",
       "year": 2024,
       "venue": "Google Patents",
@@ -1109,7 +1109,7 @@
     },
     {
       "id": "C01",
-      "title": "HYDAK UV/Thermal hydrophilic coating (Biocoat)",
+      "title": "HYDAK UV/熱固化雙路親水塗層（Biocoat）",
       "authors": "Biocoat Inc.",
       "year": 2022,
       "venue": "商用產品/USPTO",
@@ -1235,7 +1235,7 @@
     },
     {
       "id": "C02",
-      "title": "LUBRITEQ UV-curable hydrophilic coating (Freudenberg Medical)",
+      "title": "LUBRITEQ UV 固化親水塗層（Freudenberg Medical）",
       "authors": "Freudenberg Medical",
       "year": 2026,
       "venue": "商用產品",
@@ -1353,7 +1353,7 @@
     },
     {
       "id": "C03",
-      "title": "Serene 親水塗層 (Surmodics)",
+      "title": "Serene 兩性離子親水塗層（Surmodics）",
       "authors": "Surmodics Inc.",
       "year": 2015,
       "venue": "商用產品",
@@ -1479,7 +1479,7 @@
     },
     {
       "id": "C04",
-      "title": "Hydromer Lubricious Coatings (Hydromer)",
+      "title": "Hydromer 潤滑塗層系列（Hydromer）",
       "authors": "Hydromer Inc.",
       "year": 2000,
       "venue": "商用產品",
@@ -1594,7 +1594,7 @@
     },
     {
       "id": "A1",
-      "title": "UV-curing hydrophilic semi-IPN coating for medical guidewires",
+      "title": "UV 固化親水 Semi-IPN 塗層用於醫療導線（Guidewire）",
       "authors": "Ding W et al. / Shanghai Kindly Medical",
       "year": 2021,
       "venue": "J. Coatings Technology and Research",
@@ -1668,7 +1668,7 @@
     },
     {
       "id": "A2",
-      "title": "Low-friction high-stability hydrophilic PVP/PEG coated TPU for interventional catheter",
+      "title": "低摩擦高穩定性 PVP/PEG 親水塗層 TPU 介入導管",
       "authors": "(待補) / 中國研究機構*",
       "year": 2024,
       "venue": "Surface and Coatings Technology",
@@ -1742,7 +1742,7 @@
     },
     {
       "id": "A3",
-      "title": "PVP/PVA coatings with high adhesion for coronary guidewires (TPU)",
+      "title": "高附著力 PVP/PVA 塗層用於冠狀動脈導線（TPU 基材）",
       "authors": "(待補) / 中國研究機構*",
       "year": 2025,
       "venue": "ScienceDirect",
@@ -1816,7 +1816,7 @@
     },
     {
       "id": "B1",
-      "title": "Influence of Biocompatible Hydrophilic Needle Surface Coating on Puncture Biopsy",
+      "title": "生物相容性親水針面塗層對穿刺切片（Biopsy）之影響",
       "authors": "Gao, Song, Liu, Jiang, Hao",
       "year": 2020,
       "venue": "Coatings (MDPI)",
@@ -1883,7 +1883,7 @@
     },
     {
       "id": "B2",
-      "title": "A novel polymeric coating for enhanced ultrasound visibility (biopsy needle)",
+      "title": "超音波可視性增強聚合物塗層 — 切片針新型設計",
       "authors": "(PubMed)",
       "year": 2022,
       "venue": "PubMed",
@@ -1951,7 +1951,7 @@
     },
     {
       "id": "R1",
-      "title": "Water-Soluble Photoinitiators in Biomedical Applications",
+      "title": "水溶性光起始劑（Photoinitiator）在生醫應用中的研究",
       "authors": "Tomal, Ortyl",
       "year": 2020,
       "venue": "Polymers (MDPI)",
@@ -2069,7 +2069,7 @@
     },
     {
       "id": "R2",
-      "title": "UV Curing for Medical Devices: Role of PEG, PVP, Chitosan (Hydromer)",
+      "title": "UV 固化醫療器材：PEG、PVP、幾丁聚醣（Chitosan）的角色（Hydromer）",
       "authors": "Hydromer",
       "year": 2025,
       "venue": "Hydromer 技術文章",
@@ -2198,7 +2198,7 @@
     },
     {
       "id": "R3",
-      "title": "PVP UV photooxidation 光降解風險",
+      "title": "PVP UV 光氧化降解風險研究",
       "authors": "Hassouna et al.",
       "year": 2009,
       "venue": "Polymer Degradation and Stability",
@@ -2266,7 +2266,7 @@
     },
     {
       "id": "R4",
-      "title": "Shrinkage of UV oligomers and monomers",
+      "title": "UV 寡聚物（Oligomer）與單體的固化收縮分析",
       "authors": "Moeck, AG",
       "year": 2014,
       "venue": "RadTech Conference",
@@ -2330,7 +2330,7 @@
     },
     {
       "id": "R5",
-      "title": "UV cross-linked PVP electrospun fibres as antibacterial surfaces",
+      "title": "UV 交聯 PVP 靜電紡絲纖維作為抗菌表面",
       "authors": "Maciejewska et al.",
       "year": 2019,
       "venue": "Sci. Tech. Adv. Materials",
@@ -2400,7 +2400,7 @@
     },
     {
       "id": "M1",
-      "title": "Hydrophilic Coating Market Report (MarketsandMarkets)",
+      "title": "全球醫療器材親水塗層市場報告（MarketsandMarkets）",
       "authors": "MarketsandMarkets",
       "year": 2024,
       "venue": "市場報告",
@@ -2506,7 +2506,7 @@
     },
     {
       "id": "M2",
-      "title": "Hydrophilic polymer coatings patent landscape 2026 (PatSnap)",
+      "title": "全球親水聚合物塗層專利地圖分析 2026（PatSnap）",
       "authors": "PatSnap",
       "year": 2026,
       "venue": "專利地圖",
@@ -2621,7 +2621,7 @@
     },
     {
       "id": "L02",
-      "title": "Hydrophilic coating (US8871869 / 含界面活性劑)",
+      "title": "含界面活性劑（Surfactant）之親水塗層（US8871869）",
       "authors": "DSM",
       "year": 2014,
       "venue": "USPTO",
@@ -2691,7 +2691,7 @@
     },
     {
       "id": "L04",
-      "title": "Hydrophilic coatings for medical implements (US7015262 / lancing needle)",
+      "title": "醫療器材親水塗層 — 穿刺針應用（US7015262）",
       "authors": "(專利)",
       "year": 2006,
       "venue": "USPTO",
@@ -2760,7 +2760,7 @@
     },
     {
       "id": "A4",
-      "title": "PVP/PVA coatings high adhesion for coronary guidewires (TPU, PDA+UV, 詳細數據)",
+      "title": "PVP/PVA 高附著塗層用於冠狀動脈導線 — PDA+UV 詳細數據",
       "authors": "(待補) / 中國研究機構*",
       "year": 2025,
       "venue": "Materials Today Communications",
@@ -2838,7 +2838,7 @@
     },
     {
       "id": "R6",
-      "title": "Friction behaviour of hydrophilic lubricious coatings (in vitro tribology)",
+      "title": "親水潤滑塗層摩擦行為研究 — 體外摩擦學（Tribology）分析",
       "authors": "(ScienceDirect)",
       "year": 2015,
       "venue": "Tribology International",
@@ -2912,7 +2912,7 @@
     },
     {
       "id": "R7",
-      "title": "Performance Testing of Hydrophilic Coatings on Medical Devices",
+      "title": "醫療器材親水塗層性能測試方法綜述",
       "authors": "Adhesives & Sealants Industry",
       "year": 2020,
       "venue": "產業技術文章",
@@ -3032,7 +3032,7 @@
     },
     {
       "id": "R8",
-      "title": "Pinch Test Parameters White Paper + 摩擦測試方法 (Biocoat/ViVitro)",
+      "title": "摩擦測試參數白皮書 — Pinch Test 方法論（Biocoat/ViVitro）",
       "authors": "Biocoat / ViVitro Labs",
       "year": 2020,
       "venue": "技術白皮書",
@@ -3129,7 +3129,7 @@
     },
     {
       "id": "R9",
-      "title": "Hydrophilic coating chemistry families: PVP vs PEG 定位 (PatSnap)",
+      "title": "親水塗層化學家族定位：PVP vs PEG（PatSnap 分析）",
       "authors": "PatSnap",
       "year": 2026,
       "venue": "技術文章",
@@ -3263,7 +3263,7 @@
     },
     {
       "id": "C06",
-      "title": "DSM ComfortCoat / 親水塗層系統 (dsm-firmenich)",
+      "title": "DSM ComfortCoat 親水塗層系統（dsm-firmenich）",
       "authors": "DSM-Firmenich",
       "year": 2018,
       "venue": "商用產品",
@@ -3494,7 +3494,7 @@
     },
     {
       "id": "P22",
-      "title": "Hydrophilic lubricant coatings (US6458867B1 / plasma+silane primer)",
+      "title": "潤滑親水塗層 — Plasma 加矽烷底塗（US6458867B1）",
       "authors": "(專利)",
       "year": 2002,
       "venue": "Google Patents",
@@ -3567,7 +3567,7 @@
     },
     {
       "id": "P05",
-      "title": "Hydrophilic coating (US8287890 / PEO底層+PVP面層雙層)",
+      "title": "雙層親水塗層：PEO 底層 + PVP 面層（US8287890）",
       "authors": "(專利)",
       "year": 2012,
       "venue": "USPTO",
@@ -3641,7 +3641,7 @@
     },
     {
       "id": "M3",
-      "title": "Medical Device Hydrophilic Coatings Market (Grand View)",
+      "title": "醫療器材親水塗層市場分析（Grand View Research）",
       "authors": "Grand View Research",
       "year": 2025,
       "venue": "市場報告",
@@ -3741,7 +3741,7 @@
     },
     {
       "id": "R10",
-      "title": "Influence of Biocompatible Hydrophilic Coated Needle on Puncture (FEM, 期刊版)",
+      "title": "生物相容性親水塗層針對穿刺影響研究 — 有限元素分析（FEM）版",
       "authors": "Gao et al.",
       "year": 2020,
       "venue": "Procedia (ScienceDirect)",
@@ -3807,7 +3807,7 @@
     },
     {
       "id": "C08",
-      "title": "AST Products LubriLAST / 親水塗層 (AST Products)",
+      "title": "LubriLAST 親水塗層（AST Products）",
       "authors": "AST Products Inc.",
       "year": 2016,
       "venue": "商用產品",
@@ -3907,7 +3907,7 @@
     },
     {
       "id": "R11",
-      "title": "TPU wettability hydrophilic stability by plasma-induced graft polymerization",
+      "title": "Plasma 誘導接枝聚合提升 TPU 親水穩定性研究",
       "authors": "Xie Y et al. / Hunan Prov (中國)",
       "year": 2024,
       "venue": "Applied Surface Science",
@@ -3981,7 +3981,7 @@
     },
     {
       "id": "R12",
-      "title": "Solvent-free UV-curable waterborne PU-acrylate sIPN coatings",
+      "title": "無溶劑 UV 固化水性聚氨酯丙烯酸酯（WPUA）半互穿塗層",
       "authors": "(Scientific Reports)",
       "year": 2025,
       "venue": "Scientific Reports",
@@ -4051,7 +4051,7 @@
     },
     {
       "id": "C09",
-      "title": "Surmodics Serene / Harland Cork 歐洲總部 (產業動態)",
+      "title": "Surmodics Serene 與 Harland Cork 歐洲佈局（產業動態）",
       "authors": "產業新聞",
       "year": 2022,
       "venue": "產業動態",
@@ -4148,7 +4148,7 @@
     },
     {
       "id": "P28",
-      "title": "Lubricious coating for medical device comprising adhesion-promoting primer (CN107405430A)",
+      "title": "含附著促進底塗（Adhesion-Promoting Primer）之醫療器材潤滑塗層",
       "authors": "DSM",
       "year": 2019,
       "venue": "Google Patents",
@@ -4220,7 +4220,7 @@
     },
     {
       "id": "P29",
-      "title": "Coating composition (Coloplast / 親水塗層)",
+      "title": "塗層組成物（Coloplast 親水塗層）",
       "authors": "Coloplast",
       "year": 2020,
       "venue": "Google Patents",
@@ -4294,7 +4294,7 @@
     },
     {
       "id": "R13",
-      "title": "Coating formulation for preparing a hydrophilic coating (US8957125)",
+      "title": "親水塗層配方 — 光固化水凝膠（US8957125）",
       "authors": "DSM",
       "year": 2015,
       "venue": "Google Patents",
@@ -4365,7 +4365,7 @@
     },
     {
       "id": "R14",
-      "title": "UV-VIS Curable PEG Hydrogels for Biomedical Applications (multifunctionality)",
+      "title": "UV-VIS 固化 PEG 水凝膠在生醫應用的多功能性",
       "authors": "Sabel-Grau et al.",
       "year": 2022,
       "venue": "Gels (MDPI)",
@@ -4434,7 +4434,7 @@
     },
     {
       "id": "G01",
-      "title": "Frictional properties of poly(MPC-co-BMA) phospholipid polymer for catheter applications",
+      "title": "MPC 磷脂聚合物 Poly(MPC-co-BMA) 導管摩擦特性研究",
       "authors": "Ho SP; Nakabayashi N; Iwasaki Y et al.",
       "year": 2003,
       "venue": "Biomaterials",
@@ -4505,7 +4505,7 @@
     },
     {
       "id": "G02",
-      "title": "Grafting of Multifunctional Antithrombogenic Chemical Networks on Polyurethane Intravascular Catheters",
+      "title": "多功能抗血栓化學網絡接枝於聚氨酯（PU）表面",
       "authors": "Roth Y; Lewitus D / Shenkar Engineering (Israel)",
       "year": 2020,
       "venue": "Polymers",
@@ -4585,7 +4585,7 @@
     },
     {
       "id": "G03",
-      "title": "Zwitterionic Photografted Coatings Reduce Friction and Insertion Forces (Cochlear Implant)",
+      "title": "兩性離子光接枝塗層降低耳蝸植入電極插入摩擦力",
       "authors": "Bennion DM; Horne R; Peel A et al.",
       "year": 2021,
       "venue": "Otol Neurotol",
@@ -4660,7 +4660,7 @@
     },
     {
       "id": "G04",
-      "title": "Soft Zwitterionic Hydrogel as Coating to Reduce Foreign Body Reaction (Polyimide)",
+      "title": "軟性兩性離子水凝膠塗層降低聚醯亞胺（Polyimide）植入異物反應",
       "authors": "Gori M; Giannitelli SM; Vadala G et al.",
       "year": 2022,
       "venue": "Molecules",
@@ -4734,7 +4734,7 @@
     },
     {
       "id": "G05",
-      "title": "SBMA hydrogel-coated heart valves with anti-calcification",
+      "title": "SBMA 水凝膠塗層心臟瓣膜 — 抗鈣化（Anti-calcification）研究",
       "authors": "Luo Y; Huang S; Ma L",
       "year": 2021,
       "venue": "Mater Sci Eng C",
@@ -4806,7 +4806,7 @@
     },
     {
       "id": "G06",
-      "title": "SBMA Antifouling All-Polymeric Microneedle for ECG (14-day)",
+      "title": "SBMA 抗汙全聚合物微針 — 心電圖（ECG）長效（14天）應用",
       "authors": "Kim JH; Hwang C; Lee JH et al.",
       "year": 2025,
       "venue": "Adv Sci",
@@ -4871,7 +4871,7 @@
     },
     {
       "id": "G07",
-      "title": "Enhanced antifouling SBMA hydrogel coatings for urinary catheters",
+      "title": "SBMA 水凝膠強化抗汙塗層用於輸尿管導管",
       "authors": "Yao C; Teng X; Sun D et al.",
       "year": 2024,
       "venue": "Colloids Surf B",
@@ -4943,7 +4943,7 @@
     },
     {
       "id": "G08",
-      "title": "Quaternized chitosan-functionalized catheter with hydrophilicity and antibacterial",
+      "title": "季銨化幾丁聚醣（QCS）功能化導管 — 親水性與抗菌雙效",
       "authors": "Liu X; Lin Q; Zhong Y et al.",
       "year": 2025,
       "venue": "J Biomater Sci Polym Ed",
@@ -5020,7 +5020,7 @@
     },
     {
       "id": "G09",
-      "title": "PDA+PVP antifouling and antimicrobial polymer membranes (PP substrate)",
+      "title": "PDA + PVP 抗汙抗菌聚合物膜（PP 基材）",
       "authors": "Jiang J; Zhu L; Zhu L et al.",
       "year": 2013,
       "venue": "ACS Appl Mater Interfaces",
@@ -5094,7 +5094,7 @@
     },
     {
       "id": "G10",
-      "title": "Chitosan-fatty acid coatings for catheters (friction 0.53→0.35)",
+      "title": "幾丁聚醣脂肪酸（Chitosan-Fatty Acid）塗層導管 — 摩擦係數 0.53→0.35",
       "authors": "Niemczyk A; Goszczynska A; Golda-Cepa M et al.",
       "year": 2019,
       "venue": "Carbohydr Polym",
@@ -5165,7 +5165,7 @@
     },
     {
       "id": "G11",
-      "title": "Chitosan-coated super-hydrophilic PVC for urothelial catheters",
+      "title": "超親水幾丁聚醣塗層 PVC 泌尿導管",
       "authors": "Vesel A; Motaln H; Mozetic M et al.",
       "year": 2025,
       "venue": "Int J Mol Sci",
@@ -5239,7 +5239,7 @@
     },
     {
       "id": "G12",
-      "title": "WPU-stabilized hydrogel coating with lubrication and antibacterial on catheters",
+      "title": "WPU 穩定化水凝膠塗層 — 潤滑與抗菌雙效導管",
       "authors": "Zhang P; Gao Y; Li S et al.",
       "year": 2025,
       "venue": "ACS Appl Mater Interfaces",
@@ -5318,7 +5318,7 @@
     },
     {
       "id": "G13",
-      "title": "Bioinspired super-hydrophilic pMPC armor for vascular catheters",
+      "title": "仿生超親水 pMPC 護甲塗層用於血管導管",
       "authors": "Ke Y; Meng H; Du Z et al.",
       "year": 2024,
       "venue": "Bioact Mater",
@@ -5394,7 +5394,7 @@
     },
     {
       "id": "G14",
-      "title": "Universal zwitterionic coating for blood-contacting catheters (10 substrates)",
+      "title": "通用型兩性離子塗層用於血液接觸導管（10 種基材驗證）",
       "authors": "Zhang T; Liang T; Pan Q et al.",
       "year": 2025,
       "venue": "Adv Sci",
@@ -5467,7 +5467,7 @@
     },
     {
       "id": "G15",
-      "title": "Stable Dual-Functional Coating on PU by Grafting Antibacterial-Zwitterionic Copolymer",
+      "title": "接枝抗菌-兩性離子共聚物於 PU 的雙功能穩定塗層",
       "authors": "Zhang M et al. / 中國研究機構*",
       "year": 2026,
       "venue": "Langmuir",
@@ -5545,7 +5545,7 @@
     },
     {
       "id": "P30",
-      "title": "Lubricious coating (US7141246 / Cook Medical PVP+PU+isocyanate+抗菌)",
+      "title": "潤滑塗層 — PVP+PU+異氰酸酯+抗菌（US7141246，Cook Medical）",
       "authors": "Houghton PE / Cook Medical",
       "year": 2006,
       "venue": "Google Patents",
@@ -5625,7 +5625,7 @@
     },
     {
       "id": "C10",
-      "title": "SLIP-COAT™ Hydrophilic Coating (Argon Medical)",
+      "title": "SLIP-COAT™ 熱固化內腔親水塗層（Argon Medical）",
       "authors": "Argon Medical Devices",
       "year": 2024,
       "venue": "Argon Medical",
@@ -5737,7 +5737,7 @@
     },
     {
       "id": "P31",
-      "title": "Lubricious coating with antimicrobial release (US7402620 / Cook续案)",
+      "title": "具抗菌釋放功能之潤滑塗層（US7402620，Cook Medical 續案）",
       "authors": "Houghton PE / Cook Medical",
       "year": 2008,
       "venue": "Google Patents",
@@ -5816,7 +5816,7 @@
     },
     {
       "id": "P32",
-      "title": "Lubricious coatings for medical devices (US20090048537 / Merit-InterV echogenic+lubricious)",
+      "title": "醫療器材潤滑塗層 — 聲學可視性增強設計（US20090048537）",
       "authors": "Merit Medical (InterV)",
       "year": 2009,
       "venue": "Google Patents",
@@ -6000,7 +6000,7 @@
     },
     {
       "id": "U01",
-      "title": "Ureteral Stent Encrustation: Epidemiology, Pathophysiology, Management and Current Technology",
+      "title": "輸尿管支架結垢：流行病學、病理機制、治療與研究方向綜述",
       "authors": "Tomer N; Garden E; Small A; Palese M / Mount Sinai",
       "year": 2020,
       "venue": "J Urol",
@@ -6127,7 +6127,7 @@
     },
     {
       "id": "U02",
-      "title": "New Stent Technologies",
+      "title": "新型輸尿管支架技術綜述",
       "authors": "Janssen P; Tailly T / Ghent University",
       "year": 2021,
       "venue": "Urol Clin North Am",
@@ -6250,7 +6250,7 @@
     },
     {
       "id": "U03",
-      "title": "Application, Advancement, and Complication of Ureteral Stent and Encrustation: A Major Complication",
+      "title": "輸尿管支架應用、進展與結垢併發症綜述",
       "authors": "Bhardwaj M; Ingole N / Jawaharlal Nehru Medical College",
       "year": 2022,
       "venue": "Cureus",
@@ -6346,7 +6346,7 @@
     },
     {
       "id": "U04",
-      "title": "Natural biopolymers in the fabrication and coating of ureteral stent: An overview",
+      "title": "天然生物聚合物用於輸尿管支架製造與塗層綜述",
       "authors": "Khan SA; Rahman ZU; Xu G / Guangzhou Medical Univ",
       "year": 2024,
       "venue": "Biomater Adv",
@@ -6472,7 +6472,7 @@
     },
     {
       "id": "U05",
-      "title": "New insights into the prevention of ureteral stents encrustation",
+      "title": "輸尿管支架結垢預防的新見解",
       "authors": "Guo H; Yuan JB / Xiangya Hospital",
       "year": 2023,
       "venue": "Open Med (Wars)",
@@ -6600,7 +6600,7 @@
     },
     {
       "id": "U06",
-      "title": "Comparison of Superhydrophilic, Liquid-Like, Liquid-Infused, and Superhydrophobic Surfaces in Preventing CAUTI and Encrustation",
+      "title": "超親水、液體狀、液體注入與超疏水表面之輸尿管支架塗層比較",
       "authors": "Teng X; Yao C; McCoy CP; Zhang S / Queen's Univ Belfast",
       "year": 2024,
       "venue": "ACS Biomater Sci Eng",
@@ -6675,7 +6675,7 @@
     },
     {
       "id": "U07",
-      "title": "Silicone-hydrocoated ureteral stents encrustation and biofilm formation after 3-week dwell time",
+      "title": "矽膠水化塗層輸尿管支架 — 3週留置結垢與生物膜研究",
       "authors": "Barghouthy Y; Wiseman O; Traxer O / Hospital Tenon Paris",
       "year": 2021,
       "venue": "World J Urol",
@@ -6747,7 +6747,7 @@
     },
     {
       "id": "U08",
-      "title": "In vitro and in vivo study of antibacterial and anti-encrustation coating on ureteric stents (propolis EEP)",
+      "title": "蜂膠（Propolis）塗層輸尿管支架體內外抗菌抗結垢研究",
       "authors": "Zhao Y; Chen G; Yang L / Sichuan Univ",
       "year": 2024,
       "venue": "BJU Int",
@@ -6819,7 +6819,7 @@
     },
     {
       "id": "U09",
-      "title": "Inner surface modification of ureteral stent PU tubes by plasma-enhanced CVD to reduce encrustation and biofilm",
+      "title": "Plasma 增強化學氣相沉積（CVD）改質輸尿管支架 PU 管腔內壁",
       "authors": "Lim H; Chung JH; Han DH / Sungkyunkwan Univ + Samsung Medical",
       "year": 2022,
       "venue": "Biofouling",
@@ -6893,7 +6893,7 @@
     },
     {
       "id": "U10",
-      "title": "Heparin/poly-l-lysine-copper coating for surface functionalization of ureteral stent",
+      "title": "肝素/聚離胺酸-銅（Heparin/PLL-Cu）塗層輸尿管支架表面功能化",
       "authors": "Awonusi BO; Yang K; Zhao J / Chinese Academy of Sciences",
       "year": 2022,
       "venue": "Regen Biomater",
@@ -6971,7 +6971,7 @@
     {
       "id": "M4",
       "doc_type": "市場報告",
-      "title": "Catheter Coatings Market Size and Share | Industry Growth, 2019-2026 (Allied Market Research)",
+      "title": "全球導管塗層市場規模與成長 2019-2026（Allied Market Research）",
       "authors": "(AMR) Trupti Wadekar; Snehal Manjrekar; Eswara Prasad / Allied Market Research",
       "year": 2020,
       "venue": "Allied Market Research",
@@ -7045,7 +7045,7 @@
     {
       "id": "P34",
       "doc_type": "專利",
-      "title": "Encrustation and bacterial resistant coatings for medical applications",
+      "title": "醫療器材抗結垢及抗菌塗層（US5328954A）",
       "authors": "Verifiber Technologies / ICET",
       "year": 1994,
       "venue": "USPTO / WIPO",
@@ -7094,7 +7094,7 @@
     {
       "id": "U11",
       "doc_type": "方法",
-      "title": "Effects of materials and surface coatings on encrustation and biofilm formation",
+      "title": "材料與表面塗層對結垢及生物膜形成影響之體外測試方法",
       "authors": "University Technologies International",
       "year": 2003,
       "venue": "USPTO",
@@ -7123,7 +7123,7 @@
     {
       "id": "U12",
       "doc_type": "期刊論文",
-      "title": "Attenuation of encrustation of medical devices using coatings of inorganic fullerene-like nanoparticles",
+      "title": "無機類富勒烯奈米顆粒（Fullerene-Like Nanoparticle）塗層降低醫療器材結垢",
       "authors": "Yeda R&D / Mor Research (Israel)",
       "year": 2016,
       "venue": "WO2015102006A1 / US11446413B2",
@@ -7153,7 +7153,7 @@
     {
       "id": "P35",
       "doc_type": "專利",
-      "title": "Water disintegrable flushable catheter with a hydrophilic coating",
+      "title": "可沖馬桶崩解型親水塗層導管（WO2015089181A2）",
       "authors": "Hollister Incorporated",
       "year": 2015,
       "venue": "WIPO / USPTO",
@@ -7246,7 +7246,7 @@
     {
       "id": "P37",
       "doc_type": "專利",
-      "title": "Hydrophilic coatings and methods of forming the same",
+      "title": "親水塗層及其製造方法（US12364789B2，Hollister）",
       "authors": "Hollister Incorporated",
       "year": 2023,
       "venue": "USPTO",
@@ -7296,7 +7296,7 @@
     {
       "id": "P38",
       "doc_type": "專利",
-      "title": "Medical device with hydrophilic coating",
+      "title": "具親水塗層之醫療器材 — 基材表面能設計（US10850009B2）",
       "authors": "Hollister Incorporated",
       "year": 2020,
       "venue": "USPTO",
@@ -7348,7 +7348,7 @@
     {
       "id": "P39",
       "doc_type": "專利",
-      "title": "Hydrophilic lubricating coating for medical catheters and its preparation method",
+      "title": "醫療導管光固化親水潤滑塗層及其製備方法（US20200339906A1）",
       "authors": "OrbusNeich Medical",
       "year": 2020,
       "venue": "USPTO",
@@ -7397,7 +7397,7 @@
     {
       "id": "P40",
       "doc_type": "專利",
-      "title": "Vapor hydration of a hydrophilic catheter in a package",
+      "title": "親水導管包裝內蒸氣活化技術（US20080179208A1）",
       "authors": "（間歇導尿產品相關公司）",
       "year": 2008,
       "venue": "USPTO",
@@ -7440,7 +7440,7 @@
     {
       "id": "P41",
       "doc_type": "專利",
-      "title": "Method for making a ready-to-use catheter assembly and ready-to-use catheter assembly",
+      "title": "即用型導管組件之製造方法及導管組件（EP2845619A1）",
       "authors": "導尿產品相關公司（專利家族成員多）",
       "year": 2014,
       "venue": "EPO / USPTO",
@@ -7536,7 +7536,7 @@
     {
       "id": "M6",
       "doc_type": "市場報告",
-      "title": "Merit Medical / Cook Medical / Boston Scientific / Argon Medical 親水導管塗層布局摘要",
+      "title": "Merit Medical / Cook Medical / Boston Scientific / Argon Medical 親水導管塗層佈局摘要",
       "authors": "LitDB 內部分析 / 公開專利資料",
       "year": 2025,
       "venue": "USPTO / EPO / 各公司官網",
@@ -7789,7 +7789,7 @@
     {
       "id": "C12",
       "doc_type": "商用產品",
-      "title": "BD Bardex® Hydrogel + Bactiguard® Foley Catheter（水凝膠+抗菌雙塗層留置導尿管）",
+      "title": "BD Bardex® 水凝膠 + Bactiguard® 抗菌雙塗層 Foley 導尿管",
       "authors": "Becton, Dickinson and Company（BD）/ C.R. Bard",
       "year": 2024,
       "venue": "BD 官方產品",
@@ -7856,7 +7856,7 @@
     {
       "id": "C13",
       "doc_type": "商用產品",
-      "title": "Teleflex Rüsch® FloCath Quick™ 親水間歇導尿管（即用型一體化設計）",
+      "title": "Teleflex Rüsch® FloCath Quick™ 親水間歇導尿管（即用型）",
       "authors": "Teleflex Medical",
       "year": 2024,
       "venue": "Teleflex 官方產品",
@@ -7907,7 +7907,7 @@
     {
       "id": "U15",
       "doc_type": "期刊論文",
-      "title": "Impact of Hydrogel-Coated Chest Drains on Outcomes in Thoracic Surgery",
+      "title": "水凝膠塗層胸腔引流管對胸腔外科手術預後之影響",
       "authors": "多中心胸腔外科研究團隊",
       "year": 2024,
       "venue": "PubMed / 胸腔外科期刊",
@@ -7952,7 +7952,7 @@
     {
       "id": "U16",
       "doc_type": "期刊論文",
-      "title": "Double-Pigtail Drainage Catheter: A New Design for Efficient Pleural Drainage",
+      "title": "雙 Pigtail 引流管新型設計 — 提升胸腔積液引流效率",
       "authors": "韓國 Gangneung Asan Hospital / Soonchunhyang University 研究團隊",
       "year": 2023,
       "venue": "MDPI / PubMed PMC10303575",
@@ -7993,7 +7993,7 @@
     {
       "id": "P43",
       "doc_type": "專利",
-      "title": "Medical tubing having exterior hydrophilic coating for microbiocide absorption（US4515593）",
+      "title": "具外表面親水塗層之醫療管材 — 抗菌劑吸附應用（US4515593，Bard）",
       "authors": "C.R. Bard Inc.",
       "year": 1985,
       "venue": "USPTO",
@@ -8039,7 +8039,7 @@
     {
       "id": "P44",
       "doc_type": "專利",
-      "title": "Hydrophilic coating composition for urinary catheter（EP1957127B1 / WO2007065720A2）",
+      "title": "泌尿導管親水塗層組成物（EP1957127B1，Coloplast）",
       "authors": "Coloplast A/S",
       "year": 2007,
       "venue": "EPO / WIPO",
