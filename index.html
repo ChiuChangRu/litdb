@@ -389,7 +389,6 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
     <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('gap',this)">🔥 缺口分析</button>
     <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('compare',this)">📊 比較</button>
     <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('commercial',this)">🏢 商業分析</button>
-    <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('kgraph',this)">🧠 知識圖譜</button>
     <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('chat',this)">🤖 AI 對話</button>
   </div>
   <div id="analysisContent">
@@ -745,6 +744,7 @@ let DB = {meta:{},papers:[]};
 // 抗結痂統一關鍵字（文庫篩選 / 分析比較 / 批次分析 三處共用）
 const ENCRUST_RE = /encrustation|結痂|biofilm|生物膜|conditioning film|sbma|mpc|zwitterion|抗汙|antifouling|chitosan|propolis|hyaluron|heparin|前列腺結石|urinary|ureteral|輸尿管|stent/i;
 let filtered = [];
+let activeRouteFilter = null; // {id, label, color, paperIds}
 let pinnedIds = new Set();
 let chatHistory = [];
 let activeTags = new Set();
@@ -2413,7 +2413,13 @@ function filterPapers() {
   const dc = document.getElementById('deletedCount');
   if(dc) dc.textContent = deletedN;
 
+  // 路線篩選池：若有 activeRouteFilter，只在這些 paper 裡篩
+  const routePool = activeRouteFilter
+    ? new Set(activeRouteFilter.paperIds)
+    : null;
+
   filtered = DB.papers.filter(p => {
+    if(routePool && !routePool.has(p.id)) return false;
     // 軟刪除篩選：預設隱藏，點開才顯示（且只顯示已刪除的）
     if(showDeleted) { if(!p._deleted) return false; }
     else { if(p._deleted) return false; }
@@ -2463,6 +2469,7 @@ function filterPapers() {
   document.getElementById('filterCount').textContent = `${filtered.length} / ${DB.papers.length} 篇`;
   renderPapers();
   renderLibraryStats(filtered);
+  renderRouteBanner();
 }
 
 function renderPapers() {
@@ -2880,7 +2887,7 @@ function renderRoutes() {
                   ${Object.entries(r.perf).map(([k,v])=>`<div style="display:flex;gap:5px;margin-bottom:2px;font-size:11px"><span style="color:var(--muted);min-width:50px;flex-shrink:0">${k}</span><span style="color:var(--text);font-weight:600">${v}</span></div>`).join('')}
                 </div>
                 <div style="display:flex;flex-direction:column;gap:5px;justify-content:flex-end">
-                  <button class="btn btn-s" onclick="goToLibraryFilter('${r.materials[0]}')" style="font-size:11px;text-align:left;padding:5px 10px">
+                  <button class="btn btn-s" onclick="goToRouteLibrary('${r.id}')" style="font-size:11px;text-align:left;padding:5px 10px">
                     📚 相關文獻 (${cnt} 篇)
                   </button>
                   <button class="btn btn-s" onclick="goToCompare()" style="font-size:11px;text-align:left;padding:5px 10px">
@@ -2920,11 +2927,55 @@ function toggleRoute(id) {
 
 function goToLibraryFilter(keyword) {
   const tabs = document.querySelectorAll('.tabs > .tab');
-  showView('browse', tabs[2]); // index 2 = 文庫
+  showView('browse', tabs[2]);
   setTimeout(()=>{
     document.getElementById('fKw').value = keyword;
     filterPapers();
   }, 100);
+}
+
+function goToRouteLibrary(routeId) {
+  const route = ROUTE_DEFS.find(r=>r.id===routeId);
+  if(!route) return;
+  const papers = DB.papers.filter(p=>!p._deleted);
+  const matchedIds = papers.filter(p=>countRoutePapers(route,[p])>0).map(p=>p.id);
+  // 設路線篩選
+  activeRouteFilter = {id:routeId, label:route.label, color:route.color, paperIds:matchedIds};
+  const tabs = document.querySelectorAll('.tabs > .tab');
+  showView('browse', tabs[2]);
+  setTimeout(()=>{
+    document.getElementById('fKw').value = '';
+    filterPapers();
+    renderRouteBanner();
+  }, 100);
+}
+
+function clearRouteFilter() {
+  activeRouteFilter = null;
+  filterPapers();
+  const banner = document.getElementById('routeFilterBanner');
+  if(banner) banner.style.display='none';
+}
+
+function renderRouteBanner() {
+  let banner = document.getElementById('routeFilterBanner');
+  if(!banner) {
+    // 在 paperList 上方插入 banner
+    const list = document.getElementById('paperList');
+    banner = document.createElement('div');
+    banner.id = 'routeFilterBanner';
+    list.parentNode.insertBefore(banner, list);
+  }
+  if(!activeRouteFilter) { banner.style.display='none'; return; }
+  const cnt = filtered.length;
+  banner.style.cssText = `display:flex;align-items:center;gap:8px;padding:8px 12px;margin-bottom:6px;background:${activeRouteFilter.color}18;border:1px solid ${activeRouteFilter.color}44;border-radius:8px;font-size:12px;`;
+  banner.innerHTML = `
+    <div style="width:8px;height:8px;border-radius:50%;background:${activeRouteFilter.color};flex-shrink:0"></div>
+    <span style="font-weight:700;color:${activeRouteFilter.color}">${activeRouteFilter.label}</span>
+    <span style="color:var(--muted)">篩選中 — 顯示 ${cnt} 篇相關文獻</span>
+    <span style="margin-left:auto;color:var(--muted);font-size:11px">後續分析→比較表也將以這 ${cnt} 篇為範圍</span>
+    <button onclick="clearRouteFilter()" style="background:none;border:1px solid var(--border);border-radius:5px;padding:2px 8px;cursor:pointer;font-size:11px;color:var(--muted)">✕ 清除篩選</button>
+  `;
 }
 
 function goToPaper(pid) {
