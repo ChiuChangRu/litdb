@@ -458,38 +458,31 @@ function doLogin(){
 
 <!-- ═══════════════ VIEW: GRAPH ═══════════════ -->
 <div class="view" id="v-graph" style="display:none">
-  <div style="height:calc(100vh - 130px);display:flex;flex-direction:column">
-    <!-- 控制列 -->
-    <div class="graph-controls" style="flex-shrink:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 12px;border-bottom:1px solid var(--border)">
-      <label style="font-size:11px;color:var(--muted)">標籤類別</label>
-      <select id="graphTagCat" onchange="buildGraph()" style="width:auto;padding:4px 8px;font-size:12px">
-        <option value="">全部標籤</option>
-        <option value="substrate">基材</option>
-        <option value="hydrophilic_polymer">親水高分子</option>
-        <option value="cure_method">固化方式</option>
-        <option value="anchor_primer">錨固劑</option>
-        <option value="application">應用</option>
-        <option value="indication">適應症</option>
-        <option value="performance">性能指標</option>
-      </select>
-      <label style="font-size:11px;color:var(--muted);margin-left:8px">最少連結</label>
-      <input type="range" id="graphThreshold" min="1" max="10" value="1" oninput="buildGraph()" style="width:80px">
-      <span id="graphThreshVal" style="font-size:11px;color:var(--muted)">1</span>
-      <span id="graphInfo" style="font-size:11px;color:var(--muted);margin-left:auto"></span>
-      <button class="btn btn-s" onclick="graphResetZoom()" style="font-size:11px">↙ 重置</button>
+  <div class="graph-container" style="display:flex;gap:0">
+    <div style="flex:1;min-width:0">
+      <div class="graph-controls">
+        <label style="font-size:11px;color:var(--muted)">標籤類別</label>
+        <select id="graphTagCat" onchange="buildGraph()" style="width:auto;padding:4px 8px;font-size:12px">
+          <option value="">全部標籤</option>
+          <option value="substrate">基材</option>
+          <option value="hydrophilic_polymer">親水高分子</option>
+          <option value="cure_method">固化方式</option>
+          <option value="anchor_primer">錨固劑</option>
+          <option value="application">應用</option>
+          <option value="indication">適應症</option>
+          <option value="performance">性能指標</option>
+        </select>
+        <label style="font-size:11px;color:var(--muted);margin-left:12px">最少連結</label>
+        <input type="range" id="graphThreshold" min="1" max="10" value="1" oninput="buildGraph()" style="width:80px">
+        <span id="graphThreshVal" style="font-size:11px;color:var(--muted)">1</span>
+        <span id="graphInfo" style="font-size:11px;color:var(--muted);margin-left:auto"></span>
+      </div>
+      <canvas id="graphCanvas" width="1200" height="550" onclick="onGraphClick(event)"></canvas>
+      <div class="graph-legend" id="graphLegend"></div>
     </div>
-    <!-- 圖例 -->
-    <div class="graph-legend" id="graphLegend" style="flex-shrink:0;padding:4px 12px;border-bottom:1px solid var(--border);font-size:10px;display:flex;gap:10px;flex-wrap:wrap"></div>
-    <!-- 主畫布 -->
-    <div style="flex:1;position:relative;overflow:hidden;display:flex">
-      <svg id="graphSvg" style="flex:1;min-width:0"></svg>
-      <!-- tooltip -->
-      <div id="graphTooltip" style="display:none;position:absolute;background:var(--card);border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:12px;pointer-events:none;max-width:220px;box-shadow:0 2px 10px rgba(0,0,0,0.12);z-index:10"></div>
-      <!-- 詳情面板 -->
-      <div id="graphDetailPanel" style="width:300px;flex-shrink:0;border-left:1px solid var(--border);overflow-y:auto;background:var(--surface)">
-        <div id="graphDetailContent" style="font-size:12px;line-height:1.6;padding:14px">
-          <div style="text-align:center;padding:30px 10px;color:var(--muted)">← 點擊節點<br>查看文獻或標籤關聯</div>
-        </div>
+    <div id="graphDetailPanel" style="width:320px;flex-shrink:0;border-left:1px solid var(--border);overflow-y:auto;max-height:600px;padding:12px">
+      <div id="graphDetailContent" style="font-size:12px;line-height:1.6">
+        <div style="text-align:center;padding:30px 10px;color:var(--muted)">← 點擊泡泡圖中的節點<br>查看文獻內容或標籤關聯</div>
       </div>
     </div>
   </div>
@@ -5186,8 +5179,162 @@ let graphNodes = [];
 let graphEdges = [];
 
 function buildGraph() {
-  if(!window.d3) return;
   const catFilter = document.getElementById('graphTagCat').value;
+  const threshold = parseInt(document.getElementById('graphThreshold').value);
+  document.getElementById('graphThreshVal').textContent = threshold;
+  const canvas = document.getElementById('graphCanvas');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio||1;
+  canvas.width = canvas.offsetWidth * dpr;
+  canvas.height = 550 * dpr;
+  ctx.scale(dpr, dpr);
+  const W = canvas.offsetWidth, H = 550;
+
+  const dict = DB.meta.tag_dictionary||{};
+  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9',market_trend:'#7f8c8d',doc_type:'#8a7e72',access:'#8a7e72'};
+  const tagCat = {};
+  Object.entries(dict).forEach(([cat,tags])=>tags.forEach(t=>{tagCat[t]=cat}));
+
+  let validTags = new Set();
+  if(catFilter) { (dict[catFilter]||[]).forEach(t=>validTags.add(t)); }
+  else { Object.values(dict).flat().forEach(t=>validTags.add(t)); }
+
+  const edges = [], tagCount = {}, paperTagCount = {};
+  const graphPapers = (filtered && filtered.length) ? filtered : DB.papers;
+
+  graphPapers.forEach(p => {
+    const tags = (p.tags||[]).filter(t=>validTags.has(t));
+    paperTagCount[p.id] = tags.length;
+    tags.forEach(t => { tagCount[t] = (tagCount[t]||0) + 1; edges.push({paper: p.id, tag: t}); });
+  });
+
+  const activeTags = new Set(Object.entries(tagCount).filter(([,c])=>c>=threshold).map(([t])=>t));
+  const filteredEdges = edges.filter(e=>activeTags.has(e.tag));
+  const activePapers = new Set(filteredEdges.map(e=>e.paper));
+
+  const nodes = [], nodeMap = {};
+  [...activeTags].forEach(t => {
+    const n = {id:t, type:'tag', cat:tagCat[t]||'', count:tagCount[t], x:W*0.3+Math.random()*W*0.4, y:Math.random()*H, vx:0, vy:0, highlight:false};
+    nodes.push(n); nodeMap[t]=n;
+  });
+  [...activePapers].forEach(pid => {
+    const p = graphPapers.find(x=>x.id===pid);
+    const n = {id:pid, type:'paper', docType:p?.doc_type||'', count:paperTagCount[pid]||1, x:Math.random()*W, y:Math.random()*H, vx:0, vy:0, highlight:false, title:(p?.title||'').slice(0,30)};
+    nodes.push(n); nodeMap[pid]=n;
+  });
+
+  const catLabels = {'':'全部標籤',substrate:'基材',hydrophilic_polymer:'親水高分子',cure_method:'固化方式',anchor_primer:'錨固劑',application:'應用',indication:'適應症',performance:'性能指標'};
+  document.getElementById('graphInfo').innerHTML = `<select onchange="document.getElementById('graphTagCat').value=this.value;buildGraph()" style="background:var(--accent);color:#fff;border:none;padding:3px 8px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer">${Object.entries(catLabels).map(([k,v])=>`<option value="${k}" ${k===catFilter?'selected':''}>${v}</option>`).join('')}</select> ${activePapers.size} 篇 · ${activeTags.size} 標籤 · ${filteredEdges.length} 連結${graphPapers.length!==DB.papers.length?' （篩選後）':''}`;
+
+  // Force simulation（靜態，跑完再畫）
+  for(let iter=0;iter<300;iter++){
+    for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++){
+      let dx=nodes[j].x-nodes[i].x, dy=nodes[j].y-nodes[i].y;
+      const dist=Math.max(Math.sqrt(dx*dx+dy*dy),1);
+      const repel = nodes[i].type===nodes[j].type ? 1200 : 600;
+      const f=repel/(dist*dist);
+      nodes[i].vx-=f*dx/dist; nodes[i].vy-=f*dy/dist;
+      nodes[j].vx+=f*dx/dist; nodes[j].vy+=f*dy/dist;
+    }
+    filteredEdges.forEach(e=>{
+      const a=nodeMap[e.paper],b=nodeMap[e.tag];if(!a||!b)return;
+      let dx=b.x-a.x,dy=b.y-a.y;
+      const dist=Math.max(Math.sqrt(dx*dx+dy*dy),1);
+      const f=dist*0.004;
+      a.vx+=f*dx/dist; a.vy+=f*dy/dist;
+      b.vx-=f*dx/dist; b.vy-=f*dy/dist;
+    });
+    nodes.forEach(n=>{
+      n.vx+=(W/2-n.x)*0.0008; n.vy+=(H/2-n.y)*0.0008;
+      n.x+=n.vx*0.25; n.y+=n.vy*0.25;
+      n.vx*=0.82; n.vy*=0.82;
+      n.x=Math.max(50,Math.min(W-50,n.x));
+      n.y=Math.max(50,Math.min(H-50,n.y));
+    });
+  }
+
+  // 繪製
+  ctx.clearRect(0,0,W,H);
+  // 邊
+  filteredEdges.forEach(e=>{
+    const a=nodeMap[e.paper],b=nodeMap[e.tag];if(!a||!b)return;
+    ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+    ctx.strokeStyle='rgba(180,174,165,0.4)'; ctx.lineWidth=0.8; ctx.stroke();
+  });
+  // 節點
+  nodes.forEach(n=>{
+    const col = n.type==='tag' ? (catColors[n.cat]||'#888') : '#8a7e72';
+    const r = n.type==='tag' ? Math.min(8+n.count*2,22) : 7;
+    ctx.beginPath();
+    if(n.type==='tag'){ ctx.arc(n.x,n.y,r,0,Math.PI*2); }
+    else { ctx.rect(n.x-6,n.y-6,12,12); }
+    ctx.fillStyle = col; ctx.fill();
+    ctx.strokeStyle='#fff'; ctx.lineWidth=1.2; ctx.stroke();
+    // 標籤文字
+    const label = n.type==='tag' ? (n.id.length>12?n.id.slice(0,11)+'…':n.id) : n.id;
+    ctx.fillStyle='#fff'; ctx.font=`bold ${n.type==='tag'?7:6}px sans-serif`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(label,n.x,n.y);
+  });
+
+  // 圖例
+  const leg = document.getElementById('graphLegend');
+  if(leg){
+    const usedCats = [...new Set([...activeTags].map(t=>tagCat[t]).filter(Boolean))];
+    leg.innerHTML = usedCats.map(c=>`<span style="display:inline-flex;align-items:center;gap:3px;font-size:10px;margin-right:8px"><span style="width:8px;height:8px;border-radius:50%;background:${catColors[c]||'#888'};display:inline-block"></span>${c}</span>`).join('') +
+      '<span style="font-size:10px;display:inline-flex;align-items:center;gap:3px"><span style="width:8px;height:8px;background:#888;display:inline-block"></span>文獻</span>';
+  }
+
+  // 存供 click 使用
+  canvas._nodes = nodes;
+  canvas._nodeMap = nodeMap;
+  canvas._graphPapers = graphPapers;
+}
+
+function onGraphClick(event) {
+  const canvas = document.getElementById('graphCanvas');
+  if(!canvas._nodes) return;
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio||1;
+  const mx = (event.clientX - rect.left);
+  const my = (event.clientY - rect.top);
+  let hit = null;
+  for(const n of canvas._nodes){
+    const r = n.type==='tag' ? Math.min(8+n.count*2,22) : 8;
+    const dx=n.x-mx, dy=n.y-my;
+    if(Math.sqrt(dx*dx+dy*dy) <= r){ hit=n; break; }
+  }
+  if(!hit){ document.getElementById('graphDetailContent').innerHTML='<div style="text-align:center;padding:30px 10px;color:var(--muted)">← 點擊泡泡圖中的節點<br>查看文獻內容或標籤關聯</div>'; return; }
+
+  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9'};
+  const dc = document.getElementById('graphDetailContent');
+  const dict = DB.meta.tag_dictionary||{};
+
+  if(hit.type==='tag'){
+    const papers = canvas._graphPapers.filter(p=>(p.tags||[]).includes(hit.id));
+    const cat = Object.entries(dict).find(([,tags])=>tags.includes(hit.id))?.[0]||'';
+    dc.innerHTML = `
+      <div style="background:${catColors[cat]||'#888'}22;border-left:3px solid ${catColors[cat]||'#888'};padding:8px 10px;border-radius:0 6px 6px 0;margin-bottom:10px">
+        <div style="font-weight:700;color:${catColors[cat]||'#888'}">${hit.id}</div>
+        <div style="font-size:10px;color:var(--muted)">${cat} · ${papers.length} 篇文獻</div>
+      </div>
+      ${papers.map(p=>`<div style="padding:4px 0;border-bottom:1px solid var(--border);cursor:pointer;font-size:11px" onclick="goToPaper('${p.id}')">
+        <span style="color:var(--accent);font-weight:700">[${p.id}]</span> ${p.title?.slice(0,50)||''}
+      </div>`).join('')}`;
+  } else {
+    const p = canvas._graphPapers.find(x=>x.id===hit.id);
+    if(!p){ dc.innerHTML='找不到文獻'; return; }
+    dc.innerHTML = `
+      <div style="font-weight:700;color:var(--accent);margin-bottom:4px">[${p.id}] ${p.doc_type}</div>
+      <div style="font-size:11px;color:var(--text);margin-bottom:8px;line-height:1.5">${p.title||''}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px">
+        ${(p.tags||[]).map(t=>{const cat=Object.entries(dict).find(([,tags])=>tags.includes(t))?.[0]||'';return `<span style="background:${catColors[cat]||'#888'}22;color:${catColors[cat]||'#888'};font-size:10px;padding:1px 6px;border-radius:4px">${t}</span>`;}).join('')}
+      </div>
+      ${p.abstract_note?`<div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:8px">${p.abstract_note.slice(0,200)}…</div>`:''}
+      <button class="btn btn-s" onclick="goToPaper('${p.id}')" style="width:100%;font-size:11px">📄 查看完整分析</button>`;
+  }
+}
+
   const threshold = parseInt(document.getElementById('graphThreshold').value)||1;
   document.getElementById('graphThreshVal').textContent = threshold;
 
@@ -5323,62 +5470,6 @@ function buildGraph() {
     g.selectAll('circle,rect').attr('opacity',1);
     g.selectAll('line').attr('stroke-opacity',0.5);
   });
-}
-
-function graphResetZoom() {
-  const svg = document.getElementById('graphSvg');
-  if(svg && svg._zoom) d3.select(svg).transition().duration(400).call(svg._zoom.transform, d3.zoomIdentity);
-}
-
-function onGraphNodeClick(d) {
-  const dc = document.getElementById('graphDetailContent');
-  if(!dc) return;
-
-  // 高亮：被選節點的連線亮、其他暗
-  const svg = d3.select('#graphSvg');
-  const connectedIds = new Set([d.id]);
-  svg.selectAll('line').each(function(e){
-    const s = e.source?.id||e.source, t = e.target?.id||e.target;
-    if(s===d.id||t===d.id){ connectedIds.add(s); connectedIds.add(t); }
-  });
-  svg.selectAll('circle,rect').attr('opacity',nd=>connectedIds.has(nd.id)?1:0.15);
-  svg.selectAll('line').attr('stroke-opacity',e=>{
-    const s=e.source?.id||e.source, t=e.target?.id||e.target;
-    return (s===d.id||t===d.id)?0.9:0.05;
-  });
-
-  if(d.type==='tag'){
-    // Tag：顯示連結的文獻清單
-    const papers = (filtered&&filtered.length?filtered:DB.papers).filter(p=>(p.tags||[]).includes(d.id));
-    const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9'};
-    const cat = Object.entries(DB.meta.tag_dictionary||{}).find(([,tags])=>tags.includes(d.id))?.[0]||'';
-    dc.innerHTML = `
-      <div style="background:${catColors[cat]||'#888'}22;border-left:3px solid ${catColors[cat]||'#888'};padding:8px 10px;border-radius:0 6px 6px 0;margin-bottom:10px">
-        <div style="font-weight:700;color:${catColors[cat]||'#888'}">${d.id}</div>
-        <div style="font-size:10px;color:var(--muted)">${cat} · ${papers.length} 篇文獻</div>
-      </div>
-      ${papers.map(p=>`<div style="padding:5px 0;border-bottom:1px solid var(--border);cursor:pointer;font-size:11px" onclick="goToPaper('${p.id}')">
-        <span style="color:var(--accent);font-weight:700">[${p.id}]</span>
-        <span style="margin-left:4px">${p.title?.slice(0,50)||''}${(p.title?.length||0)>50?'…':''}</span>
-      </div>`).join('')}`;
-  } else {
-    // Paper：顯示標籤清單與摘要
-    const p = DB.papers.find(x=>x.id===d.id);
-    if(!p){ dc.innerHTML='找不到文獻'; return; }
-    const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9'};
-    const tdict = DB.meta.tag_dictionary||{};
-    dc.innerHTML = `
-      <div style="font-weight:700;color:var(--accent);margin-bottom:4px">[${p.id}] ${p.doc_type}</div>
-      <div style="font-size:11px;color:var(--text);margin-bottom:8px;line-height:1.5">${p.title||''}</div>
-      <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px">
-        ${(p.tags||[]).map(t=>{
-          const cat=Object.entries(tdict).find(([,tags])=>tags.includes(t))?.[0]||'';
-          return `<span style="background:${catColors[cat]||'#888'}22;color:${catColors[cat]||'#888'};font-size:10px;padding:1px 6px;border-radius:4px;cursor:pointer" onclick="onGraphNodeClick({id:'${t}',type:'tag',label:'${t}',cat:'${cat}',count:1})">${t}</span>`;
-        }).join('')}
-      </div>
-      ${p.abstract_note?`<div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:8px">${p.abstract_note.slice(0,200)}${p.abstract_note.length>200?'…':''}</div>`:''}
-      <button class="btn btn-s" onclick="goToPaper('${p.id}')" style="width:100%;font-size:11px;margin-top:4px">📄 查看完整分析</button>`;
-  }
 }
 </script>
 </body>
