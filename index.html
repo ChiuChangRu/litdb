@@ -3218,7 +3218,7 @@ function renderMarket() {
       const tech = c.coating_technology||{};
       const claims = Object.entries(tech.performance_claims||{}).slice(0,3);
       return `
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer" onclick="goToPaper('${p.id}')">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer" onclick="goToMarketPaper('${p.id}')">
         <!-- Logo + 基本資訊 -->
         <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border)">
           <div style="width:48px;height:48px;border-radius:8px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden">
@@ -3582,6 +3582,8 @@ function goToLibraryFilter(keyword) {
   const tabs = document.querySelectorAll('.tabs > .tab');
   showView('browse', tabs[2]);
   setTimeout(()=>{
+    activeRouteFilter = null;
+    activeLibraryFilter = null;
     document.getElementById('fKw').value = keyword;
     filterPapers();
   }, 100);
@@ -3593,6 +3595,7 @@ function goToRouteLibrary(routeId) {
   const papers = DB.papers.filter(p=>!p._deleted);
   const matchedIds = papers.filter(p=>countRoutePapers(route,[p])>0).map(p=>p.id);
   // 設路線篩選
+  activeLibraryFilter = null;
   activeRouteFilter = {id:routeId, label:route.label, color:route.color, paperIds:matchedIds};
   const tabs = document.querySelectorAll('.tabs > .tab');
   showView('browse', tabs[2]);
@@ -3610,6 +3613,13 @@ function clearRouteFilter() {
   if(banner) banner.style.display='none';
 }
 
+function clearLibraryFilter() {
+  activeLibraryFilter = null;
+  filterPapers();
+  const banner = document.getElementById('routeFilterBanner');
+  if(banner) banner.style.display='none';
+}
+
 function renderRouteBanner() {
   let banner = document.getElementById('routeFilterBanner');
   if(!banner) {
@@ -3619,26 +3629,52 @@ function renderRouteBanner() {
     banner.id = 'routeFilterBanner';
     list.parentNode.insertBefore(banner, list);
   }
-  if(!activeRouteFilter) { banner.style.display='none'; return; }
+  const scope = activeLibraryFilter || activeRouteFilter;
+  if(!scope) { banner.style.display='none'; return; }
   const cnt = filtered.length;
-  banner.style.cssText = `display:flex;align-items:center;gap:8px;padding:8px 12px;margin-bottom:6px;background:${activeRouteFilter.color}18;border:1px solid ${activeRouteFilter.color}44;border-radius:8px;font-size:12px;`;
+  const clearFn = activeLibraryFilter ? 'clearLibraryFilter()' : 'clearRouteFilter()';
+  const note = scope.note || `篩選中 — 顯示 ${cnt} 篇相關文獻`;
+  banner.style.cssText = `display:flex;align-items:center;gap:8px;padding:8px 12px;margin-bottom:6px;background:${scope.color}18;border:1px solid ${scope.color}44;border-radius:8px;font-size:12px;`;
   banner.innerHTML = `
-    <div style="width:8px;height:8px;border-radius:50%;background:${activeRouteFilter.color};flex-shrink:0"></div>
-    <span style="font-weight:700;color:${activeRouteFilter.color}">${activeRouteFilter.label}</span>
-    <span style="color:var(--muted)">篩選中 — 顯示 ${cnt} 篇相關文獻</span>
-    <span style="margin-left:auto;color:var(--muted);font-size:11px">後續分析→比較表也將以這 ${cnt} 篇為範圍</span>
-    <button onclick="clearRouteFilter()" style="background:none;border:1px solid var(--border);border-radius:5px;padding:2px 8px;cursor:pointer;font-size:11px;color:var(--muted)">✕ 清除篩選</button>
+    <div style="width:8px;height:8px;border-radius:50%;background:${scope.color};flex-shrink:0"></div>
+    <span style="font-weight:700;color:${scope.color}">${scope.label}</span>
+    <span style="color:var(--muted)">${note}</span>
+    <span style="margin-left:auto;color:var(--muted);font-size:11px">目前列表 ${cnt} 篇</span>
+    <button onclick="${clearFn}" style="background:none;border:1px solid var(--border);border-radius:5px;padding:2px 8px;cursor:pointer;font-size:11px;color:var(--muted)">✕ 清除篩選</button>
   `;
 }
 
-function goToPaper(pid) {
+function goToPaper(pid, opts={}) {
   const tabs = document.querySelectorAll('.tabs > .tab');
   showView('browse', tabs[2]);
   setTimeout(()=>{
+    if(opts.focus) {
+      activeRouteFilter = null;
+      activeLibraryFilter = {
+        id: pid,
+        label: opts.label || pid,
+        color: opts.color || '#e86c3a',
+        paperIds: [pid],
+        note: opts.note || '市場玩家聚焦 — 只顯示點選的文獻'
+      };
+      filterPapers();
+      const idx = filtered.findIndex(p=>p.id===pid);
+      if(idx>=0) showDetail(idx);
+      return;
+    }
+    activeLibraryFilter = null;
+    activeRouteFilter = null;
     const idx = DB.papers.findIndex(p=>p.id===pid);
-    filtered = DB.papers; renderPapers();
+    filtered = DB.papers; renderPapers(); renderRouteBanner();
     if(idx>=0) showDetail(idx);
   }, 100);
+}
+
+function goToMarketPaper(pid) {
+  const p = DB.papers.find(x=>x.id===pid);
+  const c = p?.patentResults?.commercial || {};
+  const label = `市場玩家：${c.company || p?.title || pid}`;
+  goToPaper(pid, {focus:true, label, color:'#2d8c5a'});
 }
 
 function goToCompare() {
