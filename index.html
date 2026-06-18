@@ -2483,6 +2483,83 @@ function escHtml(s='') {
   return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
 
+function compactText(s='', max=220) {
+  const t = String(s || '').replace(/\s+/g,' ').trim();
+  return t.length > max ? t.slice(0, max - 1) + '…' : t;
+}
+
+function paperAnalysisText(p) {
+  const r = p.patentResults?.full || p.patentResults?.commercial || p.patentResults?.review || p.patentResults || {};
+  const examples = Array.isArray(r.examples) ? r.examples : [];
+  return [
+    p.purpose,
+    p.value_to_project,
+    p.abstract_note,
+    r.summary,
+    r.mechanism,
+    r.vs_database,
+    r.bioteque_relevance,
+    Array.isArray(r.key_findings) ? r.key_findings.join('；') : '',
+    Array.isArray(r.actionable_insights) ? r.actionable_insights.join('；') : '',
+    Array.isArray(r.red_flags) ? r.red_flags.join('；') : '',
+    examples.map(ex=>[
+      ex.name,
+      ex.credibility_reason,
+      ex.formulation?.primer,
+      ex.formulation?.topcoat,
+      ex.process?.coating_method,
+      ex.process?.curing,
+      ex.results?.friction,
+      ex.results?.adhesion,
+      ex.results?.wca,
+      ex.results?.durability,
+      ex.results?.other
+    ].filter(Boolean).join('；')).join('；')
+  ].filter(Boolean).join(' ');
+}
+
+function paperRoleLabel(p) {
+  const text = paperAnalysisText(p).toLowerCase();
+  if(p.doc_type === '商用產品') return '市場/供應商訊號';
+  if(p.doc_type === '市場報告') return '市場趨勢資料';
+  if(p.doc_type === '專利') return '專利/製程前案';
+  if(/review|綜述/.test(p.doc_type || '')) return '綜述/共識整理';
+  if(/harland|fts|cof|contact angle|wca|磨耗|測試方法|測試設備|顆粒/.test(text)) return '測試方法/驗證工具';
+  if(/antimicrobial|抗菌|encrustation|結痂|antifouling|抗汙/.test(text)) return '功能化/臨床問題';
+  if(/primer|pda|plasma|adhesion|附著|錨固|底塗/.test(text)) return '附著/底塗策略';
+  return '材料/配方技術';
+}
+
+function paperKeyPoint(p) {
+  const r = p.patentResults?.full || p.patentResults?.commercial || p.patentResults?.review || p.patentResults || {};
+  const candidates = [
+    r.summary,
+    p.value_to_project,
+    p.purpose,
+    p.abstract_note,
+    Array.isArray(r.key_findings) ? r.key_findings[0] : '',
+    Array.isArray(r.actionable_insights) ? r.actionable_insights[0] : ''
+  ].filter(Boolean);
+  return compactText(candidates[0] || '尚未整理重點', 180);
+}
+
+function paperProjectMeaning(p) {
+  const r = p.patentResults?.full || p.patentResults?.commercial || p.patentResults?.review || p.patentResults || {};
+  const direct = r.bioteque_relevance || p.value_to_project;
+  if(direct) return compactText(direct, 190);
+  const role = paperRoleLabel(p);
+  if(role.includes('專利')) return '可作為 FTO/迴避設計清單的一筆前案，需再確認權利狀態與 claim 邊界。';
+  if(role.includes('測試')) return '可轉成內部驗證 SOP 或規格門檻，讓報告從文獻整理走向可執行測試。';
+  if(role.includes('市場')) return '可用來判斷外購、合作或競品對標價值。';
+  return '可作為配方、材料或製程比較的一個候選基準。';
+}
+
+function roleSummary(ps) {
+  const map = {};
+  ps.forEach(p=>{ const role = paperRoleLabel(p); (map[role] ||= []).push(p); });
+  return Object.entries(map).sort((a,b)=>b[1].length-a[1].length);
+}
+
 function allTags(){const s=new Set();activePapersForAnalysis().forEach(p=>(p.tags||[]).forEach(t=>s.add(t)));return [...s].sort()}
 
 function activePapersForAnalysis() {
@@ -4230,9 +4307,23 @@ function renderIntegratedReport() {
     .sort((a,b)=>b[1]-a[1]).slice(0,10);
   const performance = tagsByCat('performance');
   const analyzed = ps.filter(p=>p.patentResults&&Object.keys(p.patentResults).length>0).length;
+  const withFulltext = ps.filter(p=>p.fulltext || p.full_text || p.pdf_text).length;
   const patents = ps.filter(p=>p.doc_type==='專利');
   const recentCutoff = years.length ? yMax - 4 : null;
   const recent = recentCutoff ? ps.filter(p=>p.year>=recentCutoff).length : 0;
+  const roles = roleSummary(ps);
+  const representative = [...ps]
+    .sort((a,b)=>{
+      const score = p => (p.value_to_project?3:0) + (p.patentResults?2:0) + ((p.abstract_note||'').length>80?1:0) + (p.year||0)/10000;
+      return score(b) - score(a);
+    })
+    .slice(0, Math.min(8, ps.length));
+  const commonTheme = [
+    materials[0] ? `材料主軸集中在「${materials[0][0]}」` : '',
+    cures[0] ? `製程上最常見「${cures[0][0]}」` : '',
+    performance[0] ? `性能討論主要圍繞「${performance[0][0]}」` : '',
+    applications[0] ? `應用情境以「${applications[0][0]}」最突出` : ''
+  ].filter(Boolean).join('；') || '目前文獻的標籤仍偏分散，建議先補齊每篇的材料、製程、性能標籤。';
 
   const trendLines = [];
   const topType = topEntries(byType,1)[0];
@@ -4266,6 +4357,22 @@ function renderIntegratedReport() {
       <td style="${S.td};white-space:nowrap">${p.year||'—'}</td>
       <td style="${S.td}">${escHtml((p.purpose || p.value_to_project || p.abstract_note || '').slice(0,140))}</td>
     </tr>`).join('');
+  const roleCards = roles.map(([role,docs])=>`
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px">
+      <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:4px">${escHtml(role)}</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px">${docs.length} 篇：${docs.slice(0,4).map(p=>p.id).join('、')}${docs.length>4?'…':''}</div>
+      <div style="font-size:12px;line-height:1.6">${escHtml(paperKeyPoint(docs[0]))}</div>
+    </div>`).join('');
+  const repRows = representative.map(p=>`
+    <tr>
+      <td style="${S.td};white-space:nowrap"><b>${p.id}</b><br><span style="color:var(--muted);font-size:10px">${escHtml(p.doc_type||'')}</span></td>
+      <td style="${S.td}">
+        <div style="font-weight:700;color:var(--text);margin-bottom:4px">${escHtml(p.title||'')}</div>
+        <div style="font-size:12px;color:var(--muted)">${escHtml(paperKeyPoint(p))}</div>
+      </td>
+      <td style="${S.td}">${escHtml(paperRoleLabel(p))}</td>
+      <td style="${S.td}">${escHtml(paperProjectMeaning(p))}</td>
+    </tr>`).join('');
 
   const html = `
   <div style="max-width:860px;margin:0 auto;font-family:'Noto Sans TC','Inter',serif">
@@ -4273,23 +4380,35 @@ function renderIntegratedReport() {
       <div style="font-size:11px;color:var(--muted);letter-spacing:3px;margin-bottom:8px">FILTERED TREND REPORT</div>
       <h1 style="${S.h1}">篩選文獻趨勢報告</h1>
       <div style="font-size:13px;color:var(--muted);margin-top:6px">${escHtml(scope)}</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:12px">文獻 ${total} 篇（${yMin}–${yMax}） · 已深度分析 ${analyzed} 篇 · 產製日期 ${today}</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:12px">文獻 ${total} 篇（${yMin}–${yMax}） · 已深度分析 ${analyzed} 篇 · 全文 ${withFulltext} 篇 · 產製日期 ${today}</div>
     </div>
 
     <h2 style="${S.h2}">一、快速結論</h2>
-    <p style="${S.p}">本報告根據目前文庫篩選結果自動產生，未呼叫 AI，因此可重複、免費、會隨文庫與篩選條件更新。它適合做第一版趨勢判讀：先看文獻組成、材料/製程/性能主軸，再決定是否需要進一步用 AI 或人工深入分析。</p>
+    <p style="${S.p}">本報告根據目前文庫篩選結果自動產生，未呼叫 AI，因此可重複、免費、會隨文庫與篩選條件更新。這一版不只統計標籤，也會讀取每篇文獻的目的、摘要、專案價值與已分析欄位，整理成半敘事式趨勢報告。</p>
+    <p style="${S.p}"><b>共同主題：</b>${escHtml(commonTheme)}。</p>
     <ul style="font-size:13px;line-height:1.8;margin:0 0 12px 18px">
       ${trendLines.map(x=>`<li>${escHtml(x)}</li>`).join('') || '<li>目前文獻數較少，建議先補足關鍵字搜尋或加入更多文獻後再判讀趨勢。</li>'}
     </ul>
 
-    <h2 style="${S.h2}">二、文獻組成</h2>
+    <h2 style="${S.h2}">二、文獻角色與主題結構</h2>
+    <p style="${S.p}">同一個篩選結果裡，文獻通常扮演不同角色：有些是專利前案、有些是測試方法、有些是市場或供應商訊號。先分清楚角色，報告才不會把專利、商用品和期刊論文混在一起平均解讀。</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:12px">${roleCards}</div>
+
+    <h2 style="${S.h2}">三、代表文獻解讀</h2>
+    <p style="${S.p}">下列文獻是此篩選結果中資訊密度較高、對產品判斷較有用的代表項目。這裡優先引用 <code>purpose</code>、<code>value_to_project</code>、<code>abstract_note</code> 與既有分析欄位，而不是只看標題。</p>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:12px">
+      <thead><tr><th style="${S.th}">ID</th><th style="${S.th}">文獻重點</th><th style="${S.th}">角色</th><th style="${S.th}">對專案意義</th></tr></thead>
+      <tbody>${repRows}</tbody>
+    </table>
+
+    <h2 style="${S.h2}">四、文獻組成</h2>
     <table style="width:100%;border-collapse:collapse;margin-bottom:12px">
       <thead><tr><th style="${S.th}">類型</th><th style="${S.th}">篇數</th><th style="${S.th}">占比</th></tr></thead>
       <tbody>${rows(topEntries(byType, 10))}</tbody>
     </table>
     <div style="${S.muted}">專利偏多時，報告重點應放在權利範圍與迴避；期刊/綜述偏多時，重點可放在性能基準與研究缺口；商用產品偏多時，則適合做供應商/競品比較。</div>
 
-    <h2 style="${S.h2}">三、技術訊號</h2>
+    <h2 style="${S.h2}">五、技術訊號</h2>
     <h3 style="${S.h3}">材料 / 高分子</h3>
     <div>${chips(materials)}</div>
     <h3 style="${S.h3}">基材</h3>
@@ -4301,29 +4420,30 @@ function renderIntegratedReport() {
     <h3 style="${S.h3}">性能指標</h3>
     <div>${chips(performance)}</div>
 
-    <h2 style="${S.h2}">四、市場與玩家訊號</h2>
+    <h2 style="${S.h2}">六、市場與玩家訊號</h2>
     <table style="width:100%;border-collapse:collapse;margin-bottom:12px">
       <thead><tr><th style="${S.th}">公司 / 機構</th><th style="${S.th}">篇數</th><th style="${S.th}">占比</th></tr></thead>
       <tbody>${rows(topOrgs)}</tbody>
     </table>
     <div style="${S.muted}">若此表集中於少數公司，代表主題可能已形成明確玩家；若分散於學術機構，代表仍偏研究探索，產品化訊號較弱。</div>
 
-    <h2 style="${S.h2}">五、後續行動建議</h2>
+    <h2 style="${S.h2}">七、後續行動建議</h2>
     <ol style="font-size:13px;line-height:1.85;margin:0 0 12px 20px">
-      <li>先針對前 3 個高頻材料/製程建立比較表，避免只看單篇最佳數據。</li>
+      <li>先針對代表文獻的「對專案意義」建立決策表，分成可立即採用、需驗證、僅供參考三類。</li>
+      <li>再針對前 3 個高頻材料/製程建立比較表，避免只看單篇最佳數據。</li>
       <li>若篩選結果少於 5 篇，建議補同義詞搜尋，例如產品名、臨床用途、材料名、英文關鍵字。</li>
       <li>若含專利，下一步先分「已過期 / 有效 / 申請中」，再決定是否需要正式 FTO。</li>
-      <li>若要做管理層報告，可再按下「AI 深度解讀」產生敘事版，但這會消耗 API。</li>
+      <li>若要做管理層報告，可再按下「AI 深度解讀」產生更完整敘事版，但這會消耗 API。</li>
     </ol>
 
-    <h2 style="${S.h2}">六、納入文獻</h2>
+    <h2 style="${S.h2}">八、納入文獻</h2>
     <table style="width:100%;border-collapse:collapse;margin-bottom:12px">
       <thead><tr><th style="${S.th}">ID</th><th style="${S.th}">標題</th><th style="${S.th}">類型</th><th style="${S.th}">年份</th><th style="${S.th}">重點</th></tr></thead>
       <tbody>${docRows}</tbody>
     </table>
 
     <div style="margin-top:24px;padding-top:12px;border-top:1px solid var(--border);${S.muted}">
-      方法與限制：本報告由 JavaScript 依文庫欄位、標籤與目前篩選結果自動整理，沒有外部 AI 推理。若文獻標籤不完整，趨勢統計會偏保守；若需要策略判讀或自然語言敘事，可使用 AI 深度解讀。
+      方法與限制：本報告由 JavaScript 依文庫欄位、標籤與目前篩選結果自動整理，沒有外部 AI 推理。目前全文欄位 ${withFulltext} 篇；若未匯入全文，報告主要依 title、abstract_note、purpose、value_to_project、tags 與 patentResults 判讀。若文獻標籤或摘要不完整，趨勢統計會偏保守；若需要策略判讀或自然語言敘事，可使用 AI 深度解讀。
     </div>
   </div>`;
 
