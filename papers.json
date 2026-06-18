@@ -7784,6 +7784,305 @@
           "bioteque_strategic_value": "Bioteque 台灣市場准入：健保給付路徑已存在，需符合矽質或乳膠基層 + 親水水凝膠塗層的規格要求"
         }
       }
+    },
+    {
+      "id": "C12",
+      "doc_type": "商用產品",
+      "title": "BD Bardex® Hydrogel + Bactiguard® Foley Catheter（水凝膠+抗菌雙塗層留置導尿管）",
+      "authors": "Becton, Dickinson and Company（BD）/ C.R. Bard",
+      "year": 2024,
+      "venue": "BD 官方產品",
+      "url": "https://www.bd.com/en-us/products-and-solutions/products/product-families/foley-catheters",
+      "tags": [
+        "hydrogel",
+        "antimicrobial抗菌",
+        "biocompatibility",
+        "導管catheter",
+        "留置導尿管",
+        "Foley",
+        "silicone"
+      ],
+      "abstract_note": "BD 旗下 Bard® 系列 Foley 導尿管採用雙塗層技術：外層 Bard® Hydrogel 水凝膠塗層提供長期親水潤滑性，大幅降低導尿管插入及留置期間的組織摩擦；內層 Bactiguard® 抗菌塗層（含銀、金、鈀等貴金屬離子緩釋）抑制細菌定植，降低 CAUTI（導管相關泌尿道感染）風險。適用於長期留置導尿（腎造廔、膀胱造廔、術後引流），為全球 Foley 導尿管市場最大品牌。BD 整合 C.R. Bard 後持有多件相關核心專利，IP 護城河深厚，是 Bioteque 在泌尿引流市場的主要競爭對手。",
+      "purpose": "長期留置導尿管的親水潤滑與抗菌雙功能整合",
+      "value_to_project": "BD/Bard 是泌尿引流市場龍頭，水凝膠+抗菌雙塗層是 Bioteque Phase 3 抗菌路線的主要競爭標桿",
+      "patentResults": {
+        "commercial": {
+          "company": "Becton, Dickinson and Company（BD / Bard）",
+          "product": "Bardex® Hydrogel + Bactiguard® Foley Catheter",
+          "hq": "Franklin Lakes, NJ, USA",
+          "founded": 1897,
+          "business_model": "醫材製造（自有品牌，全球最大泌尿引流廠商）",
+          "market_position": "全球 Foley 導尿管市場龍頭，泌尿引流領域市占第一",
+          "coating_technology": {
+            "type": "水凝膠塗層（外）+ 貴金屬抗菌塗層 Bactiguard®（內）",
+            "primer": "矽膠/乳膠基材",
+            "topcoat": "Hydrogel 水凝膠親水層",
+            "curing": "化學或 UV 固化",
+            "substrates": [
+              "矽膠",
+              "乳膠",
+              "TPU"
+            ],
+            "performance_claims": {
+              "lubrication": "長期潤滑",
+              "antimicrobial": "CAUTI 降低",
+              "wca": "< 20°"
+            }
+          },
+          "regulatory": {
+            "iso": [
+              "ISO 13485",
+              "ISO 10993"
+            ],
+            "fda": "510(k)",
+            "ce": "CE MDR"
+          },
+          "applications": [
+            "Foley 導尿管",
+            "腎造廔",
+            "膀胱造廔",
+            "術後引流"
+          ],
+          "differentiator": "雙塗層系統（親水+抗菌）整合；Bactiguard 貴金屬離子緩釋技術；全球最大品牌認知度",
+          "weakness": "貴金屬成本高；乳膠過敏風險；矽膠基材 TPU 附著差異",
+          "pricing_tier": "中高（大量採購有折扣）",
+          "competitive_threat_to_bioteque": "高（泌尿引流市場直接競品）",
+          "ip_risk": "BD/Bard 持有多件水凝膠塗層核心專利，需完整 FTO 分析",
+          "collaboration_opportunity": "不建議直接競爭；可評估差異化切入（SBMA 兩性離子取代水凝膠）"
+        }
+      }
+    },
+    {
+      "id": "C13",
+      "doc_type": "商用產品",
+      "title": "Teleflex Rüsch® FloCath Quick™ 親水間歇導尿管（即用型一體化設計）",
+      "authors": "Teleflex Medical",
+      "year": 2024,
+      "venue": "Teleflex 官方產品",
+      "url": "https://www.teleflex.com/usa/en/product-areas/urology/intermittent-catheters/hydrophilic-intermittent-catheters/",
+      "tags": [
+        "hydrophilic coating",
+        "間歇導尿",
+        "導管catheter",
+        "packaging包裝",
+        "即用型",
+        "lubricity潤滑"
+      ],
+      "abstract_note": "Teleflex 的 Rüsch® FloCath Quick™ 為全功能即用型親水間歇導尿管，採用「全合一」整合包裝設計：包裝內含親水塗層導管本體及 0.9% 滅菌生理鹽水小包，使用前折斷隔層即可活化親水塗層，無需另備水源。專利保護的一體式操作鞘管（handling sheath）提供觸控式操作，降低汙染風險，同時可作為延伸管使用。親水塗層在接觸生理鹽水後立即形成低摩擦水膜，顯著改善尿道插入舒適度，臨床研究顯示可降低尿道微創傷（urethral micro trauma）。此一體化設計是間歇導尿市場的主流產品形式，對 Bioteque 未來進入間歇導尿市場具重要參考價值。",
+      "purpose": "提供即用型方便性的親水間歇導尿管，降低使用門檻與汙染風險",
+      "value_to_project": "即用型包裝設計 + 觸控式操作鞘管是間歇導尿市場的競爭差異化關鍵；Bioteque 若進入此市場需評估類似設計",
+      "patentResults": {
+        "commercial": {
+          "company": "Teleflex Medical",
+          "product": "Rüsch® FloCath Quick™",
+          "hq": "Wayne, PA, USA",
+          "business_model": "醫材製造（自有品牌）",
+          "market_position": "間歇導尿市場主要玩家（次於 Coloplast、Hollister）",
+          "coating_technology": {
+            "type": "親水塗層（具體配方未公開）",
+            "primer": "未公開",
+            "topcoat": "親水聚合物層",
+            "curing": "未公開",
+            "substrates": [
+              "PVC",
+              "TPU"
+            ],
+            "performance_claims": {
+              "lubrication": "即用型",
+              "micro_trauma": "臨床研究確認降低"
+            }
+          },
+          "applications": [
+            "間歇導尿管",
+            "神經源性膀胱"
+          ],
+          "differentiator": "全合一即用型包裝；專利操作鞘管；觸控式無菌操作",
+          "competitive_threat_to_bioteque": "中（間歇導尿市場，非 Bioteque 主要現況市場）",
+          "ip_risk": "操作鞘管有專利保護；塗層配方需確認",
+          "collaboration_opportunity": "評估 Bioteque 塗層技術作為 Teleflex 的 OEM 供應"
+        }
+      }
+    },
+    {
+      "id": "U15",
+      "doc_type": "期刊論文",
+      "title": "Impact of Hydrogel-Coated Chest Drains on Outcomes in Thoracic Surgery",
+      "authors": "多中心胸腔外科研究團隊",
+      "year": 2024,
+      "venue": "PubMed / 胸腔外科期刊",
+      "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12782731/",
+      "tags": [
+        "hydrogel",
+        "durability耐久",
+        "antifouling抗汙",
+        "biocompatibility",
+        "引流管",
+        "胸腔引流",
+        "encrustation resistance抗結痂"
+      ],
+      "abstract_note": "本多中心回顧性研究評估水凝膠塗層胸腔引流管（Hydrogel-Coated Drain, HCD）在胸腔外科手術後的臨床效益。研究背景：標準胸腔引流管的阻塞率高達 7.4%，阻塞可導致胸腔積液殘留、膿胸、皮下氣腫及需重新置管等嚴重併發症。研究納入解剖性肺切除、楔形切除、胸膜活檢、肺大泡切除、膿胸清洗及胸膜剝脫等多種胸腔外科手術患者。水凝膠塗層引流管的導入依據是其改善通暢性、降低阻塞風險，即使使用較小管徑仍具優勢。與歷史對照組相比，HCD 組的引流管阻塞率顯著降低。此研究是目前胸腔引流管親水塗層臨床效益最直接的文獻依據，確認親水塗層在胸腔引流領域的實際臨床價值。",
+      "purpose": "評估水凝膠塗層對胸腔引流管阻塞率與手術後預後的影響",
+      "value_to_project": "直接確認親水塗層在胸腔引流管的臨床需求（7.4% 阻塞率）；支持 Bioteque 切入胸腔引流管市場的商業論點",
+      "patentResults": {
+        "review": {
+          "scope": "水凝膠塗層胸腔引流管臨床多中心研究",
+          "n_papers_covered": 1,
+          "consensus": [
+            "標準胸腔引流管阻塞率 7.4%",
+            "水凝膠塗層顯著改善通暢性",
+            "小管徑 HCD 仍有效",
+            "親水塗層胸腔引流有明確臨床需求"
+          ],
+          "clinical_data": {
+            "blockage_rate_standard": "7.4%",
+            "benefit": "阻塞率降低",
+            "study_type": "多中心回顧性"
+          },
+          "evidence_pyramid": {
+            "retrospective_multicenter": 1
+          },
+          "best_for": {
+            "application": "胸腔引流管防阻塞"
+          },
+          "bioteque_strategic_value": "胸腔引流管是親水塗層技術最值得切入的空白市場：無強勢大廠壟斷、有明確臨床需求（7.4% 阻塞率）、親水塗層效益已有臨床證據"
+        }
+      }
+    },
+    {
+      "id": "U16",
+      "doc_type": "期刊論文",
+      "title": "Double-Pigtail Drainage Catheter: A New Design for Efficient Pleural Drainage",
+      "authors": "韓國 Gangneung Asan Hospital / Soonchunhyang University 研究團隊",
+      "year": 2023,
+      "venue": "MDPI / PubMed PMC10303575",
+      "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10303575/",
+      "tags": [
+        "引流管",
+        "胸腔引流",
+        "导管catheter",
+        "pigtail",
+        "抗阻塞",
+        "設計"
+      ],
+      "abstract_note": "本研究比較雙 pigtail 引流管（DPC）與傳統單 pigtail 引流管（SPC）在胸腔積液引流的效能差異。DPC 在導管中段設計額外的 pigtail 彎曲結構及多個離心側孔，可維持引流孔通暢。研究納入 2018-2019 年 382 例胸腔積液引流手術（DPC 156 例、SPC 無側孔 110 例、SPC 含多側孔 116 例），所有導管為 10.2 Fr，由同一位介入放射科醫師操作。結果顯示 DPC 引流效率最高，留置時間最短，對轉移性胸腔積液具顯著優勢。此研究顯示引流管設計本身對抗阻塞的重要性，與表面塗層的抗阻塞策略形成互補。若 DPC 結構設計結合親水塗層，預期可進一步降低阻塞率並延長有效引流時間。",
+      "purpose": "比較新型雙 pigtail 與傳統單 pigtail 胸腔引流管的引流效能",
+      "value_to_project": "胸腔 pigtail 引流管市場存在設計改良需求；親水塗層結合新型結構設計可作為差異化切入點",
+      "patentResults": {
+        "review": {
+          "scope": "DPC vs SPC 胸腔積液引流比較（382 例，多型號）",
+          "n_papers_covered": 1,
+          "consensus": [
+            "DPC 引流效率優於 SPC",
+            "多側孔設計降低阻塞",
+            "留置時間縮短",
+            "設計改良是抗阻塞的有效策略"
+          ],
+          "clinical_data": {
+            "n_cases": 382,
+            "catheter_size": "10.2 Fr",
+            "result": "DPC 留置時間最短，引流效率最高"
+          },
+          "evidence_pyramid": {
+            "retrospective_clinical": 1
+          },
+          "bioteque_strategic_value": "支持 Bioteque 以親水塗層 + 優化結構設計切入胸腔 pigtail 引流管市場的論點"
+        }
+      }
+    },
+    {
+      "id": "P43",
+      "doc_type": "專利",
+      "title": "Medical tubing having exterior hydrophilic coating for microbiocide absorption（US4515593）",
+      "authors": "C.R. Bard Inc.",
+      "year": 1985,
+      "venue": "USPTO",
+      "url": "https://patents.google.com/patent/US4515593",
+      "tags": [
+        "NVP",
+        "hydrophilic coating",
+        "antimicrobial抗菌",
+        "導管catheter",
+        "引流管",
+        "radiation grafting",
+        "已過期"
+      ],
+      "abstract_note": "本 Bard 早期基礎專利（US4515593，1985）揭示以 NVP（N-乙烯吡咯烷酮）或丙烯酸/甲基丙烯酸單體塗覆於疏水性彈性體導管表面，並以離子輻照（ionizing radiation）接枝固化，形成親水塗層。塗層設計僅覆蓋導管外表面的特定區段，使親水塗層可吸附聚維酮碘（povidone iodine）等殺菌劑水溶液，實現抗菌功能。此設計結合「親水塗層作抗菌劑載體」的概念，是最早將親水塗層與抗菌功能結合的代表性專利之一。專利已過期（1985 年申請，保護期已滿），相關基礎技術現為公共領域，可自由使用。對 Bioteque 具有歷史技術參考價值，NVP 單體接枝的概念可作為 Phase 2 UV 固化配方的設計參考。",
+      "purpose": "以 NVP 或丙烯酸單體輻照接枝，賦予導管表面親水抗菌複合功能",
+      "value_to_project": "Bard 早期基礎 IP（已過期，自由使用）；NVP 輻照接枝概念對 Phase 2 配方有參考意義；確認抗菌載體功能是親水塗層的早期應用方向",
+      "patentResults": {
+        "full": {
+          "summary": "NVP 或丙烯酸單體輻照接枝親水抗菌塗層，Bard 早期基礎專利（已過期）",
+          "key_findings": [
+            "NVP 輻照接枝是早期親水塗層主流方法",
+            "親水塗層作抗菌劑吸附載體",
+            "選擇性覆蓋設計（僅特定區段）",
+            "核心專利 1985 年，已過期可自由使用"
+          ],
+          "examples": [
+            {
+              "formulation": {
+                "topcoat": "NVP 或 pHEMA 輻照接枝"
+              },
+              "process": {
+                "curing": "離子輻照（ionizing radiation）"
+              },
+              "results": {
+                "antimicrobial": "聚維酮碘吸附",
+                "wca": "顯著降低"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "P44",
+      "doc_type": "專利",
+      "title": "Hydrophilic coating composition for urinary catheter（EP1957127B1 / WO2007065720A2）",
+      "authors": "Coloplast A/S",
+      "year": 2007,
+      "venue": "EPO / WIPO",
+      "url": "https://patents.google.com/patent/EP1957127B1",
+      "tags": [
+        "PVP",
+        "polyelectrolyte",
+        "hydrophilic coating",
+        "UV",
+        "間歇導尿",
+        "導管catheter",
+        "adhesion附著力",
+        "durability耐久"
+      ],
+      "abstract_note": "本 Coloplast 專利（EP1957127B1）揭示一種以聚電解質（polyelectrolyte）強化的雙層親水塗層配方，用於泌尿導管。內層（primer）為含支撐性聚合物網絡（supporting polymer network，由聚醚或聚硫醚組成）的底塗，提供機械錨固；外層（functional layer）含非離子性親水高分子（PVP 等）與聚電解質（ionic polymer）的複合功能層。聚電解質的引入顯著提升塗層的吸水速率、減少活化時間，並增強潤滑持久性。此配方是 Coloplast SpeediCath 間歇導尿管的核心 IP 之一，在歐美市場受強力保護。對 Bioteque 的 Phase 2 配方開發而言，聚電解質對潤滑持久性的強化效果值得參考，但需注意此專利族群的有效性。",
+      "purpose": "以聚電解質強化非離子性親水塗層的吸水速率與潤滑持久性",
+      "value_to_project": "Coloplast 的聚電解質複合塗層策略是 DSM P01-P03 路線之外的重要替代方向；活化速率改善對即用型產品設計有參考價值",
+      "patentResults": {
+        "full": {
+          "summary": "聚醚/聚硫醚 primer + PVP/聚電解質複合頂塗，雙層親水塗層，Coloplast 核心 IP",
+          "key_findings": [
+            "聚電解質加速吸水活化",
+            "雙層結構強化耐久",
+            "適用間歇導尿管",
+            "歐美市場有效 IP，需注意"
+          ],
+          "examples": [
+            {
+              "formulation": {
+                "primer": "聚醚/聚硫醚支撐網絡",
+                "topcoat": "PVP + 聚電解質複合"
+              },
+              "process": {
+                "curing": "UV 或化學固化"
+              },
+              "results": {
+                "activation": "快速",
+                "durability": "持久潤滑",
+                "wca": "< 20°"
+              }
+            }
+          ]
+        }
+      }
     }
   ]
 }
