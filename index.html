@@ -2492,6 +2492,9 @@ function paperAnalysisText(p) {
   const r = p.patentResults?.full || p.patentResults?.commercial || p.patentResults?.review || p.patentResults || {};
   const examples = Array.isArray(r.examples) ? r.examples : [];
   return [
+    p.fulltext,
+    p.full_text,
+    p.pdf_text,
     p.purpose,
     p.value_to_project,
     p.abstract_note,
@@ -2534,6 +2537,7 @@ function paperKeyPoint(p) {
   const r = p.patentResults?.full || p.patentResults?.commercial || p.patentResults?.review || p.patentResults || {};
   const candidates = [
     r.summary,
+    p.fulltext ? compactText(p.fulltext, 220) : '',
     p.value_to_project,
     p.purpose,
     p.abstract_note,
@@ -2558,6 +2562,141 @@ function roleSummary(ps) {
   const map = {};
   ps.forEach(p=>{ const role = paperRoleLabel(p); (map[role] ||= []).push(p); });
   return Object.entries(map).sort((a,b)=>b[1].length-a[1].length);
+}
+
+function getFulltext(p) {
+  return p.fulltext || p.full_text || p.pdf_text || '';
+}
+
+function fulltextSourceLabel(p) {
+  if(!getFulltext(p)) return '尚未快取全文';
+  const src = p.fulltext_source || 'manual';
+  const at = p.fulltext_cached_at ? ` · ${String(p.fulltext_cached_at).slice(0,10)}` : '';
+  return `${src === 'manual' ? '手動貼上' : '自動抓取'} · ${getFulltext(p).length.toLocaleString()} 字${at}`;
+}
+
+function pickFulltextUrl(p) {
+  const links = p.links || {};
+  if(links.pmc) return links.pmc;
+  if(links.article) return links.article;
+  if(links.url) return links.url;
+  if(links.doi) return links.doi;
+  if(p.doi) return `https://doi.org/${p.doi}`;
+  if(links.pubmed) return links.pubmed;
+  if(p.pmid) return `https://pubmed.ncbi.nlm.nih.gov/${p.pmid}/`;
+  return Object.values(links)[0] || '';
+}
+
+function extractReadableTextFromHtml(html) {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  doc.querySelectorAll('script,style,noscript,svg,nav,header,footer,form,aside').forEach(el=>el.remove());
+  const candidates = ['article', 'main', '[role="main"]', '.article', '.article-body', '#article', '.content'];
+  let root = null;
+  for(const sel of candidates) {
+    root = doc.querySelector(sel);
+    if(root && root.innerText && root.innerText.length > 1000) break;
+  }
+  const text = (root?.innerText || doc.body?.innerText || '')
+    .replace(/\s+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .replace(/[ \t]{2,}/g, ' ')
+    .trim();
+  return text;
+}
+
+async function fetchPmcFulltextByPmid(pmid) {
+  if(!pmid) return '';
+  const elink = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pubmed&db=pmc&id=${encodeURIComponent(pmid)}&retmode=json`);
+  if(!elink.ok) return '';
+  const js = await elink.json();
+  const links = js.linksets?.[0]?.linksetdbs || [];
+  const pmcId = links.flatMap(x=>x.links || [])[0];
+  if(!pmcId) return '';
+  const efetch = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=${encodeURIComponent(pmcId)}&retmode=xml`);
+  if(!efetch.ok) return '';
+  const xmlText = await efetch.text();
+  const xml = new DOMParser().parseFromString(xmlText, 'text/xml');
+  const body = xml.querySelector('body');
+  const title = xml.querySelector('article-title')?.textContent || '';
+  const abs = [...xml.querySelectorAll('abstract p')].map(x=>x.textContent).join('\n');
+  const bodyText = body ? [...body.querySelectorAll('sec, p')].map(x=>x.textContent).join('\n') : '';
+  return [title, abs, bodyText].filter(Boolean).join('\n\n').replace(/\n{3,}/g, '\n\n').trim();
+}
+
+async function fetchFulltextForPaper(i) {
+  const p = filtered[i];
+  if(!p) return;
+  const url = pickFulltextUrl(p);
+  const box = document.getElementById(`fulltextStatus_${i}`);
+  if(box) box.textContent = '抓取全文中...';
+  try {
+    if(p.pmid) {
+      const pmcText = await fetchPmcFulltextByPmid(p.pmid);
+      if(pmcText && pmcText.length > 1200) {
+        p.fulltext = pmcText.slice(0, 50000);
+        p.fulltext_source = `PMC via PMID:${p.pmid}`;
+        p.fulltext_cached_at = new Date().toISOString();
+        saveDB();
+        showDetail(i);
+        toast(`已從 PMC 快取全文 ${p.fulltext.length.toLocaleString()} 字`, 'success');
+        return;
+      }
+    }
+    if(!url) { throw new Error('這篇沒有可抓取的連結'); }
+    if(/\.pdf($|[?#])/i.test(url)) throw new Error('此連結是 PDF，請先複製 PDF 文字後貼上');
+    const r = await fetch(url, {redirect:'follow'});
+    const ct = r.headers.get('content-type') || '';
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+    if(ct.includes('pdf')) throw new Error('此連結是 PDF，請手動貼上 PDF 文字');
+    const html = await r.text();
+    const text = extractReadableTextFromHtml(html);
+    if(text.length < 800) throw new Error('抓到的文字太短，可能被網站或 CORS 限制');
+    p.fulltext = text.slice(0, 50000);
+    p.fulltext_source = url;
+    p.fulltext_cached_at = new Date().toISOString();
+    saveDB();
+    showDetail(i);
+    toast(`已快取全文 ${p.fulltext.length.toLocaleString()} 字`, 'success');
+  } catch(e) {
+    if(box) box.textContent = `抓取失敗：${e.message}`;
+    toast('自動抓取失敗，請改用手動貼上全文', 'error');
+    openFulltextPaste(i);
+  }
+}
+
+function openFulltextPaste(i) {
+  const box = document.getElementById(`fulltextPaste_${i}`);
+  if(!box) return;
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+  const ta = document.getElementById(`fulltextText_${i}`);
+  if(ta) { ta.value = getFulltext(filtered[i] || ''); ta.focus(); }
+}
+
+function saveFulltextFromTextarea(i) {
+  const p = filtered[i];
+  const ta = document.getElementById(`fulltextText_${i}`);
+  if(!p || !ta) return;
+  const text = ta.value.replace(/\s+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+  if(text.length < 300) { toast('文字太短，請貼上較完整的全文或重點段落','error'); return; }
+  p.fulltext = text.slice(0, 50000);
+  p.fulltext_source = 'manual';
+  p.fulltext_cached_at = new Date().toISOString();
+  saveDB();
+  showDetail(i);
+  toast(`已儲存全文 ${p.fulltext.length.toLocaleString()} 字`, 'success');
+}
+
+function clearFulltext(i) {
+  const p = filtered[i];
+  if(!p || !confirm('確定清除此篇全文快取？')) return;
+  delete p.fulltext;
+  delete p.full_text;
+  delete p.pdf_text;
+  delete p.fulltext_source;
+  delete p.fulltext_cached_at;
+  saveDB();
+  showDetail(i);
+  toast('已清除全文快取','success');
 }
 
 function allTags(){const s=new Set();activePapersForAnalysis().forEach(p=>(p.tags||[]).forEach(t=>s.add(t)));return [...s].sort()}
@@ -2972,7 +3111,7 @@ function filterPapers() {
     }
     // 主題篩選（多選 OR，跨欄位匹配）
     if(activeFilters.topic.size) {
-      const hay = `${p.title} ${p.abstract_note||''} ${p.purpose||''} ${p.value_to_project||''} ${tags.join(' ')} ${p.id}`.toLowerCase();
+      const hay = `${p.title} ${p.abstract_note||''} ${p.purpose||''} ${p.value_to_project||''} ${getFulltext(p).slice(0,4000)} ${tags.join(' ')} ${p.id}`.toLowerCase();
       const topicMatch = [...activeFilters.topic].some(topic => {
         if(topic==='encrustation') return ENCRUST_RE.test(hay) || p.id.startsWith('U');
         if(topic==='antimicrobial') return /antimicrobial|抗菌|antibacterial|silver|chlorhexidine|chitosan|propolis|copper|biocidal|antibiofilm/i.test(hay);
@@ -2986,7 +3125,7 @@ function filterPapers() {
     if(activeTags.size && ![...activeTags].every(t=>tags.includes(t))) return false;
     // 關鍵字
     if(kw) {
-      const hay = `${p.title} ${p.abstract_note} ${p.purpose} ${p.value_to_project} ${tags.join(' ')} ${p.authors} ${p.id} ${p.venue||''}`.toLowerCase();
+      const hay = `${p.title} ${p.abstract_note} ${p.purpose} ${p.value_to_project} ${getFulltext(p).slice(0,8000)} ${tags.join(' ')} ${p.authors} ${p.id} ${p.venue||''}`.toLowerCase();
       const terms = kw.split(/[,;，；\s]+/).map(s=>s.trim()).filter(Boolean);
       if(terms.length && !terms.some(t=>hay.includes(t))) return false;
     }
@@ -3134,6 +3273,24 @@ function showDetail(i) {
       <div class="detail-section-title">💡 對專案價值</div>
       <div class="detail-value">${p.value_to_project}</div>
     </div>`:''}
+
+    <div class="detail-section">
+      <div class="detail-section-title">📄 全文快取</div>
+      <div id="fulltextStatus_${i}" style="font-size:12px;color:${getFulltext(p)?'var(--accent2)':'var(--muted)'};margin-bottom:8px">${fulltextSourceLabel(p)}</div>
+      ${getFulltext(p)?`<div style="font-size:11px;color:var(--muted);background:var(--card);border:1px solid var(--border);border-radius:6px;padding:8px;max-height:120px;overflow:auto;margin-bottom:8px">${escHtml(compactText(getFulltext(p), 900))}</div>`:''}
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn btn-s" onclick="fetchFulltextForPaper(${i})">🌐 自動抓取</button>
+        <button class="btn btn-s" onclick="openFulltextPaste(${i})">✍️ 貼上全文</button>
+        ${getFulltext(p)?`<button class="btn btn-s" onclick="clearFulltext(${i})" style="color:var(--danger);border-color:var(--danger)">🗑 清除全文</button>`:''}
+      </div>
+      <div id="fulltextPaste_${i}" style="display:none;margin-top:8px">
+        <textarea id="fulltextText_${i}" placeholder="貼上 PDF 或網頁全文文字；若全文太長，貼摘要、方法、結果、討論也可以。" style="width:100%;min-height:180px;font-size:12px;line-height:1.5;padding:8px;border:1px solid var(--border);border-radius:6px"></textarea>
+        <div style="display:flex;gap:6px;margin-top:6px">
+          <button class="btn btn-p" onclick="saveFulltextFromTextarea(${i})">儲存全文快取</button>
+          <button class="btn btn-s" onclick="openFulltextPaste(${i})">取消</button>
+        </div>
+      </div>
+    </div>
 
     <div class="detail-section">
       <div class="detail-section-title">🏷 標籤</div>
@@ -4307,14 +4464,14 @@ function renderIntegratedReport() {
     .sort((a,b)=>b[1]-a[1]).slice(0,10);
   const performance = tagsByCat('performance');
   const analyzed = ps.filter(p=>p.patentResults&&Object.keys(p.patentResults).length>0).length;
-  const withFulltext = ps.filter(p=>p.fulltext || p.full_text || p.pdf_text).length;
+  const withFulltext = ps.filter(p=>getFulltext(p)).length;
   const patents = ps.filter(p=>p.doc_type==='專利');
   const recentCutoff = years.length ? yMax - 4 : null;
   const recent = recentCutoff ? ps.filter(p=>p.year>=recentCutoff).length : 0;
   const roles = roleSummary(ps);
   const representative = [...ps]
     .sort((a,b)=>{
-      const score = p => (p.value_to_project?3:0) + (p.patentResults?2:0) + ((p.abstract_note||'').length>80?1:0) + (p.year||0)/10000;
+      const score = p => (getFulltext(p)?4:0) + (p.value_to_project?3:0) + (p.patentResults?2:0) + ((p.abstract_note||'').length>80?1:0) + (p.year||0)/10000;
       return score(b) - score(a);
     })
     .slice(0, Math.min(8, ps.length));
@@ -4365,7 +4522,7 @@ function renderIntegratedReport() {
     </div>`).join('');
   const repRows = representative.map(p=>`
     <tr>
-      <td style="${S.td};white-space:nowrap"><b>${p.id}</b><br><span style="color:var(--muted);font-size:10px">${escHtml(p.doc_type||'')}</span></td>
+      <td style="${S.td};white-space:nowrap"><b>${p.id}</b><br><span style="color:var(--muted);font-size:10px">${escHtml(p.doc_type||'')}</span>${getFulltext(p)?'<br><span style="color:var(--accent2);font-size:10px">全文</span>':''}</td>
       <td style="${S.td}">
         <div style="font-weight:700;color:var(--text);margin-bottom:4px">${escHtml(p.title||'')}</div>
         <div style="font-size:12px;color:var(--muted)">${escHtml(paperKeyPoint(p))}</div>
