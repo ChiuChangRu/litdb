@@ -2449,6 +2449,48 @@ function buildOneHeatmap(wrapperId, rows, cols, rowLabel, colLabel) {
   document.getElementById(wrapperId).innerHTML = html;
 }
 
+function prefillChat(text){showView('chat',document.querySelectorAll('.tab')[3]);document.getElementById('chatInput').value=text;document.getElementById('chatInput').focus()}
+
+function showFuncGapDetail(r, g) {
+  const papers = DB.papers.filter(p=>(p.tags||[]).includes(r) && paperFunctionGoals(p).includes(g));
+  const el = document.getElementById('gapDetail');
+  if(!papers.length) {
+    el.innerHTML = `<h4 style="color:var(--warn)">⚠ 缺口：${r} × ${g}</h4><p style="font-size:13px;color:var(--muted);margin-top:8px">資料庫中沒有同時涵蓋「${r}」基材/應用且具備「${g}」功能的文獻。這可能是值得開發或搜尋的方向。</p>
+    <button class="btn btn-p" style="margin-top:8px" onclick="prefillChat('我想找在 ${r} 上實現 ${g} 功能的塗層方案，目前資料庫是空白，請建議搜尋關鍵字與技術方向')">🤖 問 AI 建議</button>`;
+  } else {
+    el.innerHTML = `<h4 style="color:var(--accent2)">${r} × ${g}：${papers.length} 篇</h4><div style="margin-top:8px">${papers.map(p=>`<div style="padding:4px 0;font-size:13px;cursor:pointer" onclick="showView('browse',document.querySelectorAll('.tabs > .tab')[1]);setTimeout(()=>{filtered=DB.papers;renderPapers();showDetail(DB.papers.findIndex(x=>x.id==='${p.id}'))},100)"><span class="tag tag-gray">${p.id}</span> ${p.title}</div>`).join('')}</div>`;
+  }
+  el.classList.add('show');
+}
+
+function buildFunctionHeatmap(wrapperId, rows, goals, rowLabel, colLabel) {
+  const wrap = document.getElementById(wrapperId);
+  if(!wrap) return;
+  const matrix = {};
+  rows.forEach(r=>{matrix[r]={};goals.forEach(g=>matrix[r][g]=[])});
+
+  DB.papers.forEach(p=>{
+    const tags = p.tags||[];
+    const pg = paperFunctionGoals(p);
+    rows.forEach(r=>{ if(tags.includes(r)) pg.forEach(g=>{ if(matrix[r][g]) matrix[r][g].push(p); })});
+  });
+
+  let html = `<table class="heatmap"><tr><th>${rowLabel} \\ ${colLabel}</th>${goals.map(g=>`<th>${g}</th>`).join('')}<th>小計</th></tr>`;
+  rows.forEach(r=>{
+    let rowSum = 0;
+    html += `<tr><th style="text-align:left">${r}</th>`;
+    goals.forEach(g=>{
+      const v = matrix[r][g].length;
+      rowSum += v;
+      const cls = v===0?'cell-0':v===1?'cell-1':v===2?'cell-2':'cell-many';
+      html += `<td class="${cls}" onclick="showFuncGapDetail('${r}','${g}')" title="${r} × ${g}: ${v} 篇">${v||'·'}</td>`;
+    });
+    html += `<td style="color:var(--muted)">${rowSum}</td></tr>`;
+  });
+  html += '</table>';
+  wrap.innerHTML = html;
+}
+
 function buildHeatmaps() {
   const dict = DB.meta.tag_dictionary || {};
   const sub = dict.substrate||[];
