@@ -270,8 +270,9 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 </header>
 
 <div class="tabs">
+  <div class="tab active" onclick="showView('routes',this)">🛣<span class="tab-text"> 路線</span></div>
   <div class="tab" onclick="showView('search',this)">🔍<span class="tab-text"> 檢索</span></div>
-  <div class="tab active" onclick="showView('browse',this)">📚<span class="tab-text"> 文庫</span> <span class="badge" id="browseCount">0</span><span class="badge" id="analyzedCount" style="background:var(--accent2)">0</span></div>
+  <div class="tab" onclick="showView('browse',this)">📚<span class="tab-text"> 文庫</span> <span class="badge" id="browseCount">0</span><span class="badge" id="analyzedCount" style="background:var(--accent2)">0</span></div>
   <div class="tab" onclick="showView('analysis',this)">📊<span class="tab-text"> 分析</span></div>
   <div class="tab" onclick="showView('report',this)">📋<span class="tab-text"> 報告</span></div>
 </div>
@@ -279,6 +280,25 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 <div class="main">
 
 <!-- ═══════════════ VIEW: SEARCH ═══════════════ -->
+<div class="view active" id="v-routes">
+  <div style="max-width:900px;margin:0 auto;padding:20px 16px">
+
+    <!-- 標題 -->
+    <div style="margin-bottom:20px">
+      <h2 style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px">親水塗層技術路線</h2>
+      <p style="font-size:13px;color:var(--muted)">目前資料庫涵蓋 <span id="rte_total" style="font-weight:700;color:var(--accent)">—</span> 篇文獻，歸屬 9 條主流技術路線。點擊路線展開詳情。</p>
+    </div>
+
+    <!-- 路線清單 -->
+    <div id="routeList"></div>
+
+    <!-- 底部導覽提示 -->
+    <div style="margin-top:24px;padding:12px 16px;background:var(--card);border-radius:8px;font-size:12px;color:var(--muted)">
+      💡 點擊路線卡片展開 → 查看核心材料、代表專利、性能基準 → 跳到文庫篩選相關文獻
+    </div>
+  </div>
+</div>
+
 <div class="view" id="v-search">
   <div style="max-width:1000px;margin:0 auto;padding:16px">
     <!-- 搜尋框 -->
@@ -318,7 +338,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 </div>
 
 <!-- ═══════════════ VIEW: BROWSE ═══════════════ -->
-<div class="view active" id="v-browse">
+<div class="view" id="v-browse">
   <div class="browse-layout" id="browseLayout">
     <!-- 雙欄：文獻列表（含頂部篩選）+ 詳情 -->
     <div class="browse-columns">
@@ -2240,6 +2260,8 @@ async function loadDB() {
 }
 
 function onDBLoaded() {
+  if(document.getElementById('v-routes')?.classList.contains('active')||
+     document.getElementById('v-routes')?.style.display!=='none') renderRoutes();
   const active = DB.papers.filter(p=>!p._deleted);
   const deleted = DB.papers.length - active.length;
   document.getElementById('dbStats').textContent = `${active.length} 篇文獻${deleted?` (${deleted} 已刪除)`:''}`;
@@ -2271,7 +2293,7 @@ let currentAnalysisTab = 'graph';
 function goBack() {
   if(!previousView) return;
   const tabs = document.querySelectorAll('.tabs > .tab');
-  const viewMap = {search:0, browse:1, analysis:2, report:3};
+  const viewMap = {routes:0, search:1, browse:2, analysis:3, report:4};
   const idx = viewMap[previousView];
   if(idx!==undefined && tabs[idx]) {
     showView(previousView, tabs[idx]);
@@ -2636,6 +2658,216 @@ function tryLocalFig(el, localUrl) {
 
 function closeMobileDetail() {
   document.getElementById('colRight').classList.remove('mobile-open');
+}
+
+// ── Technology Routes 首頁 ───────────────────
+const ROUTE_DEFS = [
+  { id:'R_UVBP', label:'UV-BP Route', color:'#e86c3a',
+    risk:'高', riskColor:'#e74c3c', phase:'Phase 2-3 ⚠️ 迴避',
+    summary:'苯甲酮（BP）作 Type II PI，UV 奪取基材 C-H 形成自由基，PVP 共價接枝。DSM ComfortCoat 核心技術，全球市占最高。',
+    materials:['PVP','Benzophenone','PEGDA','TMPTA','TPU'],
+    patents:['P01（DSM）','P02（DSM）','P03（DSM）','P08','P28（DSM）'],
+    perf:{COF:'< 0.10', WCA:'< 20°', 附著:'Grade 0', 耐久:'通過臨床'},
+    pattern:/benzophenone|BP.*UV|UV.*graft|photograft|DSM|ComfortCoat|P01|P02|P03|TMPTA/i },
+
+  { id:'R_UV1', label:'UV Type I Route', color:'#c0392b',
+    risk:'中', riskColor:'#e67e22', phase:'Phase 1 ✅ 推薦起點',
+    summary:'I-2959、KIP150、LAP 等水溶性 Type I PI 引發 PVP/PEG 自由基交聯，形成 semi-IPN。製程簡單，法規資料充足，最低門檻起點。',
+    materials:['PVP','PEG','PEGDA','PVA','I-2959','LAP','KIP150'],
+    patents:['P13（Coloplast）','P14','L02（Surmodics）'],
+    perf:{COF:'0.05–0.16', WCA:'< 20°', 附著:'Grade 0–1', 耐久:'中等'},
+    pattern:/I-2959|irgacure|KIP150|esacure|LAP|semi.IPN|Type.I/i },
+
+  { id:'R_ISO', label:'Isocyanate Route', color:'#8e44ad',
+    risk:'中', riskColor:'#e67e22', phase:'備選（無 UV 設備）',
+    summary:'HDI/IPDI 與基材 -OH/-NH2 共價鍵結，再接枝 PVP 親水層。熱固化，無 UV line-of-sight 限制，管腔內壁可塗覆。毒性需管控。',
+    materials:['HDI','IPDI','PVP','TPU'],
+    patents:['P15'],
+    perf:{COF:'潤滑良好', WCA:'< 30°', 附著:'最強（共價）', 耐久:'高'},
+    pattern:/isocyanate|NCO|HDI|IPDI|P15|thermal.*cur|熱固化|isocyan/i },
+
+  { id:'R_PDA', label:'PDA Route', color:'#d4a030',
+    risk:'低', riskColor:'#2d8c5a', phase:'Phase 1-2 ✅ 首選 Primer',
+    summary:'多巴胺弱鹼自聚沉積形成黏著層（PDA），再接枝 PVP/PEG/PVA。常溫水溶液操作，免 plasma，對 TPU 基材最友好的底塗方案。',
+    materials:['PDA-polydopamine','PVP','PEG','PVA','PEGDA'],
+    patents:['（無核心專利，自由使用）'],
+    perf:{COF:'0.16（A4）', WCA:'7.4°（A2）', 附著:'Grade 0（A4）', 耐久:'中'},
+    pattern:/polydopamine|PDA|dopamine.*coat|catechol/i },
+
+  { id:'R_ZW', label:'Zwitterionic Route', color:'#2d8c5a',
+    risk:'高', riskColor:'#e74c3c', phase:'Phase 3 ⚖️ FTO 優先',
+    summary:'SBMA 兩性離子強水合層阻斷 conditioning film，4 週結痂率降至 25%（vs 無塗層 80%）。Surmodics Serene 核心技術，抗結痂最強。',
+    materials:['SBMA','MPC','PEG','benzophenone'],
+    patents:['L02（Surmodics）','P29（Coloplast）'],
+    perf:{COF:'0.02（G03）', WCA:'< 10°', 抗結痂:'4週 25%', 耐久:'高'},
+    pattern:/SBMA|sulfobetaine|zwitterion|Serene|anti.encrust.*coat/i },
+
+  { id:'R_PLASMA', label:'Plasma Route', color:'#2980b9',
+    risk:'低', riskColor:'#2d8c5a', phase:'Phase 3（需設備投資）',
+    summary:'N2-Ar plasma 活化 TPU 表面自由基，誘導 PVP 共價接枝。WCA 從 109° 降至 9.2°，80 天穩定。耐久性最強，但設備門檻高。',
+    materials:['PVP','TPU'],
+    patents:['（無核心專利，自由使用）'],
+    perf:{COF:'未報告', WCA:'9.2°（80天穩定）', 附著:'共價，最耐久', 耐久:'80天 WCA<20°'},
+    pattern:/plasma.*graft|N2.*Ar|N2-Ar|plasma.*induc|plasma.*treat.*PVP/i },
+
+  { id:'R_MPC', label:'MPC Route', color:'#16a085',
+    risk:'中高', riskColor:'#e67e22', phase:'透析導管 Phase 3',
+    summary:'MPC 仿生磷脂雙層，血液相容性最佳，血小板附著降 >90%。成本最高（原料 $500+/g）。適合透析導管、長期留置血管導管。',
+    materials:['MPC','BMA','PDA-polydopamine'],
+    patents:['（日本 NOF 專利族群）'],
+    perf:{COF:'0.08–0.15', WCA:'< 20°', 血液相容:'最佳', 耐久:'高'},
+    pattern:/\bMPC\b|phosphorylcholine|phospholipid|pMPC|poly.*MPC/i },
+
+  { id:'R_NAT', label:'Natural Polymer Route', color:'#7f8c8d',
+    risk:'低', riskColor:'#2d8c5a', phase:'Phase 2 補強（抗菌）',
+    summary:'Chitosan、heparin、HA、alginate 等天然多醣。抗菌（chitosan）+ 抗結痂（heparin）+ 生物相容。亞洲法規友好，耐久性弱於合成材料。',
+    materials:['chitosan','heparin','alginate','hyaluronic acid'],
+    patents:['（多數開放，無核心 IP）'],
+    perf:{COF:'0.08–0.20', WCA:'< 30°', 抗菌:'殺菌率 99%（U08）', 耐久:'弱*'},
+    pattern:/chitosan|heparin|alginate|hyaluronic|propolis|天然.*高分子/i },
+
+  { id:'R_LBL', label:'LbL Self-Assembly Route', color:'#95a5a6',
+    risk:'低', riskColor:'#2d8c5a', phase:'探索（實驗室階段）',
+    summary:'靜電層積（heparin/PLL/Cu²⁺），精確控制塗層組成。Cu²⁺ 緩釋抗菌，heparin 抗凝。批量生產困難，目前 TRL 3-4。',
+    materials:['heparin','poly-l-lysine','copper'],
+    patents:['（無）'],
+    perf:{抗菌:'Cu²⁺ 緩釋', 抗汙:'heparin', COF:'未量化', 耐久:'實驗室驗證'},
+    pattern:/layer.by.layer|LbL|poly.L.lysine|PLL.*coat/i },
+];
+
+let expandedRoute = null;
+
+function renderRoutes() {
+  if(!DB.papers) return;
+  const papers = DB.papers.filter(p=>!p._deleted);
+  document.getElementById('rte_total').textContent = papers.length;
+
+  const maxCount = Math.max(...ROUTE_DEFS.map(r => countRoutePapers(r, papers)));
+
+  document.getElementById('routeList').innerHTML = ROUTE_DEFS.map((r,idx) => {
+    const cnt = countRoutePapers(r, papers);
+    const barW = Math.round(cnt / maxCount * 100);
+    const isOpen = expandedRoute === r.id;
+
+    // 路線卡片
+    return `
+    <div id="route_${r.id}" style="margin-bottom:10px;border-radius:10px;overflow:hidden;border:1px solid var(--border);box-shadow:${isOpen?'0 2px 12px rgba(0,0,0,0.08)':'none'}">
+
+      <!-- 摺疊列 -->
+      <div onclick="toggleRoute('${r.id}')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;background:var(--card);transition:background .15s" onmouseover="this.style.background='var(--surface)'" onmouseout="this.style.background='var(--card)'">
+        <div style="width:4px;height:44px;background:${r.color};border-radius:2px;flex-shrink:0"></div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+            <span style="font-size:14px;font-weight:700;color:var(--text)">${r.label}</span>
+            <span style="font-size:11px;padding:2px 8px;border-radius:10px;background:${r.riskColor}22;color:${r.riskColor};font-weight:600;flex-shrink:0">${r.risk}風險</span>
+            <span style="font-size:11px;color:var(--muted);flex-shrink:0">${r.phase}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="flex:1;height:6px;background:#e5e2dc;border-radius:3px;overflow:hidden">
+              <div style="height:100%;background:${r.color};width:${barW}%;border-radius:3px;opacity:0.8"></div>
+            </div>
+            <span style="font-size:12px;font-weight:700;color:${r.color};min-width:50px;text-align:right">${cnt} 篇</span>
+          </div>
+        </div>
+        <span style="font-size:16px;color:var(--muted);flex-shrink:0;transform:rotate(${isOpen?90:0}deg);transition:transform .2s"
+          >›</span>
+      </div>
+
+      <!-- 展開內容 -->
+      ${isOpen ? `
+      <div style="background:var(--surface);border-top:1px solid var(--border);padding:16px 20px">
+        <p style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:14px">${r.summary}</p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+
+          <!-- 核心材料 -->
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:6px">⚗️ 核心材料</div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px">
+              ${r.materials.map(m=>`<span style="background:#eaf5ef;color:#1a6040;padding:2px 8px;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer" onclick="goToLibraryFilter('${m}')">${m}</span>`).join('')}
+            </div>
+          </div>
+
+          <!-- 代表專利 -->
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:6px">📄 代表專利</div>
+            ${r.patents.map(p=>{
+              const pid = p.match(/^(P\d+|L\d+)/)?.[1];
+              return `<div style="font-size:12px;color:var(--text);margin-bottom:3px;cursor:${pid?'pointer':'default'}" onclick="${pid?`goToPaper('${pid}')`:''}">
+                ${pid?`<span style="color:var(--accent);font-weight:600">${pid}</span> `:''}${p.replace(/^(P\d+|L\d+)\s*/,'')}</div>`;
+            }).join('')}
+          </div>
+
+          <!-- 性能基準 -->
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:6px">📊 性能基準</div>
+            ${Object.entries(r.perf).map(([k,v])=>`
+              <div style="display:flex;gap:6px;margin-bottom:3px;font-size:12px">
+                <span style="color:var(--muted);min-width:55px;flex-shrink:0">${k}</span>
+                <span style="color:var(--text);font-weight:600">${v}</span>
+              </div>`).join('')}
+          </div>
+
+          <!-- 操作按鈕 -->
+          <div style="display:flex;flex-direction:column;gap:6px;justify-content:flex-end">
+            <button class="btn btn-s" onclick="goToLibraryFilter('${r.materials[0]}')" style="font-size:12px;text-align:left">
+              📚 查看相關文獻 (${cnt} 篇)
+            </button>
+            <button class="btn btn-s" onclick="goToCompare()" style="font-size:12px;text-align:left">
+              📊 跳到比較分析
+            </button>
+          </div>
+        </div>
+      </div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function countRoutePapers(route, papers) {
+  return papers.filter(p => {
+    const hay = [p.title, p.abstract_note, p.purpose, p.value_to_project,
+      (p.tags||[]).join(' '),
+      p.patentResults?.full?.summary||'',
+      JSON.stringify(p.patentResults?.full?.examples?.[0]?.formulation||{})
+    ].join(' ');
+    return route.pattern.test(hay);
+  }).length;
+}
+
+function toggleRoute(id) {
+  expandedRoute = expandedRoute === id ? null : id;
+  renderRoutes();
+  if(expandedRoute) {
+    setTimeout(()=>{
+      const el = document.getElementById('route_'+id);
+      if(el) el.scrollIntoView({behavior:'smooth',block:'nearest'});
+    },50);
+  }
+}
+
+function goToLibraryFilter(keyword) {
+  const tabs = document.querySelectorAll('.tabs > .tab');
+  showView('browse', tabs[2]); // index 2 = 文庫
+  setTimeout(()=>{
+    document.getElementById('fKw').value = keyword;
+    filterPapers();
+  }, 100);
+}
+
+function goToPaper(pid) {
+  const tabs = document.querySelectorAll('.tabs > .tab');
+  showView('browse', tabs[2]);
+  setTimeout(()=>{
+    const idx = DB.papers.findIndex(p=>p.id===pid);
+    filtered = DB.papers; renderPapers();
+    if(idx>=0) showDetail(idx);
+  }, 100);
+}
+
+function goToCompare() {
+  const tabs = document.querySelectorAll('.tabs > .tab');
+  showView('analysis', tabs[3]);
+  setTimeout(()=>showAnalysisTab('compare', document.querySelector('.analysis-sub')), 100);
 }
 
 // ── Knowledge Graph ────────────────────────────
