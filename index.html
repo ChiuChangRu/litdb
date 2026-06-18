@@ -2285,7 +2285,7 @@ async function loadDB() {
 }
 
 function onDBLoaded() {
-  renderMarket();
+  setTimeout(renderMarket, 50);
   if(document.getElementById('v-report')?.classList.contains('active')) renderIntegratedReport();
   if(document.getElementById('v-routes')?.classList.contains('active')||
      document.getElementById('v-routes')?.style.display!=='none') renderRoutes();
@@ -2785,7 +2785,11 @@ function showNewPapersBanner(newPapers) {
 function renderMarket() {
   const el = document.getElementById('marketContent');
   if(!el) return;
-
+  if(!DB.papers || !DB.papers.length) {
+    el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">📡 資料載入中，請稍候…<br><button class="btn btn-s" onclick="renderMarket()" style="margin-top:12px">重試</button></div>';
+    return;
+  }
+  try {
   const papers = DB.papers.filter(p=>!p._deleted);
   const commercials = papers.filter(p=>p.doc_type==='商用產品' && p.patentResults?.commercial);
 
@@ -2996,6 +3000,10 @@ function renderMarket() {
   <div style="font-size:11px;color:var(--muted);text-align:center;padding:8px">
     資料來源：LitDB 商業產品分析 C01–C10　|　市場數據：MarketsandMarkets / Grand View Research　|　點擊公司卡片查看完整分析
   </div>`;
+  } catch(err) {
+    el.innerHTML = `<div style="text-align:center;padding:40px;color:var(--muted)">⚠️ 市場頁載入錯誤：${err.message}<br><button class="btn btn-s" onclick="renderMarket()" style="margin-top:12px">重試</button></div>`;
+    console.error('renderMarket error:', err);
+  }
 }
 
 // ── Technology Routes 首頁 ───────────────────
