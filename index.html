@@ -554,70 +554,24 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 
 <!-- ═══════════════ VIEW: REPORT ═══════════════ -->
 <div class="view" id="v-report">
-  <div style="max-width:1000px;margin:0 auto;padding:16px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-      <h3 style="font-size:16px;color:var(--accent)">📋 開發策略報告產生器</h3>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-p" onclick="renderIntegratedReport()" style="background:var(--accent2);border-color:var(--accent2)">📄 整合綜述報告（免費）</button>
-        <button class="btn btn-p" onclick="generateReport()">🤖 AI 產生報告（~NT$1）</button>
-      </div>
+  <div style="max-width:900px;margin:0 auto;padding:20px 16px">
+    <!-- 右上角工具列 -->
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:16px">
+      <button class="btn btn-s" onclick="window.print()" style="font-size:12px">🖨 列印 / PDF</button>
+      <button class="btn btn-s" onclick="exportExcel()" style="font-size:12px">📊 匯出 Excel</button>
     </div>
-
-    <!-- 批次分析（睡前點一下）-->
-    <div style="background:var(--card);border:1px solid var(--accent);border-radius:8px;padding:16px;margin-bottom:16px">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div>
-          <div style="font-size:13px;font-weight:600;color:var(--accent)">🌙 批次分析（睡前點一下）</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px">自動分析所有未分析的文獻，電腦保持開啟即可。每篇自動存檔，中途斷電不會遺失。</div>
-        </div>
-        <div style="display:flex;gap:6px;flex-direction:column">
-          <button class="btn btn-p" onclick="batchAnalyzeEncrustation()" style="white-space:nowrap;padding:8px 16px;font-size:12px">💧 抗結痂 10 篇（~NT$3）</button>
-          <button class="btn btn-p" onclick="batchAnalyzeTpu()" style="white-space:nowrap;padding:8px 16px;font-size:12px;background:var(--accent2);border-color:var(--accent2)">🧬 TPU 8 篇（~NT$2）</button>
-          <button class="btn btn-s" onclick="batchAnalyzeAll()" style="white-space:nowrap;padding:6px 16px;font-size:11px">🤖 全部未分析（~NT$9）</button>
-        </div>
-      </div>
-      <div id="batchStatus" style="margin-top:8px;font-size:12px;color:var(--muted)"></div>
+    <!-- 報告本體（自動 render）-->
+    <div id="rptOutput" style="font-size:13px;line-height:1.8">
+      <div style="text-align:center;padding:40px;color:var(--muted)">載入中...</div>
     </div>
-
-    <!-- 基本資訊（可編輯）-->
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px">
-      <div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:10px">基本資訊</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <div><label style="font-size:11px;color:var(--muted)">公司名稱</label><input type="text" id="rptCompany" placeholder="（請填入公司名稱）" style="font-size:13px"></div>
-        <div><label style="font-size:11px;color:var(--muted)">計畫名稱</label><input type="text" id="rptTitle" value="次世代親水性塗層開發計畫" style="font-size:13px"></div>
-        <div><label style="font-size:11px;color:var(--muted)">目標產品</label><input type="text" id="rptProduct" value="TPU 導管（輸尿管支架/Pigtail/泌尿導管）" style="font-size:13px"></div>
-        <div><label style="font-size:11px;color:var(--muted)">基材</label><input type="text" id="rptSubstrate" value="XXX TPU（聚醚型）" style="font-size:13px"></div>
-        <div><label style="font-size:11px;color:var(--muted)">現有設備</label><input type="text" id="rptEquipment" value="air plasma, LED UV (365/405nm), dip coating, Harland FTS" style="font-size:13px"></div>
-        <div><label style="font-size:11px;color:var(--muted)">撰寫人</label><input type="text" id="rptAuthor" placeholder="（請填入）" style="font-size:13px"></div>
-      </div>
-    </div>
-
-    <!-- 報告章節選擇 -->
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px">
-      <div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:10px">報告章節（勾選要產生的）</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px">
-        <label><input type="checkbox" id="rptSec1" checked> 1. 專利風險與迴避分析</label>
-        <label><input type="checkbox" id="rptSec2" checked> 2. 技術路線比較（分群比較）</label>
-        <label><input type="checkbox" id="rptSec3" checked> 3. 配方候選與性能基準</label>
-        <label><input type="checkbox" id="rptSec4" checked> 4. Primer/底塗策略建議</label>
-        <label><input type="checkbox" id="rptSec5" checked> 5. 供應商比較（Plan A）</label>
-        <label><input type="checkbox" id="rptSec6" checked> 6. 自主開發建議（Plan B）</label>
-        <label><input type="checkbox" id="rptSec7" checked> 7. 驗證項目與目標值</label>
-        <label><input type="checkbox" id="rptSec8"> 8. 抗結痂/抗菌方向（Phase 3）</label>
-      </div>
-    </div>
-
-    <!-- 資料庫數據摘要（自動填入）-->
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px">
-      <div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:10px">資料庫數據（自動彙整）</div>
-      <div id="rptDataSummary" style="font-size:12px;color:var(--muted)">載入中...</div>
-    </div>
-
-    <!-- 報告輸出 -->
-    <div id="rptOutput" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:16px;font-size:13px;line-height:1.8">
-    </div>
-
-    <div style="display:flex;gap:8px;justify-content:center" id="rptActions" style="display:none">
+    <!-- 保留隱藏元素供 AI 報告功能使用 -->
+    <div style="display:none">
+      <input type="text" id="rptCompany" value="">
+      <input type="text" id="rptProduct" value="TPU 導管（輸尿管支架/Pigtail/泌尿導管）">
+      <input type="text" id="rptTitle" value="次世代親水性塗層開發計畫">
+      <div id="batchStatus"></div>
+      <div id="rptDataSummary"></div>
+      <div id="rptActions"></div>
     </div>
   </div>
 </div>
@@ -2268,6 +2222,7 @@ async function loadDB() {
 
 function onDBLoaded() {
   renderMarket();
+  if(document.getElementById('v-report')?.classList.contains('active')) renderIntegratedReport();
   if(document.getElementById('v-routes')?.classList.contains('active')||
      document.getElementById('v-routes')?.style.display!=='none') renderRoutes();
   const active = DB.papers.filter(p=>!p._deleted);
@@ -2344,7 +2299,7 @@ function showView(id,el){
   if(id==='graph') buildGraph();
   if(id==='gap') buildHeatmaps();
   if(id==='compare') buildCompare();
-  if(id==='report') { buildReportSummary(); loadSavedReport(); }
+  if(id==='report') { renderIntegratedReport(); }
   // 分析總頁：顯示子分頁
   if(id==='analysis') {
     showAnalysisTab(currentAnalysisTab);
@@ -3645,7 +3600,7 @@ function renderIntegratedReport() {
   </div>`;
 
   const out = document.getElementById('rptOutput');
-  out.style.display = 'block';
+  if(out) out.style.display = 'block';
   out.innerHTML = html;
   out.scrollIntoView({behavior:'smooth', block:'start'});
   toast('✅ 整合報告已生成','success');
