@@ -2782,6 +2782,17 @@ function renderMarket() {
   const papers = DB.papers.filter(p=>!p._deleted);
   const commercials = papers.filter(p=>p.doc_type==='商用產品' && p.patentResults?.commercial);
 
+  // Logo 網域對照
+  const LOGO_MAP = {
+    'C01':'biocoat.com','C02':'freudenberg-medical.com','C03':'surmodics.com',
+    'C04':'hydromer.com','C06':'dsm-firmenich.com','C07':'harlandmedical.com',
+    'C08':'astproducts.com','C09':'surmodics.com','C10':'argonmedical.com',
+  };
+  const ABBR_MAP = {
+    'C01':'BC','C02':'FM','C03':'SR','C04':'HY','C06':'DSM',
+    'C07':'HM','C08':'AST','C09':'SR','C10':'AM',
+  };
+
   // 路線歸屬映射
   const ROUTE_MAP = {
     'C06': ['UV-BP Route'],
@@ -2859,16 +2870,26 @@ function renderMarket() {
     ${commercials.map(p=>{
       const c = p.patentResults.commercial;
       const tc = threatColor[c.competitive_threat_to_bioteque]||'#888';
+      const LOGO_DOMAIN = LOGO_MAP[p.id]||'';
+      const ABBR = ABBR_MAP[p.id]||c.company?.slice(0,3)||'?';
       const routes = ROUTE_MAP[p.id]||[];
       const tech = c.coating_technology||{};
       const claims = Object.entries(tech.performance_claims||{}).slice(0,3);
       return `
       <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer" onclick="goToPaper('${p.id}')">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:12px 14px;border-bottom:1px solid var(--border)">
-          <div>
-            <div style="font-size:14px;font-weight:700;color:var(--text)">${c.company}</div>
+        <!-- Logo + 基本資訊 -->
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border)">
+          <div style="width:48px;height:48px;border-radius:8px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden">
+            <img src="https://logo.clearbit.com/${LOGO_DOMAIN}"
+              style="width:40px;height:40px;object-fit:contain"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+              alt="${c.company} logo">
+            <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--accent);background:var(--card)">${ABBR}</div>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:var(--text)">${c.company}</div>
             <div style="font-size:11px;color:var(--accent);font-weight:600">${c.product}</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:2px">${c.hq||''}</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:1px">${c.hq||''}</div>
           </div>
           <div style="text-align:right;flex-shrink:0">
             <div style="font-size:9px;color:var(--muted)">競爭威脅</div>
