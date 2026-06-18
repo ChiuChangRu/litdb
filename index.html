@@ -244,6 +244,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+TC:wght@400;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
@@ -368,6 +369,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
     <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('gap',this)">🔥 缺口分析</button>
     <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('compare',this)">📊 比較</button>
     <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('commercial',this)">🏢 商業分析</button>
+    <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('kgraph',this)">🧠 知識圖譜</button>
     <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('chat',this)">🤖 AI 對話</button>
   </div>
   <div id="analysisContent">
@@ -477,6 +479,40 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
   <div style="max-width:1100px;margin:0 auto;padding:16px">
     <h3 style="font-size:16px;color:var(--accent);margin-bottom:12px">🏢 商業產品分析 — 供應商技術與專利對照</h3>
     <div id="commercialContent"></div>
+  </div>
+</div>
+
+<div class="view" id="v-kgraph" style="display:none">
+  <div style="height:calc(100vh - 140px);display:flex;flex-direction:column">
+    <!-- 工具列 -->
+    <div style="padding:8px 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--border);flex-shrink:0">
+      <span style="font-size:12px;font-weight:600;color:var(--accent2)">顯示層級：</span>
+      <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="kg_route" checked onchange="renderKGraph()"> 技術路線</label>
+      <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="kg_tech" checked onchange="renderKGraph()"> 技術</label>
+      <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="kg_mech" onchange="renderKGraph()"> 機制</label>
+      <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="kg_mat" checked onchange="renderKGraph()"> 材料</label>
+      <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="kg_proc" onchange="renderKGraph()"> 製程</label>
+      <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="kg_pat" checked onchange="renderKGraph()"> 專利</label>
+      <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="kg_co" checked onchange="renderKGraph()"> 公司</label>
+      <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="kg_perf" checked onchange="renderKGraph()"> 性能</label>
+      <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="kg_app" onchange="renderKGraph()"> 應用</label>
+      <button class="btn btn-s" onclick="renderKGraph()" style="margin-left:auto">⟳ 重繪</button>
+      <button class="btn btn-s" onclick="kgResetZoom()">↙ 重置</button>
+    </div>
+    <!-- 圖例 -->
+    <div style="padding:6px 12px;display:flex;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--border);flex-shrink:0;font-size:10px">
+      <span>🟠 技術路線</span><span>🔵 技術</span><span>🟣 機制</span><span>🟢 材料</span>
+      <span>⬛ 製程</span><span>🔴 專利</span><span>🏢 公司</span><span>⚡ 性能</span><span>📍 應用</span>
+    </div>
+    <!-- 畫布 -->
+    <div style="flex:1;position:relative;overflow:hidden">
+      <svg id="kgSvg" style="width:100%;height:100%"></svg>
+      <!-- 節點詳情面板 -->
+      <div id="kgDetail" style="display:none;position:absolute;top:10px;right:10px;width:260px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:11px;max-height:70vh;overflow-y:auto;box-shadow:0 4px 16px rgba(0,0,0,0.12)">
+        <button onclick="document.getElementById('kgDetail').style.display='none'" style="float:right;background:none;border:none;cursor:pointer;font-size:14px;color:var(--muted)">✕</button>
+        <div id="kgDetailContent"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -2289,6 +2325,7 @@ function showAnalysisTab(subId, btn) {
   else document.querySelectorAll('.analysis-sub').forEach(b=>{ if(b.textContent.includes(subId==='graph'?'關係圖':subId==='gap'?'缺口':subId==='compare'?'比較':subId==='commercial'?'商業':'AI'))b.classList.add('active'); });
   // 觸發初始化
   if(subId==='graph') buildGraph();
+  if(subId==='kgraph') initKGraph();
   if(subId==='gap') buildHeatmaps();
   if(subId==='compare') buildCompare();
   if(subId==='commercial') buildCommercial();
@@ -2589,6 +2626,152 @@ function tryLocalFig(el, localUrl) {
 
 function closeMobileDetail() {
   document.getElementById('colRight').classList.remove('mobile-open');
+}
+
+// ── Knowledge Graph ────────────────────────────
+let KG = null, kgSim = null, kgZoom = null;
+
+const KG_COLORS = {
+  root:'#2c2c2a', route:'#e86c3a', technology:'#2980b9', mechanism:'#8e44ad',
+  material:'#2d8c5a', process:'#7f6a00', patent:'#c0392b', company:'#8a7e72',
+  performance:'#d4a030', application:'#16a085'
+};
+const KG_SIZES = {
+  root:28, route:22, technology:16, mechanism:13, material:13,
+  process:12, patent:11, company:14, performance:12, application:12
+};
+
+async function initKGraph() {
+  if(!KG) {
+    try {
+      const r = await fetch('https://chiuchangru.github.io/litdb/graph.json?v='+Date.now());
+      KG = await r.json();
+    } catch(e) {
+      const svg = document.getElementById('kgSvg');
+      if(svg) svg.innerHTML = `<text x="50%" y="50%" text-anchor="middle" fill="#888" font-size="14">graph.json 載入失敗</text>`;
+      return;
+    }
+  }
+  renderKGraph();
+}
+
+function renderKGraph() {
+  if(!KG||!window.d3) return;
+  const svg = document.getElementById('kgSvg');
+  if(!svg) return;
+  svg.innerHTML = '';
+
+  const show = {
+    root:true,
+    route: document.getElementById('kg_route')?.checked ?? true,
+    technology: document.getElementById('kg_tech')?.checked ?? true,
+    mechanism: document.getElementById('kg_mech')?.checked ?? false,
+    material: document.getElementById('kg_mat')?.checked ?? true,
+    process: document.getElementById('kg_proc')?.checked ?? false,
+    patent: document.getElementById('kg_pat')?.checked ?? true,
+    company: document.getElementById('kg_co')?.checked ?? true,
+    performance: document.getElementById('kg_perf')?.checked ?? true,
+    application: document.getElementById('kg_app')?.checked ?? false,
+  };
+
+  const visNodes = KG.nodes.filter(n=>show[n.type]).map(n=>({...n}));
+  const visIds = new Set(visNodes.map(n=>n.id));
+  const visEdges = KG.edges.filter(e=>visIds.has(e.source)&&visIds.has(e.target)).map(e=>({...e}));
+
+  const W = svg.clientWidth||900, H = svg.clientHeight||600;
+  const d3svg = d3.select(svg).attr('viewBox',`0 0 ${W} ${H}`);
+  const g = d3svg.append('g');
+  kgZoom = d3.zoom().scaleExtent([0.15,5]).on('zoom',e=>g.attr('transform',e.transform));
+  d3svg.call(kgZoom);
+
+  const edgeColors = {contains:'#e86c3a',based_on:'#8e44ad',uses_material:'#2d8c5a',uses_process:'#7f6a00',improves:'#d4a030',represented_by:'#c0392b',developed_by:'#8a7e72',family_of:'#e86c3a33',extends:'#c0392b',alternative_to:'#95a5a6',used_in:'#16a085',develops:'#2980b9'};
+  const defs = d3svg.append('defs');
+  Object.entries(edgeColors).forEach(([t,c])=>{
+    defs.append('marker').attr('id','arr_'+t).attr('viewBox','0 -3 8 6').attr('refX',12).attr('refY',0).attr('markerWidth',5).attr('markerHeight',5).attr('orient','auto')
+      .append('path').attr('d','M0,-3L8,0L0,3').attr('fill',c).attr('opacity',0.8);
+  });
+
+  const routeNodes = visNodes.filter(n=>n.type==='route');
+  const cx=W/2, cy=H/2, rr=Math.min(W,H)*0.28;
+  visNodes.forEach(n=>{
+    if(n.type==='root'){n.x=cx;n.y=cy;n.fx=cx;n.fy=cy;}
+    else if(n.type==='route'){const i=routeNodes.indexOf(n);const a=(i/routeNodes.length)*2*Math.PI-Math.PI/2;n.x=cx+rr*Math.cos(a);n.y=cy+rr*Math.sin(a);}
+    else{n.x=cx+(Math.random()-0.5)*W*0.7;n.y=cy+(Math.random()-0.5)*H*0.7;}
+  });
+
+  if(kgSim) kgSim.stop();
+  kgSim = d3.forceSimulation(visNodes)
+    .force('link',d3.forceLink(visEdges).id(d=>d.id).distance(d=>({route:110,technology:85,mechanism:70,material:70,process:65,patent:60,company:80,performance:70,application:70}[d.target?.type||'']||80)).strength(0.4))
+    .force('charge',d3.forceManyBody().strength(d=>d.type==='root'?-800:d.type==='route'?-350:-150))
+    .force('center',d3.forceCenter(cx,cy).strength(0.04))
+    .force('collision',d3.forceCollide(d=>(KG_SIZES[d.type]||12)+10))
+    .alphaDecay(0.025);
+
+  const link = g.append('g').selectAll('line').data(visEdges).join('line')
+    .attr('stroke',d=>edgeColors[d.type]||'#ccc')
+    .attr('stroke-width',d=>d.type==='family_of'?2.5:1.3)
+    .attr('stroke-opacity',d=>d.type==='alternative_to'?0.35:0.5)
+    .attr('stroke-dasharray',d=>d.type==='alternative_to'?'5,4':null)
+    .attr('marker-end',d=>`url(#arr_${d.type})`);
+
+  const node = g.append('g').selectAll('g').data(visNodes).join('g')
+    .attr('cursor','pointer')
+    .call(d3.drag()
+      .on('start',(e,d)=>{if(!e.active)kgSim.alphaTarget(0.3).restart();d.fx=d.x;d.fy=d.y;})
+      .on('drag',(e,d)=>{d.fx=e.x;d.fy=e.y;})
+      .on('end',(e,d)=>{if(!e.active)kgSim.alphaTarget(0);d.fx=null;d.fy=null;}))
+    .on('click',(e,d)=>{e.stopPropagation();showKGDetail(d);});
+
+  node.append('circle')
+    .attr('r',d=>KG_SIZES[d.type]||12)
+    .attr('fill',d=>KG_COLORS[d.type]||'#888')
+    .attr('fill-opacity',0.9)
+    .attr('stroke','#fff').attr('stroke-width',1.8);
+
+  node.append('text').attr('text-anchor','middle').attr('dominant-baseline','middle')
+    .attr('fill','#fff').attr('font-weight',700).attr('pointer-events','none')
+    .style('font-size',d=>({root:'9px',route:'7.5px'}[d.type]||'6.5px'))
+    .each(function(d){
+      const el=d3.select(this), lines=(d.label||d.id).split('\n');
+      if(lines.length===1){el.text(lines[0].length>11?lines[0].slice(0,10)+'…':lines[0]);}
+      else{lines.forEach((l,i)=>el.append('tspan').attr('x',0).attr('dy',i===0?`${-(lines.length-1)*0.55}em`:'1.1em').text(l.length>9?l.slice(0,8)+'…':l));}
+    });
+
+  kgSim.on('tick',()=>{
+    link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
+    node.attr('transform',d=>`translate(${d.x},${d.y})`);
+  });
+  d3svg.on('click',()=>document.getElementById('kgDetail').style.display='none');
+}
+
+function showKGDetail(d) {
+  const panel=document.getElementById('kgDetail'), content=document.getElementById('kgDetailContent');
+  if(!panel||!content) return;
+  const col=KG_COLORS[d.type]||'#888';
+  const outgoing=KG.edges.filter(e=>e.source===d.id);
+  const incoming=KG.edges.filter(e=>e.target===d.id);
+  const fn=id=>KG.nodes.find(n=>n.id===id);
+  const relRow=(e,dir)=>{const o=fn(dir==='out'?e.target:e.source);if(!o)return '';return `<div style="padding:3px 0;border-bottom:1px solid var(--border);font-size:11px"><span style="color:${col};font-size:9px;text-transform:uppercase">${e.type}</span><span style="margin-left:6px;font-weight:600">${o.label?.split('\n')[0]}</span></div>`;};
+  content.innerHTML=`
+    <div style="background:${col};color:#fff;border-radius:7px;padding:9px 11px;margin-bottom:10px">
+      <div style="font-size:9px;opacity:0.8;text-transform:uppercase;letter-spacing:1px">${d.type}</div>
+      <div style="font-size:14px;font-weight:700;margin-top:3px">${d.label?.replace('\n',' ')||d.id}</div>
+    </div>
+    ${d.description?`<p style="font-size:11px;color:var(--text);margin-bottom:8px;line-height:1.65">${d.description}</p>`:''}
+    ${d.route_summary?`<div style="background:var(--card);border-radius:5px;padding:7px;margin-bottom:8px;font-size:11px;line-height:1.6">${d.route_summary}</div>`:''}
+    ${d.advantages?`<div style="font-size:11px;color:var(--accent2);margin-bottom:4px"><b>✅ 優勢：</b>${d.advantages}</div>`:''}
+    ${d.disadvantages?`<div style="font-size:11px;color:#c0392b;margin-bottom:4px"><b>⚠️ 劣勢：</b>${d.disadvantages}</div>`:''}
+    ${d.patent_risk?`<div style="font-size:11px;color:var(--muted);margin-bottom:4px"><b>⚖️ 專利風險：</b>${d.patent_risk}</div>`:''}
+    ${d.development_priority?`<div style="font-size:11px;color:var(--accent);margin-bottom:10px"><b>🎯 優先序：</b>${d.development_priority}</div>`:''}
+    ${d.cas?`<div style="font-size:10px;color:var(--muted);margin-bottom:8px">CAS: ${d.cas}</div>`:''}
+    ${outgoing.length?`<div style="font-size:10px;font-weight:700;color:var(--accent2);margin-bottom:3px">→ 指向 (${outgoing.length})</div>${outgoing.slice(0,6).map(e=>relRow(e,'out')).join('')}`:''}
+    ${incoming.length?`<div style="font-size:10px;font-weight:700;color:var(--muted);margin-top:7px;margin-bottom:3px">← 被指向 (${incoming.length})</div>${incoming.slice(0,6).map(e=>relRow(e,'in')).join('')}`:''}
+  `;
+  panel.style.display='block';
+}
+
+function kgResetZoom() {
+  d3.select('#kgSvg').transition().duration(500).call(kgZoom.transform,d3.zoomIdentity.scale(0.9).translate(50,30));
 }
 
 // ── 整合綜述報告（基於資料庫，免 API）────────────
