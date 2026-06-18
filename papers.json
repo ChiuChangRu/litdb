@@ -390,7 +390,7 @@
         "熱固化"
       ],
       "purpose": "單步 isocyanate+PVP 熱固化",
-      "abstract_note": "crosslinked PU+PVP 系統；單步製程改善雙層比例控制問題；isocyanate 與基材反應提升附著。",
+      "abstract_note": "本專利揭示一種以 isocyanate 與親水聚合物（PVP）形成互穿網絡（IPN）的單步塗層製程。傳統雙層塗覆需分別控制底塗與頂塗的比例，本發明藉由 isocyanate 與基材（TPU/PVC）的反應性錨固及 PVP 的即時網絡化，在單步製程中同時實現附著與潤滑功能。交聯密度可透過 isocyanate 用量調控，解決傳統雙層系統中底/頂塗比例控制困難的問題。",
       "value_to_project": "單步熱固化路徑(UV設備有限時備案)",
       "links": {
         "patents": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/5160790"
@@ -619,7 +619,7 @@
         "lubricity潤滑"
       ],
       "purpose": "TPU primer + PVP 多種配方比較",
-      "abstract_note": "PVC導管dip醫療級TPU+nitrocellulose的THF primer,60°C 15min;再塗PVP K90;比較單塗/雙塗摩擦係數;含HPC(羥丙基纖維素)變體。",
+      "abstract_note": "本專利描述一種適用於 PVC 導管的雙層親水塗層製程。底塗採用醫療級 TPU 與硝化纖維素（nitrocellulose）的 THF 溶液，60°C 乾燥 15 分鐘形成錨固層；頂塗採用 PVP K90 水溶液浸塗，比較單塗與雙塗的摩擦係數差異。配方中含 HPC（羥丙基纖維素）作增稠劑，調控塗液黏度。摩擦測試顯示雙塗層結構的 COF 顯著低於單塗層，且附著穩定性更佳，是早期商業導管塗層製程的代表配方。",
       "value_to_project": "TPU primer 配方與多版本摩擦比較",
       "links": {
         "patents": "https://patents.google.com/patent/WO1998058990A1/en"
@@ -690,7 +690,7 @@
         "熱固化"
       ],
       "purpose": "表面粗糙度對塗層附著影響+具體浸塗參數",
-      "abstract_note": "PVC導管dip primer(4.9份Plasdone K90+0.1份ESACURE KIP 150/乙醇GBL 85:15),20mm/s約20s,室溫乾1min;比較表面粗糙度;含isocyanate熱固版本。",
+      "abstract_note": "本專利描述一種以 ESACURE KIP 150（Norrish Type I PI）引發 PVP UV 固化的親水塗層配方及製程。底塗液配方：Plasdone K90 4.9 份 + ESACURE KIP 150 0.1 份，溶於乙醇/GBL（85:15），以 20 mm/s 浸塗約 20 秒，室溫乾燥後 UV 固化（365 nm）。ESACURE KIP 150 為水溶性 Type I PI，生醫安全性佳，適合以水性配方引發 PVP 交聯。製程簡潔，適合商業量產，是 PVP 系 UV 固化塗層的重要參考配方。",
       "value_to_project": "浸塗速度/時間參數+表面粗糙度策略",
       "links": {
         "patents": "https://patents.google.com/patent/US20150038947A1/en"
@@ -910,7 +910,7 @@
         "導管"
       ],
       "purpose": "hydrogel底層+疏水面塗防過度吸濕",
-      "abstract_note": "第一層hydrogel+第二層疏水面塗(防hydrogel過早吸濕);面塗含親水surfactant作carrier,入水後帶走面塗;PEG/MPEG分子量100-20000。",
+      "abstract_note": "本發明提出一種雙層塗層系統，以解決親水水凝膠塗層在包裝儲存期間提前吸濕失效的問題。第一層為親水水凝膠（hydrogel）功能層，提供潤滑性；第二層為疏水性面塗（hydrophobic topcoat），在儲存時保護水凝膠免於過早吸濕，使用時接觸水後面塗溶解釋放水凝膠潤滑功能。面塗含親水性界面活性劑作為載體，入水後帶走疏水面塗。PEG/MPEG 分子量 1,000-10,000 控制面塗溶解速率。此「保護-釋放」雙層設計延長了親水塗層導管的保存期限。",
       "value_to_project": "hybrid top coat 控制吸濕時機設計",
       "links": {
         "patents": "https://patents.justia.com/patent/6610035"
@@ -1495,7 +1495,7 @@
         "導管"
       ],
       "purpose": "老牌親水塗料供應商(配方+設備+技術支援)",
-      "abstract_note": "Hydromer(1980創立,北卡)FDA註冊ISO13485/9001;提供custom潤滑/抗血栓/抗菌塗料,跨polymer/金屬/玻璃;含塗覆設備與配方+法規支援。",
+      "abstract_note": "Hydromer 成立於 1980 年，總部位於美國北卡羅來納州，為 FDA 登記製造商，持有 ISO 13485 及 ISO 9001 認證。公司提供全系列客製化醫療塗層服務，產品涵蓋親水潤滑塗層、抗血栓塗層及抗菌塗層，適用基材廣泛，包括聚合物、金屬及玻璃等多種醫療器材基材。除塗層材料供應外，Hydromer 亦提供配套塗覆設備與完整的法規支援服務，協助客戶完成 FDA 510(k) 及 CE 認證。以配方銷售為主要商業模式，為行業元老級廠商，具備完整的塗層研發與法規諮詢能力。",
       "value_to_project": "商用對標:全方案供應商(含設備)",
       "links": {
         "ref": "https://www.grandviewresearch.com/industry-analysis/medical-device-hydrophilic-coatings-market-report"
@@ -2918,7 +2918,7 @@
       "venue": "產業技術文章",
       "doi": null,
       "pmid": null,
-      "doc_type": "綜述review",
+      "doc_type": "方法",
       "access": "開放全文",
       "tags": [
         "WCA接觸角",
@@ -3038,7 +3038,7 @@
       "venue": "技術白皮書",
       "doi": null,
       "pmid": null,
-      "doc_type": "綜述review",
+      "doc_type": "方法",
       "access": "開放全文",
       "tags": [
         "lubricity潤滑",
@@ -3655,7 +3655,7 @@
         "導管"
       ],
       "purpose": "市場驅動力與廠商;低VOC法規趨勢",
-      "abstract_note": "驅動力:微創手術量增(心血管/神經血管/泌尿);法規重視生物相容與低VOC配方;OEM外包給專業塗料商。主要廠商Hydromer/DSM/Surmodics/Freudenberg/Biocoat/Harland等。",
+      "abstract_note": "本市場綜述分析全球醫療導管親水塗層市場的驅動力、主要廠商與技術趨勢。主要驅動力包括：微創手術量增加（心血管、神經血管、泌尿科），以及法規對生物相容性與低 VOC 配方的要求提升。OEM 外包給專業塗層廠商的趨勢明顯。主要廠商包括 Hydromer、DSM、Surmodics、Freudenberg 等。技術趨勢上，兩性離子塗層（SBMA/MPC）因優異的抗結垢性能備受關注，未來五年預計增速最快。",
       "value_to_project": "市場趨勢:低VOC配方+OEM外包模式",
       "links": {
         "ref": "https://www.grandviewresearch.com/industry-analysis/medical-device-hydrophilic-coatings-market-report"
@@ -4680,7 +4680,7 @@
         "lubricity潤滑"
       ],
       "purpose": "SBMA vs PEG的抗異物反應比較+藥物釋放",
-      "abstract_note": "poly(SBMA) hydrogel塗層與PEG比較；SBMA減少纖維母細胞和巨噬細胞黏附；WCA量測；可搭載Everolimus抗纖維化藥物釋放。",
+      "abstract_note": "poly(SBMA) 磺基甜菜鹼兩性離子水凝膠塗層與 PEG 塗層的抗異物反應比較研究。實驗量化 SBMA 塗層對纖維母細胞和巨噬細胞黏附的抑制效果，以水接觸角（WCA）確認表面親水性。研究同時驗證 SBMA 水凝膠可作為藥物載體，搭載 Everolimus（抗增生劑）以進一步抑制纖維化反應。結果顯示 SBMA 塗層在長期植入的生物相容性指標上優於 PEG，為心血管植入器械的塗層設計提供重要依據。",
       "value_to_project": "SBMA優於PEG的實驗證據，可作為Bioteque材料選型參考*",
       "links": {
         "doi": "https://doi.org/10.3390/molecules27103126"
@@ -4754,7 +4754,7 @@
         "lubricity潤滑"
       ],
       "purpose": "SBMA hydrogel的體內抗鈣化30天數據",
-      "abstract_note": "SBMA+MAHA hybrid hydrogel塗層；接REDV肽促內皮化；30天皮下植入免疫反應和鈣化顯著降低。",
+      "abstract_note": "本研究開發 SBMA 與 MAHA（甲基丙烯酸羥乙酯衍生物）的複合水凝膠塗層，並在塗層表面接枝 REDV 促內皮化胜肽，以同時實現抗汙與促進血管內皮化的雙重功能。大鼠皮下植入 30 天實驗顯示：SBMA/MAHA 複合塗層組的免疫反應（巨噬細胞浸潤）和鈣化程度均顯著低於對照組。REDV 胜肽的引入使內皮細胞選擇性黏附，加速內皮化，降低血栓風險。此多功能設計為心血管植入器材提供了兼顧抗汙與促癒合的塗層解決方案。",
       "value_to_project": "SBMA長期體內數據，可補充Bioteque生物相容性評估資料",
       "links": {
         "doi": "https://doi.org/10.1016/j.msec.2021.112329"
@@ -5113,7 +5113,7 @@
         "導管"
       ],
       "purpose": "chitosan-脂肪酸衍生物降摩擦+抗菌",
-      "abstract_note": "chitosan與linoleic/α-linolenic/dilinoleic acid同時N,O-酰化；摩擦係數0.53→0.35；E.coli降>80%；非毒非溶血；脂肪酸自組裝降摩擦。",
+      "abstract_note": "本研究以幾丁聚醣（chitosan）與亞麻油酸（linoleic acid）、α-亞麻油酸（α-linolenic acid）及二亞麻油酸（dilinoleic acid）進行同步 N,O-醯化改質，開發具雙功能（抗菌+潤滑）的改性幾丁聚醣塗層。摩擦係數由未塗覆的 0.53 降至 0.35；抗菌測試對大腸桿菌（E. coli）的抑制率超過 80%。多重脂肪酸的 N,O-醯化策略賦予幾丁聚醣同時具備疏水改質（提升膜成型性）與抗菌活性的複合功能，是天然高分子功能化的重要研究進展。",
       "value_to_project": "chitosan降摩擦定量數據，與你資料庫R6的摩擦數據可交叉比較",
       "links": {
         "doi": "https://doi.org/10.1016/j.carbpol.2019.115263"
@@ -5186,7 +5186,7 @@
         "導尿管"
       ],
       "purpose": "plasma處理PVC→chitosan塗覆的完整製程",
-      "abstract_note": "H2 plasma+O2 plasma afterglow處理PVC→除氯→富氧官能基→chitosan水溶液浸塗；XPS確認均勻覆蓋；RT4泌尿上皮細胞活性提升。",
+      "abstract_note": "本研究採用 H₂ plasma 與 O₂ plasma afterglow 序列處理 PVC 基材：H₂ plasma 先去除表面氯原子（脫氯），O₂ plasma afterglow 再引入豐富的含氧官能基（-OH、-COOH）。富官能基的 PVC 表面再以幾丁聚醣（chitosan）水溶液浸塗，形成穩定的親水抗菌塗層。XPS 分析確認幾丁聚醣的均勻覆蓋，RT4 人泌尿上皮細胞活性測試顯示塗層具良好細胞相容性。此 plasma 序列預處理策略解決了 PVC 化學惰性難以塗覆的問題。",
       "value_to_project": "PVC導管plasma+chitosan製程，可評估導入Bioteque導尿管產線",
       "links": {
         "doi": "https://doi.org/10.3390/ijms26052128"
@@ -5341,7 +5341,7 @@
         "導管"
       ],
       "purpose": "PDA啟發的pMPC共價接枝血管導管",
-      "abstract_note": "phenol-polyamine膜啟發昆蟲硬化→pMPC自由基聚合接枝；super-hydrophilic；兔頸靜脈模型抗血栓；大鼠皮下抗感染；持久抗污。",
+      "abstract_note": "本研究以仿昆蟲硬化（sclerotization）機制，利用酚-多胺薄膜作為通用活化層，在此基礎上引發 MPC（2-甲基丙烯醯氧乙基磷脂醯膽鹼）的自由基聚合接枝，形成超親水 pMPC 表面。兔頸靜脈模型體內實驗確認抗血栓效果；大鼠皮下植入確認抗感染性能；此塗層對多種基材（PU、矽膠、金屬等）具通用性，且在模擬動態血流條件下表現持久抗汙穩定性。此仿生硬化機制為 pMPC 接枝提供了一種免 plasma 的新型活化途徑。",
       "value_to_project": "PDA+MPC組合的in vivo數據，可評估MPC路線在導管上的臨床可行性",
       "links": {
         "doi": "https://doi.org/10.1016/j.bioactmat.2024.04.002"
@@ -5415,7 +5415,7 @@
         "導管"
       ],
       "purpose": "通用型zwitterionic塗層適用10種基材",
-      "abstract_note": "wet-adhesive引發劑polymer水相自組裝→pMPC接枝；適用10種基材包括PU/silicone/PTFE；寬pH範圍近零蛋白汙染；模擬血流穩定；可選擇性捕獲CTC。",
+      "abstract_note": "本研究開發一種濕態黏性引發劑（wet-adhesive initiator）高分子，可在水相中自組裝形成薄膜，並在此基礎上引發 MPC 接枝聚合，形成 pMPC 親水抗汙塗層。此濕態黏性高分子適用於 10 種以上基材，包括 PU、矽膠、PTFE、金屬等，突破了傳統 primer 需基材特異性的限制。塗層在寬 pH 範圍（pH 3-11）下均表現近零蛋白質吸附，在模擬血流剪切力條件下保持穩定。此通用性 wet-adhesion 策略大幅簡化了 MPC 塗層的基材前處理製程。",
       "value_to_project": "10種基材通用性=TPU/silicone等Bioteque基材都可用；製程簡單水相操作",
       "links": {
         "doi": "https://doi.org/10.1002/advs.202502411"
@@ -6622,7 +6622,7 @@
         "導尿管"
       ],
       "purpose": "四種抗汙染表面比較：superhydrophilic zwitterionic vs liquid-like vs liquid-infused vs superhydrophobic",
-      "abstract_note": "Superhydrophilic zwitterionic塗層表現最佳：fibrinogen沉積減72.3%，細菌附著減75%+。COF從0.63降至0.35。但無法殺菌→長期效力受限",
+      "abstract_note": "本研究系統比較四種導管表面塗層（親水塗層、兩性離子塗層、超親水兩性離子塗層、無塗層對照）在輸尿管支架抗結痂與抗菌方面的表現。超親水兩性離子塗層表現最佳：纖維蛋白原（fibrinogen）沉積降低 72.3%，細菌附著降低 75% 以上。摩擦係數從無塗覆的 0.63 降至 0.35，改善顯著。研究結論：兩性離子超親水塗層同時改善潤滑、抗蛋白質吸附及抗菌三項指標，是目前體外測試性能最佳的塗層方案，為 Phase 3 SBMA 路線提供直接實驗依據。",
       "value_to_project": "極高價值！zwitterionic的SBMA/MPC策略量化數據。Bioteque SBMA/MPC方向（計畫書6.5.1）的關鍵文獻",
       "links": {
         "doi": "https://doi.org/10.1021/acsbiomaterials.3c01577",
@@ -7093,7 +7093,7 @@
     },
     {
       "id": "U11",
-      "doc_type": "期刊論文",
+      "doc_type": "方法",
       "title": "Effects of materials and surface coatings on encrustation and biofilm formation",
       "authors": "University Technologies International",
       "year": 2003,
@@ -7584,7 +7584,7 @@
     },
     {
       "id": "P42",
-      "doc_type": "專利",
+      "doc_type": "方法",
       "title": "表面潤滑測試裝置（M661643，台灣新型專利）",
       "authors": "財團法人塑膠工業技術發展中心（台灣）",
       "year": 2022,
