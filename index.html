@@ -458,31 +458,38 @@ function doLogin(){
 
 <!-- ═══════════════ VIEW: GRAPH ═══════════════ -->
 <div class="view" id="v-graph" style="display:none">
-  <div class="graph-container" style="display:flex;gap:0">
-    <div style="flex:1;min-width:0">
-      <div class="graph-controls">
-        <label style="font-size:11px;color:var(--muted)">標籤類別</label>
-        <select id="graphTagCat" onchange="buildGraph()" style="width:auto;padding:4px 8px;font-size:12px">
-          <option value="">全部標籤</option>
-          <option value="substrate">基材</option>
-          <option value="hydrophilic_polymer">親水高分子</option>
-          <option value="cure_method">固化方式</option>
-          <option value="anchor_primer">錨固劑</option>
-          <option value="application">應用</option>
-          <option value="indication">適應症</option>
-          <option value="performance">性能指標</option>
-        </select>
-        <label style="font-size:11px;color:var(--muted);margin-left:12px">最少連結</label>
-        <input type="range" id="graphThreshold" min="1" max="10" value="1" oninput="buildGraph()" style="width:80px">
-        <span id="graphThreshVal" style="font-size:11px;color:var(--muted)">1</span>
-        <span id="graphInfo" style="font-size:11px;color:var(--muted);margin-left:auto"></span>
-      </div>
-      <canvas id="graphCanvas" width="1200" height="550" onclick="onGraphClick(event)"></canvas>
-      <div class="graph-legend" id="graphLegend"></div>
+  <div style="height:calc(100vh - 130px);display:flex;flex-direction:column">
+    <!-- 控制列 -->
+    <div class="graph-controls" style="flex-shrink:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 12px;border-bottom:1px solid var(--border)">
+      <label style="font-size:11px;color:var(--muted)">標籤類別</label>
+      <select id="graphTagCat" onchange="buildGraph()" style="width:auto;padding:4px 8px;font-size:12px">
+        <option value="">全部標籤</option>
+        <option value="substrate">基材</option>
+        <option value="hydrophilic_polymer">親水高分子</option>
+        <option value="cure_method">固化方式</option>
+        <option value="anchor_primer">錨固劑</option>
+        <option value="application">應用</option>
+        <option value="indication">適應症</option>
+        <option value="performance">性能指標</option>
+      </select>
+      <label style="font-size:11px;color:var(--muted);margin-left:8px">最少連結</label>
+      <input type="range" id="graphThreshold" min="1" max="10" value="1" oninput="buildGraph()" style="width:80px">
+      <span id="graphThreshVal" style="font-size:11px;color:var(--muted)">1</span>
+      <span id="graphInfo" style="font-size:11px;color:var(--muted);margin-left:auto"></span>
+      <button class="btn btn-s" onclick="graphResetZoom()" style="font-size:11px">↙ 重置</button>
     </div>
-    <div id="graphDetailPanel" style="width:320px;flex-shrink:0;border-left:1px solid var(--border);overflow-y:auto;max-height:600px;padding:12px">
-      <div id="graphDetailContent" style="font-size:12px;line-height:1.6">
-        <div style="text-align:center;padding:30px 10px;color:var(--muted)">← 點擊泡泡圖中的節點<br>查看文獻內容或標籤關聯</div>
+    <!-- 圖例 -->
+    <div class="graph-legend" id="graphLegend" style="flex-shrink:0;padding:4px 12px;border-bottom:1px solid var(--border);font-size:10px;display:flex;gap:10px;flex-wrap:wrap"></div>
+    <!-- 主畫布 -->
+    <div style="flex:1;position:relative;overflow:hidden;display:flex">
+      <svg id="graphSvg" style="flex:1;min-width:0"></svg>
+      <!-- tooltip -->
+      <div id="graphTooltip" style="display:none;position:absolute;background:var(--card);border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:12px;pointer-events:none;max-width:220px;box-shadow:0 2px 10px rgba(0,0,0,0.12);z-index:10"></div>
+      <!-- 詳情面板 -->
+      <div id="graphDetailPanel" style="width:300px;flex-shrink:0;border-left:1px solid var(--border);overflow-y:auto;background:var(--surface)">
+        <div id="graphDetailContent" style="font-size:12px;line-height:1.6;padding:14px">
+          <div style="text-align:center;padding:30px 10px;color:var(--muted)">← 點擊節點<br>查看文獻或標籤關聯</div>
+        </div>
       </div>
     </div>
   </div>
@@ -5038,1248 +5045,199 @@ let graphNodes = [];
 let graphEdges = [];
 
 function buildGraph() {
+  if(!window.d3) return;
   const catFilter = document.getElementById('graphTagCat').value;
-  const threshold = parseInt(document.getElementById('graphThreshold').value);
+  const threshold = parseInt(document.getElementById('graphThreshold').value)||1;
   document.getElementById('graphThreshVal').textContent = threshold;
-  const canvas = document.getElementById('graphCanvas');
-  const ctx = canvas.getContext('2d');
-  const dpr = window.devicePixelRatio||1;
-  canvas.width = canvas.offsetWidth * dpr;
-  canvas.height = 550 * dpr;
-  ctx.scale(dpr, dpr);
-  const W = canvas.offsetWidth, H = 550;
+
+  const svg = document.getElementById('graphSvg');
+  if(!svg) return;
+  svg.innerHTML = '';
 
   const dict = DB.meta.tag_dictionary||{};
-  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9',market_trend:'#7f8c8d',doc_type:'#8a7e72',access:'#8a7e72'};
+  const catColors = {
+    substrate:'#e86c3a', hydrophilic_polymer:'#2d8c5a', cure_method:'#d4a030',
+    anchor_primer:'#c0392b', application:'#8e44ad', indication:'#16a085',
+    performance:'#2980b9', market_trend:'#7f8c8d', doc_type:'#8a7e72',
+    encrustation_mechanism:'#16a085'
+  };
   const tagCat = {};
-  Object.entries(dict).forEach(([cat,tags])=>tags.forEach(t=>{tagCat[t]=cat}));
+  Object.entries(dict).forEach(([cat,tags])=>tags.forEach(t=>{tagCat[t]=cat;}));
 
-  // 建立有效標籤集（依篩選）
+  // 有效標籤集
   let validTags = new Set();
-  if(catFilter) {
-    (dict[catFilter]||[]).forEach(t=>validTags.add(t));
-  } else {
-    Object.values(dict).flat().forEach(t=>validTags.add(t));
-  }
+  if(catFilter) (dict[catFilter]||[]).forEach(t=>validTags.add(t));
+  else Object.values(dict).flat().forEach(t=>validTags.add(t));
 
-  // 建立 Paper ↔ Tag 邊
-  const edges = [];
-  const tagCount = {};
-  const paperTagCount = {};
-  // 使用篩選後的文獻（若有），否則全部
-  const graphPapers = (filtered && filtered.length) ? filtered : DB.papers;
+  const graphPapers = (filtered&&filtered.length) ? filtered : DB.papers;
 
-  graphPapers.forEach(p => {
+  // 建立邊與計數
+  const edges = [], tagCount = {}, paperTagCount = {};
+  graphPapers.forEach(p=>{
     const tags = (p.tags||[]).filter(t=>validTags.has(t));
     paperTagCount[p.id] = tags.length;
-    tags.forEach(t => {
-      tagCount[t] = (tagCount[t]||0) + 1;
-      edges.push({paper: p.id, tag: t});
-    });
+    tags.forEach(t=>{ tagCount[t]=(tagCount[t]||0)+1; edges.push({paper:p.id, tag:t}); });
   });
 
-  // 過濾：標籤至少出現 threshold 次
   const activeTags = new Set(Object.entries(tagCount).filter(([,c])=>c>=threshold).map(([t])=>t));
   const filteredEdges = edges.filter(e=>activeTags.has(e.tag));
-
-  // 涉及的 papers
   const activePapers = new Set(filteredEdges.map(e=>e.paper));
 
-  // 建立節點
+  // 建立 D3 節點與邊
   const nodes = [];
   const nodeMap = {};
-
-  // Tag 節點
-  [...activeTags].forEach(t => {
-    const n = {id:t, type:'tag', cat:tagCat[t]||'', count:tagCount[t], x:W*0.3+Math.random()*W*0.4, y:Math.random()*H, vx:0, vy:0, highlight:false};
+  [...activeTags].forEach(t=>{
+    const n = {id:t, type:'tag', cat:tagCat[t]||'', count:tagCount[t], label:t};
     nodes.push(n); nodeMap[t]=n;
   });
-
-  // Paper 節點
-  [...activePapers].forEach(pid => {
+  [...activePapers].forEach(pid=>{
     const p = graphPapers.find(x=>x.id===pid);
-    const n = {id:pid, type:'paper', docType:p?.doc_type||'', count:paperTagCount[pid]||1, x:Math.random()*W, y:Math.random()*H, vx:0, vy:0, highlight:false, title:(p?.title||'').slice(0,30)};
+    const n = {id:pid, type:'paper', docType:p?.doc_type||'', count:paperTagCount[pid]||1, label:pid, title:p?.title||pid};
     nodes.push(n); nodeMap[pid]=n;
   });
 
-  const catLabels = {'':'全部標籤',substrate:'基材',hydrophilic_polymer:'親水高分子',cure_method:'固化方式',anchor_primer:'錨固劑',application:'應用',indication:'適應症',performance:'性能指標'};
-  document.getElementById('graphInfo').innerHTML = `<select onchange="document.getElementById('graphTagCat').value=this.value;buildGraph()" style="background:var(--accent);color:#fff;border:none;padding:3px 8px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer">${Object.entries(catLabels).map(([k,v])=>`<option value="${k}" ${k===catFilter?'selected':''}>${v}</option>`).join('')}</select> ${activePapers.size} 篇 · ${activeTags.size} 標籤 · ${filteredEdges.length} 連結${graphPapers.length!==DB.papers.length?' （篩選後）':''}`;
+  const d3edges = filteredEdges.map(e=>({source:e.paper, target:e.tag}));
 
-  // Force simulation
-  for(let iter=0;iter<300;iter++){
-    for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++){
-      let dx=nodes[j].x-nodes[i].x, dy=nodes[j].y-nodes[i].y;
-      const dist=Math.max(Math.sqrt(dx*dx+dy*dy),1);
-      const repel = nodes[i].type===nodes[j].type ? 1200 : 600;
-      const f=repel/(dist*dist);
-      nodes[i].vx-=f*dx/dist; nodes[i].vy-=f*dy/dist;
-      nodes[j].vx+=f*dx/dist; nodes[j].vy+=f*dy/dist;
-    }
-    filteredEdges.forEach(e=>{
-      const a=nodeMap[e.paper],b=nodeMap[e.tag];if(!a||!b)return;
-      let dx=b.x-a.x,dy=b.y-a.y;
-      const dist=Math.max(Math.sqrt(dx*dx+dy*dy),1);
-      const f=dist*0.004;
-      a.vx+=f*dx/dist; a.vy+=f*dy/dist;
-      b.vx-=f*dx/dist; b.vy-=f*dy/dist;
-    });
-    nodes.forEach(n=>{
-      n.vx+=(W/2-n.x)*0.0008; n.vy+=(H/2-n.y)*0.0008;
-      n.x+=n.vx*0.25; n.y+=n.vy*0.25;
-      n.vx*=0.82; n.vy*=0.82;
-      n.x=Math.max(50,Math.min(W-50,n.x));
-      n.y=Math.max(30,Math.min(H-30,n.y));
-    });
-  }
+  // 圖例
+  const usedCats = [...new Set([...activeTags].map(t=>tagCat[t]).filter(Boolean))];
+  const leg = document.getElementById('graphLegend');
+  if(leg) leg.innerHTML = usedCats.map(c=>`<span style="display:inline-flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:50%;background:${catColors[c]||'#888'};display:inline-block"></span>${c}</span>`).join('') +
+    ' <span style="display:inline-flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:2px;background:#888;display:inline-block"></span>文獻</span>';
 
-  graphNodes = nodes;
-  graphEdges = filteredEdges;
-  drawGraph(ctx, W, H, null);
+  document.getElementById('graphInfo').textContent = `${activePapers.size} 篇 · ${activeTags.size} 標籤 · ${filteredEdges.length} 連結${graphPapers.length!==DB.papers.length?' （篩選後）':''}`;
 
-  // Legend
-  const legend = document.getElementById('graphLegend');
-  legend.innerHTML = `<span>◼ 文獻（方形）</span>` +
-    Object.entries(catColors).filter(([cat])=>!catFilter||cat===catFilter).map(([cat,col])=>
-      `<span><span class="legend-dot" style="background:${col}"></span>${cat}</span>`
-    ).join('');
-}
+  const W = svg.clientWidth||800, H = svg.clientHeight||500;
+  const d3svg = d3.select(svg).attr('viewBox',`0 0 ${W} ${H}`);
+  const g = d3svg.append('g');
 
-function drawGraph(ctx, W, H, highlightId) {
-  const dict = DB.meta.tag_dictionary||{};
-  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9',market_trend:'#7f8c8d',doc_type:'#8a7e72',access:'#8a7e72'};
-  const tagCat = {};
-  Object.entries(dict).forEach(([cat,tags])=>tags.forEach(t=>{tagCat[t]=cat}));
+  // 縮放
+  const zoom = d3.zoom().scaleExtent([0.2,5]).on('zoom',e=>g.attr('transform',e.transform));
+  d3svg.call(zoom);
+  svg._zoom = zoom;
 
-  const nodeMap = {};
-  graphNodes.forEach(n=>nodeMap[n.id]=n);
+  // 邊
+  const link = g.append('g').selectAll('line').data(d3edges).join('line')
+    .attr('stroke','#ccc').attr('stroke-width',1).attr('stroke-opacity',0.5);
 
-  // 找出 highlight 的連結節點
-  const connected = new Set();
-  if(highlightId) {
-    connected.add(highlightId);
-    graphEdges.forEach(e=>{
-      if(e.paper===highlightId) connected.add(e.tag);
-      if(e.tag===highlightId) connected.add(e.paper);
-    });
-  }
+  // 節點
+  const node = g.append('g').selectAll('g').data(nodes).join('g')
+    .attr('cursor','pointer')
+    .call(d3.drag()
+      .on('start',(e,d)=>{ if(!e.active)sim.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; })
+      .on('drag',(e,d)=>{ d.fx=e.x; d.fy=e.y; })
+      .on('end',(e,d)=>{ if(!e.active)sim.alphaTarget(0); d.fx=null; d.fy=null; }))
+    .on('click',(e,d)=>{ e.stopPropagation(); onGraphNodeClick(d); })
+    .on('mouseover',(e,d)=>{
+      const tt = document.getElementById('graphTooltip');
+      if(!tt) return;
+      tt.style.display='block';
+      tt.style.left=(e.offsetX+12)+'px'; tt.style.top=(e.offsetY-10)+'px';
+      tt.innerHTML = d.type==='tag'
+        ? `<b style="color:${catColors[d.cat]||'#888'}">${d.label}</b><br><span style="font-size:10px;color:var(--muted)">${d.cat} · ${d.count} 篇文獻</span>`
+        : `<b>[${d.id}]</b> ${d.title.slice(0,50)}${d.title.length>50?'…':''}<br><span style="font-size:10px;color:var(--muted)">${d.docType} · ${d.count} 個標籤</span>`;
+    })
+    .on('mouseout',()=>{ const tt=document.getElementById('graphTooltip'); if(tt)tt.style.display='none'; });
 
-  ctx.clearRect(0,0,W,H);
-
-  // Edges
-  graphEdges.forEach(e=>{
-    const a=nodeMap[e.paper],b=nodeMap[e.tag];if(!a||!b)return;
-    const hl = highlightId && (connected.has(e.paper)&&connected.has(e.tag));
-    ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
-    ctx.strokeStyle = hl ? 'rgba(232,108,58,0.6)' : highlightId ? 'rgba(200,190,180,0.08)' : 'rgba(180,160,140,0.2)';
-    ctx.lineWidth = hl ? 2 : 0.5;
-    ctx.stroke();
-  });
-
-  // Nodes
-  graphNodes.forEach(n=>{
-    const hl = !highlightId || connected.has(n.id);
-    const alpha = hl ? 1 : 0.15;
-    ctx.globalAlpha = alpha;
-
-    if(n.type==='tag') {
-      // 圓形 Tag 節點
-      const r = 5 + Math.min(n.count*2, 18);
-      const col = catColors[n.cat] || '#8a7e72';
-      ctx.beginPath();ctx.arc(n.x,n.y,r,0,Math.PI*2);
-      ctx.fillStyle=col;ctx.fill();
-      ctx.strokeStyle='rgba(0,0,0,0.15)';ctx.lineWidth=0.5;ctx.stroke();
-      ctx.fillStyle='#2a2420';ctx.font='600 11px Inter,sans-serif';ctx.textAlign='center';
-      ctx.fillText(n.id, n.x, n.y-r-4);
+  // 圓形（tag）或矩形（paper）
+  node.each(function(d){
+    const el = d3.select(this);
+    const r = d.type==='tag' ? Math.min(6+d.count*2, 24) : 8;
+    if(d.type==='tag'){
+      el.append('circle').attr('r',r).attr('fill',catColors[d.cat]||'#888').attr('fill-opacity',0.85).attr('stroke','#fff').attr('stroke-width',1.2);
     } else {
-      // 方形 Paper 節點
-      const s = 6 + Math.min(n.count*2, 12);
-      const docColor = n.docType==='專利'?'#d4a030':n.docType==='商用產品'?'#2d8c5a':'#e86c3a';
-      ctx.fillStyle=docColor;
-      ctx.fillRect(n.x-s/2, n.y-s/2, s, s);
-      ctx.strokeStyle='rgba(0,0,0,0.2)';ctx.lineWidth=0.5;
-      ctx.strokeRect(n.x-s/2, n.y-s/2, s, s);
-      ctx.fillStyle='#2a2420';ctx.font='500 9px JetBrains Mono,monospace';ctx.textAlign='center';
-      ctx.fillText(n.id, n.x, n.y-s/2-3);
+      const s = r*1.6;
+      el.append('rect').attr('x',-s/2).attr('y',-s/2).attr('width',s).attr('height',s).attr('rx',2)
+        .attr('fill','#8a7e72').attr('fill-opacity',0.8).attr('stroke','#fff').attr('stroke-width',1);
     }
-    ctx.globalAlpha = 1;
+    el.append('text').attr('text-anchor','middle').attr('dominant-baseline','middle')
+      .attr('fill','#fff').attr('font-weight',700).attr('pointer-events','none')
+      .style('font-size',d.type==='tag'?'7px':'6px')
+      .text(d.type==='tag' ? (d.label.length>10?d.label.slice(0,9)+'…':d.label) : d.id);
   });
 
-  // Highlight 標籤
-  if(highlightId && nodeMap[highlightId]) {
-    const hn = nodeMap[highlightId];
-    ctx.fillStyle='var(--text)';ctx.font='700 13px Inter,sans-serif';ctx.textAlign='left';
-    ctx.fillText(`🔍 ${hn.id}${hn.title?' — '+hn.title:''}`, 10, H-10);
-  }
+  // Simulation
+  const sim = d3.forceSimulation(nodes)
+    .force('link', d3.forceLink(d3edges).id(d=>d.id).distance(60).strength(0.5))
+    .force('charge', d3.forceManyBody().strength(d=>d.type==='tag'?-120:-80))
+    .force('center', d3.forceCenter(W/2, H/2).strength(0.08))
+    .force('forceX', d3.forceX(W/2).strength(0.04))
+    .force('forceY', d3.forceY(H/2).strength(0.04))
+    .force('collision', d3.forceCollide(d=>d.type==='tag'?Math.min(6+d.count*2,24)+6:12))
+    .alphaDecay(0.025)
+    .on('tick',()=>{
+      nodes.forEach(n=>{
+        n.x=Math.max(20,Math.min(W-20,n.x));
+        n.y=Math.max(20,Math.min(H-20,n.y));
+      });
+      link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y)
+          .attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
+      node.attr('transform',d=>`translate(${d.x},${d.y})`);
+    });
+
+  // 點空白取消選取
+  d3svg.on('click',()=>{
+    document.getElementById('graphDetailContent').innerHTML =
+      '<div style="text-align:center;padding:30px 10px;color:var(--muted)">← 點擊節點<br>查看文獻或標籤關聯</div>';
+    // 恢復所有節點透明度
+    g.selectAll('circle,rect').attr('opacity',1);
+    g.selectAll('line').attr('stroke-opacity',0.5);
+  });
 }
 
-function onGraphClick(event) {
-  const canvas = document.getElementById('graphCanvas');
-  const rect = canvas.getBoundingClientRect();
-  const x = event.clientX - rect.left;
-  const y = event.clientY - rect.top;
+function graphResetZoom() {
+  const svg = document.getElementById('graphSvg');
+  if(svg && svg._zoom) d3.select(svg).transition().duration(400).call(svg._zoom.transform, d3.zoomIdentity);
+}
 
-  // 找最近的節點
-  let closest = null, minDist = 30;
-  graphNodes.forEach(n=>{
-    const dx=n.x-x, dy=n.y-y;
-    const dist=Math.sqrt(dx*dx+dy*dy);
-    if(dist<minDist){minDist=dist;closest=n}
+function onGraphNodeClick(d) {
+  const dc = document.getElementById('graphDetailContent');
+  if(!dc) return;
+
+  // 高亮：被選節點的連線亮、其他暗
+  const svg = d3.select('#graphSvg');
+  const connectedIds = new Set([d.id]);
+  svg.selectAll('line').each(function(e){
+    const s = e.source?.id||e.source, t = e.target?.id||e.target;
+    if(s===d.id||t===d.id){ connectedIds.add(s); connectedIds.add(t); }
+  });
+  svg.selectAll('circle,rect').attr('opacity',nd=>connectedIds.has(nd.id)?1:0.15);
+  svg.selectAll('line').attr('stroke-opacity',e=>{
+    const s=e.source?.id||e.source, t=e.target?.id||e.target;
+    return (s===d.id||t===d.id)?0.9:0.05;
   });
 
-  const ctx = canvas.getContext('2d');
-  const W = canvas.offsetWidth, H = 550;
-
-  if(!closest){
-    drawGraph(ctx,W,H,null);
-    document.getElementById('graphDetailContent').innerHTML = '<div style="text-align:center;padding:30px 10px;color:var(--muted)">← 點擊泡泡圖中的節點<br>查看文獻內容或標籤關聯</div>';
-    return;
-  }
-
-  drawGraph(ctx,W,H,closest.id);
-
-  // 右側面板顯示詳情
-  const content = document.getElementById('graphDetailContent');
-
-  if(closest.type==='tag') {
-    // 標籤節點：列出所有連結的文獻 + 關聯分析
-    const connected = [];
-    graphEdges.forEach(e=>{
-      if(e.tag===closest.id) connected.push(e.paper);
-    });
-
-    // 分析這些文獻的其他共同標籤
-    const tagFreq = {};
-    connected.forEach(pid=>{
-      const p=DB.papers.find(x=>x.id===pid);
-      if(!p) return;
-      (p.tags||[]).forEach(t=>{
-        if(t!==closest.id) tagFreq[t] = (tagFreq[t]||0) + 1;
-      });
-    });
-    const sortedTags = Object.entries(tagFreq).sort((a,b)=>b[1]-a[1]);
-    const primaryTags = sortedTags.filter(([,c])=>c>=connected.length*0.5);
-    const secondaryTags = sortedTags.filter(([,c])=>c>=connected.length*0.25 && c<connected.length*0.5);
-    const minorTags = sortedTags.filter(([,c])=>c>=2 && c<connected.length*0.25).slice(0,8);
-
-    const tagBadge = (tag,count,bg) => `<span style="display:inline-block;background:${bg};padding:2px 8px;border-radius:4px;margin:2px;font-size:10px"><strong>${tag}</strong> <span style="opacity:0.6">${count}/${connected.length}</span></span>`;
-
-    const relationHtml = (primaryTags.length||secondaryTags.length) ? `
-      <div style="margin:10px 0;padding:10px;background:var(--card);border-radius:6px">
-        <div style="font-size:11px;font-weight:600;margin-bottom:6px">🔗 關聯標籤分析</div>
-        ${primaryTags.length?`<div style="margin-bottom:6px"><span style="font-size:10px;color:var(--accent);font-weight:600">🔴 主要關聯（>50% 共有）</span><br>${primaryTags.map(([t,c])=>tagBadge(t,c,'#fff0e6')).join('')}</div>`:''}
-        ${secondaryTags.length?`<div style="margin-bottom:6px"><span style="font-size:10px;color:var(--accent2);font-weight:600">🟡 次要關聯（25-50%）</span><br>${secondaryTags.map(([t,c])=>tagBadge(t,c,'#eaf5ef')).join('')}</div>`:''}
-        ${minorTags.length?`<div><span style="font-size:10px;color:var(--muted)">⚪ 少數關聯</span><br>${minorTags.map(([t,c])=>tagBadge(t,c,'var(--bg)')).join('')}</div>`:''}
-      </div>` : '';
-
-    const paperCards = connected.map(pid=>{
-      const p=DB.papers.find(x=>x.id===pid);
-      if(!p) return '';
-      const org = extractOrg(p);
-      const hasA = p.patentResults && Object.keys(p.patentResults).length>0;
-      const r = p.patentResults?.full||{};
-      return `<div style="padding:8px;margin-bottom:6px;background:var(--card);border-radius:6px;border-left:3px solid ${hasA?'#2d8c5a':'var(--border)'}; cursor:pointer" onclick="showView('browse',document.querySelectorAll('.tabs > .tab')[1]);setTimeout(()=>{filtered=DB.papers;renderPapers();showDetail(DB.papers.findIndex(x=>x.id==='${pid}'))},100)">
-        <div style="font-weight:600;color:var(--accent);font-size:11px">[${pid}] ${p.doc_type} ${hasA?'✅':''}</div>
-        <div style="font-size:11px;margin-top:2px">${p.title.slice(0,50)}${p.title.length>50?'...':''}</div>
-        ${org?`<span style="background:#fff0e6;color:#b85c2a;padding:1px 4px;border-radius:3px;font-size:9px">${org}</span>`:''}
-        ${r.summary?`<div style="font-size:10px;color:var(--accent2);margin-top:3px">💡 ${r.summary.slice(0,60)}...</div>`:''}
-      </div>`;
-    }).filter(Boolean).join('');
-
-    content.innerHTML = `
-      <div style="font-size:14px;font-weight:700;color:var(--accent);margin-bottom:8px">🏷 ${closest.id}</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:6px">${connected.length} 篇文獻使用此標籤</div>
-      ${relationHtml}
-      ${paperCards}`;
-  } else {
-    // 文獻節點：顯示完整內容
-    const p = DB.papers.find(x=>x.id===closest.id);
-    if(!p) return;
-    const org = extractOrg(p);
-    const mainAuthor = extractMainAuthor(p);
-    const hasA = p.patentResults && Object.keys(p.patentResults).length>0;
-    const r = p.patentResults?.full||{};
-    const ex = r.examples?.[0]||{};
-    const tags = (p.tags||[]).map(t=>`<span class="tag tag-gray" style="font-size:10px">${t}</span>`).join(' ');
-    const patBadge = getPatentBadge(p);
-
-    let analysisHtml = '';
-    if(hasA) {
-      analysisHtml = `
-        ${r.summary?`<div style="padding:6px 8px;background:var(--card);border-radius:4px;margin-bottom:6px;font-weight:600;font-size:11px">💡 ${r.summary}</div>`:''}
-        ${ex.formulation?.primer?`<div style="font-size:11px"><strong>底塗：</strong>${ex.formulation.primer}</div>`:''}
-        ${ex.formulation?.topcoat?`<div style="font-size:11px"><strong>面塗：</strong>${ex.formulation.topcoat}</div>`:''}
-        ${ex.process?.curing?`<div style="font-size:11px"><strong>固化：</strong>${ex.process.curing}</div>`:''}
-        <div style="display:flex;gap:12px;margin-top:6px;font-size:11px">
-          ${ex.results?.friction?`<div><strong>COF</strong><br><span style="color:var(--accent2);font-weight:700">${ex.results.friction}</span></div>`:''}
-          ${ex.results?.adhesion?`<div><strong>附著</strong><br><span style="color:var(--accent2);font-weight:700">${ex.results.adhesion}</span></div>`:''}
-          ${ex.results?.wca?`<div><strong>WCA</strong><br><span style="color:var(--accent2);font-weight:700">${ex.results.wca}</span></div>`:''}
-        </div>
-        ${r.actionable_insights?`<div style="margin-top:8px;font-size:11px"><strong style="color:var(--accent2)">✅ 可借鏡</strong><br>${r.actionable_insights.map((x,i)=>(i+1)+'. '+x).join('<br>')}</div>`:''}
-        ${r.bioteque_relevance?`<div style="margin-top:6px;font-size:11px"><strong style="color:var(--accent)">🏭 建議</strong><br>${r.bioteque_relevance}</div>`:''}`;
-    }
-
-    content.innerHTML = `
-      <div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap;align-items:center">
-        <span class="tag ${p.doc_type==='專利'?'tag-orange':p.doc_type==='商用產品'?'tag-green':'tag-blue'}" style="font-size:10px">${p.doc_type}</span>
-        <span style="font-weight:700;color:var(--accent)">${p.id}</span>
-        ${p.year?`<span style="font-size:10px;color:var(--muted)">${p.year}</span>`:''}
-        ${patBadge}
+  if(d.type==='tag'){
+    // Tag：顯示連結的文獻清單
+    const papers = (filtered&&filtered.length?filtered:DB.papers).filter(p=>(p.tags||[]).includes(d.id));
+    const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9'};
+    const cat = Object.entries(DB.meta.tag_dictionary||{}).find(([,tags])=>tags.includes(d.id))?.[0]||'';
+    dc.innerHTML = `
+      <div style="background:${catColors[cat]||'#888'}22;border-left:3px solid ${catColors[cat]||'#888'};padding:8px 10px;border-radius:0 6px 6px 0;margin-bottom:10px">
+        <div style="font-weight:700;color:${catColors[cat]||'#888'}">${d.id}</div>
+        <div style="font-size:10px;color:var(--muted)">${cat} · ${papers.length} 篇文獻</div>
       </div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:6px">${p.title}</div>
-      <div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap">
-        ${mainAuthor?`<span style="background:#eaf5ef;color:#1a7040;padding:1px 6px;border-radius:3px;font-size:10px">${mainAuthor}</span>`:''}
-        ${org?`<span style="background:#fff0e6;color:#b85c2a;padding:1px 6px;border-radius:3px;font-size:10px">${org}</span>`:''}
-      </div>
-      ${p.abstract_note?`<div style="font-size:11px;color:var(--muted);margin-bottom:8px;padding:6px 8px;background:var(--card);border-radius:4px">${p.abstract_note.slice(0,200)}${p.abstract_note.length>200?'...':''}</div>`:''}
-      ${analysisHtml}
-      <div style="margin-top:8px">${tags}</div>
-      <button class="btn btn-s" style="width:100%;margin-top:10px" onclick="showView('browse',document.querySelectorAll('.tabs > .tab')[1]);setTimeout(()=>{filtered=DB.papers;renderPapers();showDetail(DB.papers.findIndex(x=>x.id==='${p.id}'))},100)">↗ 跳到文庫查看完整資料</button>`;
-  }
-}
-
-let hoverTimeout = null;
-function onGraphHover(event) {
-  const canvas = document.getElementById('graphCanvas');
-  const rect = canvas.getBoundingClientRect();
-  const x = event.clientX - rect.left;
-  const y = event.clientY - rect.top;
-  const tooltip = document.getElementById('graphTooltip');
-
-  let closest = null, minDist = 25;
-  graphNodes.forEach(n=>{
-    const dx=n.x-x, dy=n.y-y;
-    const dist=Math.sqrt(dx*dx+dy*dy);
-    if(dist<minDist){minDist=dist;closest=n}
-  });
-
-  if(!closest) {
-    tooltip.style.display='none';
-    canvas.style.cursor='default';
-    return;
-  }
-
-  canvas.style.cursor='pointer';
-
-  // 組合 tooltip 內容
-  let html = '';
-  if(closest.type==='paper') {
-    const p = DB.papers.find(x=>x.id===closest.id);
-    if(!p) return;
-    const org = extractOrg(p);
-    const r = p.patentResults?.full||{};
-    const ex = r.examples?.[0]||{};
-    const hasA = p.patentResults && Object.keys(p.patentResults).length>0;
-
-    html = `<div style="font-weight:700;color:var(--accent);margin-bottom:4px">[${p.id}] ${p.doc_type} ${hasA?'✅':''}</div>
-      <div style="font-weight:600;margin-bottom:4px">${p.title}</div>
-      ${org?`<span style="background:#fff0e6;color:#b85c2a;padding:1px 6px;border-radius:3px;font-size:10px">${org}</span> `:''}
-      ${p.year?`<span style="font-size:10px;color:var(--muted)">${p.year}</span>`:''}<br>
-      ${p.abstract_note?`<div style="margin-top:4px;color:var(--muted);font-size:11px">${p.abstract_note.slice(0,150)}${p.abstract_note.length>150?'...':''}</div>`:''}
-      ${r.summary?`<div style="margin-top:4px;color:var(--accent2);font-size:11px">💡 ${r.summary}</div>`:''}
-      ${ex.results?.friction?`<div style="font-size:10px;margin-top:2px">COF: <strong>${ex.results.friction}</strong></div>`:''}
-      ${ex.results?.wca?`<div style="font-size:10px">WCA: <strong>${ex.results.wca}</strong></div>`:''}
-      <div style="margin-top:4px;font-size:10px">${(p.tags||[]).slice(0,5).map(t=>`<span style="background:var(--card);padding:1px 4px;border-radius:2px;margin-right:2px">${t}</span>`).join('')}</div>`;
+      ${papers.map(p=>`<div style="padding:5px 0;border-bottom:1px solid var(--border);cursor:pointer;font-size:11px" onclick="goToPaper('${p.id}')">
+        <span style="color:var(--accent);font-weight:700">[${p.id}]</span>
+        <span style="margin-left:4px">${p.title?.slice(0,50)||''}${(p.title?.length||0)>50?'…':''}</span>
+      </div>`).join('')}`;
   } else {
-    // Tag 節點
-    const connected = [];
-    graphEdges.forEach(e=>{
-      if(e.tag===closest.id) connected.push(e.paper);
-    });
-    html = `<div style="font-weight:700;color:var(--accent);margin-bottom:4px">🏷 ${closest.id}</div>
-      <div style="font-size:11px;color:var(--muted)">${connected.length} 篇文獻使用此標籤</div>
-      <div style="margin-top:4px;font-size:11px">${connected.slice(0,8).map(pid=>{
-        const p=DB.papers.find(x=>x.id===pid);
-        return p?`[${pid}] ${p.title.slice(0,30)}...`:'';
-      }).filter(Boolean).join('<br>')}</div>
-      ${connected.length>8?`<div style="font-size:10px;color:var(--muted)">...還有 ${connected.length-8} 篇</div>`:''}`;
-  }
-
-  tooltip.innerHTML = html;
-  tooltip.style.display = 'block';
-  // 定位在滑鼠旁邊
-  const tx = event.clientX + 15;
-  const ty = event.clientY - 10;
-  tooltip.style.left = Math.min(tx, window.innerWidth - 370) + 'px';
-  tooltip.style.top = Math.min(ty, window.innerHeight - 250) + 'px';
-}
-
-function hideGraphTooltip() {
-  document.getElementById('graphTooltip').style.display='none';
-}
-
-// ══════════════════════════════════════════════
-// GAP: Heatmaps
-// ══════════════════════════════════════════════
-function buildHeatmaps() {
-  const dict = DB.meta.tag_dictionary || {};
-  const sub = dict.substrate||[];
-  const poly = dict.hydrophilic_polymer||[];
-  const cure = dict.cure_method||[];
-  const anchor = dict.anchor_primer||[];
-  const app = dict.application||[];
-
-  buildOneHeatmap('heatmapWrap',  sub,    cure,   '基材','固化方式');
-  buildOneHeatmap('heatmapWrap2', app,    poly,   '應用','親水高分子');
-  buildOneHeatmap('heatmapWrap3', sub,    poly,   '基材','親水高分子');
-  buildOneHeatmap('heatmapWrap4', app,    cure,   '應用','固化方式');
-  buildOneHeatmap('heatmapWrap5', sub,    anchor, '基材','錨固劑');
-  buildOneHeatmap('heatmapWrap6', poly,   anchor, '親水高分子','錨固劑');
-
-  // ⑦⑧ 功能目標維度（抗結痂/抗菌/潤滑/附著）— 用關鍵字動態判定
-  const funcGoals = ['潤滑','抗結痂','抗菌','附著'];
-  buildFunctionHeatmap('heatmapWrap7', app, funcGoals, '應用','功能目標');
-  buildFunctionHeatmap('heatmapWrap8', sub, funcGoals, '基材','功能目標');
-}
-
-// 判定一篇文獻涵蓋哪些功能目標（優先用 tag，fallback 用 regex）
-function paperFunctionGoals(p) {
-  const tags = new Set(p.tags||[]);
-  const goals = [];
-  // Tag-based（與統計儀表板/關係圖完全一致）
-  if(tags.has('lubricity潤滑')||tags.has('COF<0.1')) goals.push('潤滑');
-  if(tags.has('encrustation resistance抗結痂')||tags.has('antifouling抗汙')) goals.push('抗結痂');
-  if(tags.has('antimicrobial抗菌')) goals.push('抗菌');
-  if(tags.has('adhesion附著力')) goals.push('附著');
-  // Fallback：有分析但 tag 未補全時，用 regex 補救
-  if(!goals.includes('抗結痂') && (ENCRUST_RE.test(p.title)||p.id.startsWith('U'))) goals.push('抗結痂');
-  return goals;
-}
-
-// 功能目標專用熱圖（行=標籤，列=功能目標）
-function buildFunctionHeatmap(wrapperId, rows, goals, rowLabel, colLabel) {
-  const wrap = document.getElementById(wrapperId);
-  if(!wrap) return;
-  const matrix = {};
-  rows.forEach(r=>{matrix[r]={};goals.forEach(g=>matrix[r][g]=[])});
-
-  DB.papers.forEach(p=>{
-    const tags = p.tags||[];
-    const pg = paperFunctionGoals(p);
-    rows.forEach(r=>{ if(tags.includes(r)) pg.forEach(g=>{ if(matrix[r][g]) matrix[r][g].push(p); })});
-  });
-
-  let html = `<table class="heatmap"><tr><th>${rowLabel} \\ ${colLabel}</th>${goals.map(g=>`<th>${g}</th>`).join('')}<th>小計</th></tr>`;
-  rows.forEach(r=>{
-    let rowSum = 0;
-    html += `<tr><th style="text-align:left">${r}</th>`;
-    goals.forEach(g=>{
-      const v = matrix[r][g].length;
-      rowSum += v;
-      const cls = v===0?'cell-0':v===1?'cell-1':v===2?'cell-2':'cell-many';
-      html += `<td class="${cls}" onclick="showFuncGapDetail('${r}','${g}')" title="${r} × ${g}: ${v} 篇">${v||'·'}</td>`;
-    });
-    html += `<td style="color:var(--muted)">${rowSum}</td></tr>`;
-  });
-  html += '</table>';
-  wrap.innerHTML = html;
-}
-
-function showFuncGapDetail(r, g) {
-  const papers = DB.papers.filter(p=>(p.tags||[]).includes(r) && paperFunctionGoals(p).includes(g));
-  const el = document.getElementById('gapDetail');
-  if(!papers.length) {
-    el.innerHTML = `<h4 style="color:var(--warn)">⚠ 缺口：${r} × ${g}</h4><p style="font-size:13px;color:var(--muted);margin-top:8px">資料庫中沒有同時涵蓋「${r}」基材/應用且具備「${g}」功能的文獻。這可能是值得開發或搜尋的方向。</p>
-    <button class="btn btn-p" style="margin-top:8px" onclick="prefillChat('我想找在 ${r} 上實現 ${g} 功能的塗層方案，目前資料庫是空白，請建議搜尋關鍵字與技術方向')">🤖 問 AI 建議</button>`;
-  } else {
-    el.innerHTML = `<h4 style="color:var(--accent2)">${r} × ${g}：${papers.length} 篇</h4><div style="margin-top:8px">${papers.map(p=>`<div style="padding:4px 0;font-size:13px;cursor:pointer" onclick="showView('browse',document.querySelectorAll('.tabs > .tab')[1]);setTimeout(()=>{filtered=DB.papers;renderPapers();showDetail(DB.papers.findIndex(x=>x.id==='${p.id}'))},100)"><span class="tag tag-gray">${p.id}</span> ${p.title}</div>`).join('')}</div>`;
-  }
-  el.classList.add('show');
-}
-
-function buildOneHeatmap(wrapperId, rows, cols, rowLabel, colLabel) {
-  const matrix = {};
-  const paperMap = {};
-  rows.forEach(r=>{matrix[r]={};cols.forEach(c=>{matrix[r][c]=0;paperMap[r+'||'+c]=[]})});
-
-  DB.papers.forEach(p=>{
-    const tags = p.tags||[];
-    rows.forEach(r=>{ if(tags.includes(r)) cols.forEach(c=>{ if(tags.includes(c)){matrix[r][c]++;paperMap[r+'||'+c].push(p)} })});
-  });
-
-  let html = `<table class="heatmap"><tr><th>${rowLabel} \\ ${colLabel}</th>${cols.map(c=>`<th>${c}</th>`).join('')}<th>小計</th></tr>`;
-  rows.forEach(r=>{
-    let rowSum = 0;
-    html += `<tr><th style="text-align:left">${r}</th>`;
-    cols.forEach(c=>{
-      const v = matrix[r][c];
-      rowSum += v;
-      const cls = v===0?'cell-0':v===1?'cell-1':v===2?'cell-2':v>=3?'cell-many':'cell-3';
-      html += `<td class="${cls}" onclick="showGapDetail('${r}','${c}')" title="${r} × ${c}: ${v} 篇">${v||'·'}</td>`;
-    });
-    html += `<td style="color:var(--muted)">${rowSum}</td></tr>`;
-  });
-  html += '</table>';
-  document.getElementById(wrapperId).innerHTML = html;
-}
-
-function showGapDetail(r, c) {
-  const tags = DB.papers.filter(p=>(p.tags||[]).includes(r)&&(p.tags||[]).includes(c));
-  const el = document.getElementById('gapDetail');
-  if(!tags.length) {
-    el.innerHTML = `<h4 style="color:var(--warn)">⚠ 缺口：${r} × ${c}</h4><p style="font-size:13px;color:var(--muted);margin-top:8px">資料庫中沒有同時涵蓋「${r}」和「${c}」的文獻。這可能是值得搜尋的方向。</p>
-    <button class="btn btn-p" style="margin-top:8px" onclick="prefillChat('我的文獻資料庫中 ${r} 和 ${c} 的交集是缺口，請建議可能的搜尋關鍵字和研究方向')">🤖 問 AI 建議</button>`;
-  } else {
-    el.innerHTML = `<h4 style="color:var(--accent2)">${r} × ${c}：${tags.length} 篇</h4><div style="margin-top:8px">${tags.map(p=>`<div style="padding:4px 0;font-size:13px"><span class="tag tag-gray">${p.id}</span> ${p.title}</div>`).join('')}</div>`;
-  }
-  el.classList.add('show');
-}
-
-// ══════════════════════════════════════════════
-// AI CHAT
-// ══════════════════════════════════════════════
-function renderCtx() {
-  const kw = document.getElementById('ctxSearch').value.toLowerCase();
-  const list = DB.papers.filter(p=>!kw||`${p.title} ${p.id} ${(p.tags||[]).join(' ')}`.toLowerCase().includes(kw));
-  document.getElementById('ctxList').innerHTML = list.map(p=>{
-    const pinned = pinnedIds.has(p.id);
-    return `<div class="ctx-item${pinned?' pinned':''}" onclick="pinPaper('${p.id}')">
-      <span style="color:${pinned?'var(--accent2)':'var(--muted)'}">${pinned?'📌':'○'}</span>
-      <strong>${p.id}</strong> ${(p.title||'').slice(0,40)}${(p.title||'').length>40?'…':''}
-    </div>`;
-  }).join('');
-  document.getElementById('pinnedCount').textContent = `${pinnedIds.size} 已釘選`;
-}
-
-function buildContext() {
-  // 層級 1：全庫索引（每篇一行，極精簡）
-  const index = DB.papers.map(p =>
-    `[${p.id}] ${p.title} | ${(p.tags||[]).join(',')} | ${p.year||''}`
-  ).join('\n');
-
-  // 層級 2：釘選的文獻（完整資訊）
-  const pinned = DB.papers.filter(p => pinnedIds.has(p.id));
-  const pinnedDetail = pinned.map(p =>
-    `[${p.id}] ${p.title}\n用途:${p.purpose||''}\n價值:${p.value_to_project||''}\n摘要:${(p.abstract_note||'').slice(0,250)}\n標籤:${(p.tags||[]).join(',')}`
-  ).join('\n---\n');
-
-  let context = `=== 全部文獻索引（${DB.papers.length} 篇）===\n${index}`;
-  if(pinned.length) {
-    context += `\n\n=== 釘選文獻詳情（${pinned.length} 篇）===\n${pinnedDetail}`;
-  }
-  return context;
-}
-
-// 根據問題自動找相關文獻加入 context
-function buildSmartContext(question) {
-  const qLow = question.toLowerCase();
-  const qTerms = qLow.split(/[\s,;，；]+/).filter(t => t.length > 1);
-
-  // 全庫索引
-  const index = DB.papers.map(p =>
-    `[${p.id}] ${p.title} | ${(p.tags||[]).join(',')} | ${p.year||''}`
-  ).join('\n');
-
-  // 釘選的文獻
-  const pinned = DB.papers.filter(p => pinnedIds.has(p.id));
-
-  // 自動匹配：根據問題關鍵字找相關文獻（最多 10 篇）
-  const scored = DB.papers.map(p => {
-    if(pinnedIds.has(p.id)) return { p, score: -1 }; // 已釘選，跳過
-    const hay = `${p.title} ${p.abstract_note||''} ${p.purpose||''} ${p.value_to_project||''} ${(p.tags||[]).join(' ')}`.toLowerCase();
-    const score = qTerms.reduce((s, t) => s + (hay.includes(t) ? 1 : 0), 0);
-    return { p, score };
-  }).filter(x => x.score > 0).sort((a, b) => b.score - a.score).slice(0, 10);
-
-  const autoMatched = scored.map(x => x.p);
-  const detailed = [...pinned, ...autoMatched];
-
-  const detailText = detailed.map(p =>
-    `[${p.id}] ${p.title}\n用途:${p.purpose||''}\n價值:${p.value_to_project||''}\n摘要:${(p.abstract_note||'').slice(0,250)}\n標籤:${(p.tags||[]).join(',')}`
-  ).join('\n---\n');
-
-  let context = `=== 全部文獻索引（${DB.papers.length} 篇）===\n${index}`;
-  if(detailed.length) {
-    context += `\n\n=== 相關文獻詳情（${pinned.length} 篇釘選 + ${autoMatched.length} 篇自動匹配）===\n${detailText}`;
-  }
-  return context;
-}
-
-// ══════════════════════════════════════════════
-// PubMed 即時搜尋（給 AI 對話用）
-// ══════════════════════════════════════════════
-async function searchPubMedForChat(question) {
-  // 從問題提取英文關鍵字
-  const engTerms = question.replace(/[^\w\s]/g,' ').split(/\s+/).filter(t=>t.length>2 && /[a-zA-Z]/.test(t)).slice(0,5);
-  if(!engTerms.length) {
-    // 嘗試用標籤字典翻譯中文關鍵字
-    const dict = DB.meta.tag_dictionary||{};
-    const allTags = Object.values(dict).flat();
-    const matched = allTags.filter(t => question.includes(t) || question.toLowerCase().includes(t.toLowerCase()));
-    if(matched.length) engTerms.push(...matched.slice(0,4));
-  }
-  if(!engTerms.length) return [];
-
-  const query = engTerms.join(' ') + ' hydrophilic coating';
-  try {
-    const sr = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${encodeURIComponent(query)}&retmax=5&sort=relevance&retmode=json`);
-    const sd = await sr.json();
-    const pmids = sd.esearchresult?.idlist || [];
-    if(!pmids.length) return [];
-
-    const fr = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=${pmids.join(',')}&retmode=xml`);
-    const xml = await fr.text();
-    const doc = new DOMParser().parseFromString(xml,'text/xml');
-
-    return [...doc.querySelectorAll('PubmedArticle')].map(art => {
-      const pmid = art.querySelector('PMID')?.textContent||'';
-      const title = art.querySelector('ArticleTitle')?.textContent||'';
-      const abstract = [...art.querySelectorAll('AbstractText')].map(a=>a.textContent).join(' ').slice(0,300);
-      const year = art.querySelector('PubDate Year')?.textContent||'';
-      const inDB = DB.papers.some(p=>p.pmid===pmid);
-      return { pmid, title, abstract, year, inDB };
-    }).filter(p=>!p.inDB); // 排除已在資料庫中的
-  } catch(e) {
-    console.warn('PubMed chat search failed:', e);
-    return [];
-  }
-}
-
-async function sendChat() {
-  const input = document.getElementById('chatInput');
-  const q = input.value.trim();
-  if(!q) return;
-  if(!cfg.proxy){toast('請先在設定中填入 Claude API Proxy URL','error');return}
-  input.value = '';
-
-  // Show user message
-  appendMsg(q, 'user');
-  const aiDiv = appendMsg('<span class="spinner"></span> 搜尋 PubMed + 分析中...', 'ai');
-
-  // 同時進行：建立本地 context + 搜尋 PubMed
-  const [localContext, pubmedResults] = await Promise.all([
-    Promise.resolve(buildSmartContext(q)),
-    searchPubMedForChat(q).catch(()=>[])
-  ]);
-
-  // 組合 PubMed 結果
-  let pubmedContext = '';
-  if(pubmedResults.length) {
-    pubmedContext = `\n\n=== PubMed 即時搜尋結果（${pubmedResults.length} 篇，不在資料庫中）===\n` +
-      pubmedResults.map(p=>`[PMID:${p.pmid}] ${p.title} (${p.year})\n摘要:${p.abstract}`).join('\n---\n');
-  }
-
-  const sysPrompt = `你是 Bioteque（邦特生物科技）的 R&D 文獻顧問。
-
-以下提供三層資訊：
-1. 全部文獻索引：資料庫中每篇一行（ID、標題、標籤、年份）
-2. 相關文獻詳情：與問題相關的文獻完整摘要
-3. PubMed 即時搜尋：資料庫外的最新相關文獻
-
-${localContext}${pubmedContext}
-
-Bioteque 現有能力：TPU/Pebax 基材、air plasma 前處理、LED UV 固化、Harland FTS 摩擦測試儀。
-產品線：ureteral stent、hemodialysis catheter、TPU catheter、biopsy needle。
-
-回答規則：
-1. 使用繁體中文
-2. 資料庫文獻用 [ID] 標註，PubMed 新文獻用 [PMID:數字] 標註
-3. 不確定的推論標上 *
-4. 回答要具體可執行，不要泛泛而談
-5. 如果 PubMed 找到資料庫中沒有的重要文獻，主動推薦收錄
-6. 優先參考資料庫文獻，PubMed 結果作為補充
-7. 區分「資料庫中已有」vs「PubMed 新發現」`;
-
-  chatHistory.push({role:'user',content:q});
-  // Keep last 4 turns
-  if(chatHistory.length>8) chatHistory = chatHistory.slice(-8);
-
-  const messages = [{role:'user',content:sysPrompt+'\\n\\n歷史對話將在下方，請根據以上背景回答：'},...chatHistory];
-
-  aiDiv.innerHTML = `<span class="spinner"></span> AI 分析中...（已搜尋 PubMed ${pubmedResults.length} 篇）`;
-
-  try {
-    const r = await fetch(cfg.proxy, {
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1200,messages})
-    });
-    const data = await r.json();
-    trackUsage(data);
-    const reply = data.content?.[0]?.text || '回應失敗';
-    chatHistory.push({role:'assistant',content:reply});
-
-    // Format: replace [P01] etc with clickable refs
-    let formatted = reply.replace(/\[([A-Z]\d+)\]/g, (m,id)=>{
-      const p = DB.papers.find(x=>x.id===id);
-      if(!p) return m;
-      return `<span style="color:var(--accent2);cursor:pointer;font-weight:600" title="${p.title}" onclick="highlightPaper('${id}')">[${id}]</span>`;
-    });
-    // Format: replace [PMID:xxxxx] with PubMed links
-    formatted = formatted.replace(/\[PMID:(\d+)\]/g, (m,pmid)=>{
-      return `<a href="https://pubmed.ncbi.nlm.nih.gov/${pmid}/" target="_blank" style="color:var(--accent);font-weight:600;text-decoration:none" title="PubMed 新文獻">[PMID:${pmid}]↗</a>`;
-    });
-    aiDiv.innerHTML = formatted;
-  } catch(e) {
-    aiDiv.innerHTML = `<span style="color:var(--danger)">錯誤：${e.message}</span>`;
-  }
-}
-
-function appendMsg(html, type) {
-  const c = document.getElementById('chatMessages');
-  const div = document.createElement('div');
-  div.className = 'msg msg-' + (type==='user'?'user':'ai');
-  div.innerHTML = html;
-  c.appendChild(div);
-  c.scrollTop = c.scrollHeight;
-  return div;
-}
-
-function clearChat(){chatHistory=[];document.getElementById('chatMessages').innerHTML='<div class="msg msg-ai">對話已清空。請繼續提問。</div>'}
-function prefillChat(text){showView('chat',document.querySelectorAll('.tab')[3]);document.getElementById('chatInput').value=text;document.getElementById('chatInput').focus()}
-function highlightPaper(id){showView('browse',document.querySelectorAll('.tabs > .tab')[1]);document.getElementById('fKw').value=id;filterPapers()}
-
-// ══════════════════════════════════════════════
-// BATCH: PubMed Search for bulk add
-// ══════════════════════════════════════════════
-let batchPapers = [];
-
-async function batchSearch() {
-  const q = document.getElementById('batchQuery').value.trim();
-  if(!q){toast('請輸入關鍵字','error');return}
-  const yf = document.getElementById('batchYearFrom').value;
-  const yt = document.getElementById('batchYearTo').value;
-  const max = document.getElementById('batchMax').value;
-  let term = q;
-  if(yf&&yt) term += ` AND ${yf}:${yt}[pdat]`;
-  else if(yf) term += ` AND ${yf}:3000[pdat]`;
-
-  document.getElementById('batchStatus').innerHTML = '<span class="spinner"></span> 搜尋中...';
-  document.getElementById('batchResults').innerHTML = '';
-
-  try {
-    const sr = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${encodeURIComponent(term)}&retmax=${max}&retmode=json&sort=date`);
-    const sd = await sr.json();
-    const ids = sd.esearchresult.idlist;
-    const total = sd.esearchresult.count;
-    if(!ids.length){document.getElementById('batchStatus').textContent=`無結果（共 ${total} 筆）`;return}
-
-    const fr = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=${ids.join(',')}&retmode=xml`);
-    const xml = await fr.text();
-    const doc = new DOMParser().parseFromString(xml,'text/xml');
-
-    batchPapers = [...doc.querySelectorAll('PubmedArticle')].map(art => {
-      const pmid = art.querySelector('PMID')?.textContent||'';
-      const title = art.querySelector('ArticleTitle')?.textContent||'';
-      const abstract = [...art.querySelectorAll('AbstractText')].map(a=>a.textContent).join(' ');
-      const journal = art.querySelector('Title')?.textContent||'';
-      const year = art.querySelector('PubDate Year')?.textContent||'';
-      const authors = [...art.querySelectorAll('Author')].slice(0,3)
-        .map(a=>`${a.querySelector('LastName')?.textContent||''} ${a.querySelector('Initials')?.textContent||''}`.trim())
-        .join('; ') + (art.querySelectorAll('Author').length>3?' et al.':'');
-      const doi = [...art.querySelectorAll('ArticleId')].find(id=>id.getAttribute('IdType')==='doi')?.textContent||'';
-      const exists = DB.papers.some(p=>p.pmid===pmid||p.title===title);
-      return {pmid,title,abstract:abstract.slice(0,500),journal,year,authors,doi,_checked:false,_exists:exists};
-    });
-
-    document.getElementById('batchStatus').textContent = `找到 ${total} 筆，顯示 ${batchPapers.length} 筆（灰色=已收錄）`;
-    renderBatch();
-  } catch(e) {
-    document.getElementById('batchStatus').textContent = '搜尋失敗：'+e.message;
-  }
-}
-
-function renderBatch() {
-  document.getElementById('batchResults').innerHTML = batchPapers.map((p,i)=>`
-    <div class="batch-card${p._exists?' added':''}" id="bc_${i}">
-      <div class="batch-header">
-        <input type="checkbox" class="batch-check" ${p._checked?'checked':''} ${p._exists?'disabled':''} onchange="batchPapers[${i}]._checked=this.checked">
-        <div style="flex:1;min-width:0">
-          <div style="font-weight:600;color:${p._exists?'var(--muted)':'var(--text)'}; line-height:1.4">${p.title}</div>
-          <div style="color:var(--muted);margin-top:2px">${p.authors} · ${p.journal} · ${p.year}</div>
-          ${p._exists?'<span style="color:var(--accent2);font-size:10px">✓ 已收錄</span>':''}
-        </div>
+    // Paper：顯示標籤清單與摘要
+    const p = DB.papers.find(x=>x.id===d.id);
+    if(!p){ dc.innerHTML='找不到文獻'; return; }
+    const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9'};
+    const tdict = DB.meta.tag_dictionary||{};
+    dc.innerHTML = `
+      <div style="font-weight:700;color:var(--accent);margin-bottom:4px">[${p.id}] ${p.doc_type}</div>
+      <div style="font-size:11px;color:var(--text);margin-bottom:8px;line-height:1.5">${p.title||''}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px">
+        ${(p.tags||[]).map(t=>{
+          const cat=Object.entries(tdict).find(([,tags])=>tags.includes(t))?.[0]||'';
+          return `<span style="background:${catColors[cat]||'#888'}22;color:${catColors[cat]||'#888'};font-size:10px;padding:1px 6px;border-radius:4px;cursor:pointer" onclick="onGraphNodeClick({id:'${t}',type:'tag',label:'${t}',cat:'${cat}',count:1})">${t}</span>`;
+        }).join('')}
       </div>
-      <div class="batch-actions">
-        ${p.abstract?`<button class="btn btn-s" style="padding:2px 8px;font-size:11px" onclick="toggleBatchAbstract(${i})">📄 摘要</button>`:'<span style="font-size:10px;color:var(--muted)">（無摘要）</span>'}
-        ${p.abstract&&cfg.proxy?`<button class="btn btn-s" style="padding:2px 8px;font-size:11px" onclick="translateBatch(${i})">🌐 翻譯</button>`:''}
-        ${p.pmid?`<a href="https://pubmed.ncbi.nlm.nih.gov/${p.pmid}/" target="_blank" class="btn btn-s" style="padding:2px 8px;font-size:11px">↗ PubMed</a>`:''}
-      </div>
-      ${p.abstract?`<div class="batch-abstract" id="ba_${i}">${p.abstract}</div>`:''}
-      ${p._zhAbstract?`<div class="batch-zh" id="bz_${i}"><strong style="font-size:10px;color:var(--accent2)">🌐 中文翻譯</strong><br>${p._zhAbstract}</div>`:'<div id="bz_${i}"></div>'}
-    </div>`).join('');
-}
-
-function toggleBatchAbstract(i) {
-  const el = document.getElementById('ba_'+i);
-  if(el) el.classList.toggle('show');
-}
-
-async function translateBatch(i) {
-  const p = batchPapers[i];
-  if(!p.abstract||!cfg.proxy) return;
-  if(p._zhAbstract) { document.getElementById('bz_'+i).style.display='block'; return; }
-
-  const bzEl = document.getElementById('bz_'+i);
-  bzEl.innerHTML = '<span class="spinner"></span> 翻譯中...';
-  bzEl.style.display = 'block';
-
-  try {
-    const r = await fetch(cfg.proxy, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({model:'claude-sonnet-4-6', max_tokens:600,
-        messages:[{role:'user',content:`將以下醫學文獻摘要翻譯成繁體中文，保留專業術語原文（括號附註）。簡潔精確，不超過200字。\n\n${p.abstract.slice(0,1200)}`}]})
-    });
-    const data = await r.json();
-    trackUsage(data);
-    p._zhAbstract = data.content?.[0]?.text || '翻譯失敗';
-    bzEl.innerHTML = `<div class="batch-zh"><strong style="font-size:10px;color:var(--accent2)">🌐 中文翻譯</strong><br>${p._zhAbstract}</div>`;
-  } catch(e) {
-    bzEl.innerHTML = `<span style="color:var(--danger);font-size:11px">翻譯失敗：${e.message}</span>`;
+      ${p.abstract_note?`<div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:8px">${p.abstract_note.slice(0,200)}${p.abstract_note.length>200?'…':''}</div>`:''}
+      <button class="btn btn-s" onclick="goToPaper('${p.id}')" style="width:100%;font-size:11px;margin-top:4px">📄 查看完整分析</button>`;
   }
 }
 
-function batchSelectAll() {
-  batchPapers.forEach(p=>{if(!p._exists)p._checked=true});
-  renderBatch();
-}
 
-function batchAddSelected() {
-  const sel = batchPapers.filter(p=>p._checked&&!p._exists);
-  if(!sel.length){toast('請先勾選文獻','error');return}
-
-  const prefix = 'A';
-  let maxNum = DB.papers.filter(p=>p.id.startsWith(prefix)).map(p=>parseInt(p.id.slice(1))||0).reduce((a,b)=>Math.max(a,b),0);
-
-  sel.forEach(p => {
-    maxNum++;
-    DB.papers.push({
-      id: prefix + String(maxNum).padStart(2,'0'),
-      title: p.title,
-      authors: p.authors,
-      year: parseInt(p.year)||null,
-      venue: p.journal,
-      doi: p.doi||null,
-      pmid: p.pmid,
-      doc_type: '期刊論文',
-      access: p.abstract?'開放摘要':'付費',
-      tags: [],
-      purpose: '',
-      abstract_note: p.abstract.slice(0,300),
-      value_to_project: '',
-      links: p.pmid ? {pubmed:`https://pubmed.ncbi.nlm.nih.gov/${p.pmid}/`} : {}
-    });
-    p._exists = true;
-    p._checked = false;
-  });
-
-  saveDB();onDBLoaded();renderBatch();
-  toast(`已加入 ${sel.length} 篇（標籤待補，可用「AI 補標籤」）`,'success');
-}
-
-async function batchAIEnrich() {
-  if(!cfg.proxy){toast('請先設定 Claude API Proxy URL','error');return}
-  const newPapers = DB.papers.filter(p=>(!p.tags||!p.tags.length)&&p.abstract_note);
-  if(!newPapers.length){toast('沒有需要補標籤的文獻','');return}
-
-  const tagDict = DB.meta.tag_dictionary||{};
-  const allValidTags = Object.values(tagDict).flat();
-  const batch = newPapers.slice(0,10); // max 10 at a time
-
-  toast(`AI 分析 ${batch.length} 篇中...`,'');
-
-  for(const p of batch) {
-    try {
-      const r = await fetch(cfg.proxy,{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,
-          messages:[{role:'user',content:`你是醫材親水塗層文獻分類專家。根據以下摘要，從有效標籤中選擇適用的，並寫出 purpose 和 value_to_project。
-
-有效標籤：${allValidTags.join(', ')}
-
-標題：${p.title}
-摘要：${p.abstract_note}
-
-回傳純 JSON：{"tags":[],"purpose":"一句話","value_to_project":"對 Bioteque TPU catheter/stent 的具體價值"}`}]})
-      });
-      const data = await r.json();
-      trackUsage(data);
-      let text = data.content?.[0]?.text||'';
-      text = text.replace(/```json|```/g,'').trim();
-      const parsed = JSON.parse(text);
-      p.tags = parsed.tags||[];
-      p.purpose = parsed.purpose||'';
-      p.value_to_project = parsed.value_to_project||'';
-    } catch(e) { console.warn('AI enrich failed for',p.id,e); }
-  }
-
-  saveDB();onDBLoaded();
-  toast(`已完成 ${batch.length} 篇標籤補充`,'success');
-}
-
-// ══════════════════════════════════════════════
-// ADD: New Paper (single)
-// ══════════════════════════════════════════════
-// ══════════════════════════════════════════════
-// DOI IMPORT (Crossref API, 免費)
-// ══════════════════════════════════════════════
-async function importDOI() {
-  let doi = document.getElementById('doiInput').value.trim();
-  if(!doi) { toast('請輸入 DOI','error'); return; }
-
-  // 清理 DOI：支援完整 URL 或純 DOI
-  doi = doi.replace(/^https?:\/\/doi\.org\//,'').replace(/^doi:/i,'').trim();
-
-  // 檢查是否已存在
-  if(DB.papers.some(p=>p.doi===doi)) {
-    toast('此 DOI 已在資料庫中','error'); return;
-  }
-
-  const statusEl = document.getElementById('doiStatus');
-  statusEl.innerHTML = '<span class="spinner"></span> 查詢 Crossref...';
-
-  try {
-    const r = await fetch(`https://api.crossref.org/works/${encodeURIComponent(doi)}`, {
-      headers: {'Accept':'application/json'}
-    });
-    if(!r.ok) throw new Error(`DOI 未找到（HTTP ${r.status}）`);
-    const data = await r.json();
-    const w = data.message;
-
-    // 解析作者
-    const authors = (w.author||[]).slice(0,4).map(a =>
-      `${a.family||''} ${(a.given||'').charAt(0)}`.trim()
-    ).join('; ') + ((w.author||[]).length > 4 ? ' et al.' : '');
-
-    // 解析年份
-    const year = w.published?.['date-parts']?.[0]?.[0] ||
-                 w['published-print']?.['date-parts']?.[0]?.[0] ||
-                 w['published-online']?.['date-parts']?.[0]?.[0] || null;
-
-    // 解析期刊
-    const journal = (w['container-title']||[])[0] || w.publisher || '';
-
-    // 解析標題
-    const title = (w.title||[])[0] || '';
-
-    // 解析摘要（Crossref 有時有 abstract）
-    let abstract = w.abstract || '';
-    // 清除 HTML tags
-    abstract = abstract.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,500);
-
-    // ISSN / URL
-    const url = w.URL || `https://doi.org/${doi}`;
-
-    // 自動產生 ID
-    const prefix = 'A';
-    const maxNum = DB.papers.filter(p=>p.id.startsWith(prefix)).map(p=>parseInt(p.id.slice(1))||0).reduce((a,b)=>Math.max(a,b),0);
-    const newId = prefix + String(maxNum+1).padStart(2,'0');
-
-    // 填入表單
-    document.getElementById('addId').value = newId;
-    document.getElementById('addTitle').value = title;
-    document.getElementById('addAuthors').value = authors;
-    document.getElementById('addYear').value = year || '';
-    document.getElementById('addDocType').value = '期刊論文';
-    document.getElementById('addAccess').value = abstract ? '開放摘要' : '付費';
-    document.getElementById('addAbstract').value = abstract;
-    document.getElementById('addLink').value = url;
-    document.getElementById('addTags').value = '';
-    document.getElementById('addPurpose').value = '';
-    document.getElementById('addValue').value = '';
-
-    // 也填入 AI 自動填入框（方便之後補標籤）
-    document.getElementById('addRaw').value = `${title}\n\n${abstract}\n\n${journal} (${year})\nDOI: ${doi}`;
-
-    statusEl.innerHTML = `✅ 已匯入：${title.slice(0,50)}...<br>
-      <span style="color:var(--muted)">${authors} · ${journal} · ${year}</span><br>
-      <span style="font-size:10px;color:var(--accent)">💡 點「🤖 AI 自動填入」可補標籤和對專案價值</span>`;
-
-    toast('DOI 匯入成功，請確認後加入資料庫','success');
-  } catch(e) {
-    statusEl.innerHTML = `<span style="color:var(--danger)">❌ ${e.message}</span>`;
-    toast('DOI 匯入失敗','error');
-  }
-}
-
-// 也支援批次 DOI 匯入（多個 DOI 用換行分隔）
-async function batchDOIImport(doiList) {
-  const dois = doiList.split(/[\n,;]+/).map(d=>d.trim()).filter(Boolean);
-  let added = 0;
-  for(const doi of dois) {
-    document.getElementById('doiInput').value = doi;
-    await importDOI();
-    if(document.getElementById('addTitle').value) {
-      addPaper();
-      added++;
-    }
-    await new Promise(r=>setTimeout(r,500)); // Crossref rate limit
-  }
-  toast(`批次匯入完成：${added}/${dois.length} 篇`,'success');
-}
-
-async function aiParseAdd() {
-  const raw = document.getElementById('addRaw').value.trim();
-  if(!raw){toast('請先貼上內容','error');return}
-  if(!cfg.proxy){toast('請先設定 Claude API Proxy URL','error');return}
-
-  toast('AI 解析中...','');
-
-  const tagDict = DB.meta.tag_dictionary || {};
-  const allValidTags = Object.values(tagDict).flat();
-
-  try {
-    const r = await fetch(cfg.proxy, {
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:800,
-        messages:[{role:'user',content:`你是醫材親水塗層文獻分析專家。解析以下文獻資訊，回傳純 JSON（不含 markdown fence）：
-
-有效標籤列表：${allValidTags.join(', ')}
-
-請回傳：
-{"title":"","authors":"","year":null,"doc_type":"期刊論文","access":"開放摘要","tags":[],"purpose":"一句話說明為什麼值得收錄","abstract_note":"精華摘要150字","value_to_project":"對 Bioteque TPU catheter/ureteral stent 專案的具體價值"}
-
-輸入內容：
-${raw.slice(0,2000)}`}]})
-    });
-    const data = await r.json();
-    trackUsage(data);
-    let text = data.content?.[0]?.text||'';
-    text = text.replace(/```json|```/g,'').trim();
-    const parsed = JSON.parse(text);
-
-    // Auto-generate ID
-    const prefix = parsed.doc_type==='專利'?'P':parsed.doc_type==='商用產品'?'C':parsed.doc_type==='綜述review'?'R':'A';
-    const maxNum = DB.papers.filter(p=>p.id.startsWith(prefix)).map(p=>parseInt(p.id.slice(1))||0).reduce((a,b)=>Math.max(a,b),0);
-    document.getElementById('addId').value = prefix + String(maxNum+1).padStart(2,'0');
-
-    document.getElementById('addTitle').value = parsed.title||'';
-    document.getElementById('addAuthors').value = parsed.authors||'';
-    document.getElementById('addYear').value = parsed.year||'';
-    document.getElementById('addDocType').value = parsed.doc_type||'期刊論文';
-    document.getElementById('addAccess').value = parsed.access||'開放摘要';
-    document.getElementById('addTags').value = (parsed.tags||[]).join(', ');
-    document.getElementById('addPurpose').value = parsed.purpose||'';
-    document.getElementById('addAbstract').value = parsed.abstract_note||'';
-    document.getElementById('addValue').value = parsed.value_to_project||'';
-
-    toast('AI 已填入，請檢查後確認','success');
-  } catch(e) {
-    toast('解析失敗：'+e.message,'error');
-  }
-}
-
-function addPaper() {
-  const id = document.getElementById('addId').value.trim();
-  const title = document.getElementById('addTitle').value.trim();
-  if(!id||!title){toast('ID 和標題為必填','error');return}
-  if(DB.papers.some(p=>p.id===id)){toast(`ID ${id} 已存在`,'error');return}
-
-  const paper = {
-    id,
-    title,
-    authors: document.getElementById('addAuthors').value.trim(),
-    year: parseInt(document.getElementById('addYear').value)||null,
-    venue: '',
-    doi: null, pmid: null,
-    doc_type: document.getElementById('addDocType').value,
-    access: document.getElementById('addAccess').value,
-    tags: document.getElementById('addTags').value.split(/[,，]/).map(s=>s.trim()).filter(Boolean),
-    purpose: document.getElementById('addPurpose').value.trim(),
-    abstract_note: document.getElementById('addAbstract').value.trim(),
-    value_to_project: document.getElementById('addValue').value.trim(),
-    links: {}
-  };
-  const link = document.getElementById('addLink').value.trim();
-  if(link) paper.links = {ref: link};
-  const figure = document.getElementById('addFigure').value.trim();
-  if(figure) paper.figure = figure;
-
-  DB.papers.push(paper);
-  saveDB();
-  onDBLoaded();
-
-  // Clear form
-  ['addId','addTitle','addAuthors','addYear','addTags','addPurpose','addAbstract','addValue','addLink','addFigure','addRaw'].forEach(id=>document.getElementById(id).value='');
-  toast(`已新增 ${paper.id}: ${paper.title.slice(0,30)}...`,'success');
-}
-
-// ══════════════════════════════════════════════
-// GOOGLE: Sign-In + Sheets Sync
-// ══════════════════════════════════════════════
-const G_CLIENT_ID = '794566862514-jrcn9pkvc4brtt4dt8r3m3g6slsgl888.apps.googleusercontent.com';
-const G_SCOPES = 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.file';
-const SHEETS_API = 'https://sheets.googleapis.com/v4/spreadsheets';
-const DRIVE_API = 'https://www.googleapis.com/drive/v3/files';
-let gToken = null;
-
-function googleSignIn() {
-  if(!window.google?.accounts?.oauth2) {
-    toast('Google 登入服務載入中，請稍候再試','error');
-    return;
-  }
-  const client = google.accounts.oauth2.initTokenClient({
-    client_id: G_CLIENT_ID,
-    scope: G_SCOPES,
-    callback: (resp) => {
-      if(resp.error) { toast('登入失敗：'+resp.error,'error'); return; }
-      gToken = resp.access_token;
-      onGoogleSignedIn();
-    }
-  });
-  client.requestAccessToken();
-}
-
-async function onGoogleSignedIn() {
-  // 取得使用者資訊
-  try {
-    const r = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-      headers: {'Authorization': 'Bearer '+gToken}
-    });
-    const u = await r.json();
-    document.getElementById('gUserLabel').textContent = '✓ '+u.name;
-    document.getElementById('gUserLabel').style.display = '';
-  } catch(e) {}
-
-  document.getElementById('gSignInBtn').style.display = 'none';
-  document.getElementById('gSaveBtn').style.display = '';
-  document.getElementById('gLoadBtn').style.display = '';
-  document.getElementById('gOutBtn').style.display = '';
-  toast('Google 登入成功','success');
-}
-
-function googleSignOut() {
-  gToken = null;
-  document.getElementById('gUserLabel').style.display = 'none';
-  document.getElementById('gSignInBtn').style.display = '';
-  document.getElementById('gSaveBtn').style.display = 'none';
-  document.getElementById('gLoadBtn').style.display = 'none';
-  document.getElementById('gOutBtn').style.display = 'none';
-  toast('已登出 Google','');
-}
-
-// ── 存到 Google Sheets ──
-async function saveToSheets() {
-  if(!gToken) { toast('請先登入 Google','error'); return; }
-  toast('儲存中...','');
-
-  try {
-    // 找或建立 LitDB 試算表
-    let sheetId = await findLitDBSheet();
-    if(!sheetId) sheetId = await createLitDBSheet();
-
-    // 轉換 papers 為二維陣列
-    const headers = ['id','title','authors','year','venue','doi','pmid','doc_type','access','tags','purpose','abstract_note','value_to_project','links','figure'];
-    const rows = [headers];
-    DB.papers.forEach(p => {
-      rows.push(headers.map(h => {
-        const v = p[h];
-        if(h==='tags') return (v||[]).join('; ');
-        if(h==='links') return JSON.stringify(v||{});
-        return v==null?'':String(v);
-      }));
-    });
-
-    // 寫入（覆蓋整個 Sheet1）
-    await fetch(`${SHEETS_API}/${sheetId}/values/Sheet1?valueInputOption=RAW`, {
-      method: 'PUT',
-      headers: {'Authorization':'Bearer '+gToken, 'Content-Type':'application/json'},
-      body: JSON.stringify({range:'Sheet1', values: rows})
-    });
-
-    // 也存一份完整 JSON 到 meta sheet
-    // 先確認 meta sheet 存在
-    const sheetInfo = await fetch(`${SHEETS_API}/${sheetId}`, {
-      headers: {'Authorization':'Bearer '+gToken}
-    }).then(r=>r.json());
-
-    const hasMetaSheet = (sheetInfo.sheets||[]).some(s=>s.properties.title==='_meta');
-    if(!hasMetaSheet) {
-      await fetch(`${SHEETS_API}/${sheetId}:batchUpdate`, {
-        method:'POST',
-        headers:{'Authorization':'Bearer '+gToken,'Content-Type':'application/json'},
-        body: JSON.stringify({requests:[{addSheet:{properties:{title:'_meta'}}}]})
-      });
-    }
-
-    // 把完整 JSON 存到 _meta!A1
-    await fetch(`${SHEETS_API}/${sheetId}/values/_meta!A1?valueInputOption=RAW`, {
-      method: 'PUT',
-      headers: {'Authorization':'Bearer '+gToken, 'Content-Type':'application/json'},
-      body: JSON.stringify({range:'_meta!A1', values: [[JSON.stringify(DB)]]})
-    });
-
-    localStorage.setItem('litdb_sheetId', sheetId);
-    toast(`已儲存 ${DB.papers.length} 篇到 Google Sheets ✓`,'success');
-  } catch(e) {
-    toast('儲存失敗：'+e.message,'error');
-  }
-}
-
-// ── 從 Google Sheets 載入 ──
-async function loadFromSheets() {
-  if(!gToken) { toast('請先登入 Google','error'); return; }
-  toast('載入中...','');
-
-  try {
-    let sheetId = localStorage.getItem('litdb_sheetId');
-    if(!sheetId) sheetId = await findLitDBSheet();
-    if(!sheetId) { toast('找不到 LitDB 試算表，請先儲存一次','error'); return; }
-
-    // 先嘗試從 _meta 載入完整 JSON
-    try {
-      const metaRes = await fetch(`${SHEETS_API}/${sheetId}/values/_meta!A1`, {
-        headers: {'Authorization':'Bearer '+gToken}
-      });
-      const metaData = await metaRes.json();
-      if(metaData.values && metaData.values[0] && metaData.values[0][0]) {
-        const fullDB = JSON.parse(metaData.values[0][0]);
-        if(fullDB.papers && fullDB.papers.length) {
-          DB = fullDB;
-          saveDB(); onDBLoaded();
-          toast(`已從 Sheets 載入 ${DB.papers.length} 篇（完整格式）`,'success');
-          return;
-        }
-      }
-    } catch(e) { console.warn('meta load failed, trying table format'); }
-
-    // 備援：從 Sheet1 表格載入
-    const res = await fetch(`${SHEETS_API}/${sheetId}/values/Sheet1`, {
-      headers: {'Authorization':'Bearer '+gToken}
-    });
-    const data = await res.json();
-    const rows = data.values || [];
-    if(rows.length < 2) { toast('試算表是空的','error'); return; }
-
-    const headers = rows[0];
-    const papers = rows.slice(1).map(row => {
-      const obj = {};
-      headers.forEach((h,i) => {
-        let v = row[i] || '';
-        if(h==='tags') v = v.split('; ').filter(Boolean);
-        else if(h==='links') { try{v=JSON.parse(v)}catch(e){v={}} }
-        else if(h==='year') v = parseInt(v)||null;
-        else if(v==='') v = null;
-        obj[h] = v;
-      });
-      return obj;
-    });
-
-    DB.papers = papers;
-    saveDB(); onDBLoaded();
-    toast(`已從 Sheets 載入 ${papers.length} 篇`,'success');
-  } catch(e) {
-    toast('載入失敗：'+e.message,'error');
-  }
-}
-
-// ── 工具函式 ──
-async function findLitDBSheet() {
-  const r = await fetch(`${DRIVE_API}?q=name='LitDB' and mimeType='application/vnd.google-apps.spreadsheet' and trashed=false&fields=files(id,name)`, {
-    headers: {'Authorization':'Bearer '+gToken}
-  });
-  const d = await r.json();
-  return (d.files && d.files.length) ? d.files[0].id : null;
-}
-
-async function createLitDBSheet() {
-  const r = await fetch(SHEETS_API, {
-    method: 'POST',
-    headers: {'Authorization':'Bearer '+gToken, 'Content-Type':'application/json'},
-    body: JSON.stringify({properties:{title:'LitDB'}})
-  });
-  const d = await r.json();
-  toast('已建立 Google Sheets「LitDB」','success');
-  return d.spreadsheetId;
-}
-</script>
-</body>
-</html>
