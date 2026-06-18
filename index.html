@@ -484,20 +484,28 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 
 <div class="view" id="v-kgraph" style="display:none">
   <div style="height:calc(100vh - 140px);display:flex;flex-direction:column">
-    <!-- 工具列 -->
-    <div style="padding:8px 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--border);flex-shrink:0">
-      <span style="font-size:12px;font-weight:600;color:var(--accent2)">顯示層級：</span>
-      <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="kg_route" checked onchange="renderKGraph()"> 技術路線</label>
-      <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="kg_tech" checked onchange="renderKGraph()"> 技術</label>
-      <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="kg_mech" onchange="renderKGraph()"> 機制</label>
-      <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="kg_mat" checked onchange="renderKGraph()"> 材料</label>
-      <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="kg_proc" onchange="renderKGraph()"> 製程</label>
-      <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="kg_pat" checked onchange="renderKGraph()"> 專利</label>
-      <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="kg_co" checked onchange="renderKGraph()"> 公司</label>
-      <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="kg_perf" checked onchange="renderKGraph()"> 性能</label>
-      <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="kg_app" onchange="renderKGraph()"> 應用</label>
-      <button class="btn btn-s" onclick="renderKGraph()" style="margin-left:auto">⟳ 重繪</button>
-      <button class="btn btn-s" onclick="kgResetZoom()">↙ 重置</button>
+    <!-- 問題導引列 -->
+    <div style="padding:8px 12px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:6px">
+        <span style="font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap">快速問題：</span>
+        <button class="btn btn-s kg-mode-btn" id="kgMode_a" onclick="kgSetMode('routes')" style="font-size:11px;padding:4px 10px">🗺 有哪些技術路線？</button>
+        <button class="btn btn-s kg-mode-btn" id="kgMode_b" onclick="kgSetMode('materials')" style="font-size:11px;padding:4px 10px">⚗️ 路線用了哪些材料？</button>
+        <button class="btn btn-s kg-mode-btn" id="kgMode_c" onclick="kgSetMode('patents')" style="font-size:11px;padding:4px 10px">📄 路線對應哪些專利？</button>
+        <button class="btn btn-s kg-mode-btn" id="kgMode_d" onclick="kgSetMode('risk')" style="font-size:11px;padding:4px 10px">⚖️ 專利風險比較</button>
+        <button class="btn btn-s" onclick="kgSetMode('all')" style="font-size:11px;padding:4px 10px">🔍 全圖</button>
+        <button class="btn btn-s" onclick="kgResetZoom()" style="margin-left:auto;font-size:11px">↙ 重置</button>
+      </div>
+      <div id="kgModeHint" style="font-size:11px;color:var(--accent2);min-height:16px">
+        點選上方問題切換視圖　·　點擊節點查看詳情並高亮連線　·　Hover 顯示完整名稱
+      </div>
+      <!-- 隱藏 checkbox（程式控制） -->
+      <div style="display:none">
+        <input type="checkbox" id="kg_route" checked><input type="checkbox" id="kg_tech" checked>
+        <input type="checkbox" id="kg_mech"><input type="checkbox" id="kg_mat" checked>
+        <input type="checkbox" id="kg_proc"><input type="checkbox" id="kg_pat" checked>
+        <input type="checkbox" id="kg_co" checked><input type="checkbox" id="kg_perf" checked>
+        <input type="checkbox" id="kg_app">
+      </div>
     </div>
     <!-- 圖例 -->
     <div style="padding:6px 12px;display:flex;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--border);flex-shrink:0;font-size:10px">
@@ -507,6 +515,8 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
     <!-- 畫布 -->
     <div style="flex:1;position:relative;overflow:hidden">
       <svg id="kgSvg" style="width:100%;height:100%"></svg>
+      <!-- Hover Tooltip -->
+      <div id="kgTooltip" style="display:none;position:absolute;background:var(--card);border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:12px;pointer-events:none;max-width:200px;box-shadow:0 2px 10px rgba(0,0,0,0.12);z-index:10"></div>
       <!-- 節點詳情面板 -->
       <div id="kgDetail" style="display:none;position:absolute;top:10px;right:10px;width:260px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:11px;max-height:70vh;overflow-y:auto;box-shadow:0 4px 16px rgba(0,0,0,0.12)">
         <button onclick="document.getElementById('kgDetail').style.display='none'" style="float:right;background:none;border:none;cursor:pointer;font-size:14px;color:var(--muted)">✕</button>
@@ -2771,13 +2781,29 @@ function renderKGraph() {
       .on('start',(e,d)=>{if(!e.active)kgSim.alphaTarget(0.3).restart();d.fx=d.x;d.fy=d.y;})
       .on('drag',(e,d)=>{d.fx=e.x;d.fy=e.y;})
       .on('end',(e,d)=>{if(!e.active)kgSim.alphaTarget(0);d.fx=null;d.fy=null;}))
-    .on('click',(e,d)=>{e.stopPropagation();showKGDetail(d);});
+    .on('click',(e,d)=>{e.stopPropagation();kgHighlight(d.id);})
+    .on('mouseover',(e,d)=>{
+      // Tooltip：完整名稱
+      d3.select('#kgTooltip').style('display','block')
+        .style('left',(e.offsetX+12)+'px').style('top',(e.offsetY-10)+'px')
+        .html(`<b style="color:${KG_COLORS[d.type]}">${d.label?.replace('\n',' ')||d.id}</b><br>
+               <span style="font-size:10px;color:#888">${d.type}</span>
+               ${d.patent_risk?`<br><span style="font-size:10px">⚖️ ${d.patent_risk}</span>`:''}`);
+    })
+    .on('mouseout',()=>d3.select('#kgTooltip').style('display','none'));
 
   node.append('circle')
     .attr('r',d=>KG_SIZES[d.type]||12)
     .attr('fill',d=>KG_COLORS[d.type]||'#888')
     .attr('fill-opacity',0.9)
-    .attr('stroke','#fff').attr('stroke-width',1.8);
+    .attr('stroke',d=>{
+      if(kgCurrentMode==='risk'&&d.type==='route'&&d.patent_risk){
+        const r=d.patent_risk.split('（')[0];
+        return {高:'#e74c3c',中:'#f39c12',低:'#2d8c5a'}[r]||'#fff';
+      }
+      return '#fff';
+    })
+    .attr('stroke-width',d=>kgCurrentMode==='risk'&&d.type==='route'&&d.patent_risk?4:1.8);
 
   node.append('text').attr('text-anchor','middle').attr('dominant-baseline','middle')
     .attr('fill','#fff').attr('font-weight',700).attr('pointer-events','none')
@@ -2788,7 +2814,7 @@ function renderKGraph() {
       else{lines.forEach((l,i)=>el.append('tspan').attr('x',0).attr('dy',i===0?`${-(lines.length-1)*0.55}em`:'1.1em').text(l.length>9?l.slice(0,8)+'…':l));}
     });
 
-  d3svg.on('click',()=>document.getElementById('kgDetail').style.display='none');
+  d3svg.on('click',()=>{kgSelectedId=null;kgHighlight(null);document.getElementById('kgDetail').style.display='none';});
 }
 
 function showKGDetail(d) {
@@ -2815,6 +2841,87 @@ function showKGDetail(d) {
     ${incoming.length?`<div style="font-size:10px;font-weight:700;color:var(--muted);margin-top:7px;margin-bottom:3px">← 被指向 (${incoming.length})</div>${incoming.slice(0,6).map(e=>relRow(e,'in')).join('')}`:''}
   `;
   panel.style.display='block';
+}
+
+
+// ── KG 模式控制 ──────────────────────────────
+let kgCurrentMode = 'all';
+let kgSelectedId = null;
+
+const KG_MODES = {
+  all:       {route:1,technology:1,mechanism:0,material:1,process:0,patent:1,company:1,performance:1,application:0,
+              hint:'全圖模式：點擊任意節點查看詳情與連線'},
+  routes:    {route:1,technology:1,mechanism:0,material:0,process:0,patent:0,company:0,performance:0,application:0,
+              hint:'🗺 技術路線：顯示 9 條主流路線與其包含技術。點擊路線節點看優劣與專利風險'},
+  materials: {route:1,technology:1,mechanism:0,material:1,process:0,patent:0,company:0,performance:0,application:0,
+              hint:'⚗️ 材料視圖：路線 → 技術 → 材料的完整關係。點路線節點高亮該路線所有材料'},
+  patents:   {route:1,technology:0,mechanism:0,material:0,process:0,patent:1,company:1,performance:0,application:0,
+              hint:'📄 專利視圖：路線對應哪些專利、哪家公司持有。點路線看專利家族'},
+  risk:      {route:1,technology:0,mechanism:0,material:0,process:0,patent:1,company:1,performance:0,application:0,
+              hint:'⚖️ 風險視圖：紅框=高風險、黃框=中風險、綠框=低風險。點路線看具體 IP 建議'},
+};
+
+function kgSetMode(mode) {
+  kgCurrentMode = mode;
+  kgSelectedId = null;
+  // 更新按鈕樣式
+  document.querySelectorAll('.kg-mode-btn').forEach(b=>b.style.background='');
+  const activeBtn = document.getElementById('kgMode_'+mode[0]);
+  if(activeBtn) activeBtn.style.background='var(--accent)'; 
+  // 更新 checkbox
+  const cfg = KG_MODES[mode]||KG_MODES.all;
+  Object.entries(cfg).forEach(([k,v])=>{
+    if(k==='hint') return;
+    const el=document.getElementById('kg_'+k);
+    if(el) el.checked=!!v;
+  });
+  document.getElementById('kgModeHint').textContent = cfg.hint||'';
+  renderKGraph();
+}
+
+// 節點高亮（點擊後）
+function kgHighlight(selectedId) {
+  if(!KG) return;
+  kgSelectedId = selectedId === kgSelectedId ? null : selectedId;
+
+  const svg = d3.select('#kgSvg');
+  if(!kgSelectedId) {
+    // 取消選取，全部恢復
+    svg.selectAll('circle').attr('opacity',1).attr('stroke','#fff').attr('stroke-width',1.8);
+    svg.selectAll('line').attr('stroke-opacity',d=>d.indirect?0.28:d.type==='alternative_to'?0.35:0.5);
+    svg.selectAll('text').attr('opacity',1);
+    return;
+  }
+
+  const connected = new Set([kgSelectedId]);
+  KG.edges.forEach(e=>{
+    if(e.source===kgSelectedId||e.source?.id===kgSelectedId) connected.add(e.target?.id||e.target);
+    if(e.target===kgSelectedId||e.target?.id===kgSelectedId) connected.add(e.source?.id||e.source);
+  });
+
+  svg.selectAll('circle')
+    .attr('opacity',d=>connected.has(d.id)?1:0.12)
+    .attr('stroke',d=>d.id===kgSelectedId?'#fff':'#fff')
+    .attr('stroke-width',d=>d.id===kgSelectedId?3:1.8);
+
+  svg.selectAll('line')
+    .attr('stroke-opacity',d=>{
+      const s=d.source?.id||d.source, t=d.target?.id||d.target;
+      return (s===kgSelectedId||t===kgSelectedId)?0.9:0.04;
+    });
+
+  svg.selectAll('text').attr('opacity',d=>connected.has(d.id)?1:0.15);
+
+  // 右側面板
+  const node = KG.nodes.find(n=>n.id===kgSelectedId);
+  if(node) {
+    // 風險模式：邊框顏色
+    if(kgCurrentMode==='risk') {
+      const riskColor = {高:'#e74c3c',中:'#f39c12',低:'#2d8c5a'}[node.patent_risk?.split('（')[0]]||null;
+      if(riskColor) svg.selectAll('circle').filter(d=>d.id===kgSelectedId).attr('stroke',riskColor).attr('stroke-width',4);
+    }
+    showKGDetail(node);
+  }
 }
 
 function kgResetZoom() {
