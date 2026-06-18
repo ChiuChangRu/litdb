@@ -365,7 +365,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 <!-- ═══════════════ VIEW: ANALYSIS (wrapper) ═══════════════ -->
 <div class="view" id="v-analysis">
   <div style="display:flex;gap:4px;padding:8px 16px;background:var(--card);border-bottom:1px solid var(--border);flex-wrap:wrap">
-    <button class="btn btn-s analysis-sub active" onclick="showAnalysisTab('graph',this)">🕸 關係圖</button>
+    <button class="btn btn-s analysis-sub active" onclick="showAnalysisTab('graph',this)">🕸 文獻關聯圖</button>
     <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('gap',this)">🔥 缺口分析</button>
     <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('compare',this)">📊 比較</button>
     <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('commercial',this)">🏢 商業分析</button>
@@ -2676,7 +2676,46 @@ function renderKGraph() {
 
   const visNodes = KG.nodes.filter(n=>show[n.type]).map(n=>({...n}));
   const visIds = new Set(visNodes.map(n=>n.id));
-  const visEdges = KG.edges.filter(e=>visIds.has(e.source)&&visIds.has(e.target)).map(e=>({...e}));
+  const hiddenNodes = KG.nodes.filter(n=>!show[n.type]);
+  const hiddenIds = new Set(hiddenNodes.map(n=>n.id));
+
+  // 直接邊（兩端都可見）
+  const directEdges = KG.edges.filter(e=>visIds.has(e.source)&&visIds.has(e.target)).map(e=>({...e,indirect:false}));
+
+  // 間接邊：透過隱藏節點的傳遞連線（BFS 找最短路徑）
+  const adjMap = {};
+  KG.edges.forEach(e=>{
+    if(!adjMap[e.source]) adjMap[e.source]=[];
+    adjMap[e.source].push({to:e.target,type:e.type});
+  });
+  const indirectEdges = [];
+  const existingPairs = new Set(directEdges.map(e=>`${e.source}__${e.target}`));
+
+  visIds.forEach(srcId=>{
+    // BFS 從 srcId 出發，穿過隱藏節點，找到可見節點
+    const visited = new Set([srcId]);
+    const queue = [{id:srcId,depth:0,type:'root_type'}];
+    while(queue.length){
+      const {id,depth} = queue.shift();
+      if(depth>3) continue; // 最多穿透3層
+      (adjMap[id]||[]).forEach(({to,type})=>{
+        if(visited.has(to)) return;
+        visited.add(to);
+        if(visIds.has(to)){
+          // 找到可見端點，建立間接邊
+          const key = `${srcId}__${to}`;
+          if(!existingPairs.has(key) && srcId!==to){
+            existingPairs.add(key);
+            indirectEdges.push({source:srcId,target:to,type:'indirect',origType:type,indirect:true});
+          }
+        } else if(hiddenIds.has(to)){
+          queue.push({id:to,depth:depth+1,type});
+        }
+      });
+    }
+  });
+
+  const visEdges = [...directEdges, ...indirectEdges];
 
   const W = svg.clientWidth||900, H = svg.clientHeight||600;
   const d3svg = d3.select(svg).attr('viewBox',`0 0 ${W} ${H}`);
@@ -2720,11 +2759,11 @@ function renderKGraph() {
     });
 
   const link = g.append('g').selectAll('line').data(visEdges).join('line')
-    .attr('stroke',d=>edgeColors[d.type]||'#ccc')
-    .attr('stroke-width',d=>d.type==='family_of'?2.5:1.3)
-    .attr('stroke-opacity',d=>d.type==='alternative_to'?0.35:0.5)
-    .attr('stroke-dasharray',d=>d.type==='alternative_to'?'5,4':null)
-    .attr('marker-end',d=>`url(#arr_${d.type})`);
+    .attr('stroke',d=>d.indirect?'#aaa':edgeColors[d.type]||'#ccc')
+    .attr('stroke-width',d=>d.indirect?1:d.type==='family_of'?2.5:1.3)
+    .attr('stroke-opacity',d=>d.indirect?0.28:d.type==='alternative_to'?0.35:0.5)
+    .attr('stroke-dasharray',d=>d.indirect?'4,4':d.type==='alternative_to'?'5,4':null)
+    .attr('marker-end',d=>d.indirect?null:`url(#arr_${d.type})`);
 
   const node = g.append('g').selectAll('g').data(visNodes).join('g')
     .attr('cursor','pointer')
