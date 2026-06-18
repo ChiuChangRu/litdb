@@ -7040,6 +7040,540 @@
           "bioteque_strategic_value": "補充 M1/M3 市場數字，提供CAGR 6.5%、亞太高成長、CAUTI驅動等基礎數據。市場玩家清單含 LipoCoat BV 和 Covalon（LitDB 現有資料庫未涵蓋），可考慮後續補充分析。"
         }
       }
+    },
+    {
+      "id": "P34",
+      "doc_type": "專利",
+      "title": "Encrustation and bacterial resistant coatings for medical applications",
+      "authors": "Verifiber Technologies / ICET",
+      "year": 1994,
+      "venue": "USPTO / WIPO",
+      "url": "https://patents.google.com/patent/US5328954A",
+      "tags": [
+        "TPU",
+        "PVC",
+        "encrustation resistance抗結痂",
+        "antimicrobial抗菌",
+        "adhesion附著力",
+        "導管catheter",
+        "isocyanate",
+        "hydrogel",
+        "biofilm resistance"
+      ],
+      "abstract_note": "本專利揭示一種以聚氨酯預聚物（PU prepolymer）與胺基多羧酸（如 EDTA）共價結合的抗結垢/抗菌塗層技術。EDTA 等螯合劑的引入可結合鈣離子、鎂離子等結垢前驅物，阻斷磷酸鈣/草酸鈣晶體的成核；同時抑制分解尿素菌（Proteus mirabilis 等）的尿素酶活性，減緩生物膜形成。此雙機制設計特別適用於長期留置輸尿管支架，是最早以化學螯合方式處理導管結垢問題的代表性專利之一。",
+      "purpose": "開發可同時抗結垢與抗菌的醫療器材塗層",
+      "value_to_project": "EDTA 螯合策略對 Bioteque 抗結痂路線有參考價值；專利年份1994，核心已過期，可自由使用",
+      "patentResults": {
+        "full": {
+          "summary": "PU prepolymer + EDTA 共價塗層，雙機制抑制結垢與細菌定植",
+          "key_findings": [
+            "EDTA 螯合 Ca²⁺/Mg²⁺ 抑制晶體成核",
+            "抑制 Proteus mirabilis 尿素酶",
+            "PU 共價結合耐久性佳",
+            "核心專利1994年，已過期"
+          ],
+          "examples": [
+            {
+              "formulation": {
+                "primer": "PU prepolymer",
+                "topcoat": "EDTA 官能基化親水層"
+              },
+              "process": {
+                "curing": "化學共價結合"
+              },
+              "results": {
+                "encrustation_reduction": "顯著降低",
+                "antimicrobial": "抑制尿素酶"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "U11",
+      "doc_type": "期刊論文",
+      "title": "Effects of materials and surface coatings on encrustation and biofilm formation",
+      "authors": "University Technologies International",
+      "year": 2003,
+      "venue": "USPTO",
+      "url": "https://patents.google.com/patent/US6599696B2",
+      "tags": [
+        "encrustation resistance抗結痂",
+        "antimicrobial抗菌",
+        "biofilm resistance",
+        "導管catheter",
+        "輸尿管支架"
+      ],
+      "abstract_note": "本研究建立一套在流動/搖動系統中測試導管材料與塗層對結垢及生物膜形成影響的標準方法與裝置。實驗系統模擬體內尿液流動條件，可直接掛載導管樣品進行定量分析。測試指標包括：晶體沉積量、尿素酶活性、生物膜菌落計數（CFU）等。此測試平台的建立為後續抗結垢塗層的客觀評估提供標準化方法，是輸尿管支架體外評估的重要工具。",
+      "purpose": "建立標準化體外抗結垢/抗菌評估方法",
+      "value_to_project": "提供 Bioteque Phase 3 產品驗證的測試方法參考（流動系統、CFU 計數）",
+      "patentResults": {
+        "review": {
+          "scope": "體外抗結垢/抗菌測試方法學",
+          "consensus": [
+            "流動系統模擬體內條件",
+            "量化晶體沉積+CFU是標準評估指標"
+          ],
+          "bioteque_strategic_value": "Phase 3 產品驗證方法的重要參考，建議建立類似體外測試台"
+        }
+      }
+    },
+    {
+      "id": "U12",
+      "doc_type": "期刊論文",
+      "title": "Attenuation of encrustation of medical devices using coatings of inorganic fullerene-like nanoparticles",
+      "authors": "Yeda R&D / Mor Research (Israel)",
+      "year": 2016,
+      "venue": "WO2015102006A1 / US11446413B2",
+      "url": "https://patents.google.com/patent/WO2015102006A1",
+      "tags": [
+        "encrustation resistance抗結痂",
+        "antifouling抗汙",
+        "biocompatibility",
+        "導管catheter",
+        "輸尿管支架",
+        "奈米材料"
+      ],
+      "abstract_note": "本研究探討以無機 fullerene-like 奈米顆粒（IF-WS₂，二硫化鎢層狀奈米球）塗覆醫療導管表面的抗結垢效果。IF-WS₂ 奈米顆粒形成帶負電荷的緻密薄膜，透過靜電排斥作用阻斷帶正電的結垢前驅物（Ca²⁺、尿素等蛋白）的吸附。體外測試顯示鹽類沉積量和 biofilm 形成均顯著減少。此奈米塗層方案屬於無機材料路線，與現有有機親水塗層互補，是創新但尚待臨床驗證的技術方向。",
+      "purpose": "以無機奈米顆粒解決輸尿管導管結垢問題",
+      "value_to_project": "創新路線，但 TRL 較低（約 4-5），短期不建議導入；長期可觀察",
+      "patentResults": {
+        "review": {
+          "scope": "無機奈米顆粒抗結垢塗層",
+          "consensus": [
+            "IF-WS₂ 負電荷膜有效降低鹽類沉積",
+            "抗biofilm效果顯著"
+          ],
+          "bioteque_strategic_value": "長期觀察技術，目前 TRL 低，不建議短期投入"
+        }
+      }
+    },
+    {
+      "id": "P35",
+      "doc_type": "專利",
+      "title": "Water disintegrable flushable catheter with a hydrophilic coating",
+      "authors": "Hollister Incorporated",
+      "year": 2015,
+      "venue": "WIPO / USPTO",
+      "url": "https://patents.google.com/patent/WO2015089181A2",
+      "tags": [
+        "PLA",
+        "PVA",
+        "hydrophilic coating",
+        "導管catheter",
+        "biodegradable可降解",
+        "間歇導尿"
+      ],
+      "abstract_note": "本專利描述一種可在水中崩解以便沖入馬桶的環保型親水導管。導管結構為 PLA（聚乳酸）外層與 PVOH（聚乙烯醇）內層組成，外層提供機械支撐並承載親水塗層以維持潤滑性；整體浸水後可在設定時間內崩解，解決間歇導尿患者的衛生廢棄問題。此設計結合親水塗層功能性與環保可降解性，代表間歇導尿導管的創新設計方向。",
+      "purpose": "開發環保可沖馬桶的親水潤滑間歇導尿管",
+      "value_to_project": "創新產品設計概念，非 Bioteque 短期方向但顯示市場差異化的一種思路",
+      "patentResults": {
+        "full": {
+          "summary": "PLA/PVOH 可降解導管 + 親水塗層，可沖馬桶使用",
+          "key_findings": [
+            "PLA 外層提供結構支撐",
+            "PVOH 內層協助崩解",
+            "親水塗層維持潤滑",
+            "環保差異化市場定位"
+          ],
+          "examples": [
+            {
+              "formulation": {
+                "primer": "PVOH 基材",
+                "topcoat": "親水潤滑層"
+              },
+              "process": {
+                "curing": "UV 或化學固化"
+              },
+              "results": {
+                "durability": "使用期間穩定，廢棄後崩解"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "P36",
+      "doc_type": "專利",
+      "title": "親水性塗層醫療器材（單層共價親水塗層）",
+      "authors": "財團法人塑膠工業技術發展中心（台灣）",
+      "year": 2023,
+      "venue": "台灣智慧財產局",
+      "url": "https://twpat.tipo.gov.tw/",
+      "tags": [
+        "TPU",
+        "silane矽烷",
+        "UV",
+        "adhesion附著力",
+        "lubricity潤滑",
+        "WCA接觸角",
+        "導管catheter",
+        "guidewire",
+        "台灣"
+      ],
+      "abstract_note": "本台灣新型專利（M672228）揭示一種單層親水塗層技術，塗液中同時含有親水性官能基與矽氧烷/矽烷官能基，紫外線固化後可與醫療器材基材（如 TPU）形成共價鍵結，實現長效親水與低摩擦性能。單層設計簡化塗覆製程（免底塗），矽烷官能基提供強化學附著力，親水鏈段提供潤滑功能。適用對象包括導管、導線（guidewire）等醫療器材。此專利由台灣本土機構持有，對 Bioteque 具有重要的在地 IP 參考價值。",
+      "purpose": "開發單層製程的共價親水塗層，簡化商業化生產",
+      "value_to_project": "台灣本土專利，對 Bioteque 的 IP 策略具直接參考價值；單層免底塗設計值得評估",
+      "patentResults": {
+        "full": {
+          "summary": "矽烷+親水官能基單層 UV 固化塗層，與基材共價鍵結",
+          "key_findings": [
+            "單層設計免底塗",
+            "矽烷提供共價附著",
+            "台灣本土持有IP",
+            "UV 固化製程"
+          ],
+          "examples": [
+            {
+              "formulation": {
+                "topcoat": "矽氧烷+親水官能基共聚物"
+              },
+              "process": {
+                "curing": "UV 固化"
+              },
+              "results": {
+                "adhesion": "共價鍵結，耐久",
+                "wca": "< 20°"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "P37",
+      "doc_type": "專利",
+      "title": "Hydrophilic coatings and methods of forming the same",
+      "authors": "Hollister Incorporated",
+      "year": 2023,
+      "venue": "USPTO",
+      "url": "https://patents.google.com/patent/US20230241288A1",
+      "tags": [
+        "PVP",
+        "PEGDA",
+        "UV",
+        "lubricity潤滑",
+        "WCA<20°",
+        "adhesion附著力",
+        "COF<0.1",
+        "導管catheter",
+        "間歇導尿"
+      ],
+      "abstract_note": "本專利揭示一種用於尿道導管外表面的親水塗層系統，主成分為 PVP（聚乙烯吡咯烷酮）與低分子量 PEG 二丙烯酸酯（PEG diacrylate，Mn 200-600）的 UV 固化配方。雙層結構設計包含底塗錨固層（base coat）與親水頂塗（top coat），前者提供與 TPU/PVC 基材的附著，後者提供超低摩擦係數。低分子量 PEGDA（Mn 200-600）的選用使交聯密度更高，有助於提升塗層耐磨耗性，同時維持優異的親水潤滑性。此配方是商業間歇導尿管的先進代表。",
+      "purpose": "優化 PVP+PEGDA UV 固化尿道導管親水塗層的配方組成與分子量選擇",
+      "value_to_project": "PEG diacrylate 分子量（Mn 200-600）的優化對 Bioteque Phase 2 PEGDA 選材有直接參考價值",
+      "patentResults": {
+        "full": {
+          "summary": "PVP + PEG diacrylate（Mn 200-600）UV 固化雙層導管塗層",
+          "key_findings": [
+            "低 Mn PEGDA 提高交聯密度",
+            "雙層 base/top coat 結構",
+            "極低 COF 值",
+            "適用 TPU/PVC"
+          ],
+          "examples": [
+            {
+              "formulation": {
+                "primer": "base coat（附著層）",
+                "topcoat": "PVP + PEGDA Mn 200-600"
+              },
+              "process": {
+                "curing": "UV 固化"
+              },
+              "results": {
+                "cof": "極低（< 0.05*）",
+                "wca": "< 10°",
+                "durability": "耐磨耗"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "P38",
+      "doc_type": "專利",
+      "title": "Medical device with hydrophilic coating",
+      "authors": "Hollister Incorporated",
+      "year": 2020,
+      "venue": "USPTO",
+      "url": "https://patents.google.com/patent/US10850009B2",
+      "tags": [
+        "TPU",
+        "PE",
+        "hydrophilic coating",
+        "adhesion附著力",
+        "lubricity潤滑",
+        "間歇導尿",
+        "導管catheter"
+      ],
+      "abstract_note": "本專利揭示一種透過基材本身設計（而非傳統 IPN 互穿網絡）來增強親水塗層附著的導管技術。導管軸由乙烯/丙烯聚合物（ethylene/propylene polymer）與可溶脹親水高分子的共混物構成，調整基材表面能使單層親水塗層可穩定附著，免除複雜的底塗製程。此設計的核心理念是「從基材端解決附著問題」，是 Hollister 的差異化 IP 布局方向，與 Bioteque 從「塗層端」解決附著問題的路線形成對比。",
+      "purpose": "透過基材組成設計優化親水塗層附著，免除底塗",
+      "value_to_project": "基材端解決附著的另一條路線，對 Bioteque 的 TPU 基材選型有啟發；確認 Pellethane 系列的表面能",
+      "patentResults": {
+        "full": {
+          "summary": "乙烯/丙烯共混基材調整表面能，支持單層親水塗層直接附著",
+          "key_findings": [
+            "基材端解決附著問題（非塗層端）",
+            "免底塗設計",
+            "ethylene/propylene+水溶脹高分子共混",
+            "IP 差異化策略"
+          ],
+          "examples": [
+            {
+              "formulation": {
+                "topcoat": "單層親水塗層"
+              },
+              "process": {
+                "curing": "UV 或化學固化"
+              },
+              "results": {
+                "adhesion": "穩定（基材設計）",
+                "cof": "低"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "P39",
+      "doc_type": "專利",
+      "title": "Hydrophilic lubricating coating for medical catheters and its preparation method",
+      "authors": "OrbusNeich Medical",
+      "year": 2020,
+      "venue": "USPTO",
+      "url": "https://patents.google.com/patent/US20200339906A1",
+      "tags": [
+        "UV",
+        "lubricity潤滑",
+        "adhesion附著力",
+        "durability耐久",
+        "polyester acrylate",
+        "NVP",
+        "導管catheter",
+        "光固化"
+      ],
+      "abstract_note": "本專利揭示一種光固化型親水潤滑雙層塗層，由 primer 層與 topcoat 層組成。Primer 層含聚酯丙烯酸酯（polyester acrylate）與反應性稀釋劑（含 NVP，N-乙烯吡咯烷酮），提供基材附著；Topcoat 層含親水聚合物與更多 NVP，提供潤滑功能。UV 固化形成高度交聯網絡，顯著提升耐磨耗性。NVP 的引入（而非 PVP）是本配方的特點，NVP 為 PVP 的單體形式，可直接參與交聯反應，形成比物理混合 PVP 更穩定的共價網絡。",
+      "purpose": "以 NVP 單體直接交聯取代物理混合 PVP，提升塗層耐久性",
+      "value_to_project": "NVP 直接交聯的策略對 Bioteque Phase 2 提供重要參考：以 monomer 取代 polymer 可增加交聯密度",
+      "patentResults": {
+        "full": {
+          "summary": "聚酯丙烯酸酯 primer + NVP 親水 topcoat，UV 光固化交聯雙層塗層",
+          "key_findings": [
+            "NVP 單體取代 PVP 直接交聯",
+            "polyester acrylate 底塗提供附著",
+            "UV 固化高交聯密度",
+            "耐磨耗性優於物理混合 PVP"
+          ],
+          "examples": [
+            {
+              "formulation": {
+                "primer": "polyester acrylate + NVP",
+                "topcoat": "親水聚合物 + NVP"
+              },
+              "process": {
+                "curing": "UV 光固化"
+              },
+              "results": {
+                "durability": "高交聯耐磨耗",
+                "cof": "低",
+                "adhesion": "佳"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "P40",
+      "doc_type": "專利",
+      "title": "Vapor hydration of a hydrophilic catheter in a package",
+      "authors": "（間歇導尿產品相關公司）",
+      "year": 2008,
+      "venue": "USPTO",
+      "url": "https://patents.google.com/patent/US20080179208A1",
+      "tags": [
+        "hydrophilic coating",
+        "間歇導尿",
+        "packaging包裝",
+        "即用型",
+        "導管catheter"
+      ],
+      "abstract_note": "本專利描述一種「蒸氣活化即用型」親水導管的包裝技術。採用氣體不可透的包裝材料，內含少量液體（水或緩衝液）作為水蒸氣來源，在密封包裝中藉由蒸氣緩慢活化表面親水塗層。使用者打開包裝即可得到完全潤滑的即用型導管，無需另行注水活化。此技術解決了傳統「需加水活化」間歇導尿管的使用不便問題，對患者體驗有大幅改善。",
+      "purpose": "開發免加水、開封即用的親水導管包裝系統",
+      "value_to_project": "包裝端的差異化設計，若 Bioteque 未來進入間歇導尿市場可參考此即用型設計",
+      "patentResults": {
+        "full": {
+          "summary": "密閉包裝內蒸氣預活化親水塗層，實現即用型間歇導尿管",
+          "key_findings": [
+            "蒸氣活化免加水",
+            "氣體不透包材封存濕度",
+            "開封即潤滑",
+            "改善患者使用體驗"
+          ],
+          "examples": [
+            {
+              "formulation": {
+                "topcoat": "蒸氣活化親水塗層"
+              },
+              "process": {
+                "curing": "包裝前已固化，包裝內蒸氣活化"
+              },
+              "results": {
+                "lubrication": "開封即潤滑"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "P41",
+      "doc_type": "專利",
+      "title": "Method for making a ready-to-use catheter assembly and ready-to-use catheter assembly",
+      "authors": "導尿產品相關公司（專利家族成員多）",
+      "year": 2014,
+      "venue": "EPO / USPTO",
+      "url": "https://patents.google.com/patent/EP2845619A1",
+      "tags": [
+        "hydrophilic coating",
+        "間歇導尿",
+        "packaging包裝",
+        "即用型",
+        "輻照滅菌",
+        "導管catheter"
+      ],
+      "abstract_note": "本專利描述一種在輻照滅菌後仍可在包裝內活化的 ready-to-use 親水導管組件的製造方法。關鍵創新在於精確控制親水塗層與潤濕液的接觸時機（滅菌前/後），使 gamma 或 e-beam 輻照滅菌不破壞塗層的潤濕活化能力。製程步驟包含：先滅菌再注入潤濕液，或設計特殊的隔離包裝使塗層在滅菌過程中保持乾燥。此專利族群成員眾多，是間歇導尿即用型市場的核心 IP 之一。",
+      "purpose": "解決輻照滅菌對親水塗層潤濕活化能力的破壞問題",
+      "value_to_project": "若 Bioteque 未來推出即用型產品，需評估此專利族群的 IP 風險；滅菌與活化的時序控制是關鍵",
+      "patentResults": {
+        "full": {
+          "summary": "控制滅菌與潤濕液接觸時序，實現輻照後仍可活化的即用型導管",
+          "key_findings": [
+            "輻照滅菌與塗層活化時序控制",
+            "隔離包裝防止滅菌損傷",
+            "專利族群龐大（IP 風險高）",
+            "間歇導尿即用型核心技術"
+          ],
+          "examples": [
+            {
+              "formulation": {
+                "topcoat": "耐輻照親水塗層"
+              },
+              "process": {
+                "curing": "UV 固化後輻照滅菌"
+              },
+              "results": {
+                "durability": "耐輻照後仍可活化",
+                "lubrication": "即用型潤滑"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "M5",
+      "doc_type": "市場報告",
+      "title": "Hollister 親水導管專利布局分析（US12364789B2 等族群）",
+      "authors": "LitDB 內部分析 / 公開專利資料",
+      "year": 2025,
+      "venue": "USPTO / Lens.org",
+      "url": "https://patents.google.com/assignee/Hollister",
+      "tags": [
+        "市場報告",
+        "hydrophilic coating",
+        "間歇導尿",
+        "PVP",
+        "PEGDA",
+        "biocompatibility",
+        "IP分析"
+      ],
+      "abstract_note": "Hollister Incorporated 在親水導管塗層領域布局完整，從配方本身（PVP + PEG diacrylate，US12364789B2）、基材設計（乙烯/丙烯聚合物調整表面能，US10850009B2）到可降解導管（PLA/PVOH，WO2015089181A2）和包裝活化技術（EP2845619A1）均有多件核心專利保護。配方特點：採用低分子量 PEGDA（Mn 200-600）提升交聯密度，是目前間歇導尿市場技術最先進的廠商之一。對 Bioteque 的競爭分析意義重大。",
+      "purpose": "分析 Hollister 在親水導管塗層領域的 IP 布局策略",
+      "value_to_project": "Hollister 是 Bioteque 泌尿科導管市場的主要競爭對手，需持續追蹤其專利進展與技術方向",
+      "patentResults": {
+        "commercial": {
+          "company": "Hollister Incorporated",
+          "product": "Advance Plus / VaPro 系列",
+          "hq": "Libertyville, IL, USA",
+          "coating_technology": {
+            "type": "PVP + PEG diacrylate UV 固化雙層塗層",
+            "primer": "base coat（耐磨錨固層）",
+            "topcoat": "PVP + PEGDA Mn 200-600",
+            "curing": "UV 固化",
+            "substrates": [
+              "TPU",
+              "PVC",
+              "乙烯/丙烯聚合物"
+            ],
+            "performance_claims": {
+              "cof": "極低（< 0.05*）",
+              "wca": "< 10°",
+              "durability": "通過臨床"
+            }
+          },
+          "applications": [
+            "間歇導尿管",
+            "輸尿管導管"
+          ],
+          "competitive_threat_to_bioteque": "高（泌尿科市場直接競品）",
+          "ip_risk": "Hollister 塗層配方族群（US12364789B2 等）需做 FTO",
+          "collaboration_opportunity": "不建議合作（直接競爭）；應持續監控其新申請案"
+        }
+      }
+    },
+    {
+      "id": "M6",
+      "doc_type": "市場報告",
+      "title": "Merit Medical / Cook Medical / Boston Scientific / Argon Medical 親水導管塗層布局摘要",
+      "authors": "LitDB 內部分析 / 公開專利資料",
+      "year": 2025,
+      "venue": "USPTO / EPO / 各公司官網",
+      "url": "https://www.meritmedical.com",
+      "tags": [
+        "市場報告",
+        "hydrophilic coating",
+        "guidewire",
+        "IP分析",
+        "competitive intelligence",
+        "大廠布局"
+      ],
+      "abstract_note": "本報告彙整四家主要介入醫材大廠的親水導管/導線塗層布局策略：(1) Merit Medical 的 SplashWire™ 強調彈性親水塗層與低摩擦高可控性，在 hydrophilic coated guidewire 與 support catheter 有相當數量專利。(2) Cook Medical（Cook Incorporated）在外周血管導管與導線的親水塗層有多件核心專利，可從 assignee 搜尋擴展。(3) Boston Scientific 擁有多件基礎性介入導管專利（US5876448 等），並曾以此主張侵權訴訟，形成強大的專利護城河。(4) Argon Medical 的 Scorpion 等產品有多件結構性保護專利，親水塗層相關部分需進一步搜尋。以上大廠均以 UV 固化 PVP 系塗層為主流，新一代產品逐步引入兩性離子成分。",
+      "purpose": "掌握主要大廠的親水導管塗層 IP 布局，為 Bioteque 競爭策略提供情報",
+      "value_to_project": "系統性競爭情報，協助識別 Bioteque 可進入的市場空白與需規避的 IP 地雷",
+      "patentResults": {
+        "review": {
+          "scope": "Merit / Cook / Boston Scientific / Argon 四家大廠親水塗層布局",
+          "technologies_compared": [
+            {
+              "material": "Merit SplashWire™",
+              "verdict": "彈性親水塗層，guidewire 主力"
+            },
+            {
+              "material": "Cook hydrophilic guidewire",
+              "verdict": "外周血管導管/導線，assignee 搜尋可擴展"
+            },
+            {
+              "material": "Boston Scientific 基礎專利",
+              "verdict": "US5876448 等基礎性 IP，侵權訴訟護城河"
+            },
+            {
+              "material": "Argon Medical Scorpion",
+              "verdict": "結構性保護為主，塗層部分待搜尋"
+            }
+          ],
+          "consensus": [
+            "大廠均以 UV 固化 PVP 系塗層為主流",
+            "兩性離子塗層是下一代方向",
+            "IP 訴訟風險高（Boston Scientific）"
+          ],
+          "bioteque_strategic_value": "確認 Bioteque 需迴避 Boston Scientific 基礎專利族群；Cook/Merit 的 guidewire 塗層市場可考慮合作或差異化切入"
+        }
+      }
     }
   ]
 }
