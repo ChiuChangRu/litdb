@@ -2412,6 +2412,19 @@ function allTags(){const s=new Set();DB.papers.forEach(p=>(p.tags||[]).forEach(t
 // ══════════════════════════════════════════════
 // BROWSE: Filters
 // ══════════════════════════════════════════════
+// 判定一篇文獻涵蓋哪些功能目標（優先用 tag，fallback 用 regex）
+function paperFunctionGoals(p) {
+  const tags = new Set(p.tags||[]);
+  const goals = [];
+  if(tags.has('lubricity潤滑')||tags.has('COF<0.1')) goals.push('潤滑');
+  if(tags.has('encrustation resistance抗結痂')||tags.has('antifouling抗汙')) goals.push('抗結痂');
+  if(tags.has('antimicrobial抗菌')) goals.push('抗菌');
+  if(tags.has('adhesion附著力')) goals.push('附著');
+  // Fallback regex
+  if(!goals.includes('抗結痂') && ENCRUST_RE.test(p.title||'')) goals.push('抗結痂');
+  return goals;
+}
+
 // ── 缺口分析 Heatmaps ─────────────────────────
 function buildHeatmaps() {
   const papers = (filtered && filtered.length) ? filtered : DB.papers.filter(p=>!p._deleted);
