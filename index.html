@@ -625,7 +625,10 @@ function doLogin(){
       <input type="text" id="rptCompany" value="">
       <input type="text" id="rptProduct" value="TPU 導管（輸尿管支架/Pigtail/泌尿導管）">
       <input type="text" id="rptTitle" value="次世代親水性塗層開發計畫">
-      <div id="batchStatus"></div>
+      <input type="text" id="rptSubstrate" value="TPU / Pebax / PVC 等醫療級高分子基材">
+      <input type="text" id="rptEquipment" value="Dip coating / UV curing / 熱固化設備">
+      <input type="text" id="rptAuthor" value="LitDB">
+      <div id="rptBatchStatus"></div>
       <div id="rptDataSummary"></div>
       <div id="rptActions"></div>
     </div>
@@ -762,6 +765,7 @@ let DB = {meta:{},papers:[]};
 const ENCRUST_RE = /encrustation|結痂|biofilm|生物膜|conditioning film|sbma|mpc|zwitterion|抗汙|antifouling|chitosan|propolis|hyaluron|heparin|前列腺結石|urinary|ureteral|輸尿管|stent/i;
 let filtered = [];
 let activeRouteFilter = null; // {id, label, color, paperIds}
+let activeLibraryFilter = null; // {id, label, color, paperIds, note}
 let pinnedIds = new Set();
 let chatHistory = [];
 let activeTags = new Set();
@@ -1037,25 +1041,29 @@ async function searchPatentUnified(query) {
   if(patentMatch) {
     const patentId = patentMatch[0];
     const inDB = DB.papers.some(p=>(p.title||'').includes(patentId));
-    statusEl.innerHTML = '<span class="spinner"></span> 透過 Worker 抓取專利...';
+    statusEl.innerHTML = cfg.proxy
+      ? '<span class="spinner"></span> 透過 Worker 抓取專利...'
+      : '<span class="spinner"></span> 建立專利基本資料...';
 
     let title='', abstract='', claims='';
-    try {
-      const proxyBase = cfg.proxy.replace(/\/api$/,'');
-      const r = await fetch(`${proxyBase}/fetch?url=${encodeURIComponent(`https://patents.google.com/patent/${patentId}/en`)}`);
-      if(r.ok) {
-        const html = await r.text();
-        const doc = new DOMParser().parseFromString(html,'text/html');
-        title = doc.querySelector('title')?.textContent?.replace(' - Google Patents','').trim() || patentId;
-        const absEl = doc.querySelector('.abstract, [itemprop=abstract]');
-        abstract = absEl?.textContent?.trim()?.slice(0,500) || '';
-        const clEl = doc.querySelector('.claims, [itemprop=claims]');
-        claims = clEl?.textContent?.trim()?.slice(0,300) || '';
-      }
-    } catch(e) { console.warn('Patent fetch failed:', e); }
+    if(cfg.proxy) {
+      try {
+        const proxyBase = cfg.proxy.replace(/\/api$/,'');
+        const r = await fetch(`${proxyBase}/fetch?url=${encodeURIComponent(`https://patents.google.com/patent/${patentId}/en`)}`);
+        if(r.ok) {
+          const html = await r.text();
+          const doc = new DOMParser().parseFromString(html,'text/html');
+          title = doc.querySelector('title')?.textContent?.replace(' - Google Patents','').trim() || patentId;
+          const absEl = doc.querySelector('.abstract, [itemprop=abstract]');
+          abstract = absEl?.textContent?.trim()?.slice(0,500) || '';
+          const clEl = doc.querySelector('.claims, [itemprop=claims]');
+          claims = clEl?.textContent?.trim()?.slice(0,300) || '';
+        }
+      } catch(e) { console.warn('Patent fetch failed:', e); }
+    }
 
     if(!title || title===patentId) title = `Patent ${patentId}`;
-    statusEl.textContent = '找到 1 筆';
+    statusEl.textContent = cfg.proxy ? '找到 1 筆' : '找到 1 筆（未設定 Proxy，僅顯示基本資料）';
 
     // 翻譯摘要
     let translatedAbstract = '';
@@ -2099,7 +2107,7 @@ function renderCompareGroups(groups, container, allPapers) {
       const patBadge = getPatentBadge(p);
       const rowBg = hasA ? '' : 'opacity:0.5';
       const shortTitle = (p.title||'').length > 35 ? p.title.slice(0,34)+'…' : p.title;
-      const clickNav = `showView('browse',document.querySelectorAll('.tabs > .tab')[1]);setTimeout(()=>{const idx=DB.papers.findIndex(x=>x.id==='${p.id}');filtered=DB.papers;renderPapers();if(idx>=0)showDetail(idx)},100)`;
+      const clickNav = `showView('browse',getMainTab('browse'));setTimeout(()=>{const idx=DB.papers.findIndex(x=>x.id==='${p.id}');filtered=DB.papers;renderPapers();if(idx>=0)showDetail(idx)},100)`;
 
       const tds = isEncrust
         ? `<td style="padding:6px 8px;border:1px solid var(--border);font-size:11px;max-width:120px" title="${fm.primer||''}">${fm.primer||'—'}</td>
@@ -2310,6 +2318,197 @@ function saveDB() {
 // UI Helpers
 // ══════════════════════════════════════════════
 function toast(m,t=''){const e=document.getElementById('toast');e.textContent=m;e.className='show '+t;clearTimeout(e._t);e._t=setTimeout(()=>e.className='',3000)}
+
+
+// ══════════════════════════════════════════════
+// BUGFIX HELPERS: 安全導覽、缺漏按鈕函式補齊
+// ══════════════════════════════════════════════
+function getMainTab(viewId) {
+  const tabs = Array.from(document.querySelectorAll('.tabs > .tab'));
+  return tabs.find(t => (t.getAttribute('onclick') || '').includes(`showView('${viewId}'`)) || null;
+}
+
+function safeEl(id) { return document.getElementById(id); }
+function safeVal(id, fallback='') { const el = safeEl(id); return el ? (el.value || '').trim() : fallback; }
+function setSafeHTML(id, html) { const el = safeEl(id); if(el) el.innerHTML = html; }
+function nextPaperId(prefix='P') {
+  const nums = (DB.papers || [])
+    .map(p => String(p.id || ''))
+    .filter(id => id.startsWith(prefix))
+    .map(id => parseInt(id.replace(/^\D+/, ''), 10) || 0);
+  return prefix + String((nums.length ? Math.max(...nums) : 0) + 1).padStart(2, '0');
+}
+function normalizeDoi(raw) {
+  return String(raw || '').trim()
+    .replace(/^https?:\/\/(dx\.)?doi\.org\//i, '')
+    .replace(/^doi:\s*/i, '')
+    .trim();
+}
+
+function googleSignIn(){ toast('Google Sheets 同步尚未完成設定；目前請先使用右上角匯出 / 匯入 JSON。','error'); }
+function saveToSheets(){ toast('Google Sheets 儲存尚未完成設定；已保留按鈕但避免程式報錯。','error'); }
+function loadFromSheets(){ toast('Google Sheets 載入尚未完成設定；目前請先用 GitHub 同步或匯入 JSON。','error'); }
+function googleSignOut(){ toast('目前沒有 Google 登入狀態需要登出。','success'); }
+
+async function importDOI(){
+  const doi = normalizeDoi(safeVal('doiInput'));
+  if(!doi){ toast('請輸入 DOI','error'); return; }
+  setSafeHTML('doiStatus','查詢 DOI 中…');
+  try{
+    const r = await fetch(`https://api.crossref.org/works/${encodeURIComponent(doi)}`);
+    if(!r.ok) throw new Error(`Crossref ${r.status}`);
+    const m = (await r.json()).message || {};
+    const title = (m.title && m.title[0]) || '';
+    const authors = (m.author || []).map(a => [a.given, a.family].filter(Boolean).join(' ')).filter(Boolean).join(', ');
+    const year = m.published?.['date-parts']?.[0]?.[0] || m.created?.['date-parts']?.[0]?.[0] || '';
+    const venue = (m['container-title'] && m['container-title'][0]) || m.publisher || '';
+    const abstract = (m.abstract || '').replace(/<[^>]+>/g,'').trim();
+    if(safeEl('addTitle')) safeEl('addTitle').value = title;
+    if(safeEl('addAuthors')) safeEl('addAuthors').value = authors;
+    if(safeEl('addYear')) safeEl('addYear').value = year;
+    if(safeEl('addVenue')) safeEl('addVenue').value = venue;
+    if(safeEl('addDoi')) safeEl('addDoi').value = doi;
+    if(safeEl('addAbstract') && abstract) safeEl('addAbstract').value = abstract;
+    setSafeHTML('doiStatus',`✅ 已匯入：${title || doi}`);
+    toast('DOI 匯入完成','success');
+  } catch(e) {
+    setSafeHTML('doiStatus',`❌ DOI 查詢失敗：${e.message}`);
+    toast('DOI 查詢失敗，請改用手動新增','error');
+  }
+}
+
+async function aiParseAdd(){
+  const raw = safeVal('addRaw');
+  if(!raw){ toast('請先貼上標題、摘要或 DOI','error'); return; }
+  if(!cfg.proxy){ toast('請先設定 Claude API Proxy URL；或改用手動填寫','error'); return; }
+  try{
+    toast('AI 解析中…');
+    const r = await fetch(cfg.proxy, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:700,
+        system:'你是醫材文獻資料庫助理。只回傳純 JSON，不要 markdown。繁體中文。',
+        messages:[{role:'user',content:`請將以下內容解析成 JSON：{"title":"","authors":"","year":"","venue":"","doi":"","doc_type":"期刊論文","tags":[],"purpose":"","abstract_note":"","value_to_project":""}\n\n${raw.slice(0,4000)}`}]
+      })
+    });
+    const data = await r.json(); trackUsage(data);
+    let txt = data.content?.[0]?.text || '{}';
+    txt = txt.replace(/```json|```/g,'').trim();
+    const obj = JSON.parse(txt);
+    if(safeEl('addTitle')) safeEl('addTitle').value = obj.title || '';
+    if(safeEl('addAuthors')) safeEl('addAuthors').value = obj.authors || '';
+    if(safeEl('addYear')) safeEl('addYear').value = obj.year || '';
+    if(safeEl('addVenue')) safeEl('addVenue').value = obj.venue || '';
+    if(safeEl('addDoi')) safeEl('addDoi').value = obj.doi || '';
+    if(safeEl('addDocType')) safeEl('addDocType').value = obj.doc_type || '期刊論文';
+    if(safeEl('addTags')) safeEl('addTags').value = (obj.tags || []).join(', ');
+    if(safeEl('addPurpose')) safeEl('addPurpose').value = obj.purpose || '';
+    if(safeEl('addAbstract')) safeEl('addAbstract').value = obj.abstract_note || '';
+    if(safeEl('addValue')) safeEl('addValue').value = obj.value_to_project || '';
+    toast('AI 解析完成','success');
+  } catch(e){ toast('AI 解析失敗：'+e.message,'error'); }
+}
+
+function addPaper(){
+  const id = safeVal('addId') || nextPaperId('P');
+  if((DB.papers || []).some(p => p.id === id)){ toast(`ID ${id} 已存在，請換一個 ID`,'error'); return; }
+  const title = safeVal('addTitle');
+  if(!title){ toast('請至少填寫標題','error'); return; }
+  const link = safeVal('addLink');
+  const doi = normalizeDoi(safeVal('addDoi')) || null;
+  const paper = {
+    id,
+    title,
+    authors: safeVal('addAuthors'),
+    year: parseInt(safeVal('addYear'),10) || null,
+    venue: safeVal('addVenue'),
+    doi,
+    pmid: safeVal('addPmid') || null,
+    doc_type: safeVal('addDocType','期刊論文') || '期刊論文',
+    access: safeVal('addAccess','開放摘要') || '開放摘要',
+    tags: safeVal('addTags').split(/[,，、]/).map(s=>s.trim()).filter(Boolean),
+    purpose: safeVal('addPurpose'),
+    abstract_note: safeVal('addAbstract'),
+    value_to_project: safeVal('addValue'),
+    links: {}
+  };
+  if(doi) paper.links.doi = `https://doi.org/${doi}`;
+  if(link) paper.links.url = link;
+  const fig = safeVal('addFigure');
+  if(fig) paper.figure = fig;
+  DB.papers.push(paper);
+  saveDB(); onDBLoaded();
+  toast(`已加入 ${id}`,'success');
+  ['addId','addTitle','addAuthors','addYear','addVenue','addDoi','addPmid','addTags','addPurpose','addAbstract','addValue','addLink','addFigure','addRaw','doiInput'].forEach(k=>{const el=safeEl(k); if(el) el.value='';});
+}
+
+let batchSearchResults = [];
+async function batchSearch(){
+  const q = safeVal('batchQuery');
+  if(!q){ toast('請輸入搜尋關鍵字','error'); return; }
+  const yearFrom = safeVal('batchYearFrom');
+  const yearTo = safeVal('batchYearTo');
+  const max = safeVal('batchMax','20') || '20';
+  let term = q;
+  if(yearFrom || yearTo) term += ` AND (${yearFrom || '1900'}:${yearTo || new Date().getFullYear()}[dp])`;
+  setSafeHTML('batchStatus','PubMed 搜尋中…');
+  try{
+    const es = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&retmode=json&retmax=${encodeURIComponent(max)}&term=${encodeURIComponent(term)}`);
+    const ids = (await es.json()).esearchresult?.idlist || [];
+    if(!ids.length){ setSafeHTML('batchStatus','沒有找到結果'); setSafeHTML('batchResults',''); return; }
+    const sum = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=${ids.join(',')}`);
+    const js = await sum.json();
+    batchSearchResults = ids.map(id => js.result[id]).filter(Boolean).map(r => ({
+      pmid: r.uid,
+      title: r.title || '',
+      authors: (r.authors || []).map(a=>a.name).join(', '),
+      year: parseInt(String(r.pubdate || '').slice(0,4),10) || null,
+      venue: r.fulljournalname || r.source || '',
+      doi: (r.articleids || []).find(x=>x.idtype==='doi')?.value || null
+    }));
+    renderBatchResults();
+    setSafeHTML('batchStatus',`找到 ${batchSearchResults.length} 筆`);
+  } catch(e){ setSafeHTML('batchStatus',`❌ 搜尋失敗：${e.message}`); toast('PubMed 搜尋失敗','error'); }
+}
+function renderBatchResults(){
+  const html = batchSearchResults.map((r,i)=>`<div class="batch-card"><div class="batch-header"><input class="batch-check" type="checkbox" data-i="${i}"><div><div style="font-weight:700">${r.title}</div><div style="color:var(--muted);font-size:11px">${r.authors || '—'} · ${r.venue || '—'} · ${r.year || '—'} · PMID:${r.pmid}</div></div></div></div>`).join('');
+  setSafeHTML('batchResults', html || '<div style="padding:20px;color:var(--muted)">沒有結果</div>');
+}
+function batchSelectAll(){ document.querySelectorAll('#batchResults .batch-check').forEach(c=>c.checked=true); }
+function batchAddSelected(){
+  const checked = Array.from(document.querySelectorAll('#batchResults .batch-check:checked')).map(c=>parseInt(c.dataset.i,10));
+  if(!checked.length){ toast('請先勾選文獻','error'); return; }
+  let added = 0;
+  checked.forEach(i=>{
+    const r = batchSearchResults[i]; if(!r) return;
+    if(DB.papers.some(p => String(p.pmid||'') === String(r.pmid))) return;
+    DB.papers.push({id:nextPaperId('P'),title:r.title,authors:r.authors,year:r.year,venue:r.venue,doi:r.doi,pmid:r.pmid,doc_type:'期刊論文',access:'開放摘要',tags:[],purpose:'',abstract_note:'',value_to_project:'',links:{pubmed:`https://pubmed.ncbi.nlm.nih.gov/${r.pmid}/`,...(r.doi?{doi:`https://doi.org/${r.doi}`}:{})}});
+    added++;
+  });
+  saveDB(); onDBLoaded();
+  toast(`已加入 ${added} 筆`,'success');
+}
+async function batchAIEnrich(){ toast('AI 補標籤功能目前請改用單篇「AI 自動填入」，避免批次誤耗 API。','error'); }
+
+async function sendChat(){
+  const input = safeEl('chatInput');
+  const q = input ? input.value.trim() : '';
+  if(!q) return;
+  const box = safeEl('chatMessages');
+  if(box) box.insertAdjacentHTML('beforeend',`<div class="msg msg-user">${q.replace(/[<>&]/g,s=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[s]))}</div>`);
+  if(input) input.value='';
+  if(!cfg.proxy){ if(box) box.insertAdjacentHTML('beforeend','<div class="msg msg-ai">請先在設定中填入 Claude API Proxy URL。</div>'); return; }
+  const ctx = (DB.papers || []).filter(p => pinnedIds.has(p.id)).slice(0,8).map(p=>`[${p.id}] ${p.title}\n${p.abstract_note||p.purpose||''}`).join('\n\n') || (DB.papers || []).slice(0,12).map(p=>`[${p.id}] ${p.title}: ${(p.abstract_note||p.purpose||'').slice(0,160)}`).join('\n');
+  try{
+    if(box) box.insertAdjacentHTML('beforeend','<div class="msg msg-ai"><span class="spinner"></span> 思考中…</div>');
+    const r = await fetch(cfg.proxy,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1200,system:'你是 LitDB 文獻助理，回答需根據提供的文庫背景，繁體中文。',messages:[{role:'user',content:`文庫背景：\n${ctx}\n\n問題：${q}`}]} )});
+    const data = await r.json(); trackUsage(data);
+    const ans = (data.content?.[0]?.text || '沒有取得回覆').replace(/\n/g,'<br>');
+    const last = box?.lastElementChild; if(last && last.textContent.includes('思考中')) last.remove();
+    if(box) box.insertAdjacentHTML('beforeend',`<div class="msg msg-ai">${ans}</div>`);
+  } catch(e){ if(box) box.insertAdjacentHTML('beforeend',`<div class="msg msg-ai">AI 回覆失敗：${e.message}</div>`); }
+  if(box) box.scrollTop = box.scrollHeight;
+}
+function clearChat(){ setSafeHTML('chatMessages','<div class="msg msg-ai">已清空。請輸入新的問題。</div>'); }
 let previousView = null;
 let savedScrollTop = 0;
 let currentAnalysisTab = 'graph';
@@ -2458,7 +2657,7 @@ function showFuncGapDetail(r, g) {
     el.innerHTML = `<h4 style="color:var(--warn)">⚠ 缺口：${r} × ${g}</h4><p style="font-size:13px;color:var(--muted);margin-top:8px">資料庫中沒有同時涵蓋「${r}」基材/應用且具備「${g}」功能的文獻。這可能是值得開發或搜尋的方向。</p>
     <button class="btn btn-p" style="margin-top:8px" onclick="prefillChat('我想找在 ${r} 上實現 ${g} 功能的塗層方案，目前資料庫是空白，請建議搜尋關鍵字與技術方向')">🤖 問 AI 建議</button>`;
   } else {
-    el.innerHTML = `<h4 style="color:var(--accent2)">${r} × ${g}：${papers.length} 篇</h4><div style="margin-top:8px">${papers.map(p=>`<div style="padding:4px 0;font-size:13px;cursor:pointer" onclick="showView('browse',document.querySelectorAll('.tabs > .tab')[1]);setTimeout(()=>{filtered=DB.papers;renderPapers();showDetail(DB.papers.findIndex(x=>x.id==='${p.id}'))},100)"><span class="tag tag-gray">${p.id}</span> ${p.title}</div>`).join('')}</div>`;
+    el.innerHTML = `<h4 style="color:var(--accent2)">${r} × ${g}：${papers.length} 篇</h4><div style="margin-top:8px">${papers.map(p=>`<div style="padding:4px 0;font-size:13px;cursor:pointer" onclick="showView('browse',getMainTab('browse'));setTimeout(()=>{filtered=DB.papers;renderPapers();showDetail(DB.papers.findIndex(x=>x.id==='${p.id}'))},100)"><span class="tag tag-gray">${p.id}</span> ${p.title}</div>`).join('')}</div>`;
   }
   el.classList.add('show');
 }
@@ -2567,9 +2766,13 @@ function filterPapers() {
   const routePool = activeRouteFilter
     ? new Set(activeRouteFilter.paperIds)
     : null;
+  const libraryPool = activeLibraryFilter
+    ? new Set(activeLibraryFilter.paperIds)
+    : null;
 
   filtered = DB.papers.filter(p => {
     if(routePool && !routePool.has(p.id)) return false;
+    if(libraryPool && !libraryPool.has(p.id)) return false;
     // 軟刪除篩選：預設隱藏，點開才顯示（且只顯示已刪除的）
     if(showDeleted) { if(!p._deleted) return false; }
     else { if(p._deleted) return false; }
@@ -2919,7 +3122,7 @@ function renderMarket() {
   // Logo 直接 URL（Google Favicon API + Wikimedia）
   const LOGO_MAP = {
     'C01':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://biocoat.com&size=128',
-    'C02':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://freudenberg-medical.com&size=128',
+    'C02':'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 rx=%2216%22 fill=%22%23f5efe8%22/%3E%3Ctext x=%2250%22 y=%2260%22 text-anchor=%22middle%22 font-family=%22Arial,sans-serif%22 font-size=%2230%22 font-weight=%22700%22 fill=%22%23e86c3a%22%3EFM%3C/text%3E%3C/svg%3E',
     'C03':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://surmodics.com&size=128',
     'C04':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://hydromer.com&size=128',
     'C06':'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/DSM-Firmenich_Logo_2023.svg/320px-DSM-Firmenich_Logo_2023.svg.png',
@@ -3459,10 +3662,21 @@ const KG_SIZES = {
 
 async function initKGraph() {
   if(!KG) {
-    try {
-      const r = await fetch('https://chiuchangru.github.io/litdb/graph.json?v='+Date.now());
-      KG = await r.json();
-    } catch(e) {
+    const sources = [
+      'graph.json?v=' + Date.now(),
+      'https://chiuchangru.github.io/litdb/graph.json?v=' + Date.now()
+    ];
+    for(const src of sources) {
+      try {
+        const r = await fetch(src);
+        if(!r.ok) throw new Error('HTTP ' + r.status);
+        KG = await r.json();
+        break;
+      } catch(e) {
+        console.warn('graph.json 載入失敗:', src, e);
+      }
+    }
+    if(!KG) {
       const svg = document.getElementById('kgSvg');
       if(svg) svg.innerHTML = `<text x="50%" y="50%" text-anchor="middle" fill="#888" font-size="14">graph.json 載入失敗</text>`;
       return;
@@ -5415,7 +5629,7 @@ function onGraphClick(event) {
       const org = extractOrg(p);
       const hasA = p.patentResults && Object.keys(p.patentResults).length>0;
       const r = p.patentResults?.full||{};
-      return `<div style="padding:8px;margin-bottom:6px;background:var(--card);border-radius:6px;border-left:3px solid ${hasA?'#2d8c5a':'var(--border)'}; cursor:pointer" onclick="showView('browse',document.querySelectorAll('.tabs > .tab')[1]);setTimeout(()=>{filtered=DB.papers;renderPapers();showDetail(DB.papers.findIndex(x=>x.id==='${pid}'))},100)">
+      return `<div style="padding:8px;margin-bottom:6px;background:var(--card);border-radius:6px;border-left:3px solid ${hasA?'#2d8c5a':'var(--border)'}; cursor:pointer" onclick="showView('browse',getMainTab('browse'));setTimeout(()=>{filtered=DB.papers;renderPapers();showDetail(DB.papers.findIndex(x=>x.id==='${pid}'))},100)">
         <div style="font-weight:600;color:var(--accent);font-size:11px">[${pid}] ${p.doc_type} ${hasA?'✅':''}</div>
         <div style="font-size:11px;margin-top:2px">${p.title.slice(0,50)}${p.title.length>50?'...':''}</div>
         ${org?`<span style="background:#fff0e6;color:#b85c2a;padding:1px 4px;border-radius:3px;font-size:9px">${org}</span>`:''}
@@ -5471,7 +5685,7 @@ function onGraphClick(event) {
       ${p.abstract_note?`<div style="font-size:11px;color:var(--muted);margin-bottom:8px;padding:6px 8px;background:var(--card);border-radius:4px">${p.abstract_note.slice(0,200)}${p.abstract_note.length>200?'...':''}</div>`:''}
       ${analysisHtml}
       <div style="margin-top:8px">${tags}</div>
-      <button class="btn btn-s" style="width:100%;margin-top:10px" onclick="showView('browse',document.querySelectorAll('.tabs > .tab')[1]);setTimeout(()=>{filtered=DB.papers;renderPapers();showDetail(DB.papers.findIndex(x=>x.id==='${p.id}'))},100)">↗ 跳到文庫查看完整資料</button>`;
+      <button class="btn btn-s" style="width:100%;margin-top:10px" onclick="showView('browse',getMainTab('browse'));setTimeout(()=>{filtered=DB.papers;renderPapers();showDetail(DB.papers.findIndex(x=>x.id==='${p.id}'))},100)">↗ 跳到文庫查看完整資料</button>`;
   }
 }
 </script>
