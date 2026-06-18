@@ -263,6 +263,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
     <span id="costDisplay" style="font-size:11px;color:#ffeedd;cursor:pointer;background:rgba(0,0,0,0.15);padding:2px 8px;border-radius:4px" onclick="if(confirm('重置費用計算？')){{costData={calls:0,input_tokens:0,output_tokens:0};localStorage.setItem(COST_KEY,JSON.stringify(costData));updateCostDisplay();toast('已重置','success')}}}" title="點擊重置">0 次 ≈ NT$0</span>
     <span id="dbStats" style="font-size:11px;color:#ffeedd;background:rgba(0,0,0,0.15);padding:2px 8px;border-radius:4px">—</span>
     <button class="btn btn-s" onclick="openSettings()" style="color:#fff;border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.15)">⚙</button>
+    <button class="btn btn-s" onclick="syncFromGitHub()" id="syncBtn" style="color:#fff;border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.15)" title="從 GitHub 同步最新資料">🔄</button>
     <button class="btn btn-s" onclick="exportDB()" style="color:#fff;border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.15)">⬇</button>
     <button class="btn btn-s" onclick="exportExcel()" style="color:#fff;border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.15)" title="匯出分析報告 Excel">📊</button>
     <label class="btn btn-s" style="cursor:pointer;color:#fff;border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.15)">⬆<input type="file" accept=".json" style="display:none" onchange="importDB(event)"></label>
@@ -2197,19 +2198,23 @@ async function loadDB() {
       if(!DB.papers.length) {
         DB = remote;
       } else {
-        // 合併：遠端有 patentResults 但本地沒有 → 補入
+        // 合併策略：
+        // - 新文獻（遠端有、本地沒有）→ 完整加入
+        // - 既有文獻 → 用遠端覆蓋所有欄位，但保留本地的 patentResults（若遠端沒有）
+        let newCount = 0;
         (remote.papers||[]).forEach(rp => {
-          if(rp.patentResults) {
-            const lp = DB.papers.find(p=>p.id===rp.id);
-            if(lp && !lp.patentResults) lp.patentResults = rp.patentResults;
+          const lp = DB.papers.find(p=>p.id===rp.id);
+          if(!lp) {
+            DB.papers.push(rp);
+            newCount++;
+          } else {
+            const localPR = lp.patentResults;
+            Object.assign(lp, rp);
+            if(!rp.patentResults && localPR) lp.patentResults = localPR;
           }
         });
-        // 合併：遠端有新文獻但本地沒有 → 加入
-        (remote.papers||[]).forEach(rp => {
-          if(!DB.papers.find(p=>p.id===rp.id)) DB.papers.push(rp);
-        });
-        // 更新 meta
         if(remote.meta) DB.meta = remote.meta;
+        if(newCount > 0) console.log(`✅ 從 GitHub 同步了 ${newCount} 篇新文獻`);
       }
     }
   } catch(e) { console.warn('Failed to load remote:', e); }
@@ -2640,6 +2645,81 @@ function tryLocalFig(el, localUrl) {
 
 function closeMobileDetail() {
   document.getElementById('colRight').classList.remove('mobile-open');
+}
+
+// ── GitHub 同步 ────────────────────────────────
+async function syncFromGitHub() {
+  const btn = document.getElementById('syncBtn');
+  if(btn) { btn.textContent='⏳'; btn.disabled=true; }
+
+  const url = cfg.dataUrl || 'papers.json';
+  try {
+    const r = await fetch(url + '?t=' + Date.now());
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    const remote = await r.json();
+
+    const before = DB.papers.filter(p=>!p._deleted).length;
+
+    // 完整同步：遠端覆蓋所有欄位，保留本地 patentResults
+    const newPapers = [];
+    (remote.papers||[]).forEach(rp => {
+      const lp = DB.papers.find(p=>p.id===rp.id);
+      if(!lp) {
+        DB.papers.push(rp);
+        newPapers.push(rp);
+      } else {
+        const localPR = lp.patentResults;
+        Object.assign(lp, rp);
+        if(!rp.patentResults && localPR) lp.patentResults = localPR;
+      }
+    });
+    if(remote.meta) DB.meta = remote.meta;
+
+    saveDB();
+    onDBLoaded();
+    filterPapers();
+
+    const after = DB.papers.filter(p=>!p._deleted).length;
+    const added = after - before;
+
+    if(added > 0) {
+      toast(`✅ 同步完成！新增 ${added} 篇`, 'success');
+      showNewPapersBanner(newPapers);
+    } else {
+      toast('✅ 已是最新版本（共 ' + after + ' 篇）', 'success');
+    }
+  } catch(e) {
+    toast('❌ 同步失敗：' + e.message, 'error');
+  } finally {
+    if(btn) { btn.textContent='🔄'; btn.disabled=false; }
+  }
+}
+
+function showNewPapersBanner(newPapers) {
+  if(!newPapers.length) return;
+  const unanalyzed = newPapers.filter(p=>!p.patentResults||!Object.keys(p.patentResults).length);
+
+  // 顯示新文獻 toast + 詳細通知
+  const div = document.createElement('div');
+  div.style.cssText = 'position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:var(--card);border:2px solid var(--accent2);border-radius:12px;padding:14px 18px;z-index:500;min-width:300px;max-width:480px;box-shadow:0 4px 20px rgba(0,0,0,0.15);font-size:12px';
+  div.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+      <b style="color:var(--accent2);font-size:13px">✨ 新增 ${newPapers.length} 篇文獻</b>
+      <button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;cursor:pointer;color:var(--muted)">✕</button>
+    </div>
+    ${newPapers.map(p=>`
+      <div style="padding:4px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="goToPaper('${p.id}');this.parentElement.parentElement.remove()">
+        <span style="color:var(--accent);font-weight:700">[${p.id}]</span>
+        <span style="color:var(--text);margin-left:4px">${p.title?.slice(0,45)||''}${p.title?.length>45?'…':''}</span>
+        ${!p.patentResults||!Object.keys(p.patentResults).length ? '<span style="background:#fff0e6;color:#b85c2a;font-size:10px;padding:1px 5px;border-radius:3px;margin-left:4px">未分析</span>' : ''}
+      </div>`).join('')}
+    ${unanalyzed.length ? `
+    <div style="margin-top:8px;font-size:11px;color:var(--muted)">
+      💡 有 ${unanalyzed.length} 篇未分析 — 回到此對話貼上文獻內容或 URL，Claude 將直接分析並更新
+    </div>` : ''}
+  `;
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 15000);
 }
 
 // ── 市場玩家頁 ────────────────────────────────
