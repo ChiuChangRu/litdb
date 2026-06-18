@@ -447,6 +447,7 @@ function doLogin(){
   <div style="display:flex;gap:4px;padding:8px 16px;background:var(--card);border-bottom:1px solid var(--border);flex-wrap:wrap">
     <button class="btn btn-s analysis-sub active" onclick="showAnalysisTab('graph',this)">🕸 文獻關聯圖</button>
     <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('gap',this)">🔥 缺口分析</button>
+    <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('tools',this)">🧰 工具地圖</button>
     <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('compare',this)">📊 比較</button>
     <button class="btn btn-s analysis-sub" onclick="showAnalysisTab('chat',this)">🤖 AI 對話</button>
   </div>
@@ -470,6 +471,7 @@ function doLogin(){
           <option value="application">應用</option>
           <option value="indication">適應症</option>
           <option value="performance">性能指標</option>
+          <option value="method_tool">工具/測試方法</option>
         </select>
         <label style="font-size:11px;color:var(--muted);margin-left:12px">最少連結</label>
         <input type="range" id="graphThreshold" min="1" max="10" value="1" oninput="buildGraph()" style="width:80px">
@@ -546,12 +548,23 @@ function doLogin(){
         <option value="patent_status">專利狀態</option>
         <option value="year_range">年份區間</option>
         <option value="performance">性能指標</option>
+        <option value="method_tool">工具/測試方法</option>
         <option value="doc_type">文獻類型</option>
         <option value="analysis_status">分析狀態</option>
       </select>
       <span id="compareStats" style="font-size:12px;color:var(--muted)"></span>
     </div>
     <div id="compareResults"></div>
+  </div>
+</div>
+
+<div class="view" id="v-tools" style="display:none">
+  <div style="padding:12px;max-width:1180px;margin:0 auto">
+    <div class="panel">
+      <div class="panel-h">🧰 工具地圖</div>
+      <div id="toolMapSummary" style="padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px;color:var(--muted)"></div>
+      <div id="toolMapBody" style="padding:12px"></div>
+    </div>
   </div>
 </div>
 
@@ -2127,6 +2140,7 @@ async function loadDB() {
 }
 
 function onDBLoaded() {
+  enrichToolTags();
   setTimeout(renderMarket, 50);
   if(document.getElementById('v-report')?.classList.contains('active')) renderIntegratedReport();
   if(document.getElementById('v-routes')?.classList.contains('active')||
@@ -2409,11 +2423,11 @@ function showView(id,el){
 }
 
 function showAnalysisTab(subId, btn) {
-  const validTabs = new Set(['graph','gap','compare','chat','kgraph']);
+  const validTabs = new Set(['graph','gap','tools','compare','chat','kgraph']);
   if(!validTabs.has(subId)) subId = 'graph';
   currentAnalysisTab = subId;
   // 隱藏所有分析子 view（含 kgraph）
-  ['graph','gap','compare','chat','kgraph'].forEach(id=>{
+  ['graph','gap','tools','compare','chat','kgraph'].forEach(id=>{
     const el = document.getElementById('v-'+id);
     if(el) { el.classList.remove('active'); el.style.display = 'none'; }
   });
@@ -2431,11 +2445,12 @@ function showAnalysisTab(subId, btn) {
   // 更新子分頁按鈕高亮
   document.querySelectorAll('.analysis-sub').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
-  else document.querySelectorAll('.analysis-sub').forEach(b=>{ if(b.textContent.includes(subId==='graph'?'關聯圖':subId==='gap'?'缺口':subId==='compare'?'比較':'AI'))b.classList.add('active'); });
+  else document.querySelectorAll('.analysis-sub').forEach(b=>{ if(b.textContent.includes(subId==='graph'?'關聯圖':subId==='gap'?'缺口':subId==='tools'?'工具':subId==='compare'?'比較':'AI'))b.classList.add('active'); });
   // 觸發初始化
   if(subId==='graph') buildGraph();
   if(subId==='kgraph') initKGraph();
   if(subId==='gap') buildHeatmaps();
+  if(subId==='tools') buildToolMap();
   if(subId==='compare') buildCompare();
 }
 function openSettings(){document.getElementById('settingsModal').classList.add('show')}
@@ -2444,10 +2459,49 @@ function saveSettings(){cfg.proxy=document.getElementById('cfgProxy').value.trim
 function exportDB(){const b=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`litdb_${new Date().toISOString().slice(0,10)}.json`;a.click();toast('已匯出','success')}
 function importDB(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(d.papers)DB=d;else if(Array.isArray(d)){DB.papers=d}saveDB();onDBLoaded();toast(`已匯入 ${DB.papers.length} 篇`,'success')}catch(err){toast('匯入失敗','error')}};r.readAsText(f)}
 
+function escHtml(s='') {
+  return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
 function allTags(){const s=new Set();activePapersForAnalysis().forEach(p=>(p.tags||[]).forEach(t=>s.add(t)));return [...s].sort()}
 
 function activePapersForAnalysis() {
   return (DB.papers || []).filter(p=>!p._deleted);
+}
+
+const TOOL_TAG_RULES = [
+  {tag:'tooling', re:/(harland|fts|tribolog|pinch test|contact angle|wca|particulate|durability cycles?|silicone孔|測試設備|量測|測試系統|接觸角量測|顆粒測試|磨耗測試)/i},
+  {tag:'test-method', re:/(test method|testing methodology|sop|astm|體外測試|測試方法|標準測試|品管|qc|規程|方法論|往返磨耗|人工尿液測試)/i},
+  {tag:'COF-test', re:/(cof|coefficient of friction|friction force|harland|fts|pinch test|摩擦係數|摩擦力)/i},
+  {tag:'abrasion-test', re:/(abrasion|wear|durability cycles?|back-and-forth|磨耗|耐磨|往返)/i},
+  {tag:'contact-angle-test', re:/(contact angle|wca|water contact angle|接觸角)/i},
+  {tag:'particulate-test', re:/(particulate|particle|顆粒|微粒脫落)/i},
+  {tag:'encrustation-test', re:/(encrustation|artificial urine|urine|結痂|人工尿液)/i}
+];
+
+function paperToolText(p) {
+  const pr = p.patentResults || {};
+  return [
+    p.id, p.title, p.abstract_note, p.purpose, p.value_to_project, p.venue,
+    (p.tags||[]).join(' '),
+    pr.summary, pr.mechanism, pr.bioteque_relevance, pr.testing_methodology,
+    JSON.stringify(pr.examples || [])
+  ].filter(Boolean).join(' ');
+}
+
+function inferToolTags(p) {
+  const text = paperToolText(p);
+  const tags = new Set(p.tags || []);
+  TOOL_TAG_RULES.forEach(rule => { if(rule.re.test(text)) tags.add(rule.tag); });
+  return [...tags];
+}
+
+function enrichToolTags() {
+  if(!DB.meta) DB.meta = {};
+  if(!DB.meta.tag_dictionary) DB.meta.tag_dictionary = {};
+  const methodTags = ['tooling','test-method','COF-test','abrasion-test','contact-angle-test','particulate-test','encrustation-test'];
+  DB.meta.tag_dictionary.method_tool = [...new Set([...(DB.meta.tag_dictionary.method_tool||[]), ...methodTags])];
+  (DB.papers || []).forEach(p => { p.tags = inferToolTags(p); });
 }
 
 function getTagDictionaryWithObserved() {
@@ -2588,6 +2642,155 @@ function buildHeatmaps() {
   const funcGoals = ['潤滑','抗結痂','抗菌','附著'];
   buildFunctionHeatmap('heatmapWrap7', app, funcGoals, '應用','功能目標');
   buildFunctionHeatmap('heatmapWrap8', sub, funcGoals, '基材','功能目標');
+}
+
+function toolMetricFromTags(tags) {
+  if(tags.includes('COF-test')) return 'COF / 摩擦力';
+  if(tags.includes('abrasion-test')) return '磨耗 / 耐久';
+  if(tags.includes('contact-angle-test')) return '接觸角 / WCA';
+  if(tags.includes('particulate-test')) return '顆粒 / 脫落';
+  if(tags.includes('encrustation-test')) return '結痂 / 人工尿液';
+  return '其他測試方法';
+}
+
+function toolEquipmentFromText(text) {
+  const found = [];
+  if(/harland|fts/i.test(text)) found.push('Harland FTS');
+  if(/pinch test/i.test(text)) found.push('Pinch test');
+  if(/silicone孔|silicone/i.test(text)) found.push('Silicone 孔往返');
+  if(/contact angle|wca|接觸角/i.test(text)) found.push('Contact angle meter');
+  if(/artificial urine|人工尿液/i.test(text)) found.push('人工尿液測試');
+  if(/particulate|顆粒/i.test(text)) found.push('顆粒測試');
+  return [...new Set(found)];
+}
+
+function toolEvidenceSnippet(p) {
+  const text = [p.purpose, p.value_to_project, p.abstract_note].filter(Boolean).join(' ');
+  const hit = text.match(/.{0,36}(Harland|FTS|COF|friction|contact angle|WCA|abrasion|wear|particulate|人工尿液|磨耗|摩擦|接觸角|顆粒|測試).{0,72}/i);
+  return hit ? hit[0] : (p.purpose || p.value_to_project || p.abstract_note || '').slice(0, 120);
+}
+
+function goToToolDocs(tag, label) {
+  const docs = activePapersForAnalysis().filter(p=>(p.tags||[]).includes(tag));
+  activeRouteFilter = null;
+  activeLibraryFilter = {
+    id: `tool-${tag}`,
+    label: label || tag,
+    color: '#2980b9',
+    paperIds: docs.map(p=>p.id),
+    note: `工具/測試方法：${label || tag}`
+  };
+  showView('browse', getMainTab('browse'));
+  filterPapers();
+}
+
+function goToToolEquipment(eq) {
+  const docs = activePapersForAnalysis().filter(p=>{
+    const eqs = toolEquipmentFromText(paperToolText(p));
+    return eq === '未明確標示設備' ? !eqs.length && ((p.tags||[]).includes('tooling') || (p.tags||[]).includes('test-method')) : eqs.includes(eq);
+  });
+  activeRouteFilter = null;
+  activeLibraryFilter = {
+    id: `tool-eq-${eq}`,
+    label: eq,
+    color: '#2980b9',
+    paperIds: docs.map(p=>p.id),
+    note: `工具設備：${eq}`
+  };
+  showView('browse', getMainTab('browse'));
+  filterPapers();
+}
+
+function buildToolMap() {
+  const summary = document.getElementById('toolMapSummary');
+  const body = document.getElementById('toolMapBody');
+  if(!summary || !body) return;
+
+  const toolPapers = activePapersForAnalysis().filter(p => {
+    const tags = p.tags || [];
+    return tags.includes('tooling') || tags.includes('test-method');
+  });
+
+  const methodTags = getUsedTagsByCategory('method_tool');
+  const byMetric = {};
+  methodTags.forEach(t => byMetric[t] = []);
+  toolPapers.forEach(p => {
+    (p.tags || []).filter(t => methodTags.includes(t)).forEach(t => byMetric[t].push(p));
+  });
+
+  const equipment = {};
+  toolPapers.forEach(p => {
+    const text = paperToolText(p);
+    const eqs = toolEquipmentFromText(text);
+    (eqs.length ? eqs : ['未明確標示設備']).forEach(eq => {
+      if(!equipment[eq]) equipment[eq] = [];
+      equipment[eq].push(p);
+    });
+  });
+
+  summary.innerHTML = `${toolPapers.length} 篇工具/測試方法文獻 · ${methodTags.filter(t=>byMetric[t]?.length).length} 種方法標籤 · ${Object.keys(equipment).length} 類設備/測試場景`;
+
+  const tagLabels = {
+    tooling:'工具文獻',
+    'test-method':'測試方法',
+    'COF-test':'COF / 摩擦力',
+    'abrasion-test':'磨耗 / 耐久',
+    'contact-angle-test':'接觸角 / WCA',
+    'particulate-test':'顆粒 / 脫落',
+    'encrustation-test':'結痂 / 人工尿液'
+  };
+
+  const methodHtml = methodTags
+    .filter(t => byMetric[t]?.length)
+    .map(t => {
+      const docs = byMetric[t];
+      return `<button class="btn btn-s" onclick="goToToolDocs('${t}','${tagLabels[t]||t}')" style="margin:0 6px 6px 0">
+        ${tagLabels[t]||t} <span style="opacity:.7">${docs.length}</span>
+      </button>`;
+    }).join('');
+
+  const equipmentHtml = Object.entries(equipment)
+    .sort((a,b)=>b[1].length-a[1].length)
+    .map(([eq,docs]) => `
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px">
+        <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:6px">
+          <strong style="font-size:13px;color:var(--text)">${escHtml(eq)}</strong>
+          <button class="btn btn-s" onclick="goToToolEquipment(decodeURIComponent('${encodeURIComponent(eq)}'))" style="font-size:11px;padding:3px 8px">看文獻</button>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">${docs.length} 篇</div>
+        ${docs.slice(0,4).map(p=>`
+          <div onclick="goToPaper('${p.id}')" style="font-size:12px;line-height:1.45;padding:4px 0;border-top:1px solid var(--border);cursor:pointer">
+            <span class="tag tag-gray">${p.id}</span> ${escHtml(p.title||'')}
+          </div>`).join('')}
+      </div>`).join('');
+
+  const paperHtml = toolPapers
+    .sort((a,b)=>(b.year||0)-(a.year||0))
+    .map(p => {
+      const tags = p.tags || [];
+      return `<div style="border-bottom:1px solid var(--border);padding:8px 0;cursor:pointer" onclick="goToPaper('${p.id}')">
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+          <span class="tag tag-gray">${p.id}</span>
+          <strong style="font-size:13px">${escHtml(p.title||'')}</strong>
+          <span style="font-size:11px;color:var(--muted)">${p.year||''}</span>
+        </div>
+        <div style="margin-top:4px">${tags.filter(t=>methodTags.includes(t)).map(t=>`<span class="tag tag-blue">${tagLabels[t]||t}</span>`).join('')}</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.45;margin-top:4px">${escHtml(toolEvidenceSnippet(p))}</div>
+      </div>`;
+    }).join('');
+
+  body.innerHTML = `
+    <div style="margin-bottom:12px">
+      <div style="font-size:12px;font-weight:700;margin-bottom:6px;color:var(--text)">方法標籤</div>
+      ${methodHtml || '<span style="font-size:12px;color:var(--muted)">目前沒有工具方法標籤</span>'}
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:14px">
+      ${equipmentHtml || '<div style="font-size:12px;color:var(--muted)">目前沒有辨識到設備/測試場景</div>'}
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:700;margin-bottom:6px;color:var(--text)">工具相關文獻</div>
+      ${paperHtml || '<div style="font-size:12px;color:var(--muted);padding:20px;text-align:center">沒有符合工具/測試方法的文獻</div>'}
+    </div>`;
 }
 
 function showGapDetail(r, c) {
@@ -5402,7 +5605,7 @@ let graphNodes = [];
 let graphEdges = [];
 
 function drawGraph(ctx, W, H, highlightId) {
-  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9',market_trend:'#7f8c8d',doc_type:'#8a7e72',access:'#8a7e72',other:'#8a7e72'};
+  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9',method_tool:'#1f77b4',market_trend:'#7f8c8d',doc_type:'#8a7e72',access:'#8a7e72',other:'#8a7e72'};
   const tagCat = getTagCategoryMap();
 
   const nodeMap = {};
@@ -5480,7 +5683,7 @@ function buildGraph() {
   const W = canvas.offsetWidth, H = 550;
 
   const dict = getTagDictionaryWithObserved();
-  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9',market_trend:'#7f8c8d',doc_type:'#8a7e72',access:'#8a7e72',other:'#8a7e72'};
+  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9',method_tool:'#1f77b4',market_trend:'#7f8c8d',doc_type:'#8a7e72',access:'#8a7e72',other:'#8a7e72'};
   const tagCat = getTagCategoryMap();
 
   // 建立有效標籤集（依篩選）
@@ -5531,7 +5734,7 @@ function buildGraph() {
     nodes.push(n); nodeMap[pid]=n;
   });
 
-  const catLabels = {'':'全部標籤',substrate:'基材',hydrophilic_polymer:'親水高分子',cure_method:'固化方式',anchor_primer:'錨固劑',application:'應用',indication:'適應症',performance:'性能指標',other:'其他標籤'};
+  const catLabels = {'':'全部標籤',substrate:'基材',hydrophilic_polymer:'親水高分子',cure_method:'固化方式',anchor_primer:'錨固劑',application:'應用',indication:'適應症',performance:'性能指標',method_tool:'工具/測試方法',other:'其他標籤'};
   document.getElementById('graphInfo').innerHTML = `<select onchange="document.getElementById('graphTagCat').value=this.value;buildGraph()" style="background:var(--accent);color:#fff;border:none;padding:3px 8px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer">${Object.entries(catLabels).map(([k,v])=>`<option value="${k}" ${k===catFilter?'selected':''}>${v}</option>`).join('')}</select> ${activePapers.size} 篇 · ${activeTags.size} 標籤 · ${filteredEdges.length} 連結${graphPapers.length!==DB.papers.length?' （篩選後）':''}`;
 
   // Force simulation
