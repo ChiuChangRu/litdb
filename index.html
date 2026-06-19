@@ -2631,6 +2631,36 @@ function renderSourceLinks(p) {
   </div>`;
 }
 
+function sourceQualityIssues(p) {
+  const links = Object.values(p.links || {}).filter(Boolean);
+  const text = `${p.title||''} ${p.venue||''} ${p.abstract_note||''} ${p.purpose||''} ${p.value_to_project||''} ${(p.tags||[]).join(' ')}`;
+  const issues = [];
+  if(!links.length) issues.push('沒有原始連結');
+  if(!getFulltext(p) && /內部|競爭情報|competitive|IP分析|大廠布局|公開專利資料|USPTO|EPO|assignee|官網/i.test(text)) {
+    issues.push('競爭情報/彙整型資料尚未逐筆來源化');
+  }
+  if(!p.doi && !p.pmid && !/patents\.google|patent|US\d|EP\d|WO\d/i.test(text) && /引用|論文|文獻|paper|study/i.test(text)) {
+    issues.push('引用來源未結構化');
+  }
+  return [...new Set(issues)];
+}
+
+function isSourceWeak(p) {
+  return sourceQualityIssues(p).length > 0 && !getFulltext(p);
+}
+
+function renderSourceQualityWarning(p) {
+  const issues = sourceQualityIssues(p);
+  if(!issues.length) return '';
+  return `<div class="detail-section" style="border-left:3px solid var(--warn);background:#fff8e6">
+    <div class="detail-section-title" style="color:var(--warn)">⚠️ 來源待查證</div>
+    <div style="font-size:12px;line-height:1.7;color:#6b4b00">
+      ${issues.map(x=>`<div>• ${escHtml(x)}</div>`).join('')}
+      <div style="margin-top:6px">建議：先補原始專利/官網/論文連結，或把可驗證全文貼到「全文快取」。在補齊前，報告會降低此筆資料權重。</div>
+    </div>
+  </div>`;
+}
+
 function extractReadableTextFromHtml(html) {
   const doc = new DOMParser().parseFromString(html, 'text/html');
   doc.querySelectorAll('script,style,noscript,svg,nav,header,footer,form,aside').forEach(el=>el.remove());
@@ -3302,6 +3332,7 @@ function showDetail(i) {
     </div>
 
     <div id="detailFigure_${i}"></div>
+    ${renderSourceQualityWarning(p)}
 
     ${p.purpose?`<div class="detail-section">
       <div class="detail-section-title">📌 收錄目的</div>
@@ -4510,9 +4541,10 @@ function renderIntegratedReport() {
   const recentCutoff = years.length ? yMax - 4 : null;
   const recent = recentCutoff ? ps.filter(p=>p.year>=recentCutoff).length : 0;
   const roles = roleSummary(ps);
+  const weakSources = ps.filter(isSourceWeak);
   const representative = [...ps]
     .sort((a,b)=>{
-      const score = p => (getFulltext(p)?4:0) + (p.value_to_project?3:0) + (p.patentResults?2:0) + ((p.abstract_note||'').length>80?1:0) + (p.year||0)/10000;
+      const score = p => (getFulltext(p)?4:0) + (p.value_to_project?3:0) + (p.patentResults?2:0) + ((p.abstract_note||'').length>80?1:0) + (p.year||0)/10000 - (isSourceWeak(p)?6:0);
       return score(b) - score(a);
     })
     .slice(0, Math.min(8, ps.length));
@@ -4563,7 +4595,7 @@ function renderIntegratedReport() {
     </div>`).join('');
   const repRows = representative.map(p=>`
     <tr>
-      <td style="${S.td};white-space:nowrap"><b>${p.id}</b><br><span style="color:var(--muted);font-size:10px">${escHtml(p.doc_type||'')}</span>${getFulltext(p)?'<br><span style="color:var(--accent2);font-size:10px">全文</span>':''}</td>
+      <td style="${S.td};white-space:nowrap"><b>${p.id}</b><br><span style="color:var(--muted);font-size:10px">${escHtml(p.doc_type||'')}</span>${getFulltext(p)?'<br><span style="color:var(--accent2);font-size:10px">全文</span>':''}${isSourceWeak(p)?'<br><span style="color:var(--warn);font-size:10px">待查證</span>':''}</td>
       <td style="${S.td}">
         <div style="font-weight:700;color:var(--text);margin-bottom:4px">${escHtml(p.title||'')}</div>
         <div style="font-size:12px;color:var(--muted)">${escHtml(paperKeyPoint(p))}</div>
@@ -4594,6 +4626,9 @@ function renderIntegratedReport() {
 
     <h2 style="${S.h2}">三、代表文獻解讀</h2>
     <p style="${S.p}">下列文獻是此篩選結果中資訊密度較高、對產品判斷較有用的代表項目。這裡優先引用 <code>purpose</code>、<code>value_to_project</code>、<code>abstract_note</code> 與既有分析欄位，而不是只看標題。</p>
+    ${weakSources.length?`<div style="background:#fff8e6;border-left:3px solid var(--warn);padding:8px 10px;margin-bottom:10px;font-size:12px;line-height:1.7;color:#6b4b00">
+      <b>來源品質提醒：</b>${weakSources.length} 筆資料缺少可驗證來源或全文快取，已在代表文獻排序中降權。待查證：${weakSources.slice(0,6).map(p=>p.id).join('、')}${weakSources.length>6?'…':''}
+    </div>`:''}
     <table style="width:100%;border-collapse:collapse;margin-bottom:12px">
       <thead><tr><th style="${S.th}">ID</th><th style="${S.th}">文獻重點</th><th style="${S.th}">角色</th><th style="${S.th}">對專案意義</th></tr></thead>
       <tbody>${repRows}</tbody>

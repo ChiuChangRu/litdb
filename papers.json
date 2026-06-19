@@ -92,6 +92,15 @@
         "hemocompatibility血液相容",
         "particulate顆粒"
       ],
+      "method_tool": [
+        "tooling",
+        "test-method",
+        "COF-test",
+        "abrasion-test",
+        "contact-angle-test",
+        "particulate-test",
+        "encrustation-test"
+      ],
       "market_trend": [
         "PFAS-free",
         "low-VOC",
@@ -148,7 +157,7 @@
   "papers": [
     {
       "id": "P01",
-      "title": "泌尿導管親水塗層組成物（US8133580B2）",
+      "title": "Coating composition for a urinary catheter (US8133580B2)",
       "authors": "Dias et al. / DSM",
       "year": 2012,
       "venue": "Google Patents",
@@ -226,7 +235,7 @@
     },
     {
       "id": "P02",
-      "title": "含聚電解質（Polyelectrolyte）之親水塗層（EP1957130B1）",
+      "title": "Hydrophilic coating comprising a polyelectrolyte (EP1957130B1)",
       "authors": "Dias et al. / DSM",
       "year": 2013,
       "venue": "Google Patents",
@@ -297,7 +306,7 @@
     },
     {
       "id": "P03",
-      "title": "親水塗層（WO2009112548A1）",
+      "title": "Hydrophilic coating (WO2009112548A1)",
       "authors": "Rooijmans / DSM",
       "year": 2009,
       "venue": "Google Patents",
@@ -372,7 +381,7 @@
     },
     {
       "id": "P06",
-      "title": "潤滑水凝膠塗層 — 單步熱固化配方（US5160790）",
+      "title": "Lubricious hydrogel coatings (US5160790 / 單步熱固化)",
       "authors": "(專利)",
       "year": 1992,
       "venue": "USPTO",
@@ -390,7 +399,7 @@
         "熱固化"
       ],
       "purpose": "單步 isocyanate+PVP 熱固化",
-      "abstract_note": "本專利揭示一種以 isocyanate 與親水聚合物（PVP）形成互穿網絡（IPN）的單步塗層製程。傳統雙層塗覆需分別控制底塗與頂塗的比例，本發明藉由 isocyanate 與基材（TPU/PVC）的反應性錨固及 PVP 的即時網絡化，在單步製程中同時實現附著與潤滑功能。交聯密度可透過 isocyanate 用量調控，解決傳統雙層系統中底/頂塗比例控制困難的問題。",
+      "abstract_note": "crosslinked PU+PVP 系統；單步製程改善雙層比例控制問題；isocyanate 與基材反應提升附著。",
       "value_to_project": "單步熱固化路徑(UV設備有限時備案)",
       "links": {
         "patents": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/5160790"
@@ -445,7 +454,7 @@
     },
     {
       "id": "P08",
-      "title": "體內醫療器材之潤滑親水塗層（US6221425B1）",
+      "title": "Lubricious hydrophilic coating for intracorporeal medical device (US6221425B1)",
       "authors": "(專利)",
       "year": 2001,
       "venue": "Google Patents",
@@ -520,7 +529,7 @@
     },
     {
       "id": "P12",
-      "title": "即用型滅菌導管 — 雙層 PVP UV 固化（US9138510）",
+      "title": "Sterilized ready-to-use catheter (US9138510 / 兩層 PVP UV)",
       "authors": "(專利)",
       "year": 2015,
       "venue": "Justia",
@@ -601,7 +610,7 @@
     },
     {
       "id": "P13",
-      "title": "親水塗層及製程方法（WO1998058990A1）",
+      "title": "A hydrophilic coating and method (WO1998058990A1)",
       "authors": "(WO1998058990A1) / Coloplast A/S*",
       "year": 1998,
       "venue": "Google Patents",
@@ -619,7 +628,7 @@
         "lubricity潤滑"
       ],
       "purpose": "TPU primer + PVP 多種配方比較",
-      "abstract_note": "本專利描述一種適用於 PVC 導管的雙層親水塗層製程。底塗採用醫療級 TPU 與硝化纖維素（nitrocellulose）的 THF 溶液，60°C 乾燥 15 分鐘形成錨固層；頂塗採用 PVP K90 水溶液浸塗，比較單塗與雙塗的摩擦係數差異。配方中含 HPC（羥丙基纖維素）作增稠劑，調控塗液黏度。摩擦測試顯示雙塗層結構的 COF 顯著低於單塗層，且附著穩定性更佳，是早期商業導管塗層製程的代表配方。",
+      "abstract_note": "PVC導管dip醫療級TPU+nitrocellulose的THF primer,60°C 15min;再塗PVP K90;比較單塗/雙塗摩擦係數;含HPC(羥丙基纖維素)變體。",
       "value_to_project": "TPU primer 配方與多版本摩擦比較",
       "links": {
         "patents": "https://patents.google.com/patent/WO1998058990A1/en"
@@ -671,7 +680,7 @@
     },
     {
       "id": "P14",
-      "title": "具親水塗層之醫療器材（US20150038947A1）",
+      "title": "Medical device with hydrophilic coating (US20150038947A1)",
       "authors": "(專利)",
       "year": 2015,
       "venue": "Google Patents",
@@ -690,7 +699,7 @@
         "熱固化"
       ],
       "purpose": "表面粗糙度對塗層附著影響+具體浸塗參數",
-      "abstract_note": "本專利描述一種以 ESACURE KIP 150（Norrish Type I PI）引發 PVP UV 固化的親水塗層配方及製程。底塗液配方：Plasdone K90 4.9 份 + ESACURE KIP 150 0.1 份，溶於乙醇/GBL（85:15），以 20 mm/s 浸塗約 20 秒，室溫乾燥後 UV 固化（365 nm）。ESACURE KIP 150 為水溶性 Type I PI，生醫安全性佳，適合以水性配方引發 PVP 交聯。製程簡潔，適合商業量產，是 PVP 系 UV 固化塗層的重要參考配方。",
+      "abstract_note": "PVC導管dip primer(4.9份Plasdone K90+0.1份ESACURE KIP 150/乙醇GBL 85:15),20mm/s約20s,室溫乾1min;比較表面粗糙度;含isocyanate熱固版本。",
       "value_to_project": "浸塗速度/時間參數+表面粗糙度策略",
       "links": {
         "patents": "https://patents.google.com/patent/US20150038947A1/en"
@@ -744,7 +753,7 @@
     },
     {
       "id": "P15",
-      "title": "雙層 PU-PVP 熱固化親水塗層（US20110144579A1）",
+      "title": "Hydrophilic coating (US20110144579A1 / 雙層 PU-PVP 熱固)",
       "authors": "(專利)",
       "year": 2011,
       "venue": "Google Patents",
@@ -815,7 +824,7 @@
     },
     {
       "id": "P18",
-      "title": "泌尿導管 — PAA-PEG 塗層（US10857324，C.R. Bard）",
+      "title": "Urinary catheter (US10857324 / C.R.Bard PAA-PEG)",
       "authors": "C.R.Bard",
       "year": 2020,
       "venue": "Justia",
@@ -890,7 +899,7 @@
     },
     {
       "id": "P24",
-      "title": "複合頂塗親水潤滑塗層 — 水凝膠底層 + 疏水保護面塗（US6610035B2）",
+      "title": "Hydrophilic lubricity coating with hybrid top coat (US6610035B2)",
       "authors": "(專利)",
       "year": 2003,
       "venue": "Google Patents",
@@ -910,7 +919,7 @@
         "導管"
       ],
       "purpose": "hydrogel底層+疏水面塗防過度吸濕",
-      "abstract_note": "本發明提出一種雙層塗層系統，以解決親水水凝膠塗層在包裝儲存期間提前吸濕失效的問題。第一層為親水水凝膠（hydrogel）功能層，提供潤滑性；第二層為疏水性面塗（hydrophobic topcoat），在儲存時保護水凝膠免於過早吸濕，使用時接觸水後面塗溶解釋放水凝膠潤滑功能。面塗含親水性界面活性劑作為載體，入水後帶走疏水面塗。PEG/MPEG 分子量 1,000-10,000 控制面塗溶解速率。此「保護-釋放」雙層設計延長了親水塗層導管的保存期限。",
+      "abstract_note": "第一層hydrogel+第二層疏水面塗(防hydrogel過早吸濕);面塗含親水surfactant作carrier,入水後帶走面塗;PEG/MPEG分子量100-20000。",
       "value_to_project": "hybrid top coat 控制吸濕時機設計",
       "links": {
         "patents": "https://patents.justia.com/patent/6610035"
@@ -963,7 +972,7 @@
     },
     {
       "id": "P25",
-      "title": "聲學可視性潤滑塗層（Echogenic Lubricious Coating）（WO2007089761A2）",
+      "title": "Lubricious echogenic coatings (WO2007089761A2)",
       "authors": "(專利)",
       "year": 2007,
       "venue": "Google Patents",
@@ -1032,7 +1041,7 @@
     },
     {
       "id": "P26",
-      "title": "UV 固化醫療器材頂塗塗層（US12037560B2）",
+      "title": "UV cure topcoatings for medical devices (US12037560B2)",
       "authors": "(專利)",
       "year": 2024,
       "venue": "Google Patents",
@@ -1109,7 +1118,7 @@
     },
     {
       "id": "C01",
-      "title": "HYDAK UV/熱固化雙路親水塗層（Biocoat）",
+      "title": "HYDAK UV/Thermal hydrophilic coating (Biocoat)",
       "authors": "Biocoat Inc.",
       "year": 2022,
       "venue": "商用產品/USPTO",
@@ -1235,7 +1244,7 @@
     },
     {
       "id": "C02",
-      "title": "LUBRITEQ UV 固化親水塗層（Freudenberg Medical）",
+      "title": "LUBRITEQ UV-curable hydrophilic coating (Freudenberg Medical)",
       "authors": "Freudenberg Medical",
       "year": 2026,
       "venue": "商用產品",
@@ -1353,7 +1362,7 @@
     },
     {
       "id": "C03",
-      "title": "Serene 兩性離子親水塗層（Surmodics）",
+      "title": "Serene 親水塗層 (Surmodics)",
       "authors": "Surmodics Inc.",
       "year": 2015,
       "venue": "商用產品",
@@ -1479,7 +1488,7 @@
     },
     {
       "id": "C04",
-      "title": "Hydromer 潤滑塗層系列（Hydromer）",
+      "title": "Hydromer Lubricious Coatings (Hydromer)",
       "authors": "Hydromer Inc.",
       "year": 2000,
       "venue": "商用產品",
@@ -1495,7 +1504,7 @@
         "導管"
       ],
       "purpose": "老牌親水塗料供應商(配方+設備+技術支援)",
-      "abstract_note": "Hydromer 成立於 1980 年，總部位於美國北卡羅來納州，為 FDA 登記製造商，持有 ISO 13485 及 ISO 9001 認證。公司提供全系列客製化醫療塗層服務，產品涵蓋親水潤滑塗層、抗血栓塗層及抗菌塗層，適用基材廣泛，包括聚合物、金屬及玻璃等多種醫療器材基材。除塗層材料供應外，Hydromer 亦提供配套塗覆設備與完整的法規支援服務，協助客戶完成 FDA 510(k) 及 CE 認證。以配方銷售為主要商業模式，為行業元老級廠商，具備完整的塗層研發與法規諮詢能力。",
+      "abstract_note": "Hydromer(1980創立,北卡)FDA註冊ISO13485/9001;提供custom潤滑/抗血栓/抗菌塗料,跨polymer/金屬/玻璃;含塗覆設備與配方+法規支援。",
       "value_to_project": "商用對標:全方案供應商(含設備)",
       "links": {
         "ref": "https://www.grandviewresearch.com/industry-analysis/medical-device-hydrophilic-coatings-market-report"
@@ -1594,7 +1603,7 @@
     },
     {
       "id": "A1",
-      "title": "UV 固化親水 Semi-IPN 塗層用於醫療導線（Guidewire）",
+      "title": "UV-curing hydrophilic semi-IPN coating for medical guidewires",
       "authors": "Ding W et al. / Shanghai Kindly Medical",
       "year": 2021,
       "venue": "J. Coatings Technology and Research",
@@ -1668,7 +1677,7 @@
     },
     {
       "id": "A2",
-      "title": "低摩擦高穩定性 PVP/PEG 親水塗層 TPU 介入導管",
+      "title": "Low-friction high-stability hydrophilic PVP/PEG coated TPU for interventional catheter",
       "authors": "(待補) / 中國研究機構*",
       "year": 2024,
       "venue": "Surface and Coatings Technology",
@@ -1742,7 +1751,7 @@
     },
     {
       "id": "A3",
-      "title": "高附著力 PVP/PVA 塗層用於冠狀動脈導線（TPU 基材）",
+      "title": "PVP/PVA coatings with high adhesion for coronary guidewires (TPU)",
       "authors": "(待補) / 中國研究機構*",
       "year": 2025,
       "venue": "ScienceDirect",
@@ -1816,7 +1825,7 @@
     },
     {
       "id": "B1",
-      "title": "生物相容性親水針面塗層對穿刺切片（Biopsy）之影響",
+      "title": "Influence of Biocompatible Hydrophilic Needle Surface Coating on Puncture Biopsy",
       "authors": "Gao, Song, Liu, Jiang, Hao",
       "year": 2020,
       "venue": "Coatings (MDPI)",
@@ -1883,7 +1892,7 @@
     },
     {
       "id": "B2",
-      "title": "超音波可視性增強聚合物塗層 — 切片針新型設計",
+      "title": "A novel polymeric coating for enhanced ultrasound visibility (biopsy needle)",
       "authors": "(PubMed)",
       "year": 2022,
       "venue": "PubMed",
@@ -1951,7 +1960,7 @@
     },
     {
       "id": "R1",
-      "title": "水溶性光起始劑（Photoinitiator）在生醫應用中的研究",
+      "title": "Water-Soluble Photoinitiators in Biomedical Applications",
       "authors": "Tomal, Ortyl",
       "year": 2020,
       "venue": "Polymers (MDPI)",
@@ -2069,7 +2078,7 @@
     },
     {
       "id": "R2",
-      "title": "UV 固化醫療器材：PEG、PVP、幾丁聚醣（Chitosan）的角色（Hydromer）",
+      "title": "UV Curing for Medical Devices: Role of PEG, PVP, Chitosan (Hydromer)",
       "authors": "Hydromer",
       "year": 2025,
       "venue": "Hydromer 技術文章",
@@ -2198,7 +2207,7 @@
     },
     {
       "id": "R3",
-      "title": "PVP UV 光氧化降解風險研究",
+      "title": "PVP UV photooxidation 光降解風險",
       "authors": "Hassouna et al.",
       "year": 2009,
       "venue": "Polymer Degradation and Stability",
@@ -2266,7 +2275,7 @@
     },
     {
       "id": "R4",
-      "title": "UV 寡聚物（Oligomer）與單體的固化收縮分析",
+      "title": "Shrinkage of UV oligomers and monomers",
       "authors": "Moeck, AG",
       "year": 2014,
       "venue": "RadTech Conference",
@@ -2330,7 +2339,7 @@
     },
     {
       "id": "R5",
-      "title": "UV 交聯 PVP 靜電紡絲纖維作為抗菌表面",
+      "title": "UV cross-linked PVP electrospun fibres as antibacterial surfaces",
       "authors": "Maciejewska et al.",
       "year": 2019,
       "venue": "Sci. Tech. Adv. Materials",
@@ -2400,7 +2409,7 @@
     },
     {
       "id": "M1",
-      "title": "全球醫療器材親水塗層市場報告（MarketsandMarkets）",
+      "title": "Hydrophilic Coating Market Report (MarketsandMarkets)",
       "authors": "MarketsandMarkets",
       "year": 2024,
       "venue": "市場報告",
@@ -2506,7 +2515,7 @@
     },
     {
       "id": "M2",
-      "title": "全球親水聚合物塗層專利地圖分析 2026（PatSnap）",
+      "title": "Hydrophilic polymer coatings patent landscape 2026 (PatSnap)",
       "authors": "PatSnap",
       "year": 2026,
       "venue": "專利地圖",
@@ -2621,7 +2630,7 @@
     },
     {
       "id": "L02",
-      "title": "含界面活性劑（Surfactant）之親水塗層（US8871869）",
+      "title": "Hydrophilic coating (US8871869 / 含界面活性劑)",
       "authors": "DSM",
       "year": 2014,
       "venue": "USPTO",
@@ -2691,7 +2700,7 @@
     },
     {
       "id": "L04",
-      "title": "醫療器材親水塗層 — 穿刺針應用（US7015262）",
+      "title": "Hydrophilic coatings for medical implements (US7015262 / lancing needle)",
       "authors": "(專利)",
       "year": 2006,
       "venue": "USPTO",
@@ -2760,7 +2769,7 @@
     },
     {
       "id": "A4",
-      "title": "PVP/PVA 高附著塗層用於冠狀動脈導線 — PDA+UV 詳細數據",
+      "title": "PVP/PVA coatings high adhesion for coronary guidewires (TPU, PDA+UV, 詳細數據)",
       "authors": "(待補) / 中國研究機構*",
       "year": 2025,
       "venue": "Materials Today Communications",
@@ -2838,7 +2847,7 @@
     },
     {
       "id": "R6",
-      "title": "親水潤滑塗層摩擦行為研究 — 體外摩擦學（Tribology）分析",
+      "title": "Friction behaviour of hydrophilic lubricious coatings (in vitro tribology)",
       "authors": "(ScienceDirect)",
       "year": 2015,
       "venue": "Tribology International",
@@ -2912,13 +2921,13 @@
     },
     {
       "id": "R7",
-      "title": "醫療器材親水塗層性能測試方法綜述",
+      "title": "Performance Testing of Hydrophilic Coatings on Medical Devices",
       "authors": "Adhesives & Sealants Industry",
       "year": 2020,
       "venue": "產業技術文章",
       "doi": null,
       "pmid": null,
-      "doc_type": "方法",
+      "doc_type": "綜述review",
       "access": "開放全文",
       "tags": [
         "WCA接觸角",
@@ -3032,13 +3041,13 @@
     },
     {
       "id": "R8",
-      "title": "摩擦測試參數白皮書 — Pinch Test 方法論（Biocoat/ViVitro）",
+      "title": "Pinch Test Parameters White Paper + 摩擦測試方法 (Biocoat/ViVitro)",
       "authors": "Biocoat / ViVitro Labs",
       "year": 2020,
       "venue": "技術白皮書",
       "doi": null,
       "pmid": null,
-      "doc_type": "方法",
+      "doc_type": "綜述review",
       "access": "開放全文",
       "tags": [
         "lubricity潤滑",
@@ -3129,7 +3138,7 @@
     },
     {
       "id": "R9",
-      "title": "親水塗層化學家族定位：PVP vs PEG（PatSnap 分析）",
+      "title": "Hydrophilic coating chemistry families: PVP vs PEG 定位 (PatSnap)",
       "authors": "PatSnap",
       "year": 2026,
       "venue": "技術文章",
@@ -3263,7 +3272,7 @@
     },
     {
       "id": "C06",
-      "title": "DSM ComfortCoat 親水塗層系統（dsm-firmenich）",
+      "title": "DSM ComfortCoat / 親水塗層系統 (dsm-firmenich)",
       "authors": "DSM-Firmenich",
       "year": 2018,
       "venue": "商用產品",
@@ -3494,7 +3503,7 @@
     },
     {
       "id": "P22",
-      "title": "潤滑親水塗層 — Plasma 加矽烷底塗（US6458867B1）",
+      "title": "Hydrophilic lubricant coatings (US6458867B1 / plasma+silane primer)",
       "authors": "(專利)",
       "year": 2002,
       "venue": "Google Patents",
@@ -3567,7 +3576,7 @@
     },
     {
       "id": "P05",
-      "title": "雙層親水塗層：PEO 底層 + PVP 面層（US8287890）",
+      "title": "Hydrophilic coating (US8287890 / PEO底層+PVP面層雙層)",
       "authors": "(專利)",
       "year": 2012,
       "venue": "USPTO",
@@ -3641,7 +3650,7 @@
     },
     {
       "id": "M3",
-      "title": "醫療器材親水塗層市場分析（Grand View Research）",
+      "title": "Medical Device Hydrophilic Coatings Market (Grand View)",
       "authors": "Grand View Research",
       "year": 2025,
       "venue": "市場報告",
@@ -3655,7 +3664,7 @@
         "導管"
       ],
       "purpose": "市場驅動力與廠商;低VOC法規趨勢",
-      "abstract_note": "本市場綜述分析全球醫療導管親水塗層市場的驅動力、主要廠商與技術趨勢。主要驅動力包括：微創手術量增加（心血管、神經血管、泌尿科），以及法規對生物相容性與低 VOC 配方的要求提升。OEM 外包給專業塗層廠商的趨勢明顯。主要廠商包括 Hydromer、DSM、Surmodics、Freudenberg 等。技術趨勢上，兩性離子塗層（SBMA/MPC）因優異的抗結垢性能備受關注，未來五年預計增速最快。",
+      "abstract_note": "驅動力:微創手術量增(心血管/神經血管/泌尿);法規重視生物相容與低VOC配方;OEM外包給專業塗料商。主要廠商Hydromer/DSM/Surmodics/Freudenberg/Biocoat/Harland等。",
       "value_to_project": "市場趨勢:低VOC配方+OEM外包模式",
       "links": {
         "ref": "https://www.grandviewresearch.com/industry-analysis/medical-device-hydrophilic-coatings-market-report"
@@ -3741,7 +3750,7 @@
     },
     {
       "id": "R10",
-      "title": "生物相容性親水塗層針對穿刺影響研究 — 有限元素分析（FEM）版",
+      "title": "Influence of Biocompatible Hydrophilic Coated Needle on Puncture (FEM, 期刊版)",
       "authors": "Gao et al.",
       "year": 2020,
       "venue": "Procedia (ScienceDirect)",
@@ -3807,7 +3816,7 @@
     },
     {
       "id": "C08",
-      "title": "LubriLAST 親水塗層（AST Products）",
+      "title": "AST Products LubriLAST / 親水塗層 (AST Products)",
       "authors": "AST Products Inc.",
       "year": 2016,
       "venue": "商用產品",
@@ -3907,7 +3916,7 @@
     },
     {
       "id": "R11",
-      "title": "Plasma 誘導接枝聚合提升 TPU 親水穩定性研究",
+      "title": "TPU wettability hydrophilic stability by plasma-induced graft polymerization",
       "authors": "Xie Y et al. / Hunan Prov (中國)",
       "year": 2024,
       "venue": "Applied Surface Science",
@@ -3981,7 +3990,7 @@
     },
     {
       "id": "R12",
-      "title": "無溶劑 UV 固化水性聚氨酯丙烯酸酯（WPUA）半互穿塗層",
+      "title": "Solvent-free UV-curable waterborne PU-acrylate sIPN coatings",
       "authors": "(Scientific Reports)",
       "year": 2025,
       "venue": "Scientific Reports",
@@ -4051,7 +4060,7 @@
     },
     {
       "id": "C09",
-      "title": "Surmodics Serene 與 Harland Cork 歐洲佈局（產業動態）",
+      "title": "Surmodics Serene / Harland Cork 歐洲總部 (產業動態)",
       "authors": "產業新聞",
       "year": 2022,
       "venue": "產業動態",
@@ -4148,7 +4157,7 @@
     },
     {
       "id": "P28",
-      "title": "含附著促進底塗（Adhesion-Promoting Primer）之醫療器材潤滑塗層",
+      "title": "Lubricious coating for medical device comprising adhesion-promoting primer (CN107405430A)",
       "authors": "DSM",
       "year": 2019,
       "venue": "Google Patents",
@@ -4220,7 +4229,7 @@
     },
     {
       "id": "P29",
-      "title": "塗層組成物（Coloplast 親水塗層）",
+      "title": "Coating composition (Coloplast / 親水塗層)",
       "authors": "Coloplast",
       "year": 2020,
       "venue": "Google Patents",
@@ -4294,7 +4303,7 @@
     },
     {
       "id": "R13",
-      "title": "親水塗層配方 — 光固化水凝膠（US8957125）",
+      "title": "Coating formulation for preparing a hydrophilic coating (US8957125)",
       "authors": "DSM",
       "year": 2015,
       "venue": "Google Patents",
@@ -4365,7 +4374,7 @@
     },
     {
       "id": "R14",
-      "title": "UV-VIS 固化 PEG 水凝膠在生醫應用的多功能性",
+      "title": "UV-VIS Curable PEG Hydrogels for Biomedical Applications (multifunctionality)",
       "authors": "Sabel-Grau et al.",
       "year": 2022,
       "venue": "Gels (MDPI)",
@@ -4434,7 +4443,7 @@
     },
     {
       "id": "G01",
-      "title": "MPC 磷脂聚合物 Poly(MPC-co-BMA) 導管摩擦特性研究",
+      "title": "Frictional properties of poly(MPC-co-BMA) phospholipid polymer for catheter applications",
       "authors": "Ho SP; Nakabayashi N; Iwasaki Y et al.",
       "year": 2003,
       "venue": "Biomaterials",
@@ -4505,7 +4514,7 @@
     },
     {
       "id": "G02",
-      "title": "多功能抗血栓化學網絡接枝於聚氨酯（PU）表面",
+      "title": "Grafting of Multifunctional Antithrombogenic Chemical Networks on Polyurethane Intravascular Catheters",
       "authors": "Roth Y; Lewitus D / Shenkar Engineering (Israel)",
       "year": 2020,
       "venue": "Polymers",
@@ -4585,7 +4594,7 @@
     },
     {
       "id": "G03",
-      "title": "兩性離子光接枝塗層降低耳蝸植入電極插入摩擦力",
+      "title": "Zwitterionic Photografted Coatings Reduce Friction and Insertion Forces (Cochlear Implant)",
       "authors": "Bennion DM; Horne R; Peel A et al.",
       "year": 2021,
       "venue": "Otol Neurotol",
@@ -4660,7 +4669,7 @@
     },
     {
       "id": "G04",
-      "title": "軟性兩性離子水凝膠塗層降低聚醯亞胺（Polyimide）植入異物反應",
+      "title": "Soft Zwitterionic Hydrogel as Coating to Reduce Foreign Body Reaction (Polyimide)",
       "authors": "Gori M; Giannitelli SM; Vadala G et al.",
       "year": 2022,
       "venue": "Molecules",
@@ -4680,7 +4689,7 @@
         "lubricity潤滑"
       ],
       "purpose": "SBMA vs PEG的抗異物反應比較+藥物釋放",
-      "abstract_note": "poly(SBMA) 磺基甜菜鹼兩性離子水凝膠塗層與 PEG 塗層的抗異物反應比較研究。實驗量化 SBMA 塗層對纖維母細胞和巨噬細胞黏附的抑制效果，以水接觸角（WCA）確認表面親水性。研究同時驗證 SBMA 水凝膠可作為藥物載體，搭載 Everolimus（抗增生劑）以進一步抑制纖維化反應。結果顯示 SBMA 塗層在長期植入的生物相容性指標上優於 PEG，為心血管植入器械的塗層設計提供重要依據。",
+      "abstract_note": "poly(SBMA) hydrogel塗層與PEG比較；SBMA減少纖維母細胞和巨噬細胞黏附；WCA量測；可搭載Everolimus抗纖維化藥物釋放。",
       "value_to_project": "SBMA優於PEG的實驗證據，可作為Bioteque材料選型參考*",
       "links": {
         "doi": "https://doi.org/10.3390/molecules27103126"
@@ -4734,7 +4743,7 @@
     },
     {
       "id": "G05",
-      "title": "SBMA 水凝膠塗層心臟瓣膜 — 抗鈣化（Anti-calcification）研究",
+      "title": "SBMA hydrogel-coated heart valves with anti-calcification",
       "authors": "Luo Y; Huang S; Ma L",
       "year": 2021,
       "venue": "Mater Sci Eng C",
@@ -4754,7 +4763,7 @@
         "lubricity潤滑"
       ],
       "purpose": "SBMA hydrogel的體內抗鈣化30天數據",
-      "abstract_note": "本研究開發 SBMA 與 MAHA（甲基丙烯酸羥乙酯衍生物）的複合水凝膠塗層，並在塗層表面接枝 REDV 促內皮化胜肽，以同時實現抗汙與促進血管內皮化的雙重功能。大鼠皮下植入 30 天實驗顯示：SBMA/MAHA 複合塗層組的免疫反應（巨噬細胞浸潤）和鈣化程度均顯著低於對照組。REDV 胜肽的引入使內皮細胞選擇性黏附，加速內皮化，降低血栓風險。此多功能設計為心血管植入器材提供了兼顧抗汙與促癒合的塗層解決方案。",
+      "abstract_note": "SBMA+MAHA hybrid hydrogel塗層；接REDV肽促內皮化；30天皮下植入免疫反應和鈣化顯著降低。",
       "value_to_project": "SBMA長期體內數據，可補充Bioteque生物相容性評估資料",
       "links": {
         "doi": "https://doi.org/10.1016/j.msec.2021.112329"
@@ -4806,7 +4815,7 @@
     },
     {
       "id": "G06",
-      "title": "SBMA 抗汙全聚合物微針 — 心電圖（ECG）長效（14天）應用",
+      "title": "SBMA Antifouling All-Polymeric Microneedle for ECG (14-day)",
       "authors": "Kim JH; Hwang C; Lee JH et al.",
       "year": 2025,
       "venue": "Adv Sci",
@@ -4871,7 +4880,7 @@
     },
     {
       "id": "G07",
-      "title": "SBMA 水凝膠強化抗汙塗層用於輸尿管導管",
+      "title": "Enhanced antifouling SBMA hydrogel coatings for urinary catheters",
       "authors": "Yao C; Teng X; Sun D et al.",
       "year": 2024,
       "venue": "Colloids Surf B",
@@ -4943,7 +4952,7 @@
     },
     {
       "id": "G08",
-      "title": "季銨化幾丁聚醣（QCS）功能化導管 — 親水性與抗菌雙效",
+      "title": "Quaternized chitosan-functionalized catheter with hydrophilicity and antibacterial",
       "authors": "Liu X; Lin Q; Zhong Y et al.",
       "year": 2025,
       "venue": "J Biomater Sci Polym Ed",
@@ -5020,7 +5029,7 @@
     },
     {
       "id": "G09",
-      "title": "PDA + PVP 抗汙抗菌聚合物膜（PP 基材）",
+      "title": "PDA+PVP antifouling and antimicrobial polymer membranes (PP substrate)",
       "authors": "Jiang J; Zhu L; Zhu L et al.",
       "year": 2013,
       "venue": "ACS Appl Mater Interfaces",
@@ -5094,7 +5103,7 @@
     },
     {
       "id": "G10",
-      "title": "幾丁聚醣脂肪酸（Chitosan-Fatty Acid）塗層導管 — 摩擦係數 0.53→0.35",
+      "title": "Chitosan-fatty acid coatings for catheters (friction 0.53→0.35)",
       "authors": "Niemczyk A; Goszczynska A; Golda-Cepa M et al.",
       "year": 2019,
       "venue": "Carbohydr Polym",
@@ -5113,7 +5122,7 @@
         "導管"
       ],
       "purpose": "chitosan-脂肪酸衍生物降摩擦+抗菌",
-      "abstract_note": "本研究以幾丁聚醣（chitosan）與亞麻油酸（linoleic acid）、α-亞麻油酸（α-linolenic acid）及二亞麻油酸（dilinoleic acid）進行同步 N,O-醯化改質，開發具雙功能（抗菌+潤滑）的改性幾丁聚醣塗層。摩擦係數由未塗覆的 0.53 降至 0.35；抗菌測試對大腸桿菌（E. coli）的抑制率超過 80%。多重脂肪酸的 N,O-醯化策略賦予幾丁聚醣同時具備疏水改質（提升膜成型性）與抗菌活性的複合功能，是天然高分子功能化的重要研究進展。",
+      "abstract_note": "chitosan與linoleic/α-linolenic/dilinoleic acid同時N,O-酰化；摩擦係數0.53→0.35；E.coli降>80%；非毒非溶血；脂肪酸自組裝降摩擦。",
       "value_to_project": "chitosan降摩擦定量數據，與你資料庫R6的摩擦數據可交叉比較",
       "links": {
         "doi": "https://doi.org/10.1016/j.carbpol.2019.115263"
@@ -5165,7 +5174,7 @@
     },
     {
       "id": "G11",
-      "title": "超親水幾丁聚醣塗層 PVC 泌尿導管",
+      "title": "Chitosan-coated super-hydrophilic PVC for urothelial catheters",
       "authors": "Vesel A; Motaln H; Mozetic M et al.",
       "year": 2025,
       "venue": "Int J Mol Sci",
@@ -5186,7 +5195,7 @@
         "導尿管"
       ],
       "purpose": "plasma處理PVC→chitosan塗覆的完整製程",
-      "abstract_note": "本研究採用 H₂ plasma 與 O₂ plasma afterglow 序列處理 PVC 基材：H₂ plasma 先去除表面氯原子（脫氯），O₂ plasma afterglow 再引入豐富的含氧官能基（-OH、-COOH）。富官能基的 PVC 表面再以幾丁聚醣（chitosan）水溶液浸塗，形成穩定的親水抗菌塗層。XPS 分析確認幾丁聚醣的均勻覆蓋，RT4 人泌尿上皮細胞活性測試顯示塗層具良好細胞相容性。此 plasma 序列預處理策略解決了 PVC 化學惰性難以塗覆的問題。",
+      "abstract_note": "H2 plasma+O2 plasma afterglow處理PVC→除氯→富氧官能基→chitosan水溶液浸塗；XPS確認均勻覆蓋；RT4泌尿上皮細胞活性提升。",
       "value_to_project": "PVC導管plasma+chitosan製程，可評估導入Bioteque導尿管產線",
       "links": {
         "doi": "https://doi.org/10.3390/ijms26052128"
@@ -5239,7 +5248,7 @@
     },
     {
       "id": "G12",
-      "title": "WPU 穩定化水凝膠塗層 — 潤滑與抗菌雙效導管",
+      "title": "WPU-stabilized hydrogel coating with lubrication and antibacterial on catheters",
       "authors": "Zhang P; Gao Y; Li S et al.",
       "year": 2025,
       "venue": "ACS Appl Mater Interfaces",
@@ -5318,7 +5327,7 @@
     },
     {
       "id": "G13",
-      "title": "仿生超親水 pMPC 護甲塗層用於血管導管",
+      "title": "Bioinspired super-hydrophilic pMPC armor for vascular catheters",
       "authors": "Ke Y; Meng H; Du Z et al.",
       "year": 2024,
       "venue": "Bioact Mater",
@@ -5341,7 +5350,7 @@
         "導管"
       ],
       "purpose": "PDA啟發的pMPC共價接枝血管導管",
-      "abstract_note": "本研究以仿昆蟲硬化（sclerotization）機制，利用酚-多胺薄膜作為通用活化層，在此基礎上引發 MPC（2-甲基丙烯醯氧乙基磷脂醯膽鹼）的自由基聚合接枝，形成超親水 pMPC 表面。兔頸靜脈模型體內實驗確認抗血栓效果；大鼠皮下植入確認抗感染性能；此塗層對多種基材（PU、矽膠、金屬等）具通用性，且在模擬動態血流條件下表現持久抗汙穩定性。此仿生硬化機制為 pMPC 接枝提供了一種免 plasma 的新型活化途徑。",
+      "abstract_note": "phenol-polyamine膜啟發昆蟲硬化→pMPC自由基聚合接枝；super-hydrophilic；兔頸靜脈模型抗血栓；大鼠皮下抗感染；持久抗污。",
       "value_to_project": "PDA+MPC組合的in vivo數據，可評估MPC路線在導管上的臨床可行性",
       "links": {
         "doi": "https://doi.org/10.1016/j.bioactmat.2024.04.002"
@@ -5394,7 +5403,7 @@
     },
     {
       "id": "G14",
-      "title": "通用型兩性離子塗層用於血液接觸導管（10 種基材驗證）",
+      "title": "Universal zwitterionic coating for blood-contacting catheters (10 substrates)",
       "authors": "Zhang T; Liang T; Pan Q et al.",
       "year": 2025,
       "venue": "Adv Sci",
@@ -5415,7 +5424,7 @@
         "導管"
       ],
       "purpose": "通用型zwitterionic塗層適用10種基材",
-      "abstract_note": "本研究開發一種濕態黏性引發劑（wet-adhesive initiator）高分子，可在水相中自組裝形成薄膜，並在此基礎上引發 MPC 接枝聚合，形成 pMPC 親水抗汙塗層。此濕態黏性高分子適用於 10 種以上基材，包括 PU、矽膠、PTFE、金屬等，突破了傳統 primer 需基材特異性的限制。塗層在寬 pH 範圍（pH 3-11）下均表現近零蛋白質吸附，在模擬血流剪切力條件下保持穩定。此通用性 wet-adhesion 策略大幅簡化了 MPC 塗層的基材前處理製程。",
+      "abstract_note": "wet-adhesive引發劑polymer水相自組裝→pMPC接枝；適用10種基材包括PU/silicone/PTFE；寬pH範圍近零蛋白汙染；模擬血流穩定；可選擇性捕獲CTC。",
       "value_to_project": "10種基材通用性=TPU/silicone等Bioteque基材都可用；製程簡單水相操作",
       "links": {
         "doi": "https://doi.org/10.1002/advs.202502411"
@@ -5467,7 +5476,7 @@
     },
     {
       "id": "G15",
-      "title": "接枝抗菌-兩性離子共聚物於 PU 的雙功能穩定塗層",
+      "title": "Stable Dual-Functional Coating on PU by Grafting Antibacterial-Zwitterionic Copolymer",
       "authors": "Zhang M et al. / 中國研究機構*",
       "year": 2026,
       "venue": "Langmuir",
@@ -5545,7 +5554,7 @@
     },
     {
       "id": "P30",
-      "title": "潤滑塗層 — PVP+PU+異氰酸酯+抗菌（US7141246，Cook Medical）",
+      "title": "Lubricious coating (US7141246 / Cook Medical PVP+PU+isocyanate+抗菌)",
       "authors": "Houghton PE / Cook Medical",
       "year": 2006,
       "venue": "Google Patents",
@@ -5625,7 +5634,7 @@
     },
     {
       "id": "C10",
-      "title": "SLIP-COAT™ 熱固化內腔親水塗層（Argon Medical）",
+      "title": "SLIP-COAT™ Hydrophilic Coating (Argon Medical)",
       "authors": "Argon Medical Devices",
       "year": 2024,
       "venue": "Argon Medical",
@@ -5737,7 +5746,7 @@
     },
     {
       "id": "P31",
-      "title": "具抗菌釋放功能之潤滑塗層（US7402620，Cook Medical 續案）",
+      "title": "Lubricious coating with antimicrobial release (US7402620 / Cook续案)",
       "authors": "Houghton PE / Cook Medical",
       "year": 2008,
       "venue": "Google Patents",
@@ -5816,7 +5825,7 @@
     },
     {
       "id": "P32",
-      "title": "醫療器材潤滑塗層 — 聲學可視性增強設計（US20090048537）",
+      "title": "Lubricious coatings for medical devices (US20090048537 / Merit-InterV echogenic+lubricious)",
       "authors": "Merit Medical (InterV)",
       "year": 2009,
       "venue": "Google Patents",
@@ -5995,12 +6004,11 @@
           "vs_database": "P12(US9138510)的姊妹專利。P12提供雙層配方和COF 0.02N基準，本專利提供PEGDA分子量vs耐磨的定量數據。兩者互補",
           "bioteque_relevance": "直接可用：(1) PEGDA Mn250-700是耐磨甜蜜區→驗證SR344/SR610選擇正確 (2) 50次磨耗測試方法可直接採用 (3) 乾重比PVP:PI=95-98:2-5→配方參考基準"
         }
-      },
-      "_deleted": true
+      }
     },
     {
       "id": "U01",
-      "title": "輸尿管支架結垢：流行病學、病理機制、治療與研究方向綜述",
+      "title": "Ureteral Stent Encrustation: Epidemiology, Pathophysiology, Management and Current Technology",
       "authors": "Tomer N; Garden E; Small A; Palese M / Mount Sinai",
       "year": 2020,
       "venue": "J Urol",
@@ -6127,7 +6135,7 @@
     },
     {
       "id": "U02",
-      "title": "新型輸尿管支架技術綜述",
+      "title": "New Stent Technologies",
       "authors": "Janssen P; Tailly T / Ghent University",
       "year": 2021,
       "venue": "Urol Clin North Am",
@@ -6250,7 +6258,7 @@
     },
     {
       "id": "U03",
-      "title": "輸尿管支架應用、進展與結垢併發症綜述",
+      "title": "Application, Advancement, and Complication of Ureteral Stent and Encrustation: A Major Complication",
       "authors": "Bhardwaj M; Ingole N / Jawaharlal Nehru Medical College",
       "year": 2022,
       "venue": "Cureus",
@@ -6346,7 +6354,7 @@
     },
     {
       "id": "U04",
-      "title": "天然生物聚合物用於輸尿管支架製造與塗層綜述",
+      "title": "Natural biopolymers in the fabrication and coating of ureteral stent: An overview",
       "authors": "Khan SA; Rahman ZU; Xu G / Guangzhou Medical Univ",
       "year": 2024,
       "venue": "Biomater Adv",
@@ -6472,7 +6480,7 @@
     },
     {
       "id": "U05",
-      "title": "輸尿管支架結垢預防的新見解",
+      "title": "New insights into the prevention of ureteral stents encrustation",
       "authors": "Guo H; Yuan JB / Xiangya Hospital",
       "year": 2023,
       "venue": "Open Med (Wars)",
@@ -6600,7 +6608,7 @@
     },
     {
       "id": "U06",
-      "title": "超親水、液體狀、液體注入與超疏水表面之輸尿管支架塗層比較",
+      "title": "Comparison of Superhydrophilic, Liquid-Like, Liquid-Infused, and Superhydrophobic Surfaces in Preventing CAUTI and Encrustation",
       "authors": "Teng X; Yao C; McCoy CP; Zhang S / Queen's Univ Belfast",
       "year": 2024,
       "venue": "ACS Biomater Sci Eng",
@@ -6622,7 +6630,7 @@
         "導尿管"
       ],
       "purpose": "四種抗汙染表面比較：superhydrophilic zwitterionic vs liquid-like vs liquid-infused vs superhydrophobic",
-      "abstract_note": "本研究系統比較四種導管表面塗層（親水塗層、兩性離子塗層、超親水兩性離子塗層、無塗層對照）在輸尿管支架抗結痂與抗菌方面的表現。超親水兩性離子塗層表現最佳：纖維蛋白原（fibrinogen）沉積降低 72.3%，細菌附著降低 75% 以上。摩擦係數從無塗覆的 0.63 降至 0.35，改善顯著。研究結論：兩性離子超親水塗層同時改善潤滑、抗蛋白質吸附及抗菌三項指標，是目前體外測試性能最佳的塗層方案，為 Phase 3 SBMA 路線提供直接實驗依據。",
+      "abstract_note": "Superhydrophilic zwitterionic塗層表現最佳：fibrinogen沉積減72.3%，細菌附著減75%+。COF從0.63降至0.35。但無法殺菌→長期效力受限",
       "value_to_project": "極高價值！zwitterionic的SBMA/MPC策略量化數據。Bioteque SBMA/MPC方向（計畫書6.5.1）的關鍵文獻",
       "links": {
         "doi": "https://doi.org/10.1021/acsbiomaterials.3c01577",
@@ -6675,7 +6683,7 @@
     },
     {
       "id": "U07",
-      "title": "矽膠水化塗層輸尿管支架 — 3週留置結垢與生物膜研究",
+      "title": "Silicone-hydrocoated ureteral stents encrustation and biofilm formation after 3-week dwell time",
       "authors": "Barghouthy Y; Wiseman O; Traxer O / Hospital Tenon Paris",
       "year": 2021,
       "venue": "World J Urol",
@@ -6747,7 +6755,7 @@
     },
     {
       "id": "U08",
-      "title": "蜂膠（Propolis）塗層輸尿管支架體內外抗菌抗結垢研究",
+      "title": "In vitro and in vivo study of antibacterial and anti-encrustation coating on ureteric stents (propolis EEP)",
       "authors": "Zhao Y; Chen G; Yang L / Sichuan Univ",
       "year": 2024,
       "venue": "BJU Int",
@@ -6819,7 +6827,7 @@
     },
     {
       "id": "U09",
-      "title": "Plasma 增強化學氣相沉積（CVD）改質輸尿管支架 PU 管腔內壁",
+      "title": "Inner surface modification of ureteral stent PU tubes by plasma-enhanced CVD to reduce encrustation and biofilm",
       "authors": "Lim H; Chung JH; Han DH / Sungkyunkwan Univ + Samsung Medical",
       "year": 2022,
       "venue": "Biofouling",
@@ -6893,7 +6901,7 @@
     },
     {
       "id": "U10",
-      "title": "肝素/聚離胺酸-銅（Heparin/PLL-Cu）塗層輸尿管支架表面功能化",
+      "title": "Heparin/poly-l-lysine-copper coating for surface functionalization of ureteral stent",
       "authors": "Awonusi BO; Yang K; Zhao J / Chinese Academy of Sciences",
       "year": 2022,
       "venue": "Regen Biomater",
@@ -6971,7 +6979,7 @@
     {
       "id": "M4",
       "doc_type": "市場報告",
-      "title": "全球導管塗層市場規模與成長 2019-2026（Allied Market Research）",
+      "title": "Catheter Coatings Market Size and Share | Industry Growth, 2019-2026 (Allied Market Research)",
       "authors": "(AMR) Trupti Wadekar; Snehal Manjrekar; Eswara Prasad / Allied Market Research",
       "year": 2020,
       "venue": "Allied Market Research",
@@ -7041,1463 +7049,6 @@
           "bioteque_strategic_value": "補充 M1/M3 市場數字，提供CAGR 6.5%、亞太高成長、CAUTI驅動等基礎數據。市場玩家清單含 LipoCoat BV 和 Covalon（LitDB 現有資料庫未涵蓋），可考慮後續補充分析。"
         }
       }
-    },
-    {
-      "id": "P34",
-      "doc_type": "專利",
-      "title": "醫療器材抗結垢及抗菌塗層（US5328954A）",
-      "authors": "Verifiber Technologies / ICET",
-      "year": 1994,
-      "venue": "USPTO / WIPO",
-      "url": "https://patents.google.com/patent/US5328954A",
-      "tags": [
-        "TPU",
-        "PVC",
-        "encrustation resistance抗結痂",
-        "antimicrobial抗菌",
-        "adhesion附著力",
-        "導管catheter",
-        "isocyanate",
-        "hydrogel",
-        "biofilm resistance"
-      ],
-      "abstract_note": "本專利揭示一種以聚氨酯預聚物（PU prepolymer）與胺基多羧酸（如 EDTA）共價結合的抗結垢/抗菌塗層技術。EDTA 等螯合劑的引入可結合鈣離子、鎂離子等結垢前驅物，阻斷磷酸鈣/草酸鈣晶體的成核；同時抑制分解尿素菌（Proteus mirabilis 等）的尿素酶活性，減緩生物膜形成。此雙機制設計特別適用於長期留置輸尿管支架，是最早以化學螯合方式處理導管結垢問題的代表性專利之一。",
-      "purpose": "開發可同時抗結垢與抗菌的醫療器材塗層",
-      "value_to_project": "EDTA 螯合策略對 Bioteque 抗結痂路線有參考價值；專利年份1994，核心已過期，可自由使用",
-      "patentResults": {
-        "full": {
-          "summary": "PU prepolymer + EDTA 共價塗層，雙機制抑制結垢與細菌定植",
-          "key_findings": [
-            "EDTA 螯合 Ca²⁺/Mg²⁺ 抑制晶體成核",
-            "抑制 Proteus mirabilis 尿素酶",
-            "PU 共價結合耐久性佳",
-            "核心專利1994年，已過期"
-          ],
-          "examples": [
-            {
-              "formulation": {
-                "primer": "PU prepolymer",
-                "topcoat": "EDTA 官能基化親水層"
-              },
-              "process": {
-                "curing": "化學共價結合"
-              },
-              "results": {
-                "encrustation_reduction": "顯著降低",
-                "antimicrobial": "抑制尿素酶"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": "U11",
-      "doc_type": "方法",
-      "title": "材料與表面塗層對結垢及生物膜形成影響之體外測試方法",
-      "authors": "University Technologies International",
-      "year": 2003,
-      "venue": "USPTO",
-      "url": "https://patents.google.com/patent/US6599696B2",
-      "tags": [
-        "encrustation resistance抗結痂",
-        "antimicrobial抗菌",
-        "biofilm resistance",
-        "導管catheter",
-        "輸尿管支架"
-      ],
-      "abstract_note": "本研究建立一套在流動/搖動系統中測試導管材料與塗層對結垢及生物膜形成影響的標準方法與裝置。實驗系統模擬體內尿液流動條件，可直接掛載導管樣品進行定量分析。測試指標包括：晶體沉積量、尿素酶活性、生物膜菌落計數（CFU）等。此測試平台的建立為後續抗結垢塗層的客觀評估提供標準化方法，是輸尿管支架體外評估的重要工具。",
-      "purpose": "建立標準化體外抗結垢/抗菌評估方法",
-      "value_to_project": "提供 Bioteque Phase 3 產品驗證的測試方法參考（流動系統、CFU 計數）",
-      "patentResults": {
-        "review": {
-          "scope": "體外抗結垢/抗菌測試方法學",
-          "consensus": [
-            "流動系統模擬體內條件",
-            "量化晶體沉積+CFU是標準評估指標"
-          ],
-          "bioteque_strategic_value": "Phase 3 產品驗證方法的重要參考，建議建立類似體外測試台"
-        }
-      }
-    },
-    {
-      "id": "U12",
-      "doc_type": "期刊論文",
-      "title": "無機類富勒烯奈米顆粒（Fullerene-Like Nanoparticle）塗層降低醫療器材結垢",
-      "authors": "Yeda R&D / Mor Research (Israel)",
-      "year": 2016,
-      "venue": "WO2015102006A1 / US11446413B2",
-      "url": "https://patents.google.com/patent/WO2015102006A1",
-      "tags": [
-        "encrustation resistance抗結痂",
-        "antifouling抗汙",
-        "biocompatibility",
-        "導管catheter",
-        "輸尿管支架",
-        "奈米材料"
-      ],
-      "abstract_note": "本研究探討以無機 fullerene-like 奈米顆粒（IF-WS₂，二硫化鎢層狀奈米球）塗覆醫療導管表面的抗結垢效果。IF-WS₂ 奈米顆粒形成帶負電荷的緻密薄膜，透過靜電排斥作用阻斷帶正電的結垢前驅物（Ca²⁺、尿素等蛋白）的吸附。體外測試顯示鹽類沉積量和 biofilm 形成均顯著減少。此奈米塗層方案屬於無機材料路線，與現有有機親水塗層互補，是創新但尚待臨床驗證的技術方向。",
-      "purpose": "以無機奈米顆粒解決輸尿管導管結垢問題",
-      "value_to_project": "創新路線，但 TRL 較低（約 4-5），短期不建議導入；長期可觀察",
-      "patentResults": {
-        "review": {
-          "scope": "無機奈米顆粒抗結垢塗層",
-          "consensus": [
-            "IF-WS₂ 負電荷膜有效降低鹽類沉積",
-            "抗biofilm效果顯著"
-          ],
-          "bioteque_strategic_value": "長期觀察技術，目前 TRL 低，不建議短期投入"
-        }
-      }
-    },
-    {
-      "id": "P35",
-      "doc_type": "專利",
-      "title": "可沖馬桶崩解型親水塗層導管（WO2015089181A2）",
-      "authors": "Hollister Incorporated",
-      "year": 2015,
-      "venue": "WIPO / USPTO",
-      "url": "https://patents.google.com/patent/WO2015089181A2",
-      "tags": [
-        "PLA",
-        "PVA",
-        "hydrophilic coating",
-        "導管catheter",
-        "biodegradable可降解",
-        "間歇導尿"
-      ],
-      "abstract_note": "本專利描述一種可在水中崩解以便沖入馬桶的環保型親水導管。導管結構為 PLA（聚乳酸）外層與 PVOH（聚乙烯醇）內層組成，外層提供機械支撐並承載親水塗層以維持潤滑性；整體浸水後可在設定時間內崩解，解決間歇導尿患者的衛生廢棄問題。此設計結合親水塗層功能性與環保可降解性，代表間歇導尿導管的創新設計方向。",
-      "purpose": "開發環保可沖馬桶的親水潤滑間歇導尿管",
-      "value_to_project": "創新產品設計概念，非 Bioteque 短期方向但顯示市場差異化的一種思路",
-      "patentResults": {
-        "full": {
-          "summary": "PLA/PVOH 可降解導管 + 親水塗層，可沖馬桶使用",
-          "key_findings": [
-            "PLA 外層提供結構支撐",
-            "PVOH 內層協助崩解",
-            "親水塗層維持潤滑",
-            "環保差異化市場定位"
-          ],
-          "examples": [
-            {
-              "formulation": {
-                "primer": "PVOH 基材",
-                "topcoat": "親水潤滑層"
-              },
-              "process": {
-                "curing": "UV 或化學固化"
-              },
-              "results": {
-                "durability": "使用期間穩定，廢棄後崩解"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": "P36",
-      "doc_type": "專利",
-      "title": "親水性塗層醫療器材（單層共價親水塗層）",
-      "authors": "財團法人塑膠工業技術發展中心（台灣）",
-      "year": 2023,
-      "venue": "台灣智慧財產局",
-      "url": "https://twpat.tipo.gov.tw/",
-      "tags": [
-        "TPU",
-        "silane矽烷",
-        "UV",
-        "adhesion附著力",
-        "lubricity潤滑",
-        "WCA接觸角",
-        "導管catheter",
-        "guidewire",
-        "台灣"
-      ],
-      "abstract_note": "本台灣新型專利（M672228）揭示一種單層親水塗層技術，塗液中同時含有親水性官能基與矽氧烷/矽烷官能基，紫外線固化後可與醫療器材基材（如 TPU）形成共價鍵結，實現長效親水與低摩擦性能。單層設計簡化塗覆製程（免底塗），矽烷官能基提供強化學附著力，親水鏈段提供潤滑功能。適用對象包括導管、導線（guidewire）等醫療器材。此專利由台灣本土機構持有，對 Bioteque 具有重要的在地 IP 參考價值。",
-      "purpose": "開發單層製程的共價親水塗層，簡化商業化生產",
-      "value_to_project": "台灣本土專利，對 Bioteque 的 IP 策略具直接參考價值；單層免底塗設計值得評估",
-      "patentResults": {
-        "full": {
-          "summary": "矽烷+親水官能基單層 UV 固化塗層，與基材共價鍵結",
-          "key_findings": [
-            "單層設計免底塗",
-            "矽烷提供共價附著",
-            "台灣本土持有IP",
-            "UV 固化製程"
-          ],
-          "examples": [
-            {
-              "formulation": {
-                "topcoat": "矽氧烷+親水官能基共聚物"
-              },
-              "process": {
-                "curing": "UV 固化"
-              },
-              "results": {
-                "adhesion": "共價鍵結，耐久",
-                "wca": "< 20°"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": "P37",
-      "doc_type": "專利",
-      "title": "親水塗層及其製造方法（US12364789B2，Hollister）",
-      "authors": "Hollister Incorporated",
-      "year": 2023,
-      "venue": "USPTO",
-      "url": "https://patents.google.com/patent/US20230241288A1",
-      "tags": [
-        "PVP",
-        "PEGDA",
-        "UV",
-        "lubricity潤滑",
-        "WCA<20°",
-        "adhesion附著力",
-        "COF<0.1",
-        "導管catheter",
-        "間歇導尿"
-      ],
-      "abstract_note": "本專利揭示一種用於尿道導管外表面的親水塗層系統，主成分為 PVP（聚乙烯吡咯烷酮）與低分子量 PEG 二丙烯酸酯（PEG diacrylate，Mn 200-600）的 UV 固化配方。雙層結構設計包含底塗錨固層（base coat）與親水頂塗（top coat），前者提供與 TPU/PVC 基材的附著，後者提供超低摩擦係數。低分子量 PEGDA（Mn 200-600）的選用使交聯密度更高，有助於提升塗層耐磨耗性，同時維持優異的親水潤滑性。此配方是商業間歇導尿管的先進代表。",
-      "purpose": "優化 PVP+PEGDA UV 固化尿道導管親水塗層的配方組成與分子量選擇",
-      "value_to_project": "PEG diacrylate 分子量（Mn 200-600）的優化對 Bioteque Phase 2 PEGDA 選材有直接參考價值",
-      "patentResults": {
-        "full": {
-          "summary": "PVP + PEG diacrylate（Mn 200-600）UV 固化雙層導管塗層",
-          "key_findings": [
-            "低 Mn PEGDA 提高交聯密度",
-            "雙層 base/top coat 結構",
-            "極低 COF 值",
-            "適用 TPU/PVC"
-          ],
-          "examples": [
-            {
-              "formulation": {
-                "primer": "base coat（附著層）",
-                "topcoat": "PVP + PEGDA Mn 200-600"
-              },
-              "process": {
-                "curing": "UV 固化"
-              },
-              "results": {
-                "cof": "極低（< 0.05*）",
-                "wca": "< 10°",
-                "durability": "耐磨耗"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": "P38",
-      "doc_type": "專利",
-      "title": "具親水塗層之醫療器材 — 基材表面能設計（US10850009B2）",
-      "authors": "Hollister Incorporated",
-      "year": 2020,
-      "venue": "USPTO",
-      "url": "https://patents.google.com/patent/US10850009B2",
-      "tags": [
-        "PEGDA",
-        "hydrophilic coating",
-        "adhesion附著力",
-        "導尿管",
-        "間歇導尿",
-        "PEG",
-        "PVP",
-        "導管catheter",
-        "durability耐久",
-        "TPU",
-        "PE",
-        "UV光固化",
-        "lubricity潤滑"
-      ],
-      "abstract_note": "本專利揭示一種透過基材本身設計（而非傳統 IPN 互穿網絡）來增強親水塗層附著的導管技術。導管軸由乙烯/丙烯聚合物（ethylene/propylene polymer）與可溶脹親水高分子的共混物構成，調整基材表面能使單層親水塗層可穩定附著，免除複雜的底塗製程。此設計的核心理念是「從基材端解決附著問題」，是 Hollister 的差異化 IP 布局方向，與 Bioteque 從「塗層端」解決附著問題的路線形成對比。",
-      "purpose": "透過基材組成設計優化親水塗層附著，免除底塗",
-      "value_to_project": "基材端解決附著的另一條路線，對 Bioteque 的 TPU 基材選型有啟發；確認 Pellethane 系列的表面能",
-      "patentResults": {
-        "full": {
-          "summary": "乙烯/丙烯共混基材調整表面能，支持單層親水塗層直接附著",
-          "key_findings": [
-            "基材端解決附著問題（非塗層端）",
-            "免底塗設計",
-            "ethylene/propylene+水溶脹高分子共混",
-            "IP 差異化策略"
-          ],
-          "examples": [
-            {
-              "formulation": {
-                "topcoat": "單層親水塗層"
-              },
-              "process": {
-                "curing": "UV 或化學固化"
-              },
-              "results": {
-                "adhesion": "穩定（基材設計）",
-                "cof": "低"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": "P39",
-      "doc_type": "專利",
-      "title": "醫療導管光固化親水潤滑塗層及其製備方法（US20200339906A1）",
-      "authors": "OrbusNeich Medical",
-      "year": 2020,
-      "venue": "USPTO",
-      "url": "https://patents.google.com/patent/US20200339906A1",
-      "tags": [
-        "UV",
-        "lubricity潤滑",
-        "adhesion附著力",
-        "durability耐久",
-        "polyester acrylate",
-        "NVP",
-        "導管catheter",
-        "光固化"
-      ],
-      "abstract_note": "本專利揭示一種光固化型親水潤滑雙層塗層，由 primer 層與 topcoat 層組成。Primer 層含聚酯丙烯酸酯（polyester acrylate）與反應性稀釋劑（含 NVP，N-乙烯吡咯烷酮），提供基材附著；Topcoat 層含親水聚合物與更多 NVP，提供潤滑功能。UV 固化形成高度交聯網絡，顯著提升耐磨耗性。NVP 的引入（而非 PVP）是本配方的特點，NVP 為 PVP 的單體形式，可直接參與交聯反應，形成比物理混合 PVP 更穩定的共價網絡。",
-      "purpose": "以 NVP 單體直接交聯取代物理混合 PVP，提升塗層耐久性",
-      "value_to_project": "NVP 直接交聯的策略對 Bioteque Phase 2 提供重要參考：以 monomer 取代 polymer 可增加交聯密度",
-      "patentResults": {
-        "full": {
-          "summary": "聚酯丙烯酸酯 primer + NVP 親水 topcoat，UV 光固化交聯雙層塗層",
-          "key_findings": [
-            "NVP 單體取代 PVP 直接交聯",
-            "polyester acrylate 底塗提供附著",
-            "UV 固化高交聯密度",
-            "耐磨耗性優於物理混合 PVP"
-          ],
-          "examples": [
-            {
-              "formulation": {
-                "primer": "polyester acrylate + NVP",
-                "topcoat": "親水聚合物 + NVP"
-              },
-              "process": {
-                "curing": "UV 光固化"
-              },
-              "results": {
-                "durability": "高交聯耐磨耗",
-                "cof": "低",
-                "adhesion": "佳"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": "P40",
-      "doc_type": "專利",
-      "title": "親水導管包裝內蒸氣活化技術（US20080179208A1）",
-      "authors": "（間歇導尿產品相關公司）",
-      "year": 2008,
-      "venue": "USPTO",
-      "url": "https://patents.google.com/patent/US20080179208A1",
-      "tags": [
-        "hydrophilic coating",
-        "間歇導尿",
-        "packaging包裝",
-        "即用型",
-        "導管catheter"
-      ],
-      "abstract_note": "本專利描述一種「蒸氣活化即用型」親水導管的包裝技術。採用氣體不可透的包裝材料，內含少量液體（水或緩衝液）作為水蒸氣來源，在密封包裝中藉由蒸氣緩慢活化表面親水塗層。使用者打開包裝即可得到完全潤滑的即用型導管，無需另行注水活化。此技術解決了傳統「需加水活化」間歇導尿管的使用不便問題，對患者體驗有大幅改善。",
-      "purpose": "開發免加水、開封即用的親水導管包裝系統",
-      "value_to_project": "包裝端的差異化設計，若 Bioteque 未來進入間歇導尿市場可參考此即用型設計",
-      "patentResults": {
-        "full": {
-          "summary": "密閉包裝內蒸氣預活化親水塗層，實現即用型間歇導尿管",
-          "key_findings": [
-            "蒸氣活化免加水",
-            "氣體不透包材封存濕度",
-            "開封即潤滑",
-            "改善患者使用體驗"
-          ],
-          "examples": [
-            {
-              "formulation": {
-                "topcoat": "蒸氣活化親水塗層"
-              },
-              "process": {
-                "curing": "包裝前已固化，包裝內蒸氣活化"
-              },
-              "results": {
-                "lubrication": "開封即潤滑"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": "P41",
-      "doc_type": "專利",
-      "title": "即用型導管組件之製造方法及導管組件（EP2845619A1）",
-      "authors": "導尿產品相關公司（專利家族成員多）",
-      "year": 2014,
-      "venue": "EPO / USPTO",
-      "url": "https://patents.google.com/patent/EP2845619A1",
-      "tags": [
-        "hydrophilic coating",
-        "間歇導尿",
-        "packaging包裝",
-        "即用型",
-        "輻照滅菌",
-        "導管catheter"
-      ],
-      "abstract_note": "本專利描述一種在輻照滅菌後仍可在包裝內活化的 ready-to-use 親水導管組件的製造方法。關鍵創新在於精確控制親水塗層與潤濕液的接觸時機（滅菌前/後），使 gamma 或 e-beam 輻照滅菌不破壞塗層的潤濕活化能力。製程步驟包含：先滅菌再注入潤濕液，或設計特殊的隔離包裝使塗層在滅菌過程中保持乾燥。此專利族群成員眾多，是間歇導尿即用型市場的核心 IP 之一。",
-      "purpose": "解決輻照滅菌對親水塗層潤濕活化能力的破壞問題",
-      "value_to_project": "若 Bioteque 未來推出即用型產品，需評估此專利族群的 IP 風險；滅菌與活化的時序控制是關鍵",
-      "patentResults": {
-        "full": {
-          "summary": "控制滅菌與潤濕液接觸時序，實現輻照後仍可活化的即用型導管",
-          "key_findings": [
-            "輻照滅菌與塗層活化時序控制",
-            "隔離包裝防止滅菌損傷",
-            "專利族群龐大（IP 風險高）",
-            "間歇導尿即用型核心技術"
-          ],
-          "examples": [
-            {
-              "formulation": {
-                "topcoat": "耐輻照親水塗層"
-              },
-              "process": {
-                "curing": "UV 固化後輻照滅菌"
-              },
-              "results": {
-                "durability": "耐輻照後仍可活化",
-                "lubrication": "即用型潤滑"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": "M5",
-      "doc_type": "市場報告",
-      "title": "Hollister 親水導管專利布局分析（US12364789B2 等族群）",
-      "authors": "LitDB 內部分析 / 公開專利資料",
-      "year": 2025,
-      "venue": "USPTO / Lens.org",
-      "url": "https://patents.google.com/assignee/Hollister",
-      "tags": [
-        "市場報告",
-        "hydrophilic coating",
-        "間歇導尿",
-        "PVP",
-        "PEGDA",
-        "biocompatibility",
-        "IP分析"
-      ],
-      "abstract_note": "Hollister Incorporated 在親水導管塗層領域布局完整，從配方本身（PVP + PEG diacrylate，US12364789B2）、基材設計（乙烯/丙烯聚合物調整表面能，US10850009B2）到可降解導管（PLA/PVOH，WO2015089181A2）和包裝活化技術（EP2845619A1）均有多件核心專利保護。配方特點：採用低分子量 PEGDA（Mn 200-600）提升交聯密度，是目前間歇導尿市場技術最先進的廠商之一。對 Bioteque 的競爭分析意義重大。",
-      "purpose": "分析 Hollister 在親水導管塗層領域的 IP 布局策略",
-      "value_to_project": "Hollister 是 Bioteque 泌尿科導管市場的主要競爭對手，需持續追蹤其專利進展與技術方向",
-      "patentResults": {
-        "commercial": {
-          "company": "Hollister Incorporated",
-          "product": "Advance Plus / VaPro 系列",
-          "hq": "Libertyville, IL, USA",
-          "coating_technology": {
-            "type": "PVP + PEG diacrylate UV 固化雙層塗層",
-            "primer": "base coat（耐磨錨固層）",
-            "topcoat": "PVP + PEGDA Mn 200-600",
-            "curing": "UV 固化",
-            "substrates": [
-              "TPU",
-              "PVC",
-              "乙烯/丙烯聚合物"
-            ],
-            "performance_claims": {
-              "cof": "極低（< 0.05*）",
-              "wca": "< 10°",
-              "durability": "通過臨床"
-            }
-          },
-          "applications": [
-            "間歇導尿管",
-            "輸尿管導管"
-          ],
-          "competitive_threat_to_bioteque": "高（泌尿科市場直接競品）",
-          "ip_risk": "Hollister 塗層配方族群（US12364789B2 等）需做 FTO",
-          "collaboration_opportunity": "不建議合作（直接競爭）；應持續監控其新申請案"
-        }
-      }
-    },
-    {
-      "id": "M6",
-      "doc_type": "市場報告",
-      "title": "Merit Medical / Cook Medical / Boston Scientific / Argon Medical 親水導管塗層佈局摘要",
-      "authors": "LitDB 內部分析 / 公開專利資料",
-      "year": 2025,
-      "venue": "USPTO / EPO / 各公司官網",
-      "url": "https://www.meritmedical.com",
-      "tags": [
-        "市場報告",
-        "hydrophilic coating",
-        "guidewire",
-        "IP分析",
-        "competitive intelligence",
-        "大廠布局"
-      ],
-      "abstract_note": "本報告彙整四家主要介入醫材大廠的親水導管/導線塗層布局策略：(1) Merit Medical 的 SplashWire™ 強調彈性親水塗層與低摩擦高可控性，在 hydrophilic coated guidewire 與 support catheter 有相當數量專利。(2) Cook Medical（Cook Incorporated）在外周血管導管與導線的親水塗層有多件核心專利，可從 assignee 搜尋擴展。(3) Boston Scientific 擁有多件基礎性介入導管專利（US5876448 等），並曾以此主張侵權訴訟，形成強大的專利護城河。(4) Argon Medical 的 Scorpion 等產品有多件結構性保護專利，親水塗層相關部分需進一步搜尋。以上大廠均以 UV 固化 PVP 系塗層為主流，新一代產品逐步引入兩性離子成分。",
-      "purpose": "掌握主要大廠的親水導管塗層 IP 布局，為 Bioteque 競爭策略提供情報",
-      "value_to_project": "系統性競爭情報，協助識別 Bioteque 可進入的市場空白與需規避的 IP 地雷",
-      "patentResults": {
-        "review": {
-          "scope": "Merit / Cook / Boston Scientific / Argon 四家大廠親水塗層布局",
-          "technologies_compared": [
-            {
-              "material": "Merit SplashWire™",
-              "verdict": "彈性親水塗層，guidewire 主力"
-            },
-            {
-              "material": "Cook hydrophilic guidewire",
-              "verdict": "外周血管導管/導線，assignee 搜尋可擴展"
-            },
-            {
-              "material": "Boston Scientific 基礎專利",
-              "verdict": "US5876448 等基礎性 IP，侵權訴訟護城河"
-            },
-            {
-              "material": "Argon Medical Scorpion",
-              "verdict": "結構性保護為主，塗層部分待搜尋"
-            }
-          ],
-          "consensus": [
-            "大廠均以 UV 固化 PVP 系塗層為主流",
-            "兩性離子塗層是下一代方向",
-            "IP 訴訟風險高（Boston Scientific）"
-          ],
-          "bioteque_strategic_value": "確認 Bioteque 需迴避 Boston Scientific 基礎專利族群；Cook/Merit 的 guidewire 塗層市場可考慮合作或差異化切入"
-        }
-      }
-    },
-    {
-      "id": "P42",
-      "doc_type": "方法",
-      "title": "表面潤滑測試裝置（M661643，台灣新型專利）",
-      "authors": "財團法人塑膠工業技術發展中心（台灣）",
-      "year": 2022,
-      "venue": "台灣智慧財產局",
-      "url": "https://twpat.tipo.gov.tw/",
-      "tags": [
-        "lubricity潤滑",
-        "COF<0.1",
-        "測試設備",
-        "guidewire",
-        "導管catheter",
-        "台灣"
-      ],
-      "abstract_note": "本台灣新型專利（M661643）描述一種專為量測親水潤滑導管與導絲表面潤滑特性的測試裝置。裝置設計可模擬臨床插入動作，精確量化塗層的摩擦係數（COF）與潤滑力。此測試工具是塑膠中心親水塗層技術（M672228）的配套驗證設備，提供標準化的表面潤滑性評估方法。對 Bioteque 而言，此類測試標準化工具是 Phase 2 塗層開發中建立 COF 放行標準的重要參考。",
-      "purpose": "建立親水潤滑導管/導絲的標準化表面潤滑測試方法",
-      "value_to_project": "測試標準化對 Bioteque 的 QC 系統建立有直接參考價值；可與 Harland FTS7000 比較分析",
-      "patentResults": {
-        "full": {
-          "summary": "台灣本土開發的親水塗層 COF 測試專用裝置，適用導管/導絲表面改質評估",
-          "key_findings": [
-            "標準化 COF 測試",
-            "模擬臨床插入動作",
-            "配套 M672228 使用",
-            "台灣本土 QC 工具"
-          ],
-          "examples": [
-            {
-              "formulation": {
-                "primer": "N/A（測試裝置非塗層）",
-                "topcoat": "N/A"
-              },
-              "process": {
-                "curing": "N/A"
-              },
-              "results": {
-                "cof": "可量化",
-                "friction": "標準化評估"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": "C11",
-      "doc_type": "商用產品",
-      "title": "邦特生技鼻膽引流導管（親水塗層）",
-      "authors": "邦特生技股份有限公司（台灣）",
-      "year": 2024,
-      "venue": "邦特生技官方產品",
-      "url": "https://www.bio-dg.com",
-      "tags": [
-        "hydrophilic coating",
-        "導管catheter",
-        "引流管",
-        "台灣",
-        "lubricity潤滑",
-        "WCA接觸角",
-        "biliary膽道"
-      ],
-      "abstract_note": "邦特生技（Bio-DG）生產的鼻膽引流導管（Naso-Biliary Drainage Catheter）明確標示導管表面具有親水塗層，以降低內視鏡操作中的穿刺摩擦力，便於膽道引流導管的導入定位。此為台灣本土醫材廠商在引流導管領域實際應用親水塗層的商業例證，也是目前 LitDB 資料庫中第一件明確涵蓋「膽道引流管」應用的商業產品記錄。",
-      "purpose": "降低鼻膽引流導管插入摩擦，改善內視鏡操作性",
-      "value_to_project": "台灣本土商用案例，確認膽道引流管是親水塗層的實際應用市場；可作為 Bioteque 產品線擴展參考",
-      "patentResults": {
-        "commercial": {
-          "company": "邦特生技股份有限公司（Bio-DG）",
-          "product": "鼻膽引流導管（NBDC）",
-          "hq": "台灣",
-          "business_model": "醫材製造（OEM + 自有品牌）",
-          "market_position": "台灣本土膽道內視鏡引流導管供應商",
-          "coating_technology": {
-            "type": "親水潤滑塗層（具體配方未公開）",
-            "primer": "未公開",
-            "topcoat": "親水塗層",
-            "curing": "未公開",
-            "substrates": [
-              "PE",
-              "導管材料"
-            ],
-            "performance_claims": {
-              "lubrication": "降低穿刺摩擦",
-              "insertion": "便於內視鏡導入"
-            }
-          },
-          "applications": [
-            "鼻膽引流管",
-            "膽道引流",
-            "ERCP 相關器材"
-          ],
-          "differentiator": "台灣本土製造、膽道專用引流導管",
-          "competitive_threat_to_bioteque": "低（不同應用市場，可能是潛在合作夥伴）",
-          "collaboration_opportunity": "評估作為 Bioteque 親水塗層技術的膽道引流管 ODM 合作夥伴"
-        }
-      },
-      "_deleted": true
-    },
-    {
-      "id": "U13",
-      "doc_type": "期刊論文",
-      "title": "周邊置放中心靜脈導管（PICC）材料之比較：親水性聚氨酯 vs 標準聚氨酯 vs 氯己定塗層",
-      "authors": "（台灣臨床護理研究）",
-      "year": 2023,
-      "venue": "台灣護理學術期刊",
-      "url": "",
-      "tags": [
-        "TPU",
-        "antimicrobial抗菌",
-        "biocompatibility",
-        "hemocompatibility血液相容",
-        "PICC",
-        "導管catheter",
-        "臨床比較"
-      ],
-      "abstract_note": "本臨床研究比較三種周邊置放中心靜脈導管（PICC）材料：標準聚氨酯（PU）、親水性聚氨酯（hydrophilic PU）與氯己定塗層導管（chlorhexidine-coated），評估導管相關血流感染（CRBSI）發生率與併發症。結果顯示三組在感染率上無顯著差異，但氯己定組的皮膚刺激與局部過敏反應風險較高。親水性 PU 在插入摩擦力與患者舒適度方面有改善，但未能單獨降低感染率。結論：親水材料的主要優勢在於改善插入體驗與減少機械刺激，而非直接抗菌作用。",
-      "purpose": "評估不同材質 PICC 在感染預防與患者體驗上的差異",
-      "value_to_project": "臨床數據確認親水塗層的功能定位：改善舒適度與減少機械刺激，而非替代抗菌機制。Phase 3 抗菌方向仍需獨立驗證",
-      "patentResults": {
-        "review": {
-          "scope": "PICC 三種材料臨床比較（CRBSI、感染率、舒適度）",
-          "consensus": [
-            "親水塗層改善插入舒適度",
-            "未能顯著降低感染率",
-            "氯己定有過敏風險",
-            "抗菌需獨立設計，不能靠親水塗層替代"
-          ],
-          "evidence_pyramid": {
-            "clinical_rct": 1
-          },
-          "best_for": {
-            "comfort": "親水性 PU",
-            "infection_prevention": "需額外抗菌成分"
-          },
-          "bioteque_strategic_value": "Phase 3 抗菌方案（QCS/Cu²⁺）的必要性確認：親水塗層本身不夠，需主動抗菌成分"
-        }
-      }
-    },
-    {
-      "id": "G16",
-      "doc_type": "期刊論文",
-      "title": "親水性塗層導絲在 CTO（慢性全阻塞）介入治療中的應用與特性",
-      "authors": "嘉義基督教醫院心臟科團隊（臨床應用說明）",
-      "year": 2023,
-      "venue": "台灣自費特殊材料臨床說明",
-      "url": "",
-      "tags": [
-        "lubricity潤滑",
-        "guidewire",
-        "WCA接觸角",
-        "adhesion附著力",
-        "durability耐久",
-        "血管介入",
-        "CTO"
-      ],
-      "abstract_note": "本臨床資料說明親水性塗層 CTO 導絲（Chronic Total Occlusion Wire）在穿越慢性完全阻塞血管病變中的應用優勢。親水塗層使導絲表面在血液環境下即時形成水膜，顯著降低摩擦係數，使導絲得以通過常規導絲難以通過的高度鈣化狹窄或慢性阻塞節段。此應用驗證了親水塗層對於「穿越狹窄彎曲通道」的關鍵功能，這一特性同樣適用於狹窄膽道或尿道引流管的插入輔助，是「親水塗層跨領域轉用」的重要臨床依據。",
-      "purpose": "說明親水塗層在 CTO 介入導絲中的技術優勢與臨床功能",
-      "value_to_project": "驗證親水塗層對穿越狹窄通道的普適優勢，支持 Bioteque 將技術延伸至膽道/尿道引流管市場的邏輯",
-      "patentResults": {
-        "review": {
-          "scope": "CTO 介入親水導絲的臨床應用",
-          "consensus": [
-            "親水塗層在血液中即時形成水膜",
-            "顯著降低高阻力通道的 COF",
-            "可類比應用於膽道/尿道引流"
-          ],
-          "bioteque_strategic_value": "支持 Bioteque 技術跨應用（從尿導管到引流管/導絲）的市場擴展論點"
-        }
-      }
-    },
-    {
-      "id": "U14",
-      "doc_type": "綜述review",
-      "title": "親水性水凝膠塗層 Foley 導尿管健保給付適應症與臨床應用範圍",
-      "authors": "台灣衛生福利部健保署 / 台北市衛生局",
-      "year": 2023,
-      "venue": "台灣法規文件",
-      "url": "",
-      "tags": [
-        "hydrophilic coating",
-        "hydrogel",
-        "導管catheter",
-        "biocompatibility",
-        "腎造廔",
-        "膀胱造廔",
-        "長期導尿",
-        "台灣"
-      ],
-      "abstract_note": "台灣健保相關法規明確規定，矽質或乳膠基層包覆親水性水凝膠塗層之 Foley 導尿管可申請給付，適用對象包括：腎造廔（nephrostomy）、膀胱造廔（cystostomy）及長期導尿患者等特定適應症。此法規文件確立了「親水塗層 = 長期留置適應症」的給付邏輯，並隱含監管機構認可親水水凝膠塗層在降低組織刺激與感染風險方面的臨床價值。對 Bioteque 的意義在於：台灣市場對親水塗層的法規認可已建立，未來申請相關產品時可引用此給付框架。",
-      "purpose": "確認台灣法規對親水塗層導管的給付認可與適應症範圍",
-      "value_to_project": "台灣市場准入依據：健保給付框架已建立，Bioteque 未來申請長期留置導管塗層時的重要法規參考",
-      "patentResults": {
-        "review": {
-          "scope": "台灣健保親水塗層導尿管給付規範",
-          "consensus": [
-            "親水水凝膠塗層具法規認可",
-            "適用腎造廔/膀胱造廔/長期導尿",
-            "台灣給付框架已存在"
-          ],
-          "bioteque_strategic_value": "Bioteque 台灣市場准入：健保給付路徑已存在，需符合矽質或乳膠基層 + 親水水凝膠塗層的規格要求"
-        }
-      }
-    },
-    {
-      "id": "C12",
-      "doc_type": "商用產品",
-      "title": "BD Bardex® 水凝膠 + Bactiguard® 抗菌雙塗層 Foley 導尿管",
-      "authors": "Becton, Dickinson and Company（BD）/ C.R. Bard",
-      "year": 2024,
-      "venue": "BD 官方產品",
-      "url": "https://www.bd.com/en-us/products-and-solutions/products/product-families/foley-catheters",
-      "tags": [
-        "hydrogel",
-        "antimicrobial抗菌",
-        "biocompatibility",
-        "導管catheter",
-        "留置導尿管",
-        "Foley",
-        "silicone"
-      ],
-      "abstract_note": "BD 旗下 Bard® 系列 Foley 導尿管採用雙塗層技術：外層 Bard® Hydrogel 水凝膠塗層提供長期親水潤滑性，大幅降低導尿管插入及留置期間的組織摩擦；內層 Bactiguard® 抗菌塗層（含銀、金、鈀等貴金屬離子緩釋）抑制細菌定植，降低 CAUTI（導管相關泌尿道感染）風險。適用於長期留置導尿（腎造廔、膀胱造廔、術後引流），為全球 Foley 導尿管市場最大品牌。BD 整合 C.R. Bard 後持有多件相關核心專利，IP 護城河深厚，是 Bioteque 在泌尿引流市場的主要競爭對手。",
-      "purpose": "長期留置導尿管的親水潤滑與抗菌雙功能整合",
-      "value_to_project": "BD/Bard 是泌尿引流市場龍頭，水凝膠+抗菌雙塗層是 Bioteque Phase 3 抗菌路線的主要競爭標桿",
-      "patentResults": {
-        "commercial": {
-          "company": "Becton, Dickinson and Company（BD / Bard）",
-          "product": "Bardex® Hydrogel + Bactiguard® Foley Catheter",
-          "hq": "Franklin Lakes, NJ, USA",
-          "founded": 1897,
-          "business_model": "醫材製造（自有品牌，全球最大泌尿引流廠商）",
-          "market_position": "全球 Foley 導尿管市場龍頭，泌尿引流領域市占第一",
-          "coating_technology": {
-            "type": "水凝膠塗層（外）+ 貴金屬抗菌塗層 Bactiguard®（內）",
-            "primer": "矽膠/乳膠基材",
-            "topcoat": "Hydrogel 水凝膠親水層",
-            "curing": "化學或 UV 固化",
-            "substrates": [
-              "矽膠",
-              "乳膠",
-              "TPU"
-            ],
-            "performance_claims": {
-              "lubrication": "長期潤滑",
-              "antimicrobial": "CAUTI 降低",
-              "wca": "< 20°"
-            }
-          },
-          "regulatory": {
-            "iso": [
-              "ISO 13485",
-              "ISO 10993"
-            ],
-            "fda": "510(k)",
-            "ce": "CE MDR"
-          },
-          "applications": [
-            "Foley 導尿管",
-            "腎造廔",
-            "膀胱造廔",
-            "術後引流"
-          ],
-          "differentiator": "雙塗層系統（親水+抗菌）整合；Bactiguard 貴金屬離子緩釋技術；全球最大品牌認知度",
-          "weakness": "貴金屬成本高；乳膠過敏風險；矽膠基材 TPU 附著差異",
-          "pricing_tier": "中高（大量採購有折扣）",
-          "competitive_threat_to_bioteque": "高（泌尿引流市場直接競品）",
-          "ip_risk": "BD/Bard 持有多件水凝膠塗層核心專利，需完整 FTO 分析",
-          "collaboration_opportunity": "不建議直接競爭；可評估差異化切入（SBMA 兩性離子取代水凝膠）"
-        }
-      }
-    },
-    {
-      "id": "C13",
-      "doc_type": "商用產品",
-      "title": "Teleflex Rüsch® FloCath Quick™ 親水間歇導尿管（即用型）",
-      "authors": "Teleflex Medical",
-      "year": 2024,
-      "venue": "Teleflex 官方產品",
-      "url": "https://www.teleflex.com/usa/en/product-areas/urology/intermittent-catheters/hydrophilic-intermittent-catheters/",
-      "tags": [
-        "hydrophilic coating",
-        "間歇導尿",
-        "導管catheter",
-        "packaging包裝",
-        "即用型",
-        "lubricity潤滑"
-      ],
-      "abstract_note": "Teleflex 的 Rüsch® FloCath Quick™ 為全功能即用型親水間歇導尿管，採用「全合一」整合包裝設計：包裝內含親水塗層導管本體及 0.9% 滅菌生理鹽水小包，使用前折斷隔層即可活化親水塗層，無需另備水源。專利保護的一體式操作鞘管（handling sheath）提供觸控式操作，降低汙染風險，同時可作為延伸管使用。親水塗層在接觸生理鹽水後立即形成低摩擦水膜，顯著改善尿道插入舒適度，臨床研究顯示可降低尿道微創傷（urethral micro trauma）。此一體化設計是間歇導尿市場的主流產品形式，對 Bioteque 未來進入間歇導尿市場具重要參考價值。",
-      "purpose": "提供即用型方便性的親水間歇導尿管，降低使用門檻與汙染風險",
-      "value_to_project": "即用型包裝設計 + 觸控式操作鞘管是間歇導尿市場的競爭差異化關鍵；Bioteque 若進入此市場需評估類似設計",
-      "patentResults": {
-        "commercial": {
-          "company": "Teleflex Medical",
-          "product": "Rüsch® FloCath Quick™",
-          "hq": "Wayne, PA, USA",
-          "business_model": "醫材製造（自有品牌）",
-          "market_position": "間歇導尿市場主要玩家（次於 Coloplast、Hollister）",
-          "coating_technology": {
-            "type": "親水塗層（具體配方未公開）",
-            "primer": "未公開",
-            "topcoat": "親水聚合物層",
-            "curing": "未公開",
-            "substrates": [
-              "PVC",
-              "TPU"
-            ],
-            "performance_claims": {
-              "lubrication": "即用型",
-              "micro_trauma": "臨床研究確認降低"
-            }
-          },
-          "applications": [
-            "間歇導尿管",
-            "神經源性膀胱"
-          ],
-          "differentiator": "全合一即用型包裝；專利操作鞘管；觸控式無菌操作",
-          "competitive_threat_to_bioteque": "中（間歇導尿市場，非 Bioteque 主要現況市場）",
-          "ip_risk": "操作鞘管有專利保護；塗層配方需確認",
-          "collaboration_opportunity": "評估 Bioteque 塗層技術作為 Teleflex 的 OEM 供應"
-        }
-      }
-    },
-    {
-      "id": "U15",
-      "doc_type": "期刊論文",
-      "title": "水凝膠塗層胸腔引流管對胸腔外科手術預後之影響",
-      "authors": "多中心胸腔外科研究團隊",
-      "year": 2024,
-      "venue": "PubMed / 胸腔外科期刊",
-      "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12782731/",
-      "tags": [
-        "hydrogel",
-        "durability耐久",
-        "antifouling抗汙",
-        "biocompatibility",
-        "引流管",
-        "胸腔引流",
-        "encrustation resistance抗結痂"
-      ],
-      "abstract_note": "本多中心回顧性研究評估水凝膠塗層胸腔引流管（Hydrogel-Coated Drain, HCD）在胸腔外科手術後的臨床效益。研究背景：標準胸腔引流管的阻塞率高達 7.4%，阻塞可導致胸腔積液殘留、膿胸、皮下氣腫及需重新置管等嚴重併發症。研究納入解剖性肺切除、楔形切除、胸膜活檢、肺大泡切除、膿胸清洗及胸膜剝脫等多種胸腔外科手術患者。水凝膠塗層引流管的導入依據是其改善通暢性、降低阻塞風險，即使使用較小管徑仍具優勢。與歷史對照組相比，HCD 組的引流管阻塞率顯著降低。此研究是目前胸腔引流管親水塗層臨床效益最直接的文獻依據，確認親水塗層在胸腔引流領域的實際臨床價值。",
-      "purpose": "評估水凝膠塗層對胸腔引流管阻塞率與手術後預後的影響",
-      "value_to_project": "直接確認親水塗層在胸腔引流管的臨床需求（7.4% 阻塞率）；支持 Bioteque 切入胸腔引流管市場的商業論點",
-      "patentResults": {
-        "review": {
-          "scope": "水凝膠塗層胸腔引流管臨床多中心研究",
-          "n_papers_covered": 1,
-          "consensus": [
-            "標準胸腔引流管阻塞率 7.4%",
-            "水凝膠塗層顯著改善通暢性",
-            "小管徑 HCD 仍有效",
-            "親水塗層胸腔引流有明確臨床需求"
-          ],
-          "clinical_data": {
-            "blockage_rate_standard": "7.4%",
-            "benefit": "阻塞率降低",
-            "study_type": "多中心回顧性"
-          },
-          "evidence_pyramid": {
-            "retrospective_multicenter": 1
-          },
-          "best_for": {
-            "application": "胸腔引流管防阻塞"
-          },
-          "bioteque_strategic_value": "胸腔引流管是親水塗層技術最值得切入的空白市場：無強勢大廠壟斷、有明確臨床需求（7.4% 阻塞率）、親水塗層效益已有臨床證據"
-        }
-      }
-    },
-    {
-      "id": "U16",
-      "doc_type": "期刊論文",
-      "title": "雙 Pigtail 引流管新型設計 — 提升胸腔積液引流效率",
-      "authors": "韓國 Gangneung Asan Hospital / Soonchunhyang University 研究團隊",
-      "year": 2023,
-      "venue": "MDPI / PubMed PMC10303575",
-      "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10303575/",
-      "tags": [
-        "引流管",
-        "胸腔引流",
-        "导管catheter",
-        "pigtail",
-        "抗阻塞",
-        "設計"
-      ],
-      "abstract_note": "本研究比較雙 pigtail 引流管（DPC）與傳統單 pigtail 引流管（SPC）在胸腔積液引流的效能差異。DPC 在導管中段設計額外的 pigtail 彎曲結構及多個離心側孔，可維持引流孔通暢。研究納入 2018-2019 年 382 例胸腔積液引流手術（DPC 156 例、SPC 無側孔 110 例、SPC 含多側孔 116 例），所有導管為 10.2 Fr，由同一位介入放射科醫師操作。結果顯示 DPC 引流效率最高，留置時間最短，對轉移性胸腔積液具顯著優勢。此研究顯示引流管設計本身對抗阻塞的重要性，與表面塗層的抗阻塞策略形成互補。若 DPC 結構設計結合親水塗層，預期可進一步降低阻塞率並延長有效引流時間。",
-      "purpose": "比較新型雙 pigtail 與傳統單 pigtail 胸腔引流管的引流效能",
-      "value_to_project": "胸腔 pigtail 引流管市場存在設計改良需求；親水塗層結合新型結構設計可作為差異化切入點",
-      "patentResults": {
-        "review": {
-          "scope": "DPC vs SPC 胸腔積液引流比較（382 例，多型號）",
-          "n_papers_covered": 1,
-          "consensus": [
-            "DPC 引流效率優於 SPC",
-            "多側孔設計降低阻塞",
-            "留置時間縮短",
-            "設計改良是抗阻塞的有效策略"
-          ],
-          "clinical_data": {
-            "n_cases": 382,
-            "catheter_size": "10.2 Fr",
-            "result": "DPC 留置時間最短，引流效率最高"
-          },
-          "evidence_pyramid": {
-            "retrospective_clinical": 1
-          },
-          "bioteque_strategic_value": "支持 Bioteque 以親水塗層 + 優化結構設計切入胸腔 pigtail 引流管市場的論點"
-        }
-      }
-    },
-    {
-      "id": "P43",
-      "doc_type": "專利",
-      "title": "具外表面親水塗層之醫療管材 — 抗菌劑吸附應用（US4515593，Bard）",
-      "authors": "C.R. Bard Inc.",
-      "year": 1985,
-      "venue": "USPTO",
-      "url": "https://patents.google.com/patent/US4515593",
-      "tags": [
-        "NVP",
-        "hydrophilic coating",
-        "antimicrobial抗菌",
-        "導管catheter",
-        "引流管",
-        "radiation grafting",
-        "已過期"
-      ],
-      "abstract_note": "本 Bard 早期基礎專利（US4515593，1985）揭示以 NVP（N-乙烯吡咯烷酮）或丙烯酸/甲基丙烯酸單體塗覆於疏水性彈性體導管表面，並以離子輻照（ionizing radiation）接枝固化，形成親水塗層。塗層設計僅覆蓋導管外表面的特定區段，使親水塗層可吸附聚維酮碘（povidone iodine）等殺菌劑水溶液，實現抗菌功能。此設計結合「親水塗層作抗菌劑載體」的概念，是最早將親水塗層與抗菌功能結合的代表性專利之一。專利已過期（1985 年申請，保護期已滿），相關基礎技術現為公共領域，可自由使用。對 Bioteque 具有歷史技術參考價值，NVP 單體接枝的概念可作為 Phase 2 UV 固化配方的設計參考。",
-      "purpose": "以 NVP 或丙烯酸單體輻照接枝，賦予導管表面親水抗菌複合功能",
-      "value_to_project": "Bard 早期基礎 IP（已過期，自由使用）；NVP 輻照接枝概念對 Phase 2 配方有參考意義；確認抗菌載體功能是親水塗層的早期應用方向",
-      "patentResults": {
-        "full": {
-          "summary": "NVP 或丙烯酸單體輻照接枝親水抗菌塗層，Bard 早期基礎專利（已過期）",
-          "key_findings": [
-            "NVP 輻照接枝是早期親水塗層主流方法",
-            "親水塗層作抗菌劑吸附載體",
-            "選擇性覆蓋設計（僅特定區段）",
-            "核心專利 1985 年，已過期可自由使用"
-          ],
-          "examples": [
-            {
-              "formulation": {
-                "topcoat": "NVP 或 pHEMA 輻照接枝"
-              },
-              "process": {
-                "curing": "離子輻照（ionizing radiation）"
-              },
-              "results": {
-                "antimicrobial": "聚維酮碘吸附",
-                "wca": "顯著降低"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": "P44",
-      "doc_type": "專利",
-      "title": "泌尿導管親水塗層組成物（EP1957127B1，Coloplast）",
-      "authors": "Coloplast A/S",
-      "year": 2007,
-      "venue": "EPO / WIPO",
-      "url": "https://patents.google.com/patent/EP1957127B1",
-      "tags": [
-        "PVP",
-        "polyelectrolyte",
-        "hydrophilic coating",
-        "UV",
-        "間歇導尿",
-        "導管catheter",
-        "adhesion附著力",
-        "durability耐久"
-      ],
-      "abstract_note": "本 Coloplast 專利（EP1957127B1）揭示一種以聚電解質（polyelectrolyte）強化的雙層親水塗層配方，用於泌尿導管。內層（primer）為含支撐性聚合物網絡（supporting polymer network，由聚醚或聚硫醚組成）的底塗，提供機械錨固；外層（functional layer）含非離子性親水高分子（PVP 等）與聚電解質（ionic polymer）的複合功能層。聚電解質的引入顯著提升塗層的吸水速率、減少活化時間，並增強潤滑持久性。此配方是 Coloplast SpeediCath 間歇導尿管的核心 IP 之一，在歐美市場受強力保護。對 Bioteque 的 Phase 2 配方開發而言，聚電解質對潤滑持久性的強化效果值得參考，但需注意此專利族群的有效性。",
-      "purpose": "以聚電解質強化非離子性親水塗層的吸水速率與潤滑持久性",
-      "value_to_project": "Coloplast 的聚電解質複合塗層策略是 DSM P01-P03 路線之外的重要替代方向；活化速率改善對即用型產品設計有參考價值",
-      "patentResults": {
-        "full": {
-          "summary": "聚醚/聚硫醚 primer + PVP/聚電解質複合頂塗，雙層親水塗層，Coloplast 核心 IP",
-          "key_findings": [
-            "聚電解質加速吸水活化",
-            "雙層結構強化耐久",
-            "適用間歇導尿管",
-            "歐美市場有效 IP，需注意"
-          ],
-          "examples": [
-            {
-              "formulation": {
-                "primer": "聚醚/聚硫醚支撐網絡",
-                "topcoat": "PVP + 聚電解質複合"
-              },
-              "process": {
-                "curing": "UV 或化學固化"
-              },
-              "results": {
-                "activation": "快速",
-                "durability": "持久潤滑",
-                "wca": "< 20°"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": "E01",
-      "doc_type": "期刊論文",
-      "title": "食道穿孔處置的進展選擇",
-      "authors": "Clayton J. Brinster, S. Singhal",
-      "year": 2004,
-      "venue": "Annals of Thoracic Surgery",
-      "url": "https://doi.org/10.1016/J.ATHORACSUR.2003.08.037",
-      "tags": [
-        "食道穿孔",
-        "引流管",
-        "支架（Stent）",
-        "外科手術",
-        "esophageal"
-      ],
-      "abstract_note": "本篇為食道穿孔處置的重要綜述，引用達 805 次。分析食道穿孔的病因分類（醫源性、自發性 Boerhaave、外傷）、診斷時機、以及各種處置選項的比較：包括手術修補、食道切除、T 管引流、食道支架置放與保守療法。研究強調處置時機（< 24 小時 vs > 24 小時）對預後的決定性影響，早期手術修補仍是標準方針，但支架與內視鏡真空治療的角色日益重要。本文確立了食道穿孔多模式處置的現代框架。",
-      "purpose": "系統性回顧食道穿孔的各種處置策略與預後比較",
-      "value_to_project": "確立食道穿孔處置的現代多模式框架，支架應用的循證基礎",
-      "_deleted": true
-    },
-    {
-      "id": "E02",
-      "doc_type": "期刊論文",
-      "title": "食道穿孔：持續的挑戰",
-      "authors": "W. G. Jones, R. Ginsberg",
-      "year": 1992,
-      "venue": "Annals of Thoracic Surgery",
-      "url": "https://doi.org/10.1016/0003-4975(92)90294-E",
-      "tags": [
-        "食道穿孔",
-        "引流管",
-        "外科手術",
-        "esophageal",
-        "併發症"
-      ],
-      "abstract_note": "本經典文獻（引用 360 次）分析食道穿孔的高死亡率與處置挑戰。研究確認縱膈腔炎（mediastinitis）是食道穿孔最嚴重的致命併發症，不治療死亡率可達 100%。文章強調早期診斷（< 24 小時）可使死亡率從 > 40% 降至 < 10%。食道穿孔的高死亡率源於：（1）消化液外漏造成的縱膈腔感染，（2）解剖位置深、修補困難，（3）診斷延誤常見。此文奠定了食道穿孔「時間就是存活」的處置原則。",
-      "purpose": "分析食道穿孔的死亡率、病理生理機制與處置挑戰",
-      "value_to_project": "奠定食道穿孔緊急處置的基礎原則，是領域內引用最高的早期文獻之一",
-      "_deleted": true
-    },
-    {
-      "id": "E03",
-      "doc_type": "綜述review",
-      "title": "系統回顧：暫時性支架置放用於食道良性破裂或吻合口滲漏",
-      "authors": "P. V. Boeckel, A. Sijbring",
-      "year": 2011,
-      "venue": "Alimentary Pharmacology & Therapeutics",
-      "url": "https://doi.org/10.1111/j.1365-2036.2011.04663.x",
-      "tags": [
-        "食道穿孔",
-        "支架（Stent）",
-        "吻合口滲漏（Anastomotic Leak）",
-        "引流管",
-        "esophageal",
-        "系統回顧"
-      ],
-      "abstract_note": "本系統回顧（引用 279 次）分析暫時性食道支架置放（temporary stent placement）治療食道良性破裂或吻合口滲漏的有效性與安全性。彙整 17 項研究共 267 例，臨床成功率達 76%，但支架移位率達 26%，是主要不良事件。覆膜自膨式金屬支架（FCSEMS）與塑膠支架（plastic stent）的比較顯示 FCSEMS 成功率更高，但移位問題仍存在。此綜述確立了支架作為食道穿孔/滲漏非手術處置選項的臨床基礎，也指出支架移位是亟待解決的技術問題。",
-      "purpose": "系統評估暫時性食道支架置放的臨床有效性與安全性",
-      "value_to_project": "確認支架移位（26%）是食道支架最大臨床問題，直接驅動防移位塗層設計需求",
-      "_deleted": true
-    },
-    {
-      "id": "E04",
-      "doc_type": "期刊論文",
-      "title": "食道支架在食道吻合口滲漏及良性食道穿孔處置中的角色",
-      "authors": "Bobby V. M. Dasari, D. Neely",
-      "year": 2014,
-      "venue": "Annals of Surgery",
-      "url": "https://doi.org/10.1097/SLA.0000000000000564",
-      "tags": [
-        "食道穿孔",
-        "支架（Stent）",
-        "吻合口滲漏（Anastomotic Leak）",
-        "esophageal",
-        "系統回顧"
-      ],
-      "abstract_note": "本系統回顧（引用 275 次）評估食道支架在吻合口滲漏（anastomotic leak）及良性食道穿孔的處置角色。分析 20 項研究共 340 例，整體臨床成功率 77%，但支架相關並發症發生率 34%（含移位 24%、肉芽組織增生（granuloma formation）8%、出血 2%）。研究顯示食道支架可作為外科手術的替代或橋接治療，特別適合高手術風險患者。研究呼籲標準化支架選擇標準及置放技術，以降低並發症。支架表面改良（親水塗層、抗沾黏）可潛在改善移位問題。",
-      "purpose": "評估食道支架在良性穿孔和吻合口滲漏的療效與安全性",
-      "value_to_project": "支架移位 24%、並發症 34%，強化食道支架表面塗層改良的臨床需求",
-      "_deleted": true
-    },
-    {
-      "id": "E05",
-      "doc_type": "綜述review",
-      "title": "成人食道穿孔的現行治療與預後：75 項研究的系統回顧與統合分析",
-      "authors": "F. Biancari, V. D'Andrea",
-      "year": 2013,
-      "venue": "World Journal of Surgery",
-      "url": "https://doi.org/10.1007/s00268-013-1951-7",
-      "tags": [
-        "食道穿孔",
-        "統合分析（Meta-Analysis）",
-        "支架（Stent）",
-        "外科手術",
-        "esophageal",
-        "預後"
-      ],
-      "abstract_note": "本統合分析（引用 270 次）彙整 75 項研究共 2971 例食道穿孔患者，全面分析各種處置選項（手術修補、食道切除、支架、保守治療）的死亡率與預後。整體死亡率為 11.9%，自發性穿孔（Boerhaave 症候群）死亡率最高（36.2%）。手術修補（早期，< 24 小時）死亡率 12.2%；食道切除死亡率最高（16.4%）；支架置放死亡率 7.9%，顯示微創介入的優勢。本統合分析是目前最大規模的食道穿孔預後數據彙整，確立了支架作為低風險選項的地位。",
-      "purpose": "大規模統合分析食道穿孔各種處置方案的死亡率與預後",
-      "value_to_project": "確立支架死亡率（7.9%）低於手術（12.2%），是支持食道支架臨床應用的最強統計依據",
-      "_deleted": true
-    },
-    {
-      "id": "E06",
-      "doc_type": "期刊論文",
-      "title": "醫源性內視鏡穿孔的診斷與處置：歐洲消化內視鏡學會（ESGE）立場聲明 — 2020 更新",
-      "authors": "G. Paspatis, M. Arvanitakis",
-      "year": 2020,
-      "venue": "Endoscopy",
-      "url": "https://doi.org/10.1055/a-1222-3191",
-      "tags": [
-        "食道穿孔",
-        "醫源性（Iatrogenic）",
-        "內視鏡（Endoscopy）",
-        "支架（Stent）",
-        "ESGE 指引",
-        "esophageal"
-      ],
-      "abstract_note": "本 ESGE（歐洲消化內視鏡學會）2020 年更新立場聲明（引用 182 次），提供醫源性內視鏡消化道穿孔的標準化診斷與處置指引。指引強調：（1）即時辨識穿孔是改善預後的關鍵；（2）小型穿孔（< 10 mm）優先使用內視鏡夾閉（clip closure）；（3）較大穿孔或延遲發現者應考慮支架置放或手術；（4）內視鏡真空治療（Endoscopic Vacuum Therapy, EVT）對術後滲漏具高度有效性。此指引是歐洲醫療機構的標準處置參考，對食道支架及塗層相關產品的法規審查具有指引意義。",
-      "purpose": "制定醫源性內視鏡穿孔的標準診療路徑",
-      "value_to_project": "ESGE 指引是歐洲市場法規審查的重要參考；支架與 EVT 並列為主要選項，確認市場需求",
-      "_deleted": true
-    },
-    {
-      "id": "E07",
-      "doc_type": "期刊論文",
-      "title": "食道支架置放治療醫源性胸腔內食道穿孔",
-      "authors": "R. Freeman, Jaclyn M Van Woerkom",
-      "year": 2007,
-      "venue": "Annals of Thoracic Surgery",
-      "url": "https://doi.org/10.1016/J.ATHORACSUR.2007.02.025",
-      "tags": [
-        "食道穿孔",
-        "支架（Stent）",
-        "醫源性（Iatrogenic）",
-        "胸腔",
-        "esophageal"
-      ],
-      "abstract_note": "本臨床研究（引用 168 次）報告食道支架置放治療醫源性胸腔內食道穿孔的結果。研究分析 7 例胸腔內食道穿孔患者，均接受覆膜自膨式支架（covered SEMS）置放，臨床成功率 86%，平均住院天數 12 天，無手術相關死亡。研究確認覆膜支架可有效封閉食道穿孔缺口，作為外科手術的替代方案。支架移位是主要風險，需後續內視鏡追蹤。此研究是早期確立食道支架作為穿孔非手術治療選項的重要臨床報告之一。",
-      "purpose": "評估覆膜支架治療醫源性胸腔內食道穿孔的有效性",
-      "value_to_project": "早期臨床確認食道支架治療穿孔的可行性，支架移位問題首次被系統記錄",
-      "_deleted": true
-    },
-    {
-      "id": "E08",
-      "doc_type": "綜述review",
-      "title": "食道支架的全面回顧",
-      "authors": "Pierre Hindy, J. Hong",
-      "year": 2012,
-      "venue": "Gastroenterology & Hepatology",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/23293566/",
-      "tags": [
-        "食道穿孔",
-        "支架（Stent）",
-        "良性狹窄",
-        "惡性腫瘤",
-        "esophageal",
-        "引流管"
-      ],
-      "abstract_note": "本食道支架全面回顧（引用 162 次）涵蓋支架的類型（金屬 SEMS、塑膠 PS）、設計特點、臨床應用（惡性梗阻、良性狹窄、穿孔、瘻管）及並發症管理。詳細比較完全覆膜（FCSEMS）、部分覆膜（PCSEMS）與裸金屬支架（UCS）的適應症差異：FCSEMS 用於良性疾病（可回收）；PCSEMS 用於惡性梗阻（防移位）；UCS 用於惡性梗阻（最低移位率但不可回收）。支架設計的核心取捨：防移位 vs 可回收性。親水塗層可潛在改善支架表面生物相容性，降低肉芽組織增生（tissue ingrowth）並易於回收。",
-      "purpose": "全面回顧食道支架的種類、適應症、設計選擇與並發症",
-      "value_to_project": "詳細分析支架設計的防移位 vs 可回收取捨，直接指向親水/抗沾黏塗層可改善的臨床問題",
-      "_deleted": true
-    },
-    {
-      "id": "E09",
-      "doc_type": "期刊論文",
-      "title": "食道支架用於良性及惡性疾病：歐洲消化內視鏡學會（ESGE）指引 — 2021 更新",
-      "authors": "M. Spaander, R. D. van der Bogt",
-      "year": 2021,
-      "venue": "Endoscopy",
-      "url": "https://doi.org/10.1055/a-1475-0063",
-      "tags": [
-        "食道穿孔",
-        "支架（Stent）",
-        "ESGE 指引",
-        "良性疾病",
-        "惡性腫瘤",
-        "esophageal"
-      ],
-      "abstract_note": "本 ESGE 2021 更新指引（引用 138 次）提供食道支架在良性與惡性疾病的最新臨床建議。良性適應症包括：食道穿孔/瘻管（fistula）、難治性良性狹窄（refractory benign stricture）、術後滲漏；惡性適應症主要為惡性食道梗阻（palliative treatment）。指引強調 FCSEMS 是良性食道疾病的首選，計畫回收支架；並建議置入後 4-6 週移除，以降低過度肉芽增生風險。抗反流（anti-reflux）設計支架可降低胃食道逆流相關不適。指引為歐洲市場支架選擇的重要參考依據。",
-      "purpose": "提供食道支架在良性及惡性疾病的最新 ESGE 臨床指引",
-      "value_to_project": "ESGE 2021 最新指引是歐洲市場支架應用的法規依據；抗移位與易回收是設計核心需求",
-      "_deleted": true
-    },
-    {
-      "id": "E10",
-      "doc_type": "期刊論文",
-      "title": "內視鏡支架置放對比主要手術治療自發性食道破裂（Boerhaave 症候群）的國際比較研究",
-      "authors": "M. Schweigert, R. Beattie",
-      "year": 2013,
-      "venue": "American Surgeon",
-      "url": "https://doi.org/10.1177/000313481307900627",
-      "tags": [
-        "食道穿孔",
-        "Boerhaave 症候群",
-        "支架（Stent）",
-        "外科手術",
-        "esophageal",
-        "比較研究"
-      ],
-      "abstract_note": "本國際多中心比較研究（引用 105 次）比較內視鏡支架置放與手術治療自發性食道破裂（Boerhaave 症候群）的預後差異。Boerhaave 症候群是最嚴重的食道穿孔類型，傳統死亡率 > 35%。研究納入 76 例患者（支架組 35 例，手術組 41 例），結果顯示支架組死亡率（14%）顯著低於手術組（29%），住院時間及 ICU 使用也較短。但支架組的臨床失敗率（需轉手術）較高（20%）。此研究支持在嚴選的 Boerhaave 症候群患者中優先考慮支架治療，但需備妥手術轉換計畫。",
-      "purpose": "比較支架 vs 手術治療 Boerhaave 症候群的死亡率與預後",
-      "value_to_project": "確認支架可降低 Boerhaave 症候群死亡率（14% vs 29%），強化食道支架市場需求",
-      "_deleted": true
-    },
-    {
-      "id": "E11",
-      "doc_type": "綜述review",
-      "title": "食道滲漏患者各主要治療選項的預後：系統文獻回顧",
-      "authors": "Saga Persson, I. Rouvelas",
-      "year": 2017,
-      "venue": "Diseases of the Esophagus",
-      "url": "https://doi.org/10.1093/dote/dox108",
-      "tags": [
-        "食道穿孔",
-        "吻合口滲漏（Anastomotic Leak）",
-        "支架（Stent）",
-        "內視鏡真空治療（EVT）",
-        "esophageal",
-        "系統回顧"
-      ],
-      "abstract_note": "本系統回顧（引用 71 次）比較食道滲漏（esophageal leakage）患者接受各種治療選項的預後：外科手術修補、食道支架、內視鏡真空治療（Endoscopic Vacuum Therapy, EVT）、保守治療。分析 23 項研究顯示：EVT 組臨床成功率最高（90%），支架組 76%，手術組 67%，保守組 56%。EVT 住院時間最長（平均 37 天），支架組最短（24 天）。結論：EVT 對術後食道滲漏最有效，但需多次換藥；支架適合快速控制急性滲漏，但移位仍是主要問題。",
-      "purpose": "系統比較食道滲漏各治療選項的臨床成功率與預後",
-      "value_to_project": "EVT 成功率最高但負擔大；支架具快速封閉優勢，親水塗層可解決移位問題以進一步提升支架競爭力",
-      "_deleted": true
-    },
-    {
-      "id": "E12",
-      "doc_type": "期刊論文",
-      "title": "內視鏡真空治療（EVT）用於食道穿孔的多中心回顧性世代研究",
-      "authors": "J. Luttikhold, L. Pattynama",
-      "year": 2022,
-      "venue": "Endoscopy",
-      "url": "https://doi.org/10.1055/a-2042-6707",
-      "tags": [
-        "食道穿孔",
-        "內視鏡真空治療（EVT）",
-        "引流管",
-        "esophageal",
-        "多中心研究"
-      ],
-      "abstract_note": "本多中心回顧性世代研究（引用 35 次）評估內視鏡真空治療（EVT）用於食道穿孔的臨床效益。EVT 利用負壓海綿（vacuum sponge）置於缺損腔內，持續吸引促進傷口癒合，是近年食道穿孔治療的重要進展。研究納入 7 個中心共 52 例患者，臨床成功率 87%（44/52），平均 EVT 換置次數 4.3 次，平均住院 31 天。EVT 成功的獨立預測因子包括穿孔後 48 小時內介入與缺損直徑 < 3 cm。此研究確認 EVT 對食道穿孔具高有效性，且可作為支架治療失敗的救援選項。",
-      "purpose": "多中心評估 EVT 治療食道穿孔的有效性與預測因子",
-      "value_to_project": "EVT 是食道穿孔的重要替代治療，與支架形成互補；引流海綿的表面改良（抗沾黏）是潛在商機",
-      "_deleted": true
-    },
-    {
-      "id": "E13",
-      "doc_type": "期刊論文",
-      "title": "完全覆膜食道支架（FCSEMS）在良性及惡性疾病中的移位率：多中心回顧研究",
-      "authors": "Samuel Thomas, A. Siddiqui",
-      "year": 2019,
-      "venue": "Endoscopy International Open",
-      "url": "https://doi.org/10.1055/a-0890-3284",
-      "tags": [
-        "食道穿孔",
-        "支架（Stent）",
-        "移位（Migration）",
-        "FCSEMS",
-        "esophageal",
-        "多中心研究"
-      ],
-      "abstract_note": "本多中心回顧研究（引用 34 次）專注分析完全覆膜食道支架（FCSEMS）在良性與惡性疾病的移位率差異。研究納入 8 個中心 259 例患者，整體支架移位率 28.6%（74/259）。良性疾病移位率（38%）顯著高於惡性疾病（22%），原因在於良性食道保有正常蠕動，對支架的推力更強。移位後的臨床影響：17% 需要重新介入（re-intervention），3% 需要緊急手術。研究結論：食道支架移位是普遍問題，良性疾病更嚴重，需要更好的防移位設計（如錨定機制、防移位表面塗層）。",
-      "purpose": "量化 FCSEMS 在不同疾病中的移位率及臨床影響",
-      "value_to_project": "良性疾病移位率 38%，直接指向防移位表面設計需求，親水+ 錨定混合塗層可能是解方",
-      "_deleted": true
-    },
-    {
-      "id": "E14",
-      "doc_type": "期刊論文",
-      "title": "食道支架用於穿孔、瘻管或吻合口滲漏之治療",
-      "authors": "R. Freeman, A. Ascioti",
-      "year": 2011,
-      "venue": "Seminars in Thoracic and Cardiovascular Surgery",
-      "url": "https://doi.org/10.1053/j.semtcvs.2011.08.005",
-      "tags": [
-        "食道穿孔",
-        "瘻管（Fistula）",
-        "吻合口滲漏（Anastomotic Leak）",
-        "支架（Stent）",
-        "esophageal"
-      ],
-      "abstract_note": "本回顧文章（引用 34 次）分析食道支架在三種適應症（穿孔、瘻管、吻合口滲漏）中的臨床結果與技術要點。作者指出食道支架的成功取決於：（1）支架選擇（覆膜種類、直徑、長度）；（2）缺損封閉完整性的確認（水溶性顯影劑驗證）；（3）移位預防策略（縫合固定、可視標記）；（4）置放後 6-8 週的適時移除。文章強調支架的「橋接治療」角色，為患者創造恢復時機以接受確定性手術或等待自發癒合。",
-      "purpose": "分析食道支架在穿孔、瘻管和吻合口滲漏的臨床應用技術",
-      "value_to_project": "明確定義食道支架的「橋接治療」角色，及支架選擇、固定和移除時機的技術要點",
-      "_deleted": true
-    },
-    {
-      "id": "E15",
-      "doc_type": "綜述review",
-      "title": "食道穿孔處置的系統回顧",
-      "authors": "Tariq M Shaqran, Rawan Engineer",
-      "year": 2024,
-      "venue": "Cureus",
-      "url": "https://doi.org/10.7759/cureus.63651",
-      "tags": [
-        "食道穿孔",
-        "支架（Stent）",
-        "內視鏡真空治療（EVT）",
-        "系統回顧",
-        "esophageal",
-        "2024"
-      ],
-      "abstract_note": "本 2024 年最新系統回顧（引用 18 次）彙整食道穿孔的最新處置證據。回顧確認現代處置趨勢：向微創介入轉移，外科手術比例下降。最新處置選項包括：（1）食道支架（首選非手術選項）；（2）內視鏡真空治療（EVT，成功率 85-90%）；（3）內視鏡夾閉（早期小型穿孔）；（4）膠封閉（fibrin glue）；（5）手術（難治性或大型穿孔）。文章呼籲制定更統一的處置流程，並強調多學科合作（MDT）的重要性。是目前食道穿孔處置最新的證據彙整。",
-      "purpose": "彙整食道穿孔處置的最新 2024 年臨床證據",
-      "value_to_project": "2024 最新綜述，確認支架仍是首選非手術選項，EVT 成功率高，多種選項並存趨勢",
-      "_deleted": true
-    },
-    {
-      "id": "E16",
-      "doc_type": "期刊論文",
-      "title": "新型完全覆膜自膨式非縮短金屬食道支架的有效性與安全性",
-      "authors": "K. Dua, S. Latif",
-      "year": 2014,
-      "venue": "Gastrointestinal Endoscopy",
-      "url": "https://doi.org/10.1016/j.gie.2014.02.005",
-      "tags": [
-        "食道穿孔",
-        "支架（Stent）",
-        "FCSEMS",
-        "非縮短設計",
-        "esophageal",
-        "新型設計"
-      ],
-      "abstract_note": "本研究（引用 18 次）評估新型完全覆膜自膨式非縮短金屬支架（Non-Foreshortening FCSEMS）的有效性與安全性。傳統 FCSEMS 在膨脹過程中會有 25-40% 的縮短，造成定位困難；新型設計的非縮短特性使支架部署更精準。研究納入 60 例患者（惡性梗阻 40 例、良性狹窄 12 例、穿孔/瘻管 8 例），技術成功率 98%，臨床成功率 88%，支架移位率 18%（低於傳統 FCSEMS 的 25-30%）。此研究確認支架設計改良可降低移位率，支持持續的支架工程改良方向。",
-      "purpose": "評估非縮短設計 FCSEMS 的臨床表現及與傳統設計的差異",
-      "value_to_project": "設計改良降低移位率（18% vs 25-30%），但移位仍存在，表面塗層改良仍有互補空間",
-      "_deleted": true
-    },
-    {
-      "id": "E17",
-      "doc_type": "綜述review",
-      "title": "內視鏡真空治療（EVT）在食道腔缺損的有效性與安全性：系統回顧與統合分析",
-      "authors": "Ishaan Vohra, Harishankar Gopakumar",
-      "year": 2024,
-      "venue": "Clinical Endoscopy",
-      "url": "https://doi.org/10.5946/ce.2023.282",
-      "tags": [
-        "食道穿孔",
-        "內視鏡真空治療（EVT）",
-        "系統回顧",
-        "統合分析（Meta-Analysis）",
-        "esophageal",
-        "2024"
-      ],
-      "abstract_note": "本 2024 年系統回顧與統合分析（引用 16 次）彙整 EVT 在食道腔缺損（穿孔、吻合口滲漏、瘻管）的有效性與安全性最新數據。分析 18 項研究共 467 例，EVT 整體臨床成功率 87.3%，術後滲漏成功率最高（91.5%），食道穿孔 84.2%，瘻管 77.8%。EVT 相關嚴重不良事件發生率 6.2%，主要包括：出血、海綿嵌頓（sponge impaction）、食道狹窄。研究確認 EVT 是安全有效的食道腔缺損非手術治療選項，但需多次換置（平均 5.2 次）。",
-      "purpose": "統合分析 EVT 在食道腔缺損的最新有效性與安全性數據",
-      "value_to_project": "EVT 成功率 87.3%，但海綿嵌頓是一個並發症，抗沾黏海綿設計有潛在改良空間",
-      "_deleted": true
-    },
-    {
-      "id": "E18",
-      "doc_type": "期刊論文",
-      "title": "新型錨定夾（Anchor Pronged Clip）用於大腸直腸內視鏡黏膜下切除（ESD）後黏膜缺損閉合的臨床效用",
-      "authors": "D. Shiomi, M. Tanabe",
-      "year": 2024,
-      "venue": "Endoscopy",
-      "url": "https://doi.org/10.1055/a-2409-3622",
-      "tags": [
-        "內視鏡夾閉",
-        "ESD",
-        "黏膜缺損",
-        "大腸直腸",
-        "消化道",
-        "2024"
-      ],
-      "abstract_note": "本 2024 年臨床研究（引用 15 次）評估新型錨定夾（Anchor Pronged Clip, APC）在大腸直腸 ESD 後黏膜缺損閉合的效果。APC 設計特點：端部設有錨定刺（anchor prong），可嵌入黏膜下層提供穩固固定，避免傳統夾在剛性或大面積缺損中滑脫的問題。研究納入 42 例患者，技術成功率 98%，完全閉合率 90%，無嚴重並發症。APC 對 > 3 cm 大型缺損的閉合效果優於傳統夾（88% vs 62%）。此研究展示消化道閉合器材的設計創新方向，錨定機制對防移位設計有啟發意義。",
-      "purpose": "評估新型錨定夾對 ESD 後大型黏膜缺損的閉合效果",
-      "value_to_project": "錨定機制設計可應用於食道支架的防移位策略思考，是跨領域設計啟發",
-      "_deleted": true
-    },
-    {
-      "id": "E19",
-      "doc_type": "期刊論文",
-      "title": "食道穿孔與術後滲漏的處置策略",
-      "authors": "D. Nachira, C. Sassorossi",
-      "year": 2021,
-      "venue": "Annals of Esophagus",
-      "url": "https://doi.org/10.21037/AOE-2020-23",
-      "tags": [
-        "食道穿孔",
-        "吻合口滲漏（Anastomotic Leak）",
-        "支架（Stent）",
-        "外科手術",
-        "esophageal"
-      ],
-      "abstract_note": "本綜述（引用 9 次）回顧食道穿孔與術後滲漏的多模式處置策略，強調個別化治療方案的重要性。處置算法依據穿孔大小、位置、時間及患者狀況分層：（1）早期（< 24h）小型穿孔→內視鏡夾閉；（2）早期大型穿孔→支架或手術修補；（3）延遲（> 24h）→支架作為橋接或 EVT；（4）縱膈腔炎→手術引流 ± 支架。文章強調 MDT（多學科團隊）決策在降低食道穿孔死亡率中的核心角色，並介紹各處置選項的技術要點。",
-      "purpose": "建立食道穿孔與術後滲漏的個別化多模式處置算法",
-      "value_to_project": "處置算法確認支架是多種情境下的關鍵選項，說明支架市場的廣泛需求",
-      "_deleted": true
-    },
-    {
-      "id": "E20",
-      "doc_type": "期刊論文",
-      "title": "Boston Scientific Wallflex 與 Merit Medical Endotek 食道支架在良性及惡性病況的並發症比較",
-      "authors": "R. Essrani, Hiral N. Shah",
-      "year": 2020,
-      "venue": "Cureus",
-      "url": "https://doi.org/10.7759/cureus.7380",
-      "tags": [
-        "食道穿孔",
-        "支架（Stent）",
-        "Boston Scientific Wallflex",
-        "Merit Medical Endotek",
-        "移位（Migration）",
-        "esophageal",
-        "品牌比較"
-      ],
-      "abstract_note": "本臨床研究（引用 8 次）直接比較兩款主流食道支架的並發症：Boston Scientific Wallflex FCSEMS 與 Merit Medical Endotek FCSEMS。研究納入 75 例患者（Wallflex 42 例、Endotek 33 例），比較移位率、出血、肉芽組織增生（tissue ingrowth/overgrowth）等主要並發症。結果：Wallflex 移位率 21%，Endotek 移位率 18%（無統計顯著差異）；兩組肉芽增生率相近（各約 12%）。結論：兩種 FCSEMS 整體安全性相當，移位仍是共同問題，材料/塗層改良是下一步改善空間。",
-      "purpose": "比較兩款主流食道 FCSEMS 支架的臨床並發症",
-      "value_to_project": "確認目前主流支架移位率 18-21%，肉芽增生 12%，是表面塗層改良的核心目標指標",
-      "_deleted": true
     }
   ]
 }
