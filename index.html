@@ -303,7 +303,7 @@ function doLogin(){
 
 <header>
   <div class="logo" onclick="location.reload()" style="cursor:pointer;color:#fff" title="重新整理">Lit<span style="color:#ffeedd">DB</span></div>
-  <span style="font-size:10px;color:rgba(255,255,255,0.7)">v3.2 · 2026-06-15</span>
+  <span style="font-size:10px;color:rgba(255,255,255,0.7)">v3.3 · 2026-06-19</span>
   <button id="backBtn" class="btn" style="display:none;padding:6px 14px;font-size:13px;font-weight:700;color:var(--accent);border:2px solid var(--accent);background:#fff;border-radius:8px;letter-spacing:0.2px" onclick="goBack()">← 返回</button>
   <span class="mobile-hide" style="font-size:12px;color:rgba(255,255,255,0.85)">親水塗層文獻知識管理</span>
   <div class="header-r" style="gap:8px">
@@ -612,6 +612,8 @@ function doLogin(){
           <button class="btn btn-p" onclick="renderResearchAgent()">產生任務包</button>
           <button class="btn btn-s" onclick="researchApplyToLibrary()">套用到文庫篩選</button>
           <button class="btn btn-s" onclick="researchOpenReport()">產生篩選報告</button>
+          <button class="btn btn-s" onclick="aiReadResearchBatch(5)" style="color:var(--warn);border-color:var(--warn)">AI 閱讀前 5 篇</button>
+          <span id="researchReadStatus" style="font-size:12px;color:var(--muted)"></span>
         </div>
         <div style="font-size:12px;color:var(--muted);line-height:1.6">
           這版先不自動上網，而是根據目前 <code>papers.json</code> 產生可執行研究計畫。之後可升級成：逐篇上網讀專利/全文 → 萃取核心 claim、配方、製程、風險 → 回寫 JSON。
@@ -2464,6 +2466,7 @@ function renderResearchAgent() {
       <td style="padding:7px 8px;border:1px solid var(--border)"><div style="font-weight:700">${escHtml(p.title||'')}</div><div style="font-size:12px;color:var(--muted);margin-top:3px">${escHtml(paperKeyPoint(p))}</div></td>
       <td style="padding:7px 8px;border:1px solid var(--border);font-size:12px">${escHtml(paperRoleLabel(p))}</td>
       <td style="padding:7px 8px;border:1px solid var(--border);font-size:12px">${escHtml(paperProjectMeaning(p))}</td>
+      <td style="padding:7px 8px;border:1px solid var(--border);font-size:12px;white-space:nowrap">${hasAgentReading(p) ? '<span class="tag tag-green">AI 已讀</span>' : `<button class="btn btn-s" style="font-size:11px;padding:4px 8px" onclick="aiReadPaperById('${p.id}')">AI 閱讀</button>`}</td>
     </tr>`).join('');
   const patentRows = patents.map(p=>`
     <tr>
@@ -2490,8 +2493,8 @@ function renderResearchAgent() {
       <div class="panel-h">核心閱讀清單</div>
       <div style="padding:12px;overflow:auto">
         <table style="width:100%;border-collapse:collapse">
-          <thead><tr><th style="padding:7px 8px;border:1px solid var(--border);background:var(--card);text-align:left">ID</th><th style="padding:7px 8px;border:1px solid var(--border);background:var(--card);text-align:left">重點</th><th style="padding:7px 8px;border:1px solid var(--border);background:var(--card);text-align:left">角色</th><th style="padding:7px 8px;border:1px solid var(--border);background:var(--card);text-align:left">專案意義</th></tr></thead>
-          <tbody>${rows || '<tr><td colspan="4" style="padding:20px;text-align:center;color:var(--muted)">沒有符合資料</td></tr>'}</tbody>
+          <thead><tr><th style="padding:7px 8px;border:1px solid var(--border);background:var(--card);text-align:left">ID</th><th style="padding:7px 8px;border:1px solid var(--border);background:var(--card);text-align:left">重點</th><th style="padding:7px 8px;border:1px solid var(--border);background:var(--card);text-align:left">角色</th><th style="padding:7px 8px;border:1px solid var(--border);background:var(--card);text-align:left">專案意義</th><th style="padding:7px 8px;border:1px solid var(--border);background:var(--card);text-align:left">AI</th></tr></thead>
+          <tbody>${rows || '<tr><td colspan="5" style="padding:20px;text-align:center;color:var(--muted)">沒有符合資料</td></tr>'}</tbody>
         </table>
       </div>
     </div>
@@ -2542,6 +2545,162 @@ function researchApplyToLibrary() {
 function researchOpenReport() {
   researchApplyToLibrary();
   setTimeout(()=>openFilteredReport(), 80);
+}
+
+function agentReadingSourceText(p) {
+  const pr = p.patentResults || {};
+  const parts = [
+    p.fulltext,
+    p.full_text,
+    p.pdf_text,
+    p.abstract_note,
+    p.purpose,
+    p.value_to_project,
+    p.patent_notes,
+    pr.full ? JSON.stringify(pr.full) : '',
+    pr.review ? JSON.stringify(pr.review) : '',
+    pr.commercial ? JSON.stringify(pr.commercial) : ''
+  ].filter(Boolean);
+  return parts.join('\n\n').replace(/\s+/g, ' ').trim();
+}
+
+function hasAgentReading(p) {
+  return !!(p?.patentResults?.agent_reading);
+}
+
+function setResearchReadStatus(msg, isError=false) {
+  const el = document.getElementById('researchReadStatus');
+  if(el) {
+    el.textContent = msg || '';
+    el.style.color = isError ? 'var(--danger)' : 'var(--muted)';
+  }
+}
+
+function agentReadingQueue(topic, limit=5) {
+  return getResearchCandidates(topic)
+    .filter(p => !hasAgentReading(p))
+    .filter(p => agentReadingSourceText(p).length > 80)
+    .slice(0, limit);
+}
+
+function parseJsonObject(raw) {
+  let txt = String(raw || '').replace(/```json|```/g, '').trim();
+  const first = txt.indexOf('{');
+  const last = txt.lastIndexOf('}');
+  if(first >= 0 && last > first) txt = txt.slice(first, last + 1);
+  return JSON.parse(txt);
+}
+
+async function aiReadPaperById(pid) {
+  const p = DB.papers.find(x => x.id === pid);
+  if(!p) { toast('找不到文獻', 'error'); return; }
+  await aiReadPaper(p, true);
+}
+
+async function aiReadPaper(p, refresh=true) {
+  if(!cfg.proxy) { toast('請先設定 Claude API Proxy URL', 'error'); return null; }
+  const text = agentReadingSourceText(p);
+  if(!text || text.length < 80) { toast('此篇資料太少，請先補全文或摘要', 'error'); return null; }
+  setResearchReadStatus(`AI 閱讀中：${p.id}`);
+  const related = getResearchCandidates(`${p.title || ''} ${(p.tags || []).join(' ')}`)
+    .filter(x => x.id !== p.id)
+    .slice(0, 6)
+    .map(x => `[${x.id}] ${x.title}: ${compactText(x.abstract_note || x.purpose || x.value_to_project || '', 180)}`)
+    .join('\n');
+  const prompt = `請閱讀這筆 LitDB 文獻/專利資料，並只輸出 JSON，不要 markdown。
+
+目標：補強文獻整理內涵，尤其要找出專利核心內容、材料/製程/測試方法、對 Bioteque 的研發與商業意義。若資料不足，請明確標示 evidence_level 與 citations_needed，不要編造。
+
+文獻：
+[${p.id}] ${p.title || ''}
+type: ${p.doc_type || ''}
+year: ${p.year || ''}
+tags: ${(p.tags || []).join(', ')}
+
+相關文庫脈絡：
+${related || '無'}
+
+可用文本：
+${text.slice(0, 18000)}
+
+JSON schema:
+{
+  "summary": "150字內精華摘要",
+  "evidence_level": "high|medium|low",
+  "source_quality": "fulltext|abstract|metadata|weak",
+  "key_findings": ["最多6點"],
+  "coating_technology": {
+    "materials": ["材料/單體/聚合物"],
+    "surface_prep": ["表面處理"],
+    "curing_or_process": ["固化/接枝/塗佈條件"],
+    "test_methods": ["摩擦/接觸角/磨耗/結痂/抗菌等"]
+  },
+  "patent_core": {
+    "claim_focus": ["若非專利可留空"],
+    "design_around_notes": ["可迴避或需注意處"]
+  },
+  "experimental_plan": {
+    "materials": ["建議材料"],
+    "suppliers": ["供應商或供應來源；不確定請寫需查證"],
+    "steps": ["可執行實驗步驟"],
+    "acceptance_tests": ["驗收測試"]
+  },
+  "bioteque_relevance": "對 Bioteque 的意義",
+  "next_actions": ["下一步任務"],
+  "red_flags": ["風險或資料缺口"],
+  "citations_needed": ["需補查的引用或全文"]
+}`;
+  try {
+    const r = await fetch(cfg.proxy, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 3500,
+        system: '你是醫材親水塗層與專利情報分析員。必須根據使用者提供的文本回答，不可編造。輸出必須是合法 JSON。',
+        messages: [{role: 'user', content: prompt}]
+      })
+    });
+    const data = await r.json();
+    trackUsage(data);
+    const raw = data.content?.[0]?.text || '';
+    const analysis = parseJsonObject(raw);
+    analysis.read_at = new Date().toISOString();
+    analysis.source_chars = text.length;
+    if(!p.patentResults) p.patentResults = {};
+    if(!p._patentResults) p._patentResults = {};
+    p.patentResults.agent_reading = analysis;
+    p._patentResults.agent_reading = analysis;
+    saveDB();
+    setResearchReadStatus(`完成：${p.id}`);
+    toast(`AI 已閱讀 ${p.id}`, 'success');
+    if(refresh) {
+      renderResearchAgent();
+      const idx = filtered.findIndex(x => x.id === p.id);
+      if(idx >= 0) showDetail(idx);
+    }
+    return analysis;
+  } catch(e) {
+    setResearchReadStatus(`AI 閱讀失敗：${e.message}`, true);
+    toast(`AI 閱讀失敗：${e.message}`, 'error');
+    return null;
+  }
+}
+
+async function aiReadResearchBatch(limit=5) {
+  const topic = document.getElementById('researchTopic')?.value?.trim() || '';
+  const queue = agentReadingQueue(topic, limit);
+  if(!queue.length) { toast('目前沒有可閱讀的候選文獻，或都已讀過', 'success'); return; }
+  if(!cfg.proxy) { toast('請先設定 Claude API Proxy URL', 'error'); return; }
+  if(!confirm(`將用 AI 閱讀 ${queue.length} 篇候選文獻，會消耗 API。是否繼續？`)) return;
+  for(let i=0; i<queue.length; i++) {
+    setResearchReadStatus(`AI 閱讀 ${i+1}/${queue.length}：${queue[i].id}`);
+    await aiReadPaper(queue[i], false);
+    await new Promise(resolve => setTimeout(resolve, 500));
+  }
+  setResearchReadStatus(`完成 ${queue.length} 篇 AI 閱讀`);
+  renderResearchAgent();
+  filterPapers();
 }
 
 async function sendChat(){
@@ -2668,7 +2827,8 @@ function compactText(s='', max=220) {
 }
 
 function paperAnalysisText(p) {
-  const r = p.patentResults?.full || p.patentResults?.commercial || p.patentResults?.review || p.patentResults || {};
+  const agent = p.patentResults?.agent_reading || {};
+  const r = p.patentResults?.full || p.patentResults?.commercial || p.patentResults?.review || agent || p.patentResults || {};
   const examples = Array.isArray(r.examples) ? r.examples : [];
   return [
     p.fulltext,
@@ -2681,6 +2841,16 @@ function paperAnalysisText(p) {
     r.mechanism,
     r.vs_database,
     r.bioteque_relevance,
+    agent.summary,
+    agent.bioteque_relevance,
+    agent.source_quality,
+    agent.evidence_level,
+    agent.coating_technology ? JSON.stringify(agent.coating_technology) : '',
+    agent.patent_core ? JSON.stringify(agent.patent_core) : '',
+    agent.experimental_plan ? JSON.stringify(agent.experimental_plan) : '',
+    Array.isArray(agent.key_findings) ? agent.key_findings.join('; ') : '',
+    Array.isArray(agent.next_actions) ? agent.next_actions.join('; ') : '',
+    Array.isArray(agent.red_flags) ? agent.red_flags.join('; ') : '',
     Array.isArray(r.key_findings) ? r.key_findings.join('；') : '',
     Array.isArray(r.actionable_insights) ? r.actionable_insights.join('；') : '',
     Array.isArray(r.red_flags) ? r.red_flags.join('；') : '',
@@ -2713,13 +2883,16 @@ function paperRoleLabel(p) {
 }
 
 function paperKeyPoint(p) {
-  const r = p.patentResults?.full || p.patentResults?.commercial || p.patentResults?.review || p.patentResults || {};
+  const agent = p.patentResults?.agent_reading || {};
+  const r = p.patentResults?.full || p.patentResults?.commercial || p.patentResults?.review || agent || p.patentResults || {};
   const candidates = [
+    agent.summary,
     r.summary,
     p.fulltext ? compactText(p.fulltext, 220) : '',
     p.value_to_project,
     p.purpose,
     p.abstract_note,
+    Array.isArray(agent.key_findings) ? agent.key_findings[0] : '',
     Array.isArray(r.key_findings) ? r.key_findings[0] : '',
     Array.isArray(r.actionable_insights) ? r.actionable_insights[0] : ''
   ].filter(Boolean);
@@ -2727,8 +2900,9 @@ function paperKeyPoint(p) {
 }
 
 function paperProjectMeaning(p) {
-  const r = p.patentResults?.full || p.patentResults?.commercial || p.patentResults?.review || p.patentResults || {};
-  const direct = r.bioteque_relevance || p.value_to_project;
+  const agent = p.patentResults?.agent_reading || {};
+  const r = p.patentResults?.full || p.patentResults?.commercial || p.patentResults?.review || agent || p.patentResults || {};
+  const direct = agent.bioteque_relevance || r.bioteque_relevance || p.value_to_project;
   if(direct) return compactText(direct, 190);
   const role = paperRoleLabel(p);
   if(role.includes('專利')) return '可作為 FTO/迴避設計清單的一筆前案，需再確認權利狀態與 claim 邊界。';
@@ -3560,6 +3734,7 @@ function showDetail(i) {
       ${link?`<a href="${link}" target="_blank" class="btn btn-s">↗ 開啟原文</a>`:''}
       ${p._deleted?`<button class="btn btn-s" onclick="restorePaper('${p.id}')" style="color:var(--accent2);border-color:var(--accent2)">♻ 復原</button><button class="btn btn-s" onclick="deletePaper('${p.id}')" style="color:var(--danger);border-color:var(--danger)">⛔ 永久刪除</button>`:`<button class="btn btn-s" onclick="deletePaper('${p.id}')" style="color:var(--danger);border-color:var(--danger);margin-left:auto">🗑 刪除</button>`}
       ${p.doc_type==='專利'?`<button class="btn btn-p" onclick="showPatentAnalysis(${i})">🧪 專利分析</button>`:`<button class="btn btn-s" onclick="showPaperAnalysis(${i})">📊 技術分析</button>`}
+      <button class="btn btn-s" onclick="aiReadPaperById('${p.id}')" style="color:var(--warn);border-color:var(--warn)">AI 深讀此篇</button>
       <button class="btn btn-p" onclick="loadCiteTree(${i})" style="margin-left:auto">🌳 引文樹</button>
     </div>
     <div id="patentAnalysis_${i}"></div>
@@ -3569,6 +3744,7 @@ function showDetail(i) {
         const modeLabels = {full:'📊 完整分析',avoidance:'🚧 迴避設計',formulation:'🧪 配方萃取',feasibility:'🏭 可行性評估',compare:'🔄 對比分析',review:'📚 綜述分析',commercial:'🏢 商業分析'};
         if(mode==='review') return renderReviewResult(r);
         if(mode==='commercial') return renderCommercialResult(r);
+        if(mode==='agent_reading') return renderAgentReadingResult(r);
         return `<div style="margin-bottom:6px;font-size:11px;color:var(--accent2);font-weight:600">${modeLabels[mode]||mode}</div>` + renderPatentResult(r);
       }).join('')}
       <button class="btn btn-s" onclick="${p.doc_type==='專利'?`showPatentAnalysis(${i})`:`showPaperAnalysis(${i})`}" style="width:100%;margin-top:8px">🔄 重新分析 / 其他模式</button>
@@ -3897,6 +4073,51 @@ function renderMarket() {
     </section>`;
   };
 
+  const aiReadPapers = papers.filter(hasAgentReading);
+  const fulltextPapers = papers.filter(p=>getFulltext(p));
+  const latestRead = aiReadPapers
+    .map(p=>p.patentResults?.agent_reading?.read_at)
+    .filter(Boolean)
+    .sort()
+    .pop();
+  const latestReadText = latestRead ? new Date(latestRead).toLocaleString('zh-TW', {hour12:false}) : '尚未執行';
+  const researchQueueCount = agentReadingQueue('ureteral stent encrustation hydrophilic coating', 999).length;
+  const sourceQuality = aiReadPapers.reduce((acc,p)=>{
+    const q = p.patentResults?.agent_reading?.source_quality || 'unknown';
+    acc[q] = (acc[q] || 0) + 1;
+    return acc;
+  }, {});
+  const sourceQualityText = Object.entries(sourceQuality).map(([k,v])=>`${k}: ${v}`).join(' / ') || '尚無';
+  const memoHtml = `
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;margin:14px 0 20px;overflow:hidden">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface);flex-wrap:wrap">
+      <div>
+        <div style="font-size:13px;font-weight:800;color:var(--accent)">Memo｜目前版本與 AI Agent 進度</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">v3.3 · 2026-06-19 · LitDB 內部工作版</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn btn-s" style="font-size:11px;padding:4px 10px" onclick="showView('research',getMainTab('research'))">開啟研究代理人</button>
+        <button class="btn btn-s" style="font-size:11px;padding:4px 10px" onclick="showView('browse',getMainTab('browse'))">查看文庫</button>
+      </div>
+    </div>
+    <div style="padding:12px 14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px">
+      ${[
+        ['收錄文獻', papers.length],
+        ['全文快取', fulltextPapers.length],
+        ['AI 已閱讀', aiReadPapers.length],
+        ['待閱讀候選', researchQueueCount]
+      ].map(([k,v])=>`<div style="border:1px solid var(--border);border-radius:8px;padding:9px 10px;background:#fff">
+        <div style="font-size:20px;font-weight:800;color:var(--accent2)">${v}</div>
+        <div style="font-size:11px;color:var(--muted)">${k}</div>
+      </div>`).join('')}
+    </div>
+    <div style="padding:0 14px 12px;font-size:12px;line-height:1.7;color:var(--text)">
+      <div><b>AI agent 自動閱讀進度：</b>目前以站內已收載資料為主，優先讀全文快取；沒有全文時退回摘要、目的、專案價值與既有分析。最近閱讀時間：${latestReadText}。</div>
+      <div><b>來源品質摘要：</b>${sourceQualityText}。若顯示 metadata/weak，代表需要補全文或原始專利頁面後再重跑。</div>
+      <div><b>本版更新概要：</b>新增研究頁批次 AI 閱讀、文庫單篇 AI 深讀、結果回寫 <code>patentResults.agent_reading</code>，並讓篩選報告與首頁摘要可連動讀取。</div>
+    </div>
+  </div>`;
+
   el.innerHTML = `
   <!-- 標題 -->
   <div style="margin-bottom:20px">
@@ -3905,6 +4126,8 @@ function renderMarket() {
   </div>
 
   <!-- 區塊1：市場總覽 -->
+  ${memoHtml}
+
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px">
     ${mkData.map(d=>`
     <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center">
@@ -5900,6 +6123,41 @@ ${relatedPatents||'無'}
   } catch(e) {
     toast('分析失敗：'+e.message,'error');
   }
+}
+
+function renderAgentReadingResult(r) {
+  const list = arr => Array.isArray(arr) && arr.length ? `<ul style="margin:6px 0 0 18px;padding:0">${arr.map(x=>`<li>${escHtml(x)}</li>`).join('')}</ul>` : '<div style="color:var(--muted)">-</div>';
+  const block = (title, html, color='var(--accent)') => `<div style="margin-top:8px;padding:8px 10px;background:var(--card);border-left:3px solid ${color};border-radius:0 6px 6px 0;font-size:12px;line-height:1.6"><strong style="color:${color}">${title}</strong>${html}</div>`;
+  const tech = r.coating_technology || {};
+  const patent = r.patent_core || {};
+  const exp = r.experimental_plan || {};
+  return `<div class="patent-result">
+    <div style="margin-bottom:6px;font-size:11px;color:var(--accent2);font-weight:600">AI 文獻閱讀代理人</div>
+    ${r.summary ? `<div style="padding:8px 10px;background:var(--card);border-radius:6px;font-size:13px;font-weight:600;margin-bottom:10px">${escHtml(r.summary)}</div>` : ''}
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+      <span class="tag tag-gray">evidence: ${escHtml(r.evidence_level || '-')}</span>
+      <span class="tag tag-gray">source: ${escHtml(r.source_quality || '-')}</span>
+      ${r.source_chars ? `<span class="tag tag-gray">${r.source_chars} chars</span>` : ''}
+    </div>
+    ${block('關鍵發現', list(r.key_findings), 'var(--accent2)')}
+    ${block('材料 / 表面 / 製程 / 測試', `
+      <table class="patent-table" style="margin-top:6px">
+        <tr><th>材料</th><td>${escHtml((tech.materials || []).join(', ') || '-')}</td></tr>
+        <tr><th>表面處理</th><td>${escHtml((tech.surface_prep || []).join(', ') || '-')}</td></tr>
+        <tr><th>製程/固化</th><td>${escHtml((tech.curing_or_process || []).join(', ') || '-')}</td></tr>
+        <tr><th>測試方法</th><td>${escHtml((tech.test_methods || []).join(', ') || '-')}</td></tr>
+      </table>`, 'var(--accent)')}
+    ${block('專利核心 / 迴避設計', `<div style="margin-top:4px"><b>Claim focus</b>${list(patent.claim_focus)}</div><div style="margin-top:6px"><b>Design-around</b>${list(patent.design_around_notes)}</div>`, 'var(--warn)')}
+    ${block('實驗規劃', `
+      <div><b>材料</b>${list(exp.materials)}</div>
+      <div style="margin-top:6px"><b>供應商</b>${list(exp.suppliers)}</div>
+      <div style="margin-top:6px"><b>步驟</b>${list(exp.steps)}</div>
+      <div style="margin-top:6px"><b>驗收測試</b>${list(exp.acceptance_tests)}</div>`, 'var(--accent2)')}
+    ${r.bioteque_relevance ? block('Bioteque 意義', `<div style="margin-top:4px">${escHtml(r.bioteque_relevance)}</div>`, 'var(--accent)') : ''}
+    ${block('下一步', list(r.next_actions), 'var(--accent2)')}
+    ${r.red_flags?.length ? block('風險 / 缺口', list(r.red_flags), 'var(--danger)') : ''}
+    ${r.citations_needed?.length ? block('待補引用', list(r.citations_needed), 'var(--warn)') : ''}
+  </div>`;
 }
 
 function renderPatentResult(a) {
