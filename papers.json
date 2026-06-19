@@ -8231,27 +8231,99 @@
           "summary": "Cook Medical P31（US7402620）為 P30（US7141246）續案，在 PVP+PU interpolymer+isocyanate 熱固化潤滑塗層基礎上，新增 chlorhexidine（0.1-5%）、triclosan、silver 三種抗菌劑的可控緩釋設計，加入 Vitamin E 作抗氧化保存穩定劑。抗菌劑嵌入 PU 網絡以擴散機制緩慢釋放，維持數週抑菌濃度。熱固化製程免 UV 設備，可塗管腔內壁。對 本專案 而言是 Phase 3 抗菌設計的核心參考配方，但 triclosan 的 FDA 法規疑慮與 chlorhexidine 的生物相容性評估複雜度需注意。建議以 silver 作為優先抗菌劑，配合 UV 路線或 QCS 高分子抗菌以迴避 P31 核心 claim。",
           "examples": [
             {
-              "name": "抗菌PVP-PU塗層",
-              "is_real": true,
+              "name": "Embodiment A：Chlorhexidine 緩釋抗菌塗層",
+              "is_real": false,
               "credibility": "中",
-              "credibility_reason": "已核准專利(B2)，但具體釋放數據需讀全文",
-              "substrate": "導管/gastroenteric tubes/endotracheal tubes",
+              "credibility_reason": "* 推論較少：專利摘要/claim 脈絡明確列出 chlorhexidine 0.1-5% 與 sustained release，但尚待全文 example 與測試數據核對。",
+              "substrate": "導管、gastroenteric tubes、endotracheal tubes；可延伸至需要潤滑與抗菌的管狀醫材表面",
               "formulation": {
-                "primer": "PU primer",
-                "topcoat": "PVP+PU interpolymer+抗菌劑（chlorhexidine 0.1-5%或silver或triclosan）+Vitamin E"
+                "primer": "PU interpolymer / polyurethane primer，用於提高基材附著與抗磨耗",
+                "topcoat": "PVP + PU interpolymer + isocyanate + chlorhexidine 0.1-5% + 可選 Vitamin E"
               },
               "process": {
-                "surface_prep": "可選plasma",
-                "coating_method": "Dip/spray",
-                "drying": "熱乾燥",
-                "curing": "熱固化（isocyanate交聯）"
+                "surface_prep": "可選 plasma 或其他活化處理，以提高 PU primer 附著",
+                "coating_method": "Dip coating 或 spray coating；管材內外表面皆可設計",
+                "drying": "熱乾燥，去除溶劑並讓抗菌劑保留在 polymer network",
+                "curing": "Isocyanate 熱固化，使 PVP/PU 網絡固定並提供緩釋路徑"
               },
               "results": {
-                "friction": "潤滑",
-                "adhesion": "PU interpolymer",
+                "friction": "預期維持 PVP 潤滑性，但 CHX 添加量過高可能影響表面親水與摩擦",
+                "adhesion": "PU interpolymer 提供附著；需做磨耗後抗菌與 COF 雙重確認",
+                "wca": "未明示，需全文或實驗補測",
+                "durability": "以熱固化網絡維持數週抗菌劑擴散釋放為目標",
+                "other": "適合拿來比較抗 biofilm 效果，但 CHX 過敏/細胞毒性風險需要優先評估"
+              }
+            },
+            {
+              "name": "Embodiment B：Silver / silver ion 抗 biofilm 模組",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "* 推論較少：silver/silver ion 是專利列出的抗菌選項；濃度窗口與釋放數據仍需全文或實驗確認。",
+              "substrate": "留置導管、引流管、支架或其他需要長時間抗菌/抗 biofilm 的表面",
+              "formulation": {
+                "primer": "PU interpolymer primer 或等效附著層",
+                "topcoat": "PVP + PU interpolymer + isocyanate + silver / silver ions；可加入 Vitamin E 作保存穩定設計"
+              },
+              "process": {
+                "surface_prep": "基材清潔、可選 plasma；避免 silver 分散不均造成局部毒性",
+                "coating_method": "Dip/spray 後均勻乾燥；需控制 silver dispersion 與粒徑/離子來源",
+                "drying": "低殘留溶劑熱乾燥",
+                "curing": "熱固化形成固定網絡，讓 silver 以低劑量持續釋放"
+              },
+              "results": {
+                "friction": "目標不犧牲 PVP 潤滑；silver loading 應與 COF 同步優化",
+                "adhesion": "PU network 固定 silver，降低 burst release",
+                "wca": "未明示，需補測 WCA/COF/磨耗後 WCA",
+                "durability": "重點是 24h/72h/7d 釋放與抗菌效果是否仍存在",
+                "other": "相對 triclosan/CHX 法規形象較乾淨，但劑量窗口窄，必須搭配 ISO 10993-5"
+              }
+            },
+            {
+              "name": "Embodiment C：Triclosan + Vitamin E 保存穩定組合",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "** 推論：triclosan 與 Vitamin E 皆在 P31 摘要脈絡中出現，但是否同一實施例與比例需全文核對。",
+              "substrate": "短期使用或特定抗菌需求的管狀醫材；不建議作為目前優先商品化路線",
+              "formulation": {
+                "primer": "PU interpolymer primer",
+                "topcoat": "PVP + PU interpolymer + isocyanate + triclosan + Vitamin E antioxidant stabilizer"
+              },
+              "process": {
+                "surface_prep": "基材活化與清潔；需確認 triclosan 與溶劑/PU 網絡相容性",
+                "coating_method": "Dip/spray；需避免 triclosan 結晶析出或表面 blooming",
+                "drying": "熱乾燥與保存穩定測試併行",
+                "curing": "Isocyanate 熱固化；Vitamin E 作抗氧化/保存穩定概念"
+              },
+              "results": {
+                "friction": "需確認 triclosan/Vitamin E 是否降低親水潤滑表現",
+                "adhesion": "PU interpolymer 提供基本附著，仍需磨耗後釋放測試",
                 "wca": "未明示",
-                "durability": "良好",
-                "other": "抗菌劑可控釋放；Vitamin E抗氧化保存"
+                "durability": "重點是儲存後抗菌效力是否保留",
+                "other": "Triclosan 法規疑慮高；此 embodiment 比較適合作為「不優先採用但需理解 claim」的設計"
+              }
+            },
+            {
+              "name": "Embodiment D：管腔內壁熱固化塗佈情境",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "** 推論：熱固化可避開 UV line-of-sight 問題，適合內壁塗層；實際內壁 example 與參數需全文確認。",
+              "substrate": "長管、導管內腔、endotracheal/gastroenteric tube lumen 或其他 UV 難以照射的內表面",
+              "formulation": {
+                "primer": "PU primer / PU interpolymer 作附著與耐磨骨架",
+                "topcoat": "PVP + PU interpolymer + isocyanate + CHX/silver/triclosan 任一抗菌劑，可選 Vitamin E"
+              },
+              "process": {
+                "surface_prep": "內壁清潔、溶劑預潤濕或 plasma 替代處理需依管徑選擇",
+                "coating_method": "內腔灌注、抽吸或循環式 dip coating；控制液膜厚度與排液速度",
+                "drying": "水平/旋轉乾燥以降低內壁流痕與堵塞風險",
+                "curing": "熱固化，優勢是無需 UV 直視照射，適合長管內壁"
+              },
+              "results": {
+                "friction": "內壁潤滑可降低導絲/器械通過阻力；需做 lumen COF 或推送力測試",
+                "adhesion": "需做沖洗、磨耗、彎折後附著確認",
+                "wca": "內壁 WCA 難測，可用液體通過時間或內壁 COF 替代",
+                "durability": "需做反覆沖洗與長時間浸泡後抗菌釋放",
+                "other": "這是 Cook 熱固化路線的實用價值之一，也提示 UV 路線若要內壁化需另外設計製程"
               }
             }
           ],
@@ -8360,7 +8432,8 @@
             "US7402620 全文 claim",
             "US7141246（P30 母案）claim 比對",
             "US6645483（祖案）"
-          ]
+          ],
+          "examples_note": "註：以下先把 US7402620 的抗菌劑選項與製程使用情境拆成可閱讀的 embodiment。尚未逐段核對全文 Example 與數據；右鍵卡片可展開全部。"
         }
       }
     },

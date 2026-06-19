@@ -122,6 +122,10 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 .patent-table td{padding:6px 8px;border:1px solid var(--border);vertical-align:top;line-height:1.5}
 .patent-example{margin-top:10px;padding:10px;background:var(--card);border-radius:6px;border-left:3px solid var(--accent)}
 .patent-example h5{font-size:12px;color:var(--accent);margin-bottom:6px}
+.patent-example.extra-example{border-left-color:var(--warn)}
+.patent-example-toggle{float:right;margin-left:8px;border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:5px;padding:2px 7px;font-size:11px;cursor:pointer}
+.patent-example-toggle:hover{color:var(--accent);border-color:var(--accent)}
+.patent-example-hint{font-size:11px;color:var(--muted);margin:-2px 0 6px}
 
 /* Patent modal */
 .patent-modal{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,0.5);overflow-y:auto;padding:24px}
@@ -326,7 +330,6 @@ function doLogin(){
   <div class="tab active" onclick="showView('market',this)">🏢<span class="tab-text"> 市場</span></div>
   <div class="tab" onclick="showView('routes',this)">🛣<span class="tab-text"> 路線</span></div>
   <div class="tab" onclick="showView('browse',this)">📚<span class="tab-text"> 文庫</span> <span class="badge" id="browseCount">0</span><span class="badge" id="analyzedCount" style="background:var(--accent2)">0</span></div>
-  <div class="tab" onclick="showView('research',this)">🧭<span class="tab-text"> 研究</span></div>
   <div class="tab" onclick="showView('patent-tree',this)">🌳<span class="tab-text"> 專利樹</span></div>
   <div class="tab" onclick="showView('report',this)">📋<span class="tab-text"> 報告</span></div>
 </div>
@@ -2813,7 +2816,7 @@ let currentAnalysisTab = 'graph';
 function goBack() {
   if(!previousView) return;
   const tabs = document.querySelectorAll('.tabs > .tab');
-  const viewMap = {market:0, routes:1, browse:2, research:3, 'patent-tree':4, report:5};
+  const viewMap = {market:0, routes:1, browse:2, 'patent-tree':3, report:4};
   const idx = viewMap[previousView];
   if(idx!==undefined && tabs[idx]) {
     showView(previousView, tabs[idx]);
@@ -4090,9 +4093,9 @@ function renderMarket() {
       };
       const logo = ENTITY_LOGOS[item.company] || '';
       return `<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer" onclick="goToMarketEntity('${item.company.replace(/'/g,"\\'")}')">
-        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border)">
-          <div style="width:48px;height:48px;border-radius:8px;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:${seg.color};flex-shrink:0;overflow:hidden">
-            ${logo?`<img src="${logo}" style="width:40px;height:40px;object-fit:contain;border-radius:4px" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" alt="${item.company} logo">`:''}
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border)">
+          <div style="width:42px;height:42px;border-radius:8px;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:${seg.color};flex-shrink:0;overflow:hidden">
+            ${logo?`<img src="${logo}" style="width:34px;height:34px;object-fit:contain;border-radius:4px" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" alt="${item.company} logo">`:''}
             <div style="${logo?'display:none':'display:flex'};width:100%;height:100%;align-items:center;justify-content:center">${abbr}</div>
           </div>
           <div style="flex:1;min-width:0">
@@ -4108,7 +4111,6 @@ function renderMarket() {
 
     const p = item.paper;
     const c = p.patentResults.commercial;
-    const tc = threatColor[c.competitive_threat_to_bioteque]||'#888';
     const ABBR = ABBR_MAP[p.id]||c.company?.slice(0,3)||'?';
     const routes = ROUTE_MAP[p.id]||[];
     const tech = c.coating_technology||{};
@@ -4116,22 +4118,18 @@ function renderMarket() {
     const relatedCount = countRelated([c.company||'', c.product||'', p.title||''].filter(Boolean));
     return `
       <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer" onclick="goToMarketPaper('${p.id}')">
-        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border)">
-          <div style="width:48px;height:48px;border-radius:8px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border)">
+          <div style="width:42px;height:42px;border-radius:8px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden">
             <img src="${LOGO_MAP[p.id]||''}"
-              style="width:40px;height:40px;object-fit:contain;border-radius:4px"
+              style="width:34px;height:34px;object-fit:contain;border-radius:4px"
               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
               alt="${c.company} logo">
             <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--accent);background:var(--card)">${ABBR}</div>
           </div>
           <div style="flex:1;min-width:0">
-            <div style="font-size:13px;font-weight:700;color:var(--text)">${c.company}</div>
-            <div style="font-size:11px;color:${seg.color};font-weight:600">${c.product}</div>
+            <div style="font-size:14px;font-weight:800;color:var(--text)">${c.company}</div>
+            <div style="font-size:12px;color:${seg.color};font-weight:700">${c.product}</div>
             <div style="font-size:10px;color:var(--muted);margin-top:1px">${c.hq||''} · 文庫 ${relatedCount} 篇</div>
-          </div>
-          <div style="text-align:right;flex-shrink:0">
-            <div style="font-size:9px;color:var(--muted)">競爭威脅</div>
-            <div style="font-size:16px;font-weight:800;color:${tc}">${c.competitive_threat_to_bioteque?.split('（')[0]||'—'}</div>
           </div>
         </div>
         <div style="padding:10px 14px">
@@ -4156,10 +4154,10 @@ function renderMarket() {
     const items = segmentMap[seg.id] || [];
     return `<section style="margin-bottom:24px">
       <div style="display:flex;align-items:flex-end;gap:10px;margin-bottom:10px">
-        <div style="font-size:14px;font-weight:800;color:${seg.color}">${seg.icon} ${seg.title}</div>
-        <div style="font-size:11px;color:var(--muted)">${items.length} 個玩家 · ${seg.note}</div>
+        <div style="font-size:18px;font-weight:800;color:${seg.color}">${seg.icon} ${seg.title}</div>
+        <div style="font-size:12px;color:var(--muted)">${items.length} 個玩家 · ${seg.note}</div>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px">
         ${items.length ? items.map(item=>marketCard(item, seg)).join('') : `<div style="padding:18px;background:var(--card);border:1px dashed var(--border);border-radius:8px;color:var(--muted);font-size:12px">文庫目前沒有此類玩家資料</div>`}
       </div>
     </section>`;
@@ -4182,14 +4180,14 @@ function renderMarket() {
   const sourceQualityText = Object.entries(sourceQuality).map(([k,v])=>`${k}: ${v}`).join(' / ') || '尚無';
   const memoHtml = `
   <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;margin:14px 0 20px;overflow:hidden">
-    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface);flex-wrap:wrap">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--border);background:var(--surface);flex-wrap:wrap">
       <div>
         <div style="font-size:13px;font-weight:800;color:var(--accent)">Memo｜目前版本與 AI Agent 進度</div>
         <div style="font-size:11px;color:var(--muted);margin-top:2px">v3.3 · 2026-06-19 · LitDB 內部工作版</div>
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button class="btn btn-s" style="font-size:11px;padding:4px 10px" onclick="showView('research',getMainTab('research'))">開啟研究代理人</button>
-        <button class="btn btn-s" style="font-size:11px;padding:4px 10px" onclick="showView('browse',getMainTab('browse'))">查看文庫</button>
+        <button class="btn btn-s" style="font-size:11px;padding:4px 10px" onclick="showView('browse',getMainTab('browse'))">文庫篩選</button>
+        <button class="btn btn-s" style="font-size:11px;padding:4px 10px" onclick="openFilteredReport()">生成篩選報告</button>
       </div>
     </div>
     <div style="padding:12px 14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px">
@@ -4281,95 +4279,10 @@ function renderMarket() {
   const cookPatentPathHtml = renderCookPatentPath();
 
   el.innerHTML = `
-  <!-- 標題 -->
-  <div style="margin-bottom:20px">
-    <h2 style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px">市場玩家分析</h2>
-    <p style="font-size:13px;color:var(--muted)">親水塗層主要競爭廠商、技術路線歸屬與 本專案 競爭定位</p>
-  </div>
-
-  <!-- 區塊1：市場總覽 -->
-  ${memoHtml}
-
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px">
-    ${mkData.map(d=>`
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center">
-      <div style="font-size:24px;font-weight:800;color:var(--accent)">${d.n}</div>
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-top:2px">${d.label}</div>
-      <div style="font-size:10px;color:var(--muted);margin-top:2px">${d.sub}</div>
-    </div>`).join('')}
-  </div>
-
-  <!-- 區塊2：市場角色分區 -->
-  ${MARKET_SEGMENTS.map(segmentSection).join('')}
-
-  ${cookPatentPathHtml}
-
-  <!-- 區塊3：技術路線歸屬矩陣 -->
-  <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:10px">📊 技術路線歸屬矩陣</div>
-  <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:24px">
-    <div style="overflow-x:auto">
-      <table style="width:100%;border-collapse:collapse;font-size:12px">
-        <thead>
-          <tr style="background:var(--surface)">
-            <th style="padding:10px 14px;text-align:left;border:1px solid var(--border);min-width:120px">廠商</th>
-            ${matrixRoutes.map(r=>`<th style="padding:8px 10px;text-align:center;border:1px solid var(--border);font-size:11px;white-space:nowrap">${r}</th>`).join('')}
-          </tr>
-        </thead>
-        <tbody>
-          ${matrixPlayers.map(pl=>`
-          <tr>
-            <td style="padding:8px 14px;border:1px solid var(--border);font-weight:700">${pl.name}<div style="font-size:9px;color:var(--muted);font-weight:400">${pl.role}</div></td>
-            ${pl.strength.map(s=>`<td style="padding:8px;border:1px solid var(--border);text-align:center">
-              ${s===3?'●●●':s===2?'●●':s===1?'●':'<span style="color:var(--border)">—</span>'}
-            </td>`).join('')}
-          </tr>`).join('')}
-          <tr style="background:${`#2d8c5a`}18">
-            <td style="padding:8px 14px;border:1px solid var(--border);font-weight:700;color:#2d8c5a">本專案（目標）</td>
-            <td style="padding:8px;border:1px solid var(--border);text-align:center;color:var(--muted)">迴避</td>
-            <td style="padding:8px;border:1px solid var(--border);text-align:center;color:#2d8c5a;font-weight:700">●●● Phase 2</td>
-            <td style="padding:8px;border:1px solid var(--border);text-align:center;color:#2d8c5a;font-weight:700">●● Phase 3</td>
-            <td style="padding:8px;border:1px solid var(--border);text-align:center;color:#d4a030;font-weight:700">● Phase 1</td>
-            <td style="padding:8px;border:1px solid var(--border);text-align:center;color:var(--muted)">採購</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div style="padding:8px 14px;font-size:10px;color:var(--muted)">●●● 核心技術　●● 重要技術　● 輔助技術　— 未涉及</div>
-  </div>
-
-  <!-- 區塊4：本專案 定位建議 -->
-  <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:10px">🎯 本專案 競爭定位建議</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
-    <div style="background:#fff8e6;border:1px solid #f0c040;border-radius:10px;padding:14px">
-      <div style="font-size:11px;font-weight:700;color:#b8860b;margin-bottom:8px">⚠️ 避開（競爭過強）</div>
-      <div style="font-size:12px;color:var(--text);line-height:1.7">
-        <b>UV-BP Route</b>（DSM 主導）<br>
-        <b>SBMA Serene</b>（Surmodics IP）<br>
-        → FTO 分析優先
-      </div>
-    </div>
-    <div style="background:#eaf5ef;border:1px solid #82d4a8;border-radius:10px;padding:14px">
-      <div style="font-size:11px;font-weight:700;color:#1a6040;margin-bottom:8px">✅ 切入（空間充足）</div>
-      <div style="font-size:12px;color:var(--text);line-height:1.7">
-        <b>PDA + UV Type I Route</b><br>
-        專利風險低、配方自由度高<br>
-        → Phase 1–2 核心方向
-      </div>
-    </div>
-    <div style="background:#eaf4fb;border:1px solid #85c1e9;border-radius:10px;padding:14px">
-      <div style="font-size:11px;font-weight:700;color:#1a4a6e;margin-bottom:8px">🔭 佈局（長期差異化）</div>
-      <div style="font-size:12px;color:var(--text);line-height:1.7">
-        <b>SBMA（FTO後）+ Chitosan</b><br>
-        泌尿科抗結痂市場成長 9%+<br>
-        → Phase 3 核心方向
-      </div>
-    </div>
-  </div>
-
-  <div style="font-size:11px;color:var(--muted);text-align:center;padding:8px">
-    資料來源：LitDB 商業產品分析 C01–C10　|　市場數據：MarketsandMarkets / Grand View Research　|　點擊公司卡片查看完整分析
+  <div style="max-width:980px;margin:0 auto;padding:4px 0 18px">
+    ${MARKET_SEGMENTS.map(segmentSection).join('')}
   </div>`;
-  } catch(err) {
+    } catch(err) {
     el.innerHTML = `<div style="text-align:center;padding:40px;color:var(--muted)">⚠️ 市場頁載入錯誤：${err.message}<br><button class="btn btn-s" onclick="renderMarket()" style="margin-top:12px">重試</button></div>`;
     console.error('renderMarket error:', err);
   }
@@ -6869,6 +6782,17 @@ function renderAgentReadingResult(r) {
   </div>`;
 }
 
+function togglePatentExamples(target) {
+  const root = target?.closest?.('.patent-result') || document;
+  const extras = Array.from(root.querySelectorAll('.patent-example.extra-example'));
+  if(!extras.length) return;
+  const shouldShow = extras.some(el => el.style.display === 'none' || !el.style.display);
+  extras.forEach(el => { el.style.display = shouldShow ? 'block' : 'none'; });
+  root.querySelectorAll('.example-toggle-label').forEach(el => {
+    el.textContent = shouldShow ? '\u6536\u5408\u5be6\u65bd\u4f8b' : '\u5168\u90e8\u5be6\u65bd\u4f8b';
+  });
+}
+
 function renderPatentResult(a) {
   let html = '<div class="patent-result">';
 
@@ -6884,15 +6808,26 @@ function renderPatentResult(a) {
   }
 
   // 實施例
-  (a.examples||[]).forEach((ex, idx) => {
+  const examples = a.examples || [];
+  if(examples.length > 1) {
+    html += `<div class="patent-example-hint">${'\u53f3\u9375\u4efb\u4e00\u5be6\u65bd\u4f8b\u5361\u7247\uff0c\u6216\u9ede\u300c\u5168\u90e8\u5be6\u65bd\u4f8b\u300d\uff0c\u53ef\u5c55\u958b\u540c\u4e00\u7bc7\u5c08\u5229\u7684\u4e0d\u540c embodiment\u3002'}</div>`;
+  }
+  if(a.examples_note) {
+    html += `<div class="patent-example-hint">${a.examples_note}</div>`;
+  }
+  examples.forEach((ex, idx) => {
     const credColor = ex.credibility==='高'?'var(--accent2)':ex.credibility==='中'?'var(--warn)':'var(--danger)';
     const realLabel = ex.is_real ?
       '<span style="color:var(--accent2);font-weight:600">✅ 真實實施例</span>' :
       '<span style="color:var(--danger);font-weight:600">⚠️ 預言式（未實際執行）</span>';
 
-    html += `<div class="patent-example">
+    const toggleBtn = examples.length > 1 && idx === 0
+      ? `<button type="button" class="patent-example-toggle" onclick="event.stopPropagation();togglePatentExamples(this)"><span class="example-toggle-label">&#20840;&#37096;&#23526;&#26045;&#20363;</span></button>`
+      : '';
+
+    html += `<div class="patent-example ${idx>0?'extra-example':''}" style="${idx>0?'display:none':''}" oncontextmenu="event.preventDefault();togglePatentExamples(this)">
       <h5>🧪 ${ex.name||'實施例 '+(idx+1)} ${realLabel}
-        <span style="float:right;color:${credColor};font-size:11px">可信度：${ex.credibility||'?'}</span>
+        <span style="float:right;color:${credColor};font-size:11px">可信度：${ex.credibility||'?'}</span>${toggleBtn}
       </h5>
       ${ex.credibility_reason?`<div style="font-size:11px;color:var(--muted);margin-bottom:6px">${ex.credibility_reason}</div>`:''}
       <table class="patent-table">
