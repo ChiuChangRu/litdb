@@ -347,55 +347,35 @@ function doLogin(){
     <!-- 控制列 -->
     <div class="panel" style="margin-bottom:12px">
       <div style="padding:10px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-        <label style="font-size:12px;color:var(--muted);font-weight:700">玩家</label>
-        <select id="patentTreePlayer" onchange="renderPatentTree()" style="width:auto;min-width:180px;padding:6px 10px;font-size:13px">
-          <option value="Cook Medical">Cook Medical</option>
-          <option value="DSM">DSM / ComfortCoat</option>
-          <option value="Hydromer">Hydromer</option>
-          <option value="Biocoat">Biocoat</option>
-          <option value="Surmodics">Surmodics</option>
-          <option value="Freudenberg">Freudenberg Medical</option>
-          <option value="AST Products">AST Products</option>
-          <option value="Boston Scientific">Boston Scientific</option>
-          <option value="Argon Medical">Argon Medical</option>
-          <option value="Coloplast">Coloplast</option>
-          <option value="BD Bard">BD / Bard</option>
-          <option value="Teleflex">Teleflex</option>
-          <option value="Harland Medical">Harland Medical</option>
-          <option value="ViVitro Labs">ViVitro Labs</option>
-        </select>
-        <button class="btn btn-s" onclick="renderPatentTree()" style="font-size:12px">🔄 更新</button>
-        <span id="patentTreeStats" style="font-size:12px;color:var(--muted);margin-left:auto"></span>
+        <span style="font-size:13px;font-weight:700;color:var(--text)">🏊 多公司專利 Swimlane</span>
+        <span style="font-size:12px;color:var(--muted)">X 軸＝年份｜各行＝一家公司</span>
+        <button class="btn btn-s" onclick="renderPatentTree()" style="font-size:12px;margin-left:auto">🔄 更新</button>
+        <span id="patentTreeStats" style="font-size:12px;color:var(--muted)"></span>
       </div>
     </div>
 
-    <!-- 主體：左垂直時間線 + 右詳情 -->
-    <div style="display:grid;grid-template-columns:300px 1fr;gap:12px;align-items:start">
-
-      <!-- 左：垂直時間線 SVG -->
-      <div class="panel" style="position:sticky;top:64px">
-        <div class="panel-h">🌿 專利時間線</div>
-        <div style="position:relative;overflow:hidden">
-          <svg id="patentTreeSvg" style="width:100%;display:block"></svg>
-          <div id="patentTreeTip" style="display:none;position:fixed;background:var(--card);border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:12px;pointer-events:none;max-width:240px;box-shadow:0 2px 10px rgba(0,0,0,0.15);z-index:100"></div>
-        </div>
+    <!-- Swimlane SVG（全寬，可橫向捲動）-->
+    <div class="panel" style="margin-bottom:12px">
+      <div style="position:relative;overflow-x:auto;overflow-y:hidden">
+        <svg id="patentTreeSvg" style="display:block;min-width:700px"></svg>
+        <div id="patentTreeTip" style="display:none;position:fixed;background:var(--card);border:1px solid var(--border);border-radius:7px;padding:8px 11px;font-size:12px;pointer-events:none;max-width:260px;box-shadow:0 2px 12px rgba(0,0,0,0.15);z-index:200"></div>
       </div>
-
-      <!-- 右：詳情 + 缺口清單 -->
-      <div style="display:flex;flex-direction:column;gap:12px">
-        <div class="panel">
-          <div class="panel-h">📄 專利內容</div>
-          <div id="patentTreeDetail" style="padding:14px;font-size:12px;line-height:1.7;color:var(--muted)">
-            ← 點選左側時間線上的節點，查看專利詳情
-          </div>
-        </div>
-        <div class="panel">
-          <div class="panel-h">⚠️ 未在 papers.json 的專利（待深度解析）</div>
-          <div id="missingPatentList" style="padding:12px;font-size:12px;line-height:1.7"></div>
-        </div>
-      </div>
-
     </div>
+
+    <!-- 底部：詳情 + 缺口清單 -->
+    <div style="display:grid;grid-template-columns:1fr 360px;gap:12px">
+      <div class="panel">
+        <div class="panel-h">📄 專利內容</div>
+        <div id="patentTreeDetail" style="padding:14px;font-size:12px;line-height:1.7;color:var(--muted)">
+          ↑ 點選 Swimlane 上的節點查看專利詳情
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-h">⚠️ 待深度解析（未在 papers.json）</div>
+        <div id="missingPatentList" style="padding:12px;font-size:12px;line-height:1.7"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -4246,11 +4226,8 @@ function renderMarket() {
     });
     const p30 = DB.papers.find(p=>p.id==='P30') || findPatent('US7141246');
     const p31 = DB.papers.find(p=>p.id==='P31') || findPatent('US7402620');
-    const p34 = DB.papers.find(p=>p.id==='P34') || findPatent('US6645483');
     const missing = [
-      {patent_no:'US20010051669A1', role:'P34 相關公開案 / family branch', reason:'出現在 P34 related_patents，尚未獨立 paper 條目；需確認是否與 P34 實質重複。'},
-      {patent_no:'WO2002058756A2', role:'P34 PCT / international family', reason:'出現在 P34 related_patents，尚未獨立 paper 條目；可補國際 family 視角。'},
-      {patent_no:'US7820734B2', role:'後續 / continuation 待補', reason:'P34 深度解析標記為後續需查，可能延伸熱固化潤滑/抗菌路線。'}
+      {patent_no:'US6645483', role:'祖案 / family root', reason:'出現在 P30/P31 related_patents，但目前沒有獨立 paper.json 條目；需要載入全文與 claim。'}
     ].filter(x => !findPatent(x.patent_no));
     const overlap = (a,b) => {
       const A = new Set(a?.tags || []);
@@ -4262,9 +4239,7 @@ function renderMarket() {
     const similarScore = p30 && p31 ? overlap(p30, p31) : 0;
     const analyzedBadge = p => p?.patentResults?.agent_reading?.schema_version
       ? '<span class="tag tag-green">Agent v1 已讀</span>'
-      : (p?.patentResults?.full || p?.analysisResults?.full)
-        ? '<span class="tag tag-green">已解析</span>'
-        : '<span class="tag tag-gray">待深度解析</span>';
+      : '<span class="tag tag-gray">待深度解析</span>';
     const node = (p, role, note, color) => {
       const link = p ? `<button class="btn btn-s" style="font-size:10px;padding:3px 8px;margin-top:6px" onclick="goToMarketPaper('${p.id}')">查看 ${p.id}</button>` : '';
       return `<div style="min-width:230px;flex:1;background:#fff;border:1px solid var(--border);border-top:4px solid ${color};border-radius:8px;padding:11px 12px">
@@ -4289,7 +4264,7 @@ function renderMarket() {
       </div>
       <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px">
         <div style="display:flex;align-items:stretch;gap:8px;flex-wrap:wrap">
-          ${node(p34, '1. 祖案 / 基礎平台', 'US6645483B2 / P34：Sherwood-Covidien precursor，已收錄；下一步展開旁枝、同族與 continuation。', '#8a7e72')}
+          ${node(null, '1. 祖案缺口', 'US6645483：目前只在 related_patents 出現，尚未載入 paper.json。這是次要深度解析清單的第一順位。', '#8a7e72')}
           <div style="align-self:center;color:var(--muted);font-size:18px;font-weight:800">→</div>
           ${node(p30, '2. 母案 / 平台', 'US7141246 / P30：PVP + PU interpolymer + isocyanate 熱固化潤滑骨架，可加入抗菌劑。', '#d4a030')}
           <div style="align-self:center;color:var(--muted);font-size:18px;font-weight:800">→</div>
@@ -4416,281 +4391,99 @@ let patentTreeLastPlayer = null;
 const PATENT_TREE_CONFIG = {
   'Cook Medical': {
     label: 'Cook Medical',
+    color: '#c0392b',
     aliases: ['cook medical','houghton pe','us7141246','us7402620'],
     centerIds: ['P31','P30'],
-    trendSummary: [
-      '早期先建立熱固化 PVP + PU interpolymer 潤滑骨架，重點是附著、耐久與可塗內腔。',
-      '後續把同一骨架延伸到抗菌 sustained release，從單純潤滑走向感染/生物膜控制。',
-      'US6645483 祖案已補入 P34；下一步要補的是 P34 旁枝、同族與後續 continuation，才能完整看出 Cook/Sherwood/Covidien 這條熱固化抗菌塗層的演進。'
-    ],
     evolution: [
-      {year:2003, id:'P34', patent:'US6645483B2', stage:'祖案 / 基礎平台', theme:'PVP-PU 熱固化潤滑塗層', meaning:'確認早期 claim 起點；目前已收錄，需往旁枝與 continuation 展開。', status:'known'},
-      {year:2006, id:'P30', patent:'US7141246', stage:'母案 / 平台化', theme:'PVP + PU interpolymer + isocyanate', meaning:'建立 Cook 潤滑塗層主骨架，可往抗菌功能延伸。', status:'known'},
-      {year:2008, id:'P31', patent:'US7402620', stage:'續案 / 功能延伸', theme:'CHX / triclosan / silver sustained release', meaning:'從潤滑走向抗菌與 biofilm 控制，對抗結痂第二步有參考價值。', status:'known'}
+      {year:2003, id:null,  patent:'US6645483',    stage:'祖案',    theme:'PVP-PU 熱固化潤滑', meaning:'P30/P31 的根源；未收錄，需深度解析。', status:'missing'},
+      {year:2006, id:'P30', patent:'US7141246',    stage:'母案',    theme:'PVP+PU+isocyanate',  meaning:'Cook 潤滑塗層主骨架。', status:'known'},
+      {year:2008, id:'P31', patent:'US7402620',    stage:'續案/抗菌', theme:'CHX/silver緩釋',  meaning:'從潤滑走向抗菌與 biofilm 控制。', status:'known'}
     ],
-    gapSeeds: [
-      {
-        patent_no: 'US20010051669A1',
-        role: 'P34 相關公開案 / family branch',
-        reason: '出現在 P34 related_patents，目前尚未獨立收錄，需確認是否為 P34 的公開案、優先權或同族節點。',
-        source_ids: ['P34'],
-        next_task: '補全文、claims、family 與 legal events，確認是否與 P34 實質重複或提供不同 claim 邊界。'
-      },
-      {
-        patent_no: 'WO2002058756A2',
-        role: 'P34 PCT / international family',
-        reason: '出現在 P34 related_patents，目前尚未獨立收錄；PCT 版本可能揭露更完整的 family/claims。',
-        source_ids: ['P34'],
-        next_task: '比對 US6645483B2 與 WO 公開範圍，確認是否值得獨立深度解析。'
-      },
-      {
-        patent_no: 'US7820734B2',
-        role: '後續 / continuation 待補',
-        reason: 'P34 深度解析標記為後續需查，可能是同一熱固化潤滑/抗菌路線的延伸。',
-        source_ids: ['P34'],
-        next_task: '解析 claims 與 cited-by，判斷是否延伸 P34/P30/P31 的抗菌、耐磨或添加劑保護範圍。'
-      }
-    ]
+    gapSeeds: [{
+      patent_no:'US6645483', role:'祖案/family root',
+      reason:'P30/P31 related_patents 提到，無獨立條目。',
+      source_ids:['P30','P31'],
+      next_task:'讀全文 claims，確認 PVP-PU claim 邊界與設計迴避空間。'
+    }]
   },
   'DSM': {
     label: 'DSM / ComfortCoat',
+    color: '#e86c3a',
     aliases: ['dsm','comfortcoat','dsm-firmenich','us8133580','ep1957130','wo2009112548','cn107405430','us8957125'],
     centerIds: ['P01','P02','P03','C06','P28','R13'],
-    trendSummary: [
-      'DSM 的主軸是 UV-BP / PVP 親水塗層平台，先做通用親水與低摩擦，再補乾燥保持與多基材適用性。',
-      'P01-P03 形成 ComfortCoat 核心壁壘；後續 R13/P28 更像配方窗口與 primer/附著力補強。',
-      '目前要補的是 family/cited-by 展開，不只看單件專利，才能判斷 DSM 是否把 claim 往材料、底塗、製程與應用端分層包圍。'
-    ],
     evolution: [
-      {year:2009, id:'P03', patent:'WO2009112548A1', stage:'商業化核心公開', theme:'PVP + polyelectrolyte / ComfortCoat 通用化', meaning:'多基材與製程標準化，接近產品化平台。', status:'known'},
-      {year:2012, id:'P01', patent:'US8133580B2', stage:'核心平台', theme:'UV-BP + PVP 雙層親水塗層', meaning:'DSM 核心 FTO 風險來源，需完整 claim 迴避。', status:'known'},
-      {year:2013, id:'P02', patent:'EP1957130B1', stage:'性能延伸', theme:'polyelectrolyte / dry-out resistance', meaning:'從低摩擦延伸到離水後保持潤滑，強化臨床使用情境。', status:'known'},
-      {year:2015, id:'R13', patent:'US8957125', stage:'配方窗口', theme:'UV 固化 hydrogel / PVP-BP 配方', meaning:'補強配方範圍與材料比例，需比對 P01-P03 邊界。', status:'known'},
-      {year:2018, id:'C06', patent:'ComfortCoat', stage:'商用整合', theme:'商用塗層系統', meaning:'把專利族轉成授權/商品化塗層平台。', status:'known'},
-      {year:2019, id:'P28', patent:'CN107405430A', stage:'附著力補強', theme:'adhesion-promoting primer', meaning:'往 primer 與附著耐久性補強，形成底塗層面的防線。', status:'known'}
+      {year:2009, id:'P03', patent:'WO2009112548A1', stage:'商業化核心', theme:'PVP+polyelectrolyte 通用化', meaning:'多基材製程標準化。', status:'known'},
+      {year:2012, id:'P01', patent:'US8133580B2',    stage:'核心平台',   theme:'UV-BP+PVP 雙層塗層', meaning:'DSM 核心 FTO 風險。', status:'known'},
+      {year:2013, id:'P02', patent:'EP1957130B1',    stage:'性能延伸',   theme:'polyelectrolyte/dry-out', meaning:'強化臨床使用情境。', status:'known'},
+      {year:2015, id:'R13', patent:'US8957125',      stage:'配方窗口',   theme:'UV水凝膠/PVP-BP',  meaning:'補強配方比例範圍。', status:'known'},
+      {year:2018, id:'C06', patent:'ComfortCoat™',   stage:'商用整合',   theme:'授權塗層平台',   meaning:'專利族轉商品化。', status:'known'},
+      {year:2019, id:'P28', patent:'CN107405430A',   stage:'附著力補強', theme:'adhesion primer', meaning:'底塗層面防線。', status:'known'}
     ],
     gapSeeds: [
-      {
-        patent_no: 'US8133580B2-family',
-        role: '同族 / continuations 待補',
-        reason: 'P01 是核心，但同族美國續案、分案與外國對應案尚未完整列成 paper 條目。',
-        source_ids: ['P01','C06'],
-        next_task: '用 Google Patents family/cited-by 展開，確認哪些 continuation、division、EP/WO 對應案要深度解析。'
-      },
-      {
-        patent_no: 'EP1957130B1-family',
-        role: '抗乾燥延伸族群待補',
-        reason: 'P02/C06 指向 EP1957130B1，但同族與被引用網路尚未完整收錄。',
-        source_ids: ['P02','C06'],
-        next_task: '補齊 P02 的 cited-by 與同族案，確認 polyelectrolyte/dry-out claim 的演進。'
-      }
-    ]
-  },
-  'Hydromer': {
-    label: 'Hydromer',
-    aliases: ['hydromer','us4642267','us4769013','us7008979','us20080114096','hydrUV'],
-    centerIds: ['P36','P37','P07','P38','C04','R2'],
-    trendSummary: [
-      'Hydromer 主軸從早期 PU/PVP 親水 polymer blend，延伸到 bio-effecting/抗菌釋放，再走向多用途多基材 coating composition。',
-      '2008 年 abandoned biopolymer/chitosan branch 提供設計靈感，但不能當成已授權阻擋專利，需要查 prosecution 與同族狀態。',
-      '下一步缺口是把 P07 的同族與被引用網路展開，確認 Hydromer 在耐磨、設備與多功能添加劑上的後續布局。'
-    ],
-    evolution: [
-      {year:1987, id:'P36', patent:'US4642267A', stage:'早期平台', theme:'PVP / PU hydrophilic blend', meaning:'Hydromer 親水材料平台起點。', status:'known'},
-      {year:1988, id:'P37', patent:'US4769013A', stage:'功能化', theme:'bio-effecting / antimicrobial release', meaning:'從潤滑材料走向藥物/抗菌釋放。', status:'known'},
-      {year:2006, id:'P07', patent:'US7008979B2', stage:'多用途平台', theme:'crosslinker / PU / metal oxide / aziridine', meaning:'多基材、多添加劑的商品化 coating composition。', status:'known'},
-      {year:2008, id:'P38', patent:'US20080114096A1', stage:'biopolymer 分支', theme:'chitosan / carbohydrate network', meaning:'後期生物高分子潤滑網絡，已標記 abandoned，偏設計靈感。', status:'known'}
-    ],
-    gapSeeds: [
-      {patent_no:'US4550126A', role:'早期 Hydromer companion node', reason:'P36 related_patents 提到，尚未獨立收錄；可能是早期 hydrophilic polymer/foam companion。', source_ids:['P36'], next_task:'確認 assignee、claim 與 P36 的關係，判斷是否為 Hydromer 主幹或旁枝。'},
-      {patent_no:'US20030203991A1', role:'P07 公開案 / family', reason:'P07 related_patents 提到，尚未獨立收錄；可能與 US7008979B2 實質重複但需核對公開內容。', source_ids:['P07'], next_task:'比對公開案與 granted claims，若內容重複則標記為同族不深析。'},
-      {patent_no:'WO2003093357A1', role:'P07 PCT family', reason:'P07 related_patents 提到，尚未獨立收錄；可用於追蹤國際布局。', source_ids:['P07'], next_task:'查 family、國家階段與 cited-by，補 Hydromer 國際路徑。'},
-      {patent_no:'EP1499667B1', role:'P07 EP granted family', reason:'P07 related_patents 提到，尚未獨立收錄；歐洲 claim 可能與美國不同。', source_ids:['P07'], next_task:'比對 EP claim 與 US7008979B2，確認歐洲 FTO 風險。'},
-      {patent_no:'WO2008133646A1', role:'P38 PCT family', reason:'P38 related_patents 提到，尚未獨立收錄；需確認 abandoned US 之外是否有外國有效權利。', source_ids:['P38'], next_task:'查 family legal status，確認 biopolymer/chitosan branch 是否仍有有效地區。'}
-    ]
-  },
-  'Biocoat': {
-    label: 'Biocoat / Integer Hydrophilic Technologies',
-    aliases: ['biocoat','hydak','integer hydrophilic','us12037560','us20110200828','us20130323291'],
-    centerIds: ['C01','P26'],
-    trendSummary: [
-      'Biocoat/HYDAK 目前資料庫已有商用節點與 US12037560B2，主軸是 UV/thermal 親水 topcoat 與 bi-laminar coating service。',
-      '缺口集中在早期公開案、HYDAK bi-laminar 平台與 510(k) 對應產品的專利號補齊。'
-    ],
-    evolution: [
-      {year:2011, id:null, patent:'US20110200828A1', stage:'早期公開案', theme:'hydrophilic coating family', meaning:'C01/P26 共同指向的早期公開案，待確認是否為 Biocoat 早期核心。', status:'missing'},
-      {year:2022, id:'C01', patent:'HYDAK', stage:'商用平台', theme:'UV / thermal hydrophilic coating service', meaning:'商用塗層平台與 OEM 服務節點。', status:'known'},
-      {year:2024, id:'P26', patent:'US12037560B2', stage:'授權/轉讓後核心', theme:'UV cure topcoatings', meaning:'Biocoat/Integer 近代 topcoat 專利節點。', status:'known'}
-    ],
-    gapSeeds: [
-      {patent_no:'US20110200828A1', role:'早期公開案', reason:'P26/C01 related_patents 皆提到，尚未獨立收錄。', source_ids:['P26','C01'], next_task:'解析與 US12037560B2 的 family/claim 關係，確認是否重複或補充早期範圍。'},
-      {patent_no:'US20130323291A1', role:'HYDAK 平台相關公開案', reason:'C01 related_patents 提到，尚未獨立收錄。', source_ids:['C01'], next_task:'查 assignee、claims 與 HYDAK B-500/bi-laminar 平台關聯。'},
-      {patent_no:'HYDAK-2022-US-patent', role:'專利號待查', reason:'C01 patent_notes 提到 HYDAK UV 2022 年獲美國專利，但資料庫尚未有明確專利號。', source_ids:['C01'], next_task:'用 Biocoat/Integer assignee 與 HYDAK 關鍵字查出正式 patent number。'}
-    ]
-  },
-  'Surmodics': {
-    label: 'Surmodics',
-    aliases: ['surmodics','serene','photolink','preside','us20230285641'],
-    centerIds: ['C03','C09','L02'],
-    trendSummary: [
-      'Surmodics 主軸是 PhotoLink 光接枝平台與 Serene/Preside 商用塗層。',
-      '目前資料庫有商用節點與一個 surfactant hydrophilic coating 專利，但尚未把 PhotoLink/Serene 相關專利族群展開。'
-    ],
-    evolution: [
-      {year:2014, id:'L02', patent:'US8871869', stage:'配方/界面活性劑', theme:'hydrophilic coating with surfactant', meaning:'已收錄的 Surmodics 相關親水塗層節點。', status:'known'},
-      {year:2015, id:'C03', patent:'Serene', stage:'商用平台', theme:'PhotoLink / hydrophilic coating', meaning:'Surmodics 商用 coating 品牌。', status:'known'},
-      {year:2023, id:null, patent:'US20230285641A1', stage:'Preside/Serene 近代公開案', theme:'photo-reactive hydrophilic coating', meaning:'C03 指向的近代公開案，需補成正式條目。', status:'missing'}
-    ],
-    gapSeeds: [
-      {patent_no:'US20230285641A1', role:'Serene/Preside 近代公開案', reason:'C03 related_patents 提到，尚未獨立收錄。', source_ids:['C03'], next_task:'解析 claims、assignee、產品對應與 cited-by，確認是否為 Serene/Preside 核心。'},
-      {patent_no:'PhotoLink-family-search', role:'PhotoLink 專利族待查', reason:'C03/C09 提到 Surmodics PhotoLink，但未列完整專利族。', source_ids:['C03','C09'], next_task:'用 Surmodics + PhotoLink + hydrophilic coating 檢索 family 與關鍵 granted patents。'}
-    ]
-  },
-  'Freudenberg': {
-    label: 'Freudenberg Medical',
-    aliases: ['freudenberg','lubriteq'],
-    centerIds: ['C02'],
-    trendSummary: [
-      'Freudenberg/LUBRITEQ 目前在資料庫中是商用塗層服務節點，尚未有明確專利號。',
-      '先列為 assignee/品牌檢索任務，避免把未確認專利號塞進資料庫。'
-    ],
-    evolution: [
-      {year:2026, id:'C02', patent:'LUBRITEQ', stage:'商用塗層平台', theme:'UV-curable hydrophilic coating', meaning:'目前只有商用描述，專利號未公開。', status:'known'}
-    ],
-    gapSeeds: [
-      {patent_no:'Freudenberg-LUBRITEQ-assignee-search', role:'品牌/assignee 檢索', reason:'C02 patent_notes 標記具體專利號未公開。', source_ids:['C02'], next_task:'用 Freudenberg Medical + LUBRITEQ + hydrophilic coating 搜尋公開專利與 family。'}
-    ]
-  },
-  'AST Products': {
-    label: 'AST Products',
-    aliases: ['ast products','lubrilast'],
-    centerIds: ['C08'],
-    trendSummary: [
-      'AST/LubriLAST 目前是商用塗層節點，缺少對應專利樹。',
-      '先以品牌與 assignee 搜尋任務列入待解析，確認是否有自有 IP 或主要為 coating service know-how。'
-    ],
-    evolution: [
-      {year:2016, id:'C08', patent:'LubriLAST', stage:'商用塗層平台', theme:'hydrophilic coating service', meaning:'目前資料庫只有商用節點。', status:'known'}
-    ],
-    gapSeeds: [
-      {patent_no:'AST-LubriLAST-assignee-search', role:'品牌/assignee 檢索', reason:'C08 未有 related_patents，需先查出是否有公開專利族。', source_ids:['C08'], next_task:'搜尋 AST Products + LubriLAST + hydrophilic coating patent，建立正式候選清單。'}
-    ]
-  },
-  'Boston Scientific': {
-    label: 'Boston Scientific / Scimed',
-    aliases: ['boston scientific','scimed','percuflex','us6610035','us8378011','us6458867','us5876448'],
-    centerIds: ['P24','P35','P22'],
-    trendSummary: [
-      'Boston/Scimed 目前已收錄 hybrid top coat、plasma-silane primer 與 durable IPN/SIPN coating 節點。',
-      '缺口是把早期基礎專利、P35 的公開/WO family 與 Percuflex 產品對應關係補齊。'
-    ],
-    evolution: [
-      {year:1999, id:null, patent:'US5876448', stage:'早期基礎 IP', theme:'interventional catheter / coating baseline', meaning:'資料庫多次提到 Boston 基礎專利，但尚未獨立收錄。', status:'missing'},
-      {year:2002, id:'P22', patent:'US6458867B1', stage:'primer / 表面處理', theme:'plasma + silane primer', meaning:'金屬/導線等基材附著強化。', status:'known'},
-      {year:2003, id:'P24', patent:'US6610035B2', stage:'hybrid top coat', theme:'anti-blocking / package stability', meaning:'Boston/Scimed 早期包裝與濕潤穩定性節點。', status:'known'},
-      {year:2013, id:'P35', patent:'US8378011B2', stage:'durability', theme:'IPN/SIPN durable hydrophilic coating', meaning:'往耐磨、附著與 guidewire/catheter durable coating 延伸。', status:'known'}
-    ],
-    gapSeeds: [
-      {patent_no:'US5876448', role:'早期基礎專利', reason:'既有摘要提到 Boston Scientific 基礎性介入導管專利，但未獨立收錄。', source_ids:['P24','P35'], next_task:'確認與親水塗層/導管產品的關聯，解析 claims 與訴訟/引用歷史。'},
-      {patent_no:'US20090171302A1', role:'P35 公開案', reason:'P35 related_patents 提到，尚未獨立收錄。', source_ids:['P35'], next_task:'比對公開案與 US8378011B2 granted claims。'},
-      {patent_no:'WO2009086318A1', role:'P35 PCT family', reason:'P35 related_patents 提到，尚未獨立收錄。', source_ids:['P35'], next_task:'追蹤國際 family 與有效地區。'}
-    ]
-  },
-  'Argon Medical': {
-    label: 'Argon Medical',
-    aliases: ['argon','slip-coat','scorpion'],
-    centerIds: ['C10'],
-    trendSummary: [
-      'Argon 目前只有 SLIP-COAT 商用節點，強項是熱固化與管腔內壁 coating 能力。',
-      '公開專利號尚未確認，應先做 assignee/Scorpion/SLIP-COAT 檢索，再決定是否納入正式 paper。'
-    ],
-    evolution: [
-      {year:2024, id:'C10', patent:'SLIP-COAT', stage:'商用技術', theme:'inner-lumen thermal hydrophilic coating', meaning:'內壁塗層能力是值得對標的製程訊號。', status:'known'}
-    ],
-    gapSeeds: [
-      {patent_no:'Argon-SLIP-COAT-assignee-search', role:'品牌/assignee 檢索', reason:'C10 patent_notes 標記具體專利號未公開，需查 Argon Medical / Scorpion / SLIP-COAT。', source_ids:['C10'], next_task:'查 Argon Medical hydrophilic coating、Scorpion catheter、SLIP-COAT 相關專利與產品對應。'}
+      {patent_no:'US8133580B2-family', role:'同族續案待補', reason:'P01同族美國續案/外國案未收錄。', source_ids:['P01'], next_task:'Google Patents family展開。'},
+      {patent_no:'EP1957130B1-family', role:'抗乾燥族群待補', reason:'P02 cited-by未完整。', source_ids:['P02'], next_task:'補齊 P02 cited-by 網絡。'}
     ]
   },
   'Coloplast': {
     label: 'Coloplast',
-    aliases: ['coloplast','imajinhydro','us9138510'],
-    centerIds: ['P29','P12','U07'],
-    trendSummary: [
-      'Coloplast 在文庫中主要與 ready-to-use / hydrocoated silicone / Imajinhydro 對照資料相關。',
-      '下一步要補 Coloplast coating composition 的同族與產品對應，特別是與 Boston Percuflex 的臨床比較。'
-    ],
+    color: '#2980b9',
+    aliases: ['coloplast','speedicath','ep1957127'],
+    centerIds: ['P29','P44'],
     evolution: [
-      {year:2015, id:'P12', patent:'US9138510', stage:'ready-to-use / PVP UV', theme:'兩層 PVP UV / sterilized catheter', meaning:'可作 ready-to-use 與滅菌保存對標。', status:'known'},
-      {year:2020, id:'P29', patent:'Coating composition', stage:'商用配方相關', theme:'親水塗層 composition', meaning:'Coloplast 親水 coating 節點，需補 family。', status:'known'},
-      {year:2021, id:'U07', patent:'Imajinhydro clinical study', stage:'臨床對照', theme:'silicone-hydrocoated ureteral stent', meaning:'產品/臨床證據節點，不是專利。', status:'known'}
+      {year:1998, id:'P13', patent:'WO1998058990A1', stage:'早期底塗', theme:'TPU+nitrocellulose primer', meaning:'Coloplast 雙塗層製程基礎。', status:'known'},
+      {year:2007, id:'P44', patent:'EP1957127B1',    stage:'聚電解質配方', theme:'PVP+polyelectrolyte 複合', meaning:'快速活化+耐久潤滑。', status:'known'},
+      {year:2007, id:'P29', patent:'SpeediCath核心', stage:'光接枝共價', theme:'UV photografting', meaning:'間歇導尿最強 IP 護城河。', status:'known'},
+      {year:2008, id:null,  patent:'US7745561',      stage:'美國對應案',  theme:'SpeediCath 光接枝美國版', meaning:'未收錄，需FTO分析。', status:'missing'}
     ],
-    gapSeeds: [
-      {patent_no:'Coloplast-Imajinhydro-patent-search', role:'產品對應專利待查', reason:'U07 有 Imajinhydro 臨床對照，但資料庫未列產品對應專利族。', source_ids:['U07','P29'], next_task:'用 Coloplast + Imajinhydro + hydrocoated silicone + ureteral stent 檢索專利與 510(k)/產品對應。'},
-      {patent_no:'US9138510-family', role:'P12 同族待補', reason:'P12 可能與 Coloplast ready-to-use catheter family 相關，但同族未完整展開。', source_ids:['P12'], next_task:'查 US9138510 family/cited-by，判斷是否需拆成多個 paper。'}
-    ]
+    gapSeeds: [{
+      patent_no:'US7745561', role:'P29 美國對應案',
+      reason:'EP SpeediCath核心的美國版，未獨立收錄。',
+      source_ids:['P29','P44'],
+      next_task:'查 US7745561 claims，確認光接枝方法的保護範圍。'
+    }]
   },
-  'BD Bard': {
-    label: 'BD / Bard',
-    aliases: ['bd','bard','c.r.bard','becton','us10857324','us5160790'],
-    centerIds: ['P06','P18'],
-    trendSummary: [
-      'BD/Bard 目前已有 Bard/Medtronic 熱固化平行 prior art 與 Bard PAA-PEG 抗結垢尿管節點。',
-      '下一步應把 Bard 泌尿導管與抗結垢 coating 的同族、後續與產品對應補齊。'
-    ],
+  'Surmodics': {
+    label: 'Surmodics',
+    color: '#8e44ad',
+    aliases: ['surmodics','serene','us8871869'],
+    centerIds: ['L02'],
     evolution: [
-      {year:1992, id:'P06', patent:'US5160790A', stage:'早期熱固化 prior art', theme:'PVP / isocyanate hydrogel coating', meaning:'Bard/Medtronic 平行路線，不屬 Hydromer。', status:'known'},
-      {year:2020, id:'P18', patent:'US10857324', stage:'抗結垢尿管', theme:'PAA + PEG / anti-encrustation', meaning:'Bard/BD 泌尿導管抗結垢核心節點。', status:'known'}
+      {year:2013, id:'L02', patent:'US8871869', stage:'界面活性劑UV塗層', theme:'surfactant+UV固化', meaning:'第一循環 COF < 20g，業界頂級。', status:'known'},
+      {year:2018, id:null,  patent:'US8357772', stage:'SBMA兩性離子基礎', theme:'zwitterionic coating', meaning:'Serene系列核心 IP，未收錄。', status:'missing'}
     ],
-    gapSeeds: [
-      {patent_no:'US10857324-family', role:'P18 同族/後續待補', reason:'P18 是 Bard/BD 抗結垢核心節點，但 family/cited-by 尚未獨立展開。', source_ids:['P18'], next_task:'補 PAA-PEG anti-encrustation family、continuation 與 cited-by。'},
-      {patent_no:'Bard-urinary-catheter-coating-search', role:'BD/Bard 產品線檢索', reason:'BD/Bard 泌尿導管產品線大，資料庫目前只收 P06/P18。', source_ids:['P06','P18'], next_task:'用 Bard/BD + urinary catheter + hydrophilic/anti-encrustation coating 檢索專利路徑。'}
-    ]
+    gapSeeds: [{
+      patent_no:'US8357772', role:'SBMA兩性離子基礎專利',
+      reason:'Surmodics Serene 系列的技術根源，未收錄。',
+      source_ids:['L02'],
+      next_task:'查 SBMA claim 邊界，確認本專案 SBMA 路線是否需要 FTO。'
+    }]
   },
-  'Teleflex': {
-    label: 'Teleflex',
-    aliases: ['teleflex','arrow','rüsch','rusch'],
-    centerIds: [],
-    trendSummary: [
-      'Teleflex 是首頁競爭玩家，但目前資料庫幾乎沒有對應專利節點。',
-      '先建立 assignee/品牌檢索缺口，之後再決定是否進入深度解析。'
-    ],
+  'C.R. Bard / BD': {
+    label: 'C.R. Bard / BD',
+    color: '#16a085',
+    aliases: ['bard','us4515593','us10857324'],
+    centerIds: ['P43','P18'],
     evolution: [
-      {year:2026, id:null, patent:'Teleflex-assignee-search', stage:'待檢索', theme:'catheter / hydrophilic coating IP', meaning:'首頁競爭者，但目前無正式 paper 條目。', status:'missing'}
+      {year:1985, id:'P43', patent:'US4515593',   stage:'早期基礎（已過期）', theme:'NVP輻照接枝+抗菌', meaning:'最早親水+抗菌整合，技術已公開。', status:'known'},
+      {year:2020, id:'P18', patent:'US10857324',  stage:'現代抗結垢',     theme:'PAA-PEG 負電荷抗結垢', meaning:'Bard Foley 抗結垢核心新 IP。', status:'known'}
     ],
-    gapSeeds: [
-      {patent_no:'Teleflex-assignee-search', role:'assignee 檢索', reason:'首頁市場玩家名單包含 Teleflex，但 papers.json 尚無對應專利路徑。', source_ids:[], next_task:'搜尋 Teleflex / Arrow / Rusch + catheter coating + hydrophilic patent。'}
-    ]
+    gapSeeds: []
   },
-  'Harland Medical': {
-    label: 'Harland Medical',
-    aliases: ['harland','pcx','fts7000','coater'],
-    centerIds: ['C07','R8'],
-    trendSummary: [
-      'Harland 主要是設備與測試系統，不一定是 coating composition 專利玩家。',
-      '待解析重點不是 FTO，而是設備、測試方法與可能的 coating service/fixture 專利。'
-    ],
+  'Hydromer': {
+    label: 'Hydromer',
+    color: '#7f8c8d',
+    aliases: ['hydromer','us5160790'],
+    centerIds: ['P06'],
     evolution: [
-      {year:2019, id:'C07', patent:'Harland PCX / FTS', stage:'設備平台', theme:'coating and friction testing equipment', meaning:'塗覆與摩擦測試設備節點。', status:'known'},
-      {year:2020, id:'R8', patent:'Pinch Test Parameters', stage:'測試方法', theme:'pinch test / IDTE', meaning:'測試方法白皮書節點。', status:'known'}
+      {year:1992, id:'P06', patent:'US5160790',   stage:'熱固化 IPN 基礎', theme:'PVP+MDI isocyanate', meaning:'Hydromer路線基礎，已過期可自由使用。', status:'known'},
+      {year:2005, id:null,  patent:'US6887466',   stage:'多功能延伸',     theme:'PVP+抗血栓+親水', meaning:'Hydromer後期延伸案，未收錄。', status:'missing'}
     ],
-    gapSeeds: [
-      {patent_no:'Harland-equipment-patent-search', role:'設備/測試專利待查', reason:'C07/R8 是工具節點，尚未查 Harland 是否有設備或測試 fixture 專利。', source_ids:['C07','R8'], next_task:'搜尋 Harland Medical + coating system + friction tester + patent。'}
-    ]
-  },
-  'ViVitro Labs': {
-    label: 'ViVitro Labs',
-    aliases: ['vivitro','idte','pinch test'],
-    centerIds: ['R8'],
-    trendSummary: [
-      'ViVitro/IDTE 是測試方法與設備脈絡，重點在 pinch test 條件、夾具與驗證 SOP。',
-      '先列工具/測試專利與方法文件檢索，不把它混入材料 FTO。'
-    ],
-    evolution: [
-      {year:2020, id:'R8', patent:'Pinch Test Parameters', stage:'測試方法', theme:'pinch test / hydrophilic coating friction', meaning:'目前主要依 R8 作測試方法節點。', status:'known'}
-    ],
-    gapSeeds: [
-      {patent_no:'ViVitro-IDTE-tooling-search', role:'測試工具/方法檢索', reason:'首頁設備夥伴包含 ViVitro，但尚未查其工具專利或標準化方法文件。', source_ids:['R8'], next_task:'搜尋 ViVitro / IDTE + hydrophilic coating friction test + patent / white paper。'}
-    ]
+    gapSeeds: [{
+      patent_no:'US6887466', role:'Hydromer 多功能延伸',
+      reason:'Hydromer後期配方延伸，未獨立收錄。',
+      source_ids:['P06'],
+      next_task:'確認法律狀態，評估是否仍有效。'
+    }]
   }
 };
 
@@ -4713,12 +4506,6 @@ function normalizePatentNo(no) {
   return String(no || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
 }
 
-function patentFamilyKey(no) {
-  const n = normalizePatentNo(no);
-  const m = n.match(/^(US|EP|WO|CN)(\d+)/);
-  return m ? `${m[1]}${m[2]}` : n;
-}
-
 function patentIdFromPaper(p) {
   const fromTitle = extractPatentNos(`${p?.title || ''} ${JSON.stringify(p?.links || {})}`);
   return fromTitle[0] || p?.id || '';
@@ -4734,8 +4521,7 @@ function paperMatchesPatentNo(p, no) {
     p?.patent_no,
     p?.patent_number
   ].filter(Boolean).join(' ');
-  if(normalizePatentNo(identity).includes(target)) return true;
-  return extractPatentNos(identity).some(no => patentFamilyKey(no) === patentFamilyKey(target));
+  return normalizePatentNo(identity).includes(target);
 }
 
 function patentTreePapersForPlayer(playerKey) {
@@ -4822,72 +4608,38 @@ function patentTreeBuild(playerKey, centerId) {
 }
 
 function renderPatentTree() {
-  const playerSel = document.getElementById('patentTreePlayer');
-  if(!playerSel || !DB?.papers) return;
-  const playerKey = playerSel.value || 'Cook Medical';
-  const cfg = PATENT_TREE_CONFIG[playerKey] || PATENT_TREE_CONFIG['Cook Medical'];
-  const papers = patentTreePapersForPlayer(playerKey);
+  if(!DB?.papers) return;
 
+  // 統計所有公司缺口
+  const allGaps = Object.values(PATENT_TREE_CONFIG).flatMap(cfg => cfg.gapSeeds || []);
   const stats = document.getElementById('patentTreeStats');
   if(stats) {
-    const data = patentTreeBuild(playerKey, cfg.centerIds?.[0]);
-    stats.textContent = `${cfg.label}｜已收錄 ${papers.length} 篇｜缺口 ${data.missing.length} 件`;
+    const totalPatents = Object.values(PATENT_TREE_CONFIG).flatMap(cfg => cfg.evolution || []).length;
+    const missing = allGaps.length;
+    stats.textContent = `${Object.keys(PATENT_TREE_CONFIG).length} 家公司｜${totalPatents} 件專利｜${missing} 件待解析`;
   }
 
-  const data = patentTreeBuild(playerKey, cfg.centerIds?.[0]);
-  renderMissingPatentList(data);
-  drawPatentFamilyTree(data);
+  // 渲染缺口清單（所有公司合計）
+  const missingEl = document.getElementById('missingPatentList');
+  if(missingEl) {
+    if(!allGaps.length) {
+      missingEl.innerHTML = '<div style="color:var(--muted)">目前無明確缺口。</div>';
+    } else {
+      missingEl.innerHTML = allGaps.map(m => `
+        <div style="border:1px solid var(--border);border-radius:7px;padding:8px 10px;margin-bottom:8px">
+          <div style="font-weight:800;color:#c0392b;font-size:12px">${escHtml(m.patent_no)}</div>
+          <div style="font-size:11px;color:var(--text);margin-top:2px"><b>${escHtml(m.role)}</b></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">${escHtml(m.reason)}</div>
+          <div style="font-size:11px;color:var(--accent2);margin-top:4px">來源：${escHtml((m.source_ids||[]).join(', '))}</div>
+          <div style="font-size:11px;color:#b85c2a;margin-top:3px">→ ${escHtml(m.next_task)}</div>
+        </div>`).join('');
+    }
+  }
+
+  drawPatentFamilyTree();
 }
 
-function renderPatentEvolution(data) {
-  const el = document.getElementById('patentEvolution');
-  if(!el || !data?.cfg) return;
-  const cfg = data.cfg;
-  const items = (cfg.evolution || []).map(item => {
-    const p = item.id ? (DB.papers || []).find(x => x.id === item.id) : null;
-    const statusColor = item.status === 'missing' ? '#c0392b' : '#2d8c5a';
-    const statusText = item.status === 'missing' ? '缺口待補' : '已收錄';
-    const action = p
-      ? `<button class="btn btn-s" style="font-size:10px;padding:3px 8px;margin-top:8px" onclick="goToPaper('${p.id}',{focus:true,label:'專利演進：${p.id}',color:'#2d8c5a'})">查看 ${p.id}</button>`
-      : `<div style="font-size:11px;color:#b85c2a;margin-top:8px">下一輪深度解析候選</div>`;
-    return `
-      <div style="position:relative;min-width:190px;flex:1;background:#fff;border:1px solid var(--border);border-top:4px solid ${statusColor};border-radius:8px;padding:10px 11px">
-        <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start">
-          <div style="font-size:18px;font-weight:900;color:${statusColor};line-height:1">${escHtml(item.year)}</div>
-          <span class="tag ${item.status === 'missing' ? 'tag-orange' : 'tag-green'}">${statusText}</span>
-        </div>
-        <div style="font-size:12px;font-weight:800;color:var(--text);margin-top:8px">${escHtml(item.stage)}</div>
-        <div style="font-size:11px;color:var(--accent);margin-top:3px">${escHtml(item.patent || p?.id || '')}</div>
-        <div style="font-size:12px;color:var(--text);line-height:1.55;margin-top:7px">${escHtml(item.theme)}</div>
-        <div style="font-size:11px;color:var(--muted);line-height:1.55;margin-top:7px">${escHtml(item.meaning)}</div>
-        ${action}
-      </div>`;
-  }).join('');
 
-  const trend = (cfg.trendSummary || []).map(x => `<li style="margin-bottom:5px">${escHtml(x)}</li>`).join('');
-  el.innerHTML = `
-    <div class="panel">
-      <div class="panel-h">公司開發演進與技術趨勢</div>
-      <div style="padding:12px">
-        <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px">
-          <div>
-            <div style="font-size:14px;font-weight:900;color:var(--text)">${escHtml(data.player)} 專利路徑</div>
-            <div style="font-size:11px;color:var(--muted)">依 papers.json 已收錄內容 + 明確缺口整理，非完整法律家族圖。</div>
-          </div>
-          <button class="btn btn-s" style="font-size:11px" onclick="renderPatentTree()">重新整理</button>
-        </div>
-        <div style="display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:12px">
-          <div style="display:flex;gap:10px;align-items:stretch;overflow-x:auto;padding-bottom:4px">
-            ${items}
-          </div>
-          <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:11px 12px">
-            <div style="font-size:12px;font-weight:900;color:var(--accent2);margin-bottom:6px">趨勢判讀</div>
-            <ul style="margin:0 0 0 17px;padding:0;font-size:12px;line-height:1.65;color:var(--text)">${trend}</ul>
-          </div>
-        </div>
-      </div>
-    </div>`;
-}
 
 function renderMissingPatentList(data) {
   const el = document.getElementById('missingPatentList');
@@ -4920,206 +4672,213 @@ function renderPatentTreeDetail(d) {
     ${link}`;
 }
 
-function drawPatentFamilyTree(data) {
+function drawPatentFamilyTree() {
   const svgEl = document.getElementById('patentTreeSvg');
-  if(!svgEl) return;
-  if(typeof d3 === 'undefined') {
-    svgEl.innerHTML = '<text x="20" y="40" fill="#aaa" font-size="13">D3 尚未載入</text>';
-    return;
-  }
+  if(!svgEl || typeof d3 === 'undefined') return;
 
-  const cfg = data?.cfg;
-  const evo = cfg?.evolution || [];
+  const companies = Object.values(PATENT_TREE_CONFIG);
 
-  d3.select(svgEl).selectAll('*').remove();
+  // ── 尺寸常數 ──
+  const LABEL_W = 124;   // 公司標籤寬度
+  const LANE_H  = 100;   // 每家公司的泳道高度
+  const PAD_T   = 44;    // 年份軸上方空間
+  const PAD_B   = 20;
+  const PAD_R   = 40;
+  const NODE_W  = 86;    // 節點卡片寬
+  const NODE_H  = 64;    // 節點卡片高
 
-  if(!evo.length) {
-    d3.select(svgEl).attr('style','width:100%;height:120px;display:block')
-      .append('text').attr('x',20).attr('y',40).attr('fill','#aaa').attr('font-size',13)
-      .text('尚無演進資料');
-    return;
-  }
+  const containerW = svgEl.parentElement?.clientWidth || 900;
+  const CONTENT_W  = Math.max(containerW - LABEL_W - PAD_R, 500);
+  const totalW     = LABEL_W + CONTENT_W + PAD_R;
+  const totalH     = PAD_T + companies.length * LANE_H + PAD_B;
 
-  // ── 尺寸 ──
-  const W = svgEl.parentElement?.clientWidth || 280;
-  const NODE_H = 110;   // 每個節點佔的高度
-  const PAD_T = 24, PAD_B = 32;
-  const AXIS_X = 28;    // 垂直軸 X 位置
-  const CARD_X = 52;    // 卡片起始 X
-  const CARD_W = W - CARD_X - 12;
-  const CARD_H = 96;
-  const totalH = PAD_T + evo.length * NODE_H + PAD_B;
+  // ── 年份範圍 ──
+  const allYears = companies.flatMap(c => (c.evolution||[]).map(e => Number(e.year)));
+  const yMin = Math.min(...allYears), yMax = Math.max(...allYears);
+  const yPad = (yMax - yMin) * 0.06;
+  const xScale = yr => LABEL_W + ((yr - (yMin - yPad)) / ((yMax + yPad) - (yMin - yPad))) * CONTENT_W;
 
+  // ── SVG 初始化 ──
   const svg = d3.select(svgEl)
-    .attr('width', W)
-    .attr('height', totalH)
-    .attr('style', `width:100%;height:${totalH}px;display:block`);
+    .attr('width', totalW).attr('height', totalH)
+    .attr('style', `display:block;width:${totalW}px;height:${totalH}px`);
+  svg.selectAll('*').remove();
 
-  const C_KNOWN   = '#2d8c5a';
-  const C_MISSING = '#c0392b';
+  // ── 年份格線 & 軸 ──
+  const yearTicks = d3.range(Math.ceil(yMin/5)*5, yMax+1, 5);  // 每5年一格
+  const gridG = svg.append('g').attr('class','grid');
 
-  // ── 節點 Y 位置 ──
-  const nodes = evo.map((item, i) => ({
-    ...item,
-    cx: AXIS_X,
-    cy: PAD_T + i * NODE_H + NODE_H / 2,
-    inDB: !!item.id
-  }));
-
-  // ── defs：arrows ──
-  const defs = svg.append('defs');
-  [['arr-k', C_KNOWN], ['arr-m', C_MISSING], ['arr-g', '#bbb']].forEach(([id, col]) => {
-    defs.append('marker').attr('id', id)
-      .attr('markerWidth', 7).attr('markerHeight', 5)
-      .attr('refX', 6).attr('refY', 2.5).attr('orient', 'auto')
-      .append('path').attr('d', 'M0,0 L0,5 L7,2.5 z').attr('fill', col);
+  yearTicks.forEach(yr => {
+    const x = xScale(yr);
+    gridG.append('line')
+      .attr('x1',x).attr('y1',PAD_T-8)
+      .attr('x2',x).attr('y2',totalH-PAD_B)
+      .attr('stroke','#ece8e2').attr('stroke-width',1);
+    gridG.append('text')
+      .attr('x',x).attr('y',PAD_T-12)
+      .attr('text-anchor','middle').attr('font-size',10).attr('fill','#bbb').attr('font-weight',600)
+      .text(yr);
   });
 
-  // ── 垂直主軸線 ──
+  // 頂部時間軸線
   svg.append('line')
-    .attr('x1', AXIS_X).attr('y1', PAD_T)
-    .attr('x2', AXIS_X).attr('y2', totalH - PAD_B)
-    .attr('stroke', '#e0dbd4').attr('stroke-width', 2);
+    .attr('x1',LABEL_W).attr('y1',PAD_T-2)
+    .attr('x2',totalW-PAD_R).attr('y2',PAD_T-2)
+    .attr('stroke','#ddd').attr('stroke-width',1.5);
 
-  // ── 連線（節點間箭頭）──
-  for(let i = 0; i < nodes.length - 1; i++) {
-    const s = nodes[i], t = nodes[i+1];
+  // ── 每家公司泳道 ──
+  companies.forEach((cfg, ci) => {
+    const laneY  = PAD_T + ci * LANE_H;
+    const midY   = laneY + LANE_H / 2;
+    const col    = cfg.color || '#888';
+    const evo    = cfg.evolution || [];
+
+    // 泳道背景（交替色）
+    svg.append('rect')
+      .attr('x', 0).attr('y', laneY)
+      .attr('width', totalW).attr('height', LANE_H)
+      .attr('fill', ci % 2 === 0 ? '#fafaf8' : '#f5f3ef')
+      .attr('opacity', 0.6);
+
+    // 泳道分隔線
     svg.append('line')
-      .attr('x1', s.cx).attr('y1', s.cy + 14)
-      .attr('x2', t.cx).attr('y2', t.cy - 14)
-      .attr('stroke', s.status === 'missing' ? C_MISSING + '77' : '#ccc')
-      .attr('stroke-width', 1.5)
-      .attr('stroke-dasharray', s.status === 'missing' ? '4,3' : 'none')
-      .attr('marker-end', s.status === 'missing' ? 'url(#arr-m)' : 'url(#arr-g)');
-  }
+      .attr('x1',0).attr('y1',laneY)
+      .attr('x2',totalW).attr('y2',laneY)
+      .attr('stroke','#e8e2db').attr('stroke-width',1);
 
-  // ── 節點群組 ──
-  const nodeG = svg.selectAll('.pt-node').data(nodes).join('g')
-    .attr('class', 'pt-node')
-    .attr('transform', d => `translate(0,${d.cy - NODE_H/2})`)
-    .attr('cursor', 'pointer')
-    .on('click', (e, d) => {
-      // 高亮選中
-      svg.selectAll('.pt-card-bg').attr('stroke-width', 2);
-      d3.select(e.currentTarget).select('.pt-card-bg').attr('stroke-width', 3.5);
-      // 填充右側詳情
-      if(d.id) {
-        const p = (DB.papers||[]).find(x => x.id === d.id);
-        if(p) { goToPaper(d.id, {focus:true, label:`專利樹：${d.id}`, color: C_KNOWN}); return; }
-      }
-      renderPatentTreeDetail({
-        name: d.patent, patentNo: d.patent, type: 'missing',
-        role: d.stage, title: d.theme, summary: d.meaning,
-        next_task: '下一輪深度解析候選'
-      });
-    })
-    .on('mouseover', (e, d) => {
-      const tip = document.getElementById('patentTreeTip');
-      if(!tip) return;
-      tip.style.display = 'block';
-      tip.style.left = (e.clientX + 14) + 'px';
-      tip.style.top  = (e.clientY - 10) + 'px';
-      const col = d.status === 'missing' ? C_MISSING : C_KNOWN;
-      tip.innerHTML = `<b style="color:${col}">${escHtml(d.patent)}</b>
-        <br><span style="font-weight:700;font-size:11px">${escHtml(d.stage)}</span>
-        <br><span style="color:#777;font-size:11px">${escHtml((d.theme||'').slice(0,60))}</span>
-        <br><span style="color:#aaa;font-size:10px">${d.status==='missing' ? '⚠ 未收錄 — 待深度解析' : '✅ 已收錄 papers.json'}</span>`;
-    })
-    .on('mouseout', () => {
-      const tip = document.getElementById('patentTreeTip');
-      if(tip) tip.style.display = 'none';
-    });
+    // 公司標籤（左側）
+    const labG = svg.append('g').attr('transform',`translate(6,${midY})`);
+    labG.append('rect')
+      .attr('x',0).attr('y',-14).attr('width',112).attr('height',28).attr('rx',6)
+      .attr('fill', col+'22').attr('stroke', col+'44').attr('stroke-width',1);
+    labG.append('text')
+      .attr('x',56).attr('y',4).attr('text-anchor','middle')
+      .attr('font-size',11).attr('font-weight',800).attr('fill',col)
+      .text(cfg.label.length > 14 ? cfg.label.slice(0,13)+'…' : cfg.label);
 
-  // 年份 + 圓點（在軸上）
-  nodeG.append('text')
-    .attr('x', AXIS_X).attr('y', NODE_H/2 - 2)
-    .attr('text-anchor', 'middle')
-    .attr('font-size', 10).attr('font-weight', 700)
-    .attr('fill', d => d.status === 'missing' ? C_MISSING : C_KNOWN)
-    .text(d => d.year);
+    // 水平主軸線（泳道中線）
+    svg.append('line')
+      .attr('x1', LABEL_W).attr('y1', midY)
+      .attr('x2', totalW - PAD_R).attr('y2', midY)
+      .attr('stroke', col+'33').attr('stroke-width', 2)
+      .attr('stroke-dasharray', '4,4');
 
-  nodeG.append('circle')
-    .attr('cx', AXIS_X).attr('cy', NODE_H/2 + 10)
-    .attr('r', 7)
-    .attr('fill', d => d.status === 'missing' ? C_MISSING : C_KNOWN)
-    .attr('stroke', '#fff').attr('stroke-width', 2);
+    // 節點位置計算
+    const nodeData = evo.map(item => ({
+      ...item,
+      x: xScale(Number(item.year)),
+      y: midY
+    }));
 
-  // 橫連線（dot → card）
-  nodeG.append('line')
-    .attr('x1', AXIS_X + 7).attr('y1', NODE_H/2 + 10)
-    .attr('x2', CARD_X - 2).attr('y2', NODE_H/2 + 10)
-    .attr('stroke', d => d.status === 'missing' ? C_MISSING + '66' : '#ddd')
-    .attr('stroke-width', 1.5)
-    .attr('stroke-dasharray', d => d.status === 'missing' ? '3,2' : 'none');
-
-  // 卡片背景
-  nodeG.append('rect').attr('class', 'pt-card-bg')
-    .attr('x', CARD_X).attr('y', NODE_H/2 + 10 - CARD_H/2)
-    .attr('width', CARD_W).attr('height', CARD_H)
-    .attr('rx', 8)
-    .attr('fill', 'var(--card)')
-    .attr('stroke', d => d.status === 'missing' ? C_MISSING : C_KNOWN)
-    .attr('stroke-width', 2)
-    .attr('filter', 'drop-shadow(0 1px 4px rgba(0,0,0,0.07))');
-
-  // 頂色條
-  nodeG.append('rect')
-    .attr('x', CARD_X).attr('y', NODE_H/2 + 10 - CARD_H/2)
-    .attr('width', CARD_W).attr('height', 4).attr('rx', 8)
-    .attr('fill', d => d.status === 'missing' ? C_MISSING : C_KNOWN);
-
-  // 狀態徽章
-  nodeG.append('rect')
-    .attr('x', CARD_X + CARD_W - 54).attr('y', NODE_H/2 + 10 - CARD_H/2 + 8)
-    .attr('width', 48).attr('height', 15).attr('rx', 7)
-    .attr('fill', d => d.status === 'missing' ? '#fef0ef' : '#f0faf5');
-  nodeG.append('text')
-    .attr('x', CARD_X + CARD_W - 30).attr('y', NODE_H/2 + 10 - CARD_H/2 + 19)
-    .attr('text-anchor', 'middle').attr('font-size', 8).attr('font-weight', 700)
-    .attr('fill', d => d.status === 'missing' ? C_MISSING : C_KNOWN)
-    .text(d => d.status === 'missing' ? '⚠ 待補' : '✅ 已收錄');
-
-  const cardTextBase = d => NODE_H/2 + 10 - CARD_H/2;
-
-  // 專利號
-  nodeG.append('text')
-    .attr('x', CARD_X + 9).attr('y', d => cardTextBase(d) + 22)
-    .attr('font-size', 9).attr('font-weight', 700).attr('fill', 'var(--accent)')
-    .text(d => (d.patent||'').slice(0, 22));
-
-  // 角色
-  nodeG.append('text')
-    .attr('x', CARD_X + 9).attr('y', d => cardTextBase(d) + 37)
-    .attr('font-size', 11).attr('font-weight', 800).attr('fill', 'var(--text)')
-    .text(d => (d.stage||'').slice(0, 18));
-
-  // 技術主題（2 行）
-  nodeG.each(function(d) {
-    const el = d3.select(this);
-    const baseY = NODE_H/2 + 10 - CARD_H/2;
-    const words = (d.theme||'').replace(/\s*[+\/]\s*/g,' / ').split(' ');
-    let line = '', lineY = baseY + 52, lineN = 0;
-    words.forEach(w => {
-      if(lineN >= 2) return;
-      const test = line ? line + ' ' + w : w;
-      if(test.length > 24) {
-        el.append('text').attr('x', CARD_X+9).attr('y', lineY)
-          .attr('font-size', 9).attr('fill', '#888').text(line);
-        line = w; lineY += 12; lineN++;
-      } else line = test;
-    });
-    if(line && lineN < 2) {
-      el.append('text').attr('x', CARD_X+9).attr('y', lineY)
-        .attr('font-size', 9).attr('fill', '#888').text(line.slice(0,28));
+    // 連線（節點間箭頭）
+    for(let i = 0; i < nodeData.length - 1; i++) {
+      const s = nodeData[i], t = nodeData[i+1];
+      const isMiss = s.status === 'missing';
+      svg.append('line')
+        .attr('x1', s.x + NODE_W/2 + 2).attr('y1', midY)
+        .attr('x2', t.x - NODE_W/2 - 2).attr('y2', midY)
+        .attr('stroke', isMiss ? col+'55' : col+'88')
+        .attr('stroke-width', 2)
+        .attr('stroke-dasharray', isMiss ? '5,3' : 'none')
+        .attr('marker-end', `url(#arr-${ci})`);
     }
+
+    // Arrow marker（每條泳道一個顏色）
+    const defs = svg.select('defs').empty() ? svg.append('defs') : svg.select('defs');
+    defs.append('marker').attr('id',`arr-${ci}`)
+      .attr('markerWidth',7).attr('markerHeight',5)
+      .attr('refX',6).attr('refY',2.5).attr('orient','auto')
+      .append('path').attr('d','M0,0 L0,5 L7,2.5 z').attr('fill', col+'88');
+
+    // 節點卡片
+    const nodeG = svg.selectAll(`.node-${ci}`).data(nodeData).join('g')
+      .attr('class',`node-${ci}`)
+      .attr('transform', d => `translate(${d.x - NODE_W/2},${midY - NODE_H/2})`)
+      .attr('cursor','pointer')
+      .on('click', (e,d) => {
+        if(d.id) goToPaper(d.id, {focus:true, label:`專利樹：${d.id}`, color: col});
+        else renderPatentTreeDetail({
+          name:d.patent, patentNo:d.patent, type:'missing',
+          role:d.stage, title:d.theme, summary:d.meaning,
+          next_task:'下一輪深度解析候選'
+        });
+      })
+      .on('mouseover', (e,d) => {
+        const tip = document.getElementById('patentTreeTip');
+        if(!tip) return;
+        tip.style.display='block';
+        tip.style.left=(e.clientX+14)+'px';
+        tip.style.top=(e.clientY-10)+'px';
+        tip.innerHTML=`<b style="color:${d.status==='missing'?'#c0392b':col}">${escHtml(d.patent)}</b>
+          <br><span style="font-weight:700;font-size:11px">${escHtml(d.stage)}</span>
+          <br><span style="color:#777;font-size:11px">${escHtml((d.theme||'').slice(0,60))}</span>
+          <br><span style="color:#aaa;font-size:10px">${d.status==='missing'?'⚠ 未收錄，待深度解析':'✅ 已收錄 papers.json'}</span>`;
+      })
+      .on('mouseout',() => {
+        const tip=document.getElementById('patentTreeTip');
+        if(tip) tip.style.display='none';
+      });
+
+    // 卡片背景
+    nodeG.append('rect')
+      .attr('width',NODE_W).attr('height',NODE_H).attr('rx',7)
+      .attr('fill','var(--card)')
+      .attr('stroke', d => d.status==='missing' ? '#c0392b' : col)
+      .attr('stroke-width', d => d.status==='missing' ? 2 : 1.8)
+      .attr('filter','drop-shadow(0 1px 4px rgba(0,0,0,0.08))');
+
+    // 頂色條
+    nodeG.append('rect')
+      .attr('width',NODE_W).attr('height',4).attr('rx',7)
+      .attr('fill', d => d.status==='missing' ? '#c0392b' : col);
+
+    // 年份
+    nodeG.append('text')
+      .attr('x',7).attr('y',18)
+      .attr('font-size',11).attr('font-weight',900)
+      .attr('fill', d => d.status==='missing' ? '#c0392b' : col)
+      .text(d => d.year);
+
+    // 狀態徽章
+    nodeG.append('text')
+      .attr('x',NODE_W-6).attr('y',18)
+      .attr('text-anchor','end').attr('font-size',8).attr('font-weight',700)
+      .attr('fill', d => d.status==='missing' ? '#c0392b' : '#2d8c5a')
+      .text(d => d.status==='missing' ? '⚠' : '✅');
+
+    // 專利號
+    nodeG.append('text')
+      .attr('x',7).attr('y',30)
+      .attr('font-size',8).attr('font-weight',700).attr('fill','var(--accent)')
+      .text(d => (d.patent||'').slice(0,13));
+
+    // 角色
+    nodeG.append('text')
+      .attr('x',7).attr('y',42)
+      .attr('font-size',9).attr('font-weight',800).attr('fill','var(--text)')
+      .text(d => (d.stage||'').slice(0,14));
+
+    // 技術主題（截短）
+    nodeG.append('text')
+      .attr('x',7).attr('y',55)
+      .attr('font-size',8).attr('fill','#999')
+      .text(d => (d.theme||'').slice(0,16));
   });
 
-  // 底部提示
-  nodeG.append('text')
-    .attr('x', CARD_X + CARD_W/2).attr('y', d => cardTextBase(d) + CARD_H - 5)
-    .attr('text-anchor', 'middle').attr('font-size', 8).attr('fill', '#ccc')
-    .text(d => d.id ? '點擊跳到文庫 →' : '點擊查看詳情 →');
+  // 底部分隔線
+  svg.append('line')
+    .attr('x1',0).attr('y1',totalH-PAD_B)
+    .attr('x2',totalW).attr('y2',totalH-PAD_B)
+    .attr('stroke','#e8e2db').attr('stroke-width',1);
+
+  // 圖例
+  const legG = svg.append('g').attr('transform',`translate(${LABEL_W},${totalH-PAD_B+6})`);
+  [['✅ 已收錄 papers.json','#2d8c5a'],['⚠ 未收錄（待深度解析）','#c0392b'],['→ 虛線連結 = 缺口','#aaa']].forEach(([lb,col],i) => {
+    legG.append('text').attr('x',i*200).attr('y',10)
+      .attr('font-size',10).attr('fill',col).text(lb);
+  });
 }
+
 
 
 const ROUTE_DEFS = [
