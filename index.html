@@ -342,45 +342,47 @@ function doLogin(){
 </div>
 
 <div class="view" id="v-patent-tree">
-  <div style="max-width:1180px;margin:0 auto;padding:16px">
-    <div class="panel">
-      <div class="panel-h">🌳 專利樹</div>
-      <div style="padding:12px">
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
-          <label style="font-size:12px;color:var(--muted);font-weight:700">玩家</label>
-          <select id="patentTreePlayer" onchange="renderPatentTree()" style="width:auto;min-width:180px;padding:8px 10px;font-size:13px">
-            <option value="Cook Medical">Cook Medical</option>
-            <option value="DSM">DSM / ComfortCoat</option>
-          </select>
-          <label style="font-size:12px;color:var(--muted);font-weight:700;margin-left:8px">核心</label>
-          <select id="patentTreeCenter" onchange="renderPatentTree()" style="width:auto;min-width:220px;padding:8px 10px;font-size:13px"></select>
-          <button class="btn btn-s" onclick="renderPatentTree()">更新</button>
-          <span id="patentTreeStats" style="font-size:12px;color:var(--muted);margin-left:auto"></span>
-        </div>
-        <div style="font-size:12px;color:var(--muted);line-height:1.6">
-          先看玩家專利的時間演進與技術趨勢，再用 radial 圖查看核心專利周邊、同族與資料庫缺口。缺口清單是下一輪深度解析候選。
-        </div>
+  <div style="max-width:1200px;margin:0 auto;padding:16px">
+
+    <!-- 控制列 -->
+    <div class="panel" style="margin-bottom:12px">
+      <div style="padding:10px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <label style="font-size:12px;color:var(--muted);font-weight:700">玩家</label>
+        <select id="patentTreePlayer" onchange="renderPatentTree()" style="width:auto;min-width:180px;padding:6px 10px;font-size:13px">
+          <option value="Cook Medical">Cook Medical</option>
+          <option value="DSM">DSM / ComfortCoat</option>
+        </select>
+        <button class="btn btn-s" onclick="renderPatentTree()" style="font-size:12px">🔄 更新</button>
+        <span id="patentTreeStats" style="font-size:12px;color:var(--muted);margin-left:auto"></span>
       </div>
     </div>
-    <div id="patentEvolution" style="margin-top:12px"></div>
-    <div style="display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:12px;margin-top:12px">
-      <div class="panel" style="min-height:620px">
-        <div class="panel-h">🌿 專利家族時間軸</div>
-        <div style="position:relative;height:580px;overflow:hidden">
-          <svg id="patentTreeSvg" style="width:100%;height:100%"></svg>
-          <div id="patentTreeTip" style="display:none;position:absolute;background:var(--card);border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:12px;pointer-events:none;max-width:260px;box-shadow:0 2px 10px rgba(0,0,0,0.12);z-index:10"></div>
+
+    <!-- 主體：左垂直時間線 + 右詳情 -->
+    <div style="display:grid;grid-template-columns:300px 1fr;gap:12px;align-items:start">
+
+      <!-- 左：垂直時間線 SVG -->
+      <div class="panel" style="position:sticky;top:64px">
+        <div class="panel-h">🌿 專利時間線</div>
+        <div style="position:relative;overflow:hidden">
+          <svg id="patentTreeSvg" style="width:100%;display:block"></svg>
+          <div id="patentTreeTip" style="display:none;position:fixed;background:var(--card);border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:12px;pointer-events:none;max-width:240px;box-shadow:0 2px 10px rgba(0,0,0,0.15);z-index:100"></div>
         </div>
       </div>
+
+      <!-- 右：詳情 + 缺口清單 -->
       <div style="display:flex;flex-direction:column;gap:12px">
         <div class="panel">
-          <div class="panel-h">未在 papers.json 的專利</div>
-          <div id="missingPatentList" style="padding:12px;font-size:12px;line-height:1.7"></div>
+          <div class="panel-h">📄 專利內容</div>
+          <div id="patentTreeDetail" style="padding:14px;font-size:12px;line-height:1.7;color:var(--muted)">
+            ← 點選左側時間線上的節點，查看專利詳情
+          </div>
         </div>
         <div class="panel">
-          <div class="panel-h">節點詳情</div>
-          <div id="patentTreeDetail" style="padding:12px;font-size:12px;line-height:1.7;color:var(--muted)">點選圖上的節點查看內容。</div>
+          <div class="panel-h">⚠️ 未在 papers.json 的專利（待深度解析）</div>
+          <div id="missingPatentList" style="padding:12px;font-size:12px;line-height:1.7"></div>
         </div>
       </div>
+
     </div>
   </div>
 </div>
@@ -4577,25 +4579,19 @@ function patentTreeBuild(playerKey, centerId) {
 
 function renderPatentTree() {
   const playerSel = document.getElementById('patentTreePlayer');
-  const centerSel = document.getElementById('patentTreeCenter');
-  if(!playerSel || !centerSel || !DB?.papers) return;
+  if(!playerSel || !DB?.papers) return;
   const playerKey = playerSel.value || 'Cook Medical';
   const cfg = PATENT_TREE_CONFIG[playerKey] || PATENT_TREE_CONFIG['Cook Medical'];
   const papers = patentTreePapersForPlayer(playerKey);
-  if(patentTreeLastPlayer !== playerKey || !centerSel.options.length) {
-    const centers = cfg.centerIds.map(id => papers.find(p => p.id === id)).filter(Boolean);
-    centerSel.innerHTML = (centers.length ? centers : papers.slice(0, 6)).map(p => {
-      const label = `${p.id} - ${patentIdFromPaper(p) || p.title}`;
-      return `<option value="${escHtml(p.id)}">${escHtml(label)}</option>`;
-    }).join('') || '<option value="">無核心文獻</option>';
-    patentTreeLastPlayer = playerKey;
-  }
-  const data = patentTreeBuild(playerKey, centerSel.value);
+
   const stats = document.getElementById('patentTreeStats');
-  if(stats) stats.textContent = `${data.player}｜已收錄 ${papers.length}｜缺口 ${data.missing.length}`;
-  renderPatentEvolution(data);
+  if(stats) {
+    const missing = cfg.gapSeeds?.length || 0;
+    stats.textContent = `${cfg.label}｜已收錄 ${papers.length} 篇｜缺口 ${missing} 件`;
+  }
+
+  const data = patentTreeBuild(playerKey, cfg.centerIds?.[0]);
   renderMissingPatentList(data);
-  renderPatentTreeDetail(data.root);
   drawPatentFamilyTree(data);
 }
 
@@ -4684,201 +4680,203 @@ function drawPatentFamilyTree(data) {
   const svgEl = document.getElementById('patentTreeSvg');
   if(!svgEl) return;
   if(typeof d3 === 'undefined') {
-    svgEl.innerHTML = '<text x="24" y="40" fill="#8a7e72">D3 尚未載入</text>';
+    svgEl.innerHTML = '<text x="20" y="40" fill="#aaa" font-size="13">D3 尚未載入</text>';
     return;
   }
 
   const cfg = data?.cfg;
   const evo = cfg?.evolution || [];
-  const missing = data?.missing || [];
 
-  const svg = d3.select(svgEl);
-  svg.selectAll('*').remove();
-  const W = svgEl.clientWidth || 760;
-  const H = svgEl.clientHeight || 560;
-  svg.attr('viewBox', `0 0 ${W} ${H}`);
+  d3.select(svgEl).selectAll('*').remove();
 
   if(!evo.length) {
-    svg.append('text').attr('x', W/2).attr('y', H/2)
-      .attr('text-anchor','middle').attr('fill','#aaa').attr('font-size', 13)
-      .text('尚無演進資料，請在 PATENT_TREE_CONFIG 補充 evolution。');
+    d3.select(svgEl).attr('style','width:100%;height:120px;display:block')
+      .append('text').attr('x',20).attr('y',40).attr('fill','#aaa').attr('font-size',13)
+      .text('尚無演進資料');
     return;
   }
 
-  // ── 尺寸常數 ──
-  const CW = 148, CH = 118, PAD_X = 48, PAD_Y = 60;
-  const AX_Y = PAD_Y + CH + 28; // 時間軸 Y
+  // ── 尺寸 ──
+  const W = svgEl.parentElement?.clientWidth || 280;
+  const NODE_H = 110;   // 每個節點佔的高度
+  const PAD_T = 24, PAD_B = 32;
+  const AXIS_X = 28;    // 垂直軸 X 位置
+  const CARD_X = 52;    // 卡片起始 X
+  const CARD_W = W - CARD_X - 12;
+  const CARD_H = 96;
+  const totalH = PAD_T + evo.length * NODE_H + PAD_B;
 
-  // ── 計算 X 位置（依年份比例）──
-  const years = evo.map(e => Number(e.year));
-  const yMin = Math.min(...years), yMax = Math.max(...years);
-  const yRange = yMax - yMin || 1;
-  const usableW = W - PAD_X * 2 - CW;
+  const svg = d3.select(svgEl)
+    .attr('width', W)
+    .attr('height', totalH)
+    .attr('style', `width:100%;height:${totalH}px;display:block`);
 
-  const nodes = evo.map((item, i) => {
-    const xPct = (years.length > 1) ? (Number(item.year) - yMin) / yRange : (i / (evo.length - 1 || 1));
-    return {
-      ...item,
-      x: PAD_X + xPct * usableW,
-      y: PAD_Y,
-      inDB: !!item.id
-    };
-  });
+  const C_KNOWN   = '#2d8c5a';
+  const C_MISSING = '#c0392b';
 
-  // ── defs：箭頭 marker ──
+  // ── 節點 Y 位置 ──
+  const nodes = evo.map((item, i) => ({
+    ...item,
+    cx: AXIS_X,
+    cy: PAD_T + i * NODE_H + NODE_H / 2,
+    inDB: !!item.id
+  }));
+
+  // ── defs：arrows ──
   const defs = svg.append('defs');
-  [['arr-k','#2d8c5a'],['arr-m','#c0392b'],['arr-d','#bbb']].forEach(([id,col]) => {
-    defs.append('marker').attr('id', id).attr('markerWidth',8).attr('markerHeight',6)
-      .attr('refX',7).attr('refY',3).attr('orient','auto')
-      .append('path').attr('d','M0,0 L0,6 L8,3 z').attr('fill', col);
+  [['arr-k', C_KNOWN], ['arr-m', C_MISSING], ['arr-g', '#bbb']].forEach(([id, col]) => {
+    defs.append('marker').attr('id', id)
+      .attr('markerWidth', 7).attr('markerHeight', 5)
+      .attr('refX', 6).attr('refY', 2.5).attr('orient', 'auto')
+      .append('path').attr('d', 'M0,0 L0,5 L7,2.5 z').attr('fill', col);
   });
 
-  // ── 縮放/平移 ──
-  const zoomG = svg.append('g').attr('class','zoom-root');
-  svg.call(d3.zoom().scaleExtent([0.4, 2.5]).on('zoom', e => zoomG.attr('transform', e.transform)));
+  // ── 垂直主軸線 ──
+  svg.append('line')
+    .attr('x1', AXIS_X).attr('y1', PAD_T)
+    .attr('x2', AXIS_X).attr('y2', totalH - PAD_B)
+    .attr('stroke', '#e0dbd4').attr('stroke-width', 2);
 
-  // ── 時間軸底線 ──
-  zoomG.append('line')
-    .attr('x1', PAD_X - 10).attr('y1', AX_Y)
-    .attr('x2', W - PAD_X + 20).attr('y2', AX_Y)
-    .attr('stroke','#ddd').attr('stroke-width', 1.5);
-
-  // ── 年份刻度 ──
-  const yearSet = [...new Set(years)].sort();
-  const axG = zoomG.append('g');
-  yearSet.forEach(yr => {
-    const xPct = (yr - yMin) / yRange;
-    const x = PAD_X + xPct * usableW + CW / 2;
-    axG.append('line').attr('x1',x).attr('y1',AX_Y).attr('x2',x).attr('y2',AX_Y+6).attr('stroke','#ccc');
-    axG.append('text').attr('x',x).attr('y',AX_Y+18).attr('text-anchor','middle')
-      .attr('font-size',11).attr('fill','#aaa').attr('font-weight',600).text(yr);
-  });
-
-  // ── 邊（連線）──
-  const edgeG = zoomG.append('g').attr('fill','none');
+  // ── 連線（節點間箭頭）──
   for(let i = 0; i < nodes.length - 1; i++) {
     const s = nodes[i], t = nodes[i+1];
-    const sx = s.x + CW, sy = s.y + CH/2;
-    const tx = t.x, ty = t.y + CH/2;
-    const mid = (sx + tx) / 2;
-    const isMiss = s.status === 'missing';
-    edgeG.append('path')
-      .attr('d', `M${sx},${sy} C${mid},${sy} ${mid},${ty} ${tx-2},${ty}`)
-      .attr('stroke', isMiss ? '#e86c3a88' : '#bbb')
-      .attr('stroke-width', 2)
-      .attr('stroke-dasharray', isMiss ? '5,3' : 'none')
-      .attr('marker-end', isMiss ? 'url(#arr-m)' : 'url(#arr-d)');
+    svg.append('line')
+      .attr('x1', s.cx).attr('y1', s.cy + 14)
+      .attr('x2', t.cx).attr('y2', t.cy - 14)
+      .attr('stroke', s.status === 'missing' ? C_MISSING + '77' : '#ccc')
+      .attr('stroke-width', 1.5)
+      .attr('stroke-dasharray', s.status === 'missing' ? '4,3' : 'none')
+      .attr('marker-end', s.status === 'missing' ? 'url(#arr-m)' : 'url(#arr-g)');
   }
 
-  // ── 節點卡片 ──
-  const nodeG = zoomG.append('g').attr('class','nodes');
-  const cardG = nodeG.selectAll('.pt-card').data(nodes).join('g')
-    .attr('class','pt-card')
-    .attr('transform', d => `translate(${d.x},${d.y})`)
-    .attr('cursor','pointer')
+  // ── 節點群組 ──
+  const nodeG = svg.selectAll('.pt-node').data(nodes).join('g')
+    .attr('class', 'pt-node')
+    .attr('transform', d => `translate(0,${d.cy - NODE_H/2})`)
+    .attr('cursor', 'pointer')
     .on('click', (e, d) => {
-      e.stopPropagation();
-      if(d.id) goToPaper(d.id, {focus:true, label:`專利樹：${d.id}`, color:'#2d8c5a'});
-      else renderPatentTreeDetail({
-        name: d.patent,
-        patentNo: d.patent,
-        type: 'missing',
-        role: d.stage,
-        title: d.theme,
-        summary: d.meaning,
+      // 高亮選中
+      svg.selectAll('.pt-card-bg').attr('stroke-width', 2);
+      d3.select(e.currentTarget).select('.pt-card-bg').attr('stroke-width', 3.5);
+      // 填充右側詳情
+      if(d.id) {
+        const p = (DB.papers||[]).find(x => x.id === d.id);
+        if(p) { goToPaper(d.id, {focus:true, label:`專利樹：${d.id}`, color: C_KNOWN}); return; }
+      }
+      renderPatentTreeDetail({
+        name: d.patent, patentNo: d.patent, type: 'missing',
+        role: d.stage, title: d.theme, summary: d.meaning,
         next_task: '下一輪深度解析候選'
       });
     })
-    .on('mouseover', function(e, d) {
-      d3.select(this).select('rect.card-bg').attr('filter','drop-shadow(0 4px 12px rgba(0,0,0,0.18))');
+    .on('mouseover', (e, d) => {
       const tip = document.getElementById('patentTreeTip');
       if(!tip) return;
-      const box = svgEl.getBoundingClientRect();
-      tip.style.display='block';
-      tip.style.left=(e.clientX - box.left + 12)+'px';
-      tip.style.top=(e.clientY - box.top - 10)+'px';
-      tip.innerHTML = `<b style="color:${d.status==='missing'?'#c0392b':'#2d8c5a'}">${escHtml(d.patent)}</b>
-        <br><span style="font-size:10px;font-weight:700">${escHtml(d.stage)}</span>
-        <br><span style="font-size:10px;color:#777">${escHtml(d.theme?.slice(0,60)||'')}</span>
-        <br><span style="font-size:10px;color:#aaa">${d.status==='missing'?'⚠ 未收錄 — 待深度解析':'✅ 已收錄 papers.json'}</span>`;
+      tip.style.display = 'block';
+      tip.style.left = (e.clientX + 14) + 'px';
+      tip.style.top  = (e.clientY - 10) + 'px';
+      const col = d.status === 'missing' ? C_MISSING : C_KNOWN;
+      tip.innerHTML = `<b style="color:${col}">${escHtml(d.patent)}</b>
+        <br><span style="font-weight:700;font-size:11px">${escHtml(d.stage)}</span>
+        <br><span style="color:#777;font-size:11px">${escHtml((d.theme||'').slice(0,60))}</span>
+        <br><span style="color:#aaa;font-size:10px">${d.status==='missing' ? '⚠ 未收錄 — 待深度解析' : '✅ 已收錄 papers.json'}</span>`;
     })
-    .on('mouseout', function() {
-      d3.select(this).select('rect.card-bg').attr('filter','drop-shadow(0 2px 6px rgba(0,0,0,0.07))');
+    .on('mouseout', () => {
       const tip = document.getElementById('patentTreeTip');
-      if(tip) tip.style.display='none';
+      if(tip) tip.style.display = 'none';
     });
 
-  // 卡片底色
-  const bCol = d => d.status === 'missing' ? '#c0392b' : '#2d8c5a';
-  cardG.append('rect').attr('class','card-bg')
-    .attr('width', CW).attr('height', CH).attr('rx', 10)
-    .attr('fill','var(--card)')
-    .attr('stroke', bCol).attr('stroke-width', 2.5)
-    .attr('filter','drop-shadow(0 2px 6px rgba(0,0,0,0.07))');
-
-  // 頂部色帶
-  cardG.append('rect')
-    .attr('width', CW).attr('height', 5).attr('rx', 10)
-    .attr('fill', bCol);
-
-  // 年份數字
-  cardG.append('text').attr('x', 10).attr('y', 22)
-    .attr('font-size', 16).attr('font-weight', 900).attr('fill', bCol)
+  // 年份 + 圓點（在軸上）
+  nodeG.append('text')
+    .attr('x', AXIS_X).attr('y', NODE_H/2 - 2)
+    .attr('text-anchor', 'middle')
+    .attr('font-size', 10).attr('font-weight', 700)
+    .attr('fill', d => d.status === 'missing' ? C_MISSING : C_KNOWN)
     .text(d => d.year);
 
+  nodeG.append('circle')
+    .attr('cx', AXIS_X).attr('cy', NODE_H/2 + 10)
+    .attr('r', 7)
+    .attr('fill', d => d.status === 'missing' ? C_MISSING : C_KNOWN)
+    .attr('stroke', '#fff').attr('stroke-width', 2);
+
+  // 橫連線（dot → card）
+  nodeG.append('line')
+    .attr('x1', AXIS_X + 7).attr('y1', NODE_H/2 + 10)
+    .attr('x2', CARD_X - 2).attr('y2', NODE_H/2 + 10)
+    .attr('stroke', d => d.status === 'missing' ? C_MISSING + '66' : '#ddd')
+    .attr('stroke-width', 1.5)
+    .attr('stroke-dasharray', d => d.status === 'missing' ? '3,2' : 'none');
+
+  // 卡片背景
+  nodeG.append('rect').attr('class', 'pt-card-bg')
+    .attr('x', CARD_X).attr('y', NODE_H/2 + 10 - CARD_H/2)
+    .attr('width', CARD_W).attr('height', CARD_H)
+    .attr('rx', 8)
+    .attr('fill', 'var(--card)')
+    .attr('stroke', d => d.status === 'missing' ? C_MISSING : C_KNOWN)
+    .attr('stroke-width', 2)
+    .attr('filter', 'drop-shadow(0 1px 4px rgba(0,0,0,0.07))');
+
+  // 頂色條
+  nodeG.append('rect')
+    .attr('x', CARD_X).attr('y', NODE_H/2 + 10 - CARD_H/2)
+    .attr('width', CARD_W).attr('height', 4).attr('rx', 8)
+    .attr('fill', d => d.status === 'missing' ? C_MISSING : C_KNOWN);
+
   // 狀態徽章
-  cardG.append('rect')
-    .attr('x', CW - 48).attr('y', 10).attr('width', 40).attr('height', 15).attr('rx', 7)
-    .attr('fill', d => d.status==='missing' ? '#fef0ef' : '#f0faf5');
-  cardG.append('text')
-    .attr('x', CW - 28).attr('y', 21).attr('text-anchor','middle')
-    .attr('font-size', 8).attr('font-weight', 700).attr('fill', bCol)
-    .text(d => d.status==='missing' ? '⚠ 待補' : '✅ 已收錄');
+  nodeG.append('rect')
+    .attr('x', CARD_X + CARD_W - 54).attr('y', NODE_H/2 + 10 - CARD_H/2 + 8)
+    .attr('width', 48).attr('height', 15).attr('rx', 7)
+    .attr('fill', d => d.status === 'missing' ? '#fef0ef' : '#f0faf5');
+  nodeG.append('text')
+    .attr('x', CARD_X + CARD_W - 30).attr('y', NODE_H/2 + 10 - CARD_H/2 + 19)
+    .attr('text-anchor', 'middle').attr('font-size', 8).attr('font-weight', 700)
+    .attr('fill', d => d.status === 'missing' ? C_MISSING : C_KNOWN)
+    .text(d => d.status === 'missing' ? '⚠ 待補' : '✅ 已收錄');
+
+  const cardTextBase = d => NODE_H/2 + 10 - CARD_H/2;
 
   // 專利號
-  cardG.append('text').attr('x', 10).attr('y', 37)
-    .attr('font-size', 9).attr('fill','var(--accent)').attr('font-weight', 700)
-    .text(d => (d.patent||'').slice(0, 20));
+  nodeG.append('text')
+    .attr('x', CARD_X + 9).attr('y', d => cardTextBase(d) + 22)
+    .attr('font-size', 9).attr('font-weight', 700).attr('fill', 'var(--accent)')
+    .text(d => (d.patent||'').slice(0, 22));
 
-  // 角色（stage）
-  cardG.append('text').attr('x', 10).attr('y', 51)
-    .attr('font-size', 10).attr('font-weight', 800).attr('fill','var(--text)')
-    .text(d => (d.stage||'').slice(0, 20));
+  // 角色
+  nodeG.append('text')
+    .attr('x', CARD_X + 9).attr('y', d => cardTextBase(d) + 37)
+    .attr('font-size', 11).attr('font-weight', 800).attr('fill', 'var(--text)')
+    .text(d => (d.stage||'').slice(0, 18));
 
-  // 技術主題（自動換行）
-  cardG.each(function(d) {
+  // 技術主題（2 行）
+  nodeG.each(function(d) {
     const el = d3.select(this);
-    const words = (d.theme||'').split(/\s*[+\/＋]\s*|\s+/);
-    let line = '', lineY = 66, lineN = 0;
+    const baseY = NODE_H/2 + 10 - CARD_H/2;
+    const words = (d.theme||'').replace(/\s*[+\/]\s*/g,' / ').split(' ');
+    let line = '', lineY = baseY + 52, lineN = 0;
     words.forEach(w => {
       if(lineN >= 2) return;
       const test = line ? line + ' ' + w : w;
-      if(test.length > 20) {
-        el.append('text').attr('x',10).attr('y',lineY).attr('font-size',9).attr('fill','#777').text(line);
+      if(test.length > 24) {
+        el.append('text').attr('x', CARD_X+9).attr('y', lineY)
+          .attr('font-size', 9).attr('fill', '#888').text(line);
         line = w; lineY += 12; lineN++;
       } else line = test;
     });
-    if(line && lineN < 2) el.append('text').attr('x',10).attr('y',lineY).attr('font-size',9).attr('fill','#777').text(line.slice(0,22));
+    if(line && lineN < 2) {
+      el.append('text').attr('x', CARD_X+9).attr('y', lineY)
+        .attr('font-size', 9).attr('fill', '#888').text(line.slice(0,28));
+    }
   });
 
-  // 點進文庫提示（底部）
-  cardG.append('text').attr('x', CW/2).attr('y', CH - 8)
-    .attr('text-anchor','middle').attr('font-size', 8).attr('fill','#ccc')
-    .text(d => d.id ? '點擊 → 文庫' : '點擊 → 詳情');
-
-  // ── 圖例 ──
-  const legG = zoomG.append('g').attr('transform', `translate(${W - PAD_X - 120},${H - 34})`);
-  [['✅ 已收錄','#2d8c5a'],['⚠ 待深度解析','#c0392b']].forEach(([lb,col],i) => {
-    legG.append('circle').attr('cx', i===0?0:100).attr('cy',0).attr('r',5).attr('fill',col);
-    legG.append('text').attr('x',(i===0?8:108)).attr('y',4).attr('font-size',10).attr('fill','#888').text(lb);
-  });
-
-  // ── 自動調整 SVG 高度以填滿容器 ──
-  const totalH = AX_Y + 30;
-  if(totalH < H) {
-    svg.attr('viewBox', `0 0 ${W} ${Math.max(totalH, 280)}`);
-  }
+  // 底部提示
+  nodeG.append('text')
+    .attr('x', CARD_X + CARD_W/2).attr('y', d => cardTextBase(d) + CARD_H - 5)
+    .attr('text-anchor', 'middle').attr('font-size', 8).attr('fill', '#ccc')
+    .text(d => d.id ? '點擊跳到文庫 →' : '點擊查看詳情 →');
 }
+
 
 const ROUTE_DEFS = [
   { id:'R_UVBP', label:'UV-BP Route', color:'#e86c3a',
