@@ -351,6 +351,18 @@ function doLogin(){
         <select id="patentTreePlayer" onchange="renderPatentTree()" style="width:auto;min-width:180px;padding:6px 10px;font-size:13px">
           <option value="Cook Medical">Cook Medical</option>
           <option value="DSM">DSM / ComfortCoat</option>
+          <option value="Hydromer">Hydromer</option>
+          <option value="Biocoat">Biocoat</option>
+          <option value="Surmodics">Surmodics</option>
+          <option value="Freudenberg">Freudenberg Medical</option>
+          <option value="AST Products">AST Products</option>
+          <option value="Boston Scientific">Boston Scientific</option>
+          <option value="Argon Medical">Argon Medical</option>
+          <option value="Coloplast">Coloplast</option>
+          <option value="BD Bard">BD / Bard</option>
+          <option value="Teleflex">Teleflex</option>
+          <option value="Harland Medical">Harland Medical</option>
+          <option value="ViVitro Labs">ViVitro Labs</option>
         </select>
         <button class="btn btn-s" onclick="renderPatentTree()" style="font-size:12px">🔄 更新</button>
         <span id="patentTreeStats" style="font-size:12px;color:var(--muted);margin-left:auto"></span>
@@ -4234,8 +4246,11 @@ function renderMarket() {
     });
     const p30 = DB.papers.find(p=>p.id==='P30') || findPatent('US7141246');
     const p31 = DB.papers.find(p=>p.id==='P31') || findPatent('US7402620');
+    const p34 = DB.papers.find(p=>p.id==='P34') || findPatent('US6645483');
     const missing = [
-      {patent_no:'US6645483', role:'祖案 / family root', reason:'出現在 P30/P31 related_patents，但目前沒有獨立 paper.json 條目；需要載入全文與 claim。'}
+      {patent_no:'US20010051669A1', role:'P34 相關公開案 / family branch', reason:'出現在 P34 related_patents，尚未獨立 paper 條目；需確認是否與 P34 實質重複。'},
+      {patent_no:'WO2002058756A2', role:'P34 PCT / international family', reason:'出現在 P34 related_patents，尚未獨立 paper 條目；可補國際 family 視角。'},
+      {patent_no:'US7820734B2', role:'後續 / continuation 待補', reason:'P34 深度解析標記為後續需查，可能延伸熱固化潤滑/抗菌路線。'}
     ].filter(x => !findPatent(x.patent_no));
     const overlap = (a,b) => {
       const A = new Set(a?.tags || []);
@@ -4247,7 +4262,9 @@ function renderMarket() {
     const similarScore = p30 && p31 ? overlap(p30, p31) : 0;
     const analyzedBadge = p => p?.patentResults?.agent_reading?.schema_version
       ? '<span class="tag tag-green">Agent v1 已讀</span>'
-      : '<span class="tag tag-gray">待深度解析</span>';
+      : (p?.patentResults?.full || p?.analysisResults?.full)
+        ? '<span class="tag tag-green">已解析</span>'
+        : '<span class="tag tag-gray">待深度解析</span>';
     const node = (p, role, note, color) => {
       const link = p ? `<button class="btn btn-s" style="font-size:10px;padding:3px 8px;margin-top:6px" onclick="goToMarketPaper('${p.id}')">查看 ${p.id}</button>` : '';
       return `<div style="min-width:230px;flex:1;background:#fff;border:1px solid var(--border);border-top:4px solid ${color};border-radius:8px;padding:11px 12px">
@@ -4272,7 +4289,7 @@ function renderMarket() {
       </div>
       <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px">
         <div style="display:flex;align-items:stretch;gap:8px;flex-wrap:wrap">
-          ${node(null, '1. 祖案缺口', 'US6645483：目前只在 related_patents 出現，尚未載入 paper.json。這是次要深度解析清單的第一順位。', '#8a7e72')}
+          ${node(p34, '1. 祖案 / 基礎平台', 'US6645483B2 / P34：Sherwood-Covidien precursor，已收錄；下一步展開旁枝、同族與 continuation。', '#8a7e72')}
           <div style="align-self:center;color:var(--muted);font-size:18px;font-weight:800">→</div>
           ${node(p30, '2. 母案 / 平台', 'US7141246 / P30：PVP + PU interpolymer + isocyanate 熱固化潤滑骨架，可加入抗菌劑。', '#d4a030')}
           <div style="align-self:center;color:var(--muted);font-size:18px;font-weight:800">→</div>
@@ -4404,20 +4421,34 @@ const PATENT_TREE_CONFIG = {
     trendSummary: [
       '早期先建立熱固化 PVP + PU interpolymer 潤滑骨架，重點是附著、耐久與可塗內腔。',
       '後續把同一骨架延伸到抗菌 sustained release，從單純潤滑走向感染/生物膜控制。',
-      '目前資料庫缺口是 US6645483 祖案；若補齊，可更清楚判斷 P30/P31 的 claim 邊界與設計迴避空間。'
+      'US6645483 祖案已補入 P34；下一步要補的是 P34 旁枝、同族與後續 continuation，才能完整看出 Cook/Sherwood/Covidien 這條熱固化抗菌塗層的演進。'
     ],
     evolution: [
-      {year:2003, id:null, patent:'US6645483', stage:'祖案 / 基礎平台', theme:'PVP-PU 熱固化潤滑塗層', meaning:'確認早期 claim 起點；目前未收錄，應列為下一輪深度解析。', status:'missing'},
+      {year:2003, id:'P34', patent:'US6645483B2', stage:'祖案 / 基礎平台', theme:'PVP-PU 熱固化潤滑塗層', meaning:'確認早期 claim 起點；目前已收錄，需往旁枝與 continuation 展開。', status:'known'},
       {year:2006, id:'P30', patent:'US7141246', stage:'母案 / 平台化', theme:'PVP + PU interpolymer + isocyanate', meaning:'建立 Cook 潤滑塗層主骨架，可往抗菌功能延伸。', status:'known'},
       {year:2008, id:'P31', patent:'US7402620', stage:'續案 / 功能延伸', theme:'CHX / triclosan / silver sustained release', meaning:'從潤滑走向抗菌與 biofilm 控制，對抗結痂第二步有參考價值。', status:'known'}
     ],
     gapSeeds: [
       {
-        patent_no: 'US6645483',
-        role: '祖案 / family root',
-        reason: 'P30/P31 的 related_patents 都提到，但目前沒有獨立 papers.json 條目。',
-        source_ids: ['P30','P31'],
-        next_task: '載入 Google Patents 全文，解析 independent claims、續案關係與抗菌釋放 claim 邊界。'
+        patent_no: 'US20010051669A1',
+        role: 'P34 相關公開案 / family branch',
+        reason: '出現在 P34 related_patents，目前尚未獨立收錄，需確認是否為 P34 的公開案、優先權或同族節點。',
+        source_ids: ['P34'],
+        next_task: '補全文、claims、family 與 legal events，確認是否與 P34 實質重複或提供不同 claim 邊界。'
+      },
+      {
+        patent_no: 'WO2002058756A2',
+        role: 'P34 PCT / international family',
+        reason: '出現在 P34 related_patents，目前尚未獨立收錄；PCT 版本可能揭露更完整的 family/claims。',
+        source_ids: ['P34'],
+        next_task: '比對 US6645483B2 與 WO 公開範圍，確認是否值得獨立深度解析。'
+      },
+      {
+        patent_no: 'US7820734B2',
+        role: '後續 / continuation 待補',
+        reason: 'P34 深度解析標記為後續需查，可能是同一熱固化潤滑/抗菌路線的延伸。',
+        source_ids: ['P34'],
+        next_task: '解析 claims 與 cited-by，判斷是否延伸 P34/P30/P31 的抗菌、耐磨或添加劑保護範圍。'
       }
     ]
   },
@@ -4454,6 +4485,212 @@ const PATENT_TREE_CONFIG = {
         next_task: '補齊 P02 的 cited-by 與同族案，確認 polyelectrolyte/dry-out claim 的演進。'
       }
     ]
+  },
+  'Hydromer': {
+    label: 'Hydromer',
+    aliases: ['hydromer','us4642267','us4769013','us7008979','us20080114096','hydrUV'],
+    centerIds: ['P36','P37','P07','P38','C04','R2'],
+    trendSummary: [
+      'Hydromer 主軸從早期 PU/PVP 親水 polymer blend，延伸到 bio-effecting/抗菌釋放，再走向多用途多基材 coating composition。',
+      '2008 年 abandoned biopolymer/chitosan branch 提供設計靈感，但不能當成已授權阻擋專利，需要查 prosecution 與同族狀態。',
+      '下一步缺口是把 P07 的同族與被引用網路展開，確認 Hydromer 在耐磨、設備與多功能添加劑上的後續布局。'
+    ],
+    evolution: [
+      {year:1987, id:'P36', patent:'US4642267A', stage:'早期平台', theme:'PVP / PU hydrophilic blend', meaning:'Hydromer 親水材料平台起點。', status:'known'},
+      {year:1988, id:'P37', patent:'US4769013A', stage:'功能化', theme:'bio-effecting / antimicrobial release', meaning:'從潤滑材料走向藥物/抗菌釋放。', status:'known'},
+      {year:2006, id:'P07', patent:'US7008979B2', stage:'多用途平台', theme:'crosslinker / PU / metal oxide / aziridine', meaning:'多基材、多添加劑的商品化 coating composition。', status:'known'},
+      {year:2008, id:'P38', patent:'US20080114096A1', stage:'biopolymer 分支', theme:'chitosan / carbohydrate network', meaning:'後期生物高分子潤滑網絡，已標記 abandoned，偏設計靈感。', status:'known'}
+    ],
+    gapSeeds: [
+      {patent_no:'US4550126A', role:'早期 Hydromer companion node', reason:'P36 related_patents 提到，尚未獨立收錄；可能是早期 hydrophilic polymer/foam companion。', source_ids:['P36'], next_task:'確認 assignee、claim 與 P36 的關係，判斷是否為 Hydromer 主幹或旁枝。'},
+      {patent_no:'US20030203991A1', role:'P07 公開案 / family', reason:'P07 related_patents 提到，尚未獨立收錄；可能與 US7008979B2 實質重複但需核對公開內容。', source_ids:['P07'], next_task:'比對公開案與 granted claims，若內容重複則標記為同族不深析。'},
+      {patent_no:'WO2003093357A1', role:'P07 PCT family', reason:'P07 related_patents 提到，尚未獨立收錄；可用於追蹤國際布局。', source_ids:['P07'], next_task:'查 family、國家階段與 cited-by，補 Hydromer 國際路徑。'},
+      {patent_no:'EP1499667B1', role:'P07 EP granted family', reason:'P07 related_patents 提到，尚未獨立收錄；歐洲 claim 可能與美國不同。', source_ids:['P07'], next_task:'比對 EP claim 與 US7008979B2，確認歐洲 FTO 風險。'},
+      {patent_no:'WO2008133646A1', role:'P38 PCT family', reason:'P38 related_patents 提到，尚未獨立收錄；需確認 abandoned US 之外是否有外國有效權利。', source_ids:['P38'], next_task:'查 family legal status，確認 biopolymer/chitosan branch 是否仍有有效地區。'}
+    ]
+  },
+  'Biocoat': {
+    label: 'Biocoat / Integer Hydrophilic Technologies',
+    aliases: ['biocoat','hydak','integer hydrophilic','us12037560','us20110200828','us20130323291'],
+    centerIds: ['C01','P26'],
+    trendSummary: [
+      'Biocoat/HYDAK 目前資料庫已有商用節點與 US12037560B2，主軸是 UV/thermal 親水 topcoat 與 bi-laminar coating service。',
+      '缺口集中在早期公開案、HYDAK bi-laminar 平台與 510(k) 對應產品的專利號補齊。'
+    ],
+    evolution: [
+      {year:2011, id:null, patent:'US20110200828A1', stage:'早期公開案', theme:'hydrophilic coating family', meaning:'C01/P26 共同指向的早期公開案，待確認是否為 Biocoat 早期核心。', status:'missing'},
+      {year:2022, id:'C01', patent:'HYDAK', stage:'商用平台', theme:'UV / thermal hydrophilic coating service', meaning:'商用塗層平台與 OEM 服務節點。', status:'known'},
+      {year:2024, id:'P26', patent:'US12037560B2', stage:'授權/轉讓後核心', theme:'UV cure topcoatings', meaning:'Biocoat/Integer 近代 topcoat 專利節點。', status:'known'}
+    ],
+    gapSeeds: [
+      {patent_no:'US20110200828A1', role:'早期公開案', reason:'P26/C01 related_patents 皆提到，尚未獨立收錄。', source_ids:['P26','C01'], next_task:'解析與 US12037560B2 的 family/claim 關係，確認是否重複或補充早期範圍。'},
+      {patent_no:'US20130323291A1', role:'HYDAK 平台相關公開案', reason:'C01 related_patents 提到，尚未獨立收錄。', source_ids:['C01'], next_task:'查 assignee、claims 與 HYDAK B-500/bi-laminar 平台關聯。'},
+      {patent_no:'HYDAK-2022-US-patent', role:'專利號待查', reason:'C01 patent_notes 提到 HYDAK UV 2022 年獲美國專利，但資料庫尚未有明確專利號。', source_ids:['C01'], next_task:'用 Biocoat/Integer assignee 與 HYDAK 關鍵字查出正式 patent number。'}
+    ]
+  },
+  'Surmodics': {
+    label: 'Surmodics',
+    aliases: ['surmodics','serene','photolink','preside','us20230285641'],
+    centerIds: ['C03','C09','L02'],
+    trendSummary: [
+      'Surmodics 主軸是 PhotoLink 光接枝平台與 Serene/Preside 商用塗層。',
+      '目前資料庫有商用節點與一個 surfactant hydrophilic coating 專利，但尚未把 PhotoLink/Serene 相關專利族群展開。'
+    ],
+    evolution: [
+      {year:2014, id:'L02', patent:'US8871869', stage:'配方/界面活性劑', theme:'hydrophilic coating with surfactant', meaning:'已收錄的 Surmodics 相關親水塗層節點。', status:'known'},
+      {year:2015, id:'C03', patent:'Serene', stage:'商用平台', theme:'PhotoLink / hydrophilic coating', meaning:'Surmodics 商用 coating 品牌。', status:'known'},
+      {year:2023, id:null, patent:'US20230285641A1', stage:'Preside/Serene 近代公開案', theme:'photo-reactive hydrophilic coating', meaning:'C03 指向的近代公開案，需補成正式條目。', status:'missing'}
+    ],
+    gapSeeds: [
+      {patent_no:'US20230285641A1', role:'Serene/Preside 近代公開案', reason:'C03 related_patents 提到，尚未獨立收錄。', source_ids:['C03'], next_task:'解析 claims、assignee、產品對應與 cited-by，確認是否為 Serene/Preside 核心。'},
+      {patent_no:'PhotoLink-family-search', role:'PhotoLink 專利族待查', reason:'C03/C09 提到 Surmodics PhotoLink，但未列完整專利族。', source_ids:['C03','C09'], next_task:'用 Surmodics + PhotoLink + hydrophilic coating 檢索 family 與關鍵 granted patents。'}
+    ]
+  },
+  'Freudenberg': {
+    label: 'Freudenberg Medical',
+    aliases: ['freudenberg','lubriteq'],
+    centerIds: ['C02'],
+    trendSummary: [
+      'Freudenberg/LUBRITEQ 目前在資料庫中是商用塗層服務節點，尚未有明確專利號。',
+      '先列為 assignee/品牌檢索任務，避免把未確認專利號塞進資料庫。'
+    ],
+    evolution: [
+      {year:2026, id:'C02', patent:'LUBRITEQ', stage:'商用塗層平台', theme:'UV-curable hydrophilic coating', meaning:'目前只有商用描述，專利號未公開。', status:'known'}
+    ],
+    gapSeeds: [
+      {patent_no:'Freudenberg-LUBRITEQ-assignee-search', role:'品牌/assignee 檢索', reason:'C02 patent_notes 標記具體專利號未公開。', source_ids:['C02'], next_task:'用 Freudenberg Medical + LUBRITEQ + hydrophilic coating 搜尋公開專利與 family。'}
+    ]
+  },
+  'AST Products': {
+    label: 'AST Products',
+    aliases: ['ast products','lubrilast'],
+    centerIds: ['C08'],
+    trendSummary: [
+      'AST/LubriLAST 目前是商用塗層節點，缺少對應專利樹。',
+      '先以品牌與 assignee 搜尋任務列入待解析，確認是否有自有 IP 或主要為 coating service know-how。'
+    ],
+    evolution: [
+      {year:2016, id:'C08', patent:'LubriLAST', stage:'商用塗層平台', theme:'hydrophilic coating service', meaning:'目前資料庫只有商用節點。', status:'known'}
+    ],
+    gapSeeds: [
+      {patent_no:'AST-LubriLAST-assignee-search', role:'品牌/assignee 檢索', reason:'C08 未有 related_patents，需先查出是否有公開專利族。', source_ids:['C08'], next_task:'搜尋 AST Products + LubriLAST + hydrophilic coating patent，建立正式候選清單。'}
+    ]
+  },
+  'Boston Scientific': {
+    label: 'Boston Scientific / Scimed',
+    aliases: ['boston scientific','scimed','percuflex','us6610035','us8378011','us6458867','us5876448'],
+    centerIds: ['P24','P35','P22'],
+    trendSummary: [
+      'Boston/Scimed 目前已收錄 hybrid top coat、plasma-silane primer 與 durable IPN/SIPN coating 節點。',
+      '缺口是把早期基礎專利、P35 的公開/WO family 與 Percuflex 產品對應關係補齊。'
+    ],
+    evolution: [
+      {year:1999, id:null, patent:'US5876448', stage:'早期基礎 IP', theme:'interventional catheter / coating baseline', meaning:'資料庫多次提到 Boston 基礎專利，但尚未獨立收錄。', status:'missing'},
+      {year:2002, id:'P22', patent:'US6458867B1', stage:'primer / 表面處理', theme:'plasma + silane primer', meaning:'金屬/導線等基材附著強化。', status:'known'},
+      {year:2003, id:'P24', patent:'US6610035B2', stage:'hybrid top coat', theme:'anti-blocking / package stability', meaning:'Boston/Scimed 早期包裝與濕潤穩定性節點。', status:'known'},
+      {year:2013, id:'P35', patent:'US8378011B2', stage:'durability', theme:'IPN/SIPN durable hydrophilic coating', meaning:'往耐磨、附著與 guidewire/catheter durable coating 延伸。', status:'known'}
+    ],
+    gapSeeds: [
+      {patent_no:'US5876448', role:'早期基礎專利', reason:'既有摘要提到 Boston Scientific 基礎性介入導管專利，但未獨立收錄。', source_ids:['P24','P35'], next_task:'確認與親水塗層/導管產品的關聯，解析 claims 與訴訟/引用歷史。'},
+      {patent_no:'US20090171302A1', role:'P35 公開案', reason:'P35 related_patents 提到，尚未獨立收錄。', source_ids:['P35'], next_task:'比對公開案與 US8378011B2 granted claims。'},
+      {patent_no:'WO2009086318A1', role:'P35 PCT family', reason:'P35 related_patents 提到，尚未獨立收錄。', source_ids:['P35'], next_task:'追蹤國際 family 與有效地區。'}
+    ]
+  },
+  'Argon Medical': {
+    label: 'Argon Medical',
+    aliases: ['argon','slip-coat','scorpion'],
+    centerIds: ['C10'],
+    trendSummary: [
+      'Argon 目前只有 SLIP-COAT 商用節點，強項是熱固化與管腔內壁 coating 能力。',
+      '公開專利號尚未確認，應先做 assignee/Scorpion/SLIP-COAT 檢索，再決定是否納入正式 paper。'
+    ],
+    evolution: [
+      {year:2024, id:'C10', patent:'SLIP-COAT', stage:'商用技術', theme:'inner-lumen thermal hydrophilic coating', meaning:'內壁塗層能力是值得對標的製程訊號。', status:'known'}
+    ],
+    gapSeeds: [
+      {patent_no:'Argon-SLIP-COAT-assignee-search', role:'品牌/assignee 檢索', reason:'C10 patent_notes 標記具體專利號未公開，需查 Argon Medical / Scorpion / SLIP-COAT。', source_ids:['C10'], next_task:'查 Argon Medical hydrophilic coating、Scorpion catheter、SLIP-COAT 相關專利與產品對應。'}
+    ]
+  },
+  'Coloplast': {
+    label: 'Coloplast',
+    aliases: ['coloplast','imajinhydro','us9138510'],
+    centerIds: ['P29','P12','U07'],
+    trendSummary: [
+      'Coloplast 在文庫中主要與 ready-to-use / hydrocoated silicone / Imajinhydro 對照資料相關。',
+      '下一步要補 Coloplast coating composition 的同族與產品對應，特別是與 Boston Percuflex 的臨床比較。'
+    ],
+    evolution: [
+      {year:2015, id:'P12', patent:'US9138510', stage:'ready-to-use / PVP UV', theme:'兩層 PVP UV / sterilized catheter', meaning:'可作 ready-to-use 與滅菌保存對標。', status:'known'},
+      {year:2020, id:'P29', patent:'Coating composition', stage:'商用配方相關', theme:'親水塗層 composition', meaning:'Coloplast 親水 coating 節點，需補 family。', status:'known'},
+      {year:2021, id:'U07', patent:'Imajinhydro clinical study', stage:'臨床對照', theme:'silicone-hydrocoated ureteral stent', meaning:'產品/臨床證據節點，不是專利。', status:'known'}
+    ],
+    gapSeeds: [
+      {patent_no:'Coloplast-Imajinhydro-patent-search', role:'產品對應專利待查', reason:'U07 有 Imajinhydro 臨床對照，但資料庫未列產品對應專利族。', source_ids:['U07','P29'], next_task:'用 Coloplast + Imajinhydro + hydrocoated silicone + ureteral stent 檢索專利與 510(k)/產品對應。'},
+      {patent_no:'US9138510-family', role:'P12 同族待補', reason:'P12 可能與 Coloplast ready-to-use catheter family 相關，但同族未完整展開。', source_ids:['P12'], next_task:'查 US9138510 family/cited-by，判斷是否需拆成多個 paper。'}
+    ]
+  },
+  'BD Bard': {
+    label: 'BD / Bard',
+    aliases: ['bd','bard','c.r.bard','becton','us10857324','us5160790'],
+    centerIds: ['P06','P18'],
+    trendSummary: [
+      'BD/Bard 目前已有 Bard/Medtronic 熱固化平行 prior art 與 Bard PAA-PEG 抗結垢尿管節點。',
+      '下一步應把 Bard 泌尿導管與抗結垢 coating 的同族、後續與產品對應補齊。'
+    ],
+    evolution: [
+      {year:1992, id:'P06', patent:'US5160790A', stage:'早期熱固化 prior art', theme:'PVP / isocyanate hydrogel coating', meaning:'Bard/Medtronic 平行路線，不屬 Hydromer。', status:'known'},
+      {year:2020, id:'P18', patent:'US10857324', stage:'抗結垢尿管', theme:'PAA + PEG / anti-encrustation', meaning:'Bard/BD 泌尿導管抗結垢核心節點。', status:'known'}
+    ],
+    gapSeeds: [
+      {patent_no:'US10857324-family', role:'P18 同族/後續待補', reason:'P18 是 Bard/BD 抗結垢核心節點，但 family/cited-by 尚未獨立展開。', source_ids:['P18'], next_task:'補 PAA-PEG anti-encrustation family、continuation 與 cited-by。'},
+      {patent_no:'Bard-urinary-catheter-coating-search', role:'BD/Bard 產品線檢索', reason:'BD/Bard 泌尿導管產品線大，資料庫目前只收 P06/P18。', source_ids:['P06','P18'], next_task:'用 Bard/BD + urinary catheter + hydrophilic/anti-encrustation coating 檢索專利路徑。'}
+    ]
+  },
+  'Teleflex': {
+    label: 'Teleflex',
+    aliases: ['teleflex','arrow','rüsch','rusch'],
+    centerIds: [],
+    trendSummary: [
+      'Teleflex 是首頁競爭玩家，但目前資料庫幾乎沒有對應專利節點。',
+      '先建立 assignee/品牌檢索缺口，之後再決定是否進入深度解析。'
+    ],
+    evolution: [
+      {year:2026, id:null, patent:'Teleflex-assignee-search', stage:'待檢索', theme:'catheter / hydrophilic coating IP', meaning:'首頁競爭者，但目前無正式 paper 條目。', status:'missing'}
+    ],
+    gapSeeds: [
+      {patent_no:'Teleflex-assignee-search', role:'assignee 檢索', reason:'首頁市場玩家名單包含 Teleflex，但 papers.json 尚無對應專利路徑。', source_ids:[], next_task:'搜尋 Teleflex / Arrow / Rusch + catheter coating + hydrophilic patent。'}
+    ]
+  },
+  'Harland Medical': {
+    label: 'Harland Medical',
+    aliases: ['harland','pcx','fts7000','coater'],
+    centerIds: ['C07','R8'],
+    trendSummary: [
+      'Harland 主要是設備與測試系統，不一定是 coating composition 專利玩家。',
+      '待解析重點不是 FTO，而是設備、測試方法與可能的 coating service/fixture 專利。'
+    ],
+    evolution: [
+      {year:2019, id:'C07', patent:'Harland PCX / FTS', stage:'設備平台', theme:'coating and friction testing equipment', meaning:'塗覆與摩擦測試設備節點。', status:'known'},
+      {year:2020, id:'R8', patent:'Pinch Test Parameters', stage:'測試方法', theme:'pinch test / IDTE', meaning:'測試方法白皮書節點。', status:'known'}
+    ],
+    gapSeeds: [
+      {patent_no:'Harland-equipment-patent-search', role:'設備/測試專利待查', reason:'C07/R8 是工具節點，尚未查 Harland 是否有設備或測試 fixture 專利。', source_ids:['C07','R8'], next_task:'搜尋 Harland Medical + coating system + friction tester + patent。'}
+    ]
+  },
+  'ViVitro Labs': {
+    label: 'ViVitro Labs',
+    aliases: ['vivitro','idte','pinch test'],
+    centerIds: ['R8'],
+    trendSummary: [
+      'ViVitro/IDTE 是測試方法與設備脈絡，重點在 pinch test 條件、夾具與驗證 SOP。',
+      '先列工具/測試專利與方法文件檢索，不把它混入材料 FTO。'
+    ],
+    evolution: [
+      {year:2020, id:'R8', patent:'Pinch Test Parameters', stage:'測試方法', theme:'pinch test / hydrophilic coating friction', meaning:'目前主要依 R8 作測試方法節點。', status:'known'}
+    ],
+    gapSeeds: [
+      {patent_no:'ViVitro-IDTE-tooling-search', role:'測試工具/方法檢索', reason:'首頁設備夥伴包含 ViVitro，但尚未查其工具專利或標準化方法文件。', source_ids:['R8'], next_task:'搜尋 ViVitro / IDTE + hydrophilic coating friction test + patent / white paper。'}
+    ]
   }
 };
 
@@ -4476,6 +4713,12 @@ function normalizePatentNo(no) {
   return String(no || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
 }
 
+function patentFamilyKey(no) {
+  const n = normalizePatentNo(no);
+  const m = n.match(/^(US|EP|WO|CN)(\d+)/);
+  return m ? `${m[1]}${m[2]}` : n;
+}
+
 function patentIdFromPaper(p) {
   const fromTitle = extractPatentNos(`${p?.title || ''} ${JSON.stringify(p?.links || {})}`);
   return fromTitle[0] || p?.id || '';
@@ -4491,7 +4734,8 @@ function paperMatchesPatentNo(p, no) {
     p?.patent_no,
     p?.patent_number
   ].filter(Boolean).join(' ');
-  return normalizePatentNo(identity).includes(target);
+  if(normalizePatentNo(identity).includes(target)) return true;
+  return extractPatentNos(identity).some(no => patentFamilyKey(no) === patentFamilyKey(target));
 }
 
 function patentTreePapersForPlayer(playerKey) {
@@ -4586,8 +4830,8 @@ function renderPatentTree() {
 
   const stats = document.getElementById('patentTreeStats');
   if(stats) {
-    const missing = cfg.gapSeeds?.length || 0;
-    stats.textContent = `${cfg.label}｜已收錄 ${papers.length} 篇｜缺口 ${missing} 件`;
+    const data = patentTreeBuild(playerKey, cfg.centerIds?.[0]);
+    stats.textContent = `${cfg.label}｜已收錄 ${papers.length} 篇｜缺口 ${data.missing.length} 件`;
   }
 
   const data = patentTreeBuild(playerKey, cfg.centerIds?.[0]);
