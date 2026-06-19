@@ -358,10 +358,11 @@ function doLogin(){
           <span id="patentTreeStats" style="font-size:12px;color:var(--muted);margin-left:auto"></span>
         </div>
         <div style="font-size:12px;color:var(--muted);line-height:1.6">
-          這裡用玩家專利族做放射圖：中心是核心專利，向外連到母案、續案、同家族高相似專利與尚未收錄的缺口專利。缺口清單是下一輪深度解析候選。
+          先看玩家專利的時間演進與技術趨勢，再用 radial 圖查看核心專利周邊、同族與資料庫缺口。缺口清單是下一輪深度解析候選。
         </div>
       </div>
     </div>
+    <div id="patentEvolution" style="margin-top:12px"></div>
     <div style="display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:12px;margin-top:12px">
       <div class="panel" style="min-height:620px">
         <div class="panel-h">D3 radial 專利放射圖</div>
@@ -4398,6 +4399,16 @@ const PATENT_TREE_CONFIG = {
     label: 'Cook Medical',
     aliases: ['cook medical','houghton pe','us7141246','us7402620'],
     centerIds: ['P31','P30'],
+    trendSummary: [
+      '早期先建立熱固化 PVP + PU interpolymer 潤滑骨架，重點是附著、耐久與可塗內腔。',
+      '後續把同一骨架延伸到抗菌 sustained release，從單純潤滑走向感染/生物膜控制。',
+      '目前資料庫缺口是 US6645483 祖案；若補齊，可更清楚判斷 P30/P31 的 claim 邊界與設計迴避空間。'
+    ],
+    evolution: [
+      {year:2003, id:null, patent:'US6645483', stage:'祖案 / 基礎平台', theme:'PVP-PU 熱固化潤滑塗層', meaning:'確認早期 claim 起點；目前未收錄，應列為下一輪深度解析。', status:'missing'},
+      {year:2006, id:'P30', patent:'US7141246', stage:'母案 / 平台化', theme:'PVP + PU interpolymer + isocyanate', meaning:'建立 Cook 潤滑塗層主骨架，可往抗菌功能延伸。', status:'known'},
+      {year:2008, id:'P31', patent:'US7402620', stage:'續案 / 功能延伸', theme:'CHX / triclosan / silver sustained release', meaning:'從潤滑走向抗菌與 biofilm 控制，對抗結痂第二步有參考價值。', status:'known'}
+    ],
     gapSeeds: [
       {
         patent_no: 'US6645483',
@@ -4412,6 +4423,19 @@ const PATENT_TREE_CONFIG = {
     label: 'DSM / ComfortCoat',
     aliases: ['dsm','comfortcoat','dsm-firmenich','us8133580','ep1957130','wo2009112548','cn107405430','us8957125'],
     centerIds: ['P01','P02','P03','C06','P28','R13'],
+    trendSummary: [
+      'DSM 的主軸是 UV-BP / PVP 親水塗層平台，先做通用親水與低摩擦，再補乾燥保持與多基材適用性。',
+      'P01-P03 形成 ComfortCoat 核心壁壘；後續 R13/P28 更像配方窗口與 primer/附著力補強。',
+      '目前要補的是 family/cited-by 展開，不只看單件專利，才能判斷 DSM 是否把 claim 往材料、底塗、製程與應用端分層包圍。'
+    ],
+    evolution: [
+      {year:2009, id:'P03', patent:'WO2009112548A1', stage:'商業化核心公開', theme:'PVP + polyelectrolyte / ComfortCoat 通用化', meaning:'多基材與製程標準化，接近產品化平台。', status:'known'},
+      {year:2012, id:'P01', patent:'US8133580B2', stage:'核心平台', theme:'UV-BP + PVP 雙層親水塗層', meaning:'DSM 核心 FTO 風險來源，需完整 claim 迴避。', status:'known'},
+      {year:2013, id:'P02', patent:'EP1957130B1', stage:'性能延伸', theme:'polyelectrolyte / dry-out resistance', meaning:'從低摩擦延伸到離水後保持潤滑，強化臨床使用情境。', status:'known'},
+      {year:2015, id:'R13', patent:'US8957125', stage:'配方窗口', theme:'UV 固化 hydrogel / PVP-BP 配方', meaning:'補強配方範圍與材料比例，需比對 P01-P03 邊界。', status:'known'},
+      {year:2018, id:'C06', patent:'ComfortCoat', stage:'商用整合', theme:'商用塗層系統', meaning:'把專利族轉成授權/商品化塗層平台。', status:'known'},
+      {year:2019, id:'P28', patent:'CN107405430A', stage:'附著力補強', theme:'adhesion-promoting primer', meaning:'往 primer 與附著耐久性補強，形成底塗層面的防線。', status:'known'}
+    ],
     gapSeeds: [
       {
         patent_no: 'US8133580B2-family',
@@ -4530,8 +4554,10 @@ function patentTreeBuild(playerKey, centerId) {
   }));
 
   return {
+    cfg,
     player: cfg.label,
     center,
+    papers,
     missing,
     root: {
       name: center ? `${center.id} ${patentIdFromPaper(center)}` : cfg.label,
@@ -4567,9 +4593,60 @@ function renderPatentTree() {
   const data = patentTreeBuild(playerKey, centerSel.value);
   const stats = document.getElementById('patentTreeStats');
   if(stats) stats.textContent = `${data.player}｜已收錄 ${papers.length}｜缺口 ${data.missing.length}`;
+  renderPatentEvolution(data);
   renderMissingPatentList(data);
   renderPatentTreeDetail(data.root);
   drawPatentRadial(data.root);
+}
+
+function renderPatentEvolution(data) {
+  const el = document.getElementById('patentEvolution');
+  if(!el || !data?.cfg) return;
+  const cfg = data.cfg;
+  const items = (cfg.evolution || []).map(item => {
+    const p = item.id ? (DB.papers || []).find(x => x.id === item.id) : null;
+    const statusColor = item.status === 'missing' ? '#c0392b' : '#2d8c5a';
+    const statusText = item.status === 'missing' ? '缺口待補' : '已收錄';
+    const action = p
+      ? `<button class="btn btn-s" style="font-size:10px;padding:3px 8px;margin-top:8px" onclick="goToPaper('${p.id}',{focus:true,label:'專利演進：${p.id}',color:'#2d8c5a'})">查看 ${p.id}</button>`
+      : `<div style="font-size:11px;color:#b85c2a;margin-top:8px">下一輪深度解析候選</div>`;
+    return `
+      <div style="position:relative;min-width:190px;flex:1;background:#fff;border:1px solid var(--border);border-top:4px solid ${statusColor};border-radius:8px;padding:10px 11px">
+        <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start">
+          <div style="font-size:18px;font-weight:900;color:${statusColor};line-height:1">${escHtml(item.year)}</div>
+          <span class="tag ${item.status === 'missing' ? 'tag-orange' : 'tag-green'}">${statusText}</span>
+        </div>
+        <div style="font-size:12px;font-weight:800;color:var(--text);margin-top:8px">${escHtml(item.stage)}</div>
+        <div style="font-size:11px;color:var(--accent);margin-top:3px">${escHtml(item.patent || p?.id || '')}</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.55;margin-top:7px">${escHtml(item.theme)}</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.55;margin-top:7px">${escHtml(item.meaning)}</div>
+        ${action}
+      </div>`;
+  }).join('');
+
+  const trend = (cfg.trendSummary || []).map(x => `<li style="margin-bottom:5px">${escHtml(x)}</li>`).join('');
+  el.innerHTML = `
+    <div class="panel">
+      <div class="panel-h">公司開發演進與技術趨勢</div>
+      <div style="padding:12px">
+        <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px">
+          <div>
+            <div style="font-size:14px;font-weight:900;color:var(--text)">${escHtml(data.player)} 專利路徑</div>
+            <div style="font-size:11px;color:var(--muted)">依 papers.json 已收錄內容 + 明確缺口整理，非完整法律家族圖。</div>
+          </div>
+          <button class="btn btn-s" style="font-size:11px" onclick="renderPatentTree()">重新整理</button>
+        </div>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:12px">
+          <div style="display:flex;gap:10px;align-items:stretch;overflow-x:auto;padding-bottom:4px">
+            ${items}
+          </div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:11px 12px">
+            <div style="font-size:12px;font-weight:900;color:var(--accent2);margin-bottom:6px">趨勢判讀</div>
+            <ul style="margin:0 0 0 17px;padding:0;font-size:12px;line-height:1.65;color:var(--text)">${trend}</ul>
+          </div>
+        </div>
+      </div>
+    </div>`;
 }
 
 function renderMissingPatentList(data) {
