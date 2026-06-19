@@ -4661,20 +4661,6 @@ function renderMissingPatentList(data) {
 function renderPatentTreeDetail(d) {
   const el = document.getElementById('patentTreeDetail');
   if(!el || !d) return;
-  const link = d.paperId ? `<button class="btn btn-s" style="font-size:11px;margin-top:8px" onclick="goToPaper('${d.paperId}',{focus:true,label:'專利樹：${d.paperId}',color:'#2d8c5a'})">跳到文庫 ${d.paperId}</button>` : '';
-  el.innerHTML = `
-    <div style="font-weight:800;color:var(--text);font-size:13px">${escHtml(d.title || d.name)}</div>
-    <div style="margin-top:5px;color:var(--muted)">類型：${escHtml(d.role || d.type || '')}</div>
-    ${d.patentNo ? `<div style="margin-top:5px;color:var(--accent)">專利號：${escHtml(d.patentNo)}</div>` : ''}
-    ${d.source_ids?.length ? `<div style="margin-top:5px;color:var(--accent2)">來源：${escHtml(d.source_ids.join(', '))}</div>` : ''}
-    <div style="margin-top:8px;color:var(--text);line-height:1.7">${escHtml(String(d.summary || '').slice(0, 520))}</div>
-    ${d.next_task ? `<div style="margin-top:8px;color:#b85c2a">下一步：${escHtml(d.next_task)}</div>` : ''}
-    ${link}`;
-}
-
-function renderPatentTreeDetail(d) {
-  const el = document.getElementById('patentTreeDetail');
-  if(!el || !d) return;
   const paper = d.paperId ? (DB.papers||[]).find(p=>p.id===d.paperId) : null;
   const full = paper?.patentResults?.full || {};
   const col = d.color || '#2d8c5a';
