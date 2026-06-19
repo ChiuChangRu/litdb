@@ -149,9 +149,9 @@
       ]
     },
     "stats": {
-      "total": 87,
-      "patents": 30,
-      "patent_ratio": "34%"
+      "total": 101,
+      "patents": 44,
+      "patent_ratio": "44%"
     }
   },
   "papers": [
@@ -9883,6 +9883,912 @@
           "citations_needed": [
             "Allied Market Research 報告完整版",
             "更新至 2024 年的市場數據"
+          ]
+        }
+      }
+    },
+    {
+      "id": "P39",
+      "title": "Lubricious coating (US20010051669A1 / Sherwood-Covidien P34 publication)",
+      "authors": "Diane McGhee / Individual; Sherwood-Covidien family",
+      "year": 2001,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Sherwood",
+        "Covidien",
+        "Cook-related",
+        "PVP",
+        "polyurethane",
+        "urethane prepolymer",
+        "pharmacological additive",
+        "lubricity",
+        "family-duplicate",
+        "granted-publication"
+      ],
+      "purpose": "P34 publication-stage node for lubricious coating vehicle with pharmacological additive release control.",
+      "abstract_note": "Google Patents describes a lubricant coating vehicle for medical devices that reduces coefficient of friction upon moisture exposure and allows pharmacological additive release rate control by salt form and urethane pre-polymer concentration.",
+      "value_to_project": "Do not count as a separate innovation from P34 unless claim comparison reveals meaningful differences; useful for tracing original disclosure language.",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/US20010051669A1/en"
+      },
+      "related_patents": [
+        "US6645483B2",
+        "WO2002058756A2",
+        "US7820734B2"
+      ],
+      "patent_notes": "Google Patents: filed 2000-12-18; published 2001-12-13; inventor Diane McGhee; status Granted.",
+      "patentResults": {
+        "full": {
+          "evidence_level": "medium",
+          "source_quality": "google_patents_metadata",
+          "inference_flags": [
+            "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
+          ],
+          "summary": "US20010051669A1 is the publication-stage disclosure that leads into the Sherwood/Covidien P34 lubricious coating family. Its abstract matches P34 closely: a moisture-activated lubricious coating vehicle for medical devices, capable of incorporating pharmacological additives with release controlled by additive salt form and urethane pre-polymer concentration.",
+          "key_findings": [
+            "Publication-stage node for the P34 family.",
+            "Focuses on lubricity plus pharmacological additive release.",
+            "Release-rate tuning uses additive salt form and urethane pre-polymer concentration.",
+            "Likely substantially overlaps US6645483B2; treat as family duplicate until claims are compared."
+          ],
+          "patent_core": {
+            "claim_focus": [
+              "Lubricious coating vehicle for medical devices.",
+              "Pharmacological additive release within acceptable pharmacokinetic criteria.",
+              "Release tuning by salt form and urethane pre-polymer concentration."
+            ],
+            "design_around_notes": [
+              "Because this appears to be the P34 publication, compare claims with US6645483B2 before treating it as separate IP.",
+              "UV/PDA/SBMA or non-urethane-prepolymer routes remain natural design-around directions."
+            ]
+          },
+          "company_path_note": "Cook/Sherwood/Covidien path support node: original publication language before P34 granted claims.",
+          "next_actions": [
+            "Compare with P34 claim 1.",
+            "If claim scope is identical, mark as same-family duplicate and keep only for family tree."
+          ]
+        }
+      }
+    },
+    {
+      "id": "P40",
+      "title": "Lubricious coating comprising pharmacological additives (WO2002058756A2 / Sherwood PCT family)",
+      "authors": "Diane McGhee / Sherwood Service AG",
+      "year": 2002,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Sherwood",
+        "Covidien",
+        "Cook-related",
+        "PCT-family",
+        "pharmacological additive",
+        "urethane prepolymer",
+        "lubricity",
+        "family-duplicate",
+        "ceased"
+      ],
+      "purpose": "P34 PCT/international family node for lubricious coating with pharmacological additive release.",
+      "abstract_note": "PCT version of the Sherwood lubricious coating family. It covers medical device lubricious coating vehicles and release-rate adjustment by salt forms and urethane pre-polymer concentration.",
+      "value_to_project": "Useful to map international family and priority, but likely not a distinct technical idea from P34/P39.",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/WO2002058756A2/en"
+      },
+      "related_patents": [
+        "US20010051669A1",
+        "US6645483B2"
+      ],
+      "patent_notes": "Google Patents: filed 2001-12-13; published 2002-08-01; assignee Sherwood Service AG; status Ceased.",
+      "patentResults": {
+        "full": {
+          "evidence_level": "medium",
+          "source_quality": "google_patents_metadata",
+          "inference_flags": [
+            "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
+          ],
+          "summary": "WO2002058756A2 is the PCT/international counterpart of the Sherwood/Covidien lubricious coating family. It repeats the same core idea: a lubricious coating vehicle for medical devices with pharmacological additive release controlled through additive salt form and urethane pre-polymer concentration.",
+          "key_findings": [
+            "PCT family node, not an independent product path.",
+            "Assignee is Sherwood Service AG.",
+            "Status shown as Ceased on Google Patents.",
+            "Important for international family mapping and claim-language comparison."
+          ],
+          "patent_core": {
+            "claim_focus": [
+              "Lubricious coating vehicle for medical devices.",
+              "Pharmacological additives and controlled release.",
+              "Urethane pre-polymer concentration as release control parameter."
+            ],
+            "design_around_notes": [
+              "Treat as same-family evidence unless national phase claims differ.",
+              "For FTO outside US, check country-level entries rather than relying on the WO status alone."
+            ]
+          },
+          "company_path_note": "International branch of P34; should appear in patent tree as family/PCT node, not as a separate innovation count.",
+          "next_actions": [
+            "Check national phase entries and whether any remain active.",
+            "Compare PCT claims to US6645483B2."
+          ]
+        }
+      }
+    },
+    {
+      "id": "P41",
+      "title": "Antimicrobial lubricious coating (US7820734B2 / Tyco-Covidien follow-up)",
+      "authors": "Diane L. McGhee / Tyco Healthcare Group LP",
+      "year": 2010,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Tyco",
+        "Covidien",
+        "Sherwood",
+        "Cook-related",
+        "antimicrobial",
+        "lubricious coating",
+        "pharmacological additive",
+        "release control",
+        "catheter",
+        "expired-fee-related"
+      ],
+      "purpose": "Follow-up antimicrobial lubricious coating node after P34; likely extends the same additive-release logic into antimicrobial performance.",
+      "abstract_note": "Google Patents describes lubricious antimicrobial coating vehicles for medical devices that reduce coefficient of friction upon moisture exposure and impart antimicrobial properties, with pharmacological additive release within acceptable pharmacokinetic criteria.",
+      "value_to_project": "High-value follow-up to parse after P34/P30/P31 because it may clarify antimicrobial extension and release claim boundaries.",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/US7820734B2/en"
+      },
+      "related_patents": [
+        "US6645483B2",
+        "US20010051669A1",
+        "WO2002058756A2",
+        "US4769013A"
+      ],
+      "patent_notes": "Google Patents: filed 2007-10-31; granted 2010-10-26; assignee Tyco Healthcare Group LP; status Expired - Fee Related.",
+      "patentResults": {
+        "full": {
+          "evidence_level": "medium",
+          "source_quality": "google_patents_metadata",
+          "inference_flags": [
+            "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
+          ],
+          "summary": "US7820734B2 is a real follow-up worth separate analysis. Unlike P39/P40 family duplicates, it specifically emphasizes antimicrobial lubricious coating vehicles. The coating is designed to reduce friction when wet and impart antimicrobial properties while controlling pharmacological additive release.",
+          "key_findings": [
+            "Tyco/Covidien assignee path, inventor Diane L. McGhee.",
+            "Focus moves from general pharmacological additive release to antimicrobial lubricious coating.",
+            "Cites Hydromer US4769013, linking older PVP/PU bio-effecting material concepts to Covidien/Sherwood antimicrobial coating.",
+            "Status is Expired - Fee Related, but legal status must be confirmed for each jurisdiction."
+          ],
+          "patent_core": {
+            "claim_focus": [
+              "Lubricious antimicrobial coating vehicle for medical devices.",
+              "Moisture-triggered lubricity plus antimicrobial activity.",
+              "Controlled pharmacological additive release."
+            ],
+            "design_around_notes": [
+              "If pursuing antimicrobial release, compare with Cook P31 and Hydromer P37 to avoid overlapping release-agent logic.",
+              "Non-leaching SBMA/QCS or mineral-resistant surfaces may avoid drug-release claim patterns and regulatory burden."
+            ]
+          },
+          "company_path_note": "Cook/Sherwood/Covidien path: antimicrobial follow-up after P34, closer in strategic meaning to Cook P31 than to the P34 publication duplicates.",
+          "next_actions": [
+            "Parse independent claims and examples.",
+            "Compare antimicrobial agents and release mechanisms with P31/US7402620.",
+            "Check whether expired-fee-related status has any restoration or family equivalents."
+          ]
+        }
+      }
+    },
+    {
+      "id": "P42",
+      "title": "Esophageal stent (US5876448A / Boston low-relevance structural stent node)",
+      "authors": "Richard J. Thompson; Joseph E. Laptewicz Jr.; Paul J. Thompson / Schneider USA Inc",
+      "year": 1999,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Boston Scientific",
+        "Schneider",
+        "stent",
+        "silicone coating",
+        "esophageal stent",
+        "low-relevance",
+        "structural-patent",
+        "expired"
+      ],
+      "purpose": "Boston/Schneider structural stent patent previously flagged as a possible Boston historical node; metadata shows it is not a hydrophilic coating patent.",
+      "abstract_note": "Google Patents describes a radially self-expanding esophageal stent with silicone-coated medial region and uncoated cuffs to resist migration and block tumor ingrowth.",
+      "value_to_project": "Keep as low-priority Boston product/IP context, but do not use as hydrophilic coating prior art.",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/US5876448A/en"
+      },
+      "related_patents": [],
+      "patent_notes": "Google Patents: filed 1996-03-13; granted 1999-03-02; assignee Schneider USA Inc; status Expired - Lifetime.",
+      "patentResults": {
+        "full": {
+          "evidence_level": "medium",
+          "source_quality": "google_patents_metadata",
+          "inference_flags": [
+            "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
+          ],
+          "summary": "US5876448A was suspected as a Boston Scientific historical node, but first-pass reading shows it is an esophageal stent structure patent, not a hydrophilic lubricious coating patent. It uses silicone coating on a stent medial region for tumor ingrowth barrier and radial force, while leaving cuffs uncoated to resist migration.",
+          "key_findings": [
+            "Not a hydrophilic coating patent.",
+            "Relevant to Boston/Schneider stent product IP history only.",
+            "Silicone coating is structural/barrier related, not lubricity/anti-encrustation chemistry.",
+            "Should be low priority for coating FTO."
+          ],
+          "patent_core": {
+            "claim_focus": [
+              "Self-expanding esophageal stent geometry.",
+              "Silicone-coated medial region with uncoated cuffs.",
+              "Deployment/recapture device features."
+            ],
+            "design_around_notes": [
+              "Do not use this as evidence for hydrophilic catheter coating strategy.",
+              "Keep separate from Boston/Scimed P24/P35 hydrophilic coating path."
+            ]
+          },
+          "company_path_note": "Boston tree candidate rejected/low-ranked for coating analysis; useful mainly as product-IP context.",
+          "next_actions": [
+            "Only revisit if mapping Boston stent product families, not coating chemistry."
+          ]
+        }
+      }
+    },
+    {
+      "id": "P43",
+      "title": "Enhanced durability of hydrophilic coatings (US20090171302A1 / Boston P35 publication)",
+      "authors": "Lincoln Eramo Jr.; James Campbell; Paul Matlin / Scimed Life Systems Inc",
+      "year": 2009,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Boston Scientific",
+        "Scimed",
+        "P35-family",
+        "hydrophilic coating",
+        "acrylic monomer",
+        "photoinitiator",
+        "flow modifier",
+        "inner surface",
+        "family-duplicate",
+        "granted-publication"
+      ],
+      "purpose": "Publication-stage node for Boston/Scimed P35 durable hydrophilic coating family.",
+      "abstract_note": "Google Patents describes lubricious coatings with hydrophilic polymer, flow modifier, acrylic monomer, photoinitiator and solvent, usable on inner, outer or intermediate surfaces of medical devices.",
+      "value_to_project": "Useful to keep as P35 publication/family node; avoid double-counting innovation unless claim language differs.",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/US20090171302A1/en"
+      },
+      "related_patents": [
+        "US8378011B2",
+        "WO2009086318A1"
+      ],
+      "patent_notes": "Google Patents: filed 2007-12-27; published 2009-07-02; assignee Scimed Life Systems Inc; status Granted.",
+      "patentResults": {
+        "full": {
+          "evidence_level": "medium",
+          "source_quality": "google_patents_metadata",
+          "inference_flags": [
+            "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
+          ],
+          "summary": "US20090171302A1 is the publication counterpart to Boston/Scimed P35. It covers durable hydrophilic lubricious coatings including hydrophilic polymer, flow modifier, acrylic monomer, photoinitiator and solvent, and can coat inner, outer or intermediate medical-device surfaces.",
+          "key_findings": [
+            "Same family as P35/US8378011B2.",
+            "Important because it explicitly mentions inner, outer and intermediate surfaces.",
+            "Materials match P35 durability route: hydrophilic polymer plus acrylic monomer and photoinitiator.",
+            "Treat as family duplicate unless publication contains broader examples."
+          ],
+          "patent_core": {
+            "claim_focus": [
+              "Hydrophilic polymer + acrylic monomer + photoinitiator durable coating.",
+              "Flow modifier and solvent system.",
+              "Medical-device surface coating including inner surfaces."
+            ],
+            "design_around_notes": [
+              "Compare with P35 granted claims to identify narrowing during prosecution.",
+              "Alternative PDA/Type-I UV or zwitterionic routes may avoid Boston acrylic/IPN specifics."
+            ]
+          },
+          "company_path_note": "Boston P35 family publication; supports durability/inner-surface coating path but should not be counted as a separate company innovation.",
+          "next_actions": [
+            "Compare published claims with P35 granted claims.",
+            "Extract examples for coating formulation windows."
+          ]
+        }
+      }
+    },
+    {
+      "id": "P44",
+      "title": "Enhanced durability of hydrophilic coatings (WO2009086318A1 / Boston P35 PCT)",
+      "authors": "Lincoln Eramo Jr.; James Campbell; Paul Matlin / Scimed Life Systems Inc",
+      "year": 2009,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Boston Scientific",
+        "Scimed",
+        "P35-family",
+        "PCT-family",
+        "hydrophilic coating",
+        "durability",
+        "acrylic monomer",
+        "ceased"
+      ],
+      "purpose": "PCT/international family node for Boston/Scimed P35 durable hydrophilic coating.",
+      "abstract_note": "Google Patents gives the same durability coating abstract as US20090171302A1/P35, with hydrophilic polymer, flow modifier, acrylic monomer, photoinitiator and solvent.",
+      "value_to_project": "Useful for international family mapping, not a separate innovation from P35.",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/WO2009086318A1/en"
+      },
+      "related_patents": [
+        "US20090171302A1",
+        "US8378011B2"
+      ],
+      "patent_notes": "Google Patents: filed 2008-12-22; published 2009-07-09; assignee Scimed Life Systems Inc; status Ceased.",
+      "patentResults": {
+        "full": {
+          "evidence_level": "medium",
+          "source_quality": "google_patents_metadata",
+          "inference_flags": [
+            "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
+          ],
+          "summary": "WO2009086318A1 is the PCT/international counterpart of the Boston/Scimed enhanced-durability hydrophilic coating family. It should be used to map international coverage and national phase entries rather than as a standalone innovation.",
+          "key_findings": [
+            "PCT family node for P35.",
+            "Status shown as Ceased on Google Patents.",
+            "Same core description as US20090171302A1.",
+            "Useful for country-level FTO mapping."
+          ],
+          "patent_core": {
+            "claim_focus": [
+              "Durable hydrophilic lubricious coating for medical devices.",
+              "Hydrophilic polymer, flow modifier, acrylic monomer, photoinitiator and solvent."
+            ],
+            "design_around_notes": [
+              "Check national phase grants if entering EU/Asia markets.",
+              "Do not double-count against P35 when summarizing Boston technology evolution."
+            ]
+          },
+          "company_path_note": "Boston P35 international family support node.",
+          "next_actions": [
+            "Identify national phase entries and active jurisdictions."
+          ]
+        }
+      }
+    },
+    {
+      "id": "P45",
+      "title": "Hydrophilic flexible open-cell polyurethane-poly(N-vinyl lactam) interpolymer foam (US4550126A / Hydromer biomedical foam)",
+      "authors": "Donald H. Lorenz / Hydromer Inc",
+      "year": 1985,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Hydromer",
+        "polyurethane",
+        "poly(N-vinyl lactam)",
+        "PVP",
+        "open-cell foam",
+        "biomedical products",
+        "absorptive material",
+        "expired",
+        "low-to-medium relevance"
+      ],
+      "purpose": "Early Hydromer biomedical material companion node; foam/absorptive products rather than catheter lubricious coating.",
+      "abstract_note": "Google Patents describes hydrophilic flexible open-cell polyurethane-poly(N-vinyl lactam) interpolymer foam for dental and biomedical products such as bandages, dressings, sponges and medicament carriers.",
+      "value_to_project": "Useful for Hydromer material evolution, but lower direct relevance to lubricious catheter coating FTO.",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/US4550126A/en"
+      },
+      "related_patents": [
+        "US4642267A"
+      ],
+      "patent_notes": "Google Patents: filed 1985-01-25; granted 1985-10-29; assignee Hydromer Inc; status Expired - Lifetime.",
+      "patentResults": {
+        "full": {
+          "evidence_level": "medium",
+          "source_quality": "google_patents_metadata",
+          "inference_flags": [
+            "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
+          ],
+          "summary": "US4550126A is an early Hydromer biomedical material patent. It uses polyurethane-poly(N-vinyl lactam) interpolymer foam to create hydrophilic, flexible, open-cell absorptive materials for biomedical products. It is not primarily a catheter lubricious coating patent, but it helps show Hydromer early expertise in PU/vinyl-lactam hydrophilic materials.",
+          "key_findings": [
+            "Hydromer-owned and expired.",
+            "Core material is polyurethane-poly(N-vinyl lactam) interpolymer foam.",
+            "Applications are absorptive biomedical products, not catheter coating as primary focus.",
+            "Useful as early material-platform context before P36/P37/P07."
+          ],
+          "patent_core": {
+            "claim_focus": [
+              "Hydrophilic open-cell PU-poly(N-vinyl lactam) interpolymer foam.",
+              "Biomedical absorptive products such as dressings, sponges and medicament carriers."
+            ],
+            "design_around_notes": [
+              "Low direct FTO relevance for catheter lubricious coating.",
+              "Can inspire absorptive or drug-carrier material thinking, but not a main coating obstacle."
+            ]
+          },
+          "company_path_note": "Hydromer pre-coating material context; place before P36 as low/medium relevance branch.",
+          "next_actions": [
+            "Only parse examples if biomedical foam/absorbent materials become relevant."
+          ]
+        }
+      }
+    },
+    {
+      "id": "P46",
+      "title": "Coating composition for multiple hydrophilic applications (US20030203991A1 / Hydromer P07 publication)",
+      "authors": "Thomas Schottman; Patrick Hennessey; Rainer Gruening / Hydromer Inc",
+      "year": 2003,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Hydromer",
+        "P07-family",
+        "hydrophilic coating",
+        "aqueous polymeric matrix",
+        "colloidal metal oxide",
+        "crosslinker",
+        "abrasion resistance",
+        "substrate adhesion",
+        "family-duplicate",
+        "granted-publication"
+      ],
+      "purpose": "Publication-stage node for Hydromer P07 multi-purpose hydrophilic coating platform.",
+      "abstract_note": "Google Patents describes an aqueous polymeric matrix, hydrophilic polymer, colloidal metal oxide and crosslinker. The coating improves lubricity, abrasion resistance and adhesion on metallic or plastic substrates.",
+      "value_to_project": "High-value family node; use to compare publication vs granted P07 claims and examples.",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/US20030203991A1/en"
+      },
+      "related_patents": [
+        "US7008979B2",
+        "WO2003093357A1",
+        "EP1499667B1"
+      ],
+      "patent_notes": "Google Patents: filed 2002-09-27; published 2003-10-30; assignee Hydromer Inc; status Granted.",
+      "patentResults": {
+        "full": {
+          "evidence_level": "medium",
+          "source_quality": "google_patents_metadata",
+          "inference_flags": [
+            "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
+          ],
+          "summary": "US20030203991A1 is the publication counterpart to Hydromer P07/US7008979B2. It clearly states the core P07 platform: aqueous polymeric matrix, hydrophilic polymer, colloidal metal oxide and crosslinker, giving improved lubricity, abrasion resistance and substrate adhesion on metal or plastic medical devices.",
+          "key_findings": [
+            "Same family as P07/US7008979B2.",
+            "Important explicit materials: aqueous polymeric matrix, hydrophilic polymer, colloidal metal oxide, crosslinker.",
+            "Performance targets include lubricity, abrasion resistance and substrate adhesion.",
+            "Also mentions water sheeting/anti-fog and dye/stain absorption applications."
+          ],
+          "patent_core": {
+            "claim_focus": [
+              "Multi-purpose hydrophilic coating composition.",
+              "Aqueous polymeric matrix + hydrophilic polymer + colloidal metal oxide + crosslinker.",
+              "Medical device coating on metal or plastic substrates."
+            ],
+            "design_around_notes": [
+              "Compare publication and granted claim narrowing.",
+              "If using metal oxide/crosslinker for abrasion resistance, check P07/EP claims carefully even though US P07 is expired."
+            ]
+          },
+          "company_path_note": "Hydromer P07 family publication; high-value for extracting examples and formulation windows.",
+          "next_actions": [
+            "Parse examples and claim changes relative to P07.",
+            "Extract exact metal oxide and crosslinker choices."
+          ]
+        }
+      }
+    },
+    {
+      "id": "P47",
+      "title": "Coating composition for multiple hydrophilic applications (WO2003093357A1 / Hydromer P07 PCT)",
+      "authors": "Thomas C. Schottman; Patrick M. Hennessey; Rainer Gruening / Hydromer Inc",
+      "year": 2003,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Hydromer",
+        "P07-family",
+        "PCT-family",
+        "hydrophilic coating",
+        "metal oxide",
+        "crosslinker",
+        "abrasion resistance",
+        "ceased"
+      ],
+      "purpose": "PCT/international family node for Hydromer P07 multi-purpose hydrophilic coating.",
+      "abstract_note": "Google Patents gives the same Hydromer P07 abstract: aqueous polymeric matrix, hydrophilic polymer, colloidal metal oxide and crosslinker for lubricity, abrasion resistance and adhesion.",
+      "value_to_project": "Use for international family mapping and country-level FTO, not as independent innovation.",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/WO2003093357A1/en"
+      },
+      "related_patents": [
+        "US20030203991A1",
+        "US7008979B2",
+        "EP1499667B1"
+      ],
+      "patent_notes": "Google Patents: filed 2003-03-31; published 2003-11-13; assignee Hydromer Inc; status Ceased.",
+      "patentResults": {
+        "full": {
+          "evidence_level": "medium",
+          "source_quality": "google_patents_metadata",
+          "inference_flags": [
+            "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
+          ],
+          "summary": "WO2003093357A1 is the PCT counterpart of the Hydromer P07 multi-purpose hydrophilic coating family. It should be kept in the patent tree for international coverage and priority mapping, not counted as a separate technical invention.",
+          "key_findings": [
+            "PCT family node for P07.",
+            "Core composition matches US20030203991A1/P07.",
+            "Status shown as Ceased on Google Patents.",
+            "Useful for tracking foreign national phase entries."
+          ],
+          "patent_core": {
+            "claim_focus": [
+              "Aqueous polymeric matrix, hydrophilic polymer, colloidal metal oxide, crosslinker.",
+              "Lubricity, abrasion resistance and substrate adhesion on medical devices."
+            ],
+            "design_around_notes": [
+              "Check national phase grants if market geography matters.",
+              "Avoid double-counting against P07."
+            ]
+          },
+          "company_path_note": "Hydromer P07 international family support node.",
+          "next_actions": [
+            "Map national phase entries and active/expired jurisdictions."
+          ]
+        }
+      }
+    },
+    {
+      "id": "P48",
+      "title": "Coating composition for multiple hydrophilic applications (EP1499667B1 / Hydromer P07 EP family)",
+      "authors": "Thomas C. Schottman; Patrick M. Hennessey; Rainer Gruening / Hydromer Inc",
+      "year": 2013,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Hydromer",
+        "P07-family",
+        "EP-family",
+        "hydrophilic coating",
+        "metal oxide",
+        "crosslinker",
+        "expired"
+      ],
+      "purpose": "European granted family node for Hydromer P07 multi-purpose hydrophilic coating.",
+      "abstract_note": "Google Patents identifies this as the EP granted counterpart of Hydromer P07, with Hydromer Inc assignee and expired lifetime status.",
+      "value_to_project": "Important if Europe market matters; compare EP claims with US P07 because claim scope can differ.",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/EP1499667B1/en"
+      },
+      "related_patents": [
+        "US7008979B2",
+        "US20030203991A1",
+        "WO2003093357A1"
+      ],
+      "patent_notes": "Google Patents: filed 2003-03-31; granted 2013-08-14; assignee Hydromer Inc; status Expired - Lifetime.",
+      "patentResults": {
+        "full": {
+          "evidence_level": "medium",
+          "source_quality": "google_patents_metadata",
+          "inference_flags": [
+            "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
+          ],
+          "summary": "EP1499667B1 is the European granted member of the Hydromer P07 family. Although Google Patents shows expired lifetime status, it is still useful for understanding how P07 was claimed in Europe and whether the EP claim language differed from the US grant.",
+          "key_findings": [
+            "EP granted family member of P07.",
+            "Assignee Hydromer Inc.",
+            "Status shown as Expired - Lifetime.",
+            "No separate technical novelty assumed until EP claims are compared."
+          ],
+          "patent_core": {
+            "claim_focus": [
+              "European claim version of Hydromer multi-purpose hydrophilic coating composition.",
+              "Likely related to aqueous polymeric matrix, hydrophilic polymer, colloidal metal oxide and crosslinker."
+            ],
+            "design_around_notes": [
+              "For EU FTO, compare claim wording to US7008979B2 and confirm expiry in all designated states.",
+              "Do not double-count as a separate invention."
+            ]
+          },
+          "company_path_note": "Hydromer P07 European family node.",
+          "next_actions": [
+            "Extract EP claim 1 and compare with US claim 1.",
+            "Confirm national validation/expiry if EU commercialization matters."
+          ]
+        }
+      }
+    },
+    {
+      "id": "P49",
+      "title": "Lubricious biopolymeric network compositions and methods (WO2008133646A1 / Hydromer P38 PCT)",
+      "authors": "Xin Qu; Tom Schottman; Rainer Gruening; Paul N. Chen; Joseph Conte; Zheng Wang / Hydromer Inc",
+      "year": 2008,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Hydromer",
+        "P38-family",
+        "PCT-family",
+        "biopolymer",
+        "saccharide",
+        "chitosan",
+        "network composition",
+        "substrate adhesion",
+        "ceased"
+      ],
+      "purpose": "PCT/international family node for Hydromer P38 biopolymeric lubricious network branch.",
+      "abstract_note": "Google Patents describes network compositions with associated saccharide chains and monomers linked through ester, ether, amide, ketone, urea, carbamate, aluminum oxide or siloxane linkages, capable of adhering to a substrate.",
+      "value_to_project": "Useful for design ideas around biopolymer networks, but likely same branch as abandoned US20080114096A1.",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/WO2008133646A1/en"
+      },
+      "related_patents": [
+        "US20080114096A1",
+        "TW200826980A"
+      ],
+      "patent_notes": "Google Patents: filed 2007-10-31; published 2008-11-06; status Ceased.",
+      "patentResults": {
+        "full": {
+          "evidence_level": "medium",
+          "source_quality": "google_patents_metadata",
+          "inference_flags": [
+            "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
+          ],
+          "summary": "WO2008133646A1 is the PCT family node for Hydromer P38, the lubricious biopolymeric network composition branch. It broadens the description around saccharide chains and monomers linked by multiple chemistries, with substrate adhesion. It is valuable as an idea map but should be tied to the abandoned US application and checked for any surviving national phase rights.",
+          "key_findings": [
+            "Same family branch as P38/US20080114096A1.",
+            "Biopolymeric network based on saccharide chains and linked monomers.",
+            "Linkages include ester, ether, amide, ketone, urea, carbamate, aluminum oxide and siloxane.",
+            "Status shown as Ceased on Google Patents."
+          ],
+          "patent_core": {
+            "claim_focus": [
+              "Saccharide-chain network composition.",
+              "Multiple linkage chemistries for monomer/saccharide networks.",
+              "Network capable of adhering to a substrate."
+            ],
+            "design_around_notes": [
+              "Because US counterpart is abandoned and WO is ceased, direct blocking risk may be low, but check national phase entries.",
+              "Modern chitosan/QCS/SBMA designs should be documented as different chemistry and function."
+            ]
+          },
+          "company_path_note": "Hydromer biopolymer/chitosan branch international support node.",
+          "next_actions": [
+            "Check national phase status.",
+            "Compare with P38 claims and prosecution history."
+          ]
+        }
+      }
+    },
+    {
+      "id": "P50",
+      "title": "Hydrophilic coatings for medical devices (US20110200828A1 / Biocoat abandoned early HYDAK family)",
+      "authors": "Junwei Li; William J. Work / Biocoat Inc",
+      "year": 2011,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Biocoat",
+        "HYDAK-related",
+        "hydrophilic coating",
+        "base-coat",
+        "top-coat",
+        "carboxylic acid polymer",
+        "chromium III",
+        "gamma sterilization",
+        "abandoned"
+      ],
+      "purpose": "Biocoat early hydrophilic coating application with adherent base-coat and crosslinked hydrophilic top-coat.",
+      "abstract_note": "Google Patents describes biocompatible, lubricious, durable coatings made from a highly adherent base-coat and chemically grafted hydrophilic top-coat, with carboxylic acid polymers and chromium(III) crosslinking.",
+      "value_to_project": "Technically valuable even though abandoned; helps understand Biocoat base/top-coat design evolution.",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/US20110200828A1/en"
+      },
+      "related_patents": [
+        "US12037560B2",
+        "US20130323291A1"
+      ],
+      "patent_notes": "Google Patents: filed 2011-02-07; published 2011-08-18; assignee Biocoat Inc; status Abandoned.",
+      "patentResults": {
+        "full": {
+          "evidence_level": "medium",
+          "source_quality": "google_patents_metadata",
+          "inference_flags": [
+            "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
+          ],
+          "summary": "US20110200828A1 is an abandoned Biocoat application but technically important. It describes a durable hydrophilic coating with a highly adherent carboxylic-acid-containing base coat and chemically grafted/crosslinked hydrophilic top coat. The top coat includes carboxylic acid hydrophilic polymer and chromium(III) ion crosslinking, with claims of lubricity, abrasion resistance, chemical stability and sterilization stability.",
+          "key_findings": [
+            "Biocoat-owned abandoned application.",
+            "Base/top-coat architecture resembles later HYDAK service logic.",
+            "Uses carboxylic acid polymers and chromium(III) ion crosslinking.",
+            "Claims gamma sterilization stability and abrasion resistance."
+          ],
+          "patent_core": {
+            "claim_focus": [
+              "Highly adherent base coat plus hydrophilic top coat.",
+              "Chemical grafting and crosslinking of the top coat.",
+              "Chromium(III) ion as crosslinker."
+            ],
+            "design_around_notes": [
+              "Abandoned status lowers direct US blocking risk, but check family/continuations.",
+              "Chromium crosslinker may raise biocompatibility/extractables concerns; modern alternatives should be considered."
+            ]
+          },
+          "company_path_note": "Biocoat early base/top-coat platform idea; useful for understanding HYDAK evolution.",
+          "next_actions": [
+            "Check whether abandoned claims were refiled or continued into later Biocoat/Integer patents.",
+            "Extract examples and sterilization test data."
+          ]
+        }
+      }
+    },
+    {
+      "id": "P51",
+      "title": "Hydrophilic and non-thrombogenic polymer for coating medical devices (US20130323291A1 / Biocoat abandoned hemocompatible polymer)",
+      "authors": "Junwei Li; William J. Work / Biocoat Inc",
+      "year": 2013,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Biocoat",
+        "hydrophilic coating",
+        "non-thrombogenic",
+        "acidic monomer",
+        "hydrophilic monomer",
+        "primer-base coat",
+        "sterilization stability",
+        "abandoned"
+      ],
+      "purpose": "Biocoat abandoned application for hydrophilic non-thrombogenic copolymer coatings.",
+      "abstract_note": "Google Patents describes a hydrophilic copolymer from acidic monomer and second hydrophilic monomer, covalently attached to a primer/base coat to form durable, lubricious, non-thrombogenic and non-cytotoxic coatings.",
+      "value_to_project": "Important Biocoat design idea node for hemocompatible hydrophilic coating, despite abandoned status.",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/US20130323291A1/en"
+      },
+      "related_patents": [
+        "US20110200828A1",
+        "US12037560B2"
+      ],
+      "patent_notes": "Google Patents: filed 2012-05-31; published 2013-12-05; assignee Biocoat Inc; status Abandoned.",
+      "patentResults": {
+        "full": {
+          "evidence_level": "medium",
+          "source_quality": "google_patents_metadata",
+          "inference_flags": [
+            "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
+          ],
+          "summary": "US20130323291A1 is another abandoned Biocoat application, focused on hydrophilic and non-thrombogenic copolymers. It uses an acidic monomer plus a second hydrophilic monomer, with reactive functional groups enabling covalent attachment to a primer/base coat. It claims durable lubricity, non-thrombogenic and non-cytotoxic behavior, and stability to gamma, e-beam and ethylene oxide sterilization.",
+          "key_findings": [
+            "Biocoat-owned abandoned application.",
+            "Focus is hemocompatibility/non-thrombogenicity plus lubricity.",
+            "Uses acidic monomer and second hydrophilic monomer copolymer.",
+            "Covalent attachment to primer/base coat is central."
+          ],
+          "patent_core": {
+            "claim_focus": [
+              "Hydrophilic non-thrombogenic copolymer.",
+              "Reactive functional groups for covalent attachment to primer/base coat.",
+              "Durable lubricious coating on medical devices."
+            ],
+            "design_around_notes": [
+              "Abandoned status lowers direct US risk, but may have continuation/family descendants.",
+              "If hemocompatible catheter line is planned, check later Biocoat/Integer granted patents."
+            ]
+          },
+          "company_path_note": "Biocoat hemocompatible polymer branch; complements P50 and P26.",
+          "next_actions": [
+            "Search for continuation/granted family.",
+            "Compare chemistry with P26/US12037560B2."
+          ]
+        }
+      }
+    },
+    {
+      "id": "P52",
+      "title": "Thromboresistant coatings, coated devices, and methods (US20230285641A1 / Surmodics pending PhotoLink branch)",
+      "authors": "Koren Fitzmorris; Syed Hossainy; Sean M. Stucke; Michael Militello; Toni M. Heyer / Surmodics Coatings LLC",
+      "year": 2023,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Surmodics",
+        "PhotoLink",
+        "thromboresistant",
+        "non-fouling basecoat",
+        "lubricious topcoat",
+        "photo-reactive PVP",
+        "crosslinker",
+        "pending",
+        "high-priority"
+      ],
+      "purpose": "Surmodics pending application for thromboresistant/non-fouling basecoat plus lubricious photo-reactive PVP topcoat.",
+      "abstract_note": "Google Patents describes thromboresistant implantable/partially implantable/wearable medical devices with substrate, non-fouling basecoat layer containing hydrophilic and hydrophobic components, and lubricious topcoat containing photo-reactive PVP and crosslinking agent.",
+      "value_to_project": "High-priority pending competitor patent for Surmodics/PhotoLink-like coating strategy.",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/US20230285641A1/en"
+      },
+      "related_patents": [
+        "C03",
+        "C09"
+      ],
+      "patent_notes": "Google Patents: filed 2023-03-09; published 2023-09-14; assignee Surmodics Coatings LLC; status Pending.",
+      "patentResults": {
+        "full": {
+          "evidence_level": "medium",
+          "source_quality": "google_patents_metadata",
+          "inference_flags": [
+            "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
+          ],
+          "summary": "US20230285641A1 is a high-priority pending Surmodics application. It combines a non-fouling basecoat containing hydrophilic and hydrophobic components with a lubricious topcoat containing photo-reactive PVP and a crosslinking agent. This is highly relevant to modern PhotoLink/Serene-style coating strategy and should be parsed claim-by-claim before using similar basecoat/topcoat ideas.",
+          "key_findings": [
+            "Surmodics Coatings LLC assignee; status pending.",
+            "Architecture: substrate + non-fouling basecoat + lubricious topcoat.",
+            "Basecoat includes hydrophilic and hydrophobic components.",
+            "Topcoat includes photo-reactive PVP compound and crosslinking agent.",
+            "Potentially relevant to thromboresistant and non-fouling coating claims."
+          ],
+          "patent_core": {
+            "claim_focus": [
+              "Thromboresistant device coating architecture.",
+              "Non-fouling basecoat layer with hydrophilic/hydrophobic components.",
+              "Lubricious topcoat with photo-reactive PVP and crosslinker."
+            ],
+            "design_around_notes": [
+              "Pending status means claim scope can still change; monitor prosecution.",
+              "Avoid direct photo-reactive PVP + similar basecoat architecture unless FTO confirms safe differences.",
+              "PDA primer + Type-I photoinitiator or zwitterionic SBMA topcoat may be cleaner design alternatives."
+            ]
+          },
+          "company_path_note": "Surmodics modern pending branch; should become a core competitor watch item.",
+          "next_actions": [
+            "Monitor prosecution and granted claims.",
+            "Compare with C03 Serene and C09 Surmodics/Harland commercial notes.",
+            "Extract specific photo-reactive PVP/crosslinker language."
           ]
         }
       }
