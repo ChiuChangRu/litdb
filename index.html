@@ -325,7 +325,6 @@ function doLogin(){
 <div class="tabs">
   <div class="tab active" onclick="showView('market',this)">🏢<span class="tab-text"> 市場</span></div>
   <div class="tab" onclick="showView('routes',this)">🛣<span class="tab-text"> 路線</span></div>
-  <div class="tab" onclick="showView('search',this)">🔍<span class="tab-text"> 檢索</span></div>
   <div class="tab" onclick="showView('browse',this)">📚<span class="tab-text"> 文庫</span> <span class="badge" id="browseCount">0</span><span class="badge" id="analyzedCount" style="background:var(--accent2)">0</span></div>
   <div class="tab" onclick="showView('research',this)">🧭<span class="tab-text"> 研究</span></div>
   <div class="tab" onclick="showView('patent-tree',this)">🌳<span class="tab-text"> 專利樹</span></div>
@@ -347,19 +346,17 @@ function doLogin(){
     <!-- 控制列 -->
     <div class="panel" style="margin-bottom:12px">
       <div style="padding:10px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-        <span style="font-size:13px;font-weight:700;color:var(--text)">🏊 多公司專利 Swimlane</span>
-        <span style="font-size:12px;color:var(--muted)">X 軸＝年份｜各行＝一家公司</span>
+        <span style="font-size:13px;font-weight:700;color:var(--text)">🚆 專利火車卡片</span>
+        <span style="font-size:12px;color:var(--muted)">每列一家公司｜由左到右看祖案、平台、功能延伸與待補缺口</span>
         <button class="btn btn-s" onclick="renderPatentTree()" style="font-size:12px;margin-left:auto">🔄 更新</button>
         <span id="patentTreeStats" style="font-size:12px;color:var(--muted)"></span>
       </div>
     </div>
 
-    <!-- Swimlane SVG（全寬，可橫向捲動）-->
+    <!-- 火車卡片（全寬，可橫向捲動）-->
     <div class="panel" style="margin-bottom:12px">
-      <div style="position:relative;overflow-x:auto;overflow-y:hidden">
-        <svg id="patentTreeSvg" style="display:block;min-width:700px"></svg>
-        <div id="patentTreeTip" style="display:none;position:fixed;background:var(--card);border:1px solid var(--border);border-radius:7px;padding:8px 11px;font-size:12px;pointer-events:none;max-width:260px;box-shadow:0 2px 12px rgba(0,0,0,0.15);z-index:200"></div>
-      </div>
+      <div id="patentTrain" style="padding:12px;overflow-x:auto"></div>
+      <div id="patentTreeTip" style="display:none"></div>
     </div>
 
     <!-- 底部：詳情 + 缺口清單 -->
@@ -367,7 +364,7 @@ function doLogin(){
       <div class="panel">
         <div class="panel-h">📄 專利內容</div>
         <div id="patentTreeDetail" style="padding:14px;font-size:12px;line-height:1.7;color:var(--muted)">
-          ↑ 點選 Swimlane 上的節點查看專利詳情
+          ↑ 點選火車卡片查看專利重點
         </div>
       </div>
       <div class="panel">
@@ -398,57 +395,40 @@ function doLogin(){
   </div>
 </div>
 
-<div class="view" id="v-search">
-  <div style="max-width:1000px;margin:0 auto;padding:16px">
-    <!-- 搜尋框 -->
-    <div style="display:flex;gap:8px;margin-bottom:16px">
-      <select id="searchSource" style="width:160px;font-size:13px;padding:10px;flex-shrink:0" onchange="updateSearchPlaceholder()">
-        <option value="pubmed">🔬 PubMed</option>
-        <option value="patent">📋 Google Patents</option>
-        <option value="doi">🔗 DOI 匯入</option>
-      </select>
-      <input type="text" id="searchInput" placeholder="輸入英文關鍵字搜尋 PubMed..." style="flex:1;font-size:13px;padding:10px" onkeydown="if(event.key==='Enter')doSearch()">
-      <button class="btn btn-p" onclick="doSearch()" style="padding:10px 24px;white-space:nowrap">搜尋</button>
-    </div>
-
-    <!-- PubMed 年份篩選 -->
-    <div id="searchFilters" style="display:flex;gap:12px;margin-bottom:12px;font-size:12px;align-items:center">
-      <label>年份起 <input type="number" id="searchYearFrom" value="2020" style="width:70px;padding:4px;font-size:12px"></label>
-      <label>年份迄 <input type="number" id="searchYearTo" value="2026" style="width:70px;padding:4px;font-size:12px"></label>
-      <label>筆數 <select id="searchMax" style="padding:4px;font-size:12px"><option>10</option><option selected>20</option><option>50</option></select></label>
-      <span id="searchStatus" style="margin-left:auto;color:var(--muted)"></span>
-    </div>
-
-    <!-- 搜尋結果 -->
-    <div id="searchResults"></div>
-
-    <!-- 手動新增入口 -->
-    <div style="margin-top:16px;padding:12px;background:var(--card);border-radius:8px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
-      <div>
-        <div style="font-size:12px;font-weight:600;color:var(--accent)">📎 其他收錄方式</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px">手動填寫表單新增、或使用書籤小工具從任何網頁一鍵收錄</div>
-      </div>
-      <button class="btn btn-s" onclick="document.getElementById('v-add').style.display='block';document.getElementById('v-search').querySelector('.view')?.scrollIntoView()" style="white-space:nowrap">➕ 手動新增</button>
-    </div>
-
-    <!-- 嵌入新增表單（可展開）-->
-    <div id="addFormInSearch" style="display:none;margin-top:12px"></div>
-  </div>
-</div>
-
 <!-- ═══════════════ VIEW: BROWSE ═══════════════ -->
 <div class="view" id="v-browse">
   <div class="browse-layout" id="browseLayout">
     <!-- 雙欄：文獻列表（含頂部篩選）+ 詳情 -->
     <div class="browse-columns">
       <div class="panel col-mid" id="colMid" style="display:flex;flex-direction:column">
+        <details id="librarySearchBox" style="border-bottom:1px solid var(--border);background:#faf8f5">
+          <summary style="cursor:pointer;padding:9px 12px;font-size:12px;font-weight:800;color:var(--accent);list-style:none;display:flex;align-items:center;gap:8px">
+            <span>🔎 新增 / 檢索文獻</span>
+            <span style="font-size:11px;color:var(--muted);font-weight:500">PubMed、Google Patents、DOI 匯入</span>
+            <span style="margin-left:auto;font-size:11px;color:var(--muted)">展開</span>
+          </summary>
+          <div style="padding:0 12px 12px">
+            <div style="display:flex;gap:8px;margin-bottom:10px">
+              <select id="searchSource" style="width:150px;font-size:12px;padding:8px;flex-shrink:0" onchange="updateSearchPlaceholder()">
+                <option value="pubmed">🔬 PubMed</option>
+                <option value="patent">📋 Google Patents</option>
+                <option value="doi">🔗 DOI 匯入</option>
+              </select>
+              <input type="text" id="searchInput" placeholder="輸入英文關鍵字搜尋 PubMed..." style="flex:1;font-size:12px;padding:8px" onkeydown="if(event.key==='Enter')doSearch()">
+              <button class="btn btn-p" onclick="doSearch()" style="padding:8px 18px;white-space:nowrap">搜尋</button>
+            </div>
+            <div id="searchFilters" style="display:flex;gap:10px;margin-bottom:10px;font-size:11px;align-items:center;flex-wrap:wrap">
+              <label>年份起 <input type="number" id="searchYearFrom" value="2020" style="width:66px;padding:3px;font-size:11px"></label>
+              <label>年份迄 <input type="number" id="searchYearTo" value="2026" style="width:66px;padding:3px;font-size:11px"></label>
+              <label>筆數 <select id="searchMax" style="padding:3px;font-size:11px"><option>10</option><option selected>20</option><option>50</option></select></label>
+              <span id="searchStatus" style="margin-left:auto;color:var(--muted)"></span>
+            </div>
+            <div id="searchResults"></div>
+          </div>
+        </details>
         <!-- 篩選列（只在列表欄上方）-->
         <div class="browse-filters" id="browseFilters">
-          <input type="text" id="fKw" placeholder="🔍 關鍵字..." oninput="filterPapers()" style="width:120px;padding:3px 8px;font-size:11px;border-radius:4px;border:1px solid var(--border);vertical-align:middle;margin-right:4px">
-          <span class="filter-group" id="fTypeGroup"><span class="filter-label">類型</span></span>
-          <span class="filter-group" id="fSubGroup"><span class="filter-label">基材</span></span>
-          <span class="filter-group" id="fCureGroup"><span class="filter-label">固化</span></span>
-          <span class="filter-group" id="fAppGroup"><span class="filter-label">應用</span></span>
+          <input type="text" id="fKw" placeholder="🔍 搜文庫：公司、材料、專利號..." oninput="filterPapers()" style="width:210px;padding:4px 9px;font-size:11px;border-radius:4px;border:1px solid var(--border);vertical-align:middle;margin-right:4px">
           <span class="filter-group" id="fStatusGroup"><span class="filter-label">分析</span>
             <span class="ftag" data-filter="status" data-value="analyzed" onclick="toggleFilter(this)">✅</span>
             <span class="ftag" data-filter="status" data-value="not-analyzed" onclick="toggleFilter(this)">🔴</span>
@@ -461,7 +441,16 @@ function doLogin(){
             <span class="ftag" data-filter="topic" data-value="adhesion" onclick="toggleFilter(this)">🔧 附著</span>
           </span>
           <select id="fSort" onchange="filterPapers()" style="padding:2px 4px;font-size:10px;border-radius:4px;border:1px solid var(--border);vertical-align:middle"><option value="id-desc">最新加入</option><option value="id">ID↑</option><option value="year-desc">年↓</option><option value="year-asc">年↑</option></select>
-          <span class="filter-group"><span class="ftag" id="fShowDeleted" data-filter="deleted" data-value="show" onclick="this.classList.toggle('active');filterPapers()" style="background:#fdf0ed;color:var(--danger);border-color:var(--danger)">🗑 已刪除 <span id="deletedCount">0</span></span></span>
+          <details style="display:inline-block;vertical-align:middle;margin-left:4px">
+            <summary class="ftag" style="display:inline-block;cursor:pointer">更多篩選</summary>
+            <div style="position:absolute;z-index:20;margin-top:6px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;box-shadow:0 4px 16px rgba(0,0,0,.12);max-width:520px;line-height:2">
+              <span class="filter-group" id="fTypeGroup"><span class="filter-label">類型</span></span>
+              <span class="filter-group" id="fSubGroup"><span class="filter-label">基材</span></span>
+              <span class="filter-group" id="fCureGroup"><span class="filter-label">固化</span></span>
+              <span class="filter-group" id="fAppGroup"><span class="filter-label">應用</span></span>
+              <span class="filter-group"><span class="ftag" id="fShowDeleted" data-filter="deleted" data-value="show" onclick="this.classList.toggle('active');filterPapers()" style="background:#fdf0ed;color:var(--danger);border-color:var(--danger)">🗑 已刪除 <span id="deletedCount">0</span></span></span>
+            </div>
+          </details>
         </div>
         <div class="panel-h">
           <span id="filterCount">0 篇</span>
@@ -2110,8 +2099,10 @@ function checkBookmarkletParams() {
   const abstract = params.get('abstract');
   if(!title && !url) return;
 
-  // 切到新增文獻分頁
-  showView('add', getMainTab('search'));
+  // 切到文庫並展開檢索區
+  showView('browse', getMainTab('browse'));
+  const libSearch = document.getElementById('librarySearchBox');
+  if(libSearch) libSearch.open = true;
 
   // 組合內容填入 AI 自動填入框
   let raw = '';
@@ -2822,7 +2813,7 @@ let currentAnalysisTab = 'graph';
 function goBack() {
   if(!previousView) return;
   const tabs = document.querySelectorAll('.tabs > .tab');
-  const viewMap = {market:0, routes:1, search:2, browse:3, research:4, 'patent-tree':5, report:6};
+  const viewMap = {market:0, routes:1, browse:2, research:3, 'patent-tree':4, report:5};
   const idx = viewMap[previousView];
   if(idx!==undefined && tabs[idx]) {
     showView(previousView, tabs[idx]);
@@ -4610,22 +4601,22 @@ function patentTreeBuild(playerKey, centerId) {
 function renderPatentTree() {
   if(!DB?.papers) return;
 
-  // 統計所有公司缺口
   const allGaps = Object.values(PATENT_TREE_CONFIG).flatMap(cfg => cfg.gapSeeds || []);
   const stats = document.getElementById('patentTreeStats');
   if(stats) {
     const totalPatents = Object.values(PATENT_TREE_CONFIG).flatMap(cfg => cfg.evolution || []).length;
-    const missing = allGaps.length;
+    const missing = allGaps.filter(m => !patentPaperForNo(m.patent_no)).length;
     stats.textContent = `${Object.keys(PATENT_TREE_CONFIG).length} 家公司｜${totalPatents} 件專利｜${missing} 件待解析`;
   }
 
-  // 渲染缺口清單（所有公司合計）
+  // 渲染缺口清單（所有公司合計，只列尚未收錄者）
   const missingEl = document.getElementById('missingPatentList');
   if(missingEl) {
-    if(!allGaps.length) {
+    const openGaps = allGaps.filter(m => !patentPaperForNo(m.patent_no));
+    if(!openGaps.length) {
       missingEl.innerHTML = '<div style="color:var(--muted)">目前無明確缺口。</div>';
     } else {
-      missingEl.innerHTML = allGaps.map(m => `
+      missingEl.innerHTML = openGaps.map(m => `
         <div style="border:1px solid var(--border);border-radius:7px;padding:8px 10px;margin-bottom:8px">
           <div style="font-weight:800;color:#c0392b;font-size:12px">${escHtml(m.patent_no)}</div>
           <div style="font-size:11px;color:var(--text);margin-top:2px"><b>${escHtml(m.role)}</b></div>
@@ -4636,7 +4627,75 @@ function renderPatentTree() {
     }
   }
 
-  drawPatentFamilyTree();
+  drawPatentTrain();
+}
+
+function patentPaperForNo(no) {
+  if(!no || String(no).toLowerCase().includes('family')) return null;
+  return (DB.papers || []).find(p => paperMatchesPatentNo(p, no)) || null;
+}
+
+function drawPatentTrain() {
+  const el = document.getElementById('patentTrain');
+  if(!el) return;
+  const companies = Object.values(PATENT_TREE_CONFIG);
+  const statusMeta = {
+    known: {text:'已收錄', color:'#2d8c5a', bg:'#eef8f2'},
+    missing: {text:'待解析', color:'#c0392b', bg:'#fff3ef'},
+    duplicate: {text:'同族', color:'#8a7e72', bg:'#f6f3ef'},
+    low: {text:'低相關', color:'#8a7e72', bg:'#f6f3ef'}
+  };
+
+  el.innerHTML = companies.map((cfg, ci) => {
+    const color = cfg.color || '#2d8c5a';
+    const nodes = (cfg.evolution || []).map((item, ni) => {
+      const paper = item.id ? (DB.papers || []).find(p => p.id === item.id) : patentPaperForNo(item.patent);
+      const realStatus = paper ? 'known' : (item.status || 'missing');
+      const meta = statusMeta[realStatus] || statusMeta.known;
+      const title = paper?.title || item.theme || item.patent;
+      const summary = paper?.patentResults?.full?.summary || item.meaning || '';
+      return `<button type="button" class="pt-train-card" data-ci="${ci}" data-ni="${ni}" style="width:172px;min-height:118px;flex:0 0 172px;text-align:left;background:${meta.bg};border:1px solid ${realStatus==='known'?color:'#dfc7bc'};border-top:4px solid ${realStatus==='known'?color:meta.color};border-radius:8px;padding:9px 10px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.06)">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
+          <span style="font-size:15px;font-weight:900;color:${realStatus==='known'?color:meta.color}">${escHtml(String(item.year || ''))}</span>
+          <span style="margin-left:auto;font-size:10px;font-weight:800;color:${meta.color};background:#fff;padding:1px 5px;border-radius:4px">${meta.text}</span>
+        </div>
+        <div style="font-size:11px;font-weight:900;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(item.patent || paper?.id || '')}</div>
+        <div style="font-size:12px;font-weight:900;color:var(--text);margin-top:4px;line-height:1.25">${escHtml(item.stage || '節點')}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:5px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escHtml(title)}</div>
+        ${summary ? `<div style="font-size:10px;color:${realStatus==='known'?'var(--accent2)':'#b85c2a'};margin-top:5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escHtml(summary)}</div>` : ''}
+      </button>`;
+    }).join('<div style="align-self:center;color:#bcae9f;font-weight:900;font-size:18px;flex:0 0 auto">→</div>');
+
+    return `<section style="min-width:820px;border:1px solid var(--border);border-radius:9px;background:${ci%2===0?'#fff':'#fbfaf7'};margin-bottom:12px;overflow:hidden">
+      <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px solid var(--border);background:${color}12">
+        <div style="width:10px;height:10px;border-radius:50%;background:${color}"></div>
+        <div style="font-size:13px;font-weight:900;color:var(--text);min-width:150px">${escHtml(cfg.label)}</div>
+        <div style="font-size:11px;color:var(--muted)">${(cfg.evolution||[]).length} 個節點</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:stretch;padding:12px;overflow-x:auto">${nodes || '<div style="color:var(--muted);font-size:12px">尚未建立專利路徑</div>'}</div>
+    </section>`;
+  }).join('');
+
+  el.querySelectorAll('.pt-train-card').forEach(btn => {
+    btn.addEventListener('click', () => {
+      el.querySelectorAll('.pt-train-card').forEach(x => x.style.outline = 'none');
+      btn.style.outline = '3px solid rgba(45,140,90,.25)';
+      const cfg = companies[Number(btn.dataset.ci)];
+      const d = (cfg.evolution || [])[Number(btn.dataset.ni)];
+      const paper = d.id ? (DB.papers || []).find(p => p.id === d.id) : patentPaperForNo(d.patent);
+      renderPatentTreeDetail({
+        patent: d.patent,
+        year: d.year,
+        stage: d.stage,
+        theme: d.theme,
+        meaning: d.meaning,
+        status: paper ? 'known' : d.status,
+        paperId: paper?.id || d.id,
+        color: cfg.color || '#2d8c5a'
+      });
+      document.getElementById('patentTreeDetail')?.scrollIntoView({behavior:'smooth',block:'nearest'});
+    });
+  });
 }
 
 
