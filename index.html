@@ -2626,9 +2626,44 @@ ${text.slice(0, 18000)}
 JSON schema:
 {
   "summary": "150字內精華摘要",
+  "schema_version": "agent_reading_v1",
   "evidence_level": "high|medium|low",
   "source_quality": "fulltext|abstract|metadata|weak",
   "key_findings": ["最多6點"],
+  "claims": [{
+    "claim_no": "claim number or unknown",
+    "claim_type": "independent|dependent|unknown",
+    "plain_language": "用白話說明 claim 保護什麼",
+    "protected_elements": ["材料/結構/製程/用途元素"],
+    "bioteque_risk": "high|medium|low|unknown"
+  }],
+  "design_examples": [{
+    "name": "專利或論文揭露的具體設計",
+    "substrate": "基材/器械",
+    "primer": "底塗/anchor",
+    "topcoat": "主塗層",
+    "active_agent": "藥物/抗菌/抗結痂成分",
+    "mechanism": "潤滑/抗菌/抗結痂/抗沾附機制",
+    "why_it_matters": "對研發或迴避設計的重要性"
+  }],
+  "formulation_details": [{
+    "component": "成分",
+    "role": "功能",
+    "range_or_amount": "比例/濃度/範圍；不明寫 unknown",
+    "notes": "限制或推論"
+  }],
+  "process_details": [{
+    "step": "步驟",
+    "conditions": "溫度/時間/UV/乾燥/固化等條件",
+    "equipment": "設備；不明寫 unknown",
+    "risk_or_note": "製程風險或可迴避點"
+  }],
+  "performance_tests": [{
+    "test": "測試名稱",
+    "metric": "指標",
+    "reported_result": "文中結果；不明寫 not reported",
+    "bioteque_target": "可轉成 Bioteque 驗收標準的建議"
+  }],
   "coating_technology": {
     "materials": ["材料/單體/聚合物"],
     "surface_prep": ["表面處理"],
@@ -2645,6 +2680,24 @@ JSON schema:
     "steps": ["可執行實驗步驟"],
     "acceptance_tests": ["驗收測試"]
   },
+  "design_around": [{
+    "risk_element": "可能踩到的 claim 元素",
+    "avoidance_strategy": "替代材料/製程/機制",
+    "confidence": "high|medium|low",
+    "verification_needed": "需要查證項目"
+  }],
+  "innovation_ideas": [{
+    "idea": "可借鏡的新設計想法",
+    "source_logic": "從文獻哪個設計推導",
+    "fit_to_bioteque": "high|medium|low",
+    "experiment_hint": "如何用小實驗驗證"
+  }],
+  "fto_risks": [{
+    "risk": "FTO 風險",
+    "severity": "high|medium|low|unknown",
+    "reason": "原因",
+    "next_check": "下一步查證"
+  }],
   "bioteque_relevance": "對 Bioteque 的意義",
   "next_actions": ["下一步任務"],
   "red_flags": ["風險或資料缺口"],
@@ -2848,6 +2901,14 @@ function paperAnalysisText(p) {
     agent.coating_technology ? JSON.stringify(agent.coating_technology) : '',
     agent.patent_core ? JSON.stringify(agent.patent_core) : '',
     agent.experimental_plan ? JSON.stringify(agent.experimental_plan) : '',
+    agent.claims ? JSON.stringify(agent.claims) : '',
+    agent.design_examples ? JSON.stringify(agent.design_examples) : '',
+    agent.formulation_details ? JSON.stringify(agent.formulation_details) : '',
+    agent.process_details ? JSON.stringify(agent.process_details) : '',
+    agent.performance_tests ? JSON.stringify(agent.performance_tests) : '',
+    agent.design_around ? JSON.stringify(agent.design_around) : '',
+    agent.innovation_ideas ? JSON.stringify(agent.innovation_ideas) : '',
+    agent.fto_risks ? JSON.stringify(agent.fto_risks) : '',
     Array.isArray(agent.key_findings) ? agent.key_findings.join('; ') : '',
     Array.isArray(agent.next_actions) ? agent.next_actions.join('; ') : '',
     Array.isArray(agent.red_flags) ? agent.red_flags.join('; ') : '',
@@ -6128,6 +6189,7 @@ ${relatedPatents||'無'}
 function renderAgentReadingResult(r) {
   const list = arr => Array.isArray(arr) && arr.length ? `<ul style="margin:6px 0 0 18px;padding:0">${arr.map(x=>`<li>${escHtml(x)}</li>`).join('')}</ul>` : '<div style="color:var(--muted)">-</div>';
   const block = (title, html, color='var(--accent)') => `<div style="margin-top:8px;padding:8px 10px;background:var(--card);border-left:3px solid ${color};border-radius:0 6px 6px 0;font-size:12px;line-height:1.6"><strong style="color:${color}">${title}</strong>${html}</div>`;
+  const table = (cols, rows) => Array.isArray(rows) && rows.length ? `<table class="patent-table" style="margin-top:6px"><tr>${cols.map(c=>`<th>${escHtml(c.label)}</th>`).join('')}</tr>${rows.map(row=>`<tr>${cols.map(c=>`<td>${escHtml(row[c.key] || '-')}</td>`).join('')}</tr>`).join('')}</table>` : '<div style="color:var(--muted);margin-top:4px">-</div>';
   const tech = r.coating_technology || {};
   const patent = r.patent_core || {};
   const exp = r.experimental_plan || {};
@@ -6137,9 +6199,44 @@ function renderAgentReadingResult(r) {
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
       <span class="tag tag-gray">evidence: ${escHtml(r.evidence_level || '-')}</span>
       <span class="tag tag-gray">source: ${escHtml(r.source_quality || '-')}</span>
+      ${r.schema_version ? `<span class="tag tag-green">${escHtml(r.schema_version)}</span>` : ''}
       ${r.source_chars ? `<span class="tag tag-gray">${r.source_chars} chars</span>` : ''}
     </div>
     ${block('關鍵發現', list(r.key_findings), 'var(--accent2)')}
+    ${r.claims ? block('Claim 白話拆解', table([
+      {key:'claim_no', label:'#'},
+      {key:'claim_type', label:'類型'},
+      {key:'plain_language', label:'保護內容'},
+      {key:'protected_elements', label:'元素'},
+      {key:'bioteque_risk', label:'風險'}
+    ], r.claims.map(x=>({...x, protected_elements:Array.isArray(x.protected_elements)?x.protected_elements.join(', '):x.protected_elements}))), 'var(--warn)') : ''}
+    ${r.design_examples ? block('別人的具體設計', table([
+      {key:'name', label:'設計'},
+      {key:'substrate', label:'基材/器械'},
+      {key:'primer', label:'底塗'},
+      {key:'topcoat', label:'主塗層'},
+      {key:'active_agent', label:'活性成分'},
+      {key:'mechanism', label:'機制'},
+      {key:'why_it_matters', label:'重要性'}
+    ], r.design_examples), 'var(--accent)') : ''}
+    ${r.formulation_details ? block('配方細節', table([
+      {key:'component', label:'成分'},
+      {key:'role', label:'功能'},
+      {key:'range_or_amount', label:'比例/範圍'},
+      {key:'notes', label:'備註'}
+    ], r.formulation_details), 'var(--accent2)') : ''}
+    ${r.process_details ? block('製程細節', table([
+      {key:'step', label:'步驟'},
+      {key:'conditions', label:'條件'},
+      {key:'equipment', label:'設備'},
+      {key:'risk_or_note', label:'風險/備註'}
+    ], r.process_details), 'var(--accent2)') : ''}
+    ${r.performance_tests ? block('測試與結果', table([
+      {key:'test', label:'測試'},
+      {key:'metric', label:'指標'},
+      {key:'reported_result', label:'文中結果'},
+      {key:'bioteque_target', label:'Bioteque 目標'}
+    ], r.performance_tests), 'var(--accent)') : ''}
     ${block('材料 / 表面 / 製程 / 測試', `
       <table class="patent-table" style="margin-top:6px">
         <tr><th>材料</th><td>${escHtml((tech.materials || []).join(', ') || '-')}</td></tr>
@@ -6154,6 +6251,24 @@ function renderAgentReadingResult(r) {
       <div style="margin-top:6px"><b>步驟</b>${list(exp.steps)}</div>
       <div style="margin-top:6px"><b>驗收測試</b>${list(exp.acceptance_tests)}</div>`, 'var(--accent2)')}
     ${r.bioteque_relevance ? block('Bioteque 意義', `<div style="margin-top:4px">${escHtml(r.bioteque_relevance)}</div>`, 'var(--accent)') : ''}
+    ${r.design_around ? block('迴避設計', table([
+      {key:'risk_element', label:'風險元素'},
+      {key:'avoidance_strategy', label:'迴避策略'},
+      {key:'confidence', label:'信心'},
+      {key:'verification_needed', label:'待查證'}
+    ], r.design_around), 'var(--warn)') : ''}
+    ${r.innovation_ideas ? block('可借鏡創新想法', table([
+      {key:'idea', label:'想法'},
+      {key:'source_logic', label:'來源邏輯'},
+      {key:'fit_to_bioteque', label:'適配'},
+      {key:'experiment_hint', label:'小實驗'}
+    ], r.innovation_ideas), 'var(--accent2)') : ''}
+    ${r.fto_risks ? block('FTO 風險', table([
+      {key:'risk', label:'風險'},
+      {key:'severity', label:'等級'},
+      {key:'reason', label:'原因'},
+      {key:'next_check', label:'下一步'}
+    ], r.fto_risks), 'var(--danger)') : ''}
     ${block('下一步', list(r.next_actions), 'var(--accent2)')}
     ${r.red_flags?.length ? block('風險 / 缺口', list(r.red_flags), 'var(--danger)') : ''}
     ${r.citations_needed?.length ? block('待補引用', list(r.citations_needed), 'var(--warn)') : ''}

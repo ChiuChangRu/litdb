@@ -5822,109 +5822,339 @@
           "bioteque_relevance": "Phase 3抗菌方向的重要參考。Chlorhexidine+PVP塗層在臨床上有大量前案。但Bioteque目前先做Phase 1-2（潤滑+耐磨），抗菌是後續"
         },
         "agent_reading": {
-          "summary": "Cook Medical P31?US7402620?? P30?US7141246????? PVP+PU interpolymer+isocyanate ????????????? chlorhexidine?0.1-5%??triclosan?silver ??????????????? Vitamin E ??????????????? PU ??????????????????????????? UV ??????????? Bioteque ??? Phase 3 ????????????? triclosan ? FDA ????? chlorhexidine ?????????????????? silver ?????????? UV ??? QCS ???????? P31 ?? claim?",
+          "schema_version": "agent_reading_v1",
+          "summary": "Cook Medical P31（US7402620）為 P30（US7141246）續案，在 PVP+PU interpolymer+isocyanate 熱固化潤滑塗層基礎上，新增 chlorhexidine（0.1-5%）、triclosan、silver 三種抗菌劑的可控緩釋設計，並加入 Vitamin E 作抗氧化保存穩定劑。對 Bioteque 而言，它不是 Phase 1-2 的主線，而是 Phase 3 抗菌/抗生物膜升級模組的重要參考。",
           "evidence_level": "medium",
           "source_quality": "abstract",
+          "source": "Claude manual import, normalized by Codex",
+          "source_paper_id": "P31",
+          "read_at": "2026-06-19T05:00:46.657Z",
           "key_findings": [
-            "PVP + PU interpolymer + isocyanate ??????????? P30?",
-            "??????CHX / triclosan / silver?????????",
-            "???? sustained release ??????????????",
-            "Vitamin E ????????????????",
-            "Triclosan ? FDA ?????????????",
-            "???????????? UV line-of-sight ??",
-            "???????????????biofilm?????? conditioning film?????"
+            "PVP + PU interpolymer + isocyanate 熱固化是 Cook 家族核心骨架，P31 延伸自 P30。",
+            "抗菌成分以 chlorhexidine、triclosan、silver 為主，目標是含水環境下 sustained release。",
+            "Vitamin E 被用作抗氧化/保存穩定概念，可能降低儲存期間活性成分或塗層劣化。",
+            "熱固化路線可處理管腔內壁，避開 UV line-of-sight 限制，但帶來 isocyanate 殘留與熱製程風險。",
+            "P31 主要處理 biofilm/感染風險，對抗結痂是間接貢獻；conditioning film 與晶體沉積仍需 SBMA/MPC 或抗沾附策略補強。",
+            "Triclosan 與 chlorhexidine 的法規/生物相容性門檻較高，silver 或高分子抗菌路線可能較適合作為 Bioteque 迴避設計起點。"
+          ],
+          "claims": [
+            {
+              "claim_no": "unknown",
+              "claim_type": "unknown",
+              "plain_language": "推定保護 PVP 與 polyurethane interpolymer 組成的潤滑塗層，並納入可釋放抗菌劑。",
+              "protected_elements": [
+                "PVP",
+                "polyurethane interpolymer",
+                "antimicrobial agent",
+                "lubricious coating"
+              ],
+              "bioteque_risk": "medium"
+            },
+            {
+              "claim_no": "unknown",
+              "claim_type": "unknown",
+              "plain_language": "推定保護 chlorhexidine、triclosan、silver 等抗菌劑在親水潤滑塗層中的 sustained release 用途。",
+              "protected_elements": [
+                "chlorhexidine",
+                "triclosan",
+                "silver",
+                "sustained release"
+              ],
+              "bioteque_risk": "medium"
+            },
+            {
+              "claim_no": "unknown",
+              "claim_type": "unknown",
+              "plain_language": "可能涵蓋 Vitamin E 作為保存穩定或抗氧化添加物的設計，實際邊界需查 claim。",
+              "protected_elements": [
+                "Vitamin E",
+                "stabilizer",
+                "coating storage stability"
+              ],
+              "bioteque_risk": "unknown"
+            }
+          ],
+          "design_examples": [
+            {
+              "name": "PVP/PU interpolymer + chlorhexidine 釋放型潤滑抗菌塗層",
+              "substrate": "導管、胃腸管、氣管內管或類似長期接觸體液器械",
+              "primer": "PU primer 或 PU-rich interpolymer anchor",
+              "topcoat": "PVP + PU interpolymer + chlorhexidine",
+              "active_agent": "chlorhexidine 0.1-5%（文庫摘錄，需查全文確認）",
+              "mechanism": "PVP 提供潤滑，PU 網絡提供附著，chlorhexidine 在水相中擴散釋放抑菌。",
+              "why_it_matters": "代表 Cook 將潤滑與抗菌釋放整合成單一塗層，是 Phase 3 抗菌升級可參考但需避開的設計。"
+            },
+            {
+              "name": "PVP/PU interpolymer + silver 抗 biofilm 設計",
+              "substrate": "導管或支架相關輸送系統",
+              "primer": "PU primer 或 plasma 後直接塗佈（需查全文）",
+              "topcoat": "PVP + PU interpolymer + silver/silver ions",
+              "active_agent": "silver 或 silver ions",
+              "mechanism": "銀離子釋放抑制細菌定植與 biofilm 形成。",
+              "why_it_matters": "silver 比 triclosan 法規形象較乾淨，但劑量窗口窄，是 Bioteque 可探索的迴避版抗菌模組。"
+            },
+            {
+              "name": "PVP/PU interpolymer + triclosan 廣譜抗菌設計",
+              "substrate": "導管類器械",
+              "primer": "PU primer",
+              "topcoat": "PVP + PU interpolymer + triclosan",
+              "active_agent": "triclosan",
+              "mechanism": "小分子抗菌劑釋放，提供廣譜抑菌。",
+              "why_it_matters": "技術上可行但法規疑慮較高，較適合作為反面邊界與風險標記，不建議作 Bioteque 優先路線。"
+            }
+          ],
+          "formulation_details": [
+            {
+              "component": "PVP",
+              "role": "親水潤滑主體",
+              "range_or_amount": "unknown",
+              "notes": "需查全文確認分子量、濃度與溶劑系統。"
+            },
+            {
+              "component": "Polyurethane interpolymer",
+              "role": "附著與耐久骨架",
+              "range_or_amount": "unknown",
+              "notes": "與 Hydromer/Cook 熱固化路線同源，可能是核心 claim 元素。"
+            },
+            {
+              "component": "Isocyanate crosslinker",
+              "role": "熱固化交聯",
+              "range_or_amount": "unknown",
+              "notes": "可作為 Bioteque 迴避點：改 UV/PEGDA/PDA 路線。"
+            },
+            {
+              "component": "Chlorhexidine",
+              "role": "抗菌釋放",
+              "range_or_amount": "0.1-5%（文庫摘錄，需查全文）",
+              "notes": "需評估過敏、細胞毒性與釋放曲線。"
+            },
+            {
+              "component": "Triclosan",
+              "role": "廣譜抗菌",
+              "range_or_amount": "unknown",
+              "notes": "法規疑慮高，不建議優先採用。"
+            },
+            {
+              "component": "Silver/silver ions",
+              "role": "抗菌/抗 biofilm",
+              "range_or_amount": "unknown",
+              "notes": "可作 Bioteque Phase 3 候選，但需控制細胞毒性。"
+            },
+            {
+              "component": "Vitamin E",
+              "role": "抗氧化/保存穩定",
+              "range_or_amount": "unknown",
+              "notes": "概念可借鏡，但需確認是否落入 claim。"
+            }
+          ],
+          "process_details": [
+            {
+              "step": "表面前處理",
+              "conditions": "plasma 可選，條件 unknown",
+              "equipment": "plasma system",
+              "risk_or_note": "若 Bioteque 使用 PDA/UV，可形成不同 anchor 機制。"
+            },
+            {
+              "step": "塗佈",
+              "conditions": "dip coating 或 spray coating",
+              "equipment": "dip coater/spray system",
+              "risk_or_note": "適合長管與內壁，但均勻性需實驗確認。"
+            },
+            {
+              "step": "乾燥",
+              "conditions": "熱乾燥，溫度/時間 unknown",
+              "equipment": "oven",
+              "risk_or_note": "需避免活性抗菌劑熱劣化。"
+            },
+            {
+              "step": "固化",
+              "conditions": "isocyanate 熱固化",
+              "equipment": "oven/thermal curing setup",
+              "risk_or_note": "核心迴避點：改用 UV 固化或 PDA/PEGDA 網絡。"
+            }
+          ],
+          "performance_tests": [
+            {
+              "test": "抗菌釋放測試",
+              "metric": "release profile / zone inhibition / CFU reduction",
+              "reported_result": "not reported in current database",
+              "bioteque_target": "建立 24h/72h/7d 釋放與抑菌曲線。"
+            },
+            {
+              "test": "動態接觸抗菌",
+              "metric": "ASTM E2149 CFU reduction",
+              "reported_result": "not reported",
+              "bioteque_target": "Proteus mirabilis 72h 殺菌率 >99%，並保留細胞相容性。"
+            },
+            {
+              "test": "摩擦係數",
+              "metric": "COF",
+              "reported_result": "潤滑，但無數據",
+              "bioteque_target": "COF <= 0.10，加入 silver 後仍維持。"
+            },
+            {
+              "test": "細胞毒性",
+              "metric": "ISO 10993-5 viability",
+              "reported_result": "not reported",
+              "bioteque_target": "細胞活性 >70%。"
+            }
           ],
           "coating_technology": {
             "materials": [
-              "PVP??????",
-              "PU interpolymer??????",
-              "isocyanate????????",
-              "chlorhexidine?0.1-5%????",
-              "triclosan???????????",
-              "silver / silver ions?? biofilm?",
-              "Vitamin E??????????"
+              "PVP",
+              "PU interpolymer",
+              "isocyanate",
+              "chlorhexidine",
+              "triclosan",
+              "silver/silver ions",
+              "Vitamin E"
             ],
             "surface_prep": [
-              "Plasma ??????"
+              "plasma 可選",
+              "PU primer/PU-rich anchor"
             ],
             "curing_or_process": [
-              "Isocyanate ???",
-              "???",
-              "Dip coating ? Spray coating"
+              "dip coating",
+              "spray coating",
+              "thermal drying",
+              "isocyanate thermal curing"
             ],
             "test_methods": [
-              "???? ? ???????????????",
-              "???? ? ???????????????"
+              "需查全文：抗菌釋放",
+              "需查全文：摩擦/耐久",
+              "建議補 ASTM E2149",
+              "建議補 ISO 10993-5"
             ]
           },
           "patent_core": {
             "claim_focus": [
-              "PVP + PU interpolymer + ????????CHX/triclosan/silver??????????????",
-              "Isocyanate ?????",
-              "???? sustained release ??",
-              "Vitamin E ???????????? claim ???"
+              "PVP + PU interpolymer 潤滑塗層",
+              "抗菌劑 chlorhexidine/triclosan/silver 的 sustained release",
+              "isocyanate 熱固化與 PU 網絡附著",
+              "Vitamin E 保存穩定概念需查 claim"
             ],
             "design_around_notes": [
-              "?? UV ???? isocyanate ??????????? claim",
-              "?????????QCS?chitosan???????????????",
-              "?? SBMA ??????????????????",
-              "???? claim ????????"
+              "改用 UV 固化而非 isocyanate 熱固化。",
+              "改用 SBMA/MPC 抗沾附或 QCS/chitosan 高分子抗菌，避開小分子藥物釋放。",
+              "若使用 silver，改成 UV-PVP/PEGDA/PDA 網絡並確認不使用 PU interpolymer 熱固化組合。",
+              "需查 US7402620、US7141246、US6645483 claim 邊界。"
             ]
           },
+          "design_around": [
+            {
+              "risk_element": "PVP + PU interpolymer + antimicrobial release",
+              "avoidance_strategy": "使用 PDA anchor + PVP/PEGDA UV topcoat + silver nanoparticle/ion exchange 設計。",
+              "confidence": "medium",
+              "verification_needed": "查 claim 是否限於 PU interpolymer/isocyanate。"
+            },
+            {
+              "risk_element": "chlorhexidine/triclosan 小分子釋放",
+              "avoidance_strategy": "改用 QCS/chitosan 表面固定型高分子抗菌或 SBMA 抗沾附。",
+              "confidence": "medium",
+              "verification_needed": "比較機制是否仍被 broader antimicrobial release claim 涵蓋。"
+            },
+            {
+              "risk_element": "Vitamin E stabilizer",
+              "avoidance_strategy": "改用其他包裝/避光/氮氣保存策略，或使用不同抗氧化劑。",
+              "confidence": "low",
+              "verification_needed": "查 Vitamin E 是否實際在 claim 中。"
+            }
+          ],
+          "innovation_ideas": [
+            {
+              "idea": "雙步驟防護：SBMA/MPC 抗 conditioning film + silver 抗 biofilm",
+              "source_logic": "P31 主要處理 biofilm，SBMA 類材料處理初期蛋白/鹽類沉積。",
+              "fit_to_bioteque": "high",
+              "experiment_hint": "比較 PVP/PEGDA、PVP/PEGDA+silver、SBMA+silver 在人工尿液與 Proteus mirabilis 下的結痂/CFU。"
+            },
+            {
+              "idea": "Vitamin E 或非 claim 穩定策略用於延長含銀塗層保存",
+              "source_logic": "P31 強調保存穩定，顯示活性添加物儲存劣化是實際痛點。",
+              "fit_to_bioteque": "medium",
+              "experiment_hint": "40C 加速老化 2/4/8 週後測 COF、WCA、抑菌率。"
+            },
+            {
+              "idea": "內壁塗佈改用非 UV line-of-sight 的流通式浸塗/熱風乾燥，但固化仍採 UV 或低溫反應",
+              "source_logic": "P31 熱固化可處理內壁，提示內腔 coating 是商業化關鍵。",
+              "fit_to_bioteque": "medium",
+              "experiment_hint": "建立 30 cm 管材內壁染色均勻性與 COF mapping。"
+            }
+          ],
+          "fto_risks": [
+            {
+              "risk": "直接採用 PVP + PU interpolymer + CHX/silver + isocyanate 熱固化",
+              "severity": "high",
+              "reason": "高度接近 Cook 家族揭露組合。",
+              "next_check": "查 US7402620 法律狀態與 claim 1。"
+            },
+            {
+              "risk": "使用 chlorhexidine sustained release",
+              "severity": "medium",
+              "reason": "CHX 釋放型導管前案多，且生物相容性/過敏風險較高。",
+              "next_check": "查 CHX catheter coating 專利族與 ISO 10993 資料。"
+            },
+            {
+              "risk": "使用 silver 釋放但改變固化骨架",
+              "severity": "medium",
+              "reason": "材料可迴避 Cook 熱固化骨架，但 antimicrobial release broad claim 仍需確認。",
+              "next_check": "查 claim 是否限定 PU/PVP/isocyanate 組合。"
+            }
+          ],
           "experimental_plan": {
             "materials": [
-              "AgNO3 ? silver nanoparticle",
+              "AgNO3 或 silver nanoparticle",
               "PVP K90",
-              "PEGDA?Mn 700?",
-              "PDA????????",
-              "Proteus mirabilis ATCC 7002??????",
-              "E. coli ATCC 25922??????"
+              "PEGDA Mn 700",
+              "PDA/dopamine",
+              "TPU coupon/tube",
+              "Proteus mirabilis",
+              "E. coli"
             ],
             "suppliers": [
-              "Silver?Sigma-Aldrich",
-              "PVP / PEGDA?Sigma-Aldrich ? TCI",
-              "???BCRC???????????"
+              "Sigma-Aldrich/Merck",
+              "TCI",
+              "BCRC",
+              "可另查醫材級 silver additive 供應商"
             ],
             "steps": [
-              "Step 1??? silver ?????0.5% / 1% / 2%?????? vs ????",
-              "Step 2?PDA ?? + PVP/PEGDA/silver UV ?????Phase 2 ?????",
-              "Step 3?ASTM E2149 ??????????24h / 72h / 7d?",
-              "Step 4?ISO 10993-5 ??????",
-              "Step 5?COF ???silver ??????????? <= 0.10?",
-              "Step 6????????UV ?? vs ??????"
+              "建立 PVP/PEGDA/PDA UV 基礎塗層作為非 Cook 熱固化對照。",
+              "加入 silver 0.5%、1%、2% 梯度，測 COF、WCA、附著與外觀。",
+              "以 ASTM E2149 或等效動態接觸法測 24h/72h/7d 抗菌。",
+              "人工尿液 + Proteus mirabilis 做早期 biofilm/encrustation 小模型。",
+              "ISO 10993-5 細胞毒性篩選，找 silver 劑量窗口。",
+              "用 claim chart 比對 P31/P30/P06，確認 UV-PDA-silver 是否形成可迴避路線。"
             ],
             "acceptance_tests": [
-              "??? > 99%?Proteus mirabilis?72h?",
-              "???? > 70%?ISO 10993-5?",
-              "COF <= 0.10??? silver ??",
-              "WCA <= 20???? silver ??"
+              "COF <= 0.10",
+              "WCA <= 20°",
+              "Proteus mirabilis 72h CFU reduction >99%",
+              "ISO 10993-5 cell viability >70%",
+              "7d 人工尿液無明顯晶體橋接或塗層脫落"
             ]
           },
-          "bioteque_relevance": "Phase 3 ??????????????? silver ?? chlorhexidine/triclosan?????????? UV ???? isocyanate ?????? claim?Vitamin E ?????????????????? Phase 2??????????????????????? SBMA ?????????P31 ????????biofilm??SBMA ??????conditioning film????????????????",
+          "bioteque_relevance": "P31 是 Phase 3 抗菌/抗 biofilm 升級模組的重要參考，但不應成為 Bioteque Phase 1-2 主線。Bioteque 應先完成潤滑、耐磨與附著，再用 P31 反推「不採 Cook 熱固化、不採 PU interpolymer、不採 CHX/triclosan」的 silver 或高分子抗菌設計。最有價值的不是照抄配方，而是學到：商業化塗層需要同時管理潤滑、附著、抗菌釋放、保存穩定與內壁塗佈。",
           "next_actions": [
-            "? US7402620 ?? claim ???Google Patents?",
-            "?? US7402620 ????????????????",
-            "?? triclosan ?? FDA ????21 CFR?",
-            "? silver ??? PVP/PEGDA UV ???????????????",
-            "?? Vitamin E ? UV ???????????????"
+            "查 US7402620 claim 1、dependent claims 與法律狀態。",
+            "把 P31/P30/P06 做 claim chart，標記 Cook/Hydromer 熱固化家族邊界。",
+            "新增一個「design_examples」篩選視圖，讓 HTML 可直接找別人的具體設計。",
+            "搜尋 silver + PVP/PEGDA/UV coating 文獻，確認可行性與毒性窗口。",
+            "建立 Phase 3 silver/SBMA 雙機制小實驗計畫。"
           ],
           "red_flags": [
-            "Triclosan ?? FDA ????????2016???????????",
-            "Chlorhexidine ???????1-2%*???????????",
-            "Silver ???????? vs ???????????",
-            "US7402620 ???????????????? + CHX/silver ?????",
-            "Vitamin E ??? claim ?????????"
+            "目前仍未查全文 claim，所有 claim 邊界屬 medium confidence。",
+            "Triclosan 法規疑慮高，不建議優先採用。",
+            "Chlorhexidine 過敏與細胞毒性風險需完整 ISO 10993 評估。",
+            "Silver 劑量窗口窄，抗菌與細胞毒性容易互相拉扯。",
+            "若 Bioteque 使用 PVP+PU+isocyanate+silver/CHX，FTO 風險顯著升高。"
           ],
           "citations_needed": [
-            "US7402620 ?? claim?Google Patents?",
-            "US7141246?P30 ???claim ??",
-            "US6645483????",
-            "Silver ?????????PubMed?silver catheter antimicrobial?",
-            "Triclosan ?? FDA ?????21 CFR 310.545?"
-          ],
-          "read_at": "2026-06-19T04:46:02.902Z",
-          "source": "Claude manual import",
-          "source_paper_id": "P31"
+            "US7402620 full claims",
+            "US7141246 full claims",
+            "US6645483 full claims",
+            "Silver catheter antimicrobial PubMed literature",
+            "Triclosan FDA medical device applicability",
+            "Chlorhexidine catheter coating biocompatibility data"
+          ]
         }
       }
     },
