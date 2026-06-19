@@ -149,9 +149,9 @@
       ]
     },
     "stats": {
-      "total": 65,
-      "patents": 20,
-      "patent_ratio": "31%"
+      "total": 82,
+      "patents": 26,
+      "patent_ratio": "32%"
     }
   },
   "papers": [
@@ -307,6 +307,180 @@
             "US8133580B2 全文 claim",
             "P02（EP1957130B1）",
             "P03（WO2009112548A1）"
+          ]
+        }
+      }
+    },
+    {
+      "id": "P07",
+      "title": "Coating composition for multiple hydrophilic applications (US7008979B2 / Hydromer 多用途親水塗層)",
+      "authors": "Schottman, Hennessey, Gruening / Hydromer Inc.",
+      "year": 2006,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Hydromer",
+        "PVP",
+        "polyurethane",
+        "crosslinker",
+        "metal oxide",
+        "aziridine",
+        "lubricity潤滑",
+        "durability耐久",
+        "abrasion-test",
+        "導管",
+        "已過期"
+      ],
+      "purpose": "Hydromer 多用途親水塗層 composition；P06 後續平台型專利",
+      "abstract_note": "Hydromer 之多用途親水塗層組成專利，主張可用於塑膠、金屬、玻璃等多種基材的親水塗層 composition。Google Patents 顯示此案包含 coating agent、crosslinker、metal oxide、polyurethane、aziridine 等關鍵詞，並可加入藥物、抗菌劑、表面活性劑或輔助劑。此案可視為 Hydromer 從早期 PVP/isocyanate 潤滑塗層，往多基材、多功能、耐磨與商品化配方平台延伸的重要節點。",
+      "value_to_project": "Hydromer 專利路徑關鍵節點；已到期，可作多用途親水塗層配方與耐磨設計參考",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/US7008979B2/en"
+      },
+      "related_patents": [
+        "US20030203991A1",
+        "WO2003093357A1",
+        "EP1499667B1",
+        "US5160790"
+      ],
+      "patent_notes": "Hydromer Inc.；priority 2002-04-30；filed 2002-09-27；granted 2006-03-07；Google Patents legal status: Expired - Lifetime；anticipated expiration 2022-09-27；cited by 196。",
+      "patentResults": {
+        "full": {
+          "summary": "US7008979B2 是 Hydromer 的多用途親水塗層 composition 專利，從 P06 的 PVP/isocyanate 潤滑塗層基礎，延伸到可覆蓋塑膠、金屬、玻璃等多基材的配方平台。專利關鍵詞顯示其涵蓋 coating agent、crosslinker、metal oxide、polyurethane、aziridine、表面活性劑與抗菌/藥物添加等設計。Google Patents 顯示此專利已到期，且 cited-by 數量高，代表它是 Hydromer 2000 年代親水塗層商品化與配方平台的重要節點。",
+          "examples": [
+            {
+              "name": "Hydromer 多基材親水塗層 composition",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "目前依 Google Patents 書目、關鍵詞與摘要層級整理；尚未逐項解析 examples 與 claim 全文。",
+              "substrate": "塑膠、金屬、玻璃等多種醫材基材",
+              "formulation": {
+                "primer": "需查全文；可能依基材搭配 polyurethane / crosslinker / metal oxide 等錨固或強化成分",
+                "topcoat": "親水 coating agent + crosslinker；可含表面活性劑、抗菌劑、藥物或輔助劑"
+              },
+              "process": {
+                "surface_prep": "需查全文",
+                "coating_method": "coating / dipping / drying（需查 examples）",
+                "drying": "需查全文",
+                "curing": "crosslinker 固化；可能包含 aziridine 或 carbodiimide 類交聯"
+              },
+              "results": {
+                "friction": "親水潤滑；具體 COF 需查全文",
+                "adhesion": "多基材附著設計；具體數據需查全文",
+                "wca": "需查全文",
+                "durability": "Google Patents 描述其被大量引用，且關鍵詞包含耐久/交聯設計；磨耗數據需查全文",
+                "other": "cited-by 196，顯示後續塗層/醫材應用引用度高"
+              }
+            }
+          ],
+          "key_claims": [
+            "多用途親水 coating composition，可用於多種基材與應用",
+            "coating agent + crosslinker + 可選 metal oxide / polyurethane / aziridine 等組分",
+            "可加入 drug、antimicrobial agent、surface-active agent 或 auxiliary agent",
+            "已到期，適合做為開放技術參考；仍需注意各國同族案與後續改良專利"
+          ],
+          "actionable_insights": [
+            "加入 Hydromer 專利樹：P06(1992 基礎 PVP/isocyanate) → P07(2006 多用途配方平台) → 後續商品化/設備服務 C04",
+            "可用於設計多基材通用 primer/topcoat 思路，特別是金屬、玻璃、polyurethane、polycarbonate 等跨基材應用",
+            "metal oxide / polyurethane / aziridine 這類強化成分值得進一步拆解，可能與耐磨、附著或抗菌功能有關",
+            "cited-by 高，下一步應抓出引用它的後續醫材塗層專利，建立 Hydromer 路徑樹"
+          ],
+          "red_flags": [
+            "目前尚未解析完整 claim 與 examples，配方比例與實驗數據不能直接引用",
+            "aziridine 類交聯劑有毒性與法規風險，若做實驗應優先找低毒替代",
+            "雖然美國專利已到期，仍需確認 EP/JP/CA 等同族狀態與後續 continuation / improvement patents"
+          ],
+          "vs_database": "P07 應接在 P06 之後：P06 是早期單步 PVP/isocyanate 熱固化潤滑水凝膠，P07 則把 Hydromer 技術擴張成多用途、多基材、多功能 composition 平台。與 P05 的 PEO/PVP 雙層備援親水性相比，P07 更像商品化配方平台；與 P26/Biocoat UV topcoat 相比，P07 是非單一 UV topcoat 的廣義 composition。",
+          "bioteque_relevance": "此案已到期且屬 Hydromer 重要平台專利，可作為本專案理解商用親水塗層配方架構的核心參考。短期建議用它建立 Hydromer 技術路徑，並拆出 crosslinker、metal oxide、polyurethane、aziridine 等設計元素，評估哪些可安全轉成低毒、可量產、可耐磨的配方模組。",
+          "evidence_level": "medium",
+          "source_quality": "google_patents_metadata",
+          "key_findings": [
+            "Hydromer Inc. 原始與目前 assignee",
+            "專利已到期（Google Patents: Expired - Lifetime）",
+            "priority 2002-04-30；granted 2006-03-07",
+            "family 涵蓋 US/EP/JP/KR/AU/BR/CA/WO 等多國案",
+            "cited-by 196，後續影響大",
+            "關鍵詞包含 crosslinker、metal oxide、polyurethane、aziridine、surface-active agent、drug、antimicrobial"
+          ],
+          "coating_technology": {
+            "materials": [
+              "hydrophilic coating agent",
+              "crosslinker",
+              "polyurethane",
+              "metal oxide",
+              "aziridine",
+              "surface-active agent",
+              "antimicrobial agent",
+              "drug / auxiliary agent"
+            ],
+            "surface_prep": [
+              "需查全文 examples"
+            ],
+            "curing_or_process": [
+              "crosslinking composition",
+              "coating / drying",
+              "多基材塗覆"
+            ],
+            "test_methods": [
+              "需查全文：lubricity / abrasion resistance / adhesion",
+              "下一步應補 COF、磨耗與附著數據"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "多用途親水 coating composition",
+              "親水 coating agent 與 crosslinker 的組合",
+              "可選 metal oxide / polyurethane / aziridine / antimicrobial / drug 添加",
+              "多基材應用範圍"
+            ],
+            "design_around_notes": [
+              "美國案已到期，可作自由實施參考；但要確認同族與後續改良案",
+              "若採用 aziridine 類交聯，需改以低毒交聯劑或 UV/PEGDA/PDA 路線降低法規風險",
+              "若只取『多基材通用平台』概念，可用完全不同 chemistry 實現，如 PDA primer + PVP/PEGDA topcoat"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "PVP K90",
+              "polyurethane dispersion 或 medical-grade PU",
+              "低毒 crosslinker（HDI trimer / carbodiimide / PEGDA 作替代評估）",
+              "SiO2 或 TiO2 nanoparticle（小比例耐磨添加，需評估 particulate 風險）"
+            ],
+            "suppliers": [
+              "Sigma-Aldrich / Merck（PVP、crosslinker、SiO2/TiO2）",
+              "BASF 或 Lubrizol（medical-grade PU dispersion，需確認醫材等級）",
+              "TCI / Alfa Aesar（小量篩選試劑）"
+            ],
+            "steps": [
+              "Step 1：下載 US7008979B2 PDF，逐項解析 independent claims 與 examples",
+              "Step 2：建立 Hydromer 路徑樹，連接 P06、P07、C04 與後續 cited-by 專利",
+              "Step 3：選 2-3 組低毒 crosslinker 替代 aziridine，做 TPU/Pebax coupon 初篩",
+              "Step 4：測 WCA、COF、cross-cut adhesion、50 次往返磨耗與 particulate",
+              "Step 5：若 metal oxide 添加有助耐磨，需加做 extractables / particulate / cytotoxicity 風險評估"
+            ],
+            "acceptance_tests": [
+              "WCA ≤ 20°",
+              "COF ≤ 0.10 或 Harland FTS ≤ 20 gf",
+              "50 次往返磨耗後 COF 不上升超過 30%",
+              "Cross-cut Grade 0-1",
+              "particulate 不高於內控標準"
+            ]
+          },
+          "next_actions": [
+            "抓取 US7008979B2 PDF 全文並解析 claim 1",
+            "建立 Hydromer 專利路徑：P06 → P07 → C04/後續 cited-by",
+            "從 196 件 cited-by 中挑出醫材親水塗層、耐磨、抗菌、設備相關的後續專利",
+            "確認 EP1499667B1、WO2003093357A1 等同族法律狀態",
+            "把 P07 加入未來專利樹的 Hydromer 玩家"
+          ],
+          "citations_needed": [
+            "US7008979B2 claim 1 全文",
+            "US20030203991A1 公開案",
+            "WO2003093357A1 / EP1499667B1 同族案",
+            "Google Patents cited-by 清單中醫材塗層相關後續案"
           ]
         }
       }
