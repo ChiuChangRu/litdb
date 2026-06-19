@@ -275,7 +275,7 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 <script>
 // ── 登入驗證 ──────────────────────────────────
 const AUTH_LIST = [
-  {u:'jeremy', p:'Bioteque2026'},
+  {u:'jeremy', p:'LitDB2026'},
   {u:'guest',  p:'LitDB888'},
 ];
 
@@ -328,6 +328,7 @@ function doLogin(){
   <div class="tab" onclick="showView('search',this)">🔍<span class="tab-text"> 檢索</span></div>
   <div class="tab" onclick="showView('browse',this)">📚<span class="tab-text"> 文庫</span> <span class="badge" id="browseCount">0</span><span class="badge" id="analyzedCount" style="background:var(--accent2)">0</span></div>
   <div class="tab" onclick="showView('research',this)">🧭<span class="tab-text"> 研究</span></div>
+  <div class="tab" onclick="showView('patent-tree',this)">🌳<span class="tab-text"> 專利樹</span></div>
   <div class="tab" onclick="showView('report',this)">📋<span class="tab-text"> 報告</span></div>
 </div>
 
@@ -337,6 +338,49 @@ function doLogin(){
 <div class="view active" id="v-market">
   <div style="max-width:1000px;margin:0 auto;padding:20px 16px" id="marketContent">
     <div style="text-align:center;padding:40px;color:var(--muted)">載入中...</div>
+  </div>
+</div>
+
+<div class="view" id="v-patent-tree">
+  <div style="max-width:1180px;margin:0 auto;padding:16px">
+    <div class="panel">
+      <div class="panel-h">🌳 專利樹</div>
+      <div style="padding:12px">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
+          <label style="font-size:12px;color:var(--muted);font-weight:700">玩家</label>
+          <select id="patentTreePlayer" onchange="renderPatentTree()" style="width:auto;min-width:180px;padding:8px 10px;font-size:13px">
+            <option value="Cook Medical">Cook Medical</option>
+            <option value="DSM">DSM / ComfortCoat</option>
+          </select>
+          <label style="font-size:12px;color:var(--muted);font-weight:700;margin-left:8px">核心</label>
+          <select id="patentTreeCenter" onchange="renderPatentTree()" style="width:auto;min-width:220px;padding:8px 10px;font-size:13px"></select>
+          <button class="btn btn-s" onclick="renderPatentTree()">更新</button>
+          <span id="patentTreeStats" style="font-size:12px;color:var(--muted);margin-left:auto"></span>
+        </div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6">
+          這裡用玩家專利族做放射圖：中心是核心專利，向外連到母案、續案、同家族高相似專利與尚未收錄的缺口專利。缺口清單是下一輪深度解析候選。
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:12px;margin-top:12px">
+      <div class="panel" style="min-height:620px">
+        <div class="panel-h">D3 radial 專利放射圖</div>
+        <div style="position:relative;height:580px;overflow:hidden">
+          <svg id="patentTreeSvg" style="width:100%;height:100%"></svg>
+          <div id="patentTreeTip" style="display:none;position:absolute;background:var(--card);border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:12px;pointer-events:none;max-width:260px;box-shadow:0 2px 10px rgba(0,0,0,0.12);z-index:10"></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="panel">
+          <div class="panel-h">未在 papers.json 的專利</div>
+          <div id="missingPatentList" style="padding:12px;font-size:12px;line-height:1.7"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-h">節點詳情</div>
+          <div id="patentTreeDetail" style="padding:12px;font-size:12px;line-height:1.7;color:var(--muted)">點選圖上的節點查看內容。</div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1440,7 +1484,7 @@ async function batchAnalyzeTpu() {
 3. 固化條件（UV/熱固）對 TPU 熱穩定性的影響
 4. 與 PVC、Pebax 比較時 TPU 的優劣
 
-回傳純JSON：{"summary":"一句話","examples":[{"name":"","is_real":true,"credibility":"高/中/低","credibility_reason":"","substrate":"TPU規格","formulation":{"primer":"","topcoat":""},"process":{"surface_prep":"","coating_method":"","drying":"","curing":""},"results":{"friction":"","adhesion":"","wca":"","durability":"","other":""}}],"tpu_advantages":"TPU相對PVC/Pebax的優點","tpu_challenges":"TPU塗層挑戰","key_claims":["核心貢獻"],"actionable_insights":["可借鏡做法"],"red_flags":["注意"],"bioteque_relevance":"對Bioteque TPU導管塗層的建議"}`;
+回傳純JSON：{"summary":"一句話","examples":[{"name":"","is_real":true,"credibility":"高/中/低","credibility_reason":"","substrate":"TPU規格","formulation":{"primer":"","topcoat":""},"process":{"surface_prep":"","coating_method":"","drying":"","curing":""},"results":{"friction":"","adhesion":"","wca":"","durability":"","other":""}}],"tpu_advantages":"TPU相對PVC/Pebax的優點","tpu_challenges":"TPU塗層挑戰","key_claims":["核心貢獻"],"actionable_insights":["可借鏡做法"],"red_flags":["注意"],"bioteque_relevance":"對本專案 TPU導管塗層的建議"}`;
 
     try {
       const resp = await fetch(cfg.proxy, {
@@ -1516,13 +1560,13 @@ async function batchAnalyzeEncrustation() {
 2. 用了什麼材料/塗層策略？
 3. 親水性 vs 抗結痂的關係（有時親水反而促進結痂！）
 4. 具體性能數據（細菌減少%、結晶減少%、in vitro/in vivo）
-5. 對Bioteque輸尿管支架塗層設計的具體啟示
+5. 對本專案輸尿管支架塗層設計的具體啟示
 
 文獻：${p.title}
 ${isPatent?'專利':'文獻'}類型，標籤：${(p.tags||[]).join(', ')}
 內容：${text.slice(0,2500)}
 
-回傳純JSON：{"summary":"一句話","examples":[{"name":"","is_real":true,"credibility":"高/中/低","credibility_reason":"","substrate":"","formulation":{"primer":"","topcoat":""},"process":{"surface_prep":"","coating_method":"","drying":"","curing":""},"results":{"friction":"","adhesion":"","wca":"","durability":"","antifouling":"","antimicrobial":"","encrustation_reduction":"","other":""}}],"mechanism":"結痂機制","key_findings":["關鍵發現"],"actionable_insights":["對Bioteque的具體建議"],"red_flags":["注意事項"],"vs_database":"與資料庫其他文獻的關係","bioteque_relevance":"對Bioteque輸尿管支架的建議"}`;
+回傳純JSON：{"summary":"一句話","examples":[{"name":"","is_real":true,"credibility":"高/中/低","credibility_reason":"","substrate":"","formulation":{"primer":"","topcoat":""},"process":{"surface_prep":"","coating_method":"","drying":"","curing":""},"results":{"friction":"","adhesion":"","wca":"","durability":"","antifouling":"","antimicrobial":"","encrustation_reduction":"","other":""}}],"mechanism":"結痂機制","key_findings":["關鍵發現"],"actionable_insights":["對本專案的具體建議"],"red_flags":["注意事項"],"vs_database":"與資料庫其他文獻的關係","bioteque_relevance":"對本專案輸尿管支架的建議"}`;
 
       const r = await fetch(cfg.proxy, {
         method:'POST',headers:{'Content-Type':'application/json'},
@@ -2609,7 +2653,7 @@ async function aiReadPaper(p, refresh=true) {
     .join('\n');
   const prompt = `請閱讀這筆 LitDB 文獻/專利資料，並只輸出 JSON，不要 markdown。
 
-目標：補強文獻整理內涵，尤其要找出專利核心內容、材料/製程/測試方法、對 Bioteque 的研發與商業意義。若資料不足，請明確標示 evidence_level 與 citations_needed，不要編造。
+目標：補強文獻整理內涵，尤其要找出專利核心內容、材料/製程/測試方法、對 本專案 的研發與商業意義。若資料不足，請明確標示 evidence_level 與 citations_needed，不要編造。
 
 文獻：
 [${p.id}] ${p.title || ''}
@@ -2662,7 +2706,7 @@ JSON schema:
     "test": "測試名稱",
     "metric": "指標",
     "reported_result": "文中結果；不明寫 not reported",
-    "bioteque_target": "可轉成 Bioteque 驗收標準的建議"
+    "bioteque_target": "可轉成 本專案 驗收標準的建議"
   }],
   "coating_technology": {
     "materials": ["材料/單體/聚合物"],
@@ -2698,7 +2742,7 @@ JSON schema:
     "reason": "原因",
     "next_check": "下一步查證"
   }],
-  "bioteque_relevance": "對 Bioteque 的意義",
+  "bioteque_relevance": "對 本專案 的意義",
   "next_actions": ["下一步任務"],
   "red_flags": ["風險或資料缺口"],
   "citations_needed": ["需補查的引用或全文"]
@@ -2783,7 +2827,7 @@ let currentAnalysisTab = 'graph';
 function goBack() {
   if(!previousView) return;
   const tabs = document.querySelectorAll('.tabs > .tab');
-  const viewMap = {market:0, routes:1, search:2, browse:3, research:4, report:5};
+  const viewMap = {market:0, routes:1, search:2, browse:3, research:4, 'patent-tree':5, report:6};
   const idx = viewMap[previousView];
   if(idx!==undefined && tabs[idx]) {
     showView(previousView, tabs[idx]);
@@ -2827,6 +2871,7 @@ function showView(id,el){
   if(id==='gap') buildHeatmaps();
   if(id==='compare') buildCompare();
   if(id==='research') renderResearchAgent();
+  if(id==='patent-tree') renderPatentTree();
   if(id==='report') { renderIntegratedReport(); }
   // 返回按鈕
   const backBtn = document.getElementById('backBtn');
@@ -4039,9 +4084,9 @@ function renderMarket() {
 
   const threatColor = {
     '高（直接競品，特別是輸尿管支架市場）':'#e74c3c',
-    '高（若 Bioteque 進歐洲市場）':'#e74c3c',
+    '高（若 本專案 進歐洲市場）':'#e74c3c',
     '高（技術標桿，需迴避其核心IP）':'#e74c3c',
-    '中（若 Bioteque 進歐洲市場）':'#e67e22',
+    '中（若 本專案 進歐洲市場）':'#e67e22',
     '中（間接競品）':'#e67e22',
     '低（非台灣市場主力）':'#2d8c5a',
     '低':'#2d8c5a',
@@ -4253,7 +4298,7 @@ function renderMarket() {
   <!-- 標題 -->
   <div style="margin-bottom:20px">
     <h2 style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px">市場玩家分析</h2>
-    <p style="font-size:13px;color:var(--muted)">親水塗層主要競爭廠商、技術路線歸屬與 Bioteque 競爭定位</p>
+    <p style="font-size:13px;color:var(--muted)">親水塗層主要競爭廠商、技術路線歸屬與 本專案 競爭定位</p>
   </div>
 
   <!-- 區塊1：市場總覽 -->
@@ -4293,7 +4338,7 @@ function renderMarket() {
             </td>`).join('')}
           </tr>`).join('')}
           <tr style="background:${`#2d8c5a`}18">
-            <td style="padding:8px 14px;border:1px solid var(--border);font-weight:700;color:#2d8c5a">Bioteque（目標）</td>
+            <td style="padding:8px 14px;border:1px solid var(--border);font-weight:700;color:#2d8c5a">本專案（目標）</td>
             <td style="padding:8px;border:1px solid var(--border);text-align:center;color:var(--muted)">迴避</td>
             <td style="padding:8px;border:1px solid var(--border);text-align:center;color:#2d8c5a;font-weight:700">●●● Phase 2</td>
             <td style="padding:8px;border:1px solid var(--border);text-align:center;color:#2d8c5a;font-weight:700">●● Phase 3</td>
@@ -4306,8 +4351,8 @@ function renderMarket() {
     <div style="padding:8px 14px;font-size:10px;color:var(--muted)">●●● 核心技術　●● 重要技術　● 輔助技術　— 未涉及</div>
   </div>
 
-  <!-- 區塊4：Bioteque 定位建議 -->
-  <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:10px">🎯 Bioteque 競爭定位建議</div>
+  <!-- 區塊4：本專案 定位建議 -->
+  <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:10px">🎯 本專案 競爭定位建議</div>
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
     <div style="background:#fff8e6;border:1px solid #f0c040;border-radius:10px;padding:14px">
       <div style="font-size:11px;font-weight:700;color:#b8860b;margin-bottom:8px">⚠️ 避開（競爭過強）</div>
@@ -4345,6 +4390,294 @@ function renderMarket() {
 }
 
 // ── Technology Routes 首頁 ───────────────────
+// === Patent tree MVP: player-centered radial map ===
+let patentTreeLastPlayer = null;
+
+const PATENT_TREE_CONFIG = {
+  'Cook Medical': {
+    label: 'Cook Medical',
+    aliases: ['cook medical','houghton pe','us7141246','us7402620'],
+    centerIds: ['P31','P30'],
+    gapSeeds: [
+      {
+        patent_no: 'US6645483',
+        role: '祖案 / family root',
+        reason: 'P30/P31 的 related_patents 都提到，但目前沒有獨立 papers.json 條目。',
+        source_ids: ['P30','P31'],
+        next_task: '載入 Google Patents 全文，解析 independent claims、續案關係與抗菌釋放 claim 邊界。'
+      }
+    ]
+  },
+  'DSM': {
+    label: 'DSM / ComfortCoat',
+    aliases: ['dsm','comfortcoat','dsm-firmenich','us8133580','ep1957130','wo2009112548','cn107405430','us8957125'],
+    centerIds: ['P01','P02','P03','C06','P28','R13'],
+    gapSeeds: [
+      {
+        patent_no: 'US8133580B2-family',
+        role: '同族 / continuations 待補',
+        reason: 'P01 是核心，但同族美國續案、分案與外國對應案尚未完整列成 paper 條目。',
+        source_ids: ['P01','C06'],
+        next_task: '用 Google Patents family/cited-by 展開，確認哪些 continuation、division、EP/WO 對應案要深度解析。'
+      },
+      {
+        patent_no: 'EP1957130B1-family',
+        role: '抗乾燥延伸族群待補',
+        reason: 'P02/C06 指向 EP1957130B1，但同族與被引用網路尚未完整收錄。',
+        source_ids: ['P02','C06'],
+        next_task: '補齊 P02 的 cited-by 與同族案，確認 polyelectrolyte/dry-out claim 的演進。'
+      }
+    ]
+  }
+};
+
+function patentHaystack(p) {
+  const r = p?.patentResults || {};
+  return [
+    p?.id, p?.title, p?.authors, p?.venue, p?.purpose, p?.abstract_note,
+    p?.value_to_project, p?.patent_notes, (p?.tags || []).join(' '),
+    JSON.stringify(p?.links || {}), JSON.stringify(p?.related_patents || []),
+    r?.full?.summary, r?.full?.vs_database, r?.agent_reading?.summary
+  ].filter(Boolean).join(' ');
+}
+
+function extractPatentNos(text) {
+  const hits = String(text || '').match(/\b(?:US|EP|WO|CN)\d{4,}[A-Z]?\d?\b/gi) || [];
+  return [...new Set(hits.map(x => x.toUpperCase()))];
+}
+
+function normalizePatentNo(no) {
+  return String(no || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+}
+
+function patentIdFromPaper(p) {
+  const fromTitle = extractPatentNos(`${p?.title || ''} ${JSON.stringify(p?.links || {})}`);
+  return fromTitle[0] || p?.id || '';
+}
+
+function paperMatchesPatentNo(p, no) {
+  const target = normalizePatentNo(no);
+  if(!target) return false;
+  const identity = [
+    p?.id,
+    p?.title,
+    JSON.stringify(p?.links || {}),
+    p?.patent_no,
+    p?.patent_number
+  ].filter(Boolean).join(' ');
+  return normalizePatentNo(identity).includes(target);
+}
+
+function patentTreePapersForPlayer(playerKey) {
+  const cfg = PATENT_TREE_CONFIG[playerKey] || PATENT_TREE_CONFIG['Cook Medical'];
+  const aliases = cfg.aliases.map(a => a.toLowerCase());
+  return (DB.papers || []).filter(p => {
+    if(p._deleted) return false;
+    if(cfg.centerIds.includes(p.id)) return true;
+    const hay = patentHaystack(p).toLowerCase();
+    return aliases.some(a => hay.includes(a));
+  });
+}
+
+function patentTreeBuild(playerKey, centerId) {
+  const cfg = PATENT_TREE_CONFIG[playerKey] || PATENT_TREE_CONFIG['Cook Medical'];
+  const papers = patentTreePapersForPlayer(playerKey);
+  const centers = cfg.centerIds.map(id => papers.find(p => p.id === id)).filter(Boolean);
+  const center = papers.find(p => p.id === centerId) || centers[0] || papers[0] || null;
+
+  const relatedNos = new Set();
+  papers.forEach(p => (p.related_patents || []).forEach(no => relatedNos.add(no)));
+  cfg.gapSeeds.forEach(g => relatedNos.add(g.patent_no));
+
+  const knownNodes = papers
+    .filter(p => !center || p.id !== center.id)
+    .slice(0, 22)
+    .map(p => ({
+      name: `${p.id} ${patentIdFromPaper(p)}`,
+      type: 'known',
+      paperId: p.id,
+      title: p.title,
+      patentNo: patentIdFromPaper(p),
+      role: (cfg.centerIds.includes(p.id) ? '同玩家核心專利' : '同玩家相關文獻'),
+      summary: p.patentResults?.full?.summary || p.abstract_note || p.purpose || ''
+    }));
+
+  const missing = [];
+  relatedNos.forEach(no => {
+    const seed = cfg.gapSeeds.find(g => normalizePatentNo(g.patent_no) === normalizePatentNo(no));
+    const isFamilyPlaceholder = String(no).toLowerCase().includes('family');
+    const inDb = papers.some(p => paperMatchesPatentNo(p, no));
+    if(inDb && !isFamilyPlaceholder) return;
+    if(center && normalizePatentNo(no) === normalizePatentNo(patentIdFromPaper(center))) return;
+    missing.push({
+      patent_no: no,
+      role: seed?.role || 'related patent 未獨立收錄',
+      reason: seed?.reason || `出現在 ${cfg.label} 相關條目的 related_patents / 摘要中，但沒有獨立 paper 條目。`,
+      source_ids: seed?.source_ids || papers.filter(p => (p.related_patents || []).some(x => normalizePatentNo(x) === normalizePatentNo(no))).map(p => p.id),
+      next_task: seed?.next_task || '下一輪 agent reading：補全文、claims、cited-by、family 與設計迴避重點。'
+    });
+  });
+
+  const missingNodes = missing.slice(0, 14).map(m => ({
+    name: m.patent_no,
+    type: 'missing',
+    patentNo: m.patent_no,
+    role: m.role,
+    title: '未收錄於 papers.json',
+    summary: m.reason,
+    next_task: m.next_task,
+    source_ids: m.source_ids
+  }));
+
+  return {
+    player: cfg.label,
+    center,
+    missing,
+    root: {
+      name: center ? `${center.id} ${patentIdFromPaper(center)}` : cfg.label,
+      type: 'center',
+      paperId: center?.id,
+      title: center?.title || `${cfg.label} 專利樹`,
+      patentNo: patentIdFromPaper(center),
+      role: '核心 / 圓心',
+      summary: center?.patentResults?.full?.summary || center?.abstract_note || '目前沒有核心文獻。',
+      children: [
+        { name:'已收錄同玩家文獻', type:'group', children: knownNodes },
+        { name:'資料庫缺口', type:'gapgroup', children: missingNodes }
+      ].filter(g => g.children.length)
+    }
+  };
+}
+
+function renderPatentTree() {
+  const playerSel = document.getElementById('patentTreePlayer');
+  const centerSel = document.getElementById('patentTreeCenter');
+  if(!playerSel || !centerSel || !DB?.papers) return;
+  const playerKey = playerSel.value || 'Cook Medical';
+  const cfg = PATENT_TREE_CONFIG[playerKey] || PATENT_TREE_CONFIG['Cook Medical'];
+  const papers = patentTreePapersForPlayer(playerKey);
+  if(patentTreeLastPlayer !== playerKey || !centerSel.options.length) {
+    const centers = cfg.centerIds.map(id => papers.find(p => p.id === id)).filter(Boolean);
+    centerSel.innerHTML = (centers.length ? centers : papers.slice(0, 6)).map(p => {
+      const label = `${p.id} - ${patentIdFromPaper(p) || p.title}`;
+      return `<option value="${escHtml(p.id)}">${escHtml(label)}</option>`;
+    }).join('') || '<option value="">無核心文獻</option>';
+    patentTreeLastPlayer = playerKey;
+  }
+  const data = patentTreeBuild(playerKey, centerSel.value);
+  const stats = document.getElementById('patentTreeStats');
+  if(stats) stats.textContent = `${data.player}｜已收錄 ${papers.length}｜缺口 ${data.missing.length}`;
+  renderMissingPatentList(data);
+  renderPatentTreeDetail(data.root);
+  drawPatentRadial(data.root);
+}
+
+function renderMissingPatentList(data) {
+  const el = document.getElementById('missingPatentList');
+  if(!el) return;
+  if(!data.missing.length) {
+    el.innerHTML = '<div style="color:var(--muted)">目前沒有明確缺口；建議下一步用 Google Patents family/cited-by 再展開。</div>';
+    return;
+  }
+  el.innerHTML = data.missing.map(m => `
+    <div style="border:1px solid var(--border);border-radius:8px;padding:9px 10px;margin-bottom:8px;background:${String(m.patent_no).includes('family') ? '#fff8e6' : '#fff'}">
+      <div style="font-weight:800;color:var(--danger)">${escHtml(m.patent_no)}</div>
+      <div style="font-size:11px;color:var(--text);margin-top:3px"><b>${escHtml(m.role)}</b></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">${escHtml(m.reason)}</div>
+      <div style="font-size:11px;color:var(--accent2);margin-top:5px">來源：${escHtml((m.source_ids || []).join(', ') || '待確認')}</div>
+      <div style="font-size:11px;color:#b85c2a;margin-top:5px">${escHtml(m.next_task)}</div>
+    </div>`).join('');
+}
+
+function renderPatentTreeDetail(d) {
+  const el = document.getElementById('patentTreeDetail');
+  if(!el || !d) return;
+  const link = d.paperId ? `<button class="btn btn-s" style="font-size:11px;margin-top:8px" onclick="goToPaper('${d.paperId}',{focus:true,label:'專利樹：${d.paperId}',color:'#2d8c5a'})">跳到文庫 ${d.paperId}</button>` : '';
+  el.innerHTML = `
+    <div style="font-weight:800;color:var(--text);font-size:13px">${escHtml(d.title || d.name)}</div>
+    <div style="margin-top:5px;color:var(--muted)">類型：${escHtml(d.role || d.type || '')}</div>
+    ${d.patentNo ? `<div style="margin-top:5px;color:var(--accent)">專利號：${escHtml(d.patentNo)}</div>` : ''}
+    ${d.source_ids?.length ? `<div style="margin-top:5px;color:var(--accent2)">來源：${escHtml(d.source_ids.join(', '))}</div>` : ''}
+    <div style="margin-top:8px;color:var(--text);line-height:1.7">${escHtml(String(d.summary || '').slice(0, 520))}</div>
+    ${d.next_task ? `<div style="margin-top:8px;color:#b85c2a">下一步：${escHtml(d.next_task)}</div>` : ''}
+    ${link}`;
+}
+
+function drawPatentRadial(rootData) {
+  const svgEl = document.getElementById('patentTreeSvg');
+  if(!svgEl) return;
+  if(typeof d3 === 'undefined') {
+    svgEl.innerHTML = `<text x="24" y="40" fill="#8a7e72">D3 尚未載入；請確認網路或 CDN。</text>`;
+    return;
+  }
+  const svg = d3.select(svgEl);
+  svg.selectAll('*').remove();
+  const box = svgEl.getBoundingClientRect();
+  const width = box.width || 780;
+  const height = box.height || 580;
+  const radius = Math.max(140, Math.min(width, height) / 2 - 80);
+  svg.attr('viewBox', [-width / 2, -height / 2, width, height].join(' '));
+
+  const root = d3.hierarchy(rootData);
+  d3.tree().size([2 * Math.PI, radius])(root);
+  const color = d => d.data.type === 'center' ? '#e86c3a'
+    : d.data.type === 'missing' ? '#c0392b'
+    : d.data.type === 'gapgroup' ? '#b85c2a'
+    : d.data.type === 'group' ? '#8a7e72'
+    : '#2d8c5a';
+
+  const link = d3.linkRadial().angle(d => d.x).radius(d => d.y);
+  svg.append('g')
+    .attr('fill','none')
+    .attr('stroke','#d8cfc4')
+    .attr('stroke-width',1.4)
+    .selectAll('path')
+    .data(root.links())
+    .join('path')
+    .attr('stroke-dasharray', d => d.target.data.type === 'missing' ? '4 4' : null)
+    .attr('d', link);
+
+  const node = svg.append('g')
+    .selectAll('g')
+    .data(root.descendants())
+    .join('g')
+    .attr('transform', d => `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`);
+
+  node.append('circle')
+    .attr('r', d => d.data.type === 'center' ? 7 : d.children ? 5 : 4)
+    .attr('fill', color)
+    .attr('stroke','#fff')
+    .attr('stroke-width',1.5)
+    .style('cursor','pointer')
+    .on('click', (event, d) => renderPatentTreeDetail(d.data));
+
+  node.append('text')
+    .attr('dy','0.31em')
+    .attr('x', d => d.x < Math.PI === !d.children ? 8 : -8)
+    .attr('text-anchor', d => d.x < Math.PI === !d.children ? 'start' : 'end')
+    .attr('transform', d => d.x >= Math.PI ? 'rotate(180)' : null)
+    .attr('font-size', d => d.data.type === 'center' ? 12 : 10)
+    .attr('font-weight', d => d.data.type === 'center' || d.children ? 800 : 600)
+    .attr('fill','var(--text)')
+    .style('paint-order','stroke')
+    .style('stroke','var(--surface)')
+    .style('stroke-width','3px')
+    .style('cursor','pointer')
+    .text(d => String(d.data.name || '').slice(0, 34))
+    .on('click', (event, d) => renderPatentTreeDetail(d.data));
+
+  svg.append('g')
+    .attr('transform', `translate(${-width/2 + 18},${height/2 - 58})`)
+    .selectAll('text')
+    .data([['已收錄', '#2d8c5a'], ['缺口/待補', '#c0392b'], ['核心', '#e86c3a']])
+    .join('text')
+    .attr('x', 0)
+    .attr('y', (d,i) => i * 18)
+    .attr('font-size', 11)
+    .attr('fill', d => d[1])
+    .text(d => `● ${d[0]}`);
+}
+
 const ROUTE_DEFS = [
   { id:'R_UVBP', label:'UV-BP Route', color:'#e86c3a',
     risk:'高', riskColor:'#e74c3c', phase:'Phase 2-3 ⚠️ 迴避',
@@ -5545,7 +5878,7 @@ function renderReviewResult(r) {
 
     ${r.bioteque_strategic_value?`
     <div style="background:#eaf5ef;border-left:3px solid var(--accent2);padding:8px 10px;border-radius:0 6px 6px 0;font-size:11px">
-      <div style="font-weight:700;color:var(--accent2);margin-bottom:3px">🎯 Bioteque 策略意義</div>
+      <div style="font-weight:700;color:var(--accent2);margin-bottom:3px">🎯 本專案 策略意義</div>
       <div style="color:var(--text)">${r.bioteque_strategic_value}</div>
     </div>`:''}
   </div>`;
@@ -5594,7 +5927,7 @@ function exportExcel() {
       '抗汙/抗結垢':res.antifouling||res.encrustation_reduction||'—',
       '抗菌':res.antimicrobial||'—',
       '可信度':`${ex.credibility||'—'} ${ex.credibility_reason||''}`.trim(),
-      '對Bioteque建議':(r.bioteque_relevance||r.actionable_insights?.[0]||'—'),
+      '對本專案建議':(r.bioteque_relevance||r.actionable_insights?.[0]||'—'),
       '注意事項':(r.red_flags||[]).join('；')||'—',
     };
   });
@@ -5621,7 +5954,7 @@ function exportExcel() {
       '抗菌':res.antimicrobial||'—',
       'COF':res.friction||'—',
       'WCA':res.wca||'—',
-      '對Bioteque建議':r.bioteque_relevance||'—',
+      '對本專案建議':r.bioteque_relevance||'—',
     };
   });
   const ws3 = XLSX.utils.json_to_sheet(encrust);
@@ -5638,7 +5971,7 @@ function exportExcel() {
       '固化方式':proc.curing||'—',
       'COF':res.friction||'—','附著力':res.adhesion||'—','WCA':res.wca||'—',
       'TPU優勢':r.tpu_advantages||'—','TPU挑戰':r.tpu_challenges||'—',
-      '對Bioteque建議':r.bioteque_relevance||'—',
+      '對本專案建議':r.bioteque_relevance||'—',
     };
   });
   const ws4 = XLSX.utils.json_to_sheet(tpu);
@@ -5763,7 +6096,7 @@ let currentPatentIdx = null;
 const PATENT_MODES = {
   full: {
     label: '① 完整分析',
-    desc: 'Claims 迴避 + Examples 萃取 + 可信度 + Bioteque 建議',
+    desc: 'Claims 迴避 + Examples 萃取 + 可信度 + 本專案 建議',
     cost: 'NT$0.3',
     icon: '📊'
   },
@@ -5781,7 +6114,7 @@ const PATENT_MODES = {
   },
   feasibility: {
     label: '④ 可行性評估',
-    desc: '對照 Bioteque 現有設備能力，哪些能做？差什麼？',
+    desc: '對照 本專案 現有設備能力，哪些能做？差什麼？',
     cost: 'NT$0.15',
     icon: '🏭'
   },
@@ -5885,7 +6218,7 @@ function showPaperAnalysis(i) {
   mc.innerHTML = `
     ${prevHtml}
     <div style="font-size:13px;color:var(--muted);margin-bottom:12px">
-      AI 技術分析：提取配方、製程、性能數據、可信度評估、與 Bioteque 的關聯
+      AI 技術分析：提取配方、製程、性能數據、可信度評估、與 本專案 的關聯
     </div>
     <div style="margin-bottom:12px">
       <label style="font-size:12px;font-weight:600;color:var(--muted)">分析資料來源</label>
@@ -5935,7 +6268,7 @@ async function runPaperAnalysis(i) {
         system:'你是醫材親水塗層技術分析專家。回傳精簡的純JSON，不含markdown fence。繁體中文。沒有的欄位不要填空字串，直接省略。',
         messages:[{role:'user',content:`分析以下文獻的技術內容，提取可用於內部 R&D 的情報。
 
-Bioteque 現有能力：TPU/Pebax 基材、air plasma 前處理、LED UV 固化(365/405nm)、dip coating、Harland FTS 摩擦測試儀、Irgacure 2959、benzophenone、PVP K90、PEGDA。
+本專案 現有能力：TPU/Pebax 基材、air plasma 前處理、LED UV 固化(365/405nm)、dip coating、Harland FTS 摩擦測試儀、Irgacure 2959、benzophenone、PVP K90、PEGDA。
 
 文獻：${p.title}
 標籤：${(p.tags||[]).join(', ')}
@@ -5963,7 +6296,7 @@ ${text.slice(0,3000)}
   "actionable_insights":["可直接借鏡的3個做法"],
   "red_flags":["需注意的限制或疑點"],
   "vs_database":"與資料庫其他文獻比較",
-  "bioteque_relevance":"對Bioteque的具體建議和可行性評估"
+  "bioteque_relevance":"對本專案的具體建議和可行性評估"
 }`}]})
     });
     const data = await r.json();
@@ -6172,7 +6505,7 @@ async function doPatentAnalysis(i, p, text, mode='full') {
 相關專利：${relatedPatents||'無'}
 內容：${text.slice(0,3000)}
 
-回傳純JSON：{"summary":"一句話白話","examples":[{"name":"","is_real":true,"credibility":"高/中/低","credibility_reason":"","substrate":"","formulation":{"primer":"","topcoat":""},"process":{"surface_prep":"","coating_method":"","drying":"","curing":""},"results":{"friction":"","adhesion":"","wca":"","durability":"","other":""}}],"key_claims":["白話claim"],"actionable_insights":["可借鏡做法"],"red_flags":["可疑部分"],"vs_database":"與其他專利比對","bioteque_relevance":"對Bioteque的建議"}`,
+回傳純JSON：{"summary":"一句話白話","examples":[{"name":"","is_real":true,"credibility":"高/中/低","credibility_reason":"","substrate":"","formulation":{"primer":"","topcoat":""},"process":{"surface_prep":"","coating_method":"","drying":"","curing":""},"results":{"friction":"","adhesion":"","wca":"","durability":"","other":""}}],"key_claims":["白話claim"],"actionable_insights":["可借鏡做法"],"red_flags":["可疑部分"],"vs_database":"與其他專利比對","bioteque_relevance":"對本專案的建議"}`,
 
     avoidance: `你是醫材專利迴避設計專家。聚焦 Claims 分析。
 專利：${p.title}
@@ -6184,17 +6517,17 @@ async function doPatentAnalysis(i, p, text, mode='full') {
 3. 針對每個要素提出迴避方案（替代材料/替代製程/修改結構）
 4. 評估迴避難度（容易/中等/困難）
 
-回傳純JSON：{"summary":"這個專利保護什麼","claims":[{"number":1,"type":"獨立項/附屬項","white_text":"白話翻譯","elements":["技術要素1","技術要素2"],"avoidance":[{"element":"要素","strategy":"迴避方案","difficulty":"容易/中等/困難","note":"補充"}]}],"overall_risk":"對Bioteque的整體風險評估","safe_space":"可安全操作的技術空間"}`,
+回傳純JSON：{"summary":"這個專利保護什麼","claims":[{"number":1,"type":"獨立項/附屬項","white_text":"白話翻譯","elements":["技術要素1","技術要素2"],"avoidance":[{"element":"要素","strategy":"迴避方案","difficulty":"容易/中等/困難","note":"補充"}]}],"overall_risk":"對本專案的整體風險評估","safe_space":"可安全操作的技術空間"}`,
 
     formulation: `你是醫材塗層配方萃取專家。只關注 Examples 中的具體配方和數據。
 專利：${p.title}
 內容：${text.slice(0,3000)}
 
 任務：提取每個實施例的精確配方（忽略所有法律語言和泛泛描述）。
-回傳純JSON：{"summary":"配方核心概念","examples":[{"name":"","is_real":true,"credibility":"高/中/低","credibility_reason":"","substrate":"基材+規格","primer":{"materials":"材料+牌號","concentration":"濃度wt%","solvent":"溶劑+比例","photoinitiator":"光起始劑+濃度"},"topcoat":{"materials":"","concentration":"","solvent":"","crosslinker":"交聯劑"},"process":{"dip_speed":"mm/s","dip_time":"s","dry_temp":"°C","dry_time":"min","uv_intensity":"mW/cm²","uv_time":"s","uv_wavelength":"nm"},"results":{"friction_force":"gf","friction_method":"Harland FTS等","adhesion_grade":"","wca_before":"°","wca_after":"°","durability_cycles":"","thickness_um":""}}],"key_ratios":"關鍵比例關係（如PVP:溶劑、光起始劑:單體）","reproducibility":"以Bioteque設備可複製性評估"}`,
+回傳純JSON：{"summary":"配方核心概念","examples":[{"name":"","is_real":true,"credibility":"高/中/低","credibility_reason":"","substrate":"基材+規格","primer":{"materials":"材料+牌號","concentration":"濃度wt%","solvent":"溶劑+比例","photoinitiator":"光起始劑+濃度"},"topcoat":{"materials":"","concentration":"","solvent":"","crosslinker":"交聯劑"},"process":{"dip_speed":"mm/s","dip_time":"s","dry_temp":"°C","dry_time":"min","uv_intensity":"mW/cm²","uv_time":"s","uv_wavelength":"nm"},"results":{"friction_force":"gf","friction_method":"Harland FTS等","adhesion_grade":"","wca_before":"°","wca_after":"°","durability_cycles":"","thickness_um":""}}],"key_ratios":"關鍵比例關係（如PVP:溶劑、光起始劑:單體）","reproducibility":"以本專案設備可複製性評估"}`,
 
     feasibility: `你是醫材製程可行性評估專家。
-Bioteque 現有能力：
+本專案 現有能力：
 - 基材：TPU (XXX TPU)、Pebax、PVC、nylon
 - 前處理：air plasma（大氣壓）
 - 塗覆：dip coating（手動/半自動）
@@ -6205,7 +6538,7 @@ Bioteque 現有能力：
 專利：${p.title}
 內容：${text.slice(0,3000)}
 
-回傳純JSON：{"summary":"與Bioteque能力的匹配度","match_score":"0-10（10=完全可複製）","can_do":[{"item":"可直接做的部分","how":"怎麼做"}],"need_buy":[{"item":"需採購的設備/材料","estimated_cost":"概估","source":"供應商"}],"cannot_do":[{"item":"做不到的部分","reason":"原因","alternative":"替代方案"}],"implementation_plan":"建議的實施步驟（1-2-3）","timeline":"預估時程"}`,
+回傳純JSON：{"summary":"與本專案能力的匹配度","match_score":"0-10（10=完全可複製）","can_do":[{"item":"可直接做的部分","how":"怎麼做"}],"need_buy":[{"item":"需採購的設備/材料","estimated_cost":"概估","source":"供應商"}],"cannot_do":[{"item":"做不到的部分","reason":"原因","alternative":"替代方案"}],"implementation_plan":"建議的實施步驟（1-2-3）","timeline":"預估時程"}`,
 
     compare: `你是醫材專利比較分析專家。
 目標專利：${p.title}
@@ -6307,7 +6640,7 @@ function renderAgentReadingResult(r) {
       {key:'test', label:'測試'},
       {key:'metric', label:'指標'},
       {key:'reported_result', label:'文中結果'},
-      {key:'bioteque_target', label:'Bioteque 目標'}
+      {key:'bioteque_target', label:'本專案 目標'}
     ], r.performance_tests), 'var(--accent)') : ''}
     ${block('材料 / 表面 / 製程 / 測試', `
       <table class="patent-table" style="margin-top:6px">
@@ -6322,7 +6655,7 @@ function renderAgentReadingResult(r) {
       <div style="margin-top:6px"><b>供應商</b>${list(exp.suppliers)}</div>
       <div style="margin-top:6px"><b>步驟</b>${list(exp.steps)}</div>
       <div style="margin-top:6px"><b>驗收測試</b>${list(exp.acceptance_tests)}</div>`, 'var(--accent2)')}
-    ${r.bioteque_relevance ? block('Bioteque 意義', `<div style="margin-top:4px">${escHtml(r.bioteque_relevance)}</div>`, 'var(--accent)') : ''}
+    ${r.bioteque_relevance ? block('本專案 意義', `<div style="margin-top:4px">${escHtml(r.bioteque_relevance)}</div>`, 'var(--accent)') : ''}
     ${r.design_around ? block('迴避設計', table([
       {key:'risk_element', label:'風險元素'},
       {key:'avoidance_strategy', label:'迴避策略'},
@@ -6413,10 +6746,10 @@ function renderPatentResult(a) {
       <strong style="color:var(--warn)">🔄 與資料庫比對</strong><br>${a.vs_database}</div>`;
   }
 
-  // Bioteque 建議
+  // 本專案 建議
   if(a.bioteque_relevance) {
     html += `<div style="margin-top:8px;padding:8px 10px;background:var(--card);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;font-size:12px">
-      <strong style="color:var(--accent)">🏭 對 Bioteque 的建議</strong><br>${a.bioteque_relevance}</div>`;
+      <strong style="color:var(--accent)">🏭 對 本專案 的建議</strong><br>${a.bioteque_relevance}</div>`;
   }
 
   // ── 新欄位：專利核心 / 迴避設計 ──

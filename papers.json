@@ -219,7 +219,7 @@
             "功能層用 Norrish II (benzophenone) H抽取交聯 PVP+polyelectrolyte"
           ],
           "actionable_insights": [
-            "Harland FTS 測試條件(22°C/35%RH/20g閾值)可作為 Bioteque 標準 SOP",
+            "Harland FTS 測試條件(22°C/35%RH/20g閾值)可作為 本專案 標準 SOP",
             "雙光起始劑策略概念可借鏡但具體組合需迴避",
             "PAA 鈉鹽延長 dry-out time 的效果值得測試"
           ],
@@ -228,7 +228,7 @@
             "需確認專利有效期與市場範圍",
             "UV 劑量過高會造成 PVP 光氧化降解（R3）"
           ],
-          "vs_database": "P01 是 DSM 家族專利的核心，P02(EP1957130B1)和 P03 是同家族的延伸。P06(US5160790)的 isocyanate 路線是完全不同的技術路徑，已過期可自由使用。Bioteque 的 UV+benzophenone 路線不侵權，因為 P01 claim 綁定在 polyether primer 上",
+          "vs_database": "P01 是 DSM 家族專利的核心，P02(EP1957130B1)和 P03 是同家族的延伸。P06(US5160790)的 isocyanate 路線是完全不同的技術路徑，已過期可自由使用。本專案 的 UV+benzophenone 路線不侵權，因為 P01 claim 綁定在 polyether primer 上",
           "bioteque_relevance": "需迴避 P01 核心 claim（BP + PVP UV 組合）。以 I-2959 Type I 路線（Phase 1-2 起點）作為設計迴避方案。P01 的 isocyanate 底塗概念可參考，但需確認 claim 邊界。",
           "evidence_level": "high",
           "source_quality": "abstract",
@@ -509,16 +509,16 @@
             "Benzophenone 作為 Norrish II 型交聯劑"
           ],
           "actionable_insights": [
-            "Dry-out time 概念：塗層離水後多久還滑，是臨床重要指標，Bioteque 應建立此測試",
+            "Dry-out time 概念：塗層離水後多久還滑，是臨床重要指標，本專案 應建立此測試",
             "Polyelectrolyte 保水機制（離子水合）可在2027年專利到期後使用",
-            "Pebax 基材已驗證可行，Bioteque Pebax 產線可參考"
+            "Pebax 基材已驗證可行，本專案 Pebax 產線可參考"
           ],
           "red_flags": [
             "P01-P03 族群保護範圍廣，是業界最強的親水塗層 IP",
             "直接模仿 DSM 商業配方有極高侵權風險"
           ],
           "vs_database": "P03 是 P01 面塗的獨立專利。P01 保護雙層結構，P03 保護面塗配方（PVP+polyelectrolyte）。兩者搭配形成 DSM 的專利壁壘。重要：P03 2026/12/11 到期，屆時 polyelectrolyte 技術可自由使用",
-          "bioteque_relevance": "P01-P03 是 Bioteque 最需要完整迴避的 DSM 族群。建議委託專利律師做完整 FTO 後，以 I-2959+PDA 路線作為整體迴避方案。",
+          "bioteque_relevance": "P01-P03 是 本專案 最需要完整迴避的 DSM 族群。建議委託專利律師做完整 FTO 後，以 I-2959+PDA 路線作為整體迴避方案。",
           "evidence_level": "medium",
           "source_quality": "abstract",
           "key_findings": [
@@ -648,7 +648,7 @@
             "PVP 被 polyurethane 網絡物理纏繞固定"
           ],
           "actionable_insights": [
-            "已過期專利，配方可直接使用作為 Bioteque 備援路線",
+            "已過期專利，配方可直接使用作為 本專案 備援路線",
             "耐久性測試方法(20次搓揉+10次乾濕循環+10天浸泡)可納入驗證SOP",
             "pot life 28天是配方穩定性的基準"
           ],
@@ -790,14 +790,14 @@
             "HDI trimer + TMPTA 是 DSM P08 底塗核心"
           ],
           "actionable_insights": [
-            "P08提供完整底塗配方比例，直接可作Bioteque試製起點",
+            "P08提供完整底塗配方比例，直接可作本專案試製起點",
             "PVA面塗免UV設備，適合快速原型"
           ],
           "red_flags": [
             "HDI trimer + TMPTA + BP 底塗組合可能在有效 IP 範圍內",
             "TMPTA 是 DSM 常用交聯劑，P01/P03 也有使用，需整體 FTO 評估"
           ],
-          "bioteque_relevance": "PVA 頂塗的製程簡化概念值得參考。建議以 PDA+I-2959 路線取代 HDI/TMPTA/BP 體系。球囊導管塗層是 Bioteque 潛在產品線之一。",
+          "bioteque_relevance": "PVA 頂塗的製程簡化概念值得參考。建議以 PDA+I-2959 路線取代 HDI/TMPTA/BP 體系。球囊導管塗層是 本專案 潛在產品線之一。",
           "evidence_level": "high",
           "source_quality": "abstract",
           "coating_technology": {
@@ -926,17 +926,17 @@
           "actionable_insights": [
             "Esacure KIP 150是你剛討論的高分子型光起始劑！此專利證實KIP 150用於醫材PVP塗層的可行性",
             "雙層不同交聯度策略：底塗高交聯(耐磨)+面塗低交聯(高潤滑)→解決潤滑vs耐磨矛盾",
-            "0.02N摩擦力是極低的基準值，可作為Bioteque目標",
+            "0.02N摩擦力是極低的基準值，可作為本專案目標",
             "Coloplast另一專利US10850009有50次往返磨耗數據：PEGDA Mn250-700在50次後COF維持低位，Mn≥1000開始劣化",
-            "PEGDA分子量是耐磨關鍵：Mn越小→交聯密度越高→耐磨越好。Bioteque的SR344(Mn508)/SR610(Mn508-742)落在甜蜜區",
-            "Coloplast US10850009B2 耐磨測試：50次往返磨耗（25 back-and-forth through silicone孔）。PEGDA Mn250-700維持低COF，Mn≥1000劣化。Bioteque用SR344(Mn508)/SR610(Mn508-742)剛好在甜蜜區"
+            "PEGDA分子量是耐磨關鍵：Mn越小→交聯密度越高→耐磨越好。本專案的SR344(Mn508)/SR610(Mn508-742)落在甜蜜區",
+            "Coloplast US10850009B2 耐磨測試：50次往返磨耗（25 back-and-forth through silicone孔）。PEGDA Mn250-700維持低COF，Mn≥1000劣化。本專案用SR344(Mn508)/SR610(Mn508-742)剛好在甜蜜區"
           ],
           "red_flags": [
             "PVP UV 塗層的輻照降解風險需獨立評估",
             "E-beam vs Gamma 對塗層影響不同，需分別測試"
           ],
           "vs_database": "與P01(DSM)比：P12用PVP自交聯（KIP 150 Type I），P01用benzophenone H抽取（Type II），技術路徑不同。P12的0.02N COF比P01的≤20g更優。P12的雙層不同交聯度策略是獨特貢獻",
-          "bioteque_relevance": "若 Bioteque 未來開發即用型產品，耐輻照滅菌是必要設計要求。建議在 Phase 2 完成後加入滅菌耐受性驗證實驗。",
+          "bioteque_relevance": "若 本專案 未來開發即用型產品，耐輻照滅菌是必要設計要求。建議在 Phase 2 完成後加入滅菌耐受性驗證實驗。",
           "evidence_level": "medium",
           "source_quality": "abstract",
           "key_findings": [
@@ -1209,7 +1209,7 @@
           ],
           "actionable_insights": [
             "KIP150作光起始劑比I-2959水溶性更好",
-            "20mm/s dip速度可作Bioteque製程基準",
+            "20mm/s dip速度可作本專案製程基準",
             "熱固版本適合不耐UV照射的基材"
           ],
           "red_flags": [
@@ -1282,7 +1282,7 @@
             "適用 balloon 導管和一般導管"
           ],
           "actionable_insights": [
-            "若Bioteque無UV設備，P15熱固方案可先導入",
+            "若本專案無UV設備，P15熱固方案可先導入",
             "PVP乾燥步驟必須加入SOP"
           ],
           "red_flags": [
@@ -1415,7 +1415,7 @@
             "non-adhesion（抗包裝黏著）特性"
           ],
           "actionable_insights": [
-            "Touchless layer概念：UV silicone外膜在包裝時防止塗層黏著包材，使用時推開→可解決Bioteque塗層黏包裝的問題*",
+            "Touchless layer概念：UV silicone外膜在包裝時防止塗層黏著包材，使用時推開→可解決本專案塗層黏包裝的問題*",
             "PAA+PEG配方是PVP路線的替代方案",
             "glycerin作為保濕劑延長dry-out"
           ],
@@ -1555,7 +1555,7 @@
             "適用即用型導管包裝設計"
           ],
           "actionable_insights": [
-            "Bioteque若用hydrogel塗層，P24的疏水保護層概念可直接應用到包裝設計",
+            "本專案若用hydrogel塗層，P24的疏水保護層概念可直接應用到包裝設計",
             "延長shelf life，減少保濕包裝需求"
           ],
           "red_flags": [
@@ -1604,7 +1604,7 @@
               "包裝供應商"
             ],
             "steps": [
-              "評估 Bioteque 的包裝保存策略（乾燥包裝 vs 水化包裝）",
+              "評估 本專案 的包裝保存策略（乾燥包裝 vs 水化包裝）",
               "加速老化測試（40°C/75% RH，6 個月等效）"
             ],
             "acceptance_tests": [
@@ -1681,14 +1681,14 @@
             "適合超音波引導活檢"
           ],
           "actionable_insights": [
-            "Bioteque活檢針若要進超音波引導市場，P25是直接參考",
+            "本專案活檢針若要進超音波引導市場，P25是直接參考",
             "echogenic層可用現有微粒（PMMA/尼龍粒）達成*"
           ],
           "red_flags": [
             "微粒脫落風險需驗證",
             "超音波頻率與粒徑匹配需優化*"
           ],
-          "bioteque_relevance": "Bioteque活檢針高階版本可加入echogenic功能提升競爭差異化"
+          "bioteque_relevance": "本專案活檢針高階版本可加入echogenic功能提升競爭差異化"
         }
       }
     },
@@ -1751,7 +1751,7 @@
             "水/水-醇溶劑系統（無有機溶劑），Mw 20,000~800,000"
           ],
           "actionable_insights": [
-            "Bioteque用外加benzophenone+PVP/PEGDA完全不侵權（非共聚合）",
+            "本專案用外加benzophenone+PVP/PEGDA完全不侵權（非共聚合）",
             "水/醇溶劑系統可參考，降低DMAc殘留風險",
             "滅菌後性能測試應納入Phase 2驗證（gamma/e-beam/EtO）"
           ],
@@ -1759,8 +1759,8 @@
             "US12037560B2 為近年新專利，保護期長（至 2040+ 年）",
             "PAA 的低 pH 可能影響長期生物相容性"
           ],
-          "vs_database": "此專利是C01(Biocoat HYDAK)的核心UV面塗技術。與P01(DSM)比：DSM用外加benzophenone做H抽取，Biocoat用共聚合benzophenone做原位交聯，技術路徑不同。與P06(Hydromer)比：完全不同世代，P06是isocyanate熱固化。Bioteque的技術路線（外加benzophenone+PVP）與此專利不衝突",
-          "bioteque_relevance": "若 Bioteque 開發心血管血液接觸導管，PAA 路線是競爭 IP，MPC 或 SBMA 路線是較安全的替代方向。短期（泌尿科為主）影響較小。",
+          "vs_database": "此專利是C01(Biocoat HYDAK)的核心UV面塗技術。與P01(DSM)比：DSM用外加benzophenone做H抽取，Biocoat用共聚合benzophenone做原位交聯，技術路徑不同。與P06(Hydromer)比：完全不同世代，P06是isocyanate熱固化。本專案的技術路線（外加benzophenone+PVP）與此專利不衝突",
+          "bioteque_relevance": "若 本專案 開發心血管血液接觸導管，PAA 路線是競爭 IP，MPC 或 SBMA 路線是較安全的替代方向。短期（泌尿科為主）影響較小。",
           "evidence_level": "medium",
           "source_quality": "abstract",
           "key_findings": [
@@ -1902,14 +1902,14 @@
             "廣泛OEM合作"
           ],
           "actionable_insights": [
-            "Biocoat直接提供代工塗層服務，Bioteque可評估OEM",
+            "Biocoat直接提供代工塗層服務，本專案可評估OEM",
             "HYDAK技術細節保密，若需自製需參考其他文獻"
           ],
           "red_flags": [
             "配方保密無法複製*",
             "OEM成本需談判*"
           ],
-          "bioteque_relevance": "若Bioteque短期需商業化，Biocoat OEM是最快路線；長期自製參考A2/A4配方"
+          "bioteque_relevance": "若本專案短期需商業化，Biocoat OEM是最快路線；長期自製參考A2/A4配方"
         },
         "commercial": {
           "company": "Biocoat",
@@ -1954,7 +1954,7 @@
           "weakness": "配方保密，客戶依賴性高；規模小於 DSM/Surmodics",
           "pricing_tier": "中等（OEM 服務費 $0.5-2/件*）",
           "competitive_threat_to_bioteque": "低（非台灣市場主力）",
-          "collaboration_opportunity": "可評估作為 Bioteque 初期 OEM 驗證夥伴"
+          "collaboration_opportunity": "可評估作為 本專案 初期 OEM 驗證夥伴"
         }
       }
     },
@@ -2020,14 +2020,14 @@
             "UV-B/UV-C均可，視內腔幾何選擇"
           ],
           "actionable_insights": [
-            "Bioteque若選OEM，Freudenberg是Biocoat/Surmodics外的第三選擇",
-            "單步製程可評估用於Bioteque生產線"
+            "本專案若選OEM，Freudenberg是Biocoat/Surmodics外的第三選擇",
+            "單步製程可評估用於本專案生產線"
           ],
           "red_flags": [
             "客製化配方保密*",
             "OEM費用需洽詢"
           ],
-          "bioteque_relevance": "Freudenberg OEM是備選方案；單步製程概念值得Bioteque自製時參考"
+          "bioteque_relevance": "Freudenberg OEM是備選方案；單步製程概念值得本專案自製時參考"
         },
         "commercial": {
           "company": "Freudenberg Medical",
@@ -2071,7 +2071,7 @@
           "differentiator": "單步塗覆（節省製程）；管腔內壁 UV-B/UV-C 固化技術；CDMO 整合（塗層+組裝一條龍）",
           "weakness": "配方完全不透明；CDMO 模式綁定深",
           "pricing_tier": "高（完整 CDMO 服務）",
-          "competitive_threat_to_bioteque": "中（若 Bioteque 進歐洲市場）",
+          "competitive_threat_to_bioteque": "中（若 本專案 進歐洲市場）",
           "collaboration_opportunity": "管腔內壁塗層技術可向 Freudenberg 學習，或評估技術授權*"
         }
       }
@@ -2144,14 +2144,14 @@
             "臨床已驗證"
           ],
           "actionable_insights": [
-            "Serene是Bioteque輸尿管支架塗層的競爭對標",
+            "Serene是本專案輸尿管支架塗層的競爭對標",
             "SBMA合成路線可參考G03/G07"
           ],
           "red_flags": [
             "SBMA合成複雜，OEM費用高*",
             "Surmodics專利布局廣，需迴避設計*"
           ],
-          "bioteque_relevance": "Serene是直接競爭對手技術；Bioteque若要進入輸尿管支架市場，必須對標此產品"
+          "bioteque_relevance": "Serene是直接競爭對手技術；本專案若要進入輸尿管支架市場，必須對標此產品"
         },
         "commercial": {
           "company": "Surmodics",
@@ -2264,7 +2264,7 @@
             "可客製抗菌/抗血栓複合塗層"
           ],
           "actionable_insights": [
-            "Bioteque初期可採購Hydromer配方快速驗證",
+            "本專案初期可採購Hydromer配方快速驗證",
             "Hydromer的法規服務可加速510(k)"
           ],
           "red_flags": [
@@ -2388,7 +2388,7 @@
             "PUA 的生物相容性評估（ISO 10993）",
             "PUA 配方多樣，需選擇醫材級別產品"
           ],
-          "bioteque_relevance": "A1 的 PUA semi-IPN 概念直接可用，無 IP 限制。若 Bioteque 需處理 TPU/Nitinol 導線基材，PUA 過渡層是重要的附著解決方案。",
+          "bioteque_relevance": "A1 的 PUA semi-IPN 概念直接可用，無 IP 限制。若 本專案 需處理 TPU/Nitinol 導線基材，PUA 過渡層是重要的附著解決方案。",
           "evidence_level": "high",
           "source_quality": "abstract",
           "key_findings": [
@@ -2449,7 +2449,7 @@
             ]
           },
           "next_actions": [
-            "評估 Bioteque 是否需要處理 Nitinol 基材（導線產品線）",
+            "評估 本專案 是否需要處理 Nitinol 基材（導線產品線）",
             "若需要，採購 PUA 進行附著比較實驗"
           ],
           "citations_needed": [
@@ -2528,7 +2528,7 @@
             "PDA 批次一致性需標準化控制（pH、時間、溫度）",
             "PEG 分子量選擇影響潤滑性與附著力平衡"
           ],
-          "bioteque_relevance": "A2 是 Bioteque Phase 1-2 路線的直接參考配方，WCA 7.4° 和 Grade 0 附著的量化數據是設計目標基準。PDA 底塗製程可直接轉移。",
+          "bioteque_relevance": "A2 是 本專案 Phase 1-2 路線的直接參考配方，WCA 7.4° 和 Grade 0 附著的量化數據是設計目標基準。PDA 底塗製程可直接轉移。",
           "evidence_level": "high",
           "source_quality": "abstract",
           "key_findings": [
@@ -2591,7 +2591,7 @@
             ]
           },
           "next_actions": [
-            "以 A2 配方為 Phase 1-2 起點，建立 Bioteque SOP",
+            "以 A2 配方為 Phase 1-2 起點，建立 本專案 SOP",
             "確認 dopamine HCl 採購規格（醫材級別）"
           ],
           "citations_needed": [
@@ -2670,7 +2670,7 @@
             "PVA 的水解度影響親水性（87-89% 是常用醫材規格）",
             "正交設計需足夠樣本量（至少 L9 = 9 組）"
           ],
-          "bioteque_relevance": "A3 的正交設計方法論是 Phase 2 配方優化的標準工具，可直接採用。PVA 加入的耐磨效果需在 Bioteque TPU 基材上驗證。",
+          "bioteque_relevance": "A3 的正交設計方法論是 Phase 2 配方優化的標準工具，可直接採用。PVA 加入的耐磨效果需在 本專案 TPU 基材上驗證。",
           "evidence_level": "high",
           "source_quality": "abstract",
           "key_findings": [
@@ -2799,13 +2799,13 @@
             "插入力降低直接減少術後疼痛*"
           ],
           "actionable_insights": [
-            "Bioteque穿刺針/活檢針需建立插入力測試（類FEM）",
+            "本專案穿刺針/活檢針需建立插入力測試（類FEM）",
             "ISO 11135/ASTM F2132可參考"
           ],
           "red_flags": [
             "FEM假設理想材料，實際組織差異大*"
           ],
-          "bioteque_relevance": "Bioteque活檢針性能測試設計依據；插入力是比COF更直接的臨床指標"
+          "bioteque_relevance": "本專案活檢針性能測試設計依據；插入力是比COF更直接的臨床指標"
         }
       }
     },
@@ -2866,14 +2866,14 @@
           ],
           "actionable_insights": [
             "B2與P25概念互補：一用微粒一用起泡劑",
-            "Bioteque若開發超音波引導針，兩種方案都應評估"
+            "本專案若開發超音波引導針，兩種方案都應評估"
           ],
           "red_flags": [
             "起泡劑釋放量不穩定*",
             "氣泡大小控制困難*",
             "in vivo尚未驗證"
           ],
-          "bioteque_relevance": "Bioteque超音波可視化針的備選技術，比P25的微粒方案更動態但更難控制"
+          "bioteque_relevance": "本專案超音波可視化針的備選技術，比P25的微粒方案更動態但更難控制"
         }
       }
     },
@@ -2931,14 +2931,14 @@
             "LAP（Lithium Phenyl Phosphinate）可見光固化新選擇"
           ],
           "actionable_insights": [
-            "Bioteque UV固化PI選擇：I-2959（安全）> KIP150（效率）> BP（接枝）",
+            "本專案 UV固化PI選擇：I-2959（安全）> KIP150（效率）> BP（接枝）",
             "可見光固化（LAP）未來方向，對TPU基材更溫和*"
           ],
           "red_flags": [
             "PI殘留必須<0.1%（ISO 10993-17）",
             "BP難溶於水，需ethanol助溶（TPU表面相容性需測試）"
           ],
-          "bioteque_relevance": "Bioteque配方設計選PI的直接依據；建議先用I-2959，需要接枝效果時加BP"
+          "bioteque_relevance": "本專案配方設計選PI的直接依據；建議先用I-2959，需要接枝效果時加BP"
         },
         "review": {
           "scope": "水溶性光起始劑在生醫應用的系統性回顧，2010-2020，涵蓋 Type I/II 機制、毒性評估、生醫合規",
@@ -2991,7 +2991,7 @@
             "visible_light": "LAP（細胞相容，未來首選）",
             "high_efficiency": "KIP150（效率>I-2959，法規風險較高*）"
           },
-          "bioteque_strategic_value": "配方設計關鍵決策：Bioteque Phase 1-2 選 I-2959（低風險），需要共價接枝時加 BP；長期應培養 LAP 供應鏈。PI 殘留量需納入 QC 規格（建議<0.1%）。"
+          "bioteque_strategic_value": "配方設計關鍵決策：本專案 Phase 1-2 選 I-2959（低風險），需要共價接枝時加 BP；長期應培養 LAP 供應鏈。PI 殘留量需納入 QC 規格（建議<0.1%）。"
         }
       }
     },
@@ -3063,7 +3063,7 @@
             "UV穿透深度限制複雜形狀"
           ],
           "vs_database": "支持A1/A2/A4的UV固化路線",
-          "bioteque_relevance": "Bioteque建立UV固化線的法規依據參考，重點：光起始劑選擇與殘留量測試"
+          "bioteque_relevance": "本專案建立UV固化線的法規依據參考，重點：光起始劑選擇與殘留量測試"
         },
         "review": {
           "scope": "UV 固化在醫材塗層的全面綜述，2015-2025，涵蓋 PEG/PVP/chitosan 光固化化學、設備、法規",
@@ -3120,7 +3120,7 @@
             "antimicrobial": "chitosan（抗菌加成）",
             "balance": "PVP+PEGDA 混合（DSM ComfortCoat 路線）"
           },
-          "bioteque_strategic_value": "Bioteque UV 製程 SOP 的設計依據：PVP+PEGDA 組合是性能/成本最佳平衡，UV 設備選型需支援管腔均勻照射，建議採購 Harland PCX 系列。"
+          "bioteque_strategic_value": "本專案 UV 製程 SOP 的設計依據：PVP+PEGDA 組合是性能/成本最佳平衡，UV 設備選型需支援管腔均勻照射，建議採購 Harland PCX 系列。"
         }
       }
     },
@@ -3180,7 +3180,7 @@
             "最佳UV dose需實驗確定"
           ],
           "actionable_insights": [
-            "Bioteque UV製程需驗證最佳UV劑量範圍",
+            "本專案 UV製程需驗證最佳UV劑量範圍",
             "建議N2或Ar保護氣氛下UV照射（若可能）",
             "QC需包含UV照射後的COF和WCA監控"
           ],
@@ -3188,7 +3188,7 @@
             "UV劑量過量是常見製程失敗原因",
             "不同UV燈強度/距離需重新驗證"
           ],
-          "bioteque_relevance": "Bioteque UV製程SOP關鍵控制點：UV劑量監控是必要QC項目"
+          "bioteque_relevance": "本專案 UV製程SOP關鍵控制點：UV劑量監控是必要QC項目"
         }
       }
     },
@@ -3245,14 +3245,14 @@
             "HDDA收縮大但常被過度使用"
           ],
           "actionable_insights": [
-            "Bioteque底塗配方選低收縮oligomer（PEG-DA, TEGDA）",
+            "本專案底塗配方選低收縮oligomer（PEG-DA, TEGDA）",
             "TMPTA/HDDA比例需優化減少收縮"
           ],
           "red_flags": [
             "收縮率難在lab直接測量*",
             "模擬曲率基材上應力更複雜*"
           ],
-          "bioteque_relevance": "Bioteque UV底塗配方優化參考：優先低收縮oligomer，平衡交聯密度與附著"
+          "bioteque_relevance": "本專案 UV底塗配方優化參考：優先低收縮oligomer，平衡交聯密度與附著"
         }
       }
     },
@@ -3315,14 +3315,14 @@
             "固定溶菌酶是無毒抗菌策略"
           ],
           "actionable_insights": [
-            "若Bioteque要在塗層固定抗菌蛋白質，BP-UV方案無需化學修飾",
+            "若本專案要在塗層固定抗菌蛋白質，BP-UV方案無需化學修飾",
             "PVP+BP塗層後UV可同時完成交聯和蛋白質固定（單步）*"
           ],
           "red_flags": [
             "溶菌酶對Gram-（大腸桿菌）效果弱*",
             "電紡纖維與dip塗層製程不同，需重新優化"
           ],
-          "bioteque_relevance": "進階功能化選項：Bioteque若要在PVP塗層加入抗菌酶，BP-UV單步固定方案"
+          "bioteque_relevance": "進階功能化選項：本專案若要在PVP塗層加入抗菌酶，BP-UV單步固定方案"
         }
       }
     },
@@ -3378,14 +3378,14 @@
             "OEM外包趨勢明顯"
           ],
           "actionable_insights": [
-            "Bioteque進入泌尿科市場時機好（成長最快）",
+            "本專案進入泌尿科市場時機好（成長最快）",
             "OEM vs 自製：市場規模夠大，自製ROI可行"
           ],
           "red_flags": [
             "市場報告數字常被誇大*",
             "COVID後市場預測偏差大*"
           ],
-          "bioteque_relevance": "業務開發依據：泌尿科是高成長市場，Bioteque輸尿管支架/導尿管塗層策略正確"
+          "bioteque_relevance": "業務開發依據：泌尿科是高成長市場，本專案輸尿管支架/導尿管塗層策略正確"
         },
         "review": {
           "scope": "親水塗層全球市場分析報告（MarketsandMarkets），2022-2027，涵蓋廠商/終端/區域分析",
@@ -3428,7 +3428,7 @@
             "oem_partners": "DSM / Biocoat / Surmodics / Harland",
             "geography": "北美最大，亞太成長最快"
           },
-          "bioteque_strategic_value": "Bioteque 市場定位確認：進入泌尿科親水塗層市場時機最佳；估算 OEM vs 自製 ROI 的市場規模依據；目標客戶在亞太區（台灣製造 + 東南亞出口）。"
+          "bioteque_strategic_value": "本專案 市場定位確認：進入泌尿科親水塗層市場時機最佳；估算 OEM vs 自製 ROI 的市場規模依據；目標客戶在亞太區（台灣製造 + 東南亞出口）。"
         }
       }
     },
@@ -3491,14 +3491,14 @@
             "Hydromer/Surmodics/Biocoat核心仍有佈局"
           ],
           "actionable_insights": [
-            "Bioteque PVP路線專利風險低",
+            "本專案 PVP路線專利風險低",
             "SBMA路線需找迴避空間，參考G03/G07的光接枝方案"
           ],
           "red_flags": [
             "部分國家專利保護範圍不同*",
             "需委託專利律師確認*"
           ],
-          "bioteque_relevance": "直接指引Bioteque選擇低專利風險的技術路線；PVP+PDA組合風險最低"
+          "bioteque_relevance": "直接指引本專案選擇低專利風險的技術路線；PVP+PDA組合風險最低"
         },
         "review": {
           "scope": "親水塗層專利地圖（PatSnap）2026年版，涵蓋 PVP/SBMA/MPC/heparin 技術族群的有效專利分析",
@@ -3543,7 +3543,7 @@
             "freedom_to_operate": "UV固化PVP體系（DSM核心到期後可自由使用）",
             "avoid": "Surmodics SBMA photografting，Coloplast 間歇導尿管光接枝"
           },
-          "bioteque_strategic_value": "Bioteque 法務關鍵：在 SBMA 路線導入前必須做正式 FTO 分析；PVP+PDA 是目前最安全的起始配方；建議委託台灣專利律師確認 DSM 族群在台有效性。"
+          "bioteque_strategic_value": "本專案 法務關鍵：在 SBMA 路線導入前必須做正式 FTO 分析；PVP+PDA 是目前最安全的起始配方；建議委託台灣專利律師確認 DSM 族群在台有效性。"
         }
       }
     },
@@ -3608,8 +3608,8 @@
             "Surmodics SBMA 技術的性能輔助 IP"
           ],
           "actionable_insights": [
-            "Bioteque若用Harland設備，以20g為初始COF目標",
-            "Wetting fluid策略可用於Bioteque導管套裝包裝設計"
+            "本專案若用Harland設備，以20g為初始COF目標",
+            "Wetting fluid策略可用於本專案導管套裝包裝設計"
           ],
           "red_flags": [
             "Surmodics IP（L02 + P29）整體構成間歇導尿市場的強力 IP 護城河",
@@ -3737,14 +3737,14 @@
             "活檢針、穿刺針、trocar 應用"
           ],
           "actionable_insights": [
-            "Bioteque金屬活檢針塗層參考L04 silane primer方案",
+            "本專案金屬活檢針塗層參考L04 silane primer方案",
             "pHEMA含水量可調（調整HEMA/EGDMA比例）"
           ],
           "red_flags": [
             "金屬基材的矽烷前處理 claim 邊界需確認",
             "pHEMA 顆粒脫落風險（含水率高的水凝膠）"
           ],
-          "bioteque_relevance": "若 Bioteque 擴展至穿刺針/活檢針市場，L04 的矽烷金屬前處理知識有參考價值，但以 PDA 替代可迴避。短期不在優先路線。",
+          "bioteque_relevance": "若 本專案 擴展至穿刺針/活檢針市場，L04 的矽烷金屬前處理知識有參考價值，但以 PDA 替代可迴避。短期不在優先路線。",
           "evidence_level": "high",
           "source_quality": "abstract",
           "coating_technology": {
@@ -3788,7 +3788,7 @@
               "Sigma-Aldrich"
             ],
             "steps": [
-              "若 Bioteque 開發金屬穿刺針塗層：PDA 底塗 + PVP UV 頂塗",
+              "若 本專案 開發金屬穿刺針塗層：PDA 底塗 + PVP UV 頂塗",
               "插入力測試（仿體模型）"
             ],
             "acceptance_tests": [
@@ -3839,7 +3839,7 @@
       },
       "patentResults": {
         "full": {
-          "summary": "PDA + PVP/PVA/PEGDA + BP 最優化配方（期刊論文，詳細數據版）。在 A3 基礎上加入 benzophenone（BP）作 H-abstraction 促進劑，結合 PDA 底塗形成雙底塗機制（PDA 物理錨固 + BP UV 共價接枝）。最佳配方 WCA 12.2°，COF 0.16，Cross-cut Grade 0。此為目前文庫中配方最完整、數據最詳細的 PDA 路線論文，是 Bioteque Phase 1-2 的核心參考配方。",
+          "summary": "PDA + PVP/PVA/PEGDA + BP 最優化配方（期刊論文，詳細數據版）。在 A3 基礎上加入 benzophenone（BP）作 H-abstraction 促進劑，結合 PDA 底塗形成雙底塗機制（PDA 物理錨固 + BP UV 共價接枝）。最佳配方 WCA 12.2°，COF 0.16，Cross-cut Grade 0。此為目前文庫中配方最完整、數據最詳細的 PDA 路線論文，是 本專案 Phase 1-2 的核心參考配方。",
           "examples": [
             {
               "name": "PDA+BP / PVA+PVP+PEGDA UV on TPU",
@@ -3874,14 +3874,14 @@
           ],
           "actionable_insights": [
             "PDA+BP雙重primer：PDA先沉積，BP加入topcoat液UV接枝到TPU",
-            "此配方是目前文獻最完整的TPU親水塗層數據，建議直接以此為Bioteque起點配方",
-            "COF 0.16可作Bioteque TPU導管性能目標基準"
+            "此配方是目前文獻最完整的TPU親水塗層數據，建議直接以此為本專案起點配方",
+            "COF 0.16可作本專案 TPU導管性能目標基準"
           ],
           "red_flags": [
             "A4 中 BP 的使用需確認不落入 DSM P01-P03 claim",
             "PDA 批次一致性（pH/時間/溫度）需嚴格管控"
           ],
-          "bioteque_relevance": "A4 是 Bioteque Phase 1-2 最直接的參考配方。建議以 I-2959 取代 BP（迴避 DSM P01 claim），其餘配方直接採用。WCA 12.2° 和 Grade 0 是量化設計目標。",
+          "bioteque_relevance": "A4 是 本專案 Phase 1-2 最直接的參考配方。建議以 I-2959 取代 BP（迴避 DSM P01 claim），其餘配方直接採用。WCA 12.2° 和 Grade 0 是量化設計目標。",
           "evidence_level": "high",
           "source_quality": "abstract",
           "key_findings": [
@@ -3935,7 +3935,7 @@
               "Sigma-Aldrich"
             ],
             "steps": [
-              "以 A4 配方（PDA + PVP/PVA/PEGDA + I-2959）作 Bioteque Phase 1-2 起點",
+              "以 A4 配方（PDA + PVP/PVA/PEGDA + I-2959）作 本專案 Phase 1-2 起點",
               "UV 劑量窗口驗證（30-150 mJ/cm²）",
               "PVP:PVA:PEGDA 比例優化（基於 A4 最佳點周圍）",
               "50 次往返耐久性測試"
@@ -3948,7 +3948,7 @@
             ]
           },
           "next_actions": [
-            "以 A4 配方（BP 改 I-2959）建立 Bioteque Phase 1-2 SOP",
+            "以 A4 配方（BP 改 I-2959）建立 本專案 Phase 1-2 SOP",
             "確認 BP 在 A4 配方中的角色是否可完全由 I-2959 替代",
             "50 次往返耐久性測試計畫"
           ],
@@ -4022,14 +4022,14 @@
             "測試條件（速度/溫度/模擬液）影響COF 50%以上"
           ],
           "actionable_insights": [
-            "Bioteque需建立標準COF測試方法",
+            "本專案需建立標準COF測試方法",
             "往返50次後仍COF<0.10為設計目標"
           ],
           "red_flags": [
             "ISO無統一COF測試標準*",
             "各廠數據不可直接比較"
           ],
-          "bioteque_relevance": "建立Bioteque塗層性能基準：COF目標、測試條件、與結痂關係的量化指標"
+          "bioteque_relevance": "建立本專案塗層性能基準：COF目標、測試條件、與結痂關係的量化指標"
         }
       }
     },
@@ -4094,14 +4094,14 @@
             "COF需在模擬體液（人工尿液）中測試"
           ],
           "actionable_insights": [
-            "Bioteque需建立：①COF in 人工尿液 ②particulate計數 ③cross-cut附著",
+            "本專案需建立：①COF in 人工尿液 ②particulate計數 ③cross-cut附著",
             "優先配置Harland測試方法"
           ],
           "red_flags": [
             "無法完全模擬體內環境*",
             "in vitro和in vivo結果常有差異*"
           ],
-          "bioteque_relevance": "直接作為Bioteque QC測試規程的依據；建議先建立這三項基礎測試"
+          "bioteque_relevance": "直接作為本專案 QC測試規程的依據；建議先建立這三項基礎測試"
         },
         "review": {
           "scope": "醫材親水塗層性能測試方法全面指南，涵蓋 COF/附著/顆粒/生物相容性的標準與非標準測試",
@@ -4149,7 +4149,7 @@
             "safety_test": "顆粒計數 ISO 10993-3",
             "protocol": "固定：100g夾力 / 20mm/s / 50 循環 / PBS 中"
           },
-          "bioteque_strategic_value": "Bioteque QC 測試 SOP 直接依據：優先採購 Harland FTS7000；建立標準測試條件（100g/20mm/s/50cycles/PBS）；顆粒計數納入放行標準。"
+          "bioteque_strategic_value": "本專案 QC 測試 SOP 直接依據：優先採購 Harland FTS7000；建立標準測試條件（100g/20mm/s/50cycles/PBS）；顆粒計數納入放行標準。"
         }
       }
     },
@@ -4205,14 +4205,14 @@
             "建議固定：夾力100g、速度20mm/s、循環數50"
           ],
           "actionable_insights": [
-            "Bioteque建立COF測試SOP時採用：100g/20mm/s/50cycles作標準",
+            "本專案建立COF測試SOP時採用：100g/20mm/s/50cycles作標準",
             "向Biocoat申請IDTE系統demo或採購"
           ],
           "red_flags": [
             "自建測試台需與IDTE數據比對校正",
             "測試液體（PBS vs人工尿液）影響結果"
           ],
-          "bioteque_relevance": "Bioteque COF測試SOP直接依據；先採購或自建符合IDTE規範的測試設備"
+          "bioteque_relevance": "本專案 COF測試SOP直接依據；先採購或自建符合IDTE規範的測試設備"
         },
         "review": {
           "scope": "Pinch Test 參數白皮書（Biocoat/ViVitro Labs），2020，專注於摩擦測試方法的可再現性與參數敏感性",
@@ -4246,7 +4246,7 @@
             "standard_protocol": "100g / 20mm/s / 50 cycles / PBS",
             "equipment": "Biocoat IDTE 或 ViVitro 系統"
           },
-          "bioteque_strategic_value": "Bioteque 測試台設計規格：夾力精度 ±5g，速度控制 ±1mm/s；若自建測試台，需用市售塗層品（如 Biocoat HYDAK）作校準基準。"
+          "bioteque_strategic_value": "本專案 測試台設計規格：夾力精度 ±5g，速度控制 ±1mm/s；若自建測試台，需用市售塗層品（如 Biocoat HYDAK）作校準基準。"
         }
       }
     },
@@ -4270,7 +4270,7 @@
         "導管"
       ],
       "purpose": "PVP(潤滑) vs PEG(抗沾黏) 化學家族定位",
-      "abstract_note": "本綜述分析親水塗層化學家族的技術定位與性能比較，重點探討 PEG 與 PVP 兩大主流系統。PEG 為研究最廣泛的抗沾黏材料，藉由空間排斥（steric repulsion）機制抑制蛋白質吸附；PVP 則藉由水合依賴性摩擦（hydration-dependent friction）提供優異潤滑性，是導管市場主流選擇。分析顯示 WCA < 20° 為親水性的基本門檻，而兩性離子材料（SBMA、MPC）在抗結痂性能上明顯優於傳統親水高分子。本報告為 Bioteque 選擇技術路線的核心依據。",
+      "abstract_note": "本綜述分析親水塗層化學家族的技術定位與性能比較，重點探討 PEG 與 PVP 兩大主流系統。PEG 為研究最廣泛的抗沾黏材料，藉由空間排斥（steric repulsion）機制抑制蛋白質吸附；PVP 則藉由水合依賴性摩擦（hydration-dependent friction）提供優異潤滑性，是導管市場主流選擇。分析顯示 WCA < 20° 為親水性的基本門檻，而兩性離子材料（SBMA、MPC）在抗結痂性能上明顯優於傳統親水高分子。本報告為 本專案 選擇技術路線的核心依據。",
       "value_to_project": "PVP與PEG的功能定位差異(選材依據)",
       "links": {
         "blog": "https://www.patsnap.com/resources/blog/articles/hydrophilic-polymer-coatings-for-medical-devices-2026/"
@@ -4309,7 +4309,7 @@
             "法規風險：PVP最低"
           ],
           "actionable_insights": [
-            "Bioteque Phase 1用PVP（低風險低成本）",
+            "本專案 Phase 1用PVP（低風險低成本）",
             "Phase 2換PEG交聯增耐久",
             "Phase 3導入SBMA/MPC"
           ],
@@ -4380,7 +4380,7 @@
             "encrustation": "SBMA（Phase 3）",
             "blood_contact": "MPC（透析導管 Phase 3）"
           },
-          "bioteque_strategic_value": "Bioteque 三階段技術路線圖的核心依據：Phase 1 PVP → Phase 2 PEGDA 交聯 → Phase 3 SBMA/MPC。此路線在成本/風險/性能三角上最優化。"
+          "bioteque_strategic_value": "本專案 三階段技術路線圖的核心依據：Phase 1 PVP → Phase 2 PEGDA 交聯 → Phase 3 SBMA/MPC。此路線在成本/風險/性能三角上最優化。"
         }
       }
     },
@@ -4416,7 +4416,7 @@
       "patent_notes": "US8133580B2（P01，有效至2029）+ EP1957130B1（P03，2026/12到期）。polyether primer + PVP+polyelectrolyte面塗",
       "patentResults": {
         "full": {
-          "summary": "DSM ComfortCoat：市場主導品牌，UV固化PVP系統，Bioteque主要競品技術來源（P01-P03系列）",
+          "summary": "DSM ComfortCoat：市場主導品牌，UV固化PVP系統，本專案主要競品技術來源（P01-P03系列）",
           "examples": [
             {
               "name": "DSM ComfortCoat",
@@ -4449,14 +4449,14 @@
             "dsm-firmenich近年整合強化供應鏈"
           ],
           "actionable_insights": [
-            "Bioteque自製塗層應以ComfortCoat性能為基準",
+            "本專案自製塗層應以ComfortCoat性能為基準",
             "DSM可提供OEM，也可授權配方*（需洽談）"
           ],
           "red_flags": [
             "DSM配方受專利保護*（但核心P01等已接近過期）",
             "dsm-firmenich合併後授權政策可能改變*"
           ],
-          "bioteque_relevance": "Bioteque的直接對標技術；P01-P03配方分析是迴避設計的起點"
+          "bioteque_relevance": "本專案的直接對標技術；P01-P03配方分析是迴避設計的起點"
         },
         "commercial": {
           "company": "DSM / dsm-firmenich",
@@ -4506,7 +4506,7 @@
           "pricing_tier": "中高（授權費 + 材料供應）",
           "competitive_threat_to_bioteque": "高（技術標桿，需迴避其核心IP）",
           "ip_risk": "DSM P01/P02/P03 族群部分仍有效，需確認台灣/目標市場有效性",
-          "collaboration_opportunity": "可購買 ComfortCoat 材料作性能基準比對；長期若 Bioteque 自製需確保迴避"
+          "collaboration_opportunity": "可購買 ComfortCoat 材料作性能基準比對；長期若 本專案 自製需確保迴避"
         }
       }
     },
@@ -4567,14 +4567,14 @@
             "Harland Cork歐洲據點強化歐洲供應"
           ],
           "actionable_insights": [
-            "Bioteque若自建生產線，優先評估Harland PCX+FTS7000組合",
+            "本專案若自建生產線，優先評估Harland PCX+FTS7000組合",
             "FTS7000數據可直接用於510(k)/法規文件"
           ],
           "red_flags": [
             "設備投資成本高（FTS7000 ~$100K+）*",
             "維修保養需依賴Harland服務*"
           ],
-          "bioteque_relevance": "Bioteque設備採購路線圖：PCX dip coater + FTS7000是最法規友好的組合"
+          "bioteque_relevance": "本專案設備採購路線圖：PCX dip coater + FTS7000是最法規友好的組合"
         },
         "commercial": {
           "company": "Harland Medical Systems",
@@ -4611,7 +4611,7 @@
           "weakness": "只賣設備，不提供塗層材料；初始投資高（$200K+*）",
           "pricing_tier": "高（設備購置成本 $50K-300K*）",
           "competitive_threat_to_bioteque": "無（設備商，潛在供應商）",
-          "collaboration_opportunity": "Bioteque 自建產線的首選設備方案：PCX dip coater + FTS7000 COF 測試"
+          "collaboration_opportunity": "本專案 自建產線的首選設備方案：PCX dip coater + FTS7000 COF 測試"
         }
       }
     },
@@ -4674,17 +4674,17 @@
             "針對管材內壁的塗層解決方案"
           ],
           "actionable_insights": [
-            "Plasma+silane是經典的表面活化+primer路線，與Bioteque的plasma前處理思路吻合",
+            "Plasma+silane是經典的表面活化+primer路線，與本專案的plasma前處理思路吻合",
             "Silane雙官能基概念：一端抓基材、一端抓PVP→可評估GLYMO等silane",
-            "內壁塗層技術：如果Bioteque需要塗導管內壁，此專利是參考"
+            "內壁塗層技術：如果本專案需要塗導管內壁，此專利是參考"
           ],
           "red_flags": [
             "Plasma 設備投資高",
             "矽烷偶聯劑的水解穩定性需確認",
             "三步驟製程難以量產"
           ],
-          "vs_database": "與Bioteque的plasma路線最相關。P22用plasma+silane，Bioteque計畫用plasma+PDA或plasma+benzophenone。Silane是P22的primer，PDA是A2的primer，benzophenone是P01的面塗交聯劑。三者可組合*",
-          "bioteque_relevance": "三步驟 plasma+silane 製程複雜度高，PDA 底塗是更適合 Bioteque 短期的替代方案。長期若需最高耐久性可評估此路線。",
+          "vs_database": "與本專案的plasma路線最相關。P22用plasma+silane，本專案計畫用plasma+PDA或plasma+benzophenone。Silane是P22的primer，PDA是A2的primer，benzophenone是P01的面塗交聯劑。三者可組合*",
+          "bioteque_relevance": "三步驟 plasma+silane 製程複雜度高，PDA 底塗是更適合 本專案 短期的替代方案。長期若需最高耐久性可評估此路線。",
           "evidence_level": "medium",
           "source_quality": "abstract",
           "key_findings": [
@@ -4814,7 +4814,7 @@
           "actionable_insights": [
             "PEO溶脹咬合概念：利用PEO對TPU的溶脹性產生物理錨固，可作為primer的備選思路",
             "不需UV設備的簡化製程",
-            "但缺乏化學交聯→耐磨耗性可能不足，與Bioteque需求不符*"
+            "但缺乏化學交聯→耐磨耗性可能不足，與本專案需求不符*"
           ],
           "red_flags": [
             "Isocyanate 熱固化路線若 claim 廣義，PVP + isocyanate 需謹慎",
@@ -4945,14 +4945,14 @@
             "泌尿科OEM需求最快增長"
           ],
           "actionable_insights": [
-            "Bioteque應優先使用低VOC溶劑（乙醇>GBL>THF）",
+            "本專案應優先使用低VOC溶劑（乙醇>GBL>THF）",
             "泌尿科OEM是進入市場的快速路線"
           ],
           "red_flags": [
             "VOC法規各地不同，需依銷售市場確認",
             "市場數字需交叉比對M1報告"
           ],
-          "bioteque_relevance": "市場趨勢確認：Bioteque泌尿科方向正確；溶劑選擇需符合REACH低VOC要求"
+          "bioteque_relevance": "市場趨勢確認：本專案泌尿科方向正確；溶劑選擇需符合REACH低VOC要求"
         },
         "review": {
           "scope": "醫材親水塗層市場報告（Grand View Research），2024-2030，微創手術需求驅動分析",
@@ -4988,7 +4988,7 @@
             "low_voc_leader": "Freudenberg LUBRITEQ（waterborne系統）",
             "market_growth": "心血管 + 泌尿科（CAGR >9%）"
           },
-          "bioteque_strategic_value": "Bioteque 產品規格建議：溶劑選用乙醇優先於 GBL/THF（符合 REACH），歐洲出口需準備 VOC 合規文件。"
+          "bioteque_strategic_value": "本專案 產品規格建議：溶劑選用乙醇優先於 GBL/THF（符合 REACH），歐洲出口需準備 VOC 合規文件。"
         }
       }
     },
@@ -5048,13 +5048,13 @@
             "FEM可快速預測不同配方效果"
           ],
           "actionable_insights": [
-            "Bioteque穿刺針性能目標：穿刺力降低>30%",
+            "本專案穿刺針性能目標：穿刺力降低>30%",
             "塗層厚度≤10µm為最佳範圍*"
           ],
           "red_flags": [
             "軟組織材料FEM假設影響準確性*"
           ],
-          "bioteque_relevance": "Bioteque活檢針/穿刺針塗層性能基準：>30%穿刺力降低；配合B1作設計依據"
+          "bioteque_relevance": "本專案活檢針/穿刺針塗層性能基準：>30%穿刺力降低；配合B1作設計依據"
         }
       }
     },
@@ -5113,7 +5113,7 @@
             "技術細節未公開"
           ],
           "actionable_insights": [
-            "Bioteque若需小批量初始OEM，AST比DSM/Surmodics更靈活*"
+            "本專案若需小批量初始OEM，AST比DSM/Surmodics更靈活*"
           ],
           "red_flags": [
             "規模小，供應穩定性風險*",
@@ -5215,13 +5215,13 @@
             }
           ],
           "tpu_advantages": "TPU表面有urethane基團，plasma活化後可高效接枝PVP，共價鍵比物理吸附穩定",
-          "tpu_challenges": "需plasma設備（Bioteque未必有）；接枝後TPU機械性質需確認；批量生產均勻性*",
+          "tpu_challenges": "需plasma設備（本專案未必有）；接枝後TPU機械性質需確認；批量生產均勻性*",
           "key_claims": [
             "4法比較plasma接枝最持久",
             "80天穩定性數據"
           ],
           "actionable_insights": [
-            "若Bioteque已有plasma設備：直接試N2-Ar plasma接枝PVP",
+            "若本專案已有plasma設備：直接試N2-Ar plasma接枝PVP",
             "若無plasma設備：R11數據可作justify採購plasma設備的依據"
           ],
           "red_flags": [
@@ -5356,14 +5356,14 @@
             "DoE可快速找最佳配方"
           ],
           "actionable_insights": [
-            "Bioteque UV底塗使用waterborne PUA可同時滿足低VOC和強附著",
+            "本專案 UV底塗使用waterborne PUA可同時滿足低VOC和強附著",
             "PTHF+IPDI+UDMA是可直接試製的底塗配方骨架"
           ],
           "red_flags": [
             "WPUA分散液穩定性受pH/溫度影響*",
             "UDMA生物安全需評估"
           ],
-          "bioteque_relevance": "Bioteque低VOC底塗配方選擇：WPUA sIPN是環保+高性能的未來方向"
+          "bioteque_relevance": "本專案低VOC底塗配方選擇：WPUA sIPN是環保+高性能的未來方向"
         }
       }
     },
@@ -5420,11 +5420,11 @@
             "兩大廠商聯合影響歐洲市場格局"
           ],
           "actionable_insights": [
-            "Bioteque若進入歐洲市場，Harland Cork是當地設備供應商",
+            "本專案若進入歐洲市場，Harland Cork是當地設備供應商",
             "Serene + Harland組合是歐洲最完整解決方案"
           ],
           "red_flags": [
-            "產業整合可能影響Bioteque的OEM選擇*"
+            "產業整合可能影響本專案的OEM選擇*"
           ],
           "bioteque_relevance": "歐洲市場進入策略參考；歐盟MDR法規可借助Harland Cork本地支援"
         },
@@ -5527,14 +5527,14 @@
             "DSM 族群的附著力補強 IP"
           ],
           "actionable_insights": [
-            "Bioteque TPU基材建議：先isocyanate primer→再UV PVP頂塗（P28路線）",
+            "本專案 TPU基材建議：先isocyanate primer→再UV PVP頂塗（P28路線）",
             "可作迴避DSM的參考：改用PDA primer替代isocyanate*"
           ],
           "red_flags": [
             "DSM 族群補充 IP，與 P01-P03 共同構成嚴密保護",
             "雙功能 primer 概念若被廣義 claim 保護，isocyanate+acrylate 組合需注意"
           ],
-          "bioteque_relevance": "PDA 底塗是 Bioteque 首選方案，在功能上對應 P28 的附著增強設計，但化學機制完全不同，可安全迴避。P28 驗證了「底塗附著增強」對耐久性的關鍵作用。",
+          "bioteque_relevance": "PDA 底塗是 本專案 首選方案，在功能上對應 P28 的附著增強設計，但化學機制完全不同，可安全迴避。P28 驗證了「底塗附著增強」對耐久性的關鍵作用。",
           "evidence_level": "high",
           "source_quality": "abstract",
           "coating_technology": {
@@ -5658,13 +5658,13 @@
             "間歇導尿市場第一品牌的保護技術"
           ],
           "actionable_insights": [
-            "Bioteque若做間歇導尿管，必須以Coloplast為對標",
+            "本專案若做間歇導尿管，必須以Coloplast為對標",
             "光接枝需UV設備，但耐久性遠超物理塗覆"
           ],
           "red_flags": [
             "Coloplast P29 是間歇導尿市場最強的 IP 護城河",
             "光接枝的定義可能很廣，需嚴格法律確認",
-            "若 claim 涵蓋所有 UV 誘發接枝，Bioteque UV 路線可能有風險"
+            "若 claim 涵蓋所有 UV 誘發接枝，本專案 UV 路線可能有風險"
           ],
           "bioteque_relevance": "Coloplast P29 是間歇導尿市場最難迴避的 IP，建議優先評估泌尿科以外的市場（胸腔引流管、輸尿管支架）作為切入點。若進入間歇導尿市場，需完整 FTO 分析。",
           "evidence_level": "high",
@@ -5709,7 +5709,7 @@
               "Sigma-Aldrich"
             ],
             "steps": [
-              "確認 Bioteque 路線（Type I UV 固化）與 P29 光接枝的機制差異",
+              "確認 本專案 路線（Type I UV 固化）與 P29 光接枝的機制差異",
               "在相同基材上比較 COF 和耐久性"
             ],
             "acceptance_tests": [
@@ -5719,7 +5719,7 @@
           },
           "next_actions": [
             "查 P29（Coloplast）完整 claim 及法律狀態",
-            "評估 Bioteque 的 UV Type I 路線是否構成「光接枝」的 claim 範疇",
+            "評估 本專案 的 UV Type I 路線是否構成「光接枝」的 claim 範疇",
             "委託律師分析 P29 vs Surmodics L02 的交疊"
           ],
           "citations_needed": [
@@ -5790,7 +5790,7 @@
             "多種醫材基材適用"
           ],
           "actionable_insights": [
-            "Bioteque需做US8133580族全面迴避分析",
+            "本專案需做US8133580族全面迴避分析",
             "確認哪些請求項已過期，哪些仍有效*"
           ],
           "red_flags": [
@@ -5919,7 +5919,7 @@
             "多用途：藥物載體/塗層/支架填充"
           ],
           "actionable_insights": [
-            "Bioteque若TPU黃化是問題，考慮可見光PI（LAP）替換UV PI",
+            "本專案若TPU黃化是問題，考慮可見光PI（LAP）替換UV PI",
             "PEG-DA + LAP是低傷害TPU塗層配方"
           ],
           "red_flags": [
@@ -6070,13 +6070,13 @@
           ],
           "actionable_insights": [
             "MPC是PVP以外最值得評估的親水功能材料，抗血栓性能遠優於PVP",
-            "若Bioteque透析導管或血管導管需抗血栓，MPC路線值得Phase 3研發"
+            "若本專案透析導管或血管導管需抗血栓，MPC路線值得Phase 3研發"
           ],
           "red_flags": [
             "動物源 heparin 法規複雜（bovine/porcine）",
             "多步驟化學接枝量產難度高"
           ],
-          "bioteque_relevance": "G02 的 heparin+PEG 雙功能設計主要適用於血液接觸器材，對 Bioteque 當前泌尿科方向（輸尿管支架）影響有限。若未來開發透析導管（MPC 路線更推薦）再評估。",
+          "bioteque_relevance": "G02 的 heparin+PEG 雙功能設計主要適用於血液接觸器材，對 本專案 當前泌尿科方向（輸尿管支架）影響有限。若未來開發透析導管（MPC 路線更推薦）再評估。",
           "evidence_level": "high",
           "source_quality": "abstract",
           "key_findings": [
@@ -6124,7 +6124,7 @@
               "Sigma-Aldrich"
             ],
             "steps": [
-              "若 Bioteque 開發透析導管或心血管器材：評估 G02 的 heparin+PEG 雙功能設計",
+              "若 本專案 開發透析導管或心血管器材：評估 G02 的 heparin+PEG 雙功能設計",
               "EDC/NHS 活化 PU 表面 → heparin 共價接枝",
               "血液相容性評估（ISO 10993-4）"
             ],
@@ -6135,7 +6135,7 @@
             ]
           },
           "next_actions": [
-            "低優先度，待 Bioteque 進入血液接觸器材市場再評估",
+            "低優先度，待 本專案 進入血液接觸器材市場再評估",
             "短期可參考 heparin 作為 Phase 3 抗結垢天然材料選項（U10 路線）"
           ],
           "citations_needed": [
@@ -6169,7 +6169,7 @@
       ],
       "purpose": "SBMA光接枝塗層的摩擦係數降>90%定量數據",
       "abstract_note": "SBMA一步光聚合接枝於PDMS；摩擦係數降>90%；人體屍體耳蝸植入力降~40%；展現zwitterionic光接枝的臨床可行性。",
-      "value_to_project": "SBMA光接枝方法可移植到Bioteque的UV製程；摩擦降幅數據極有參考價值",
+      "value_to_project": "SBMA光接枝方法可移植到本專案的UV製程；摩擦降幅數據極有參考價值",
       "links": {
         "doi": "https://doi.org/10.1097/MAO.0000000000003288"
       },
@@ -6208,7 +6208,7 @@
             "直接用於輸尿管支架驗證"
           ],
           "actionable_insights": [
-            "BP+SBMA UV接枝是Bioteque輸尿管支架最值得跟進的技術",
+            "BP+SBMA UV接枝是本專案輸尿管支架最值得跟進的技術",
             "COF 0.02是最高性能目標"
           ],
           "red_flags": [
@@ -6242,7 +6242,7 @@
       ],
       "purpose": "SBMA vs PEG的抗異物反應比較+藥物釋放",
       "abstract_note": "poly(SBMA) hydrogel塗層與PEG比較；SBMA減少纖維母細胞和巨噬細胞黏附；WCA量測；可搭載Everolimus抗纖維化藥物釋放。",
-      "value_to_project": "SBMA優於PEG的實驗證據，可作為Bioteque材料選型參考*",
+      "value_to_project": "SBMA優於PEG的實驗證據，可作為本專案材料選型參考*",
       "links": {
         "doi": "https://doi.org/10.3390/molecules27103126"
       },
@@ -6289,7 +6289,7 @@
             "水凝膠塗層在乾燥狀態下易碎，包裝需保持濕潤*",
             "FDA對水凝膠塗層的認證路徑較複雜*"
           ],
-          "bioteque_relevance": "適合Bioteque pigtail引流管的彎曲段抗結痂塗層"
+          "bioteque_relevance": "適合本專案 pigtail引流管的彎曲段抗結痂塗層"
         }
       }
     },
@@ -6316,7 +6316,7 @@
       ],
       "purpose": "SBMA hydrogel的體內抗鈣化30天數據",
       "abstract_note": "SBMA+MAHA hybrid hydrogel塗層；接REDV肽促內皮化；30天皮下植入免疫反應和鈣化顯著降低。",
-      "value_to_project": "SBMA長期體內數據，可補充Bioteque生物相容性評估資料",
+      "value_to_project": "SBMA長期體內數據，可補充本專案生物相容性評估資料",
       "links": {
         "doi": "https://doi.org/10.1016/j.msec.2021.112329"
       },
@@ -6355,13 +6355,13 @@
             "心臟瓣膜鈣化=輸尿管支架結石，機制類比成立"
           ],
           "actionable_insights": [
-            "G05的SBMA抗鈣化數據可作Bioteque抗結痂機制佐證",
+            "G05的SBMA抗鈣化數據可作本專案抗結痂機制佐證",
             "Ca²⁺/Mg²⁺是尿液結痂的核心離子，SBMA是對的方向"
           ],
           "red_flags": [
             "應用情境不同（心瓣vs支架），數據外推需謹慎*"
           ],
-          "bioteque_relevance": "強化Bioteque SBMA路線的機制理論依據；抗鈣化=抗結痂"
+          "bioteque_relevance": "強化本專案 SBMA路線的機制理論依據；抗鈣化=抗結痂"
         }
       }
     },
@@ -6421,7 +6421,7 @@
             "SBMA抗汙效果即使在非導管應用也高度一致"
           ],
           "actionable_insights": [
-            "SBMA機制確認度高，可直接引用作Bioteque設計依據"
+            "SBMA機制確認度高，可直接引用作本專案設計依據"
           ],
           "red_flags": [
             "微針和輸尿管支架製程完全不同*"
@@ -6454,13 +6454,13 @@
       ],
       "purpose": "SBMA導尿管塗層的抗菌+潤滑雙功能",
       "abstract_note": "SBMA與HPA共聚；控制hydrogel膨脹提升機械穩定性；纖維蛋白原沉積降40%、生物膜覆蓋降4倍；對E.coli和P.mirabilis有效。",
-      "value_to_project": "SBMA導尿管塗層直接對標Bioteque導尿管產品線",
+      "value_to_project": "SBMA導尿管塗層直接對標本專案導尿管產品線",
       "links": {
         "doi": "https://doi.org/10.1016/j.colsurfb.2024.114277"
       },
       "patentResults": {
         "full": {
-          "summary": "SBMA水凝膠專用於輸尿管支架抗汙增強：摩擦與結痂雙效，最直接的Bioteque參考",
+          "summary": "SBMA水凝膠專用於輸尿管支架抗汙增強：摩擦與結痂雙效，最直接的本專案參考",
           "examples": [
             {
               "name": "SBMA hydrogel on ureteral device",
@@ -6492,8 +6492,8 @@
             "UV製程可行"
           ],
           "actionable_insights": [
-            "G07是Bioteque Phase 3 SBMA路線的最直接參考文獻",
-            "建議直接複製G07製程到Bioteque輸尿管支架"
+            "G07是本專案 Phase 3 SBMA路線的最直接參考文獻",
+            "建議直接複製G07製程到本專案輸尿管支架"
           ],
           "red_flags": [
             "SBMA原料取得和成本*"
@@ -6528,7 +6528,7 @@
       ],
       "purpose": "chitosan+PDA+plasma在PVC導管的三合一塗層",
       "abstract_note": "PVC表面O2 plasma活化→PDA塗覆→HTCC接枝；親水性提升減少尿道黏膜損傷；優於商用PVP-urea塗層PVC導管的抗菌效能。",
-      "value_to_project": "chitosan替代PVP的直接比較數據；plasma+PDA製程與Bioteque現有能力相容",
+      "value_to_project": "chitosan替代PVP的直接比較數據；plasma+PDA製程與本專案現有能力相容",
       "links": {
         "doi": "https://doi.org/10.1080/09205063.2025.2574946"
       },
@@ -6568,14 +6568,14 @@
             "pH>6時抗菌效果下降（尿液pH需考量）"
           ],
           "actionable_insights": [
-            "QCS是Bioteque最低製程門檻的抗菌+抗結痂方案",
+            "QCS是本專案最低製程門檻的抗菌+抗結痂方案",
             "尿液pH 5-8對QCS效果影響需測試"
           ],
           "red_flags": [
             "Chitosan在偏鹼尿液中溶解性下降*",
             "長期穩定性不如共價接枝*"
           ],
-          "bioteque_relevance": "適合Bioteque快速Phase 2驗證：chitosan表面處理不需UV設備"
+          "bioteque_relevance": "適合本專案快速Phase 2驗證：chitosan表面處理不需UV設備"
         }
       }
     },
@@ -6643,7 +6643,7 @@
             "PVP不抗菌，若需抗菌需換SBMA/chitosan"
           ],
           "actionable_insights": [
-            "PDA primer是Bioteque TPU塗層的標準底塗選項（見A2/A4）",
+            "PDA primer是本專案 TPU塗層的標準底塗選項（見A2/A4）",
             "G09確認PDA+PVP組合有抗汙效果"
           ],
           "red_flags": [
@@ -6714,7 +6714,7 @@
             "比純chitosan親水性下降但抗菌更強"
           ],
           "actionable_insights": [
-            "若Bioteque要同時改善COF和抗菌，chitosan-FA路線值得Phase 2評估"
+            "若本專案要同時改善COF和抗菌，chitosan-FA路線值得Phase 2評估"
           ],
           "red_flags": [
             "脂肪酸生物相容性需ISO 10993確認*",
@@ -6748,7 +6748,7 @@
       ],
       "purpose": "plasma處理PVC→chitosan塗覆的完整製程",
       "abstract_note": "H2 plasma+O2 plasma afterglow處理PVC→除氯→富氧官能基→chitosan水溶液浸塗；XPS確認均勻覆蓋；RT4泌尿上皮細胞活性提升。",
-      "value_to_project": "PVC導管plasma+chitosan製程，可評估導入Bioteque導尿管產線",
+      "value_to_project": "PVC導管plasma+chitosan製程，可評估導入本專案導尿管產線",
       "links": {
         "doi": "https://doi.org/10.3390/ijms26052128"
       },
@@ -6787,14 +6787,14 @@
             "交聯劑選擇影響生物相容性"
           ],
           "actionable_insights": [
-            "WCA<10°應作為Bioteque支架塗層規格",
+            "WCA<10°應作為本專案支架塗層規格",
             "G11提供chitosan交聯配方直接參考"
           ],
           "red_flags": [
             "戊二醛有毒性，EDC更安全*",
             "chitosan交聯密度影響長期穩定性*"
           ],
-          "bioteque_relevance": "WCA<5°是目前記錄最低值，Bioteque需設定類似WCA目標；chitosan路線是天然可降解選項"
+          "bioteque_relevance": "WCA<5°是目前記錄最低值，本專案需設定類似WCA目標；chitosan路線是天然可降解選項"
         }
       }
     },
@@ -6824,7 +6824,7 @@
       ],
       "purpose": "WPU+SBMA+NVP+chitosan UV固化多功能塗層",
       "abstract_note": "本研究以水性聚氨酯（WPU）作為底塗，再施用含季銨化幾丁聚醣（QCS）、磺基甜菜鹼甲基丙烯酸酯（SBMA）、N-乙烯吡咯烷酮（NVP）及硫酸鋅（ZnSO₄）的 UV 固化水凝膠頂塗，開發兼具潤滑與抗菌功能的雙效塗層。量化結果：界面結合強度 536 N/m，水接觸角 24.6°，摩擦係數（COF）0.0357，塗層厚度可藉配方調整。體外抗菌測試顯示對大腸桿菌（E. coli）有效抑制。塗層適用於 TPU 基材輸尿管支架，為多功能親水塗層的重要研究進展。",
-      "value_to_project": "UV固化+多功能塗層配方，直接適用Bioteque UV製程；附著力536N/m是重要基準",
+      "value_to_project": "UV固化+多功能塗層配方，直接適用本專案 UV製程；附著力536N/m是重要基準",
       "links": {
         "doi": "https://doi.org/10.1021/acsami.5c00154"
       },
@@ -6865,15 +6865,15 @@
           "actionable_insights": [
             "WPU底塗比PDA更簡單（一步塗覆+乾燥）、比isocyanate更安全（水性無毒），對TPU基材天然親和",
             "NVP單體原位聚合可控制交聯度，減少PVP遷移析出，比P01的semi-IPN方案更簡潔",
-            "536 N/m附著力是文獻中最高基準之一，可作為Bioteque塗層設計目標"
+            "536 N/m附著力是文獻中最高基準之一，可作為本專案塗層設計目標"
           ],
           "red_flags": [
             "ZnSO₄ 劑量窗口窄（抑菌 vs 細胞毒性）",
             "SBMA 需 Surmodics FTO 分析",
             "QCS 批次一致性（天然材料）"
           ],
-          "vs_database": "與P01(DSM)比：底塗WPU vs polyether，面塗NVP原位聚合 vs PVP高分子纏繞，G12多了抗菌功能。與A2(PDA+PVP)比：COF相當(0.0357 vs ~0.03)但G12附著力量化(536 N/m)且有抗菌。可融合路線：Bioteque的plasma+benzophenone底塗 + G12的NVP+SBMA面塗",
-          "bioteque_relevance": "G12 是 Bioteque Phase 3 抗菌方向最直接的參考論文。QCS + SBMA + ZnSO₄ 的複合設計對應 Bioteque 需要的「天然抗菌 + 兩性離子抗結垢」雙功能目標。建議作為 Phase 3 實驗起點。",
+          "vs_database": "與P01(DSM)比：底塗WPU vs polyether，面塗NVP原位聚合 vs PVP高分子纏繞，G12多了抗菌功能。與A2(PDA+PVP)比：COF相當(0.0357 vs ~0.03)但G12附著力量化(536 N/m)且有抗菌。可融合路線：本專案的plasma+benzophenone底塗 + G12的NVP+SBMA面塗",
+          "bioteque_relevance": "G12 是 本專案 Phase 3 抗菌方向最直接的參考論文。QCS + SBMA + ZnSO₄ 的複合設計對應 本專案 需要的「天然抗菌 + 兩性離子抗結垢」雙功能目標。建議作為 Phase 3 實驗起點。",
           "evidence_level": "high",
           "source_quality": "abstract",
           "key_findings": [
@@ -7019,7 +7019,7 @@
             "高密度接枝耐久性更好"
           ],
           "actionable_insights": [
-            "MPC對Bioteque透析導管（血液接觸）更相關",
+            "MPC對本專案透析導管（血液接觸）更相關",
             "pMPC armor概念：高密度接枝而非低密度塗覆"
           ],
           "red_flags": [
@@ -7054,7 +7054,7 @@
       ],
       "purpose": "通用型zwitterionic塗層適用10種基材",
       "abstract_note": "wet-adhesive引發劑polymer水相自組裝→pMPC接枝；適用10種基材包括PU/silicone/PTFE；寬pH範圍近零蛋白汙染；模擬血流穩定；可選擇性捕獲CTC。",
-      "value_to_project": "10種基材通用性=TPU/silicone等Bioteque基材都可用；製程簡單水相操作",
+      "value_to_project": "10種基材通用性=TPU/silicone等本專案基材都可用；製程簡單水相操作",
       "links": {
         "doi": "https://doi.org/10.1002/advs.202502411"
       },
@@ -7093,13 +7093,13 @@
             "PVC/PU/矽膠同一製程"
           ],
           "actionable_insights": [
-            "Bioteque多種基材（TPU/PVC/矽膠）產品線可用通用塗層降低SKU",
+            "本專案多種基材（TPU/PVC/矽膠）產品線可用通用塗層降低SKU",
             "先驗證TPU，再外推其他基材"
           ],
           "red_flags": [
             "通用性可能犧牲部分性能最佳化*"
           ],
-          "bioteque_relevance": "Bioteque多品項產品線的最佳策略：開發通用兩性離子塗層方案"
+          "bioteque_relevance": "本專案多品項產品線的最佳策略：開發通用兩性離子塗層方案"
         }
       }
     },
@@ -7171,13 +7171,13 @@
           ],
           "actionable_insights": [
             "PDA+PEI雙層primer比單層PDA對後續功能化反應更有利",
-            "若Bioteque輸尿管支架需抗菌功能，此MPC+DADMAC路線是2026最新依據"
+            "若本專案輸尿管支架需抗菌功能，此MPC+DADMAC路線是2026最新依據"
           ],
           "red_flags": [
             "季銨基高分子的細胞毒性需評估（建議改用 QCS）",
             "SBMA 使用需 Surmodics FTO"
           ],
-          "bioteque_relevance": "G15 的 QCS+SBMA 雙功能概念與 Bioteque Phase 3（G12 路線）高度相符。G15 提供 28 天穩定性數據，對應輸尿管支架的留置期要求。兩篇合看可建立完整的 Phase 3 雙功能設計策略。",
+          "bioteque_relevance": "G15 的 QCS+SBMA 雙功能概念與 本專案 Phase 3（G12 路線）高度相符。G15 提供 28 天穩定性數據，對應輸尿管支架的留置期要求。兩篇合看可建立完整的 Phase 3 雙功能設計策略。",
           "evidence_level": "high",
           "source_quality": "abstract",
           "key_findings": [
@@ -7240,7 +7240,7 @@
             ]
           },
           "next_actions": [
-            "G12 + G15 合併閱讀，建立 Bioteque Phase 3 雙功能設計策略",
+            "G12 + G15 合併閱讀，建立 本專案 Phase 3 雙功能設計策略",
             "28 天穩定性測試加入 Phase 3 驗收指標"
           ],
           "citations_needed": [
@@ -7414,7 +7414,7 @@
       ],
       "purpose": "Argon Medical自有親水塗層品牌，特色是可塗導管內壁",
       "abstract_note": "SLIP-COAT熱固化親水塗層。吸收水分後表面變滑。比PTFE更潤滑。熱固化→可塗導管內壁（UV有line-of-sight限制做不到）。可客製化潤滑度和持久性",
-      "value_to_project": "Argon是內壁塗層專家。如果Bioteque需要塗導管內壁，熱固化是必要路線",
+      "value_to_project": "Argon是內壁塗層專家。如果本專案需要塗導管內壁，熱固化是必要路線",
       "links": {
         "website": "https://www.argonmedical.com/product/slip-coat-hydrophilic-coating/"
       },
@@ -7422,7 +7422,7 @@
       "patent_notes": "SLIP-COAT™具體專利號未公開。推測使用Hydromer授權技術或自有配方*。Argon也提供塗覆設備和OEM服務",
       "patentResults": {
         "full": {
-          "summary": "Argon Medical SLIP-COAT™ 熱固化親水塗層，突破 UV line-of-sight 限制，可塗導管內腔。熱固化製程（無 UV 需求），配方未公開。Argon 將此技術用於自家 Scorpion 系列導管，為公司內部使用非 OEM 服務。管腔內壁親水塗層是目前市場稀缺的技術，對 Bioteque 的輸尿管支架（pigtail 內腔）有重要啟發。",
+          "summary": "Argon Medical SLIP-COAT™ 熱固化親水塗層，突破 UV line-of-sight 限制，可塗導管內腔。熱固化製程（無 UV 需求），配方未公開。Argon 將此技術用於自家 Scorpion 系列導管，為公司內部使用非 OEM 服務。管腔內壁親水塗層是目前市場稀缺的技術，對 本專案 的輸尿管支架（pigtail 內腔）有重要啟發。",
           "examples": [
             {
               "name": "SLIP-COAT™",
@@ -7455,7 +7455,7 @@
             "也提供塗覆設備和OEM代工"
           ],
           "actionable_insights": [
-            "內壁塗層需求：如果Bioteque有導管內壁需要潤滑，熱固化是必要路線（UV有line-of-sight限制）",
+            "內壁塗層需求：如果本專案有導管內壁需要潤滑，熱固化是必要路線（UV有line-of-sight限制）",
             "Argon也賣塗覆設備，可評估整套採購方案（Plan A）",
             "SLIP-COAT定位類似Hydromer，但更專注導管內壁"
           ],
@@ -7465,7 +7465,7 @@
             "Argon 技術保密，細節需自行開發"
           ],
           "vs_database": "與C04(Hydromer)定位類似但更專注內壁。與C07(Harland)比：Argon賣塗層，Harland賣設備。Argon的內壁塗層能力是獨特賣點",
-          "bioteque_relevance": "Argon SLIP-COAT™ 確認管腔內壁熱固化塗層的商業可行性。Bioteque 的 pigtail 輸尿管支架若需管腔內壁塗層，熱固化（PVP+HDI）或可見光固化（LAP）是可行路線，應作為 Phase 2-3 的技術評估項目。",
+          "bioteque_relevance": "Argon SLIP-COAT™ 確認管腔內壁熱固化塗層的商業可行性。本專案 的 pigtail 輸尿管支架若需管腔內壁塗層，熱固化（PVP+HDI）或可見光固化（LAP）是可行路線，應作為 Phase 2-3 的技術評估項目。",
           "evidence_level": "medium",
           "source_quality": "metadata",
           "key_findings": [
@@ -7566,11 +7566,11 @@
             "引流管",
             "輸尿管支架內壁"
           ],
-          "differentiator": "熱固化突破 UV line-of-sight 限制；內壁塗層是最大差異化；對 Bioteque 極具參考價值",
+          "differentiator": "熱固化突破 UV line-of-sight 限制；內壁塗層是最大差異化；對 本專案 極具參考價值",
           "weakness": "配方不透明；熱固化溫度對 TPU 基材影響需確認",
           "pricing_tier": "未公開（自用產品，非 OEM）",
           "competitive_threat_to_bioteque": "中（間接競品）",
-          "collaboration_opportunity": "熱固化內壁塗層技術是 Bioteque 的重要學習對象；U09 的 PU 內壁改性文獻對應此應用"
+          "collaboration_opportunity": "熱固化內壁塗層技術是 本專案 的重要學習對象；U09 的 PU 內壁改性文獻對應此應用"
         }
       }
     },
@@ -7606,7 +7606,7 @@
       "patent_notes": "Cook家族第三代。新增抗菌緩釋和Vitamin E保存穩定性",
       "patentResults": {
         "full": {
-          "summary": "Cook Medical P31（US7402620）為 P30（US7141246）續案，在 PVP+PU interpolymer+isocyanate 熱固化潤滑塗層基礎上，新增 chlorhexidine（0.1-5%）、triclosan、silver 三種抗菌劑的可控緩釋設計，加入 Vitamin E 作抗氧化保存穩定劑。抗菌劑嵌入 PU 網絡以擴散機制緩慢釋放，維持數週抑菌濃度。熱固化製程免 UV 設備，可塗管腔內壁。對 Bioteque 而言是 Phase 3 抗菌設計的核心參考配方，但 triclosan 的 FDA 法規疑慮與 chlorhexidine 的生物相容性評估複雜度需注意。建議以 silver 作為優先抗菌劑，配合 UV 路線或 QCS 高分子抗菌以迴避 P31 核心 claim。",
+          "summary": "Cook Medical P31（US7402620）為 P30（US7141246）續案，在 PVP+PU interpolymer+isocyanate 熱固化潤滑塗層基礎上，新增 chlorhexidine（0.1-5%）、triclosan、silver 三種抗菌劑的可控緩釋設計，加入 Vitamin E 作抗氧化保存穩定劑。抗菌劑嵌入 PU 網絡以擴散機制緩慢釋放，維持數週抑菌濃度。熱固化製程免 UV 設備，可塗管腔內壁。對 本專案 而言是 Phase 3 抗菌設計的核心參考配方，但 triclosan 的 FDA 法規疑慮與 chlorhexidine 的生物相容性評估複雜度需注意。建議以 silver 作為優先抗菌劑，配合 UV 路線或 QCS 高分子抗菌以迴避 P31 核心 claim。",
           "examples": [
             {
               "name": "抗菌PVP-PU塗層",
@@ -7814,7 +7814,7 @@
             "若未來開發 echogenic 器材需注意此 IP"
           ],
           "vs_database": "與P25(WO2007089761)是同家族。Merit的TEMNO系列重點在針體結構不在塗層。與其他塗層專利(P01/P06/P12)比：Merit加入echogenic是獨特差異化",
-          "bioteque_relevance": "低優先度，Bioteque 目前不開發超音波引導器材。長期若進入此市場再評估。",
+          "bioteque_relevance": "低優先度，本專案 目前不開發超音波引導器材。長期若進入此市場再評估。",
           "evidence_level": "medium",
           "source_quality": "abstract",
           "key_findings": [
@@ -7849,13 +7849,13 @@
               "超音波可視性 + 潤滑的雙功能 claim"
             ],
             "design_around_notes": [
-              "Bioteque 目前不需要 echogenic 功能，此 IP 影響較小",
+              "本專案 目前不需要 echogenic 功能，此 IP 影響較小",
               "若未來開發超音波引導穿刺針，需 FTO 評估"
             ]
           },
           "experimental_plan": {
             "materials": [
-              "（目前不在 Bioteque 優先路線，暫無實驗規劃）"
+              "（目前不在 本專案 優先路線，暫無實驗規劃）"
             ],
             "suppliers": [],
             "steps": [
@@ -7893,7 +7893,7 @@
       ],
       "purpose": "Coloplast PVP+PEGDA配方的50次往返磨耗實測數據，PEGDA分子量vs耐磨性",
       "abstract_note": "PVP+PEGDA UV固化親水塗層。關鍵發現：PEGDA Mn250-700在50次silicone孔往返磨耗後COF維持穩定，Mn≥1000劣化。測試方法：通過4.14mm silicone孔(Shore 60A)往返25次(共50次通過)，Harland FTS 200g clamp測初始/磨耗後/離水10min後COF",
-      "value_to_project": "PEGDA分子量是耐磨關鍵數據。Bioteque的SR344(Mn508)/SR610(Mn742)在甜蜜區",
+      "value_to_project": "PEGDA分子量是耐磨關鍵數據。本專案的SR344(Mn508)/SR610(Mn742)在甜蜜區",
       "links": {
         "google_patents": "https://patents.google.com/patent/US10850009B2/en"
       },
@@ -7903,7 +7903,7 @@
       "patent_notes": "P12(US9138510)的姊妹專利。提供了50次往返磨耗的定量數據",
       "patentResults": {
         "full": {
-          "summary": "Hollister 基材設計型親水塗層（US10850009B2），以調整基材本身的組成（乙烯/丙烯聚合物 + 水溶脹高分子共混）來解決附著問題，免除傳統複雜底塗製程。表面能 ≥ 30 mN/m 確保單層親水塗層穩定附著。此「從基材端解決附著」的設計理念與 Bioteque 從「塗層端」解決的路線形成對比。",
+          "summary": "Hollister 基材設計型親水塗層（US10850009B2），以調整基材本身的組成（乙烯/丙烯聚合物 + 水溶脹高分子共混）來解決附著問題，免除傳統複雜底塗製程。表面能 ≥ 30 mN/m 確保單層親水塗層穩定附著。此「從基材端解決附著」的設計理念與 本專案 從「塗層端」解決的路線形成對比。",
           "examples": [
             {
               "name": "PEGDA Mn250 配方（最佳耐磨）",
@@ -7962,17 +7962,17 @@
           ],
           "actionable_insights": [
             "PEGDA Mn250-700是耐磨甜蜜區：交聯密度足夠但仍有親水性",
-            "Bioteque的SR344(PEGDA Mn508)和SR610(Mn508-742)剛好落在此甜蜜區 ✅",
-            "50次silicone孔磨耗是可複製的測試方法，建議Bioteque建立此標準",
+            "本專案的SR344(PEGDA Mn508)和SR610(Mn508-742)剛好落在此甜蜜區 ✅",
+            "50次silicone孔磨耗是可複製的測試方法，建議本專案建立此標準",
             "PVP佔乾重95-98%但PEGDA交聯劑只佔2-5%→你的經驗「PVP≤20%」是溶液比例，乾重比例PVP確實是絕大多數",
             "Dye uptake test（染料吸附）可評估磨耗後塗層完整性"
           ],
           "red_flags": [
             "Hollister 泌尿科 IP 族群廣泛，需整體 FTO",
-            "若 Bioteque 未來改用類似基材組成需注意"
+            "若 本專案 未來改用類似基材組成需注意"
           ],
           "vs_database": "P12(US9138510)的姊妹專利。P12提供雙層配方和COF 0.02N基準，本專利提供PEGDA分子量vs耐磨的定量數據。兩者互補",
-          "bioteque_relevance": "Bioteque 使用 TPU 基材，自然不落入 Hollister P33 的乙烯/丙烯聚合物 claim 範圍。此 IP 對 Bioteque 影響低。但 Hollister 整體泌尿導管 IP（P33 + P37/P38 等）需整體評估。",
+          "bioteque_relevance": "本專案 使用 TPU 基材，自然不落入 Hollister P33 的乙烯/丙烯聚合物 claim 範圍。此 IP 對 本專案 影響低。但 Hollister 整體泌尿導管 IP（P33 + P37/P38 等）需整體評估。",
           "evidence_level": "medium",
           "source_quality": "abstract",
           "key_findings": [
@@ -8007,18 +8007,18 @@
             ],
             "design_around_notes": [
               "使用標準 TPU 基材 + PDA 底塗（基材不在 claim 範圍）",
-              "Bioteque 使用 TPU，不屬於乙烯/丙烯共混基材，自然迴避"
+              "本專案 使用 TPU，不屬於乙烯/丙烯共混基材，自然迴避"
             ]
           },
           "experimental_plan": {
             "materials": [
-              "Bioteque 現有 TPU 基材"
+              "本專案 現有 TPU 基材"
             ],
             "suppliers": [
               "Lubrizol（Pellethane 系列 TPU）"
             ],
             "steps": [
-              "確認 Bioteque TPU 基材的表面能（contact angle 量測）",
+              "確認 本專案 TPU 基材的表面能（contact angle 量測）",
               "PDA 底塗對 TPU 表面能的改善效果評估"
             ],
             "acceptance_tests": [
@@ -8095,14 +8095,14 @@
             "親水性≠抗結痂，需兩性離子或抗菌功能"
           ],
           "actionable_insights": [
-            "Bioteque設計策略：阻斷conditioning film（SBMA）>殺菌（QCS）>親水（PVP）",
+            "本專案設計策略：阻斷conditioning film（SBMA）>殺菌（QCS）>親水（PVP）",
             "支架置留期設計目標：抗結痂>4週"
           ],
           "red_flags": [
             "尿液成分個體差異大，體外測試需用患者尿液*",
             "長期置留>6週結痂率急升"
           ],
-          "bioteque_relevance": "輸尿管支架抗結痂設計的必讀基礎文獻；確認Bioteque技術路線優先序"
+          "bioteque_relevance": "輸尿管支架抗結痂設計的必讀基礎文獻；確認本專案技術路線優先序"
         },
         "review": {
           "scope": "輸尿管支架結痂全面綜述（流行病學/病理生理/預防），2020，臨床觀點",
@@ -8158,7 +8158,7 @@
             "antimicrobial": "chitosan/propolis/Cu²⁺（天然抗菌，藥物洗脫風險低）",
             "combination": "SBMA + 抗菌劑（雙效最佳，見U08）"
           },
-          "bioteque_strategic_value": "Bioteque 輸尿管支架塗層的機制設計依據：目標阻斷 conditioning film（選 SBMA），同時加入天然抗菌（chitosan/propolis）；設計目標：4週結痂率 <25%（SBMA等級），置留期延長至 8 週。"
+          "bioteque_strategic_value": "本專案 輸尿管支架塗層的機制設計依據：目標阻斷 conditioning film（選 SBMA），同時加入天然抗菌（chitosan/propolis）；設計目標：4週結痂率 <25%（SBMA等級），置留期延長至 8 週。"
         }
       }
     },
@@ -8218,7 +8218,7 @@
             "生物降解支架是長遠方向"
           ],
           "actionable_insights": [
-            "Bioteque近期重點：SBMA/MPC塗層",
+            "本專案近期重點：SBMA/MPC塗層",
             "中期評估：chitosan/heparin天然材料",
             "長遠關注：可降解支架材料"
           ],
@@ -8226,7 +8226,7 @@
             "藥物洗脫支架FDA審查更嚴格",
             "可降解支架機械性未成熟*"
           ],
-          "bioteque_relevance": "Bioteque技術路線圖佐證；確認SBMA是正確Phase 3方向"
+          "bioteque_relevance": "本專案技術路線圖佐證；確認SBMA是正確Phase 3方向"
         },
         "review": {
           "scope": "新型輸尿管支架技術全面綜述，2021，涵蓋材料/塗層/設計創新",
@@ -8240,7 +8240,7 @@
             {
               "material": "聚氨酯（PU/TPU）支架",
               "n_studies": 15,
-              "verdict": "硬度可調，塗層附著較好，Bioteque 基材"
+              "verdict": "硬度可調，塗層附著較好，本專案 基材"
             },
             {
               "material": "SBMA塗層支架",
@@ -8281,7 +8281,7 @@
             "coating": "SBMA（臨床共識最強）",
             "future": "可降解 + SBMA 複合方案"
           },
-          "bioteque_strategic_value": "確認 Bioteque TPU 基材選擇正確；SBMA 是主流臨床方向；建議參考 Cook Medical/Boston Scientific 產品作性能對標。"
+          "bioteque_strategic_value": "確認 本專案 TPU 基材選擇正確；SBMA 是主流臨床方向；建議參考 Cook Medical/Boston Scientific 產品作性能對標。"
         }
       }
     },
@@ -8342,13 +8342,13 @@
             "替換頻率應≤4週（若無塗層）"
           ],
           "actionable_insights": [
-            "Bioteque目標：有效塗層延長替換週期至8週+",
+            "本專案目標：有效塗層延長替換週期至8週+",
             "抗菌+抗結痂雙效塗層可同時降低感染和結痂"
           ],
           "red_flags": [
             "臨床數據跨中心差異大*"
           ],
-          "bioteque_relevance": "臨床需求佐證：若Bioteque塗層能延長置留期，直接提升臨床價值"
+          "bioteque_relevance": "臨床需求佐證：若本專案塗層能延長置留期，直接提升臨床價值"
         },
         "review": {
           "scope": "輸尿管支架應用/進展/併發症臨床回顧，2022，包含結痂/感染/疼痛的發生率統計",
@@ -8377,7 +8377,7 @@
             "個人化換管間隔的預測模型缺乏"
           ],
           "best_for": {},
-          "bioteque_strategic_value": "Bioteque 的臨床價值主張：塗層將換管間隔從 4 週延長至 8 週，直接降低患者手術次數 50%，這是最有力的臨床銷售論點。引用 70% 結痂率數據作510(k)設計依據。"
+          "bioteque_strategic_value": "本專案 的臨床價值主張：塗層將換管間隔從 4 週延長至 8 週，直接降低患者手術次數 50%，這是最有力的臨床銷售論點。引用 70% 結痂率數據作510(k)設計依據。"
         }
       }
     },
@@ -8404,7 +8404,7 @@
       ],
       "purpose": "天然生物聚合物（alginate/chitosan）製造和塗層輸尿管支架的回顧",
       "abstract_note": "Alginate主要用於製造支架本體，Chitosan主要用於塗層抗菌。但抗菌效率不足+塗層附著不完整是限制。生物可降解+抗菌+生物相容性的潛力",
-      "value_to_project": "若Bioteque要做天然材料抗菌塗層，此篇是入門。Chitosan可作為Phase 3抗菌候選",
+      "value_to_project": "若本專案要做天然材料抗菌塗層，此篇是入門。Chitosan可作為Phase 3抗菌候選",
       "links": {
         "doi": "https://doi.org/10.1016/j.bioadv.2024.214009",
         "pubmed": "https://pubmed.ncbi.nlm.nih.gov/39216319/"
@@ -8444,13 +8444,13 @@
           ],
           "actionable_insights": [
             "天然材料路線適合法規保守市場（如中國NMPA）",
-            "HA可作Bioteque輸尿管支架的次要表面修飾"
+            "HA可作本專案輸尿管支架的次要表面修飾"
           ],
           "red_flags": [
             "天然材料批次一致性差*",
             "降解速率難控制*"
           ],
-          "bioteque_relevance": "若Bioteque進入中國市場，天然材料路線法規阻力小；主要市場仍建議SBMA"
+          "bioteque_relevance": "若本專案進入中國市場，天然材料路線法規阻力小；主要市場仍建議SBMA"
         },
         "review": {
           "scope": "天然生物聚合物在輸尿管支架製造和塗層的應用，2024，chitosan/HA/alginate/propolis 系統回顧",
@@ -8503,7 +8503,7 @@
             "drug_carrier": "Alginate（凝膠特性適合緩釋）",
             "regulatory_friendly": "Chitosan > HA > propolis"
           },
-          "bioteque_strategic_value": "若 Bioteque 目標亞洲市場（中國 NMPA），天然材料路線法規阻力小；Phase 2 可在 SBMA 旁評估 chitosan 作抗菌層；heparin 路線風險過高，不建議近期採用。"
+          "bioteque_strategic_value": "若 本專案 目標亞洲市場（中國 NMPA），天然材料路線法規阻力小；Phase 2 可在 SBMA 旁評估 chitosan 作抗菌層；heparin 路線風險過高，不建議近期採用。"
         }
       }
     },
@@ -8529,7 +8529,7 @@
       ],
       "purpose": "結痂預防策略更新（2023最新）",
       "abstract_note": "本綜述深入分析輸尿管支架結痂預防的最新進展，以兩大結痂路徑為核心框架：conditioning film 形成路徑（蛋白質沉積驅動）及 biofilm 形成路徑（細菌驅動）。從泌尿結石形成的病理機制出發，本文比較三種預防策略的臨床效果：支架結構改良、生物材料替換及 bio-coating 表面功能化。SBMA 兩性離子塗層的四週結痂率降至 25%（對照組無塗層為 80%，PVP 塗層為 55%），被確認為目前臨床證據最強的抗結痂塗層方案。利尿劑與塗層協同使用可進一步降低結痂率。",
-      "value_to_project": "最新綜述（2023），開放全文。對於Bioteque的Phase 3抗結痂方向極有參考價值",
+      "value_to_project": "最新綜述（2023），開放全文。對於本專案的Phase 3抗結痂方向極有參考價值",
       "links": {
         "doi": "https://doi.org/10.1515/med-2023-0854",
         "pmc": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10710215/"
@@ -8566,14 +8566,14 @@
             "個人化置留時間管理"
           ],
           "actionable_insights": [
-            "Bioteque需準備臨床試驗設計：COF+結痂率+置留期三項指標",
+            "本專案需準備臨床試驗設計：COF+結痂率+置留期三項指標",
             "SBMA臨床證據充分，510(k)路線可能"
           ],
           "red_flags": [
             "臨床試驗成本高",
             "個體差異需大樣本*"
           ],
-          "bioteque_relevance": "Bioteque FDA 510(k)文件引用此類臨床綜述支持設計有效性聲明"
+          "bioteque_relevance": "本專案 FDA 510(k)文件引用此類臨床綜述支持設計有效性聲明"
         },
         "review": {
           "scope": "輸尿管支架結痂預防新進展，2023，材料/塗層/患者管理三維度綜述",
@@ -8631,7 +8631,7 @@
             "cost_effective": "SBMA + 利尿劑（協同最優）",
             "high_risk_patient": "SBMA + 抗菌（chitosan/propolis）"
           },
-          "bioteque_strategic_value": "Bioteque 510(k) 設計有效性聲明核心數據：SBMA 塗層 4 週結痂率 25%，對照組（PVP）55%，無塗層 80%；置留期目標設計為 8 週。這是 FDA 送審最直接的性能指標。"
+          "bioteque_strategic_value": "本專案 510(k) 設計有效性聲明核心數據：SBMA 塗層 4 週結痂率 25%，對照組（PVP）55%，無塗層 80%；置留期目標設計為 8 週。這是 FDA 送審最直接的性能指標。"
         }
       }
     },
@@ -8660,7 +8660,7 @@
       ],
       "purpose": "四種抗汙染表面比較：superhydrophilic zwitterionic vs liquid-like vs liquid-infused vs superhydrophobic",
       "abstract_note": "Superhydrophilic zwitterionic塗層表現最佳：fibrinogen沉積減72.3%，細菌附著減75%+。COF從0.63降至0.35。但無法殺菌→長期效力受限",
-      "value_to_project": "極高價值！zwitterionic的SBMA/MPC策略量化數據。Bioteque SBMA/MPC方向（計畫書6.5.1）的關鍵文獻",
+      "value_to_project": "極高價值！zwitterionic的SBMA/MPC策略量化數據。本專案 SBMA/MPC方向（計畫書6.5.1）的關鍵文獻",
       "links": {
         "doi": "https://doi.org/10.1021/acsbiomaterials.3c01577",
         "pmc": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10865292/"
@@ -8700,13 +8700,13 @@
             "WCA<5°是抗結痂關鍵閾值"
           ],
           "actionable_insights": [
-            "Bioteque選超親水路線（SBMA/兩性離子）為正確",
+            "本專案選超親水路線（SBMA/兩性離子）為正確",
             "SLIPS不適合輸尿管支架（體內不穩定）"
           ],
           "red_flags": [
             "體外結果≠體內，需in vivo驗證*"
           ],
-          "bioteque_relevance": "直接確認Bioteque技術路線選擇：超親水（兩性離子）>其他策略"
+          "bioteque_relevance": "直接確認本專案技術路線選擇：超親水（兩性離子）>其他策略"
         }
       }
     },
@@ -8772,13 +8772,13 @@
             "塗層類型影響大：兩性離子>>親水"
           ],
           "actionable_insights": [
-            "Bioteque Phase 1（PVP）即可延遲結痂；Phase 3（SBMA）才能真正抗結痂",
+            "本專案 Phase 1（PVP）即可延遲結痂；Phase 3（SBMA）才能真正抗結痂",
             "必須做4週體外/體內測試"
           ],
           "red_flags": [
             "矽膠≠TPU，基材轉換需重新驗證*"
           ],
-          "bioteque_relevance": "Bioteque測試設計參考：4週體外人工尿液結痂量化測試為必做項目"
+          "bioteque_relevance": "本專案測試設計參考：4週體外人工尿液結痂量化測試為必做項目"
         }
       }
     },
@@ -8844,7 +8844,7 @@
             "體內4週驗證"
           ],
           "actionable_insights": [
-            "Bioteque Phase 3：SBMA（抗結痂）+ QCS/chitosan（抗菌）雙功能設計",
+            "本專案 Phase 3：SBMA（抗結痂）+ QCS/chitosan（抗菌）雙功能設計",
             "可直接引用U08 in vivo數據作510(k)依據"
           ],
           "red_flags": [
@@ -8876,7 +8876,7 @@
       ],
       "purpose": "PU管材內壁plasma-CVD表面改質：Ar/O/CH4三種比較",
       "abstract_note": "尿液浸泡15天結果：Ar+O（hydrophilic）→結痂和biofilm增加；CH4（疏水）→減少5倍以上。挑戰「親水=抗結痂」的傳統認知*",
-      "value_to_project": "重要的反證！純粹的hydrophilic表面在尿液環境下未必抗結痂。需考慮zwitterionic等更專一的抗汙染表面。對Bioteque的塗層策略有重大影響",
+      "value_to_project": "重要的反證！純粹的hydrophilic表面在尿液環境下未必抗結痂。需考慮zwitterionic等更專一的抗汙染表面。對本專案的塗層策略有重大影響",
       "links": {
         "doi": "https://doi.org/10.1080/08927014.2022.2087513",
         "pubmed": "https://pubmed.ncbi.nlm.nih.gov/35707890/"
@@ -8913,10 +8913,10 @@
           "key_findings": [
             "管腔內表面塗層更重要（直接接觸尿流）",
             "灌注塗覆是內表面處理必要製程",
-            "PU基材直接相關Bioteque"
+            "PU基材直接相關本專案"
           ],
           "actionable_insights": [
-            "Bioteque必須同時處理內外表面",
+            "本專案必須同時處理內外表面",
             "灌注製程需加入生產設備設計",
             "U09製程可直接參考"
           ],
@@ -8924,7 +8924,7 @@
             "管腔內塗層厚度影響流量*",
             "內外塗層固化條件可能衝突*"
           ],
-          "bioteque_relevance": "直接相關：Bioteque PU輸尿管支架內表面製程設計依據"
+          "bioteque_relevance": "直接相關：本專案 PU輸尿管支架內表面製程設計依據"
         }
       }
     },
@@ -8993,7 +8993,7 @@
             "heparin+Cu協同效果>單一"
           ],
           "actionable_insights": [
-            "LbL技術門檻低，Bioteque可嘗試作快速原型",
+            "LbL技術門檻低，本專案可嘗試作快速原型",
             "Cu²⁺釋放量需嚴格控制（毒性視窗窄）*"
           ],
           "red_flags": [
@@ -9109,7 +9109,7 @@
             ],
             "acceptance_tests": []
           },
-          "bioteque_relevance": "市場規模確認（$1.53B by 2026，CAGR 6.5%），亞太高成長支持 Bioteque 台灣/亞洲市場策略。抗菌塗層 CAGR 最高，支持 Phase 3 方向的市場吸引力。OEM 趨勢對 Bioteque 作為 OEM 供應商有利。",
+          "bioteque_relevance": "市場規模確認（$1.53B by 2026，CAGR 6.5%），亞太高成長支持 本專案 台灣/亞洲市場策略。抗菌塗層 CAGR 最高，支持 Phase 3 方向的市場吸引力。OEM 趨勢對 本專案 作為 OEM 供應商有利。",
           "next_actions": [
             "追蹤 Covalon 的技術路線（目前 LitDB 未有詳細資料）",
             "確認亞太市場（台灣/日本/韓國）的法規路徑"

@@ -95,7 +95,7 @@
     {"id":"MAT_HDI","label":"HDI / IPDI","type":"material","cas":"822-06-0","description":"六亞甲基二異氰酸酯，isocyanate 路線核心交聯劑"},
     {"id":"MAT_CHI","label":"Chitosan","type":"material","cas":"9012-76-4","description":"天然多醣，抗菌+抗汙，法規門檻低"},
     {"id":"MAT_HEP","label":"Heparin","type":"material","cas":"9041-08-1","description":"天然抗凝血劑，抗蛋白質吸附，抗結痂"},
-    {"id":"MAT_TPU","label":"TPU","type":"material","cas":"25322-68-3","description":"聚醚型熱塑性聚氨酯，Bioteque 主要基材，含 urethane 可鍵結 isocyanate"},
+    {"id":"MAT_TPU","label":"TPU","type":"material","cas":"25322-68-3","description":"聚醚型熱塑性聚氨酯，本專案 主要基材，含 urethane 可鍵結 isocyanate"},
     {"id":"MAT_TMPTA","label":"TMPTA","type":"material","cas":"15625-89-5","description":"三官能 UV 交聯劑，DSM P08 底塗成分"},
 
     {"id":"PROC_UV","label":"UV Curing","type":"process","description":"UV 光（310-365nm）固化，速度快，適合量產"},
