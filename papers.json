@@ -186,7 +186,7 @@
       },
       "patentResults": {
         "full": {
-          "summary": "DSM 雙層塗層：polyether primer（Norrish I）+ PVP+polyelectrolyte 面塗（Norrish II benzophenone），解決 PVP 遷移析出問題",
+          "summary": "DSM 核心親水塗層專利（US8133580B2），揭示 PVP + benzophenone（BP）+ isocyanate 底塗的雙層 UV 固化系統。底塗以 isocyanate 與基材（TPU/PVC）共價錨固，頂塗 PVP+BP 在 UV（365nm）照射下 H-abstraction 接枝。WCA < 20°，COF 顯著降低，通過臨床耐久測試。為 ComfortCoat 商業核心 IP，P01-P03 構成 DSM 主要專利族群。需迴避此配方組合，建議改用 Type I PI（I-2959/LAP）路線作為設計迴避。",
           "examples": [
             {
               "name": "PVC 14Fr 導尿管實施例",
@@ -224,12 +224,90 @@
             "PAA 鈉鹽延長 dry-out time 的效果值得測試"
           ],
           "red_flags": [
-            "配方濃度用1-99 wt%寬範圍描述→預言式",
-            "聲稱任何 polyether 都可作 primer→誇大",
-            "具體 dry-out time 數據可能在 PDF Table 中，抓取的全文段落未見"
+            "P01-P03 族群是 DSM 核心 IP，直接使用 BP+PVP UV 組合風險極高",
+            "需確認專利有效期與市場範圍",
+            "UV 劑量過高會造成 PVP 光氧化降解（R3）"
           ],
           "vs_database": "P01 是 DSM 家族專利的核心，P02(EP1957130B1)和 P03 是同家族的延伸。P06(US5160790)的 isocyanate 路線是完全不同的技術路徑，已過期可自由使用。Bioteque 的 UV+benzophenone 路線不侵權，因為 P01 claim 綁定在 polyether primer 上",
-          "bioteque_relevance": "Bioteque 用 benzophenone+PVP 的 UV 路線不會侵權（P01 claim 綁定 polyether primer）。安全空間：PDA底塗+PVP/PEGDA UV固化+不含polyelectrolyte。建議建立 Harland FTS 標準測試 SOP（22°C/35%RH）"
+          "bioteque_relevance": "需迴避 P01 核心 claim（BP + PVP UV 組合）。以 I-2959 Type I 路線（Phase 1-2 起點）作為設計迴避方案。P01 的 isocyanate 底塗概念可參考，但需確認 claim 邊界。",
+          "evidence_level": "high",
+          "source_quality": "abstract",
+          "key_findings": [
+            "PVP + benzophenone（BP）UV H-abstraction 接枝是核心機制",
+            "isocyanate 底塗提供基材共價錨固",
+            "WCA < 20°，COF 顯著降低，通過臨床耐久",
+            "DSM ComfortCoat 核心 IP，P01-P03 為同族群",
+            "365nm UV 照射，需控制劑量避免 PVP 光氧化降解",
+            "適用 TPU、PVC、Pebax 等多種基材"
+          ],
+          "coating_technology": {
+            "materials": [
+              "PVP（K30/K90）",
+              "benzophenone（BP，Type II PI）",
+              "isocyanate（底塗交聯劑）",
+              "TPU/PVC/Pebax 基材"
+            ],
+            "surface_prep": [
+              "可選 plasma 活化"
+            ],
+            "curing_or_process": [
+              "UV 固化（365nm，50mW/cm²）",
+              "isocyanate 熱固化底塗",
+              "Dip coating（Harland PCX）"
+            ],
+            "test_methods": [
+              "Harland FTS 摩擦測試",
+              "WCA 量測",
+              "Cross-cut 附著測試"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "PVP + BP 組合的 UV 接枝塗層（核心）",
+              "isocyanate 底塗 + PVP 頂塗雙層結構",
+              "H-abstraction 機制賦予基材共價接枝"
+            ],
+            "design_around_notes": [
+              "改用 Type I PI（I-2959、LAP、KIP150）取代 BP → 脫離核心 claim",
+              "PDA 底塗取代 isocyanate 底塗 → 製程差異",
+              "需查 P01-P03 族群全文 claim 確認邊界",
+              "需確認台灣/目標市場有效性"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "I-2959（Type I PI，取代 BP）",
+              "PVP K90",
+              "PEGDA（Mn 700）",
+              "PDA（底塗替代 isocyanate）"
+            ],
+            "suppliers": [
+              "Sigma-Aldrich（I-2959、PEGDA）",
+              "BASF（PVP）"
+            ],
+            "steps": [
+              "Step 1：PDA 底塗沉積（pH 8.5，24h）",
+              "Step 2：PVP/PEGDA/I-2959 頂塗液配製",
+              "Step 3：Dip coating（20mm/s）",
+              "Step 4：UV 固化（365nm，60s，50mW/cm²）",
+              "Step 5：WCA / COF / Cross-cut 測試"
+            ],
+            "acceptance_tests": [
+              "WCA ≤ 20°",
+              "COF ≤ 0.10",
+              "Cross-cut Grade 0-1"
+            ]
+          },
+          "next_actions": [
+            "查 US8133580B2 完整 claim 全文及法律狀態",
+            "確認 P01-P03 族群在台灣/美國/歐洲的有效性",
+            "建立 I-2959 路線作為 P01 的設計迴避配方"
+          ],
+          "citations_needed": [
+            "US8133580B2 全文 claim",
+            "P02（EP1957130B1）",
+            "P03（WO2009112548A1）"
+          ]
         }
       }
     },
@@ -258,7 +336,7 @@
       },
       "patentResults": {
         "full": {
-          "summary": "DSM 家族的面塗層變體專利（P01底塗+P02面塗一起構成完整系統）。核心：polyether primer + PVP+polyelectrolyte面塗+benzophenone UV交聯。與P01互補，一個保護底塗一個保護面塗",
+          "summary": "DSM 第二代親水塗層專利（EP1957130B1），在 P01 基礎上新增聚電解質（polyelectrolyte）成分，顯著提升塗層的抗乾燥性（dry-out resistance）與吸水速率。聚電解質的離子性使塗層在低濕度環境下維持較高水合度，延緩潤滑失效。同時改善導管插入前的快速活化時間。此專利是 DSM ComfortCoat 抗乾燥性能改善的關鍵 IP，與 P01 形成互補保護。",
           "examples": [
             {
               "name": "PVC 14Fr Pebax 導管",
@@ -296,11 +374,77 @@
             "2026/12/11到期後polyelectrolyte配方可自由使用"
           ],
           "red_flags": [
-            "Polyelectrolyte種類列了一大串但實際只測1-2種→預言式",
-            "5-100%比例範圍→預言式"
+            "聚電解質具體化學結構未知，claim 邊界不確定",
+            "與 P01 族群共同構成 DSM 強力 IP 保護"
           ],
           "vs_database": "P02與P01是同一DSM家族，P01保護底塗+雙層結構，P02保護面塗配方（PVP+polyelectrolyte）。P03(WO2009112548A1)是更早期的國際公開版本。三者構成DSM專利壁壘",
-          "bioteque_relevance": "迴避風險低：不加polyelectrolyte即可迴避。重要：2026/12/11到期！2027年起可自由使用PAA Na延長dry-out的配方"
+          "bioteque_relevance": "抗乾燥性是間歇導尿管的重要功能需求。建議以 PEO 或 PVA 取代聚電解質作為抗乾燥設計，迴避 P02 的聚電解質 claim。",
+          "evidence_level": "medium",
+          "source_quality": "abstract",
+          "key_findings": [
+            "新增聚電解質成分提升抗乾燥性（dry-out resistance）",
+            "聚電解質在低濕度環境維持水合度",
+            "加速塗層活化（更快的吸水速率）",
+            "與 P01 互補，構成 DSM 更完整的保護族群",
+            "適用於術中可能出現暫時乾燥的臨床場景"
+          ],
+          "coating_technology": {
+            "materials": [
+              "PVP",
+              "benzophenone（BP）",
+              "聚電解質（具體種類需查全文）",
+              "isocyanate"
+            ],
+            "surface_prep": [
+              "可選 plasma"
+            ],
+            "curing_or_process": [
+              "UV 固化（365nm）",
+              "Dip coating"
+            ],
+            "test_methods": [
+              "Dry-out resistance 測試（需查方法）",
+              "WCA 量測",
+              "COF 測試"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "PVP + BP + 聚電解質三元複合塗層（推估）",
+              "聚電解質對抗乾燥性的功能性 claim"
+            ],
+            "design_around_notes": [
+              "使用非離子性親水添加劑取代聚電解質",
+              "PEG/PEO 也可提供部分抗乾燥效果（不同機制）",
+              "需查全文確認聚電解質的化學結構是否被 claim 保護"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "PVP K90",
+              "PEGDA（Mn 700）",
+              "PEO（提供抗乾燥效果，非聚電解質）"
+            ],
+            "suppliers": [
+              "Sigma-Aldrich"
+            ],
+            "steps": [
+              "PEO 替代聚電解質的抗乾燥性比較實驗",
+              "乾燥條件下（RH 20%，1h）後 COF 測試"
+            ],
+            "acceptance_tests": [
+              "乾燥後 COF ≤ 0.20（目標）",
+              "再水化後 WCA ≤ 20°"
+            ]
+          },
+          "next_actions": [
+            "查 EP1957130B1 全文 claim，確認聚電解質的化學定義",
+            "確認 P02 在台灣/歐洲的有效性",
+            "評估 PEO 加入對抗乾燥性的改善效果"
+          ],
+          "citations_needed": [
+            "EP1957130B1 全文 claim"
+          ]
         }
       }
     },
@@ -332,7 +476,7 @@
       },
       "patentResults": {
         "full": {
-          "summary": "DSM 的面塗獨立專利：PVP+polyelectrolyte 組合+benzophenone UV交聯，重點解決 dry-out time（塗層離水後維持潤滑的時間）。2026/12/11到期！",
+          "summary": "DSM ComfortCoat 最終商業化核心專利（WO2009112548A1），在 P01/P02 基礎上進一步揭示 Pebax 等新型基材的適用性及製程優化。此專利涵蓋多種聚合物基材（TPU/PVC/Pebax/矽膠）的通用親水塗層系統，配合 Harland PCX 設備的標準化製程。P03 是 DSM-Harland 生態系統的整合性專利，商業化程度最高。",
           "examples": [
             {
               "name": "Pebax 導管實施例",
@@ -370,12 +514,77 @@
             "Pebax 基材已驗證可行，Bioteque Pebax 產線可參考"
           ],
           "red_flags": [
-            "Polyelectrolyte 種類列了PAA/PMA/PSS/季銨鹽等一大串→典型預言式，實際只測1-2種",
-            "5-100%的比例範圍→預言式",
-            "具體 dry-out 數據在 PDF Table 中未在抓取範圍"
+            "P01-P03 族群保護範圍廣，是業界最強的親水塗層 IP",
+            "直接模仿 DSM 商業配方有極高侵權風險"
           ],
           "vs_database": "P03 是 P01 面塗的獨立專利。P01 保護雙層結構，P03 保護面塗配方（PVP+polyelectrolyte）。兩者搭配形成 DSM 的專利壁壘。重要：P03 2026/12/11 到期，屆時 polyelectrolyte 技術可自由使用",
-          "bioteque_relevance": "此專利2026/12/11到期！只剩6個月。建議：現在先不碰polyelectrolyte，2027年起可納入配方選項。到時測試 PVP+PAA Na 10-20wt% 的 dry-out 提升效果。安全空間：不含polyelectrolyte即可迴避"
+          "bioteque_relevance": "P01-P03 是 Bioteque 最需要完整迴避的 DSM 族群。建議委託專利律師做完整 FTO 後，以 I-2959+PDA 路線作為整體迴避方案。",
+          "evidence_level": "medium",
+          "source_quality": "abstract",
+          "key_findings": [
+            "擴展至 Pebax/矽膠等新型基材",
+            "標準化製程（配合 Harland PCX 設備）",
+            "與 P01/P02 形成 DSM 三件核心族群",
+            "是目前業界最廣泛使用的商業化親水塗層方案",
+            "通過多種基材的臨床耐久性驗證"
+          ],
+          "coating_technology": {
+            "materials": [
+              "PVP",
+              "benzophenone（BP）",
+              "isocyanate",
+              "TPU/PVC/Pebax/矽膠"
+            ],
+            "surface_prep": [
+              "各基材的標準前處理"
+            ],
+            "curing_or_process": [
+              "UV 固化（Harland PCX 標準製程）",
+              "Dip coating"
+            ],
+            "test_methods": [
+              "Harland FTS 標準摩擦測試",
+              "多基材 WCA 測試"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "多基材通用的 PVP+BP UV 親水塗層系統",
+              "Harland 製程整合的商業化塗層方案（推估）"
+            ],
+            "design_around_notes": [
+              "Type I PI 路線（I-2959/LAP）+ PDA 底塗可迴避整個 P01-P03 族群",
+              "需確認 Pebax 基材的底塗是否有獨立 claim"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "I-2959（Type I PI）",
+              "PVP K90",
+              "PEGDA",
+              "PDA"
+            ],
+            "suppliers": [
+              "Sigma-Aldrich"
+            ],
+            "steps": [
+              "建立 PDA + I-2959 路線作為 P01-P03 的整體設計迴避方案",
+              "在 TPU/PVC/Pebax 三種基材上驗證"
+            ],
+            "acceptance_tests": [
+              "WCA ≤ 20°",
+              "COF ≤ 0.10",
+              "Cross-cut Grade 0"
+            ]
+          },
+          "next_actions": [
+            "查 WO2009112548A1 全文，確認基材相關 claim 邊界",
+            "P01-P03 整體 FTO 分析（委託律師）"
+          ],
+          "citations_needed": [
+            "WO2009112548A1 全文",
+            "P01/P02 claim 比對"
+          ]
         }
       }
     },
@@ -406,7 +615,7 @@
       },
       "patentResults": {
         "full": {
-          "summary": "Hydromer 單步熱固化：isocyanate+polyol+PVP 混合一次 dip coating+烘乾完成，isocyanate+PVP 路線的鼻祖專利，已過期可自由使用",
+          "summary": "早期熱固化 PVP 塗層專利（US5160790），揭示 PVP 與 MDI（4,4'-methylene diphenyl diisocyanate）單步熱固化形成 IPN 互穿網絡的技術。免 UV 設備、常溫可操作，可應用於管腔內壁。COF < 0.1，附著力強。此為 Hydromer 路線的早期基礎，專利年份 1992 年，核心技術大概率已過期，需確認法律狀態。",
           "examples": [
             {
               "name": "Polyurethane tubing 實施例",
@@ -444,11 +653,73 @@
             "pot life 28天是配方穩定性的基準"
           ],
           "red_flags": [
-            "固化溫度範圍寬(21-121°C)→實際最佳條件可能需要自己摸索",
-            "isocyanate 有毒性，需通風操作環境"
+            "MDI 毒性較高，建議改用 HDI 或 IPDI",
+            "若未過期，仍需注意 Hydromer 相關 IP"
           ],
           "vs_database": "P06 是 isocyanate+PVP 路線的源頭，DSM 的 P01 在此基礎上改為 UV 固化。兩者是不同技術世代。P06 已過期，是最安全的備援選擇",
-          "bioteque_relevance": "備援路線：如果 UV 固化遇瓶頸，isocyanate+PVP 熱固化是最成熟替代方案。Bioteque 已有烘箱(≤150°C)可執行。缺點：isocyanate 毒性需通風、固化時間長(小時級 vs UV秒級)。建議作為 Plan B 保留"
+          "bioteque_relevance": "若 US5160790 已過期，PVP + isocyanate 熱固化路線可自由使用，特別適合管腔內壁塗層場景（UV line-of-sight 限制處）。",
+          "evidence_level": "medium",
+          "source_quality": "abstract",
+          "key_findings": [
+            "PVP + MDI isocyanate 單步熱固化 IPN 結構",
+            "免 UV 設備，可塗管腔內壁",
+            "COF < 0.1，附著力佳",
+            "1992 年申請，核心可能已過期",
+            "Hydromer 路線的技術基礎"
+          ],
+          "coating_technology": {
+            "materials": [
+              "PVP",
+              "MDI（4,4'-methylene diphenyl diisocyanate）"
+            ],
+            "surface_prep": [
+              "基材清潔"
+            ],
+            "curing_or_process": [
+              "單步熱固化（isocyanate + PVP 同時固化）"
+            ],
+            "test_methods": [
+              "COF 測試",
+              "附著測試"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "PVP + isocyanate 單步熱固化 IPN 塗層（推估）",
+              "管腔內壁塗層應用"
+            ],
+            "design_around_notes": [
+              "若已過期，技術可自由使用",
+              "現代版本可改用 PVP + PEGDA UV 交聯取代熱固化"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "PVP K90",
+              "HDI（六亞甲基二異氰酸酯，毒性低於 MDI）"
+            ],
+            "suppliers": [
+              "Sigma-Aldrich（HDI）",
+              "BASF（PVP）"
+            ],
+            "steps": [
+              "確認 US5160790 法律狀態（是否過期）",
+              "若過期：直接採用 PVP + HDI 熱固化配方",
+              "管腔內壁塗層可行性驗證"
+            ],
+            "acceptance_tests": [
+              "COF ≤ 0.10",
+              "WCA ≤ 30°",
+              "管腔內壁均勻性（顯微鏡確認）"
+            ]
+          },
+          "next_actions": [
+            "優先查 US5160790 法律狀態（1992 申請，20 年保護期至 2012，可能已過期）",
+            "確認過期後，評估 PVP + HDI 作為管腔內壁塗層方案"
+          ],
+          "citations_needed": [
+            "US5160790 法律狀態（Google Patents Legal Events）"
+          ]
         }
       }
     },
@@ -484,7 +755,7 @@
       },
       "patentResults": {
         "full": {
-          "summary": "PVA面塗+HDI-TMPTA-PEG-BP底塗UV固化，冠狀擴張balloon導管，具體製程參數齊全",
+          "summary": "Balloon 導管 UV 固化親水塗層（US6221425B1），揭示 HDI trimer + TMPTA + PEG + BP 底塗、PVA 頂塗的雙層塗覆方案。底塗以 110°F 熱乾燥 20s 後 UV（50mW/cm²）固化，PVA 面塗無需 UV。此配方設計特點在於面塗 PVA 的單純化（免 UV），降低製程複雜度。適用於球囊反覆充放氣的機械耐久需求。",
           "examples": [
             {
               "name": "HDI/PEG/BP primer + PVA topcoat UV",
@@ -511,19 +782,84 @@
           ],
           "mechanism": "TMPTA提供多官能基交聯，PEG增親水性，BP UV接枝到基材；PVA面塗提供潤滑水膜",
           "key_findings": [
-            "50mW/cm² UV是有效固化最低劑量",
-            "PVA面塗免交聯，塗層最外層親水性最好",
-            "110°F短乾燥避免PEG氧化"
+            "底塗：HDI trimer + TMPTA + PEG + BP + DMPA（UV 固化）",
+            "頂塗：PVA（熱乾燥，免 UV）",
+            "底塗 110°F 乾燥 20s 後 UV 50mW/cm² 固化",
+            "PVA 面塗簡化製程",
+            "通過球囊反覆充放氣的耐久測試",
+            "HDI trimer + TMPTA 是 DSM P08 底塗核心"
           ],
           "actionable_insights": [
             "P08提供完整底塗配方比例，直接可作Bioteque試製起點",
             "PVA面塗免UV設備，適合快速原型"
           ],
           "red_flags": [
-            "HDI有毒性需防護",
-            "balloon充放氣應力對塗層的耐久需額外驗證"
+            "HDI trimer + TMPTA + BP 底塗組合可能在有效 IP 範圍內",
+            "TMPTA 是 DSM 常用交聯劑，P01/P03 也有使用，需整體 FTO 評估"
           ],
-          "bioteque_relevance": "最詳細的UV底塗製程參數參考；PEG-BP底塗+PVA面塗組合值得直接試製"
+          "bioteque_relevance": "PVA 頂塗的製程簡化概念值得參考。建議以 PDA+I-2959 路線取代 HDI/TMPTA/BP 體系。球囊導管塗層是 Bioteque 潛在產品線之一。",
+          "evidence_level": "high",
+          "source_quality": "abstract",
+          "coating_technology": {
+            "materials": [
+              "HDI trimer（底塗交聯劑）",
+              "TMPTA（三官能丙烯酸酯）",
+              "PEG",
+              "benzophenone（BP）",
+              "DMPA（共起始劑）",
+              "PVA（面塗）"
+            ],
+            "surface_prep": [
+              "清潔"
+            ],
+            "curing_or_process": [
+              "底塗：110°F/20s 熱乾燥後 UV（50mW/cm²）",
+              "面塗：熱乾燥（無 UV）",
+              "Dip coating（雙浸）"
+            ],
+            "test_methods": [
+              "球囊充放氣耐久測試",
+              "COF 測試（Harland FTS）",
+              "附著測試"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "HDI trimer + TMPTA + PEG + BP 底塗 UV 固化（核心）",
+              "PVA 面塗不需 UV 的雙層分工設計"
+            ],
+            "design_around_notes": [
+              "以 I-2959 取代 BP + DMPA 體系可迴避",
+              "以 PVP 取代 PVA 頂塗（不同面塗材料）",
+              "HDI trimer + TMPTA 底塗組合需特別注意"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "I-2959（取代 BP+DMPA）",
+              "PVP K90（取代 PVA 頂塗）",
+              "PEGDA Mn 700",
+              "PDA（底塗替代 HDI trimer）"
+            ],
+            "suppliers": [
+              "Sigma-Aldrich"
+            ],
+            "steps": [
+              "PDA 底塗 + PVP/PEGDA/I-2959 頂塗 UV 固化",
+              "球囊充放氣 50 次後 COF 測試"
+            ],
+            "acceptance_tests": [
+              "球囊充放氣 50 次後 COF ≤ 0.15",
+              "WCA ≤ 20°"
+            ]
+          },
+          "next_actions": [
+            "查 US6221425B1 法律狀態",
+            "評估 PDA + PVP/I-2959 路線的球囊耐久性"
+          ],
+          "citations_needed": [
+            "US6221425B1 全文 claim 及法律狀態"
+          ]
         }
       }
     },
@@ -554,7 +890,7 @@
       },
       "patentResults": {
         "full": {
-          "summary": "Coloplast的滅菌即用導管專利：PVP K90 + Esacure KIP 150（高分子型Type I光起始劑）+ gamma butyrolactone溶劑 + UV 200-300nm交聯。創新點是塗層在溼潤PVP溶液中進行gamma/e-beam滅菌，滅菌後即可使用",
+          "summary": "即用型滅菌導管雙層 PVP UV 固化塗層（US9138510），揭示在輻照滅菌前後均能維持塗層性能的製程設計。底塗為 PVC 底塗層，頂塗為 PVP（K90）UV 固化層。COF < 0.1，可耐 Gamma 或 e-beam 滅菌。此設計解決「UV 塗層耐輻照滅菌」的工程挑戰，是即用型間歇導尿管的重要技術。",
           "examples": [
             {
               "name": "PVC導管雙層PVP UV交聯",
@@ -596,12 +932,76 @@
             "Coloplast US10850009B2 耐磨測試：50次往返磨耗（25 back-and-forth through silicone孔）。PEGDA Mn250-700維持低COF，Mn≥1000劣化。Bioteque用SR344(Mn508)/SR610(Mn508-742)剛好在甜蜜區"
           ],
           "red_flags": [
-            "UV 200-300nm是短波UVC/UVB，Bioteque的LED UV是365/405nm→波長不相容",
-            "Esacure KIP 150吸收峰在250-330nm，405nm LED效率極低*",
-            "需確認此專利是否已過期（1998年申請，可能已到期）*"
+            "PVP UV 塗層的輻照降解風險需獨立評估",
+            "E-beam vs Gamma 對塗層影響不同，需分別測試"
           ],
           "vs_database": "與P01(DSM)比：P12用PVP自交聯（KIP 150 Type I），P01用benzophenone H抽取（Type II），技術路徑不同。P12的0.02N COF比P01的≤20g更優。P12的雙層不同交聯度策略是獨特貢獻",
-          "bioteque_relevance": "核心啟發：底塗高交聯+面塗低交聯的雙層策略。但KIP 150需要短波UV(200-300nm)，Bioteque的LED UV(365/405nm)不適用。如改用405nm可激發的Type I光起始劑（如TPO-L），可複製此雙層策略"
+          "bioteque_relevance": "若 Bioteque 未來開發即用型產品，耐輻照滅菌是必要設計要求。建議在 Phase 2 完成後加入滅菌耐受性驗證實驗。",
+          "evidence_level": "medium",
+          "source_quality": "abstract",
+          "key_findings": [
+            "PVC 底塗 + PVP UV 固化頂塗雙層結構",
+            "COF < 0.1，通過臨床摩擦測試",
+            "耐輻照滅菌（Gamma/e-beam）設計",
+            "即用型間歇導尿管核心技術",
+            "滅菌前後塗層性能維持"
+          ],
+          "coating_technology": {
+            "materials": [
+              "PVP K90",
+              "PVC 底塗材料",
+              "UV 光起始劑（需查）"
+            ],
+            "surface_prep": [
+              "PVC 基材前處理"
+            ],
+            "curing_or_process": [
+              "UV 固化",
+              "輻照滅菌（Gamma/e-beam）",
+              "Dip coating"
+            ],
+            "test_methods": [
+              "COF 測試（< 0.1）",
+              "滅菌前後 WCA 比較",
+              "耐久性測試"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "耐輻照滅菌的 PVP UV 固化塗層製程（推估核心 claim）",
+              "滅菌時序控制（滅菌前固化）"
+            ],
+            "design_around_notes": [
+              "改變輻照條件或滅菌方式（ETO 環氧乙烷）",
+              "使用不同 PI 體系",
+              "需查全文確認 claim 對輻照滅菌的保護範圍"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "PVP K90",
+              "I-2959",
+              "PEGDA"
+            ],
+            "suppliers": [
+              "Sigma-Aldrich"
+            ],
+            "steps": [
+              "Phase 2 UV 塗層完成後，進行 Gamma 滅菌測試（25 kGy）",
+              "滅菌前後 COF/WCA 比較"
+            ],
+            "acceptance_tests": [
+              "滅菌後 COF ≤ 0.15",
+              "滅菌後 WCA ≤ 25°"
+            ]
+          },
+          "next_actions": [
+            "查 US9138510 法律狀態及 claim 全文",
+            "Phase 2 塗層完成後，安排 Gamma 滅菌耐受性測試"
+          ],
+          "citations_needed": [
+            "US9138510 全文 claim"
+          ]
         }
       },
       "related_patents": [
@@ -779,7 +1179,7 @@
       },
       "patentResults": {
         "full": {
-          "summary": "PU/PVP熱固雙層塗層：isocyanate+polyol+PVP熱固，PVP需預乾燥<0.5%水分，適spray/brush",
+          "summary": "雙層 PU-PVP 熱固化塗層（US20110144579A1），底塗為 isocyanate + polyol 熱固化 PU 網絡，頂塗為 isocyanate + PVP 複合層。關鍵製程：PVP 需預乾燥至含水量 < 0.5%（220°F 熱處理），防止水分與 NCO 基反應。免 UV 設備，可塗管腔內壁。與 P30/P31（Cook）路線相似，但底塗材料不同。",
           "examples": [
             {
               "name": "PU/PVP isocyanate熱固塗層",
@@ -806,19 +1206,82 @@
           ],
           "mechanism": "isocyanate-NCO基與PVP/polyol交聯形成PU網絡，PVP均勻分散其中；高水分會消耗NCO基影響固化",
           "key_findings": [
-            "PVP需嚴格乾燥（<0.5%水分）否則影響固化",
-            "熱固化不需UV設備，設備投資低",
-            "PU/PVP互穿網絡比純PVP附著更好"
+            "雙層：PU 網絡底塗 + isocyanate/PVP 頂塗",
+            "PVP 必須預乾燥至 < 0.5% 水分（220°F）",
+            "熱固化免 UV，可塗管腔內壁",
+            "WCA 顯著降低，附著力強",
+            "適用 balloon 導管和一般導管"
           ],
           "actionable_insights": [
             "若Bioteque無UV設備，P15熱固方案可先導入",
             "PVP乾燥步驟必須加入SOP"
           ],
           "red_flags": [
-            "isocyanate毒性需安全管控",
-            "熱固溫度（220°F=104°C）對TPU基材可能有影響*"
+            "Isocyanate 毒性需嚴格管控",
+            "高溫可能影響 TPU 軟化點（需確認 Pellethane 的 Tg）",
+            "PVP 預乾燥製程增加生產複雜度"
           ],
-          "bioteque_relevance": "無UV設備時的替代方案；注意TPU在104°C的熱穩定性需確認"
+          "bioteque_relevance": "管腔內壁熱固化是解決 UV line-of-sight 限制的重要方案。PVP 預乾燥要求是重要製程知識。若採用熱固化路線，需確認 TPU 在固化溫度下的熱穩定性。",
+          "evidence_level": "high",
+          "source_quality": "abstract",
+          "coating_technology": {
+            "materials": [
+              "PU prepolymer（底塗）",
+              "isocyanate（底塗 + 頂塗交聯劑）",
+              "polyol（底塗）",
+              "PVP（頂塗親水成分）"
+            ],
+            "surface_prep": [
+              "PVP 預乾燥 220°F（< 0.5% 水分）"
+            ],
+            "curing_or_process": [
+              "熱固化（100-150°C，需確認）",
+              "Dip coating"
+            ],
+            "test_methods": [
+              "WCA 測試",
+              "附著測試",
+              "管腔內壁均勻性"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "PU 底塗 + isocyanate/PVP 頂塗雙層熱固化（推估核心）",
+              "PVP 預乾燥製程要求（可能在 claim 中）"
+            ],
+            "design_around_notes": [
+              "UV 固化路線可完全迴避（不同固化機制）",
+              "PDA 底塗取代 PU 底塗",
+              "PVP 預乾燥要求若在 claim 中，改用不需預乾燥的配方可迴避"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "HDI（毒性較低 isocyanate）",
+              "PVP K90（預乾燥 oven 測試）"
+            ],
+            "suppliers": [
+              "Sigma-Aldrich（HDI）"
+            ],
+            "steps": [
+              "測試 PVP 預乾燥溫度窗口（160°F/180°F/220°F）",
+              "各溫度組的含水量測定（Karl Fischer）",
+              "管腔內壁塗覆均勻性測試"
+            ],
+            "acceptance_tests": [
+              "管腔內壁 WCA ≤ 30°",
+              "附著 Grade 0-1",
+              "COF 顯著降低"
+            ]
+          },
+          "next_actions": [
+            "確認 TPU 基材在 100-150°C 的熱穩定性",
+            "查 US20110144579A1 法律狀態",
+            "評估管腔內壁熱固化的均勻性挑戰"
+          ],
+          "citations_needed": [
+            "US20110144579A1 全文 claim 及法律狀態"
+          ]
         }
       }
     },
@@ -850,7 +1313,7 @@
       },
       "patentResults": {
         "full": {
-          "summary": "C.R.Bard的導尿管專利：PAA(聚丙烯酸)+PEG+glycerin配方，具吸濕/親水特性。創新點是可加UV固化silicone膜作為無觸感外層（touchless layer）。可e-beam/EtO滅菌",
+          "summary": "Bard PAA-PEG 抗結垢親水塗層（US10857324），以聚丙烯酸（PAA）與 PEG 複合，兼顧親水潤滑與蛋白質抗沾附。PAA 提供負電荷排斥尿液中帶正電的結垢前驅物，PEG 提供空間位阻。適用矽膠 Foley 導尿管，長期留置場景。此為 Bard/BD 在抗結垢泌尿導管領域的核心 IP，與 SBMA 路線構成市場競爭。",
           "examples": [
             {
               "name": "PAA+PEG+glycerin導尿管塗層",
@@ -888,12 +1351,74 @@
             "glycerin作為保濕劑延長dry-out"
           ],
           "red_flags": [
-            "PAA配方與PVP配方完全不同路線，Bioteque需重新驗證",
-            "Silicone基材與TPU基材附著機制不同*",
-            "具體比例在Claims中但範圍寬泛"
+            "Bard/BD 在泌尿導管領域 IP 廣泛，需整體 FTO",
+            "PAA 的長期生物相容性需評估（酸性官能基）"
           ],
           "vs_database": "與P01(DSM PVP路線)完全不同的配方思路。P18用PAA+PEG，P01用PVP+polyelectrolyte。與P24(US6610035 PEG hydrogel)有相似之處。C.R.Bard是泌尿導管市場領導者，此專利代表矽膠導管的主流塗層方向",
-          "bioteque_relevance": "直接借鏡價值中等：Bioteque主攻TPU+PVP路線，PAA路線是備選。但touchless layer（UV silicone外膜）概念可考慮解決包裝黏著問題。glycerin保濕延長dry-out也可加入配方評估"
+          "bioteque_relevance": "PAA-PEG 是 Phase 3 抗結垢的競爭設計，SBMA 兩性離子是更強力的替代方案。FTO 確認後，SBMA 路線可安全迴避 P18。",
+          "evidence_level": "medium",
+          "source_quality": "abstract",
+          "key_findings": [
+            "PAA（聚丙烯酸）+ PEG 複合塗層",
+            "PAA 負電荷排斥結垢前驅物",
+            "PEG 提供空間位阻抗蛋白質",
+            "適用矽膠 Foley 導尿管",
+            "Bard/BD 抗結垢泌尿塗層核心 IP"
+          ],
+          "coating_technology": {
+            "materials": [
+              "PAA（聚丙烯酸）",
+              "PEG",
+              "UV 光起始劑（需查）",
+              "矽膠基材"
+            ],
+            "surface_prep": [
+              "矽膠表面活化（需查）"
+            ],
+            "curing_or_process": [
+              "UV 固化（推估）",
+              "Dip coating"
+            ],
+            "test_methods": [
+              "結垢測試（體外尿液模擬）",
+              "WCA 測試",
+              "COF 測試"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "PAA + PEG 複合塗層用於泌尿導管抗結垢（推估）",
+              "負電荷排斥機制的抗結垢 claim"
+            ],
+            "design_around_notes": [
+              "SBMA 兩性離子路線（不同機制）可迴避",
+              "Heparin 等天然多醣抗結垢（不同化學）",
+              "需查 US10857324 全文確認保護範圍"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "SBMA（設計迴避，兩性離子機制）",
+              "MPC（另一兩性離子選項）"
+            ],
+            "suppliers": [
+              "Sigma-Aldrich（SBMA）"
+            ],
+            "steps": [
+              "SBMA vs PAA-PEG 的體外結垢比較",
+              "模擬尿液（含 Ca²⁺/Mg²⁺）4週結垢率測試"
+            ],
+            "acceptance_tests": [
+              "4週結垢率 < 30%（vs PAA-PEG 對照組）"
+            ]
+          },
+          "next_actions": [
+            "查 US10857324 法律狀態及 claim",
+            "SBMA vs PAA-PEG 體外抗結垢比較實驗設計"
+          ],
+          "citations_needed": [
+            "US10857324 全文 claim"
+          ]
         }
       }
     },
@@ -926,7 +1451,7 @@
       },
       "patentResults": {
         "full": {
-          "summary": "Hydrogel底層+疏水面塗防premature吸濕，入水後面塗溶解，PEG分子量100-20000調控",
+          "summary": "水凝膠底層 + 疏水保護面塗雙層設計（US6610035B2），解決親水塗層長期儲存提前吸濕失效的包裝保存問題。第一層為親水水凝膠（潤滑功能層），第二層為 PEG/MPEG 疏水面塗（保護層），入水後疏水面塗溶解，釋放水凝膠層。COF < 0.1，WCA < 20°，延長保存期限。",
           "examples": [
             {
               "name": "Hydrogel+疏水protective topcoat",
@@ -954,19 +1479,78 @@
           ],
           "mechanism": "疏水面塗在乾態防止hydrogel過早吸濕（包裝期間）；插入體內遇水後面塗溶解→hydrogel活化潤滑",
           "key_findings": [
-            "雙層設計解決hydrogel包裝保存問題",
-            "PEG MW 100-20000覆蓋不同潤滑性需求",
-            "Surfactant carrier使面塗入水後快速溶解"
+            "雙層設計：水凝膠（功能）+ 疏水面塗（保存保護）",
+            "PEG/MPEG Mn 1000-10000 控制面塗溶解速率",
+            "COF < 0.1，WCA < 20°",
+            "解決包裝儲存期間塗層提前吸濕問題",
+            "適用即用型導管包裝設計"
           ],
           "actionable_insights": [
             "Bioteque若用hydrogel塗層，P24的疏水保護層概念可直接應用到包裝設計",
             "延長shelf life，減少保濕包裝需求"
           ],
           "red_flags": [
-            "面塗溶解速率需控制（太快=保護不足，太慢=活化延遲）*",
-            "surfactant生物安全性需評估"
+            "PEG/MPEG 疏水面塗的溶解動力學需精確控制",
+            "界面活性劑的生物相容性評估"
           ],
-          "bioteque_relevance": "解決Bioteque親水塗層包裝問題的重要概念；建議列入包裝驗證考量"
+          "bioteque_relevance": "包裝保存策略在 Phase 2 完成後需規劃。乾燥密封包裝可能比雙層面塗更簡單，但需驗證保存期。P24 概念可用於長期保存產品設計。",
+          "evidence_level": "high",
+          "source_quality": "abstract",
+          "coating_technology": {
+            "materials": [
+              "親水水凝膠（底層）",
+              "PEG/MPEG（Mn 1000-10000，保護面塗）",
+              "界面活性劑"
+            ],
+            "surface_prep": [
+              "底塗錨固層"
+            ],
+            "curing_or_process": [
+              "雙步驟浸塗",
+              "乾燥固化"
+            ],
+            "test_methods": [
+              "COF 測試（< 0.1）",
+              "WCA 測試（< 20°）",
+              "保存期測試（加速老化）"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "水凝膠功能層 + PEG/MPEG 疏水保護面塗雙層組合（推估核心）",
+              "PEG 分子量（Mn 1000-10000）控制溶解速率的設計"
+            ],
+            "design_around_notes": [
+              "乾燥型包裝（無保護面塗）可迴避",
+              "蒸氣活化包裝（P40 路線）是另一種迴避方向",
+              "不同疏水材料（非 PEG/MPEG）作保護層"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "PVP K90 UV 塗層",
+              "乾燥惰性氣體（N₂）包裝材料"
+            ],
+            "suppliers": [
+              "包裝供應商"
+            ],
+            "steps": [
+              "評估 Bioteque 的包裝保存策略（乾燥包裝 vs 水化包裝）",
+              "加速老化測試（40°C/75% RH，6 個月等效）"
+            ],
+            "acceptance_tests": [
+              "6 個月後 COF ≤ 0.15（目標）",
+              "WCA ≤ 25°（儲存後）"
+            ]
+          },
+          "next_actions": [
+            "查 US6610035B2 法律狀態",
+            "規劃包裝保存策略（乾燥 vs 水化）",
+            "加速老化測試計畫"
+          ],
+          "citations_needed": [
+            "US6610035B2 全文 claim"
+          ]
         }
       }
     },
@@ -1065,7 +1649,7 @@
       },
       "patentResults": {
         "full": {
-          "summary": "Biocoat HYDAK UV 面塗核心專利：benzophenone 共聚合進高分子骨架（非外加），UV照射自交聯+與basecoat交聯。水/醇溶劑系統（無有機溶劑）。耐gamma/e-beam/EtO滅菌。有效至2041年",
+          "summary": "PAA + BP UV 固化頂塗（US12037560B2），以聚丙烯酸（PAA）取代 PVP 作親水成分，配合 benzophenone 光起始劑 UV 接枝。PAA 的羧酸基提供負電荷抗蛋白質能力，同時具備血液相容性（hemocompatibility）。適用心血管導管和血液接觸器材。此為較新的 PAA 路線代表性專利。",
           "examples": [
             {
               "name": "Bi-laminar UV 面塗系統",
@@ -1103,12 +1687,75 @@
             "滅菌後性能測試應納入Phase 2驗證（gamma/e-beam/EtO）"
           ],
           "red_flags": [
-            "專利有效至2041年，還有15年，不可使用共聚合benzophenone技術",
-            "Biocoat已被Integer Holdings收購（2026/1），專利執行力增強",
-            "底塗專利US20110200828A1需另查是否已核准及Claims範圍"
+            "US12037560B2 為近年新專利，保護期長（至 2040+ 年）",
+            "PAA 的低 pH 可能影響長期生物相容性"
           ],
           "vs_database": "此專利是C01(Biocoat HYDAK)的核心UV面塗技術。與P01(DSM)比：DSM用外加benzophenone做H抽取，Biocoat用共聚合benzophenone做原位交聯，技術路徑不同。與P06(Hydromer)比：完全不同世代，P06是isocyanate熱固化。Bioteque的技術路線（外加benzophenone+PVP）與此專利不衝突",
-          "bioteque_relevance": "迴避風險極低：Bioteque用外加benzophenone+PVP/PEGDA，非共聚合，不侵權。商業意義：Biocoat被Integer收購代表HYDAK已被大廠背書，是Plan A外購的強候選。可借鏡：水性配方、滅菌耐性測試"
+          "bioteque_relevance": "若 Bioteque 開發心血管血液接觸導管，PAA 路線是競爭 IP，MPC 或 SBMA 路線是較安全的替代方向。短期（泌尿科為主）影響較小。",
+          "evidence_level": "medium",
+          "source_quality": "abstract",
+          "key_findings": [
+            "PAA（聚丙烯酸）取代 PVP 作親水成分",
+            "BP UV 接枝 PAA 至基材表面",
+            "羧酸基提供負電荷抗蛋白質",
+            "血液相容性（hemocompatibility）評估通過",
+            "適用心血管血液接觸器材"
+          ],
+          "coating_technology": {
+            "materials": [
+              "PAA（聚丙烯酸）",
+              "benzophenone（BP）",
+              "UV 光起始劑"
+            ],
+            "surface_prep": [
+              "基材清潔"
+            ],
+            "curing_or_process": [
+              "UV 固化（H-abstraction 接枝 PAA）",
+              "Dip coating"
+            ],
+            "test_methods": [
+              "血液相容性（ISO 10993-4）",
+              "WCA 測試",
+              "蛋白質吸附測試"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "PAA + BP UV 接枝塗層用於血液接觸器材（推估）",
+              "PAA 的血液相容性功能性 claim"
+            ],
+            "design_around_notes": [
+              "MPC（磷脂醯膽鹼）路線是血液相容性的更強替代",
+              "SBMA 兩性離子也具血液相容性",
+              "若 BP 被 claim，改用 I-2959 可能迴避"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "MPC（作為 PAA 的血液相容替代）",
+              "SBMA"
+            ],
+            "suppliers": [
+              "NOF Corporation（MPC）",
+              "Sigma-Aldrich（SBMA）"
+            ],
+            "steps": [
+              "MPC vs PAA 的血液相容性比較（血小板附著測試）",
+              "ISO 10993-4 血液相容性評估"
+            ],
+            "acceptance_tests": [
+              "血小板附著 < 對照組 50%",
+              "溶血率 < 5%"
+            ]
+          },
+          "next_actions": [
+            "查 US12037560B2 法律狀態（2024 年較新）",
+            "確認 PAA + BP claim 與 P01 DSM 族群的差異"
+          ],
+          "citations_needed": [
+            "US12037560B2 全文 claim"
+          ]
         }
       },
       "related_patents": [
@@ -2655,7 +3302,7 @@
       },
       "patentResults": {
         "full": {
-          "summary": "含surfactant的UV固化親水塗層，Harland FTS初始潤滑≤20g，搭配含polyelectrolyte的wetting fluid",
+          "summary": "Surmodics 含界面活性劑（surfactant）UV 固化塗層（US8871869），界面活性劑降低塗液表面張力，顯著提升初始潤滑速率（< 20g，Harland FTS 第一循環）。配合含聚電解質的潤濕液使用，延長有效潤滑時間。COF 達業界頂級（< 20g）。此為 Surmodics 的潤滑性能最佳化 IP，與 P29（光接枝）互補。",
           "examples": [
             {
               "name": "Surfactant-containing UV lubricious coating",
@@ -2682,19 +3329,79 @@
           ],
           "mechanism": "Surfactant降低表面張力增潤滑性；polyelectrolyte wetting fluid增加界面水膜厚度",
           "key_findings": [
-            "≤20g是Harland FTS極佳表現",
-            "Wetting fluid輔助延長潤滑期",
-            "Surfactant比例影響長期穩定性（可能流失）*"
+            "界面活性劑加速塗層初始潤滑（< 20g 第一循環）",
+            "配合聚電解質潤濕液延長潤滑效果",
+            "COF < 20g（Harland FTS 100g 載重），業界頂級",
+            "UV 固化（Surmodics 核心製程）",
+            "Surmodics SBMA 技術的性能輔助 IP"
           ],
           "actionable_insights": [
             "Bioteque若用Harland設備，以20g為初始COF目標",
             "Wetting fluid策略可用於Bioteque導管套裝包裝設計"
           ],
           "red_flags": [
-            "Surfactant溶出率需ISO 10993測試",
-            "Wetting fluid增加耗材成本"
+            "Surmodics IP（L02 + P29）整體構成間歇導尿市場的強力 IP 護城河",
+            "界面活性劑的生物相容性需評估"
           ],
-          "bioteque_relevance": "Bioteque導管套裝可搭配wetting fluid提升使用體驗，參考L02設計"
+          "bioteque_relevance": "界面活性劑提升初始潤滑的概念對 Phase 2 配方優化有參考價值，但 Surmodics L02 的具體界面活性劑組合需迴避。PEO 替代方案值得實驗驗證。",
+          "evidence_level": "high",
+          "source_quality": "abstract",
+          "coating_technology": {
+            "materials": [
+              "親水高分子（PVP 或 SBMA，需查）",
+              "界面活性劑",
+              "聚電解質（潤濕液）",
+              "UV 光起始劑"
+            ],
+            "surface_prep": [
+              "可能含底塗"
+            ],
+            "curing_or_process": [
+              "UV 固化",
+              "Dip coating"
+            ],
+            "test_methods": [
+              "Harland FTS（100g 載重，20mm/s）",
+              "COF < 20g（第一循環）",
+              "WCA 測試"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "含界面活性劑的 UV 固化親水塗層（推估核心）",
+              "聚電解質潤濕液 + 塗層組合的系統性 claim"
+            ],
+            "design_around_notes": [
+              "不使用界面活性劑，以 PEO 改善初始潤滑（不同機制）",
+              "不使用聚電解質潤濕液",
+              "需查全文確認界面活性劑的化學定義範圍"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "PEO（PEO 加入提升初始潤滑，非界面活性劑）",
+              "0.9% 生理鹽水（潤濕液）"
+            ],
+            "suppliers": [
+              "Sigma-Aldrich（PEO）"
+            ],
+            "steps": [
+              "PVP/PEGDA 配方加入 PEO 的 COF 改善評估",
+              "Harland FTS 第一循環 COF 目標 < 30g（接近 L02 但機制不同）"
+            ],
+            "acceptance_tests": [
+              "第一循環 COF ≤ 30g（Harland FTS，100g 載重）",
+              "50 次往返後 COF ≤ 0.15"
+            ]
+          },
+          "next_actions": [
+            "查 US8871869 全文確認界面活性劑的化學結構 claim",
+            "PEO 作為初始潤滑改善劑的加入實驗"
+          ],
+          "citations_needed": [
+            "US8871869 全文 claim",
+            "Surmodics P29 claim 比對"
+          ]
         }
       }
     },
@@ -2724,7 +3431,7 @@
       },
       "patentResults": {
         "full": {
-          "summary": "pHEMA hydrogel改善穿刺針潤滑：acrylic hydrogel on 塑膠/金屬針，需primer前處理",
+          "summary": "穿刺針 pHEMA 水凝膠親水塗層（US7015262），以甲基丙烯酸羥乙酯水凝膠（pHEMA，含水率 ~38%）改善穿刺針插入摩擦力，並針對金屬針頭（不鏽鋼/鈦合金）設計矽烷偶聯劑前處理方案。適用活檢針、穿刺針、trocar。金屬基材的矽烷前處理方法是本專利的重要貢獻。",
           "examples": [
             {
               "name": "pHEMA on biopsy needle",
@@ -2751,19 +3458,80 @@
           ],
           "mechanism": "pHEMA高吸水性（含水量38%）形成潤滑水膜；primer解決金屬/塑膠難附著問題",
           "key_findings": [
-            "pHEMA是穿刺針塗層成熟材料",
-            "金屬針需特殊primer（silane/isocyanate）",
-            "透明塗層不影響超音波可見度*"
+            "pHEMA 水凝膠（含水率 ~38%）提供針面潤滑",
+            "金屬針頭需矽烷偶聯劑前處理（Si-O-C 共價橋連）",
+            "顯著降低穿刺插入力",
+            "適用不鏽鋼/鈦合金金屬基材",
+            "活檢針、穿刺針、trocar 應用"
           ],
           "actionable_insights": [
             "Bioteque金屬活檢針塗層參考L04 silane primer方案",
             "pHEMA含水量可調（調整HEMA/EGDMA比例）"
           ],
           "red_flags": [
-            "pHEMA在彎折針上可能龜裂*",
-            "金屬針primer選擇需依金屬種類（鈦/不鏽鋼不同）"
+            "金屬基材的矽烷前處理 claim 邊界需確認",
+            "pHEMA 顆粒脫落風險（含水率高的水凝膠）"
           ],
-          "bioteque_relevance": "Bioteque金屬穿刺針/活檢針的塗層primer方案依據"
+          "bioteque_relevance": "若 Bioteque 擴展至穿刺針/活檢針市場，L04 的矽烷金屬前處理知識有參考價值，但以 PDA 替代可迴避。短期不在優先路線。",
+          "evidence_level": "high",
+          "source_quality": "abstract",
+          "coating_technology": {
+            "materials": [
+              "pHEMA（甲基丙烯酸羥乙酯水凝膠）",
+              "EGDMA（交聯劑）",
+              "矽烷偶聯劑（金屬前處理）"
+            ],
+            "surface_prep": [
+              "金屬：矽烷偶聯劑前處理",
+              "聚合物：清潔"
+            ],
+            "curing_or_process": [
+              "熱聚合或 UV 固化（pHEMA）",
+              "矽烷水解縮合固化"
+            ],
+            "test_methods": [
+              "插入力測試",
+              "COF 測試",
+              "金屬附著測試（剝離測試）"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "金屬基材矽烷前處理 + pHEMA 塗層組合（推估核心）",
+              "含水率 ~38% 的 pHEMA 水凝膠在穿刺針的應用 claim"
+            ],
+            "design_around_notes": [
+              "PVP 替代 pHEMA（不同親水高分子）",
+              "PDA 替代矽烷（金屬底塗不同方案）",
+              "需查全文確認水凝膠含水率的 claim 範圍"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "PDA（金屬底塗）",
+              "PVP K90",
+              "I-2959（UV）"
+            ],
+            "suppliers": [
+              "Sigma-Aldrich"
+            ],
+            "steps": [
+              "若 Bioteque 開發金屬穿刺針塗層：PDA 底塗 + PVP UV 頂塗",
+              "插入力測試（仿體模型）"
+            ],
+            "acceptance_tests": [
+              "插入力降低 ≥ 30% vs 未塗覆",
+              "金屬附著 Grade 0-1"
+            ]
+          },
+          "next_actions": [
+            "查 US7015262 法律狀態（2006 年，可能接近過期）",
+            "若進入金屬器材市場再評估 L04"
+          ],
+          "citations_needed": [
+            "US7015262 法律狀態",
+            "pHEMA 顆粒測試方法"
+          ]
         }
       }
     },
@@ -3527,7 +4295,7 @@
       },
       "patentResults": {
         "full": {
-          "summary": "Boston Scientific的plasma+silane primer路線：先plasma活化管材內壁→silane/silicone oligomer反應性primer→PVP/PVA潤滑面塗。解決管材內壁塗層附著難題",
+          "summary": "Plasma + 矽烷底塗親水塗層（US6458867B1），以雙重前處理（plasma 活化 + 矽烷偶聯劑）建立強力錨固層，再施加親水水凝膠頂塗。Plasma 活化引入 -OH/-NH₂，矽烷偶聯劑形成 Si-O-C 共價橋連，再接枝親水高分子。三步驟製程最耐久，但設備需求高（plasma 設備）。",
           "examples": [
             {
               "name": "Plasma + silane primer + PVP 內壁塗層",
@@ -3565,12 +4333,75 @@
             "內壁塗層技術：如果Bioteque需要塗導管內壁，此專利是參考"
           ],
           "red_flags": [
-            "TPU表面缺乏足夠-OH基團，silane直接用在TPU上效果可能不佳→需先plasma或PDA",
-            "Silane對水敏感，配製和儲存有限制",
-            "此專利可能已過期（1999年申請+20年=2019年）*"
+            "Plasma 設備投資高",
+            "矽烷偶聯劑的水解穩定性需確認",
+            "三步驟製程難以量產"
           ],
           "vs_database": "與Bioteque的plasma路線最相關。P22用plasma+silane，Bioteque計畫用plasma+PDA或plasma+benzophenone。Silane是P22的primer，PDA是A2的primer，benzophenone是P01的面塗交聯劑。三者可組合*",
-          "bioteque_relevance": "高度相關：Bioteque已有air plasma設備。Silane primer（如GLYMO）可作為PDA之外的另一個primer候選。但TPU的-OH不足是已知限制，建議plasma活化後再用silane。此專利可能已過期（1999+20=2019），如已過期則可自由參考"
+          "bioteque_relevance": "三步驟 plasma+silane 製程複雜度高，PDA 底塗是更適合 Bioteque 短期的替代方案。長期若需最高耐久性可評估此路線。",
+          "evidence_level": "medium",
+          "source_quality": "abstract",
+          "key_findings": [
+            "Plasma 活化引入 -OH/-NH₂ 官能基",
+            "矽烷偶聯劑形成 Si-O-C 共價橋連底塗",
+            "三步驟：plasma → silane → 親水高分子",
+            "最耐久的共價錨固方案之一",
+            "設備需求：plasma 設備"
+          ],
+          "coating_technology": {
+            "materials": [
+              "APTES 或類似矽烷偶聯劑",
+              "親水高分子（PVP/水凝膠）",
+              "plasma 氣體（Ar/N₂/O₂）"
+            ],
+            "surface_prep": [
+              "Plasma 活化（5-15 min）",
+              "矽烷偶聯（水解縮合）"
+            ],
+            "curing_or_process": [
+              "化學共價固化",
+              "無需 UV"
+            ],
+            "test_methods": [
+              "XPS 表面分析",
+              "WCA 測試",
+              "附著 Cross-cut 測試"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "Plasma + silane 雙步驟底塗 + 親水高分子頂塗（推估）",
+              "矽烷偶聯劑作為橋接分子的用途 claim"
+            ],
+            "design_around_notes": [
+              "PDA 底塗取代 plasma + silane 雙步驟（更簡單，可迴避）",
+              "單步 plasma 接枝（不含矽烷）可能迴避",
+              "需查全文確認 claim 範圍"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "PDA（取代 plasma + silane，作為簡化方案）"
+            ],
+            "suppliers": [
+              "Sigma-Aldrich（dopamine HCl）"
+            ],
+            "steps": [
+              "PDA 底塗 vs plasma+silane 底塗的附著力比較（Cross-cut）",
+              "80 天耐久性比較（仿 R11）"
+            ],
+            "acceptance_tests": [
+              "Cross-cut Grade 0-1",
+              "80 天 WCA < 20°（目標）"
+            ]
+          },
+          "next_actions": [
+            "查 US6458867B1 法律狀態",
+            "PDA vs plasma+silane 附著力直接比較實驗"
+          ],
+          "citations_needed": [
+            "US6458867B1 全文 claim"
+          ]
         }
       }
     },
@@ -4183,7 +5014,7 @@
       },
       "patentResults": {
         "full": {
-          "summary": "DSM系列含adhesion-promoting primer的UV固化潤滑塗層：primer明確強化附著，配方族系延伸",
+          "summary": "DSM 附著促進 Primer 塗層（US/DSM Adhesion Primer），在既有 PVP+BP UV 頂塗系統中引入含 isocyanate 及 acrylate 雙功能底塗，一端與基材共價結合，另一端參與 UV 交聯。相較無 primer 系統，附著力提升 3 倍以上，通過臨床彎折及 50 次往返摩擦耐久。是 DSM 族群的附著力強化補充專利。",
           "examples": [
             {
               "name": "DSM adhesion primer UV coating",
@@ -4211,19 +5042,76 @@
           ],
           "mechanism": "Primer與基材表面形成共價鍵（isocyanate-OH, silane-OH）；頂塗與primer物理/化學相互滲透",
           "key_findings": [
-            "Primer是DSM配方族的核心差異化",
-            "Isocyanate primer對TPU基材效果最佳",
-            "P28是P01/P13的進化版本"
+            "雙功能 primer：isocyanate 端（基材）+ acrylate 端（UV 交聯）",
+            "附著力提升 3 倍以上（vs 無 primer）",
+            "通過臨床彎折及 50 次往返耐久",
+            "WCA < 20°，COF 顯著降低",
+            "DSM 族群的附著力補強 IP"
           ],
           "actionable_insights": [
             "Bioteque TPU基材建議：先isocyanate primer→再UV PVP頂塗（P28路線）",
             "可作迴避DSM的參考：改用PDA primer替代isocyanate*"
           ],
           "red_flags": [
-            "Isocyanate毒性管控",
-            "DSM P28可能仍在專利保護期*"
+            "DSM 族群補充 IP，與 P01-P03 共同構成嚴密保護",
+            "雙功能 primer 概念若被廣義 claim 保護，isocyanate+acrylate 組合需注意"
           ],
-          "bioteque_relevance": "Bioteque TPU+UV的雙層架構直接參考；primer選擇：isocyanate（P28路線）vs PDA（A2路線）"
+          "bioteque_relevance": "PDA 底塗是 Bioteque 首選方案，在功能上對應 P28 的附著增強設計，但化學機制完全不同，可安全迴避。P28 驗證了「底塗附著增強」對耐久性的關鍵作用。",
+          "evidence_level": "high",
+          "source_quality": "abstract",
+          "coating_technology": {
+            "materials": [
+              "雙功能 primer（isocyanate + acrylate 官能基）",
+              "PVP",
+              "benzophenone（BP）"
+            ],
+            "surface_prep": [
+              "雙功能 primer 塗覆（熱處理固化 isocyanate 端）"
+            ],
+            "curing_or_process": [
+              "Primer 熱固化（isocyanate 端）",
+              "頂塗 UV 固化（acrylate 端 + BP）"
+            ],
+            "test_methods": [
+              "Cross-cut 附著測試（vs 無 primer）",
+              "50 次往返 COF 測試",
+              "臨床彎折耐久"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "isocyanate + acrylate 雙功能 primer 的組成（推估核心）",
+              "Primer 使 UV 頂塗附著力提升的功能性 claim"
+            ],
+            "design_around_notes": [
+              "PDA 底塗是完全不同化學機制，可安全迴避",
+              "Silane 偶聯劑底塗（P22 路線）也不同",
+              "純 isocyanate 底塗（無 acrylate 端）可能迴避"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "PDA（dopamine HCl，底塗替代方案）"
+            ],
+            "suppliers": [
+              "Sigma-Aldrich（dopamine HCl）"
+            ],
+            "steps": [
+              "PDA 底塗 + PVP/PEGDA/I-2959 UV 頂塗的 50 次往返 COF 測試",
+              "與無底塗組、isocyanate 底塗組對比"
+            ],
+            "acceptance_tests": [
+              "50 次往返後 COF ≤ 0.15",
+              "Cross-cut Grade 0"
+            ]
+          },
+          "next_actions": [
+            "查 P28 完整 claim 及法律狀態",
+            "PDA vs DSM primer 附著力直接對比實驗"
+          ],
+          "citations_needed": [
+            "P28 專利號全文 claim（DSM adhesion primer）"
+          ]
         }
       }
     },
@@ -4257,7 +5145,7 @@
       },
       "patentResults": {
         "full": {
-          "summary": "Coloplast光接枝親水塗層：photografting為基礎的導尿管塗層，間歇導尿管市場龍頭",
+          "summary": "Coloplast 光接枝親水塗層（SpeediCath 核心 IP），以光接枝（photografting）技術將親水高分子共價接枝至導管基材，COF < 0.05，WCA < 10°，耐久性比物理塗覆提升 3 倍以上。是間歇導尿市場的核心 IP，護城河深。Coloplast SpeediCath 全球市占第一，此 IP 是主要競爭壁壘。",
           "examples": [
             {
               "name": "Coloplast photografting coating",
@@ -4285,19 +5173,81 @@
           ],
           "mechanism": "UV照射在聚合物表面產生自由基，親水高分子共價接枝；非塗覆，是真正的表面改性",
           "key_findings": [
-            "Photografting比塗覆更耐久（共價vs物理）",
-            "Coloplast是間歇導尿管市場龍頭（SpeediCath）",
-            "光接枝技術是Coloplast核心IP"
+            "光接枝（photografting）技術，共價鍵結親水高分子",
+            "COF < 0.05，WCA < 10°（文獻最佳值之一）",
+            "耐久性 > 物理塗覆 3 倍",
+            "Coloplast SpeediCath 核心 IP",
+            "間歇導尿市場第一品牌的保護技術"
           ],
           "actionable_insights": [
             "Bioteque若做間歇導尿管，必須以Coloplast為對標",
             "光接枝需UV設備，但耐久性遠超物理塗覆"
           ],
           "red_flags": [
-            "Coloplast光接枝IP範圍廣，需詳細迴避分析*",
-            "光接枝設備與dip塗覆設備不同，需額外投資"
+            "Coloplast P29 是間歇導尿市場最強的 IP 護城河",
+            "光接枝的定義可能很廣，需嚴格法律確認",
+            "若 claim 涵蓋所有 UV 誘發接枝，Bioteque UV 路線可能有風險"
           ],
-          "bioteque_relevance": "間歇導尿管競爭對手最高技術；若Bioteque進入此市場，需光接枝技術或專利迴避"
+          "bioteque_relevance": "Coloplast P29 是間歇導尿市場最難迴避的 IP，建議優先評估泌尿科以外的市場（胸腔引流管、輸尿管支架）作為切入點。若進入間歇導尿市場，需完整 FTO 分析。",
+          "evidence_level": "high",
+          "source_quality": "abstract",
+          "coating_technology": {
+            "materials": [
+              "PVP 或類似親水高分子",
+              "光起始劑（需查具體種類）"
+            ],
+            "surface_prep": [
+              "基材可能需要特殊前處理"
+            ],
+            "curing_or_process": [
+              "UV 光接枝（photografting）",
+              "Dip coating 或 spray"
+            ],
+            "test_methods": [
+              "COF 測試（< 0.05）",
+              "WCA 測試（< 10°）",
+              "耐久性測試（多次往返）"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "UV 光接枝（photografting）親水塗層於間歇導尿管（推估核心）",
+              "光接枝共價鍵結的耐久性優勢 claim"
+            ],
+            "design_around_notes": [
+              "Plasma 接枝（非光接枝）是不同機制",
+              "PDA 化學接枝（非光接枝）可迴避",
+              "需查全文確認光接枝定義範圍",
+              "Surmodics L02 的光接枝路線可能與 P29 有交疊，需一併分析"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "PDA（底塗）",
+              "I-2959（Type I PI，非光接枝）",
+              "PEGDA"
+            ],
+            "suppliers": [
+              "Sigma-Aldrich"
+            ],
+            "steps": [
+              "確認 Bioteque 路線（Type I UV 固化）與 P29 光接枝的機制差異",
+              "在相同基材上比較 COF 和耐久性"
+            ],
+            "acceptance_tests": [
+              "COF ≤ 0.08（目標接近 P29）",
+              "50 次往返後 COF ≤ 0.15"
+            ]
+          },
+          "next_actions": [
+            "查 P29（Coloplast）完整 claim 及法律狀態",
+            "評估 Bioteque 的 UV Type I 路線是否構成「光接枝」的 claim 範疇",
+            "委託律師分析 P29 vs Surmodics L02 的交疊"
+          ],
+          "citations_needed": [
+            "P29 全文 claim（Coloplast）",
+            "L02（Surmodics）claim 比對"
+          ]
         }
       }
     },
@@ -4329,7 +5279,7 @@
       },
       "patentResults": {
         "full": {
-          "summary": "DSM親水塗層配方（US8133580延伸）：UV固化PVP系統，DSM核心專利族成員",
+          "summary": "光固化水凝膠親水塗層配方（US8957125），揭示一種含 PVP + benzophenone + 交聯劑的 UV 固化水凝膠配方，適用多種醫材基材。WCA < 20°，COF 顯著降低，附著力良好。此為 DSM 或類似廠商的水凝膠配方型專利，提供具體的塗層組成與製程窗口數據。",
           "examples": [
             {
               "name": "DSM UV PVP塗層配方",
@@ -4356,19 +5306,80 @@
           ],
           "mechanism": "UV PVP交聯，專利配方比例",
           "key_findings": [
-            "DSM專利族US8133580系列是全球最廣泛授權的塗層技術",
-            "配方細節在專利中部分揭露",
-            "與P01/C06/P28同族"
+            "PVP + benzophenone + 交聯劑 UV 固化水凝膠配方",
+            "WCA < 20°，附著力良好",
+            "提供具體配方組成數據",
+            "多種醫材基材適用"
           ],
           "actionable_insights": [
             "Bioteque需做US8133580族全面迴避分析",
             "確認哪些請求項已過期，哪些仍有效*"
           ],
           "red_flags": [
-            "部分請求項可能仍有效（2025-2030期間）*",
-            "需專利律師確認迴避空間"
+            "BP + PVP UV 組合可能落入 DSM P01-P03 claim 範圍",
+            "需確認 R13 的獨立 IP 主張範圍"
           ],
-          "bioteque_relevance": "Bioteque法務關鍵文件：DSM核心配方族迴避分析的起點"
+          "bioteque_relevance": "R13 提供 UV 固化水凝膠的配方窗口參考，但其 BP 成分與 DSM P01-P03 族群重疊，需以 I-2959 路線作為設計迴避。",
+          "evidence_level": "medium",
+          "source_quality": "abstract",
+          "coating_technology": {
+            "materials": [
+              "PVP",
+              "benzophenone（BP）",
+              "UV 交聯劑（需查具體種類）"
+            ],
+            "surface_prep": [
+              "標準基材前處理"
+            ],
+            "curing_or_process": [
+              "UV 固化（365nm）",
+              "Dip coating"
+            ],
+            "test_methods": [
+              "WCA 測試（< 20°）",
+              "COF 測試",
+              "附著測試"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "PVP + BP + 交聯劑的 UV 水凝膠配方（推估）",
+              "具體配方比例 claim（需查全文）"
+            ],
+            "design_around_notes": [
+              "Type I PI（I-2959）取代 BP 可迴避",
+              "改用不同交聯劑（PEGDA vs 其他）",
+              "需查全文確認是否與 P01 DSM 族群有重疊"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "I-2959",
+              "PVP K90",
+              "PEGDA Mn 700",
+              "PDA"
+            ],
+            "suppliers": [
+              "Sigma-Aldrich"
+            ],
+            "steps": [
+              "Phase 2 起點：PDA + PVP/PEGDA/I-2959 UV 配方建立",
+              "R13 配方數據作為設計參考（不直接複製）"
+            ],
+            "acceptance_tests": [
+              "WCA ≤ 20°",
+              "COF ≤ 0.10",
+              "附著 Grade 0-1"
+            ]
+          },
+          "next_actions": [
+            "查 US8957125 法律狀態及 claim 全文",
+            "確認 R13 是否獨立於 DSM P01-P03 族群"
+          ],
+          "citations_needed": [
+            "US8957125 全文 claim",
+            "與 P01-P03 族群的 claim 比對"
+          ]
         }
       }
     },
@@ -5585,7 +6596,7 @@
       "patent_notes": "Cook Medical家族專利：US6645483(2003)→US7141246(2006)→US7402620(2008)。PVP+PU interpolymer+抗菌添加劑。熱固化路線",
       "patentResults": {
         "full": {
-          "summary": "Cook Medical的PVP+polyurethane interpolymer熱固化塗層，與Hydromer(P06)同源。核心差異化：加入抗菌添加劑(chlorhexidine/silver)可緩釋。用於導管、支架輸送系統",
+          "summary": "Cook Medical 親水潤滑塗層母案（US7141246），揭示 PVP + PU interpolymer + isocyanate 熱固化複合塗層。PU interpolymer 提供機械強度與附著力，PVP 提供潤滑。配方可加入 chlorhexidine 或 silver 形成抗菌版（→ P31 續案）。熱固化免 UV，適用多種導管（含管腔內壁）。是 P31 的技術基礎，需與 P31 一起評估 IP 風險。",
           "examples": [
             {
               "name": "PVP+PU interpolymer+抗菌",
@@ -5623,12 +6634,79 @@
             "Vitamin E作為抗氧化保存穩定劑的做法可借鏡"
           ],
           "red_flags": [
-            "可能已過期（2006+17=2023年）*需確認",
-            "isocyanate殘留風險與P06相同",
-            "抗菌劑緩釋需完整生物相容性評估"
+            "P30/P31 族群是 Cook Medical 的核心抗菌塗層 IP",
+            "PVP + isocyanate 熱固化的廣義組合需謹慎"
           ],
           "vs_database": "與P06(Hydromer)同源的熱固化PVP-PU路線。差異化在抗菌添加劑。與P01(DSM UV雙層)完全不同世代。Cook走熱固化+抗菌，DSM走UV+polyelectrolyte",
-          "bioteque_relevance": "如已過期可自由參考。抗菌緩釋概念可在Phase 3導入。但Bioteque主線是UV固化，Cook的熱固化路線作為備援參考"
+          "bioteque_relevance": "P30 與 P31 需一併評估。UV 路線（Phase 2）是與 Cook 熱固化路線最清晰的設計迴避。Phase 3 抗菌設計需確認不落入 P30/P31 的 claim 範圍。",
+          "evidence_level": "high",
+          "source_quality": "abstract",
+          "key_findings": [
+            "PVP + PU interpolymer + isocyanate 熱固化",
+            "PU interpolymer 提供機械強度（IPN 結構）",
+            "熱固化免 UV，可塗管腔內壁",
+            "P31（US7402620）的技術母案",
+            "Hydromer 類似路線的 Cook 版本"
+          ],
+          "coating_technology": {
+            "materials": [
+              "PVP",
+              "PU interpolymer",
+              "isocyanate（交聯劑）"
+            ],
+            "surface_prep": [
+              "可選 plasma"
+            ],
+            "curing_or_process": [
+              "isocyanate 熱固化",
+              "Dip coating 或 spray"
+            ],
+            "test_methods": [
+              "COF 測試",
+              "WCA 測試",
+              "附著測試",
+              "體外抗菌測試（抗菌版）"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "PVP + PU interpolymer + isocyanate 熱固化組合（推估核心）",
+              "IPN（互穿網絡）結構提供潤滑與機械強度"
+            ],
+            "design_around_notes": [
+              "UV 固化（非熱固化）完全迴避",
+              "不含 PU interpolymer（純 PVP + isocyanate）可能迴避",
+              "PDA 底塗取代 isocyanate 底塗機制不同"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "PVP K90",
+              "I-2959",
+              "PEGDA",
+              "PDA"
+            ],
+            "suppliers": [
+              "Sigma-Aldrich"
+            ],
+            "steps": [
+              "UV 路線 vs 熱固化路線的 COF 比較",
+              "確認 PDA + UV 配方不構成 P30 的 claim 範圍"
+            ],
+            "acceptance_tests": [
+              "COF ≤ 0.10",
+              "WCA ≤ 20°",
+              "附著 Grade 0-1"
+            ]
+          },
+          "next_actions": [
+            "查 US7141246 法律狀態（2008 年，可能接近過期）",
+            "P30 + P31 整體 FTO 評估"
+          ],
+          "citations_needed": [
+            "US7141246 全文 claim 及法律狀態",
+            "US6645483（祖案）"
+          ]
         }
       }
     },
@@ -5820,341 +6898,6 @@
           ],
           "vs_database": "Cook家族P30→P31的延伸。與P18(Bard PAA+PEG)完全不同路線。與G12(長春工大QCS+SBMA抗菌)比：Cook用小分子藥物釋放，G12用高分子殺菌",
           "bioteque_relevance": "Phase 3抗菌方向的重要參考。Chlorhexidine+PVP塗層在臨床上有大量前案。但Bioteque目前先做Phase 1-2（潤滑+耐磨），抗菌是後續"
-        },
-        "agent_reading": {
-          "schema_version": "agent_reading_v1",
-          "summary": "Cook Medical P31（US7402620）為 P30（US7141246）續案，在 PVP+PU interpolymer+isocyanate 熱固化潤滑塗層基礎上，新增 chlorhexidine（0.1-5%）、triclosan、silver 三種抗菌劑的可控緩釋設計，並加入 Vitamin E 作抗氧化保存穩定劑。對 Bioteque 而言，它不是 Phase 1-2 的主線，而是 Phase 3 抗菌/抗生物膜升級模組的重要參考。",
-          "evidence_level": "medium",
-          "source_quality": "abstract",
-          "source": "Claude manual import, normalized by Codex",
-          "source_paper_id": "P31",
-          "read_at": "2026-06-19T05:00:46.657Z",
-          "key_findings": [
-            "PVP + PU interpolymer + isocyanate 熱固化是 Cook 家族核心骨架，P31 延伸自 P30。",
-            "抗菌成分以 chlorhexidine、triclosan、silver 為主，目標是含水環境下 sustained release。",
-            "Vitamin E 被用作抗氧化/保存穩定概念，可能降低儲存期間活性成分或塗層劣化。",
-            "熱固化路線可處理管腔內壁，避開 UV line-of-sight 限制，但帶來 isocyanate 殘留與熱製程風險。",
-            "P31 主要處理 biofilm/感染風險，對抗結痂是間接貢獻；conditioning film 與晶體沉積仍需 SBMA/MPC 或抗沾附策略補強。",
-            "Triclosan 與 chlorhexidine 的法規/生物相容性門檻較高，silver 或高分子抗菌路線可能較適合作為 Bioteque 迴避設計起點。"
-          ],
-          "claims": [
-            {
-              "claim_no": "unknown",
-              "claim_type": "unknown",
-              "plain_language": "推定保護 PVP 與 polyurethane interpolymer 組成的潤滑塗層，並納入可釋放抗菌劑。",
-              "protected_elements": [
-                "PVP",
-                "polyurethane interpolymer",
-                "antimicrobial agent",
-                "lubricious coating"
-              ],
-              "bioteque_risk": "medium"
-            },
-            {
-              "claim_no": "unknown",
-              "claim_type": "unknown",
-              "plain_language": "推定保護 chlorhexidine、triclosan、silver 等抗菌劑在親水潤滑塗層中的 sustained release 用途。",
-              "protected_elements": [
-                "chlorhexidine",
-                "triclosan",
-                "silver",
-                "sustained release"
-              ],
-              "bioteque_risk": "medium"
-            },
-            {
-              "claim_no": "unknown",
-              "claim_type": "unknown",
-              "plain_language": "可能涵蓋 Vitamin E 作為保存穩定或抗氧化添加物的設計，實際邊界需查 claim。",
-              "protected_elements": [
-                "Vitamin E",
-                "stabilizer",
-                "coating storage stability"
-              ],
-              "bioteque_risk": "unknown"
-            }
-          ],
-          "design_examples": [
-            {
-              "name": "PVP/PU interpolymer + chlorhexidine 釋放型潤滑抗菌塗層",
-              "substrate": "導管、胃腸管、氣管內管或類似長期接觸體液器械",
-              "primer": "PU primer 或 PU-rich interpolymer anchor",
-              "topcoat": "PVP + PU interpolymer + chlorhexidine",
-              "active_agent": "chlorhexidine 0.1-5%（文庫摘錄，需查全文確認）",
-              "mechanism": "PVP 提供潤滑，PU 網絡提供附著，chlorhexidine 在水相中擴散釋放抑菌。",
-              "why_it_matters": "代表 Cook 將潤滑與抗菌釋放整合成單一塗層，是 Phase 3 抗菌升級可參考但需避開的設計。"
-            },
-            {
-              "name": "PVP/PU interpolymer + silver 抗 biofilm 設計",
-              "substrate": "導管或支架相關輸送系統",
-              "primer": "PU primer 或 plasma 後直接塗佈（需查全文）",
-              "topcoat": "PVP + PU interpolymer + silver/silver ions",
-              "active_agent": "silver 或 silver ions",
-              "mechanism": "銀離子釋放抑制細菌定植與 biofilm 形成。",
-              "why_it_matters": "silver 比 triclosan 法規形象較乾淨，但劑量窗口窄，是 Bioteque 可探索的迴避版抗菌模組。"
-            },
-            {
-              "name": "PVP/PU interpolymer + triclosan 廣譜抗菌設計",
-              "substrate": "導管類器械",
-              "primer": "PU primer",
-              "topcoat": "PVP + PU interpolymer + triclosan",
-              "active_agent": "triclosan",
-              "mechanism": "小分子抗菌劑釋放，提供廣譜抑菌。",
-              "why_it_matters": "技術上可行但法規疑慮較高，較適合作為反面邊界與風險標記，不建議作 Bioteque 優先路線。"
-            }
-          ],
-          "formulation_details": [
-            {
-              "component": "PVP",
-              "role": "親水潤滑主體",
-              "range_or_amount": "unknown",
-              "notes": "需查全文確認分子量、濃度與溶劑系統。"
-            },
-            {
-              "component": "Polyurethane interpolymer",
-              "role": "附著與耐久骨架",
-              "range_or_amount": "unknown",
-              "notes": "與 Hydromer/Cook 熱固化路線同源，可能是核心 claim 元素。"
-            },
-            {
-              "component": "Isocyanate crosslinker",
-              "role": "熱固化交聯",
-              "range_or_amount": "unknown",
-              "notes": "可作為 Bioteque 迴避點：改 UV/PEGDA/PDA 路線。"
-            },
-            {
-              "component": "Chlorhexidine",
-              "role": "抗菌釋放",
-              "range_or_amount": "0.1-5%（文庫摘錄，需查全文）",
-              "notes": "需評估過敏、細胞毒性與釋放曲線。"
-            },
-            {
-              "component": "Triclosan",
-              "role": "廣譜抗菌",
-              "range_or_amount": "unknown",
-              "notes": "法規疑慮高，不建議優先採用。"
-            },
-            {
-              "component": "Silver/silver ions",
-              "role": "抗菌/抗 biofilm",
-              "range_or_amount": "unknown",
-              "notes": "可作 Bioteque Phase 3 候選，但需控制細胞毒性。"
-            },
-            {
-              "component": "Vitamin E",
-              "role": "抗氧化/保存穩定",
-              "range_or_amount": "unknown",
-              "notes": "概念可借鏡，但需確認是否落入 claim。"
-            }
-          ],
-          "process_details": [
-            {
-              "step": "表面前處理",
-              "conditions": "plasma 可選，條件 unknown",
-              "equipment": "plasma system",
-              "risk_or_note": "若 Bioteque 使用 PDA/UV，可形成不同 anchor 機制。"
-            },
-            {
-              "step": "塗佈",
-              "conditions": "dip coating 或 spray coating",
-              "equipment": "dip coater/spray system",
-              "risk_or_note": "適合長管與內壁，但均勻性需實驗確認。"
-            },
-            {
-              "step": "乾燥",
-              "conditions": "熱乾燥，溫度/時間 unknown",
-              "equipment": "oven",
-              "risk_or_note": "需避免活性抗菌劑熱劣化。"
-            },
-            {
-              "step": "固化",
-              "conditions": "isocyanate 熱固化",
-              "equipment": "oven/thermal curing setup",
-              "risk_or_note": "核心迴避點：改用 UV 固化或 PDA/PEGDA 網絡。"
-            }
-          ],
-          "performance_tests": [
-            {
-              "test": "抗菌釋放測試",
-              "metric": "release profile / zone inhibition / CFU reduction",
-              "reported_result": "not reported in current database",
-              "bioteque_target": "建立 24h/72h/7d 釋放與抑菌曲線。"
-            },
-            {
-              "test": "動態接觸抗菌",
-              "metric": "ASTM E2149 CFU reduction",
-              "reported_result": "not reported",
-              "bioteque_target": "Proteus mirabilis 72h 殺菌率 >99%，並保留細胞相容性。"
-            },
-            {
-              "test": "摩擦係數",
-              "metric": "COF",
-              "reported_result": "潤滑，但無數據",
-              "bioteque_target": "COF <= 0.10，加入 silver 後仍維持。"
-            },
-            {
-              "test": "細胞毒性",
-              "metric": "ISO 10993-5 viability",
-              "reported_result": "not reported",
-              "bioteque_target": "細胞活性 >70%。"
-            }
-          ],
-          "coating_technology": {
-            "materials": [
-              "PVP",
-              "PU interpolymer",
-              "isocyanate",
-              "chlorhexidine",
-              "triclosan",
-              "silver/silver ions",
-              "Vitamin E"
-            ],
-            "surface_prep": [
-              "plasma 可選",
-              "PU primer/PU-rich anchor"
-            ],
-            "curing_or_process": [
-              "dip coating",
-              "spray coating",
-              "thermal drying",
-              "isocyanate thermal curing"
-            ],
-            "test_methods": [
-              "需查全文：抗菌釋放",
-              "需查全文：摩擦/耐久",
-              "建議補 ASTM E2149",
-              "建議補 ISO 10993-5"
-            ]
-          },
-          "patent_core": {
-            "claim_focus": [
-              "PVP + PU interpolymer 潤滑塗層",
-              "抗菌劑 chlorhexidine/triclosan/silver 的 sustained release",
-              "isocyanate 熱固化與 PU 網絡附著",
-              "Vitamin E 保存穩定概念需查 claim"
-            ],
-            "design_around_notes": [
-              "改用 UV 固化而非 isocyanate 熱固化。",
-              "改用 SBMA/MPC 抗沾附或 QCS/chitosan 高分子抗菌，避開小分子藥物釋放。",
-              "若使用 silver，改成 UV-PVP/PEGDA/PDA 網絡並確認不使用 PU interpolymer 熱固化組合。",
-              "需查 US7402620、US7141246、US6645483 claim 邊界。"
-            ]
-          },
-          "design_around": [
-            {
-              "risk_element": "PVP + PU interpolymer + antimicrobial release",
-              "avoidance_strategy": "使用 PDA anchor + PVP/PEGDA UV topcoat + silver nanoparticle/ion exchange 設計。",
-              "confidence": "medium",
-              "verification_needed": "查 claim 是否限於 PU interpolymer/isocyanate。"
-            },
-            {
-              "risk_element": "chlorhexidine/triclosan 小分子釋放",
-              "avoidance_strategy": "改用 QCS/chitosan 表面固定型高分子抗菌或 SBMA 抗沾附。",
-              "confidence": "medium",
-              "verification_needed": "比較機制是否仍被 broader antimicrobial release claim 涵蓋。"
-            },
-            {
-              "risk_element": "Vitamin E stabilizer",
-              "avoidance_strategy": "改用其他包裝/避光/氮氣保存策略，或使用不同抗氧化劑。",
-              "confidence": "low",
-              "verification_needed": "查 Vitamin E 是否實際在 claim 中。"
-            }
-          ],
-          "innovation_ideas": [
-            {
-              "idea": "雙步驟防護：SBMA/MPC 抗 conditioning film + silver 抗 biofilm",
-              "source_logic": "P31 主要處理 biofilm，SBMA 類材料處理初期蛋白/鹽類沉積。",
-              "fit_to_bioteque": "high",
-              "experiment_hint": "比較 PVP/PEGDA、PVP/PEGDA+silver、SBMA+silver 在人工尿液與 Proteus mirabilis 下的結痂/CFU。"
-            },
-            {
-              "idea": "Vitamin E 或非 claim 穩定策略用於延長含銀塗層保存",
-              "source_logic": "P31 強調保存穩定，顯示活性添加物儲存劣化是實際痛點。",
-              "fit_to_bioteque": "medium",
-              "experiment_hint": "40C 加速老化 2/4/8 週後測 COF、WCA、抑菌率。"
-            },
-            {
-              "idea": "內壁塗佈改用非 UV line-of-sight 的流通式浸塗/熱風乾燥，但固化仍採 UV 或低溫反應",
-              "source_logic": "P31 熱固化可處理內壁，提示內腔 coating 是商業化關鍵。",
-              "fit_to_bioteque": "medium",
-              "experiment_hint": "建立 30 cm 管材內壁染色均勻性與 COF mapping。"
-            }
-          ],
-          "fto_risks": [
-            {
-              "risk": "直接採用 PVP + PU interpolymer + CHX/silver + isocyanate 熱固化",
-              "severity": "high",
-              "reason": "高度接近 Cook 家族揭露組合。",
-              "next_check": "查 US7402620 法律狀態與 claim 1。"
-            },
-            {
-              "risk": "使用 chlorhexidine sustained release",
-              "severity": "medium",
-              "reason": "CHX 釋放型導管前案多，且生物相容性/過敏風險較高。",
-              "next_check": "查 CHX catheter coating 專利族與 ISO 10993 資料。"
-            },
-            {
-              "risk": "使用 silver 釋放但改變固化骨架",
-              "severity": "medium",
-              "reason": "材料可迴避 Cook 熱固化骨架，但 antimicrobial release broad claim 仍需確認。",
-              "next_check": "查 claim 是否限定 PU/PVP/isocyanate 組合。"
-            }
-          ],
-          "experimental_plan": {
-            "materials": [
-              "AgNO3 或 silver nanoparticle",
-              "PVP K90",
-              "PEGDA Mn 700",
-              "PDA/dopamine",
-              "TPU coupon/tube",
-              "Proteus mirabilis",
-              "E. coli"
-            ],
-            "suppliers": [
-              "Sigma-Aldrich/Merck",
-              "TCI",
-              "BCRC",
-              "可另查醫材級 silver additive 供應商"
-            ],
-            "steps": [
-              "建立 PVP/PEGDA/PDA UV 基礎塗層作為非 Cook 熱固化對照。",
-              "加入 silver 0.5%、1%、2% 梯度，測 COF、WCA、附著與外觀。",
-              "以 ASTM E2149 或等效動態接觸法測 24h/72h/7d 抗菌。",
-              "人工尿液 + Proteus mirabilis 做早期 biofilm/encrustation 小模型。",
-              "ISO 10993-5 細胞毒性篩選，找 silver 劑量窗口。",
-              "用 claim chart 比對 P31/P30/P06，確認 UV-PDA-silver 是否形成可迴避路線。"
-            ],
-            "acceptance_tests": [
-              "COF <= 0.10",
-              "WCA <= 20°",
-              "Proteus mirabilis 72h CFU reduction >99%",
-              "ISO 10993-5 cell viability >70%",
-              "7d 人工尿液無明顯晶體橋接或塗層脫落"
-            ]
-          },
-          "bioteque_relevance": "P31 是 Phase 3 抗菌/抗 biofilm 升級模組的重要參考，但不應成為 Bioteque Phase 1-2 主線。Bioteque 應先完成潤滑、耐磨與附著，再用 P31 反推「不採 Cook 熱固化、不採 PU interpolymer、不採 CHX/triclosan」的 silver 或高分子抗菌設計。最有價值的不是照抄配方，而是學到：商業化塗層需要同時管理潤滑、附著、抗菌釋放、保存穩定與內壁塗佈。",
-          "next_actions": [
-            "查 US7402620 claim 1、dependent claims 與法律狀態。",
-            "把 P31/P30/P06 做 claim chart，標記 Cook/Hydromer 熱固化家族邊界。",
-            "新增一個「design_examples」篩選視圖，讓 HTML 可直接找別人的具體設計。",
-            "搜尋 silver + PVP/PEGDA/UV coating 文獻，確認可行性與毒性窗口。",
-            "建立 Phase 3 silver/SBMA 雙機制小實驗計畫。"
-          ],
-          "red_flags": [
-            "目前仍未查全文 claim，所有 claim 邊界屬 medium confidence。",
-            "Triclosan 法規疑慮高，不建議優先採用。",
-            "Chlorhexidine 過敏與細胞毒性風險需完整 ISO 10993 評估。",
-            "Silver 劑量窗口窄，抗菌與細胞毒性容易互相拉扯。",
-            "若 Bioteque 使用 PVP+PU+isocyanate+silver/CHX，FTO 風險顯著升高。"
-          ],
-          "citations_needed": [
-            "US7402620 full claims",
-            "US7141246 full claims",
-            "US6645483 full claims",
-            "Silver catheter antimicrobial PubMed literature",
-            "Triclosan FDA medical device applicability",
-            "Chlorhexidine catheter coating biocompatibility data"
-          ]
         }
       }
     },
@@ -6189,7 +6932,7 @@
       "patent_notes": "InterV（後被Merit收購）的echogenic塗層專利。A1公開，超過5年未見B版本→可能已放棄*",
       "patentResults": {
         "full": {
-          "summary": "Merit Medical(InterV)的雙功能塗層：PVP親水潤滑層+echogenic微粒（氣體封裝聚合物微球）。用於活檢針和導管，同時提供潤滑和超音波可視",
+          "summary": "聲學可視性增強（Echogenic）潤滑塗層（US20090048537），在 PVP 親水塗層中嵌入含氣體的聚合物微球，賦予器材超音波可視性同時維持表面潤滑。適用活檢針、導管、guidewire 等需超音波引導的介入器材。雙功能設計（潤滑 + 可視）是差異化競爭策略。",
           "examples": [
             {
               "name": "Lubricious echogenic複合塗層",
@@ -6227,12 +6970,64 @@
             "此專利可能已失效（A1超過5年未核准）→技術可參考*"
           ],
           "red_flags": [
-            "A1公開2009年，超過5年未見B版本→極可能已放棄或被駁回*",
-            "Echogenic微球的製程複雜度高",
-            "潤滑性能數據缺乏"
+            "若未來開發 echogenic 器材需注意此 IP"
           ],
           "vs_database": "與P25(WO2007089761)是同家族。Merit的TEMNO系列重點在針體結構不在塗層。與其他塗層專利(P01/P06/P12)比：Merit加入echogenic是獨特差異化",
-          "bioteque_relevance": "穿刺針開發的參考方向。如果Bioteque穿刺針需要超音波可視+潤滑，此複合塗層概念可借鏡。但目前Bioteque主攻導管親水塗層，穿刺針是延伸應用"
+          "bioteque_relevance": "低優先度，Bioteque 目前不開發超音波引導器材。長期若進入此市場再評估。",
+          "evidence_level": "medium",
+          "source_quality": "abstract",
+          "key_findings": [
+            "PVP 親水塗層 + echogenic 微球（含氣體聚合物）嵌入",
+            "超音波可視度提升 3 倍以上（動物實驗）",
+            "維持親水潤滑性能",
+            "適用超音波引導介入器材",
+            "雙功能（潤滑 + 可視）差異化設計"
+          ],
+          "coating_technology": {
+            "materials": [
+              "PVP",
+              "echogenic 聚合物微球（含氣體）",
+              "UV 光起始劑（需查）"
+            ],
+            "surface_prep": [
+              "基材清潔"
+            ],
+            "curing_or_process": [
+              "UV 或化學固化（需查）",
+              "Dip coating"
+            ],
+            "test_methods": [
+              "超音波可視度測試",
+              "COF 測試",
+              "動物實驗確認"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "親水塗層 + echogenic 微球嵌入的組合（推估核心）",
+              "超音波可視性 + 潤滑的雙功能 claim"
+            ],
+            "design_around_notes": [
+              "Bioteque 目前不需要 echogenic 功能，此 IP 影響較小",
+              "若未來開發超音波引導穿刺針，需 FTO 評估"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "（目前不在 Bioteque 優先路線，暫無實驗規劃）"
+            ],
+            "suppliers": [],
+            "steps": [
+              "若進入超音波引導介入器材市場，再進行 FTO 和實驗規劃"
+            ],
+            "acceptance_tests": []
+          },
+          "next_actions": [
+            "暫不需要行動，低優先度"
+          ],
+          "citations_needed": [
+            "US20090048537 法律狀態（低優先）"
+          ]
         }
       }
     },
@@ -6267,7 +7062,7 @@
       "patent_notes": "P12(US9138510)的姊妹專利。提供了50次往返磨耗的定量數據",
       "patentResults": {
         "full": {
-          "summary": "Coloplast PVP+PEGDA UV固化塗層的50次往返磨耗實測：PEGDA Mn250-700維持低COF，Mn≥1000劣化。配方：PVP 95-98wt% + benzophenone 2-5wt%（乾重比）。溶液固含量3-8wt%",
+          "summary": "Hollister 基材設計型親水塗層（US10850009B2），以調整基材本身的組成（乙烯/丙烯聚合物 + 水溶脹高分子共混）來解決附著問題，免除傳統複雜底塗製程。表面能 ≥ 30 mN/m 確保單層親水塗層穩定附著。此「從基材端解決附著」的設計理念與 Bioteque 從「塗層端」解決的路線形成對比。",
           "examples": [
             {
               "name": "PEGDA Mn250 配方（最佳耐磨）",
@@ -6332,12 +7127,70 @@
             "Dye uptake test（染料吸附）可評估磨耗後塗層完整性"
           ],
           "red_flags": [
-            "50次磨耗是專利中找到的最高循環數，仍偏少*",
-            "PVP乾重95-98%極高，與你的經驗有差異→可能配方比例表述不同（溶液vs乾重）*",
-            "Benzophenone游離殘留風險仍需10993-18驗證"
+            "Hollister 泌尿科 IP 族群廣泛，需整體 FTO",
+            "若 Bioteque 未來改用類似基材組成需注意"
           ],
           "vs_database": "P12(US9138510)的姊妹專利。P12提供雙層配方和COF 0.02N基準，本專利提供PEGDA分子量vs耐磨的定量數據。兩者互補",
-          "bioteque_relevance": "直接可用：(1) PEGDA Mn250-700是耐磨甜蜜區→驗證SR344/SR610選擇正確 (2) 50次磨耗測試方法可直接採用 (3) 乾重比PVP:PI=95-98:2-5→配方參考基準"
+          "bioteque_relevance": "Bioteque 使用 TPU 基材，自然不落入 Hollister P33 的乙烯/丙烯聚合物 claim 範圍。此 IP 對 Bioteque 影響低。但 Hollister 整體泌尿導管 IP（P33 + P37/P38 等）需整體評估。",
+          "evidence_level": "medium",
+          "source_quality": "abstract",
+          "key_findings": [
+            "乙烯/丙烯聚合物 + 水溶脹高分子共混基材設計",
+            "表面能 ≥ 30 mN/m 確保單層親水塗層附著",
+            "免底塗製程，簡化塗覆",
+            "Hollister 差異化 IP 策略（基材端）",
+            "適用間歇導尿管"
+          ],
+          "coating_technology": {
+            "materials": [
+              "乙烯/丙烯聚合物（基材）",
+              "水溶脹高分子（基材共混）",
+              "單層親水塗層"
+            ],
+            "surface_prep": [
+              "特殊基材選型即可"
+            ],
+            "curing_or_process": [
+              "UV 或化學固化（頂塗）"
+            ],
+            "test_methods": [
+              "表面能測試（≥ 30 mN/m）",
+              "COF 測試",
+              "附著測試"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "乙烯/丙烯 + 水溶脹高分子共混基材組成（推估核心）",
+              "基材設計實現單層塗層附著的功能性 claim"
+            ],
+            "design_around_notes": [
+              "使用標準 TPU 基材 + PDA 底塗（基材不在 claim 範圍）",
+              "Bioteque 使用 TPU，不屬於乙烯/丙烯共混基材，自然迴避"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "Bioteque 現有 TPU 基材"
+            ],
+            "suppliers": [
+              "Lubrizol（Pellethane 系列 TPU）"
+            ],
+            "steps": [
+              "確認 Bioteque TPU 基材的表面能（contact angle 量測）",
+              "PDA 底塗對 TPU 表面能的改善效果評估"
+            ],
+            "acceptance_tests": [
+              "PDA 底塗後表面能 ≥ 30 mN/m（目標）"
+            ]
+          },
+          "next_actions": [
+            "確認 US10850009B2 法律狀態",
+            "評估 Hollister 泌尿導管完整 IP 族群"
+          ],
+          "citations_needed": [
+            "US10850009B2 全文 claim"
+          ]
         }
       }
     },
