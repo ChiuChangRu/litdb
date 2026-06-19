@@ -4639,55 +4639,7 @@ function renderPatentTree() {
   drawPatentFamilyTree();
 }
 
-function renderPatentEvolution(data) {
-  const el = document.getElementById('patentEvolution');
-  if(!el || !data?.cfg) return;
-  const cfg = data.cfg;
-  const items = (cfg.evolution || []).map(item => {
-    const p = item.id ? (DB.papers || []).find(x => x.id === item.id) : null;
-    const statusColor = item.status === 'missing' ? '#c0392b' : '#2d8c5a';
-    const statusText = item.status === 'missing' ? '缺口待補' : '已收錄';
-    const action = p
-      ? `<button class="btn btn-s" style="font-size:10px;padding:3px 8px;margin-top:8px" onclick="goToPaper('${p.id}',{focus:true,label:'專利演進：${p.id}',color:'#2d8c5a'})">查看 ${p.id}</button>`
-      : `<div style="font-size:11px;color:#b85c2a;margin-top:8px">下一輪深度解析候選</div>`;
-    return `
-      <div style="position:relative;min-width:190px;flex:1;background:#fff;border:1px solid var(--border);border-top:4px solid ${statusColor};border-radius:8px;padding:10px 11px">
-        <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start">
-          <div style="font-size:18px;font-weight:900;color:${statusColor};line-height:1">${escHtml(item.year)}</div>
-          <span class="tag ${item.status === 'missing' ? 'tag-orange' : 'tag-green'}">${statusText}</span>
-        </div>
-        <div style="font-size:12px;font-weight:800;color:var(--text);margin-top:8px">${escHtml(item.stage)}</div>
-        <div style="font-size:11px;color:var(--accent);margin-top:3px">${escHtml(item.patent || p?.id || '')}</div>
-        <div style="font-size:12px;color:var(--text);line-height:1.55;margin-top:7px">${escHtml(item.theme)}</div>
-        <div style="font-size:11px;color:var(--muted);line-height:1.55;margin-top:7px">${escHtml(item.meaning)}</div>
-        ${action}
-      </div>`;
-  }).join('');
 
-  const trend = (cfg.trendSummary || []).map(x => `<li style="margin-bottom:5px">${escHtml(x)}</li>`).join('');
-  el.innerHTML = `
-    <div class="panel">
-      <div class="panel-h">公司開發演進與技術趨勢</div>
-      <div style="padding:12px">
-        <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px">
-          <div>
-            <div style="font-size:14px;font-weight:900;color:var(--text)">${escHtml(data.player)} 專利路徑</div>
-            <div style="font-size:11px;color:var(--muted)">依 papers.json 已收錄內容 + 明確缺口整理，非完整法律家族圖。</div>
-          </div>
-          <button class="btn btn-s" style="font-size:11px" onclick="renderPatentTree()">重新整理</button>
-        </div>
-        <div style="display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:12px">
-          <div style="display:flex;gap:10px;align-items:stretch;overflow-x:auto;padding-bottom:4px">
-            ${items}
-          </div>
-          <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:11px 12px">
-            <div style="font-size:12px;font-weight:900;color:var(--accent2);margin-bottom:6px">趨勢判讀</div>
-            <ul style="margin:0 0 0 17px;padding:0;font-size:12px;line-height:1.65;color:var(--text)">${trend}</ul>
-          </div>
-        </div>
-      </div>
-    </div>`;
-}
 
 function renderMissingPatentList(data) {
   const el = document.getElementById('missingPatentList');
