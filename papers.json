@@ -149,9 +149,9 @@
       ]
     },
     "stats": {
-      "total": 84,
-      "patents": 28,
-      "patent_ratio": "33%"
+      "total": 87,
+      "patents": 30,
+      "patent_ratio": "34%"
     }
   },
   "papers": [
@@ -312,6 +312,203 @@
       }
     },
     {
+      "id": "P36",
+      "title": "Hydrophilic polymer blend (US4642267A / Hydromer PVP-PU blend platform)",
+      "authors": "Creasy, Lorenz, LaCasse, Malagreca / Hydromer Inc.",
+      "year": 1987,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Hydromer",
+        "PVP",
+        "polyurethane",
+        "poly(N-vinyl lactam)",
+        "polymer-blend",
+        "lubricity",
+        "medical-coating",
+        "expired",
+        "patent-path"
+      ],
+      "purpose": "Early Hydromer hydrophilic polymer blend platform combining polyurethane with N-vinyl lactam polymers such as PVP.",
+      "abstract_note": "Google Patents lists Hydromer Inc. as original assignee, priority 1985-05-06, status Expired - Lifetime. The node is useful as Hydromer early platform chemistry before later bio-effecting and multi-purpose coating extensions.",
+      "value_to_project": "Shows Hydromer early move from simple hydrophilic polymer blending toward PU/PVP-based coating platforms; useful for understanding old freedom-to-operate and design vocabulary.",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/US4642267A/en"
+      },
+      "related_patents": [
+        "US4769013A",
+        "US4550126A",
+        "US7008979B2"
+      ],
+      "patent_notes": "Priority 1985-05-06; granted 1987-02-10; original assignee Hydromer Inc.; current assignee Hydromer Inc / Cabot Technology Corp; Google status Expired - Lifetime.",
+      "patentResults": {
+        "full": {
+          "summary": "US4642267A is an early Hydromer platform patent for hydrophilic polymer blends. Google Patents keywords emphasize polyurethane, polyvinylpyrrolidone, poly(N-vinyl lactam), coating method, solvent and substrate. In Hydromer history, this looks like a foundational material platform: create water-wettable/lubricious polymer blends first, then later add bio-effecting agents, multi-substrate adhesion, and biopolymeric networks.",
+          "evidence_level": "high",
+          "source_quality": "google_patents_metadata_and_text",
+          "key_findings": [
+            "Original assignee Hydromer Inc.; status expired.",
+            "Core materials include polyurethane plus vinyl lactam polymers such as PVP / poly(N-vinyl caprolactam).",
+            "This appears to be a platform chemistry node rather than a device-specific catheter patent.",
+            "Important as Hydromer starting point for later PVP-PU and coating composition families."
+          ],
+          "coating_technology": {
+            "materials": [
+              "polyurethane",
+              "PVP / poly(N-vinyl lactam)",
+              "poly(N-vinyl caprolactam)",
+              "solvent",
+              "optional isocyanate/polyol chemistry"
+            ],
+            "surface_prep": [
+              "not yet deeply parsed; treat as coating/blend platform"
+            ],
+            "curing_or_process": [
+              "polymer blending",
+              "solvent coating / evaporation (from metadata)",
+              "possible polyurethane/isocyanate chemistry"
+            ],
+            "test_methods": [
+              "not yet deeply parsed from examples"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "Hydrophilic polymer blend based on polyurethane and N-vinyl lactam polymer.",
+              "Use as coating/substrate material with hydrophilic character."
+            ],
+            "design_around_notes": [
+              "Expired US patent; concepts are open prior art.",
+              "Modern route can use UV-crosslinked PVP/PEGDA or PDA primer while avoiding old solvent/isocyanate choices."
+            ]
+          },
+          "company_path_note": "Hydromer phase 1: build PU/PVP hydrophilic blend platform before adding biological activity and broader multi-substrate functionality.",
+          "inference_flags": [
+            "* The placement as phase 1 of Hydromer path is an analyst inference from date, assignee, and technical content."
+          ],
+          "next_actions": [
+            "Parse independent claims and examples to extract exact ratios and coating procedure.",
+            "Check whether US4550126A is a closer foam/biomedical companion node."
+          ]
+        }
+      }
+    },
+    {
+      "id": "P37",
+      "title": "Bio-effecting medical material and device (US4769013A / Hydromer PVP-PU drug release)",
+      "authors": "Donald H. Lorenz; Walter S. Creasy / Hydromer Inc.",
+      "year": 1988,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Hydromer",
+        "PVP",
+        "polyurethane",
+        "bio-effecting",
+        "antimicrobial",
+        "iodine",
+        "drug-release",
+        "catheter",
+        "wound-drainage-tube",
+        "expired",
+        "patent-path"
+      ],
+      "purpose": "Hydromer extension from hydrophilic PU/PVP material into controlled release of antibacterial or bio-effecting agents for medical devices.",
+      "abstract_note": "Google Patents describes polyurethane complexed with PVP plus a bio-effecting agent, including anti-bacterial/anti-fungal agents, usable as coatings for medical devices such as catheters and wound drainage tubes.",
+      "value_to_project": "Relevant to anti-encrustation strategy because it blocks the biofilm/bacterial arm of encrustation, but not necessarily the initial conditioning film/mineral deposition step.",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/US4769013A/en"
+      },
+      "related_patents": [
+        "US4642267A",
+        "US7008979B2",
+        "US7402620B2"
+      ],
+      "patent_notes": "Priority 1982-09-13; filed 1986-06-04; granted 1988-09-06; assignee Hydromer Inc.; Google status Expired - Lifetime.",
+      "patentResults": {
+        "full": {
+          "summary": "US4769013A is a strong Hydromer medical-device node. It discloses polyurethane complexed with PVP, then complexed with a bio-effecting agent such as an antibacterial or antifungal agent. The text explicitly mentions coatings for medical devices including catheters and wound drainage tubes, and slow release in water or body fluids. This makes it an early Hydromer bridge from lubricious/hydrophilic materials to active, bio-effecting coatings.",
+          "evidence_level": "high",
+          "source_quality": "google_patents_metadata_and_text",
+          "key_findings": [
+            "Hydromer-owned and expired.",
+            "PVP is complexed with polyurethane and then with a bio-effecting agent.",
+            "Bio-effecting agents include antibacterial and antifungal agents; iodine is a key example.",
+            "Use includes medical-device coatings such as catheters and wound drainage tubes.",
+            "Mechanism is slow release in water/body fluids from PVP-containing material."
+          ],
+          "coating_technology": {
+            "materials": [
+              "polyurethane",
+              "PVP",
+              "iodine or other antibacterial/antifungal agent",
+              "possible polyurethane foam/prepolymer chemistry"
+            ],
+            "surface_prep": [
+              "not yet deeply parsed"
+            ],
+            "curing_or_process": [
+              "complex PU with PVP",
+              "load/complex bio-effecting agent into PVP",
+              "coat or form foam/film medical material"
+            ],
+            "test_methods": [
+              "not yet deeply parsed; prioritize antimicrobial release and coating durability examples"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "PU-PVP complex containing a bio-effecting agent.",
+              "Medical material/device coating capable of releasing active agent.",
+              "Catheter and wound-drainage-tube use cases."
+            ],
+            "design_around_notes": [
+              "Expired US patent, but later antimicrobial coating patents may build on this logic.",
+              "For anti-encrustation, consider non-leaching zwitterionic or mineral-resistant surfaces if avoiding drug-release regulatory burden.",
+              "If using silver/CHX/iodine release, check modern biocompatibility and antimicrobial-device claims separately."
+            ]
+          },
+          "company_path_note": "Hydromer phase 2: turn PU/PVP hydrophilic network into an active medical coating with controlled release.",
+          "inference_flags": [
+            "* Connection to anti-encrustation is a strategic inference: antibacterial release addresses biofilm, not necessarily mineral nucleation."
+          ],
+          "experimental_plan": {
+            "materials": [
+              "PVP K90",
+              "medical-grade PU dispersion or TPU coupon",
+              "iodine / povidone-iodine model agent",
+              "silver or CHX as modern comparator only after regulatory review"
+            ],
+            "suppliers": [
+              "Merck/Sigma for PVP and model agents",
+              "Lubrizol/BASF for PU candidates",
+              "BCRC for bacterial strains if testing proceeds"
+            ],
+            "steps": [
+              "Use this as historical reference, not first-choice formulation.",
+              "Benchmark biofilm suppression against non-leaching SBMA or QCS route.",
+              "Run extraction/release profile before cell tests if any active agent is used."
+            ],
+            "acceptance_tests": [
+              "antimicrobial activity retained after 72h soak",
+              "ISO 10993-5 cell viability >70%",
+              "COF not degraded by active-agent loading"
+            ]
+          },
+          "next_actions": [
+            "Parse claim 1 and examples for exact active-agent loading.",
+            "Compare with Cook US7402620 antimicrobial-release route to separate Hydromer vs Cook logic."
+          ]
+        }
+      }
+    },
+    {
       "id": "P07",
       "title": "Coating composition for multiple hydrophilic applications (US7008979B2 / Hydromer 多用途親水塗層)",
       "authors": "Schottman, Hennessey, Gruening / Hydromer Inc.",
@@ -334,7 +531,7 @@
         "導管",
         "已過期"
       ],
-      "purpose": "Hydromer 多用途親水塗層 composition；P06 後續平台型專利",
+      "purpose": "Hydromer multi-purpose coating composition platform; follows early PU/PVP blend and bio-effecting material nodes.",
       "abstract_note": "Hydromer 之多用途親水塗層組成專利，主張可用於塑膠、金屬、玻璃等多種基材的親水塗層 composition。Google Patents 顯示此案包含 coating agent、crosslinker、metal oxide、polyurethane、aziridine 等關鍵詞，並可加入藥物、抗菌劑、表面活性劑或輔助劑。此案可視為 Hydromer 從早期 PVP/isocyanate 潤滑塗層，往多基材、多功能、耐磨與商品化配方平台延伸的重要節點。",
       "value_to_project": "Hydromer 專利路徑關鍵節點；已到期，可作多用途親水塗層配方與耐磨設計參考",
       "links": {
@@ -344,7 +541,10 @@
         "US20030203991A1",
         "WO2003093357A1",
         "EP1499667B1",
-        "US5160790"
+        "US5160790",
+        "US4642267A",
+        "US4769013A",
+        "US20080114096A1"
       ],
       "patent_notes": "Hydromer Inc.；priority 2002-04-30；filed 2002-09-27；granted 2006-03-07；Google Patents legal status: Expired - Lifetime；anticipated expiration 2022-09-27；cited by 196。",
       "patentResults": {
@@ -481,6 +681,101 @@
             "US20030203991A1 公開案",
             "WO2003093357A1 / EP1499667B1 同族案",
             "Google Patents cited-by 清單中醫材塗層相關後續案"
+          ],
+          "company_path_note": "Hydromer phase 3: broaden PU/PVP/bio-effecting know-how into multi-substrate, multi-additive coating composition platform.",
+          "inference_flags": [
+            "* Company-path placement is analyst synthesis from verified Hydromer assignee/date/technical direction."
+          ]
+        }
+      }
+    },
+    {
+      "id": "P38",
+      "title": "Lubricious biopolymeric network compositions (US20080114096A1 / Hydromer chitosan-bio network)",
+      "authors": "Xin Qu; Tom Schottman; Rainer Gruening et al. / Hydromer Inc.",
+      "year": 2008,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Hydromer",
+        "biopolymer",
+        "chitosan",
+        "carbohydrate",
+        "aldehyde",
+        "carboxylic-acid",
+        "lubricity",
+        "antifouling",
+        "antimicrobial",
+        "abandoned",
+        "patent-path"
+      ],
+      "purpose": "Hydromer later-stage attempt to move lubricious coating chemistry toward biopolymeric/chitosan/carbohydrate network compositions.",
+      "abstract_note": "Google Patents lists Hydromer Inc. as assignee, priority 2006-11-09, publication 2008-05-15, status Abandoned. Keywords include chitosan, carbohydrates, carboxylic acid, aldehyde linkages, PVP-like lubricity and many optional bioactive/antifouling agents.",
+      "value_to_project": "Useful as a design-idea node: biopolymer/chitosan networks suggest a path toward non-classical hydrophilic coatings, but abandoned status and broad chemistry require careful validation.",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/US20080114096A1/en"
+      },
+      "related_patents": [
+        "US7008979B2",
+        "WO2008133646A1",
+        "TW200826980A"
+      ],
+      "patent_notes": "Priority/filed 2006-11-09; published 2008-05-15; original/current assignee Hydromer Inc.; Google status Abandoned.",
+      "patentResults": {
+        "full": {
+          "summary": "US20080114096A1 is a Hydromer application for lubricious biopolymeric network compositions. Google Patents metadata emphasizes chitosan, carbohydrates, carboxylic acid/aldehyde linkages, monomers, vinyl polymers, active agents, anti-bacterial/antifouling functions and coating methods. It appears to extend Hydromer beyond classic PU/PVP systems toward bio-derived network chemistry, but it is abandoned, so it should be treated as a technical idea source rather than a granted blocking patent.",
+          "evidence_level": "medium",
+          "source_quality": "google_patents_metadata",
+          "key_findings": [
+            "Hydromer-owned application; status abandoned.",
+            "Core keywords include chitosan, carbohydrates, carboxylic acids and aldehyde linkages.",
+            "Broad list of optional functions includes antimicrobial, antifouling, antithrombotic, antioxidant and lubricant agents.",
+            "This is a later Hydromer idea branch, not a confirmed granted patent barrier in the US."
+          ],
+          "coating_technology": {
+            "materials": [
+              "chitosan",
+              "carbohydrates / polysaccharides",
+              "carboxylic acid functional groups",
+              "aldehyde linkages",
+              "vinyl polymer / PVP-like lubricious components",
+              "optional active or antifouling agents"
+            ],
+            "surface_prep": [
+              "not yet deeply parsed"
+            ],
+            "curing_or_process": [
+              "biopolymeric network formation",
+              "carboxylic acid / aldehyde linkage chemistry",
+              "coating by dipping/spraying/brushing appears in metadata"
+            ],
+            "test_methods": [
+              "not yet deeply parsed"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "Biopolymeric lubricious network compositions.",
+              "Chitosan/carbohydrate/carboxylic acid/aldehyde network chemistry.",
+              "Optional active-agent and antifouling functions."
+            ],
+            "design_around_notes": [
+              "Abandoned US application reduces direct US blocking risk, but check WO/TW/foreign family.",
+              "Do not assume examples worked without parsing full text and prosecution history.",
+              "Modern chitosan/QCS route should be separated from Hydromer claim wording and validated for cytotoxicity/extractables."
+            ]
+          },
+          "company_path_note": "Hydromer phase 4: after PU/PVP and multi-purpose coating platforms, explore biopolymer/chitosan network chemistry as a broader functional coating branch.",
+          "inference_flags": [
+            "** The evolution from P07 to P38 is inferred from assignee, inventor overlap, date, and material direction; not necessarily a continuation family."
+          ],
+          "next_actions": [
+            "Download PDF and parse claim set/prosecution for why abandoned.",
+            "Check WO2008133646A1 and TW200826980A family status.",
+            "Compare chitosan network idea with QCS/SBMA anti-encrustation strategy."
           ]
         }
       }
@@ -764,8 +1059,8 @@
     },
     {
       "id": "P06",
-      "title": "Lubricious hydrogel coatings (US5160790 / 單步熱固化)",
-      "authors": "(專利)",
+      "title": "Lubricious hydrogel coatings (US5160790A / Bard-Medtronic single-step thermal cure)",
+      "authors": "Richard K. Elton / C.R. Bard; later Medtronic Vascular",
       "year": 1992,
       "venue": "USPTO",
       "doi": null,
@@ -779,17 +1074,21 @@
         "isocyanate",
         "lubricity潤滑",
         "導管",
-        "熱固化"
+        "熱固化",
+        "Bard",
+        "Medtronic",
+        "parallel-route",
+        "expired"
       ],
-      "purpose": "單步 isocyanate+PVP 熱固化",
-      "abstract_note": "crosslinked PU+PVP 系統；單步製程改善雙層比例控制問題；isocyanate 與基材反應提升附著。",
-      "value_to_project": "單步熱固化路徑(UV設備有限時備案)",
+      "purpose": "Bard/Medtronic single-step PVP + isocyanate hydrogel coating route; not a Hydromer-owned patent.",
+      "abstract_note": "Google Patents identifies original assignee C.R. Bard and current assignee Medtronic Vascular. This is a useful expired PVP/isocyanate reference, but should be treated as a Bard/Medtronic parallel route rather than Hydromer lineage.",
+      "value_to_project": "Expired parallel thermal-cure reference for lumen/internal-wall coating; do not use it as a Hydromer path node.",
       "links": {
-        "patents": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/5160790"
+        "google_patents": "https://patents.google.com/patent/US5160790A/en"
       },
       "patentResults": {
         "full": {
-          "summary": "早期熱固化 PVP 塗層專利（US5160790），揭示 PVP 與 MDI（4,4'-methylene diphenyl diisocyanate）單步熱固化形成 IPN 互穿網絡的技術。免 UV 設備、常溫可操作，可應用於管腔內壁。COF < 0.1，附著力強。此為 Hydromer 路線的早期基礎，專利年份 1992 年，核心技術大概率已過期，需確認法律狀態。",
+          "summary": "US5160790A discloses a lubricious hydrogel coating route based on PVP and isocyanate/polyurethane chemistry. It remains valuable as an expired thermal-cure reference, especially where UV line-of-sight is difficult. However, Google Patents lists C.R. Bard as original assignee and Medtronic Vascular as current assignee, so it is not Hydromer-owned and should not be plotted as Hydromer company evolution.",
           "examples": [
             {
               "name": "Polyurethane tubing 實施例",
@@ -832,14 +1131,14 @@
           ],
           "vs_database": "P06 是 isocyanate+PVP 路線的源頭，DSM 的 P01 在此基礎上改為 UV 固化。兩者是不同技術世代。P06 已過期，是最安全的備援選擇",
           "bioteque_relevance": "若 US5160790 已過期，PVP + isocyanate 熱固化路線可自由使用，特別適合管腔內壁塗層場景（UV line-of-sight 限制處）。",
-          "evidence_level": "medium",
-          "source_quality": "abstract",
+          "evidence_level": "high",
+          "source_quality": "google_patents_metadata_and_text",
           "key_findings": [
-            "PVP + MDI isocyanate 單步熱固化 IPN 結構",
-            "免 UV 設備，可塗管腔內壁",
-            "COF < 0.1，附著力佳",
-            "1992 年申請，核心可能已過期",
-            "Hydromer 路線的技術基礎"
+            "Original assignee is C.R. Bard, not Hydromer.",
+            "Current assignee listed by Google Patents is Medtronic Vascular.",
+            "Status is Expired - Lifetime.",
+            "Technical route is still useful: PVP/isocyanate hydrogel coating for lubricity.",
+            "Use as a Bard/Medtronic parallel route or prior-art reference, not a Hydromer trunk node."
           ],
           "coating_technology": {
             "materials": [
@@ -859,12 +1158,14 @@
           },
           "patent_core": {
             "claim_focus": [
-              "PVP + isocyanate 單步熱固化 IPN 塗層（推估）",
-              "管腔內壁塗層應用"
+              "Lubricious hydrogel coating on medical articles.",
+              "PVP/isocyanate/polyurethane thermal-cure chemistry.",
+              "Medical tubing/catheter coating use."
             ],
             "design_around_notes": [
-              "若已過期，技術可自由使用",
-              "現代版本可改用 PVP + PEGDA UV 交聯取代熱固化"
+              "Expired US patent; useful as open prior art reference.",
+              "For modern designs, replace toxic aromatic isocyanates with lower-risk crosslinkers or UV/PDA/PEGDA chemistry.",
+              "Keep separate from Hydromer path analysis."
             ]
           },
           "experimental_plan": {
@@ -888,14 +1189,20 @@
             ]
           },
           "next_actions": [
-            "優先查 US5160790 法律狀態（1992 申請，20 年保護期至 2012，可能已過期）",
-            "確認過期後，評估 PVP + HDI 作為管腔內壁塗層方案"
+            "Keep P06 out of Hydromer tree filters unless showing cross-company prior-art context.",
+            "Use P06 as Bard/Medtronic node when BD/Bard route is built."
           ],
           "citations_needed": [
-            "US5160790 法律狀態（Google Patents Legal Events）"
+            "US5160790A Google Patents assignee and legal status",
+            "US5160790A claim 1 full text"
           ]
         }
-      }
+      },
+      "related_patents": [
+        "EP0483941B1",
+        "US5290585A"
+      ],
+      "patent_notes": "Google Patents: priority 1990-11-01; filed by C.R. Bard; current assignee Medtronic Vascular; status Expired - Lifetime. Corrected from earlier Hydromer-path classification."
     },
     {
       "id": "P08",
@@ -8427,7 +8734,7 @@
             "若 本專案 未來改用類似基材組成需注意"
           ],
           "vs_database": "P12(US9138510)的姊妹專利。P12提供雙層配方和COF 0.02N基準，本專利提供PEGDA分子量vs耐磨的定量數據。兩者互補",
-          "bioteque_relevance": "本專案 使用 TPU 基材，自然不落入 Hollister P33 的乙烯/丙烯聚合物 claim 範圍。此 IP 對 本專案 影響低。但 Hollister 整體泌尿導管 IP（P33 + P37/P38 等）需整體評估。",
+          "bioteque_relevance": "本專案 使用 TPU 基材，自然不落入 Hollister P33 的乙烯/丙烯聚合物 claim 範圍。此 IP 對 本專案 影響低。但 Hollister 整體泌尿導管 IP（P33 與後續 Hollister 節點）需整體評估。",
           "evidence_level": "medium",
           "source_quality": "abstract",
           "key_findings": [
