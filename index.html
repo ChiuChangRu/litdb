@@ -4179,6 +4179,76 @@ function renderMarket() {
     </div>
   </div>`;
 
+  const renderCookPatentPath = () => {
+    const findPatent = token => papers.find(p => {
+      const txt = `${p.id||''} ${p.title||''} ${p.abstract_note||''} ${p.patent_notes||''} ${(p.related_patents||[]).join(' ')}`.toLowerCase();
+      return txt.includes(token.toLowerCase());
+    });
+    const p30 = DB.papers.find(p=>p.id==='P30') || findPatent('US7141246');
+    const p31 = DB.papers.find(p=>p.id==='P31') || findPatent('US7402620');
+    const missing = [
+      {patent_no:'US6645483', role:'祖案 / family root', reason:'出現在 P30/P31 related_patents，但目前沒有獨立 paper.json 條目；需要載入全文與 claim。'}
+    ].filter(x => !findPatent(x.patent_no));
+    const overlap = (a,b) => {
+      const A = new Set(a?.tags || []);
+      const B = new Set(b?.tags || []);
+      const common = [...A].filter(x=>B.has(x)).length;
+      const total = new Set([...A, ...B]).size || 1;
+      return Math.round(common / total * 100);
+    };
+    const similarScore = p30 && p31 ? overlap(p30, p31) : 0;
+    const analyzedBadge = p => p?.patentResults?.agent_reading?.schema_version
+      ? '<span class="tag tag-green">Agent v1 已讀</span>'
+      : '<span class="tag tag-gray">待深度解析</span>';
+    const node = (p, role, note, color) => {
+      const link = p ? `<button class="btn btn-s" style="font-size:10px;padding:3px 8px;margin-top:6px" onclick="goToMarketPaper('${p.id}')">查看 ${p.id}</button>` : '';
+      return `<div style="min-width:230px;flex:1;background:#fff;border:1px solid var(--border);border-top:4px solid ${color};border-radius:8px;padding:11px 12px">
+        <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start">
+          <div style="font-size:11px;font-weight:800;color:${color}">${role}</div>
+          ${p ? analyzedBadge(p) : '<span class="tag tag-gray">未載入</span>'}
+        </div>
+        <div style="font-size:13px;font-weight:800;color:var(--text);margin-top:6px">${escHtml(p?.title || note)}</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-top:6px">${escHtml(note)}</div>
+        ${p?.patentResults?.agent_reading?.design_examples?.length ? `<div style="font-size:11px;color:var(--accent2);margin-top:6px">設計案例 ${p.patentResults.agent_reading.design_examples.length}；FTO 風險 ${p.patentResults.agent_reading.fto_risks?.length || 0}</div>` : ''}
+        ${link}
+      </div>`;
+    };
+    const missingList = missing.map(m=>`<li><b>${m.patent_no}</b>｜${m.role}：${m.reason}</li>`).join('');
+    return `<section style="margin:4px 0 24px">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-end;margin-bottom:10px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:14px;font-weight:800;color:#c0392b">Cook Medical 玩家專利路徑 MVP</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">PVP-PU-isocyanate 潤滑塗層家族：從平台塗層到抗菌釋放續案</div>
+        </div>
+        <button class="btn btn-s" style="font-size:11px;padding:4px 10px" onclick="goToMarketEntity('Cook Medical')">篩選 Cook 相關文庫</button>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px">
+        <div style="display:flex;align-items:stretch;gap:8px;flex-wrap:wrap">
+          ${node(null, '1. 祖案缺口', 'US6645483：目前只在 related_patents 出現，尚未載入 paper.json。這是次要深度解析清單的第一順位。', '#8a7e72')}
+          <div style="align-self:center;color:var(--muted);font-size:18px;font-weight:800">→</div>
+          ${node(p30, '2. 母案 / 平台', 'US7141246 / P30：PVP + PU interpolymer + isocyanate 熱固化潤滑骨架，可加入抗菌劑。', '#d4a030')}
+          <div style="align-self:center;color:var(--muted);font-size:18px;font-weight:800">→</div>
+          ${node(p31, '3. 續案 / 功能延伸', 'US7402620 / P31：延伸為 CHX / triclosan / silver sustained release，加入保存穩定概念。', '#c0392b')}
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;margin-top:12px">
+          <div style="background:#fff8e6;border:1px solid #f0c040;border-radius:8px;padding:10px;font-size:12px;line-height:1.7">
+            <b style="color:#b8860b">問題專利提醒</b><br>
+            P30 與 P31 標籤相似度約 ${similarScore}%。P31 是續案/延伸案，不能把它當作完全獨立的新技術；分析時應以 patent family 看待，避免重複計算創新。
+          </div>
+          <div style="background:#fdf0ed;border:1px solid #e7a39a;border-radius:8px;padding:10px;font-size:12px;line-height:1.7">
+            <b style="color:#c0392b">次要深度解析清單</b>
+            <ul style="margin:6px 0 0 18px;padding:0">${missingList || '<li>目前沒有缺口。</li>'}</ul>
+          </div>
+          <div style="background:#eaf5ef;border:1px solid #82d4a8;border-radius:8px;padding:10px;font-size:12px;line-height:1.7">
+            <b style="color:#1a6040">商業分析意義</b><br>
+            這條路徑顯示 Cook 先建立潤滑/附著平台，再把抗菌釋放作為功能延伸。未來可接 510(k) 產品對照，建立「產品 → 專利族 → claim 風險」地圖。
+          </div>
+        </div>
+      </div>
+    </section>`;
+  };
+  const cookPatentPathHtml = renderCookPatentPath();
+
   el.innerHTML = `
   <!-- 標題 -->
   <div style="margin-bottom:20px">
@@ -4200,6 +4270,8 @@ function renderMarket() {
 
   <!-- 區塊2：市場角色分區 -->
   ${MARKET_SEGMENTS.map(segmentSection).join('')}
+
+  ${cookPatentPathHtml}
 
   <!-- 區塊3：技術路線歸屬矩陣 -->
   <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:10px">📊 技術路線歸屬矩陣</div>
