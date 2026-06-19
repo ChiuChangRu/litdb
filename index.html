@@ -4672,212 +4672,153 @@ function renderPatentTreeDetail(d) {
     ${link}`;
 }
 
+function renderPatentTreeDetail(d) {
+  const el = document.getElementById('patentTreeDetail');
+  if(!el || !d) return;
+  const paper = d.paperId ? (DB.papers||[]).find(p=>p.id===d.paperId) : null;
+  const full = paper?.patentResults?.full || {};
+  const col = d.color || '#2d8c5a';
+
+  const block = (label, items, c='var(--accent2)') => {
+    if(!items?.length) return '';
+    const li = Array.isArray(items)?items.map(x=>`<li style="margin-bottom:3px">${escHtml(String(x))}</li>`).join(''):`<li>${escHtml(String(items))}</li>`;
+    return `<div style="margin-top:9px"><div style="font-weight:800;color:${c};font-size:11px;margin-bottom:4px">${label}</div><ul style="margin:0 0 0 16px;padding:0;font-size:11px;line-height:1.6">${li}</ul></div>`;
+  };
+
+  const techTable = ct => {
+    if(!ct) return '';
+    const rows=[['材料',ct.materials],['前處理',ct.surface_prep],['固化',ct.curing_or_process],['測試',ct.test_methods]].filter(([,v])=>v?.length);
+    if(!rows.length) return '';
+    return `<div style="margin-top:9px"><div style="font-weight:800;color:var(--muted);font-size:11px;margin-bottom:4px">⚗️ 塗層技術</div><table style="font-size:11px;width:100%;border-collapse:collapse">${rows.map(([k,v])=>`<tr><td style="padding:3px 6px 3px 0;color:var(--muted);white-space:nowrap;vertical-align:top">${k}</td><td style="padding:3px 0;color:var(--text)">${Array.isArray(v)?v.join('、'):v}</td></tr>`).join('')}</table></div>`;
+  };
+
+  const pc = full.patent_core||{}, ep = full.experimental_plan||{};
+
+  el.innerHTML = `
+    <div style="border-left:3px solid ${d.status==='missing'?'#c0392b':col};padding-left:10px;margin-bottom:10px">
+      <div style="font-size:14px;font-weight:900;color:var(--text)">${escHtml(d.patent||d.patentNo||'')}</div>
+      <div style="font-size:12px;color:${col};font-weight:700;margin-top:2px">${escHtml(d.stage||'')} · ${escHtml(String(d.year||''))}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px">${escHtml(d.theme||'')}</div>
+    </div>
+    ${d.status==='missing'?`<div style="background:#fff8f0;border:1px solid #f0c080;border-radius:6px;padding:8px 10px;font-size:12px;margin-bottom:8px">⚠️ <b>未收錄於 papers.json</b> — 下一輪深度解析候選<br><span style="color:#b85c2a;font-size:11px">${escHtml(d.meaning||'')}</span></div>`:''}
+    ${full.summary?`<div style="font-size:12px;color:var(--text);line-height:1.65;margin-bottom:6px">${escHtml(full.summary)}</div>`:''}
+    ${!paper&&d.meaning&&d.status!=='missing'?`<div style="font-size:12px;color:var(--text);line-height:1.65">${escHtml(d.meaning)}</div>`:''}
+    ${block('📌 關鍵發現',full.key_findings,'#2d8c5a')}
+    ${techTable(full.coating_technology)}
+    ${pc.claim_focus?.length?`<div style="margin-top:9px"><div style="font-weight:800;color:#d4a030;font-size:11px;margin-bottom:4px">⚖️ Claim 重點</div><ul style="margin:0 0 0 16px;padding:0;font-size:11px;line-height:1.6">${pc.claim_focus.map(x=>`<li style="margin-bottom:3px">${escHtml(x)}</li>`).join('')}</ul></div>`:''}
+    ${pc.design_around_notes?.length?`<div style="margin-top:9px"><div style="font-weight:800;color:#8e44ad;font-size:11px;margin-bottom:4px">🔀 設計迴避</div><ul style="margin:0 0 0 16px;padding:0;font-size:11px;line-height:1.6">${pc.design_around_notes.map(x=>`<li style="margin-bottom:3px">${escHtml(x)}</li>`).join('')}</ul></div>`:''}
+    ${ep.steps?.length?`<div style="margin-top:9px"><div style="font-weight:800;color:var(--accent);font-size:11px;margin-bottom:4px">🔬 實驗規劃</div><ul style="margin:0 0 0 16px;padding:0;font-size:11px;line-height:1.6">${ep.steps.map(x=>`<li style="margin-bottom:3px">${escHtml(x)}</li>`).join('')}</ul></div>`:''}
+    ${block('📋 下一步',full.next_actions,'var(--accent)')}
+    ${block('🚩 紅旗',full.red_flags,'#c0392b')}
+    ${full.bioteque_relevance?`<div style="margin-top:9px;padding:8px 10px;background:var(--card);border-left:2px solid var(--accent);border-radius:0 6px 6px 0;font-size:11px;line-height:1.6"><b style="color:var(--accent)">🎯 本專案建議</b><br>${escHtml(full.bioteque_relevance)}</div>`:''}
+    ${paper?`<div style="margin-top:10px;text-align:right"><button class="btn btn-s" onclick="goToPaper('${paper.id}',{focus:true})" style="font-size:11px">📚 查看文庫完整條目 ${paper.id} →</button></div>`:''}
+  `;
+}
+
 function drawPatentFamilyTree() {
   const svgEl = document.getElementById('patentTreeSvg');
   if(!svgEl || typeof d3 === 'undefined') return;
 
   const companies = Object.values(PATENT_TREE_CONFIG);
+  const LABEL_W=124, LANE_H=140, PAD_T=44, PAD_B=24, PAD_R=40, NODE_W=90, NODE_H=68, STAGGER=NODE_H+10;
 
-  // ── 尺寸常數 ──
-  const LABEL_W = 124;   // 公司標籤寬度
-  const LANE_H  = 100;   // 每家公司的泳道高度
-  const PAD_T   = 44;    // 年份軸上方空間
-  const PAD_B   = 20;
-  const PAD_R   = 40;
-  const NODE_W  = 86;    // 節點卡片寬
-  const NODE_H  = 64;    // 節點卡片高
+  const containerW = svgEl.parentElement?.clientWidth||900;
+  const CONTENT_W = Math.max(containerW-LABEL_W-PAD_R, 500);
+  const totalW = LABEL_W+CONTENT_W+PAD_R;
+  const totalH = PAD_T+companies.length*LANE_H+PAD_B+20;
 
-  const containerW = svgEl.parentElement?.clientWidth || 900;
-  const CONTENT_W  = Math.max(containerW - LABEL_W - PAD_R, 500);
-  const totalW     = LABEL_W + CONTENT_W + PAD_R;
-  const totalH     = PAD_T + companies.length * LANE_H + PAD_B;
+  const allYears=companies.flatMap(c=>(c.evolution||[]).map(e=>Number(e.year)));
+  const yMin=Math.min(...allYears), yMax=Math.max(...allYears);
+  const yPad=(yMax-yMin)*0.06;
+  const xScale=yr=>LABEL_W+((yr-(yMin-yPad))/((yMax+yPad)-(yMin-yPad)))*CONTENT_W;
 
-  // ── 年份範圍 ──
-  const allYears = companies.flatMap(c => (c.evolution||[]).map(e => Number(e.year)));
-  const yMin = Math.min(...allYears), yMax = Math.max(...allYears);
-  const yPad = (yMax - yMin) * 0.06;
-  const xScale = yr => LABEL_W + ((yr - (yMin - yPad)) / ((yMax + yPad) - (yMin - yPad))) * CONTENT_W;
-
-  // ── SVG 初始化 ──
-  const svg = d3.select(svgEl)
-    .attr('width', totalW).attr('height', totalH)
-    .attr('style', `display:block;width:${totalW}px;height:${totalH}px`);
+  const svg=d3.select(svgEl).attr('width',totalW).attr('height',totalH)
+    .attr('style',`display:block;width:${totalW}px;height:${totalH}px`);
   svg.selectAll('*').remove();
+  const defs=svg.append('defs');
 
-  // ── 年份格線 & 軸 ──
-  const yearTicks = d3.range(Math.ceil(yMin/5)*5, yMax+1, 5);  // 每5年一格
-  const gridG = svg.append('g').attr('class','grid');
-
-  yearTicks.forEach(yr => {
-    const x = xScale(yr);
-    gridG.append('line')
-      .attr('x1',x).attr('y1',PAD_T-8)
-      .attr('x2',x).attr('y2',totalH-PAD_B)
-      .attr('stroke','#ece8e2').attr('stroke-width',1);
-    gridG.append('text')
-      .attr('x',x).attr('y',PAD_T-12)
-      .attr('text-anchor','middle').attr('font-size',10).attr('fill','#bbb').attr('font-weight',600)
-      .text(yr);
+  const yearTicks=d3.range(Math.ceil(yMin/5)*5,yMax+1,5);
+  const gridG=svg.append('g');
+  yearTicks.forEach(yr=>{
+    const x=xScale(yr);
+    gridG.append('line').attr('x1',x).attr('y1',PAD_T-8).attr('x2',x).attr('y2',totalH-PAD_B).attr('stroke','#ece8e2').attr('stroke-width',1);
+    gridG.append('text').attr('x',x).attr('y',PAD_T-12).attr('text-anchor','middle').attr('font-size',10).attr('fill','#bbb').attr('font-weight',600).text(yr);
   });
+  svg.append('line').attr('x1',LABEL_W).attr('y1',PAD_T-2).attr('x2',totalW-PAD_R).attr('y2',PAD_T-2).attr('stroke','#ddd').attr('stroke-width',1.5);
 
-  // 頂部時間軸線
-  svg.append('line')
-    .attr('x1',LABEL_W).attr('y1',PAD_T-2)
-    .attr('x2',totalW-PAD_R).attr('y2',PAD_T-2)
-    .attr('stroke','#ddd').attr('stroke-width',1.5);
+  companies.forEach((cfg,ci)=>{
+    const laneY=PAD_T+ci*LANE_H, midY=laneY+LANE_H/2, col=cfg.color||'#888', evo=cfg.evolution||[];
+    svg.append('rect').attr('x',0).attr('y',laneY).attr('width',totalW).attr('height',LANE_H).attr('fill',ci%2===0?'#fafaf8':'#f5f3ef').attr('opacity',0.65);
+    svg.append('line').attr('x1',0).attr('y1',laneY).attr('x2',totalW).attr('y2',laneY).attr('stroke','#e8e2db').attr('stroke-width',1);
 
-  // ── 每家公司泳道 ──
-  companies.forEach((cfg, ci) => {
-    const laneY  = PAD_T + ci * LANE_H;
-    const midY   = laneY + LANE_H / 2;
-    const col    = cfg.color || '#888';
-    const evo    = cfg.evolution || [];
+    const labG=svg.append('g').attr('transform',`translate(6,${midY})`);
+    labG.append('rect').attr('x',0).attr('y',-14).attr('width',112).attr('height',28).attr('rx',6).attr('fill',col+'22').attr('stroke',col+'44').attr('stroke-width',1);
+    labG.append('text').attr('x',56).attr('y',5).attr('text-anchor','middle').attr('font-size',11).attr('font-weight',800).attr('fill',col).text(cfg.label.length>14?cfg.label.slice(0,13)+'…':cfg.label);
 
-    // 泳道背景（交替色）
-    svg.append('rect')
-      .attr('x', 0).attr('y', laneY)
-      .attr('width', totalW).attr('height', LANE_H)
-      .attr('fill', ci % 2 === 0 ? '#fafaf8' : '#f5f3ef')
-      .attr('opacity', 0.6);
+    svg.append('line').attr('x1',LABEL_W).attr('y1',midY).attr('x2',totalW-PAD_R).attr('y2',midY).attr('stroke',col+'33').attr('stroke-width',2).attr('stroke-dasharray','4,4');
 
-    // 泳道分隔線
-    svg.append('line')
-      .attr('x1',0).attr('y1',laneY)
-      .attr('x2',totalW).attr('y2',laneY)
-      .attr('stroke','#e8e2db').attr('stroke-width',1);
+    defs.append('marker').attr('id',`arr-${ci}`).attr('markerWidth',7).attr('markerHeight',5).attr('refX',6).attr('refY',2.5).attr('orient','auto').append('path').attr('d','M0,0 L0,5 L7,2.5 z').attr('fill',col+'88');
 
-    // 公司標籤（左側）
-    const labG = svg.append('g').attr('transform',`translate(6,${midY})`);
-    labG.append('rect')
-      .attr('x',0).attr('y',-14).attr('width',112).attr('height',28).attr('rx',6)
-      .attr('fill', col+'22').attr('stroke', col+'44').attr('stroke-width',1);
-    labG.append('text')
-      .attr('x',56).attr('y',4).attr('text-anchor','middle')
-      .attr('font-size',11).attr('font-weight',800).attr('fill',col)
-      .text(cfg.label.length > 14 ? cfg.label.slice(0,13)+'…' : cfg.label);
+    const nodes=evo.map(item=>({...item,cx:xScale(Number(item.year)),stagger:0}));
+    nodes.sort((a,b)=>a.cx-b.cx);
+    nodes.forEach((node,i)=>{
+      const prev=nodes.slice(0,i).filter(n=>Math.abs(n.cx-node.cx)<NODE_W+6);
+      if(!prev.length){node.stagger=0;return;}
+      const used=prev.map(n=>n.stagger);
+      node.stagger=used.includes(0)?(used.includes(-1)?1:-1):0;
+    });
+    nodes.forEach(n=>{n.cardY=midY+n.stagger*STAGGER-NODE_H/2;});
 
-    // 水平主軸線（泳道中線）
-    svg.append('line')
-      .attr('x1', LABEL_W).attr('y1', midY)
-      .attr('x2', totalW - PAD_R).attr('y2', midY)
-      .attr('stroke', col+'33').attr('stroke-width', 2)
-      .attr('stroke-dasharray', '4,4');
-
-    // 節點位置計算
-    const nodeData = evo.map(item => ({
-      ...item,
-      x: xScale(Number(item.year)),
-      y: midY
-    }));
-
-    // 連線（節點間箭頭）
-    for(let i = 0; i < nodeData.length - 1; i++) {
-      const s = nodeData[i], t = nodeData[i+1];
-      const isMiss = s.status === 'missing';
-      svg.append('line')
-        .attr('x1', s.x + NODE_W/2 + 2).attr('y1', midY)
-        .attr('x2', t.x - NODE_W/2 - 2).attr('y2', midY)
-        .attr('stroke', isMiss ? col+'55' : col+'88')
-        .attr('stroke-width', 2)
-        .attr('stroke-dasharray', isMiss ? '5,3' : 'none')
-        .attr('marker-end', `url(#arr-${ci})`);
+    for(let i=0;i<nodes.length-1;i++){
+      const s=nodes[i],t=nodes[i+1];
+      const sy=s.cardY+NODE_H/2,ty=t.cardY+NODE_H/2,sx=s.cx+NODE_W/2,tx2=t.cx-NODE_W/2;
+      svg.append('path').attr('d',`M${sx},${sy} C${(sx+tx2)/2},${sy} ${(sx+tx2)/2},${ty} ${tx2},${ty}`)
+        .attr('fill','none').attr('stroke',s.status==='missing'?col+'55':col+'88').attr('stroke-width',2)
+        .attr('stroke-dasharray',s.status==='missing'?'5,3':'none').attr('marker-end',`url(#arr-${ci})`);
     }
 
-    // Arrow marker（每條泳道一個顏色）
-    const defs = svg.select('defs').empty() ? svg.append('defs') : svg.select('defs');
-    defs.append('marker').attr('id',`arr-${ci}`)
-      .attr('markerWidth',7).attr('markerHeight',5)
-      .attr('refX',6).attr('refY',2.5).attr('orient','auto')
-      .append('path').attr('d','M0,0 L0,5 L7,2.5 z').attr('fill', col+'88');
+    nodes.filter(n=>n.stagger!==0).forEach(n=>{
+      svg.append('line').attr('x1',n.cx+NODE_W/2).attr('y1',midY).attr('x2',n.cx+NODE_W/2).attr('y2',n.cardY+(n.stagger>0?0:NODE_H)).attr('stroke',col+'44').attr('stroke-width',1.5).attr('stroke-dasharray','3,2');
+    });
 
-    // 節點卡片
-    const nodeG = svg.selectAll(`.node-${ci}`).data(nodeData).join('g')
-      .attr('class',`node-${ci}`)
-      .attr('transform', d => `translate(${d.x - NODE_W/2},${midY - NODE_H/2})`)
-      .attr('cursor','pointer')
-      .on('click', (e,d) => {
-        if(d.id) goToPaper(d.id, {focus:true, label:`專利樹：${d.id}`, color: col});
-        else renderPatentTreeDetail({
-          name:d.patent, patentNo:d.patent, type:'missing',
-          role:d.stage, title:d.theme, summary:d.meaning,
-          next_task:'下一輪深度解析候選'
-        });
+    const nodeG=svg.selectAll(`.node-${ci}`).data(nodes).join('g').attr('class',`node-${ci}`)
+      .attr('transform',d=>`translate(${d.cx-NODE_W/2},${d.cardY})`).attr('cursor','pointer')
+      .on('click',(e,d)=>{
+        svg.selectAll('.pt-card-bg').attr('stroke-width',1.8);
+        d3.select(e.currentTarget).select('.pt-card-bg').attr('stroke-width',3.5);
+        renderPatentTreeDetail({patent:d.patent,year:d.year,stage:d.stage,theme:d.theme,meaning:d.meaning,status:d.status,paperId:d.id,color:col});
+        document.getElementById('patentTreeDetail')?.scrollIntoView({behavior:'smooth',block:'nearest'});
       })
-      .on('mouseover', (e,d) => {
-        const tip = document.getElementById('patentTreeTip');
-        if(!tip) return;
-        tip.style.display='block';
-        tip.style.left=(e.clientX+14)+'px';
-        tip.style.top=(e.clientY-10)+'px';
-        tip.innerHTML=`<b style="color:${d.status==='missing'?'#c0392b':col}">${escHtml(d.patent)}</b>
-          <br><span style="font-weight:700;font-size:11px">${escHtml(d.stage)}</span>
-          <br><span style="color:#777;font-size:11px">${escHtml((d.theme||'').slice(0,60))}</span>
-          <br><span style="color:#aaa;font-size:10px">${d.status==='missing'?'⚠ 未收錄，待深度解析':'✅ 已收錄 papers.json'}</span>`;
+      .on('mouseover',(e,d)=>{
+        const tip=document.getElementById('patentTreeTip');if(!tip)return;
+        tip.style.display='block';tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';
+        tip.innerHTML=`<b style="color:${d.status==='missing'?'#c0392b':col}">${escHtml(d.patent)}</b><br><b style="font-size:11px">${escHtml(d.stage)}</b><br><span style="color:#777;font-size:11px">${escHtml((d.theme||'').slice(0,55))}</span><br><span style="color:#aaa;font-size:10px">${d.status==='missing'?'⚠ 未收錄':'✅ 已收錄'} · 點擊查看詳情</span>`;
       })
-      .on('mouseout',() => {
-        const tip=document.getElementById('patentTreeTip');
-        if(tip) tip.style.display='none';
-      });
+      .on('mouseout',()=>{const t=document.getElementById('patentTreeTip');if(t)t.style.display='none';});
 
-    // 卡片背景
-    nodeG.append('rect')
-      .attr('width',NODE_W).attr('height',NODE_H).attr('rx',7)
-      .attr('fill','var(--card)')
-      .attr('stroke', d => d.status==='missing' ? '#c0392b' : col)
-      .attr('stroke-width', d => d.status==='missing' ? 2 : 1.8)
-      .attr('filter','drop-shadow(0 1px 4px rgba(0,0,0,0.08))');
-
-    // 頂色條
-    nodeG.append('rect')
-      .attr('width',NODE_W).attr('height',4).attr('rx',7)
-      .attr('fill', d => d.status==='missing' ? '#c0392b' : col);
-
-    // 年份
-    nodeG.append('text')
-      .attr('x',7).attr('y',18)
-      .attr('font-size',11).attr('font-weight',900)
-      .attr('fill', d => d.status==='missing' ? '#c0392b' : col)
-      .text(d => d.year);
-
-    // 狀態徽章
-    nodeG.append('text')
-      .attr('x',NODE_W-6).attr('y',18)
-      .attr('text-anchor','end').attr('font-size',8).attr('font-weight',700)
-      .attr('fill', d => d.status==='missing' ? '#c0392b' : '#2d8c5a')
-      .text(d => d.status==='missing' ? '⚠' : '✅');
-
-    // 專利號
-    nodeG.append('text')
-      .attr('x',7).attr('y',30)
-      .attr('font-size',8).attr('font-weight',700).attr('fill','var(--accent)')
-      .text(d => (d.patent||'').slice(0,13));
-
-    // 角色
-    nodeG.append('text')
-      .attr('x',7).attr('y',42)
-      .attr('font-size',9).attr('font-weight',800).attr('fill','var(--text)')
-      .text(d => (d.stage||'').slice(0,14));
-
-    // 技術主題（截短）
-    nodeG.append('text')
-      .attr('x',7).attr('y',55)
-      .attr('font-size',8).attr('fill','#999')
-      .text(d => (d.theme||'').slice(0,16));
+    nodeG.append('rect').attr('class','pt-card-bg').attr('width',NODE_W).attr('height',NODE_H).attr('rx',7)
+      .attr('fill','var(--card)').attr('stroke',d=>d.status==='missing'?'#c0392b':col).attr('stroke-width',1.8)
+      .attr('filter','drop-shadow(0 1px 5px rgba(0,0,0,0.10))');
+    nodeG.append('rect').attr('width',NODE_W).attr('height',4).attr('rx',7).attr('fill',d=>d.status==='missing'?'#c0392b':col);
+    nodeG.append('text').attr('x',7).attr('y',17).attr('font-size',11).attr('font-weight',900).attr('fill',d=>d.status==='missing'?'#c0392b':col).text(d=>d.year);
+    nodeG.append('text').attr('x',NODE_W-6).attr('y',17).attr('text-anchor','end').attr('font-size',8).attr('font-weight',700).attr('fill',d=>d.status==='missing'?'#c0392b':'#2d8c5a').text(d=>d.status==='missing'?'⚠':'✅');
+    nodeG.append('text').attr('x',7).attr('y',29).attr('font-size',8).attr('font-weight',700).attr('fill','var(--accent)').text(d=>(d.patent||'').slice(0,14));
+    nodeG.append('text').attr('x',7).attr('y',42).attr('font-size',10).attr('font-weight',800).attr('fill','var(--text)').text(d=>(d.stage||'').slice(0,14));
+    nodeG.each(function(d){
+      const words=(d.theme||'').split(/\s*[+\/]\s*|\s+/);
+      const el2=d3.select(this);let line='',lineY=54,ln=0;
+      words.forEach(w=>{if(ln>=2)return;const t=line?line+' '+w:w;if(t.length>16){el2.append('text').attr('x',7).attr('y',lineY).attr('font-size',8).attr('fill','#999').text(line);line=w;lineY+=11;ln++;}else line=t;});
+      if(line&&ln<2)el2.append('text').attr('x',7).attr('y',lineY).attr('font-size',8).attr('fill','#999').text(line.slice(0,18));
+    });
   });
 
-  // 底部分隔線
-  svg.append('line')
-    .attr('x1',0).attr('y1',totalH-PAD_B)
-    .attr('x2',totalW).attr('y2',totalH-PAD_B)
-    .attr('stroke','#e8e2db').attr('stroke-width',1);
-
-  // 圖例
-  const legG = svg.append('g').attr('transform',`translate(${LABEL_W},${totalH-PAD_B+6})`);
-  [['✅ 已收錄 papers.json','#2d8c5a'],['⚠ 未收錄（待深度解析）','#c0392b'],['→ 虛線連結 = 缺口','#aaa']].forEach(([lb,col],i) => {
-    legG.append('text').attr('x',i*200).attr('y',10)
-      .attr('font-size',10).attr('fill',col).text(lb);
+  svg.append('line').attr('x1',0).attr('y1',totalH-PAD_B).attr('x2',totalW).attr('y2',totalH-PAD_B).attr('stroke','#e8e2db');
+  const legG=svg.append('g').attr('transform',`translate(${LABEL_W},${totalH-PAD_B+8})`);
+  [['✅ 已收錄','#2d8c5a'],['⚠ 未收錄（待深度解析）','#c0392b'],['── 虛線 = 從缺口延伸','#aaa']].forEach(([lb,c],i)=>{
+    legG.append('text').attr('x',i*195).attr('y',10).attr('font-size',10).attr('fill',c).text(lb);
   });
 }
+
 
 
 
