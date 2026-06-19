@@ -149,9 +149,9 @@
       ]
     },
     "stats": {
-      "total": 82,
-      "patents": 26,
-      "patent_ratio": "32%"
+      "total": 84,
+      "patents": 28,
+      "patent_ratio": "33%"
     }
   },
   "papers": [
@@ -1668,7 +1668,7 @@
     {
       "id": "P24",
       "title": "Hydrophilic lubricity coating with hybrid top coat (US6610035B2)",
-      "authors": "(專利)",
+      "authors": "Yang, Wang, Stanslaski, Tang / Scimed Life Systems; Boston Scientific Scimed",
       "year": 2003,
       "venue": "Google Patents",
       "doi": null,
@@ -1676,6 +1676,8 @@
       "doc_type": "專利",
       "access": "專利全文",
       "tags": [
+        "Boston Scientific",
+        "Scimed",
         "COF<0.1",
         "PEG",
         "WCA<20°",
@@ -1686,7 +1688,7 @@
         "silicone",
         "導管"
       ],
-      "purpose": "hydrogel底層+疏水面塗防過度吸濕",
+      "purpose": "Boston/Scimed hybrid top coat: prevents hydrogel premature moisture uptake, package blocking and balloon coating delamination.",
       "abstract_note": "第一層hydrogel+第二層疏水面塗(防hydrogel過早吸濕);面塗含親水surfactant作carrier,入水後帶走面塗;PEG/MPEG分子量100-20000。",
       "value_to_project": "hybrid top coat 控制吸濕時機設計",
       "links": {
@@ -1793,6 +1795,145 @@
           ],
           "citations_needed": [
             "US6610035B2 全文 claim"
+          ]
+        }
+      },
+      "patent_notes": "Google Patents: original assignee Scimed Life Systems Inc; later Boston Scientific Scimed Inc; legal status Expired - Lifetime; anticipated expiration 2019-05-21. Boston historical node before P35."
+    },
+    {
+      "id": "P35",
+      "title": "Enhanced durability of hydrophilic coatings (US8378011B2 / Boston Scientific Scimed)",
+      "authors": "Eramo, Campbell, Matlin / Scimed Life Systems; Boston Scientific Scimed",
+      "year": 2013,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Boston Scientific",
+        "Scimed",
+        "PEO",
+        "hydrophilic polymer",
+        "silane",
+        "acrylic monomer",
+        "photoinitiator",
+        "aziridine",
+        "IPN",
+        "SIPN",
+        "durability",
+        "guidewire",
+        "catheter",
+        "lubricity"
+      ],
+      "purpose": "Boston/Scimed durability node: hydrophilic polymer + acrylic monomer IPN/SIPN coating for durable catheter/guidewire lubricity.",
+      "abstract_note": "US8378011B2 discloses durable hydrophilic lubricious coatings for guidewires, catheters and related intravascular devices. Embodiments include hydrophilic polymer, flow modifier, acrylic monomer, photoinitiator, solvent and binder; another includes PEO, silane, aziridine and acrylic monomer cross-linked to form an IPN/SIPN network. The patent is assigned to Boston Scientific Scimed Inc and is a key durability-focused node after earlier Boston/Scimed hybrid topcoat work.",
+      "value_to_project": "Boston/Scimed historical evolution node from hybrid topcoat/anti-blocking design toward IPN/SIPN durability enhancement.",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/US8378011B2/en"
+      },
+      "related_patents": [
+        "US20090171302A1",
+        "WO2009086318A1"
+      ],
+      "patent_notes": "Google Patents: priority 2007-12-27; granted 2013-02-19; current assignee Boston Scientific Scimed Inc; original assignee Scimed Life Systems Inc; legal status Expired - Fee Related; adjusted expiration 2031-02-16.",
+      "patentResults": {
+        "full": {
+          "summary": "US8378011B2 is a Boston Scientific/Scimed hydrophilic coating durability patent. It uses acrylic monomer crosslinking to form an IPN/SIPN network that holds PEO or other hydrophilic polymer on guidewire/catheter surfaces. The formula can include silane, flow modifier, photoinitiator, aziridine and binder. It should be linked after P24/US6610035B2: P24 solves hydrogel premature moisture uptake, blocking and packaging/delamination problems, while P35 moves toward abrasion resistance, adhesion and durable guidewire/catheter coating.",
+          "evidence_level": "high",
+          "source_quality": "google_patents_fulltext",
+          "key_findings": [
+            "Current assignee Boston Scientific Scimed Inc; original Scimed Life Systems Inc",
+            "Hydrophilic polymer + acrylic monomer + photoinitiator + binder/flow modifier",
+            "PEO + silane + aziridine + acrylic monomer embodiment",
+            "Crosslinked acrylic monomer forms IPN/SIPN web for durability",
+            "Relevant to guidewire, catheter and intravascular devices",
+            "Google Patents legal status is Expired - Fee Related"
+          ],
+          "coating_technology": {
+            "materials": [
+              "PEO / hydrophilic polymer",
+              "flow modifier",
+              "acrylic monomer",
+              "photoinitiator",
+              "silane",
+              "aziridine",
+              "binder",
+              "isopropyl alcohol"
+            ],
+            "surface_prep": [
+              "metal or polymer substrate; surface bonding may be required"
+            ],
+            "curing_or_process": [
+              "mix hydrophilic polymer + silane + flow modifier + photoinitiator + aziridine + acrylic monomer",
+              "crosslink acrylic monomer to form IPN/SIPN",
+              "coat guidewire/catheter surface"
+            ],
+            "test_methods": [
+              "durability / abrasion resistance",
+              "lubricity / friction",
+              "adhesion to metal or polymer surfaces"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "Hydrophilic polymer + acrylic monomer + photoinitiator + binder/flow modifier coating",
+              "PEO/silane/aziridine/acrylic monomer IPN/SIPN lubricious coating",
+              "Enhanced durability on guidewire/catheter surfaces"
+            ],
+            "design_around_notes": [
+              "Avoid aziridine for toxicity reasons",
+              "PDA primer + PEGDA/PVP UV network is a different chemistry route",
+              "If developing metal guidewires, silane/metal bonding claims require FTO"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "PVP or PEO",
+              "PEGDA or acrylic monomer crosslinker",
+              "Irgacure 2959 / LAP",
+              "PDA primer or silane primer comparator",
+              "IPA/water solvent"
+            ],
+            "suppliers": [
+              "Sigma-Aldrich / Merck",
+              "TCI",
+              "Gelest or Momentive for silanes"
+            ],
+            "steps": [
+              "Compare PDA primer vs silane primer on coupon substrates",
+              "Prepare PEO/PVP + PEGDA UV IPN topcoat",
+              "Test TPU, Pebax, Nitinol and stainless wire",
+              "Compare durability without aziridine"
+            ],
+            "acceptance_tests": [
+              "COF <=0.10",
+              "50-cycle abrasion COF increase <=30%",
+              "cross-cut Grade 0-1",
+              "no delamination after bending on wire substrate"
+            ]
+          },
+          "actionable_insights": [
+            "Boston path should connect P24 -> P35",
+            "P35 is more relevant if the project enters guidewire, metal needle or catheter shaft applications",
+            "PDA/PEGDA replacement is a cleaner design-around than silane/aziridine"
+          ],
+          "red_flags": [
+            "aziridine toxicity and residual risk",
+            "silane + metal bonding may matter for FTO",
+            "fee-related expiration should be confirmed before relying on freedom to operate"
+          ],
+          "vs_database": "P35 complements P24. P24 addresses hybrid topcoat and anti-blocking storage; P35 addresses enhanced durability through IPN/SIPN network formation.",
+          "bioteque_relevance": "Useful for durability and adhesion design, especially for future guidewire or metal device coatings. For TPU/Pebax urology tubing it is a design reference rather than a direct product match.",
+          "next_actions": [
+            "Add P24/P35 to Boston patent path",
+            "Check WO2009086318A1 family status",
+            "Parse claim 1 dependency on aziridine/silane/acrylic monomer"
+          ],
+          "citations_needed": [
+            "US8378011B2 claim 1",
+            "US20090171302A1",
+            "WO2009086318A1"
           ]
         }
       }
@@ -7912,6 +8053,146 @@
             "US7402620 全文 claim",
             "US7141246（P30 母案）claim 比對",
             "US6645483（祖案）"
+          ]
+        }
+      }
+    },
+    {
+      "id": "P34",
+      "title": "Lubricious coating (US6645483B2 / Sherwood-Covidien precursor to P30-P31)",
+      "authors": "Diane McGhee / Sherwood Service AG; later Covidien / KPR",
+      "year": 2003,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "Sherwood",
+        "Covidien",
+        "Cook-related",
+        "PVP",
+        "isocyanate",
+        "polyurethane",
+        "chlorhexidine",
+        "silver",
+        "antimicrobial",
+        "lubricity",
+        "wet-abrasion",
+        "catheter",
+        "expired"
+      ],
+      "purpose": "Precursor to P30/P31 family logic: PVP + isocyanate-terminated prepolymer lubricious coating with antimicrobial / antithrombogenic carrier function.",
+      "abstract_note": "US6645483B2 discloses a lubricious hydrophilic coating for catheters, AV shunts, feeding tubes, endotracheal tubes and other medical devices. The composition includes PVP, polyoxyethylene-based isocyanate-terminated prepolymer, ethyl lactate and toluene, and can carry chlorhexidine, silver salts, antibiotics, heparin or other pharmacological additives. Google Patents links US7141246B2 as a priority-related application, so this is a precursor node for the P30/P31 path, but the assignee is Sherwood/Covidien/KPR, not Cook.",
+      "value_to_project": "Important expired precursor for the PVP/PU/isocyanate antimicrobial-release route; useful for mapping P30/P31 design history and FTO boundaries.",
+      "links": {
+        "google_patents": "https://patents.google.com/patent/US6645483B2/en"
+      },
+      "related_patents": [
+        "US20010051669A1",
+        "WO2002058756A2",
+        "US7141246B2",
+        "US7820734B2"
+      ],
+      "patent_notes": "Google Patents: priority 1998-10-07; filed 2000-12-18; granted 2003-11-11; status Expired - Lifetime; anticipated expiration 2018-10-07. Current assignee Covidien AG / KPR US LLC; original assignee Sherwood Service AG. US7141246B2 is listed as a priority-related application.",
+      "patentResults": {
+        "full": {
+          "summary": "US6645483B2 is an important precursor to the P30/P31 style PVP/PU/isocyanate antimicrobial lubricious coating path. It is not a Cook-owned patent; Google Patents identifies Sherwood Service AG as original assignee and Covidien/KPR as later assignees. The coating vehicle uses PVP plus a polyoxyethylene-based isocyanate-terminated prepolymer in ethyl lactate/toluene, with antimicrobial or antithrombogenic additives such as chlorhexidine, silver salts, antibiotics or heparin. It targets >50% friction reduction, broad substrate adhesion, wet abrasion resistance, and controlled release of pharmacological additives. The US patent is expired, making it useful as a baseline reference while later related patents still need FTO review.",
+          "evidence_level": "high",
+          "source_quality": "google_patents_fulltext",
+          "key_findings": [
+            "PVP + polyoxyethylene-based isocyanate-terminated prepolymer is the core lubricious/adhesion backbone",
+            "Can carry chlorhexidine, silver salts, antibiotics, heparin and other pharmacological additives",
+            "Targets wet lubricity, wide substrate adhesion and wet abrasion resistance",
+            "Uses ethyl lactate and toluene solvent system",
+            "US7141246B2 is priority-related, connecting this precursor to P30/P31",
+            "US case is expired"
+          ],
+          "coating_technology": {
+            "materials": [
+              "PVP",
+              "polyoxyethylene-based isocyanate-terminated prepolymer",
+              "ethyl lactate",
+              "toluene",
+              "chlorhexidine salts",
+              "silver salts",
+              "antibiotics",
+              "heparin"
+            ],
+            "surface_prep": [
+              "cleaning / washing",
+              "drying before coating"
+            ],
+            "curing_or_process": [
+              "dip coating or applying lubricant",
+              "air drying / excess lubricant removal",
+              "optional baking",
+              "package before or after sterilization"
+            ],
+            "test_methods": [
+              "coefficient-of-friction reduction",
+              "wet abrasion resistance",
+              "additive release rate"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": [
+              "Lubricant coating composition comprising PVP, isocyanate-terminated prepolymer, ethyl lactate and toluene",
+              "Carrier for antimicrobial / antithrombogenic additives",
+              "Wet abrasion resistance and broad substrate adhesion"
+            ],
+            "design_around_notes": [
+              "Expired US case can be used as baseline reference",
+              "Later P30/P31 and US7820734B2 must still be checked",
+              "UV/PEGDA/PDA or zwitterionic anti-fouling routes are cleaner mechanism alternatives"
+            ]
+          },
+          "experimental_plan": {
+            "materials": [
+              "PVP K90",
+              "low free-NCO PU prepolymer or HDI trimer",
+              "ethyl lactate or low-VOC substitute",
+              "silver or CHX only as controlled comparison"
+            ],
+            "suppliers": [
+              "Sigma-Aldrich / Merck",
+              "BASF or Ashland for PVP",
+              "medical-grade PU prepolymer supplier TBD"
+            ],
+            "steps": [
+              "Parse claim 1 and examples",
+              "Map P34 -> P30 -> P31 family logic",
+              "Run TPU/Pebax coupon screening with lower-toxicity substitutes",
+              "Test COF, wet abrasion, adhesion and release"
+            ],
+            "acceptance_tests": [
+              "friction reduction >50%",
+              "COF <=0.10 or Harland FTS <=20 gf",
+              "wet-abrasion COF increase <=30%",
+              "cytotoxicity screen pass"
+            ]
+          },
+          "actionable_insights": [
+            "Represent this as a Sherwood/Covidien precursor, not as Cook-owned",
+            "Use it to explain the P30/P31 antimicrobial-release lineage",
+            "Good reference for release-carrier logic and wet abrasion testing"
+          ],
+          "red_flags": [
+            "toluene and isocyanate EHS concerns",
+            "CHX/silver release requires biocompatibility and dose-window control",
+            "assignee is not Cook; tree must show related/precursor edge"
+          ],
+          "vs_database": "P34 precedes P30/P31. P30 extends the PVP/PU/isocyanate backbone, while P31 extends antimicrobial sustained release. Compared with Hydromer P06, P34 emphasizes antimicrobial/antithrombogenic additives and wet abrasion.",
+          "bioteque_relevance": "Useful expired baseline for understanding antimicrobial lubricious coating design. The project should map P34/P30/P31 before choosing UV, QCS/SBMA or silver-based alternatives.",
+          "next_actions": [
+            "Add P34 to Cook-related precursor tree",
+            "Compare claim extension into US7141246 and US7402620",
+            "Check US7820734B2 as follow-up"
+          ],
+          "citations_needed": [
+            "US6645483B2 claim 1",
+            "US7141246B2 family relation",
+            "US7820734B2"
           ]
         }
       }
