@@ -327,6 +327,7 @@ function doLogin(){
   <div class="tab" onclick="showView('routes',this)">🛣<span class="tab-text"> 路線</span></div>
   <div class="tab" onclick="showView('search',this)">🔍<span class="tab-text"> 檢索</span></div>
   <div class="tab" onclick="showView('browse',this)">📚<span class="tab-text"> 文庫</span> <span class="badge" id="browseCount">0</span><span class="badge" id="analyzedCount" style="background:var(--accent2)">0</span></div>
+  <div class="tab" onclick="showView('research',this)">🧭<span class="tab-text"> 研究</span></div>
   <div class="tab" onclick="showView('report',this)">📋<span class="tab-text"> 報告</span></div>
 </div>
 
@@ -597,6 +598,27 @@ function doLogin(){
         <div id="kgDetailContent"></div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ═══════════════ VIEW: RESEARCH AGENT ═══════════════ -->
+<div class="view" id="v-research">
+  <div style="max-width:1100px;margin:0 auto;padding:16px">
+    <div class="panel">
+      <div class="panel-h">🧭 Research Agent 任務包</div>
+      <div style="padding:14px">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
+          <input id="researchTopic" value="抗結痂 親水塗層 ureteral stent encrustation SBMA" placeholder="輸入研究任務，例如：抗結痂 親水塗層 專利 五年策略 實驗規劃" style="flex:1;min-width:260px;padding:9px 10px;font-size:13px">
+          <button class="btn btn-p" onclick="renderResearchAgent()">產生任務包</button>
+          <button class="btn btn-s" onclick="researchApplyToLibrary()">套用到文庫篩選</button>
+          <button class="btn btn-s" onclick="researchOpenReport()">產生篩選報告</button>
+        </div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6">
+          這版先不自動上網，而是根據目前 <code>papers.json</code> 產生可執行研究計畫。之後可升級成：逐篇上網讀專利/全文 → 萃取核心 claim、配方、製程、風險 → 回寫 JSON。
+        </div>
+      </div>
+    </div>
+    <div id="researchOutput" style="margin-top:12px"></div>
   </div>
 </div>
 
@@ -2366,6 +2388,162 @@ function openFilteredReport() {
   renderIntegratedReport();
 }
 
+function researchTerms(topic='') {
+  const base = topic.toLowerCase();
+  const terms = new Set(base.split(/[,;，；\s]+/).map(s=>s.trim()).filter(Boolean));
+  const bundles = [
+    ['抗結痂','encrustation','anti-encrustation','ureteral stent','urinary catheter','biofilm','conditioning film'],
+    ['親水塗層','hydrophilic coating','lubricious coating','zwitterionic coating','medical device coating'],
+    ['SBMA','MPC','sulfobetaine','phosphorylcholine','zwitterionic','PEG','PVP','chitosan','propolis'],
+    ['專利','patent','claim','assignee','FTO','freedom to operate','USPTO','EPO','Google Patents'],
+    ['實驗','COF','WCA','contact angle','artificial urine','Proteus mirabilis','crystal violet','SEM','FTIR','XPS']
+  ];
+  bundles.forEach(group=>{
+    if(group.some(t=>base.includes(t.toLowerCase()))) group.forEach(t=>terms.add(t));
+  });
+  if(!terms.size) bundles.flat().forEach(t=>terms.add(t));
+  return [...terms];
+}
+
+function researchCandidateScore(p, terms) {
+  const hay = `${p.id||''} ${p.title||''} ${p.authors||''} ${p.venue||''} ${p.doc_type||''} ${(p.tags||[]).join(' ')} ${p.purpose||''} ${p.abstract_note||''} ${p.value_to_project||''} ${paperAnalysisText(p)}`.toLowerCase();
+  let score = 0;
+  terms.forEach(t=>{ if(t && hay.includes(t.toLowerCase())) score += t.length > 4 ? 2 : 1; });
+  if((p.tags||[]).some(t=>/encrustation|抗結痂|SBMA|MPC|antifouling|抗汙/i.test(t))) score += 8;
+  if(p.doc_type === '專利') score += 3;
+  if(/U\d+/.test(p.id||'')) score += 4;
+  if(p.patentResults && Object.keys(p.patentResults).length) score += 2;
+  if(getFulltext(p)) score += 3;
+  if(isSourceWeak(p)) score -= 4;
+  return score;
+}
+
+function getResearchCandidates(topic) {
+  const terms = researchTerms(topic);
+  return activePapersForAnalysis()
+    .map(p=>({p, score:researchCandidateScore(p, terms)}))
+    .filter(x=>x.score > 0)
+    .sort((a,b)=>b.score-a.score)
+    .map(x=>x.p);
+}
+
+function researchQualityBadge(p) {
+  if(getFulltext(p)) return '<span class="tag tag-green">全文</span>';
+  if(isSourceWeak(p)) return '<span class="tag tag-orange">待查證</span>';
+  if(p.pmid || p.doi || Object.values(p.links||{}).length) return '<span class="tag tag-blue">有來源</span>';
+  return '<span class="tag tag-gray">摘要/筆記</span>';
+}
+
+function researchSearchQueries(topic) {
+  const t = topic || 'anti-encrustation hydrophilic coating ureteral stent';
+  return [
+    `${t} PubMed review`,
+    `("ureteral stent" encrustation zwitterionic SBMA coating)`,
+    `("hydrophilic coating" catheter encrustation patent)`,
+    `assignee Surmodics SBMA ureteral stent coating patent`,
+    `assignee Cook Medical hydrophilic coating antimicrobial catheter patent`,
+    `assignee Boston Scientific hydrophilic catheter coating patent`,
+    `site:patents.google.com ureteral stent anti encrustation coating`,
+    `site:pmc.ncbi.nlm.nih.gov ureteral stent encrustation coating`
+  ];
+}
+
+function renderResearchAgent() {
+  const out = document.getElementById('researchOutput');
+  if(!out || !DB.papers?.length) return;
+  const topic = document.getElementById('researchTopic')?.value?.trim() || '抗結痂 親水塗層';
+  const candidates = getResearchCandidates(topic);
+  const core = candidates.slice(0, 18);
+  const patents = candidates.filter(p=>p.doc_type==='專利').slice(0, 12);
+  const weak = core.filter(isSourceWeak);
+  const full = core.filter(p=>getFulltext(p));
+  const queries = researchSearchQueries(topic);
+  const rows = core.map(p=>`
+    <tr>
+      <td style="padding:7px 8px;border:1px solid var(--border);white-space:nowrap"><b>${p.id}</b><br>${researchQualityBadge(p)}</td>
+      <td style="padding:7px 8px;border:1px solid var(--border)"><div style="font-weight:700">${escHtml(p.title||'')}</div><div style="font-size:12px;color:var(--muted);margin-top:3px">${escHtml(paperKeyPoint(p))}</div></td>
+      <td style="padding:7px 8px;border:1px solid var(--border);font-size:12px">${escHtml(paperRoleLabel(p))}</td>
+      <td style="padding:7px 8px;border:1px solid var(--border);font-size:12px">${escHtml(paperProjectMeaning(p))}</td>
+    </tr>`).join('');
+  const patentRows = patents.map(p=>`
+    <tr>
+      <td style="padding:6px 8px;border:1px solid var(--border);white-space:nowrap"><b>${p.id}</b></td>
+      <td style="padding:6px 8px;border:1px solid var(--border)">${escHtml(p.title||'')}</td>
+      <td style="padding:6px 8px;border:1px solid var(--border);font-size:12px">${escHtml((p.patent_notes || p.value_to_project || p.abstract_note || '').slice(0,160))}</td>
+      <td style="padding:6px 8px;border:1px solid var(--border);font-size:12px">${isSourceWeak(p)?'先補來源/全文':'可進入 claim/配方萃取'}</td>
+    </tr>`).join('');
+  out.innerHTML = `
+    <div class="panel">
+      <div class="panel-h">任務摘要</div>
+      <div style="padding:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px">
+        ${[
+          ['候選文獻', candidates.length],
+          ['核心閱讀', core.length],
+          ['專利優先', patents.length],
+          ['已有全文', full.length],
+          ['待查證', weak.length]
+        ].map(([k,v])=>`<div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-size:22px;font-weight:700;color:var(--accent)">${v}</div><div style="font-size:11px;color:var(--muted)">${k}</div></div>`).join('')}
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:12px">
+      <div class="panel-h">核心閱讀清單</div>
+      <div style="padding:12px;overflow:auto">
+        <table style="width:100%;border-collapse:collapse">
+          <thead><tr><th style="padding:7px 8px;border:1px solid var(--border);background:var(--card);text-align:left">ID</th><th style="padding:7px 8px;border:1px solid var(--border);background:var(--card);text-align:left">重點</th><th style="padding:7px 8px;border:1px solid var(--border);background:var(--card);text-align:left">角色</th><th style="padding:7px 8px;border:1px solid var(--border);background:var(--card);text-align:left">專案意義</th></tr></thead>
+          <tbody>${rows || '<tr><td colspan="4" style="padding:20px;text-align:center;color:var(--muted)">沒有符合資料</td></tr>'}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:12px">
+      <div class="panel-h">專利核心閱讀佇列</div>
+      <div style="padding:12px">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Agent 後續應逐篇萃取：claim 限定、材料、底塗/面塗、固化條件、測試方法、可迴避空間、是否過期。</div>
+        <table style="width:100%;border-collapse:collapse">
+          <thead><tr><th style="padding:6px 8px;border:1px solid var(--border);background:var(--card);text-align:left">ID</th><th style="padding:6px 8px;border:1px solid var(--border);background:var(--card);text-align:left">專利</th><th style="padding:6px 8px;border:1px solid var(--border);background:var(--card);text-align:left">已知訊息</th><th style="padding:6px 8px;border:1px solid var(--border);background:var(--card);text-align:left">下一步</th></tr></thead>
+          <tbody>${patentRows || '<tr><td colspan="4" style="padding:20px;text-align:center;color:var(--muted)">目前沒有專利候選</td></tr>'}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:12px">
+      <div class="panel-h">上網檢索任務</div>
+      <div style="padding:12px">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px">
+          ${queries.map(q=>`<div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:12px;line-height:1.5"><div>${escHtml(q)}</div><a class="detail-link" target="_blank" href="https://www.google.com/search?q=${encodeURIComponent(q)}">🔎 Google</a> <a class="detail-link" target="_blank" href="https://patents.google.com/?q=${encodeURIComponent(q)}">📋 Patents</a></div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:12px">
+      <div class="panel-h">五年策略與實驗規劃骨架</div>
+      <div style="padding:12px;font-size:13px;line-height:1.8">
+        <b>Year 1：</b>建立 PVP/PEGDA 或 PDA 底塗基準配方；完成 COF、WCA、附著、50 次往返磨耗。<br>
+        <b>Year 2：</b>導入人工尿液與 Proteus mirabilis biofilm/encrustation 體外模型；比較 PVP、PEG、chitosan、SBMA/MPC。<br>
+        <b>Year 3：</b>選 1–2 條候選路線放大製程；補 FTO，確認 Surmodics/Cook/Boston/Coloplast 專利風險。<br>
+        <b>Year 4：</b>做長期留置模擬與滅菌後性能；建立供應商備援清單。<br>
+        <b>Year 5：</b>產品化規格、法規測試包、臨床/動物試驗設計。<br><br>
+        <b>材料候選：</b>SBMA、MPC、PVP K90、PEGDA Mn250–700、PDA/dopamine、chitosan/QCS、propolis、Zn/Cu 抗菌組件。<br>
+        <b>供應商初稿：</b>Sigma/Merck（研究級單體）、TCI/Alfa（小量試劑）、Surmodics/Biocoat/Hydromer（OEM/技術對標）、Harland/ViVitro（測試/塗覆設備）。
+      </div>
+    </div>`;
+}
+
+function researchApplyToLibrary() {
+  const topic = document.getElementById('researchTopic')?.value?.trim() || '';
+  const docs = getResearchCandidates(topic).slice(0, 80);
+  activeRouteFilter = null;
+  activeLibraryFilter = {id:'research', label:`研究任務：${topic||'全部'}`, color:'#2980b9', paperIds:docs.map(p=>p.id), note:'Research Agent 候選文獻'};
+  showView('browse', getMainTab('browse'));
+  filterPapers();
+}
+
+function researchOpenReport() {
+  researchApplyToLibrary();
+  setTimeout(()=>openFilteredReport(), 80);
+}
+
 async function sendChat(){
   const input = safeEl('chatInput');
   const q = input ? input.value.trim() : '';
@@ -2393,7 +2571,7 @@ let currentAnalysisTab = 'graph';
 function goBack() {
   if(!previousView) return;
   const tabs = document.querySelectorAll('.tabs > .tab');
-  const viewMap = {market:0, routes:1, search:2, browse:3, report:4};
+  const viewMap = {market:0, routes:1, search:2, browse:3, research:4, report:5};
   const idx = viewMap[previousView];
   if(idx!==undefined && tabs[idx]) {
     showView(previousView, tabs[idx]);
@@ -2436,6 +2614,7 @@ function showView(id,el){
   if(id==='graph') buildGraph();
   if(id==='gap') buildHeatmaps();
   if(id==='compare') buildCompare();
+  if(id==='research') renderResearchAgent();
   if(id==='report') { renderIntegratedReport(); }
   // 返回按鈕
   const backBtn = document.getElementById('backBtn');
