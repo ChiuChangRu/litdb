@@ -6419,6 +6419,50 @@ function renderPatentResult(a) {
       <strong style="color:var(--accent)">🏭 對 Bioteque 的建議</strong><br>${a.bioteque_relevance}</div>`;
   }
 
+  // ── 新欄位：專利核心 / 迴避設計 ──
+  const _pc = a.patent_core || {};
+  if(_pc.claim_focus?.length || _pc.design_around_notes?.length) {
+    const _li = arr => Array.isArray(arr) && arr.length
+      ? arr.map(x=>`<li style="margin-bottom:3px">${escHtml(x)}</li>`).join('')
+      : '<li style="color:var(--muted)">-</li>';
+    html += `<div style="margin-top:10px;padding:10px 12px;background:var(--card);border-left:3px solid var(--warn);border-radius:0 6px 6px 0;font-size:12px">
+      <strong style="color:var(--warn)">⚖️ 專利核心 / 迴避設計</strong>
+      <div style="margin-top:6px"><b>Claim 重點</b><ul style="margin:4px 0 0 18px;padding:0">${_li(_pc.claim_focus)}</ul></div>
+      <div style="margin-top:6px"><b>設計迴避建議</b><ul style="margin:4px 0 0 18px;padding:0">${_li(_pc.design_around_notes)}</ul></div>
+    </div>`;
+  }
+
+  // ── 新欄位：實驗規劃 ──
+  const _ep = a.experimental_plan || {};
+  if(_ep.steps?.length || _ep.materials?.length) {
+    const _li = arr => Array.isArray(arr) && arr.length
+      ? arr.map(x=>`<li style="margin-bottom:3px">${escHtml(x)}</li>`).join('')
+      : '<li style="color:var(--muted)">-</li>';
+    html += `<div style="margin-top:10px;padding:10px 12px;background:var(--card);border-left:3px solid var(--accent2);border-radius:0 6px 6px 0;font-size:12px">
+      <strong style="color:var(--accent2)">🔬 實驗規劃</strong>
+      ${_ep.materials?.length?`<div style="margin-top:6px"><b>材料</b><ul style="margin:4px 0 0 18px;padding:0">${_li(_ep.materials)}</ul></div>`:''}
+      ${_ep.suppliers?.length?`<div style="margin-top:6px"><b>供應商</b><ul style="margin:4px 0 0 18px;padding:0">${_li(_ep.suppliers)}</ul></div>`:''}
+      ${_ep.steps?.length?`<div style="margin-top:6px"><b>步驟</b><ul style="margin:4px 0 0 18px;padding:0">${_li(_ep.steps)}</ul></div>`:''}
+      ${_ep.acceptance_tests?.length?`<div style="margin-top:6px"><b>驗收測試</b><ul style="margin:4px 0 0 18px;padding:0">${_li(_ep.acceptance_tests)}</ul></div>`:''}
+    </div>`;
+  }
+
+  // ── 新欄位：下一步行動 ──
+  if(a.next_actions?.length) {
+    html += `<div style="margin-top:8px;padding:10px 12px;background:var(--card);border-left:3px solid var(--accent2);border-radius:0 6px 6px 0;font-size:12px">
+      <strong style="color:var(--accent2)">📋 下一步行動</strong>
+      <ul style="margin:6px 0 0 18px;padding:0">${a.next_actions.map(x=>`<li style="margin-bottom:3px">${escHtml(x)}</li>`).join('')}</ul>
+    </div>`;
+  }
+
+  // ── 新欄位：待補查引用 ──
+  if(a.citations_needed?.length) {
+    html += `<div style="margin-top:8px;padding:10px 12px;background:var(--card);border-left:3px solid var(--muted);border-radius:0 6px 6px 0;font-size:12px">
+      <strong style="color:var(--muted)">📎 待補查引用</strong>
+      <ul style="margin:6px 0 0 18px;padding:0">${a.citations_needed.map(x=>`<li style="margin-bottom:3px">${escHtml(x)}</li>`).join('')}</ul>
+    </div>`;
+  }
+
   html += '<div style="margin-top:12px;padding:8px 10px;background:var(--card);border-radius:6px;font-size:12px;color:var(--accent2);text-align:center">✅ 分析已自動儲存。點頂部「📊 存到 Sheets」可同步到 Google Drive。</div>';
   html += '</div>';
   return html;
