@@ -4108,7 +4108,6 @@ function renderLibraryFulltextPanel(p, i) {
     <div id="fulltextStatus_${i}" style="font-size:12px;color:${text?'var(--accent2)':'var(--muted)'};margin:8px 0">${fulltextSourceLabel(p)}</div>
     ${text ? `<div style="font-size:11px;color:var(--muted);background:var(--card);border:1px solid var(--border);border-radius:6px;padding:8px;max-height:120px;overflow:auto;margin-bottom:8px">${escHtml(compactText(text, 900))}</div>` : ''}
     <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <button class="btn btn-s" onclick="fetchFulltextForPaper(${i})">自動抓取</button>
       <button class="btn btn-s" onclick="openFulltextPaste(${i})">貼上全文</button>
       ${text ? `<button class="btn btn-s" onclick="clearFulltext(${i})" style="color:var(--danger);border-color:var(--danger)">清除全文</button>` : ''}
     </div>
@@ -4137,10 +4136,7 @@ function renderLibraryManagementTools(p, i, link) {
   return `<details class="detail-section">
     <summary class="detail-section-title" style="cursor:pointer">進階 / 內部工具</summary>
     <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
-      <button class="btn btn-s" onclick="pinPaper('${p.id}')">釘選到 AI</button>
-      <button class="btn btn-s" onclick="aiReadPaperById('${p.id}')" style="color:var(--warn);border-color:var(--warn)">AI 深讀此篇</button>
       ${analysisBtn}
-      <button class="btn btn-s" onclick="loadCiteTree(${i})">引文樹</button>
       ${link ? `<a href="${link}" target="_blank" class="btn btn-s">開啟原文</a>` : ''}
       ${p._deleted ? `<button class="btn btn-s" onclick="restorePaper('${p.id}')" style="color:var(--accent2);border-color:var(--accent2)">復原</button><button class="btn btn-s" onclick="deletePaper('${p.id}')" style="color:var(--danger);border-color:var(--danger)">永久刪除</button>` : `<button class="btn btn-s" onclick="deletePaper('${p.id}')" style="color:var(--danger);border-color:var(--danger)">刪除</button>`}
     </div>
