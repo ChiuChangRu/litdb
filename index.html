@@ -6003,6 +6003,269 @@ function renderIntegratedReport() {
 }
 
 // ── 文庫統計儀表板 ────────────────────────────
+// ════════════════════════════════════════════════════════════
+// 篩選決策報告引擎（純前端規則引擎，無需 API）
+// ════════════════════════════════════════════════════════════
+
+function _deGetFull(p){
+  const pr = p.patentResults||{};
+  return pr.full || pr.review || pr.commercial || {};
+}
+
+// 判定一篇文獻的「技術路線」（看核心材料，不被迴避建議干擾）
+function _deClassifyRoute(p){
+  const mats = (_deGetFull(p).coating_technology?.materials||[]).join(' ').toLowerCase();
+  const title = (p.title||'').toLowerCase();
+  const tags = (p.tags||[]).join(' ').toLowerCase();
+  const core = mats + ' ' + title + ' ' + tags;
+  // 依核心材料判定（優先序：明確材料 > 製程）
+  if(/\bpda\b|polydopamine|dopamine|多巴胺|聚多巴胺/.test(core)) return 'PDA底塗';
+  if(/photograf|光接枝|光接枝/.test(core)) return '光接枝';
+  if(/\bsbma\b|\bmpc\b|zwitterion|兩性離子|甜菜鹼/.test(core)) return '兩性離子';
+  if(/plasma|電漿|電漿/.test(mats)) return 'Plasma接枝';
+  if(/silane|矽烷|矽氧烷/.test(core)) return 'Silane偶聯';
+  if(/isocyanate|異氰酸|mdi|hdi|ipdi/.test(core)) return 'Isocyanate共價';
+  if(/benzophenone|二苯甲酮|\bbp\b/.test(core)) return 'UV-BP接枝';
+  if(/chitosan|幾丁聚醣|殼聚醣/.test(core)) return '幾丁聚醣';
+  return '其他';
+}
+
+// IP 風險評分（0=安全 ~ 3=地雷）
+function _deIpRisk(p){
+  const tags = p.tags||[];
+  const full = _deGetFull(p);
+  const rf = (full.red_flags||[]).join(' ').toLowerCase();
+  const dt = p.doc_type||'';
+  if(tags.includes('expired') || /expired|已過期|過期/.test(rf)) return ['🟢 已過期可用',0];
+  if(['期刊論文','綜述review','方法'].includes(dt)) return ['🟢 學術/無claim',0];
+  if(/fto|claim 風險|claim風險|需做 fto|地雷|侵權/.test(rf)) return ['🔴 核心claim地雷',3];
+  if(dt==='商用產品') return ['🟡 競品IP',2];
+  if(dt==='專利') return ['🟡 待FTO',2];
+  return ['⚪ 未評估',2];
+}
+
+// 製程複雜度（0=最簡單 ~ 3=最複雜）
+function _deProcess(p){
+  const route = _deClassifyRoute(p);
+  if(route==='PDA底塗' || route==='幾丁聚醣') return ['常溫水溶液',0];
+  const cure = (_deGetFull(p).coating_technology?.curing_or_process||[]).join(' ').toLowerCase();
+  if(/plasma|電漿/.test(cure)) return ['Plasma設備',3];
+  if(/熱固化|thermal|isocyanate|異氰酸/.test(cure)) return ['熱固化',2];
+  if(/uv|光固化|紫外/.test(cure)) return ['UV固化',1];
+  return ['其他',2];
+}
+
+// 數據強度（0~5）
+function _deDataStrength(p){
+  const txt = JSON.stringify(p);
+  let s=0;
+  if(/grade\s*0/i.test(txt)) s+=2;
+  if(/COF[\s:]*[<≤]?\s*0\.[01]/i.test(txt)) s+=1;
+  if(/[<≤]\s*(20|10)\s*°/.test(txt)) s+=1;
+  if(_deGetFull(p).evidence_level==='high') s+=1;
+  return s;
+}
+
+// 抓取最佳實驗配方（優先 PDA/有 acceptance_tests 的）
+function _deBestExperiment(papers){
+  // 優先有 experimental_plan + acceptance_tests 的高證據篇
+  const scored = papers.map(p=>{
+    const ep = _deGetFull(p).experimental_plan||{};
+    let s=0;
+    if(ep.steps?.length) s+=2;
+    if(ep.acceptance_tests?.length) s+=2;
+    if(_deGetFull(p).evidence_level==='high') s+=1;
+    return {p, ep, s};
+  }).filter(x=>x.ep.steps?.length).sort((a,b)=>b.s-a.s);
+  return scored[0] || null;
+}
+
+// ── 特性決策報告 ──
+function buildFeatureReport(papers, featureLabel){
+  if(!papers.length) return '';
+  // 歸類路線
+  const routes = {};
+  papers.forEach(p=>{
+    const r = _deClassifyRoute(p);
+    routes[r] = routes[r] || {papers:[], ipSum:0, procSum:0, dataSum:0, ipLabels:{}, procLabels:{}};
+    const [ipL,ipS] = _deIpRisk(p);
+    const [pcL,pcS] = _deProcess(p);
+    routes[r].papers.push(p);
+    routes[r].ipSum+=ipS; routes[r].procSum+=pcS; routes[r].dataSum+=_deDataStrength(p);
+    routes[r].ipLabels[ipL]=(routes[r].ipLabels[ipL]||0)+1;
+    routes[r].procLabels[pcL]=(routes[r].procLabels[pcL]||0)+1;
+  });
+  // 評分（IP安全權重最高）
+  const scoreRoute = r=>{
+    const d=routes[r], n=d.papers.length;
+    const ip=d.ipSum/n, pc=d.procSum/n, dt=d.dataSum/n;
+    const sample=Math.min(n/10,1);
+    return (3-ip)*2.5 + (3-pc)*1.5 + dt*1.0 + sample*2;
+  };
+  const ranked = Object.keys(routes).filter(r=>r!=='其他').sort((a,b)=>scoreRoute(b)-scoreRoute(a));
+  if(!ranked.length) return '';
+  const best = ranked[0], bd=routes[best];
+  const mode = o=>Object.entries(o).sort((a,b)=>b[1]-a[1])[0]?.[0]||'—';
+  const bestIp = mode(bd.ipLabels), bestProc=mode(bd.procLabels);
+
+  // ① 結論
+  let html = `<div style="background:linear-gradient(135deg,#fff8f0,#fff);border:2px solid var(--accent);border-radius:10px;padding:14px;margin-bottom:14px">
+    <div style="font-size:10px;color:var(--accent);font-weight:700;letter-spacing:1px">📊 ${featureLabel} 技術決策報告 · ${papers.length} 篇 · ${ranked.length} 條路線</div>
+    <div style="font-size:15px;font-weight:900;color:var(--text);margin-top:6px">① 首選：${best}</div>
+    <div style="font-size:11px;color:var(--muted);margin-top:3px">${bestIp}、製程「${bestProc}」、${bd.papers.length} 篇支持</div>
+  </div>`;
+
+  // ② 路線對決表
+  html += `<div style="margin-bottom:14px">
+    <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:6px">② 路線對決</div>
+    <table style="width:100%;border-collapse:collapse;font-size:10px">
+      <thead><tr style="color:var(--muted);text-align:left">
+        <th style="padding:3px 4px">路線</th><th style="padding:3px 4px">篇</th>
+        <th style="padding:3px 4px">IP風險</th><th style="padding:3px 4px">製程</th><th style="padding:3px 4px">推薦</th>
+      </tr></thead><tbody>`;
+  ranked.forEach((r,i)=>{
+    const d=routes[r], n=d.papers.length;
+    const ip=mode(d.ipLabels), pc=mode(d.procLabels);
+    const sc=scoreRoute(r);
+    const stars='★'.repeat(Math.max(1,Math.min(5,Math.round(sc/3.5))));
+    const hl = i===0?'background:#f0faf5;font-weight:700':'';
+    html += `<tr style="border-top:1px solid var(--border);${hl}">
+      <td style="padding:4px">${r}</td><td style="padding:4px">${n}</td>
+      <td style="padding:4px;font-size:9px">${ip}</td><td style="padding:4px;font-size:9px">${pc}</td>
+      <td style="padding:4px;color:var(--accent)">${stars}</td></tr>`;
+  });
+  html += `</tbody></table></div>`;
+
+  // ③ 證據鏈
+  html += `<div style="margin-bottom:14px">
+    <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:6px">③ 為什麼選「${best}」</div>`;
+  bd.papers.slice(0,4).forEach(p=>{
+    const kf=(_deGetFull(p).key_findings||[])[0]||'—';
+    html += `<div style="font-size:10px;color:var(--text);padding:3px 0;cursor:pointer" onclick="goToPaper('${p.id}',{focus:true})">
+      <span style="color:var(--accent);font-weight:700">[${p.id}]</span> ${kf.slice(0,52)}</div>`;
+  });
+  html += `</div>`;
+
+  // ④ 立即可做的實驗
+  const exp = _deBestExperiment(bd.papers);
+  if(exp){
+    html += `<div style="background:var(--card);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:10px 12px">
+      <div style="font-size:11px;font-weight:700;color:var(--accent);margin-bottom:5px">④ 立即可做的實驗 <span style="color:var(--muted);font-weight:400">[${exp.p.id}]</span></div>
+      <ol style="margin:0 0 6px 16px;padding:0;font-size:10px;line-height:1.7;color:var(--text)">
+        ${exp.ep.steps.slice(0,5).map(s=>`<li>${s}</li>`).join('')}
+      </ol>
+      ${exp.ep.acceptance_tests?.length?`<div style="font-size:10px;color:#2d8c5a;font-weight:700">✅ 驗收：${exp.ep.acceptance_tests.slice(0,3).join(' / ')}</div>`:''}
+      ${exp.ep.materials?.length?`<div style="font-size:9px;color:var(--muted);margin-top:4px">🛒 ${exp.ep.materials.slice(0,4).join('、')}</div>`:''}
+    </div>`;
+  }
+  return html;
+}
+
+// ── 公司競爭規避報告 ──
+function buildCompanyReport(papers, companyLabel){
+  if(!papers.length) return '';
+  // 依年份排序建立演進
+  const sorted = [...papers].filter(p=>p.year).sort((a,b)=>(a.year||0)-(b.year||0));
+  if(!sorted.length) return '';
+
+  // 威脅等級（看有無 claim 地雷 + 商用產品）
+  const hasLandmine = papers.some(p=>{
+    const rf=(_deGetFull(p).red_flags||[]).join(' ').toLowerCase();
+    return /fto|claim 風險|claim風險|地雷|核心/.test(rf);
+  });
+  const hasCommercial = papers.some(p=>p.doc_type==='商用產品');
+  const expiredN = papers.filter(p=>(p.tags||[]).includes('expired')).length;
+  const threat = hasLandmine&&hasCommercial ? ['🔴 高威脅','#c0392b']
+    : hasLandmine ? ['🟡 中威脅','#d4a030'] : ['🟢 低威脅','#2d8c5a'];
+
+  let html = `<div style="background:linear-gradient(135deg,${threat[1]}11,#fff);border:2px solid ${threat[1]};border-radius:10px;padding:14px;margin-bottom:14px">
+    <div style="font-size:10px;color:${threat[1]};font-weight:700;letter-spacing:1px">🏢 ${companyLabel} 競爭規避報告 · ${papers.length} 件</div>
+    <div style="font-size:15px;font-weight:900;color:var(--text);margin-top:6px">① 威脅等級：${threat[0]}</div>
+    <div style="font-size:11px;color:var(--muted);margin-top:3px">${expiredN>0?`${expiredN} 件已過期可用 · `:''}${hasLandmine?'核心 claim 需整體迴避':'IP 風險可控'}</div>
+  </div>`;
+
+  // ② 技術演進
+  html += `<div style="margin-bottom:14px">
+    <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:6px">② 技術演進脈絡</div>`;
+  sorted.forEach(p=>{
+    const [ipL] = _deIpRisk(p);
+    const route = _deClassifyRoute(p);
+    html += `<div style="display:flex;gap:8px;padding:4px 0;font-size:10px;cursor:pointer" onclick="goToPaper('${p.id}',{focus:true})">
+      <span style="font-weight:900;color:var(--accent);min-width:34px">${p.year||'—'}</span>
+      <span style="color:var(--text)"><b>[${p.id}]</b> ${route} · ${ipL}</span>
+    </div>`;
+  });
+  html += `</div>`;
+
+  // ③ 地雷地圖
+  const landmines = papers.filter(p=>{
+    const rf=(_deGetFull(p).red_flags||[]).join(' ').toLowerCase();
+    return /fto|claim 風險|claim風險|地雷|核心/.test(rf) && !(p.tags||[]).includes('expired');
+  });
+  if(landmines.length){
+    html += `<div style="margin-bottom:14px">
+      <div style="font-size:11px;font-weight:700;color:#c0392b;margin-bottom:6px">③ 地雷地圖（不能踩的 claim）</div>`;
+    landmines.slice(0,5).forEach(p=>{
+      const rf=(_deGetFull(p).red_flags||[])[0]||'';
+      html += `<div style="font-size:10px;padding:4px 0;cursor:pointer" onclick="goToPaper('${p.id}',{focus:true})">
+        <span style="color:#c0392b;font-weight:700">🔴 [${p.id}]</span> ${rf.slice(0,55)}</div>`;
+    });
+    html += `</div>`;
+  }
+
+  // ④ 迴避路徑（彙整 design_around_notes）
+  const avoidance = [];
+  papers.forEach(p=>{
+    (_deGetFull(p).patent_core?.design_around_notes||[]).forEach(n=>{
+      if(n.length>10 && !avoidance.some(a=>a.slice(0,20)===n.slice(0,20))) avoidance.push(n);
+    });
+  });
+  if(avoidance.length){
+    html += `<div style="background:var(--card);border-left:3px solid #8e44ad;border-radius:0 8px 8px 0;padding:10px 12px">
+      <div style="font-size:11px;font-weight:700;color:#8e44ad;margin-bottom:5px">④ 我方迴避路徑</div>
+      <ul style="margin:0 0 0 16px;padding:0;font-size:10px;line-height:1.7;color:var(--text)">
+        ${avoidance.slice(0,4).map(n=>`<li>${n.slice(0,70)}</li>`).join('')}
+      </ul>
+    </div>`;
+  }
+  return html;
+}
+
+// ── 主入口：判斷該顯示哪種報告 ──
+function buildDecisionReport(papers){
+  // 偵測當前篩選是「特性」還是「公司」
+  const af = activeFilters || {};
+  // 特性篩選（topic / cure / app / sub）
+  const featureMap = {
+    'adhesion':'附著力','encrustation':'抗結痂/抗汙','antimicrobial':'抗菌','lubricity':'潤滑'
+  };
+  let featureLabel = null;
+  if(af.topic && af.topic.size===1){
+    featureLabel = featureMap[[...af.topic][0]] || [...af.topic][0];
+  } else if(af.sub && af.sub.size===1){
+    featureLabel = [...af.sub][0];
+  } else if(af.cure && af.cure.size===1){
+    featureLabel = [...af.cure][0];
+  } else if(af.app && af.app.size===1){
+    featureLabel = [...af.app][0];
+  }
+
+  // 公司篩選（看篩選後文獻是否集中在單一機構）
+  const orgs = {};
+  papers.forEach(p=>{ const o=extractOrg(p); if(o) orgs[o]=(orgs[o]||0)+1; });
+  const topOrg = Object.entries(orgs).sort((a,b)=>b[1]-a[1])[0];
+  const isCompanyFocus = topOrg && topOrg[1] >= papers.length*0.6 && papers.length>=2;
+
+  if(isCompanyFocus && papers.length<=12){
+    return buildCompanyReport(papers, topOrg[0]);
+  }
+  if(featureLabel && papers.length>=3){
+    return buildFeatureReport(papers, featureLabel);
+  }
+  return '';
+}
+
+
 function renderLibraryStats(papers) {
   const el = document.getElementById('libraryStatsPanel');
   if(!el) return;
@@ -6056,7 +6319,12 @@ function renderLibraryStats(papers) {
   ];
   const perfCoverage = PERF_DISPLAY.map(({tag,label})=>({tag, label, n:ps.filter(p=>(p.tags||[]).includes(tag)).length}));
 
+  // ── 決策報告（篩選後自動生成）──
+  let decisionHtml = '';
+  try { decisionHtml = buildDecisionReport(ps) || ''; } catch(e){ console.warn('決策報告生成失敗',e); }
+
   el.innerHTML = `
+  ${decisionHtml ? `<div style="padding:4px 4px 0">${decisionHtml}</div>` : ''}
   <div style="padding:14px 4px">
 
     <!-- 頂部數字卡 -->
