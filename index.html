@@ -6012,6 +6012,69 @@ function _deGetFull(p){
   return pr.full || pr.review || pr.commercial || {};
 }
 
+// 從實施例萃取關鍵參數
+function _deExtractParams(ex){
+  const blob = JSON.stringify(ex);
+  const p = {};
+  let m;
+  if(m = blob.match(/(\d+(?:\.\d+)?)\s*(?:mW\/cm2|mW\/cm²)/)) p.uv強度 = m[1]+'mW';
+  if(m = blob.match(/(\d+(?:\.\d+)?)\s*(?:J\/cm2|J\/cm²)/)) p.uv劑量 = m[1]+'J';
+  if(m = blob.match(/(\d+)\s*°?\s*F\b/)) p.溫度 = m[1]+'°F';
+  else if(m = blob.match(/(\d+)\s*°?\s*C\b/)) p.溫度 = m[1]+'°C';
+  if(m = blob.match(/(\d+)\s*(?:min|分鐘)/)) p.時間 = m[1]+'min';
+  else if(m = blob.match(/(\d+)\s*(?:sec|秒|s\b)/)) p.時間 = m[1]+'s';
+  // WCA：排除溫度誤抓（須有「接觸角/WCA/水接觸」上下文或 <30°）
+  if(m = blob.match(/(?:WCA|接觸角|water contact)[^0-9]{0,12}(\d+(?:\.\d+)?)\s*°/i)) p.wca = m[1]+'°';
+  else if(m = blob.match(/(\b[12]?\d(?:\.\d+)?)\s*°(?![FC])/)) { if(+m[1] < 90) p.wca = m[1]+'°'; }
+  if(m = blob.match(/COF[\s:]*[<≤]?\s*(0\.\d+)/i)) p.cof = m[1];
+  return p;
+}
+
+// 建立實施例參數比對表
+function _deExampleCompare(papers){
+  const rows = [];
+  papers.forEach(p=>{
+    (_deGetFull(p).examples||[]).forEach(ex=>{
+      if(!ex.is_real) return;  // 只比對真實實施例
+      const pa = _deExtractParams(ex);
+      if(Object.keys(pa).length < 2) return;  // 至少要有 2 個參數才有比對價值
+      rows.push({id:p.id, name:(ex.name||'').slice(0,20), pa});
+    });
+  });
+  if(rows.length < 2) return '';
+
+  // 偵測分支：UV vs 熱固化
+  const uvN = rows.filter(r=>r.pa.uv強度||r.pa.uv劑量).length;
+  const thermalN = rows.filter(r=>r.pa.溫度&&r.pa.溫度.includes('F')).length;
+  let insight = '';
+  if(uvN && thermalN){
+    insight = `💡 分支：${uvN} 例走 UV 固化、${thermalN} 例走熱固化 — 同路線的兩條製程分支`;
+  }
+
+  let html = `<div style="margin-bottom:14px">
+    <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:6px">⚗️ 實施例參數比對（僅真實實施例）</div>
+    <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:9px">
+      <thead><tr style="color:var(--muted);text-align:left">
+        <th style="padding:2px 4px">ID</th><th style="padding:2px 4px">UV劑量</th>
+        <th style="padding:2px 4px">溫度</th><th style="padding:2px 4px">時間</th>
+        <th style="padding:2px 4px">WCA</th><th style="padding:2px 4px">COF</th>
+      </tr></thead><tbody>`;
+  rows.slice(0,8).forEach(r=>{
+    html += `<tr style="border-top:1px solid var(--border);cursor:pointer" onclick="goToPaper('${r.id}',{focus:true})">
+      <td style="padding:3px 4px;color:var(--accent);font-weight:700">${r.id}</td>
+      <td style="padding:3px 4px">${r.pa.uv劑量||r.pa.uv強度||'—'}</td>
+      <td style="padding:3px 4px">${r.pa.溫度||'—'}</td>
+      <td style="padding:3px 4px">${r.pa.時間||'—'}</td>
+      <td style="padding:3px 4px">${r.pa.wca||'—'}</td>
+      <td style="padding:3px 4px">${r.pa.cof||'—'}</td>
+    </tr>`;
+  });
+  html += `</tbody></table></div>`;
+  if(insight) html += `<div style="font-size:10px;color:#b85c2a;margin-top:5px;line-height:1.5">${insight}</div>`;
+  html += `</div>`;
+  return html;
+}
+
 // 判定一篇文獻的「技術路線」（看核心材料，不被迴避建議干擾）
 function _deClassifyRoute(p){
   const mats = (_deGetFull(p).coating_technology?.materials||[]).join(' ').toLowerCase();
@@ -6146,11 +6209,14 @@ function buildFeatureReport(papers, featureLabel){
   });
   html += `</div>`;
 
-  // ④ 立即可做的實驗
+  // ④ 實施例參數比對
+  try { html += _deExampleCompare(bd.papers); } catch(e){ console.warn('實施例比對失敗',e); }
+
+  // ⑤ 立即可做的實驗
   const exp = _deBestExperiment(bd.papers);
   if(exp){
     html += `<div style="background:var(--card);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:10px 12px">
-      <div style="font-size:11px;font-weight:700;color:var(--accent);margin-bottom:5px">④ 立即可做的實驗 <span style="color:var(--muted);font-weight:400">[${exp.p.id}]</span></div>
+      <div style="font-size:11px;font-weight:700;color:var(--accent);margin-bottom:5px">⑤ 立即可做的實驗 <span style="color:var(--muted);font-weight:400">[${exp.p.id}]</span></div>
       <ol style="margin:0 0 6px 16px;padding:0;font-size:10px;line-height:1.7;color:var(--text)">
         ${exp.ep.steps.slice(0,5).map(s=>`<li>${s}</li>`).join('')}
       </ol>
