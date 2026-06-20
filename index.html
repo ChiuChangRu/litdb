@@ -1976,12 +1976,39 @@ function _deBuildAIContext(papers){
     const redFlags=full.red_flags;
     if(redFlags?.length) parts.push(`紅旗/限制：${redFlags.slice(0,3).join('；').slice(0,250)}`);
     if((p.tags||[]).length) parts.push(`標籤：${p.tags.slice(0,10).join('、')}`);
+    // 逐筆實施例配方光譜：讓AI能比較「同一篇內」不同實施例的配方差異，
+    // 而非只看整篇摘要。最多列5個實施例，避免單篇文獻佔用過多篇幅。
+    // is_real=false 的（推論性實施例）會標註，避免AI誤把推論當成原文實測數據。
+    const exs=(full.examples||[]).slice(0,5);
+    if(exs.length){
+      parts.push(`實施例（共${full.examples.length}個，列出前${exs.length}個）：`);
+      exs.forEach((ex,idx)=>{
+        const tag = ex.is_real ? '' : '（推論性，非原文明確記載）';
+        const f=ex.formulation||{}, pr=ex.process||{}, res=ex.results||{};
+        const line=[`  ${idx+1}. ${(ex.name||'未命名').slice(0,50)}${tag}`];
+        if(f.primer) line.push(`底塗：${String(f.primer).slice(0,80)}`);
+        if(f.topcoat) line.push(`面塗：${String(f.topcoat).slice(0,80)}`);
+        if(pr.curing) line.push(`固化：${String(pr.curing).slice(0,40)}`);
+        if(res.wca && !_isNoData(res.wca)) line.push(`WCA：${String(res.wca).slice(0,40)}`);
+        if(res.friction && !_isNoData(res.friction)) line.push(`COF/摩擦：${String(res.friction).slice(0,60)}`);
+        if(res.adhesion && !_isNoData(res.adhesion)) line.push(`附著：${String(res.adhesion).slice(0,40)}`);
+        parts.push(line.join(' | '));
+      });
+    }
     return parts.join('\n');
   }).join('\n---\n');
 }
 
 function _deDimensionPromptSpec(dim){
-  // 依維度類型回傳 {focusTitle, instructions}，組成 system prompt 的核心部分
+  // 依維度類型回傳 {focusTitle, instructions}，組成 system prompt 的核心部分。
+  // 每個維度都額外要求「配方光譜比對」：同一篇文獻內若有多個實施例，要比較彼此差異；
+  // 跨篇文獻之間也要比較配方/製程/數據異同，不能只看整篇摘要做籠統歸納。
+  const SPEC_NOTE = `
+配方比對要求（務必執行，不可省略）：
+- 若同一篇文獻有多個實施例，請指出該篇內各實施例的配方/製程差異，以及這些差異如何影響結果（WCA/COF/附著等）
+- 跨文獻比較時，請具體點出哪些文獻用了相同/相近的材料或製程，差異在哪裡，結果優劣如何
+- 引用實施例時請標明文獻ID（如[P30]），若該實施例是推論性質（非原文明確記載），引用時要註明「推論」二字`;
+
   if(dim.type==='company'){
     return {
       focusTitle:`競爭對手分析：${dim.company}`,
@@ -1989,7 +2016,8 @@ function _deDimensionPromptSpec(dim){
 1. 這家公司市場上主要用什麼原理/技術路線（依文獻歸納，不要臆測未提及的內容）
 2. 從這些文獻看出的專利布局趨勢（時間演進、技術延伸方向、防禦範圍）
 3. 我方可以採用的空白地帶或可迴避方向（引用具體文獻ID佐證）
-4. 我方應避開的核心claim範圍（引用具體文獻ID佐證，說明為什麼有風險）`
+4. 我方應避開的核心claim範圍（引用具體文獻ID佐證，說明為什麼有風險）
+${SPEC_NOTE}`
     };
   }
   if(dim.type==='indication'){
@@ -1999,7 +2027,8 @@ function _deDimensionPromptSpec(dim){
 1. 市場上達成「${dim.label}」效果實際採用的技術機制有哪幾種（依文獻歸納，並標明各機制分別來自哪些文獻ID；如果不同文獻的機制描述有衝突或不確定，請標註(*)並說明）
 2. 我方若要做「${dim.label}」應該優先考慮的技術方向，以及理由
 3. 這些技術方向各自對應到哪些既有專利的claim範圍，我方需要迴避什麼
-4. 資料缺口：哪些技術方向目前文獻證據不足，需要補強分析才能下判斷`
+4. 資料缺口：哪些技術方向目前文獻證據不足，需要補強分析才能下判斷
+${SPEC_NOTE}`
     };
   }
   if(dim.type==='route'){
@@ -2009,7 +2038,8 @@ function _deDimensionPromptSpec(dim){
 1. 市場上採用這條路線的公司分別用什麼策略（製程參數、材料選擇、搭配的底塗/面塗設計）
 2. 這條路線上的專利布局密度與風險（哪些是核心地雷、哪些已過期可用）
 3. 我方在這條路線上可以做的具體方向（引用文獻ID佐證）
-4. 我方應該迴避的具體claim範圍（引用文獻ID佐證）`
+4. 我方應該迴避的具體claim範圍（引用文獻ID佐證）
+${SPEC_NOTE}`
     };
   }
   if(dim.type==='company_route'){
@@ -2019,7 +2049,8 @@ function _deDimensionPromptSpec(dim){
 1. 這家公司在這條路線上的具體配方/製程策略是什麼（引用文獻ID佐證實施例細節）
 2. 哪些做法已過期可以直接參考使用，哪些仍在有效claim範圍內不能照抄
 3. 我方如果也要走這條路線，可以怎麼做出技術差異化（不踩到這家公司的claim）
-4. 我方絕對不能做的事（會直接侵犯這家公司現有claim的具體技術特徵）`
+4. 我方絕對不能做的事（會直接侵犯這家公司現有claim的具體技術特徵）
+${SPEC_NOTE}`
     };
   }
   if(dim.type==='multi_company'){
@@ -2030,10 +2061,11 @@ function _deDimensionPromptSpec(dim){
 1. 各家公司的技術策略定位差異是什麼（例如誰主攻低成本量產、誰主攻技術壁壘、誰在做防禦性佈局）
 2. 哪一家公司的IP對我方威脅最大，為什麼（引用文獻ID佐證具體claim內容）
 3. 各家公司之間是否有可乘的空白地帶（例如A家沒做但B家在做的技術組合）
-4. 我方應該優先參考哪家公司的做法、迴避哪家公司的claim`
+4. 我方應該優先參考哪家公司的做法、迴避哪家公司的claim
+${SPEC_NOTE}`
     };
   }
-  return {focusTitle:'技術決策解讀', instructions:'請根據這批文獻歸納關鍵技術趨勢、可行方向與需迴避的風險，引用具體文獻ID佐證。'};
+  return {focusTitle:'技術決策解讀', instructions:`請根據這批文獻歸納關鍵技術趨勢、可行方向與需迴避的風險，引用具體文獻ID佐證。${SPEC_NOTE}`};
 }
 
 async function generateDimensionalAIReport(){
@@ -2042,7 +2074,7 @@ async function generateDimensionalAIReport(){
   if(!cfg.proxy){ toast('請先設定 Claude API Proxy URL','error'); return; }
 
   const spec = _deDimensionPromptSpec(dim);
-  const context = _deBuildAIContext(dim.papers.slice(0,15)); // 上限15篇，避免單次成本過高
+  const context = _deBuildAIContext(dim.papers.slice(0,10)); // 上限10篇（含逐篇實施例後單篇資料量變大，收緊上限控制成本）
   const btnEl = document.getElementById('deAIReportBtn');
   const outEl = document.getElementById('deAIReportOutput');
   if(!outEl) return;
@@ -2063,10 +2095,11 @@ async function generateDimensionalAIReport(){
 4. 不確定、屬於推論而非文獻明確記載的內容，標註(*)
 5. 若文獻資料不足以回答某個問題，明確說「現有文獻資料不足以判斷」，不要硬掰
 6. 簡潔務實，每點 2-4 句即可，不要學術廢話
-7. 用 ## 標題分隔各點`,
+7. 用 ## 標題分隔各點
+8. 比對配方時要具體到數值/條件層級（如「PVP K90 vs K30」「COF 0.16 vs 0.22」），不能只說「材料類似」這種籠統說法；若文獻資料本身只到材料名稱層級沒有數值，就明確說資料只到這個層級，不要硬掰數字`,
         messages:[{role:'user',content:`【${spec.focusTitle}】
 
-以下是 ${dim.papers.length>15?'前15篇（共'+dim.papers.length+'篇，已截斷）':dim.papers.length+'篇'}文獻的分析資料：
+以下是 ${dim.papers.length>10?'前10篇（共'+dim.papers.length+'篇，已截斷）':dim.papers.length+'篇'}文獻的分析資料：
 
 ${context}
 
@@ -2086,7 +2119,7 @@ ${spec.instructions}`}]
     outEl.innerHTML = `<div style="background:linear-gradient(135deg,#f5f0ff,#fff);border:2px solid #8e44ad;border-radius:12px;padding:16px">
       <div style="font-size:12px;color:#8e44ad;font-weight:700;letter-spacing:1px;margin-bottom:8px">🤖 AI 策略解讀 · ${escHtml(spec.focusTitle)}</div>
       <div style="font-size:13px;line-height:1.8;color:var(--text)">${text}</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:12px;padding-top:8px;border-top:1px solid var(--border)">基於 ${dim.papers.length>15?15:dim.papers.length} 篇文獻的已有分析資料生成，非重新讀取專利原文；請自行核對關鍵判斷</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:12px;padding-top:8px;border-top:1px solid var(--border)">基於 ${dim.papers.length>10?10:dim.papers.length} 篇文獻的已有分析資料（含逐篇實施例配方）生成，非重新讀取專利原文；請自行核對關鍵判斷</div>
     </div>`;
   }catch(e){
     outEl.innerHTML = `<div style="color:var(--warn);padding:16px;text-align:center">AI 解讀失敗：${escHtml(e.message||String(e))}</div>`;
@@ -6103,7 +6136,7 @@ function renderIntegratedReport() {
     const aiSection = dim ? `
       <div style="max-width:860px;margin:16px auto 0;text-align:center">
         <button id="deAIReportBtn" class="btn btn-s" style="font-size:12px;color:#8e44ad;border-color:#8e44ad"
-          onclick="if(confirm('這會呼叫 API 進行策略解讀，確定要繼續嗎？（約10篇文獻成本約NT$1.5-2元）')) generateDimensionalAIReport()">
+          onclick="if(confirm('這會呼叫 API 進行策略解讀（含逐篇實施例配方比對），確定要繼續嗎？（約10篇文獻成本約NT$2-2.5元）')) generateDimensionalAIReport()">
           🤖 AI 策略解讀（針對「${escHtml(dim.company||dim.label||Object.keys(dim.orgGroups||{}).join('/')||'目前篩選')}」）
         </button>
       </div>
