@@ -20,9 +20,6 @@ header{background:var(--accent);border-bottom:none;padding:10px 24px;display:fle
 .tabs{display:flex;gap:2px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:4px;margin:16px 24px 0}
 .tab{flex:1;padding:8px;text-align:center;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-radius:6px;transition:var(--tr)}
 .tab.active{background:var(--card);color:var(--text)}
-.subtabs{display:flex;gap:4px;flex-wrap:wrap;padding:8px 24px 0;margin:0}
-.subtab{padding:6px 14px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border-radius:6px;border:1px solid var(--border);background:var(--surface);transition:var(--tr)}
-.subtab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 .tab .badge{background:var(--border);border-radius:20px;padding:1px 6px;font-size:11px}
 
 /* Main */
@@ -404,19 +401,19 @@ async function doLogin(){
   </div>
 </header>
 
-<div class="tabs" id="mainTabs">
-  <div class="tab active" data-group="dashboard" onclick="showGroup('dashboard',this)">🎯<span class="tab-text"> 戰情室</span></div>
-  <div class="tab" data-group="library" onclick="showGroup('library',this)">📚<span class="tab-text"> 文庫</span> <span class="badge" id="browseCount">0</span><span class="badge" id="analyzedCount" style="background:var(--accent2)">0</span></div>
-  <div class="tab" data-group="intel" onclick="showGroup('intel',this)">🔬<span class="tab-text"> 競爭情報</span></div>
-  <div class="tab" data-group="tools" onclick="showGroup('tools',this)">🧰<span class="tab-text"> 工具</span></div>
+<div class="tabs">
+  <div class="tab active" onclick="showView('market',this)">🏢<span class="tab-text"> 市場</span></div>
+  <div class="tab" onclick="showView('routes',this)">🛣<span class="tab-text"> 路線</span></div>
+  <div class="tab" onclick="showView('browse',this)">📚<span class="tab-text"> 文庫</span> <span class="badge" id="browseCount">0</span><span class="badge" id="analyzedCount" style="background:var(--accent2)">0</span></div>
+  <div class="tab" onclick="showView('patent-tree',this)">🌳<span class="tab-text"> 專利樹</span></div>
+  <div class="tab" onclick="showView('report',this)">📋<span class="tab-text"> 報告</span></div>
+  <div class="tab" onclick="showView('manual',this)">📘<span class="tab-text"> 使用說明</span></div>
 </div>
-
-<div class="subtabs" id="subTabs" style="display:none"></div>
 
 <div class="main">
 
 <!-- ═══════════════ VIEW: SEARCH ═══════════════ -->
-<div class="view" id="v-market">
+<div class="view active" id="v-market">
   <div style="max-width:1000px;margin:0 auto;padding:20px 16px" id="marketContent">
     <div style="text-align:center;padding:40px;color:var(--muted)">載入中...</div>
   </div>
@@ -2356,7 +2353,6 @@ window.onload = async () => {
   await loadDB();
   checkBookmarkletParams();
   updateCostDisplay();
-  showGroup('dashboard');
 };
 
 // 從書籤小工具接收資料
@@ -2501,8 +2497,8 @@ function toast(m,t=''){const e=document.getElementById('toast');e.textContent=m;
 // BUGFIX HELPERS: 安全導覽、缺漏按鈕函式補齊
 // ══════════════════════════════════════════════
 function getMainTab(viewId) {
-  // 新架構：主 tab 用 data-group，view 高亮由 syncMainTabForView 處理
-  return null;
+  const tabs = Array.from(document.querySelectorAll('.tabs > .tab'));
+  return tabs.find(t => (t.getAttribute('onclick') || '').includes(`showView('${viewId}'`)) || null;
 }
 
 function safeEl(id) { return document.getElementById(id); }
@@ -3080,93 +3076,18 @@ let savedScrollTop = 0;
 let currentAnalysisTab = 'graph';
 function goBack() {
   if(!previousView) return;
-  showView(previousView);
-  previousView = null;
-  const bb = document.getElementById('backBtn');
-  if(bb) bb.style.display = 'none';
-  const list = document.getElementById('paperList');
-  if(list) requestAnimationFrame(()=>{ list.scrollTop = savedScrollTop; });
-}
-// ── 兩層導覽：主分類 → 子頁籤 ──
-const TAB_GROUPS = {
-  dashboard: { label:'戰情室', subs:[
-    {id:'routes', label:'🛣 技術路線'},
-    {id:'report', label:'📋 整合報告'}
-  ]},
-  library: { label:'文庫', subs:[
-    {id:'browse', label:'📚 文獻瀏覽'}
-  ]},
-  intel: { label:'競爭情報', subs:[
-    {id:'market', label:'🏢 市場玩家'},
-    {id:'patent-tree', label:'🌳 專利樹'},
-    {id:'gap', label:'🔥 缺口分析'},
-    {id:'compare', label:'📊 比較表'}
-  ]},
-  tools: { label:'工具', subs:[
-    {id:'add', label:'🔍 檢索新增'},
-    {id:'research', label:'🧭 研究'},
-    {id:'graph', label:'🕸 關聯圖'},
-    {id:'manual', label:'📘 使用說明'}
-  ]}
-};
-
-let currentGroup = 'dashboard';
-
-function showGroup(groupId, el){
-  currentGroup = groupId;
-  const group = TAB_GROUPS[groupId];
-  if(!group) return;
-
-  // 主 tab 高亮
-  document.querySelectorAll('#mainTabs > .tab').forEach(t=>t.classList.remove('active'));
-  if(el) el.classList.add('active');
-  else document.querySelector(`#mainTabs > .tab[data-group="${groupId}"]`)?.classList.add('active');
-
-  // 渲染子頁籤
-  const subBar = document.getElementById('subTabs');
-  if(group.subs.length > 1){
-    subBar.style.display = 'flex';
-    subBar.innerHTML = group.subs.map((s,i)=>
-      `<div class="subtab${i===0?' active':''}" data-view="${s.id}" onclick="showSubView('${s.id}',this)">${s.label}</div>`
-    ).join('');
-  } else {
-    subBar.style.display = 'none';
-  }
-
-  // 顯示該分類第一個 view
-  showView(group.subs[0].id);
-}
-
-function showSubView(viewId, el){
-  document.querySelectorAll('#subTabs > .subtab').forEach(t=>t.classList.remove('active'));
-  if(el) el.classList.add('active');
-  showView(viewId);
-}
-
-// 依 view id 找所屬主分類，自動高亮主 tab + 子頁籤
-function syncMainTabForView(viewId){
-  let foundGroup = null;
-  for(const [gid, g] of Object.entries(TAB_GROUPS)){
-    if(g.subs.some(s=>s.id===viewId)){ foundGroup = gid; break; }
-  }
-  if(!foundGroup) return;
-  currentGroup = foundGroup;
-  // 主 tab 高亮
-  document.querySelectorAll('#mainTabs > .tab').forEach(t=>t.classList.remove('active'));
-  document.querySelector(`#mainTabs > .tab[data-group="${foundGroup}"]`)?.classList.add('active');
-  // 子頁籤渲染與高亮
-  const group = TAB_GROUPS[foundGroup];
-  const subBar = document.getElementById('subTabs');
-  if(subBar && group.subs.length > 1){
-    subBar.style.display = 'flex';
-    subBar.innerHTML = group.subs.map(s=>
-      `<div class="subtab${s.id===viewId?' active':''}" data-view="${s.id}" onclick="showSubView('${s.id}',this)">${s.label}</div>`
-    ).join('');
-  } else if(subBar){
-    subBar.style.display = 'none';
+  const tabs = document.querySelectorAll('.tabs > .tab');
+  const viewMap = {market:0, routes:1, browse:2, 'patent-tree':3, report:4};
+  const idx = viewMap[previousView];
+  if(idx!==undefined && tabs[idx]) {
+    showView(previousView, tabs[idx]);
+    previousView = null;
+    document.getElementById('backBtn').style.display = 'none';
+    // 恢復離開前的滾動位置
+    const list = document.getElementById('paperList');
+    if(list) requestAnimationFrame(()=>{ list.scrollTop = savedScrollTop; });
   }
 }
-
 function showView(id,el){
   const currentView = document.querySelector('.view.active')?.id?.replace('v-','');
   // 離開文庫時記錄滾動位置
@@ -3192,8 +3113,9 @@ function showView(id,el){
   // 顯示目標 view
   const target = document.getElementById('v-'+id);
   if(target) target.classList.add('active');
-  // 自動同步主分類高亮（依 view 找所屬 group）
-  syncMainTabForView(id);
+  // 更新 tab 高亮
+  document.querySelectorAll('.tabs > .tab').forEach(t=>t.classList.remove('active'));
+  if(el) el.classList.add('active');
   // 觸發各 view 的初始化
   if(id==='graph') buildGraph();
   if(id==='gap') buildHeatmaps();
@@ -5447,7 +5369,8 @@ function toggleRoute(id) {
 }
 
 function goToLibraryFilter(keyword) {
-  showView('browse');
+  const tabs = document.querySelectorAll('.tabs > .tab');
+  showView('browse', getMainTab('browse'));
   setTimeout(()=>{
     activeRouteFilter = null;
     activeLibraryFilter = null;
@@ -5464,7 +5387,8 @@ function goToRouteLibrary(routeId) {
   // 設路線篩選
   activeLibraryFilter = null;
   activeRouteFilter = {id:routeId, label:route.label, color:route.color, paperIds:matchedIds};
-  showView('browse');
+  const tabs = document.querySelectorAll('.tabs > .tab');
+  showView('browse', getMainTab('browse'));
   setTimeout(()=>{
     document.getElementById('fKw').value = '';
     filterPapers();
@@ -5511,7 +5435,8 @@ function renderRouteBanner() {
 }
 
 function goToPaper(pid, opts={}) {
-  showView('browse');
+  const tabs = document.querySelectorAll('.tabs > .tab');
+  showView('browse', getMainTab('browse'));
   setTimeout(()=>{
     if(opts.focus) {
       activeRouteFilter = null;
@@ -5554,7 +5479,8 @@ function goToMarketEntity(name) {
     const hay = `${p.id||''} ${p.title||''} ${p.authors||''} ${p.venue||''} ${p.purpose||''} ${p.abstract_note||''} ${p.value_to_project||''}`.toLowerCase();
     return aliases.some(a=>hay.includes(a));
   }).map(p=>p.id);
-  showView('browse');
+  const tabs = document.querySelectorAll('.tabs > .tab');
+  showView('browse', getMainTab('browse'));
   setTimeout(()=>{
     activeRouteFilter = null;
     activeLibraryFilter = {
