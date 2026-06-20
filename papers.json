@@ -395,7 +395,7 @@
           ],
           "examples": [
             {
-              "name": "Embodiment A：PVP-PU 高分子共混塗層*",
+              "name": "* Embodiment A：PVP-PU 高分子共混塗層",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論：US4642267A 為 Hydromer 1985 基礎專利（已過期），摘要列出 PU + poly(N-vinyl lactam)，比例需查全文。",
@@ -534,7 +534,7 @@
           ],
           "examples": [
             {
-              "name": "Embodiment A：PVP-PU 載碘抗菌塗層*",
+              "name": "* Embodiment A：PVP-PU 載碘抗菌塗層",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論：US4769013A 摘要描述 PU 與 PVP 複合並含 bio-effecting agent（碘等），具體載量需查全文。",
@@ -833,7 +833,7 @@
           ],
           "examples": [
             {
-              "name": "Embodiment A：幾丁聚醣生物聚合物網絡塗層*",
+              "name": "* Embodiment A：幾丁聚醣生物聚合物網絡塗層",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論：US20080112617 摘要描述 chitosan + 碳水化合物 + 醛基交聯，狀態為 Abandoned，比例需查全文。",
@@ -2325,7 +2325,7 @@
           ],
           "examples": [
             {
-              "name": "Embodiment A：PEO 矽烷耐久型親水塗層*",
+              "name": "* Embodiment A：PEO 矽烷耐久型親水塗層",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論：US8378011B2 摘要列出 PEO + 矽烷 + acrylic monomer + 光起始劑，但配方比例需查全文。",
@@ -3634,7 +3634,7 @@
           "summary": "水溶性光起始劑生醫應用綜述：Type I（I-2959）vs Type II（BP），毒性/溶解度/效率比較",
           "examples": [
             {
-              "name": "水溶性光起始劑比較",
+              "name": "* 水溶性光起始劑比較",
               "is_real": false,
               "credibility": "高",
               "credibility_reason": "系統性綜述",
@@ -3755,7 +3755,7 @@
           "summary": "UV固化在醫療器材的應用綜述：PEG/PVP光固化化學、反應機制、法規考量",
           "examples": [
             {
-              "name": "UV固化醫材塗層系統",
+              "name": "* UV固化醫材塗層系統",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "綜述，無具體實驗數據",
@@ -4081,7 +4081,7 @@
           "summary": "親水塗層市場報告（MarketsandMarkets）：2027達225億，主要廠商/基材/終端分析",
           "examples": [
             {
-              "name": "親水塗層全球市場",
+              "name": "* 親水塗層全球市場",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "市場研究報告，數字可能有偏差*",
@@ -4194,7 +4194,7 @@
           "summary": "2026親水塗層專利地圖：PVP/PEG/SBMA/MPC各技術路線的專利布局與過期分析",
           "examples": [
             {
-              "name": "親水塗層專利地圖",
+              "name": "* 親水塗層專利地圖",
               "is_real": false,
               "credibility": "高",
               "credibility_reason": "2026最新專利分析",
@@ -4723,7 +4723,7 @@
           "summary": "醫療器材親水塗層摩擦行為系統研究：COF測量方法、影響因子、與結痂相關性",
           "examples": [
             {
-              "name": "親水塗層COF測試",
+              "name": "* 親水塗層COF測試",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "綜述/實驗混合",
@@ -4794,7 +4794,7 @@
           "summary": "醫材親水塗層性能測試全指南：COF、顆粒、附著力、生物相容性標準方法",
           "examples": [
             {
-              "name": "性能測試標準",
+              "name": "* 性能測試標準",
               "is_real": false,
               "credibility": "高",
               "credibility_reason": "標準/指引文件",
@@ -4908,7 +4908,7 @@
           "summary": "Pinch Test白皮書（Biocoat/ViVitro）：非標準摩擦測試方法論，IDTE系統，參數敏感性",
           "examples": [
             {
-              "name": "Pinch Test摩擦測試方法",
+              "name": "* Pinch Test摩擦測試方法",
               "is_real": false,
               "credibility": "高",
               "credibility_reason": "行業標準白皮書",
@@ -5010,7 +5010,7 @@
           "summary": "PVP vs PEG vs兩性離子塗層化學家族比較：結構、性能、法規、成本全面分析",
           "examples": [
             {
-              "name": "三類親水塗層比較",
+              "name": "* 三類親水塗層比較",
               "is_real": false,
               "credibility": "高",
               "credibility_reason": "系統性比較綜述",
@@ -5648,7 +5648,7 @@
           "summary": "Grand View Research市場報告：微創手術驅動需求，低VOC/生物相容趨勢，OEM外包主流",
           "examples": [
             {
-              "name": "醫材親水塗層全球市場（GVR）",
+              "name": "* 醫材親水塗層全球市場（GVR）",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "市場研究報告",
@@ -8339,7 +8339,7 @@
           "summary": "Cook Medical P31（US7402620）為 P30（US7141246）續案，在 PVP+PU interpolymer+isocyanate 熱固化潤滑塗層基礎上，新增 chlorhexidine（0.1-5%）、triclosan、silver 三種抗菌劑的可控緩釋設計，加入 Vitamin E 作抗氧化保存穩定劑。抗菌劑嵌入 PU 網絡以擴散機制緩慢釋放，維持數週抑菌濃度。熱固化製程免 UV 設備，可塗管腔內壁。對 本專案 而言是 Phase 3 抗菌設計的核心參考配方，但 triclosan 的 FDA 法規疑慮與 chlorhexidine 的生物相容性評估複雜度需注意。建議以 silver 作為優先抗菌劑，配合 UV 路線或 QCS 高分子抗菌以迴避 P31 核心 claim。",
           "examples": [
             {
-              "name": "Embodiment A：Chlorhexidine 緩釋抗菌塗層",
+              "name": "* Embodiment A：Chlorhexidine 緩釋抗菌塗層",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論較少：專利摘要/claim 脈絡明確列出 chlorhexidine 0.1-5% 與 sustained release，但尚待全文 example 與測試數據核對。",
@@ -8363,7 +8363,7 @@
               }
             },
             {
-              "name": "Embodiment B：Silver / silver ion 抗 biofilm 模組",
+              "name": "* Embodiment B：Silver / silver ion 抗 biofilm 模組",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論較少：silver/silver ion 是專利列出的抗菌選項；濃度窗口與釋放數據仍需全文或實驗確認。",
@@ -8387,7 +8387,7 @@
               }
             },
             {
-              "name": "Embodiment C：Triclosan + Vitamin E 保存穩定組合",
+              "name": "** Embodiment C：Triclosan + Vitamin E 保存穩定組合",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "** 推論：triclosan 與 Vitamin E 皆在 P31 摘要脈絡中出現，但是否同一實施例與比例需全文核對。",
@@ -8411,7 +8411,7 @@
               }
             },
             {
-              "name": "Embodiment D：管腔內壁熱固化塗佈情境",
+              "name": "** Embodiment D：管腔內壁熱固化塗佈情境",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "** 推論：熱固化可避開 UV line-of-sight 問題，適合內壁塗層；實際內壁 example 與參數需全文確認。",
@@ -8684,7 +8684,7 @@
           ],
           "examples": [
             {
-              "name": "Embodiment A：PVP-PU 異氰酸酯潤滑塗層*",
+              "name": "* Embodiment A：PVP-PU 異氰酸酯潤滑塗層",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論：US6645483B2 摘要明確列出 PVP + polyoxyethylene isocyanate-terminated prepolymer，但具體比例與測試數據需查全文 example。",
@@ -9036,7 +9036,7 @@
           "summary": "輸尿管支架結痂機制完整綜述：流行病學、pathophysiology、預防策略",
           "examples": [
             {
-              "name": "輸尿管支架結痂臨床研究",
+              "name": "* 輸尿管支架結痂臨床研究",
               "is_real": false,
               "credibility": "高",
               "credibility_reason": "系統性臨床綜述",
@@ -9161,7 +9161,7 @@
           "summary": "新型輸尿管支架技術全覽：材料、塗層、設計創新，含抗結痂技術比較",
           "examples": [
             {
-              "name": "新型支架技術",
+              "name": "* 新型支架技術",
               "is_real": false,
               "credibility": "高",
               "credibility_reason": "系統性技術綜述",
@@ -9284,7 +9284,7 @@
           "summary": "輸尿管支架應用、進展與併發症臨床回顧：結痂、感染、疼痛的發生率與處理",
           "examples": [
             {
-              "name": "支架臨床回顧",
+              "name": "* 支架臨床回顧",
               "is_real": false,
               "credibility": "高",
               "credibility_reason": "臨床數據統計",
@@ -9384,7 +9384,7 @@
           "summary": "天然生物聚合物（chitosan/HA/alginate）輸尿管支架塗層：抗結痂+生物相容+可降解",
           "examples": [
             {
-              "name": "天然生物聚合物塗層",
+              "name": "* 天然生物聚合物塗層",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "綜述，部分數據",
@@ -9509,7 +9509,7 @@
           "summary": "輸尿管支架結痂預防新進展：材料、塗層、操作策略，2024最新臨床觀點",
           "examples": [
             {
-              "name": "結痂預防策略",
+              "name": "* 結痂預防策略",
               "is_real": false,
               "credibility": "高",
               "credibility_reason": "2024最新臨床綜述",
@@ -10161,7 +10161,7 @@
           ],
           "examples": [
             {
-              "name": "Embodiment A：urethane prepolymer 潤滑塗層*",
+              "name": "* Embodiment A：urethane prepolymer 潤滑塗層",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論：US20010051669A1 為 Sherwood 潤滑塗層 vehicle，摘要描述遇濕降低 COF，比例需查全文。",
@@ -10253,7 +10253,7 @@
           ],
           "examples": [
             {
-              "name": "Embodiment A：含藥理添加劑潤滑塗層（PCT）*",
+              "name": "* Embodiment A：含藥理添加劑潤滑塗層（PCT）",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論：Sherwood 潤滑塗層族群的 PCT 版本，涵蓋藥物釋放，具體藥物需查全文。",
@@ -10349,7 +10349,7 @@
           ],
           "examples": [
             {
-              "name": "Embodiment A：抗菌潤滑塗層*",
+              "name": "* Embodiment A：抗菌潤滑塗層",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論：US7820734B2（Tyco-Covidien）抗菌潤滑塗層，遇濕降 COF 並抗菌，抗菌劑種類需查全文。",
@@ -10436,7 +10436,7 @@
           ],
           "examples": [
             {
-              "name": "Embodiment A：矽膠塗層食道支架（低關聯）*",
+              "name": "** Embodiment A：矽膠塗層食道支架（低關聯）",
               "is_real": false,
               "credibility": "低",
               "credibility_reason": "** 推論且低關聯：US5876448A 是 Boston 食道支架結構專利，矽膠塗層非親水潤滑，與本專案關聯低。",
@@ -10529,7 +10529,7 @@
           ],
           "examples": [
             {
-              "name": "Embodiment A：耐久親水塗層（P35 同族）*",
+              "name": "* Embodiment A：耐久親水塗層（P35 同族）",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論：US20090171302A1 與 P35 同族，配方相同（PEO+flow modifier+acrylic+光起始劑）。",
@@ -10618,7 +10618,7 @@
           ],
           "examples": [
             {
-              "name": "Embodiment A：耐久親水塗層（P35 PCT）*",
+              "name": "* Embodiment A：耐久親水塗層（P35 PCT）",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論：WO2009086363 與 P35/P43 同族 PCT 版本，配方相同。",
@@ -10707,7 +10707,7 @@
           ],
           "examples": [
             {
-              "name": "Embodiment A：PU-PVP 開孔發泡材*",
+              "name": "* Embodiment A：PU-PVP 開孔發泡材",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論：Hydromer 開孔發泡 PU-poly(N-vinyl lactam) 互聚物，用於牙科/生醫，比例需查全文。",
@@ -10801,7 +10801,7 @@
           ],
           "examples": [
             {
-              "name": "Embodiment A：水性膠體金屬氧化物塗層*",
+              "name": "* Embodiment A：水性膠體金屬氧化物塗層",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論：Hydromer P07 族群，水性聚合物基質 + 膠體金屬氧化物 + 交聯劑，比例需查全文。",
@@ -10891,7 +10891,7 @@
           ],
           "examples": [
             {
-              "name": "Embodiment A：水性膠體金屬氧化物塗層（PCT）*",
+              "name": "* Embodiment A：水性膠體金屬氧化物塗層（PCT）",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論：Hydromer P07 族群 PCT 版本，配方同 P46。",
@@ -10981,7 +10981,7 @@
           ],
           "examples": [
             {
-              "name": "Embodiment A：水性膠體金屬氧化物塗層（EP）*",
+              "name": "* Embodiment A：水性膠體金屬氧化物塗層（EP）",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論：Hydromer P07 族群 EP 授權案（已過期），配方同 P46。",
@@ -11073,7 +11073,7 @@
           ],
           "examples": [
             {
-              "name": "Embodiment A：生物聚合物網絡塗層（P38 PCT）*",
+              "name": "* Embodiment A：生物聚合物網絡塗層（P38 PCT）",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論：與 P38 同族 PCT，醣鏈 + 單體以酯/醚/醛鍵連結。",
@@ -11165,7 +11165,7 @@
           ],
           "examples": [
             {
-              "name": "Embodiment A：base/top coat 羧酸聚合物塗層*",
+              "name": "* Embodiment A：base/top coat 羧酸聚合物塗層",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論：US20110200828（Biocoat HYDAK 相關）描述高附著底塗 + 化學鍵結頂塗，羧酸聚合物，比例需查全文。",
@@ -11256,7 +11256,7 @@
           ],
           "examples": [
             {
-              "name": "Embodiment A：非血栓親水共聚物塗層*",
+              "name": "* Embodiment A：非血栓親水共聚物塗層",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論：Biocoat 酸性單體 + 親水單體共聚物，共價附著於 primer base-coat，比例需查全文。",
@@ -11351,7 +11351,7 @@
           ],
           "examples": [
             {
-              "name": "Embodiment A：PhotoLink 抗血栓光反應塗層*",
+              "name": "* Embodiment A：PhotoLink 抗血栓光反應塗層",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "* 推論：Surmodics PhotoLink 技術，非汙底塗 + 光反應 PVP 潤滑頂塗，比例需查全文。",
