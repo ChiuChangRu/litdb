@@ -392,7 +392,34 @@
           "next_actions": [
             "Parse independent claims and examples to extract exact ratios and coating procedure.",
             "Check whether US4550126A is a closer foam/biomedical companion node."
-          ]
+          ],
+          "examples": [
+            {
+              "name": "Embodiment A：PVP-PU 高分子共混塗層*",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "* 推論：US4642267A 為 Hydromer 1985 基礎專利（已過期），摘要列出 PU + poly(N-vinyl lactam)，比例需查全文。",
+              "substrate": "各類醫療器材表面（導管、器械）",
+              "formulation": {
+                "primer": "polyurethane 底層",
+                "topcoat": "PVP / poly(N-vinyl lactam)（含 poly(N-vinyl caprolactam)）與 PU 物理共混"
+              },
+              "process": {
+                "surface_prep": "基材清潔",
+                "coating_method": "Dip coating",
+                "drying": "溶劑揮發",
+                "curing": "物理乾燥成膜（共混型）"
+              },
+              "results": {
+                "friction": "PVP 提供潤滑",
+                "adhesion": "PU 共混提供附著",
+                "wca": "未明示",
+                "durability": "已過期專利，技術可自由使用",
+                "other": "Hydromer 路線最早期的 PVP-PU 共混基礎專利"
+              }
+            }
+          ],
+          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
         }
       }
     },
@@ -504,7 +531,34 @@
           "next_actions": [
             "Parse claim 1 and examples for exact active-agent loading.",
             "Compare with Cook US7402620 antimicrobial-release route to separate Hydromer vs Cook logic."
-          ]
+          ],
+          "examples": [
+            {
+              "name": "Embodiment A：PVP-PU 載碘抗菌塗層*",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "* 推論：US4769013A 摘要描述 PU 與 PVP 複合並含 bio-effecting agent（碘等），具體載量需查全文。",
+              "substrate": "需抗菌/抗黴的醫療器材表面",
+              "formulation": {
+                "primer": "polyurethane 底層",
+                "topcoat": "PU + PVP + 碘或其他抗菌/抗黴劑"
+              },
+              "process": {
+                "surface_prep": "基材清潔",
+                "coating_method": "Dip coating",
+                "drying": "溶劑揮發",
+                "curing": "PU 成膜，碘錯合於 PVP"
+              },
+              "results": {
+                "friction": "PVP 潤滑",
+                "adhesion": "PU 提供附著",
+                "wca": "未明示",
+                "durability": "碘緩釋抗菌",
+                "other": "PVP-碘錯合（povidone-iodine）是經典抗菌組合，Hydromer 早期抗菌延伸"
+              }
+            }
+          ],
+          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
         }
       }
     },
@@ -776,7 +830,34 @@
             "Download PDF and parse claim set/prosecution for why abandoned.",
             "Check WO2008133646A1 and TW200826980A family status.",
             "Compare chitosan network idea with QCS/SBMA anti-encrustation strategy."
-          ]
+          ],
+          "examples": [
+            {
+              "name": "Embodiment A：幾丁聚醣生物聚合物網絡塗層*",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "* 推論：US20080112617 摘要描述 chitosan + 碳水化合物 + 醛基交聯，狀態為 Abandoned，比例需查全文。",
+              "substrate": "醫療器材表面（生物可相容塗層）",
+              "formulation": {
+                "primer": "基材活化",
+                "topcoat": "chitosan + 多醣 + 羧酸官能基，以醛基（aldehyde）交聯"
+              },
+              "process": {
+                "surface_prep": "基材清潔",
+                "coating_method": "Dip coating",
+                "drying": "溶劑/水揮發",
+                "curing": "醛基交聯（Schiff base）"
+              },
+              "results": {
+                "friction": "幾丁聚醣親水潤滑",
+                "adhesion": "醛基交聯網絡",
+                "wca": "未明示",
+                "durability": "專利已放棄（Abandoned）",
+                "other": "天然生物聚合物路線，幾丁聚醣兼具潤滑與抗菌潛力"
+              }
+            }
+          ],
+          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
         }
       }
     },
@@ -2241,7 +2322,34 @@
             "US8378011B2 claim 1",
             "US20090171302A1",
             "WO2009086318A1"
-          ]
+          ],
+          "examples": [
+            {
+              "name": "Embodiment A：PEO 矽烷耐久型親水塗層*",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "* 推論：US8378011B2 摘要列出 PEO + 矽烷 + acrylic monomer + 光起始劑，但配方比例需查全文。",
+              "substrate": "導線（guidewire）、導管及血管內器材",
+              "formulation": {
+                "primer": "silane 偶聯底塗",
+                "topcoat": "PEO / 親水高分子 + flow modifier + acrylic monomer + 光起始劑"
+              },
+              "process": {
+                "surface_prep": "silane 表面處理",
+                "coating_method": "Dip/spray",
+                "drying": "溶劑揮發",
+                "curing": "UV 光固化（acrylic 交聯）"
+              },
+              "results": {
+                "friction": "低 COF",
+                "adhesion": "silane 共價橋接，耐久性強化",
+                "wca": "未明示",
+                "durability": "本專利核心訴求即為耐久性提升",
+                "other": "Boston Scientific 耐久塗層族群，P43/P44 為同族"
+              }
+            }
+          ],
+          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
         }
       }
     },
@@ -8573,7 +8681,34 @@
             "US6645483B2 claim 1",
             "US7141246B2 family relation",
             "US7820734B2"
-          ]
+          ],
+          "examples": [
+            {
+              "name": "Embodiment A：PVP-PU 異氰酸酯潤滑塗層*",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "* 推論：US6645483B2 摘要明確列出 PVP + polyoxyethylene isocyanate-terminated prepolymer，但具體比例與測試數據需查全文 example。",
+              "substrate": "導管、AV shunt、餵食管、氣管內管等管狀醫材",
+              "formulation": {
+                "primer": "polyoxyethylene-based isocyanate-terminated prepolymer 作底塗",
+                "topcoat": "PVP + isocyanate prepolymer，溶於 ethyl lactate / toluene"
+              },
+              "process": {
+                "surface_prep": "基材清潔",
+                "coating_method": "Dip coating",
+                "drying": "溶劑揮發",
+                "curing": "isocyanate 熱固化交聯"
+              },
+              "results": {
+                "friction": "PVP 提供潤滑",
+                "adhesion": "isocyanate prepolymer 共價錨固",
+                "wca": "未明示",
+                "durability": "熱固化網絡，良好",
+                "other": "Cook 家族祖案（US6645483），P30/P31 的技術根源"
+              }
+            }
+          ],
+          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
         }
       }
     },
@@ -10023,7 +10158,34 @@
           "next_actions": [
             "Compare with P34 claim 1.",
             "If claim scope is identical, mark as same-family duplicate and keep only for family tree."
-          ]
+          ],
+          "examples": [
+            {
+              "name": "Embodiment A：urethane prepolymer 潤滑塗層*",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "* 推論：US20010051669A1 為 Sherwood 潤滑塗層 vehicle，摘要描述遇濕降低 COF，比例需查全文。",
+              "substrate": "醫療器材（導管等）",
+              "formulation": {
+                "primer": "urethane prepolymer 底塗",
+                "topcoat": "PVP + polyurethane + urethane prepolymer"
+              },
+              "process": {
+                "surface_prep": "基材清潔",
+                "coating_method": "Dip coating",
+                "drying": "溶劑揮發",
+                "curing": "urethane 熱固化"
+              },
+              "results": {
+                "friction": "遇濕後 COF 顯著降低",
+                "adhesion": "urethane prepolymer 錨固",
+                "wca": "未明示",
+                "durability": "良好",
+                "other": "Sherwood-Covidien 潤滑塗層族群，與 Cook 家族相關"
+              }
+            }
+          ],
+          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
         }
       }
     },
@@ -10088,7 +10250,34 @@
           "next_actions": [
             "Check national phase entries and whether any remain active.",
             "Compare PCT claims to US6645483B2."
-          ]
+          ],
+          "examples": [
+            {
+              "name": "Embodiment A：含藥理添加劑潤滑塗層（PCT）*",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "* 推論：Sherwood 潤滑塗層族群的 PCT 版本，涵蓋藥物釋放，具體藥物需查全文。",
+              "substrate": "醫療器材潤滑塗層 vehicle",
+              "formulation": {
+                "primer": "urethane prepolymer 底塗",
+                "topcoat": "PVP/PU + urethane prepolymer + 藥理添加劑（pharmacological additive）"
+              },
+              "process": {
+                "surface_prep": "基材清潔",
+                "coating_method": "Dip/spray",
+                "drying": "溶劑揮發",
+                "curing": "urethane 熱固化"
+              },
+              "results": {
+                "friction": "遇濕潤滑",
+                "adhesion": "urethane 錨固",
+                "wca": "未明示",
+                "durability": "含藥緩釋",
+                "other": "Sherwood 潤滑+藥釋整合，與 Cook P30/P31 抗菌路線思路相似"
+              }
+            }
+          ],
+          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
         }
       }
     },
@@ -10157,7 +10346,34 @@
             "Parse independent claims and examples.",
             "Compare antimicrobial agents and release mechanisms with P31/US7402620.",
             "Check whether expired-fee-related status has any restoration or family equivalents."
-          ]
+          ],
+          "examples": [
+            {
+              "name": "Embodiment A：抗菌潤滑塗層*",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "* 推論：US7820734B2（Tyco-Covidien）抗菌潤滑塗層，遇濕降 COF 並抗菌，抗菌劑種類需查全文。",
+              "substrate": "醫療器材（導管等）",
+              "formulation": {
+                "primer": "urethane prepolymer 底塗",
+                "topcoat": "PVP/PU + urethane prepolymer + 抗菌劑"
+              },
+              "process": {
+                "surface_prep": "基材清潔",
+                "coating_method": "Dip/spray",
+                "drying": "溶劑揮發",
+                "curing": "urethane 熱固化"
+              },
+              "results": {
+                "friction": "遇濕潤滑",
+                "adhesion": "urethane 錨固",
+                "wca": "未明示",
+                "durability": "抗菌緩釋",
+                "other": "Tyco-Covidien 抗菌潤滑整合，與 Cook P31 同屬抗菌+潤滑路線"
+              }
+            }
+          ],
+          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
         }
       }
     },
@@ -10217,7 +10433,34 @@
           "company_path_note": "Boston tree candidate rejected/low-ranked for coating analysis; useful mainly as product-IP context.",
           "next_actions": [
             "Only revisit if mapping Boston stent product families, not coating chemistry."
-          ]
+          ],
+          "examples": [
+            {
+              "name": "Embodiment A：矽膠塗層食道支架（低關聯）*",
+              "is_real": false,
+              "credibility": "低",
+              "credibility_reason": "** 推論且低關聯：US5876448A 是 Boston 食道支架結構專利，矽膠塗層非親水潤滑，與本專案關聯低。",
+              "substrate": "食道支架（self-expanding stent）",
+              "formulation": {
+                "primer": "無（結構性塗層）",
+                "topcoat": "矽膠塗層於支架中段，兩端裸金屬 cuff"
+              },
+              "process": {
+                "surface_prep": "支架表面處理",
+                "coating_method": "矽膠包覆",
+                "drying": "矽膠硫化",
+                "curing": "矽膠交聯"
+              },
+              "results": {
+                "friction": "非親水潤滑訴求",
+                "adhesion": "矽膠包覆",
+                "wca": "疏水（矽膠）",
+                "durability": "結構性塗層",
+                "other": "⚠ 與親水潤滑塗層關聯低，僅作 Boston Scientific IP 地圖參考"
+              }
+            }
+          ],
+          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
         }
       }
     },
@@ -10283,7 +10526,34 @@
           "next_actions": [
             "Compare published claims with P35 granted claims.",
             "Extract examples for coating formulation windows."
-          ]
+          ],
+          "examples": [
+            {
+              "name": "Embodiment A：耐久親水塗層（P35 同族）*",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "* 推論：US20090171302A1 與 P35 同族，配方相同（PEO+flow modifier+acrylic+光起始劑）。",
+              "substrate": "導線、導管、血管內器材",
+              "formulation": {
+                "primer": "silane 底塗",
+                "topcoat": "親水高分子 + flow modifier + acrylic monomer + 光起始劑"
+              },
+              "process": {
+                "surface_prep": "silane 處理",
+                "coating_method": "Dip/spray",
+                "drying": "溶劑揮發",
+                "curing": "UV 光固化"
+              },
+              "results": {
+                "friction": "低 COF",
+                "adhesion": "silane 共價",
+                "wca": "未明示",
+                "durability": "耐久性強化",
+                "other": "Boston Scientific P35 美國同族案"
+              }
+            }
+          ],
+          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
         }
       }
     },
@@ -10345,7 +10615,34 @@
           "company_path_note": "Boston P35 international family support node.",
           "next_actions": [
             "Identify national phase entries and active jurisdictions."
-          ]
+          ],
+          "examples": [
+            {
+              "name": "Embodiment A：耐久親水塗層（P35 PCT）*",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "* 推論：WO2009086363 與 P35/P43 同族 PCT 版本，配方相同。",
+              "substrate": "導線、導管、血管內器材",
+              "formulation": {
+                "primer": "silane 底塗",
+                "topcoat": "親水高分子 + flow modifier + acrylic monomer + 光起始劑"
+              },
+              "process": {
+                "surface_prep": "silane 處理",
+                "coating_method": "Dip/spray",
+                "drying": "溶劑揮發",
+                "curing": "UV 光固化"
+              },
+              "results": {
+                "friction": "低 COF",
+                "adhesion": "silane 共價",
+                "wca": "未明示",
+                "durability": "耐久性強化",
+                "other": "Boston Scientific P35 族群 PCT 國際案"
+              }
+            }
+          ],
+          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
         }
       }
     },
@@ -10407,7 +10704,34 @@
           "company_path_note": "Hydromer pre-coating material context; place before P36 as low/medium relevance branch.",
           "next_actions": [
             "Only parse examples if biomedical foam/absorbent materials become relevant."
-          ]
+          ],
+          "examples": [
+            {
+              "name": "Embodiment A：PU-PVP 開孔發泡材*",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "* 推論：Hydromer 開孔發泡 PU-poly(N-vinyl lactam) 互聚物，用於牙科/生醫，比例需查全文。",
+              "substrate": "牙科及生醫產品（發泡材形式）",
+              "formulation": {
+                "primer": "無（本體材料非塗層）",
+                "topcoat": "polyurethane + poly(N-vinyl lactam)/PVP 開孔發泡互聚物"
+              },
+              "process": {
+                "surface_prep": "N/A",
+                "coating_method": "發泡成型",
+                "drying": "發泡乾燥",
+                "curing": "PU 發泡交聯"
+              },
+              "results": {
+                "friction": "親水潤滑",
+                "adhesion": "互聚物網絡",
+                "wca": "親水",
+                "durability": "開孔吸液結構",
+                "other": "Hydromer 發泡材延伸，非導管塗層但同屬 PVP-PU 化學"
+              }
+            }
+          ],
+          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
         }
       }
     },
@@ -10474,7 +10798,34 @@
           "next_actions": [
             "Parse examples and claim changes relative to P07.",
             "Extract exact metal oxide and crosslinker choices."
-          ]
+          ],
+          "examples": [
+            {
+              "name": "Embodiment A：水性膠體金屬氧化物塗層*",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "* 推論：Hydromer P07 族群，水性聚合物基質 + 膠體金屬氧化物 + 交聯劑，比例需查全文。",
+              "substrate": "多種親水應用器材",
+              "formulation": {
+                "primer": "水性聚合物基質",
+                "topcoat": "親水高分子 + 膠體金屬氧化物（colloidal metal oxide）+ 交聯劑"
+              },
+              "process": {
+                "surface_prep": "基材清潔",
+                "coating_method": "水性 dip coating",
+                "drying": "水分揮發",
+                "curing": "交聯劑固化"
+              },
+              "results": {
+                "friction": "親水潤滑",
+                "adhesion": "金屬氧化物增強附著",
+                "wca": "未明示",
+                "durability": "交聯網絡",
+                "other": "Hydromer 水性低 VOC 路線，膠體金屬氧化物為特色"
+              }
+            }
+          ],
+          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
         }
       }
     },
@@ -10537,7 +10888,34 @@
           "company_path_note": "Hydromer P07 international family support node.",
           "next_actions": [
             "Map national phase entries and active/expired jurisdictions."
-          ]
+          ],
+          "examples": [
+            {
+              "name": "Embodiment A：水性膠體金屬氧化物塗層（PCT）*",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "* 推論：Hydromer P07 族群 PCT 版本，配方同 P46。",
+              "substrate": "多種親水應用器材",
+              "formulation": {
+                "primer": "水性聚合物基質",
+                "topcoat": "親水高分子 + 膠體金屬氧化物 + 交聯劑"
+              },
+              "process": {
+                "surface_prep": "基材清潔",
+                "coating_method": "水性 dip coating",
+                "drying": "水分揮發",
+                "curing": "交聯劑固化"
+              },
+              "results": {
+                "friction": "親水潤滑",
+                "adhesion": "金屬氧化物增強",
+                "wca": "未明示",
+                "durability": "交聯網絡",
+                "other": "Hydromer P07 族群 PCT 國際案"
+              }
+            }
+          ],
+          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
         }
       }
     },
@@ -10600,7 +10978,34 @@
           "next_actions": [
             "Extract EP claim 1 and compare with US claim 1.",
             "Confirm national validation/expiry if EU commercialization matters."
-          ]
+          ],
+          "examples": [
+            {
+              "name": "Embodiment A：水性膠體金屬氧化物塗層（EP）*",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "* 推論：Hydromer P07 族群 EP 授權案（已過期），配方同 P46。",
+              "substrate": "多種親水應用器材",
+              "formulation": {
+                "primer": "水性聚合物基質",
+                "topcoat": "親水高分子 + 膠體金屬氧化物 + 交聯劑"
+              },
+              "process": {
+                "surface_prep": "基材清潔",
+                "coating_method": "水性 dip coating",
+                "drying": "水分揮發",
+                "curing": "交聯劑固化"
+              },
+              "results": {
+                "friction": "親水潤滑",
+                "adhesion": "金屬氧化物增強",
+                "wca": "未明示",
+                "durability": "已過期，可自由使用",
+                "other": "Hydromer P07 族群歐洲授權案，已過期"
+              }
+            }
+          ],
+          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
         }
       }
     },
@@ -10665,7 +11070,34 @@
           "next_actions": [
             "Check national phase status.",
             "Compare with P38 claims and prosecution history."
-          ]
+          ],
+          "examples": [
+            {
+              "name": "Embodiment A：生物聚合物網絡塗層（P38 PCT）*",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "* 推論：與 P38 同族 PCT，醣鏈 + 單體以酯/醚/醛鍵連結。",
+              "substrate": "醫療器材生物可相容塗層",
+              "formulation": {
+                "primer": "基材活化",
+                "topcoat": "幾丁聚醣 + 醣鏈 + 單體，以酯/醚/醛鍵交聯"
+              },
+              "process": {
+                "surface_prep": "基材清潔",
+                "coating_method": "Dip coating",
+                "drying": "溶劑/水揮發",
+                "curing": "酯/醚/醛鍵交聯"
+              },
+              "results": {
+                "friction": "幾丁聚醣親水潤滑",
+                "adhesion": "多鍵結網絡",
+                "wca": "未明示",
+                "durability": "生物可降解",
+                "other": "Hydromer P38 生物聚合物族群 PCT 案"
+              }
+            }
+          ],
+          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
         }
       }
     },
@@ -10730,7 +11162,34 @@
           "next_actions": [
             "Check whether abandoned claims were refiled or continued into later Biocoat/Integer patents.",
             "Extract examples and sterilization test data."
-          ]
+          ],
+          "examples": [
+            {
+              "name": "Embodiment A：base/top coat 羧酸聚合物塗層*",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "* 推論：US20110200828（Biocoat HYDAK 相關）描述高附著底塗 + 化學鍵結頂塗，羧酸聚合物，比例需查全文。",
+              "substrate": "醫療器材（HYDAK 適用基材）",
+              "formulation": {
+                "primer": "高附著 base-coat",
+                "topcoat": "羧酸聚合物（carboxylic acid polymer）化學鍵結頂塗"
+              },
+              "process": {
+                "surface_prep": "基材清潔",
+                "coating_method": "base/top coat 雙層 dip",
+                "drying": "溶劑揮發",
+                "curing": "化學鍵結固化"
+              },
+              "results": {
+                "friction": "低 COF 潤滑",
+                "adhesion": "高附著 base-coat",
+                "wca": "親水",
+                "durability": "通過 HYDAK 耐久標準",
+                "other": "Biocoat HYDAK 雙層塗層族群核心"
+              }
+            }
+          ],
+          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
         }
       }
     },
@@ -10794,7 +11253,34 @@
           "next_actions": [
             "Search for continuation/granted family.",
             "Compare chemistry with P26/US12037560B2."
-          ]
+          ],
+          "examples": [
+            {
+              "name": "Embodiment A：非血栓親水共聚物塗層*",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "* 推論：Biocoat 酸性單體 + 親水單體共聚物，共價附著於 primer base-coat，比例需查全文。",
+              "substrate": "血液接觸醫療器材",
+              "formulation": {
+                "primer": "primer base-coat",
+                "topcoat": "酸性單體 + 第二親水單體共聚物，共價接枝"
+              },
+              "process": {
+                "surface_prep": "基材清潔",
+                "coating_method": "base/top coat dip",
+                "drying": "溶劑揮發",
+                "curing": "共價接枝固化"
+              },
+              "results": {
+                "friction": "親水潤滑",
+                "adhesion": "共價附著 primer",
+                "wca": "親水",
+                "durability": "非血栓（non-thrombogenic）",
+                "other": "Biocoat 血液相容塗層，酸性單體提供抗血栓"
+              }
+            }
+          ],
+          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
         }
       }
     },
@@ -10862,7 +11348,34 @@
             "Monitor prosecution and granted claims.",
             "Compare with C03 Serene and C09 Surmodics/Harland commercial notes.",
             "Extract specific photo-reactive PVP/crosslinker language."
-          ]
+          ],
+          "examples": [
+            {
+              "name": "Embodiment A：PhotoLink 抗血栓光反應塗層*",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "* 推論：Surmodics PhotoLink 技術，非汙底塗 + 光反應 PVP 潤滑頂塗，比例需查全文。",
+              "substrate": "植入/部分植入/穿戴醫療器材",
+              "formulation": {
+                "primer": "non-fouling base-coat（抗汙底塗）",
+                "topcoat": "光反應 PVP（photo-reactive PVP）潤滑頂塗"
+              },
+              "process": {
+                "surface_prep": "基材清潔",
+                "coating_method": "PhotoLink dip/spray",
+                "drying": "溶劑揮發",
+                "curing": "UV 光接枝（PhotoLink 專利技術）"
+              },
+              "results": {
+                "friction": "低 COF 潤滑",
+                "adhesion": "光接枝共價",
+                "wca": "親水",
+                "durability": "抗血栓 + 抗汙雙功能",
+                "other": "Surmodics PhotoLink 核心技術，抗血栓+潤滑整合"
+              }
+            }
+          ],
+          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
         }
       }
     }
