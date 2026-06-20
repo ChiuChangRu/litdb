@@ -5997,25 +5997,26 @@ function _deClassifyRoute(p){
 // 同一個材料路線底下可能混雜不同作用機制，例如 isocyanate 共價塗層
 // 可能是單純潤滑，也可能是加了抗菌劑釋出，兩者對抗結痂的原理完全不同，
 // 不該因為材料字串相同就被當成同一種抗結痂方案比較）
+//
+// 重要：以下 desc 文字是「關鍵字分類規則」的說明，描述的是程式為何把這篇文獻
+// 歸入此類別（依據 tags/materials/summary 出現的關鍵字），不是文獻已證實的
+// 技術原理或結論。各篇文獻是否真的具備此機制、效果如何，仍須以該篇 summary/
+// red_flags 原文為準（見下方「全部候選證據」與各篇配方旁的限制說明）。
 function _deMechanism(p){
   const full = _deGetFull(p);
   const tags = (p.tags||[]).join(' ').toLowerCase();
   const mats = (full.coating_technology?.materials||[]).join(' ').toLowerCase();
   const summary = (full.summary||'').toLowerCase();
   const blob = tags+' '+mats+' '+summary;
-  // 兩性離子 / 非吸附式抗汙（結構性阻止蛋白質與結晶吸附，現代抗結痂主流機制）
   if(/zwitterion|兩性離子|\bsbma\b|\bmpc\b|sulfobetaine|phosphorylcholine|antifouling|抗汙/.test(blob))
-    return {key:'zwitterion', label:'兩性離子/非吸附抗汙', col:'#2d8c5a', desc:'結構性阻止蛋白質、結晶吸附（現代抗結痂主流機制）'};
-  // 抗菌劑釋出（透過殺菌/抑菌間接減少 biofilm 與結痂核心，非結構性機制）
+    return {key:'zwitterion', label:'兩性離子/非吸附抗汙', col:'#2d8c5a', desc:'分類依據：tags/materials 含 zwitterion、SBMA、MPC、antifouling 等關鍵字'};
   if(/chlorhexidine|triclosan|silver|銀離子|抗菌|antimicrobial|antibiotic|抗生素/.test(blob))
-    return {key:'antimicrobial_release', label:'抗菌劑釋出', col:'#d4a030', desc:'靠殺菌/抑菌間接減少 biofilm，非結構性抗汙，長期釋出量會衰減、可能有抗藥性疑慮'};
-  // 天然高分子/幾丁聚醣（部分有抗菌+部分有抗汙，依文獻而定，需個案確認）
+    return {key:'antimicrobial_release', label:'抗菌劑釋出', col:'#d4a030', desc:'分類依據：tags/materials 含 silver、chlorhexidine、antimicrobial 等關鍵字'};
   if(/chitosan|幾丁聚醣|alginate|heparin|肝素|propolis/.test(blob))
-    return {key:'biopolymer', label:'天然高分子塗層', col:'#8e44ad', desc:'機制因文獻而異，部分偏抗菌、部分偏抗汙，需逐篇確認'};
-  // 純潤滑（降低摩擦力，對抗結痂只是間接幫助，非核心機制）
+    return {key:'biopolymer', label:'天然高分子塗層', col:'#8e44ad', desc:'分類依據：tags/materials 含 chitosan、alginate、heparin、propolis 等關鍵字'};
   if(/lubricity|潤滑|friction|滑度/.test(blob) && !/encrustation|結痂/.test(blob))
-    return {key:'lubricity_only', label:'純潤滑（非抗結痂機制）', col:'#95a5a6', desc:'僅降低摩擦力，對結晶沉積無結構性阻止作用'};
-  return {key:'unclassified', label:'機制未分類', col:'#95a5a6', desc:'資料不足，無法判斷抗結痂作用機制'};
+    return {key:'lubricity_only', label:'純潤滑（非抗結痂機制）', col:'#95a5a6', desc:'分類依據：僅命中 lubricity/friction 關鍵字，未命中抗結痂相關字'};
+  return {key:'unclassified', label:'機制未分類', col:'#95a5a6', desc:'分類依據：未命中任何已知機制關鍵字，資料不足無法判斷'};
 }
 
 // 核心關聯度：判斷這篇文獻是否真的針對「抗結痂相關機制」（兩性離子/抗汙、
@@ -6030,6 +6031,19 @@ function _deCoreRelevance(p){
   const mechHit = /encrustation|結痂|antifouling|抗汙|antimicrobial|抗菌|zwitterion|兩性離子|sbma|mpc|chitosan|幾丁聚醣|biofilm|生物膜|silver|chlorhexidine|propolis|heparin|肝素/.test(blob);
   if(mechHit) return {core:true, label:'核心證據'};
   return {core:false, label:'邊緣關聯（僅部位詞匹配，內容偏潤滑/附著力，非抗結痂機制）'};
+}
+
+// 從這篇文獻的 red_flags 裡，找出真正提到限制/風險的條目（不是程式自己編的）。
+// 只回傳該篇 red_flags 陣列裡原文存在的句子，未命中時回傳 null——
+// 絕不為了「補一句限制說明」而生成 papers.json 裡不存在的內容。
+function _deRealLimitation(p){
+  const full = _deGetFull(p);
+  const rf = full.red_flags || [];
+  if(!rf.length) return null;
+  // 優先找跟「釋出/抗性/法規/毒性/過敏」相關的條目，這類最常是機制本身的限制
+  const limitKeywords = /釋出|衰減|抗藥|抵抗|抗性|fda|法規|毒性|toxic|過敏|allerg|release|resist|regulat|concern|risk|window/i;
+  const hit = rf.find(s=>limitKeywords.test(s));
+  return hit || rf[0]; // 沒有特別命中限制關鍵字，就回傳第一條 red_flag 原文
 }
 
 // IP 風險
@@ -6496,7 +6510,7 @@ function _buildMechanismRecipeBlock(papers){
         <span style="font-size:16px;font-weight:900;color:var(--text)">${escHtml(grp.m.label)}</span>
         <span style="font-size:13px;color:${pColor[ri]};margin-left:auto">${stars}</span>
       </div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">${escHtml(grp.m.desc)}</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">⚙️ ${escHtml(grp.m.desc)}（程式分類規則，非文獻已證實之原理——各篇實際機制與限制請見下方各篇原文摘要）</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
         <span style="font-size:13px;padding:4px 10px;background:#f5f5f5;border-radius:5px;color:${ipCol}">${escHtml(ipL)}</span>
         <span style="font-size:13px;padding:4px 10px;background:#f5f5f5;border-radius:5px;color:var(--muted)">${core.length} 篇核心證據</span>
@@ -6513,6 +6527,7 @@ function _buildMechanismRecipeBlock(papers){
       const ep=full.experimental_plan||{};
       const exs=(full.examples||[]).filter(e=>e.is_real);
       const hasEp = ep.steps?.length>0;
+      const limitation = _deRealLimitation(p); // 該篇 red_flags 原文，非程式生成
 
       html+=`<div style="background:var(--card);border-radius:8px;padding:12px;margin-bottom:8px">
         <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px">📋 [${p.id}] ${escHtml((p.title||'').slice(0,40))}</div>`;
@@ -6547,6 +6562,9 @@ function _buildMechanismRecipeBlock(papers){
         });
       } else {
         html+=`<div style="font-size:12px;color:var(--muted)">尚無實施例詳細資料，請補強文獻全文後再查看。</div>`;
+      }
+      if(limitation){
+        html+=`<div style="font-size:12px;color:#a35a00;margin-top:8px;padding-top:6px;border-top:1px dashed var(--border)">⚠️ 該篇限制（原文）：${escHtml(limitation.slice(0,150))}</div>`;
       }
       html+=`</div>`;
     });
