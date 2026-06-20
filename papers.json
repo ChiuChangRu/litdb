@@ -9494,105 +9494,105 @@
       "patent_notes": "Cook Medical家族專利：US6645483(2003)→US7141246(2006)→US7402620(2008)。PVP+PU interpolymer+抗菌添加劑。熱固化路線",
       "patentResults": {
         "full": {
-          "summary": "Cook Medical 親水潤滑塗層母案（US7141246），揭示 PVP + PU interpolymer + isocyanate 熱固化複合塗層。PU interpolymer 提供機械強度與附著力，PVP 提供潤滑。配方可加入 chlorhexidine 或 silver 形成抗菌版（→ P31 續案）。熱固化免 UV，適用多種導管（含管腔內壁）。是 P31 的技術基礎，需與 P31 一起評估 IP 風險。",
+          "summary": "Cook/Sherwood P30 (US7141246) is a platform patent for lubricious PVP + urethane / isocyanate coating vehicles. The full text contains four concrete examples: (1) a base PVP / ethyl lactate / toluene / isocyanate prepolymer vehicle; (2) PVC thoracic catheter dip coating with up to 60% friction reduction; (3) THF / Pellethane / PVP K-90 vehicle carrying tolnaftate and norfloxacin, where Pellethane controls antibiotic release and PVP controls lubricity; and (4) silver-salt / heparin vehicle for PVC medical devices with release regulated by Pellethane:PVP ratio and strong protein/platelet reduction signals.",
           "examples": [
             {
-              "name": "EXAMPLE 1：PVP / urethane",
+              "name": "Example 1: base PVP / ethyl lactate / toluene / isocyanate prepolymer vehicle",
               "is_real": true,
               "credibility": "高",
-              "credibility_reason": "Google Patents 全文 EXAMPLE 1 明列；由批次解析寫入，需人工複核細節。",
-              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "credibility_reason": "Google Patents US7141246 full text EXAMPLE 1 gives wt% formula and 30 min room-temperature blending.",
+              "substrate": "coating vehicle; substrate not yet applied in this example",
               "formulation": {
-                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
-                "topcoat": "polyvinylpyrrolidone + ethyl lactate + toluene + isocyanate"
+                "primer": "none stated",
+                "topcoat": "2.0 wt% polyvinylpyrrolidone + 18.0 wt% ethyl lactate + 77.8 wt% toluene + 1.2 wt% isocyanate-terminated prepolymer"
               },
               "process": {
-                "surface_prep": "需依全文確認",
-                "coating_method": "room temperature mixing",
-                "drying": "需依全文確認",
-                "curing": "需依全文確認"
+                "surface_prep": "not applicable",
+                "coating_method": "blend components in mixing vat at room temperature",
+                "drying": "not applicable in vehicle example",
+                "curing": "not stated in Example 1; device coating cure shown in Example 2"
               },
               "results": {
-                "friction": "lubricious coating was prepared by blending at room temperature the following components in a mixing vat for a",
-                "adhesion": "未明示",
-                "wca": "未明示",
-                "durability": "需依全文確認",
-                "other": "A lubricious coating was prepared by blending at room temperature the following components in a mixing vat for approximately 30 minutes until fully dissolved to form a crystal clear solution. Ingredient % (wt) Polyvinylpyrrolidone 2.0 Ethyl lactate 18.0 Toluene 77.8 Isocyanate-terminated prepolymer 1.2"
+                "friction": "not measured in vehicle example",
+                "adhesion": "not measured in vehicle example",
+                "wca": "not stated",
+                "durability": "not stated",
+                "other": "Forms a crystal clear lubricious coating solution after about 30 min mixing."
               },
               "source_url": "https://patents.google.com/patent/US7141246/en"
             },
             {
-              "name": "EXAMPLE 2：device coating",
+              "name": "Example 2: PVC thoracic catheter dip coating and 80C bake",
               "is_real": true,
               "credibility": "高",
-              "credibility_reason": "Google Patents 全文 EXAMPLE 2 明列；由批次解析寫入，需人工複核細節。",
-              "substrate": "Thoracic catheters / catheters",
+              "credibility_reason": "Google Patents US7141246 full text EXAMPLE 2 states substrate, cleaning/drying, dip time, bake condition and friction reduction.",
+              "substrate": "polyvinyl chloride (PVC) thoracic catheters",
               "formulation": {
-                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
-                "topcoat": "Thoracic catheters made of polyvinyl chloride (PVC) were washed with isopropanol and dried at 80° C. for 30 minutes. The catheters were dipped coated for 10 seconds while the cath…"
+                "primer": "isopropanol wash; no separate primer stated",
+                "topcoat": "lubricious coating vehicle from Example 1"
               },
               "process": {
-                "surface_prep": "washed with isopropanol and dried at 80° C",
-                "coating_method": "isopropanol 清洗；dip coating；baked at 80° C",
-                "drying": "dried at 80° C",
-                "curing": "baked at 80° C"
+                "surface_prep": "washed with isopropanol and dried at 80C for 30 min",
+                "coating_method": "dip coated for 10 s while catheters were still warm; excess coating removed with paper towels",
+                "drying": "pre-dried at 80C for 30 min before coating",
+                "curing": "baked at 80C for 60 min immediately after dipping"
               },
               "results": {
-                "friction": "friction reduction was up to 60%；lubricious when wet and the friction reduction was up to 60%",
-                "adhesion": "bonding",
-                "wca": "未明示",
-                "durability": "需依全文確認",
-                "other": "Thoracic catheters made of polyvinyl chloride (PVC) were washed with isopropanol and dried at 80° C. for 30 minutes. The catheters were dipped coated for 10 seconds while the catheters were still warm. After dipping, excessive coating was removed using paper towels. The catheters were then immediately baked at 80° C. for 60 minutes. The resultant coating was transparent and colorless with good bonding. The coating was very lubricious when wet and the friction reduction was up to 60%."
+                "friction": "wet lubricious coating; friction reduction up to 60%",
+                "adhesion": "transparent/colorless coating with good bonding",
+                "wca": "not stated",
+                "durability": "not stated as cycle count",
+                "other": "This is the main device-level lubricity example for the P30 base coating."
               },
               "source_url": "https://patents.google.com/patent/US7141246/en"
             },
             {
-              "name": "EXAMPLE 3：antimicrobial / PVP / urethane",
+              "name": "Example 3: antimicrobial vehicle with Pellethane / PVP K-90 / tolnaftate / norfloxacin",
               "is_real": true,
               "credibility": "高",
-              "credibility_reason": "Google Patents 全文 EXAMPLE 3 明列；由批次解析寫入，需人工複核細節。",
-              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "credibility_reason": "Google Patents US7141246 full text EXAMPLE 3 gives gram-level antimicrobial vehicle formula and release/lubricity control logic.",
+              "substrate": "antimicrobial lubricious coating vehicle; medical-device substrate not specified in the extracted example",
               "formulation": {
-                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
-                "topcoat": "PVP + PVP K-90 + Pellethane + THF + NMP + toluene + isocyanate + urethane + norfloxacin + tolnaftate"
+                "primer": "none stated",
+                "topcoat": "34.0 g THF + 3.0 g Pellethane AE80 + 38.0 g THF + 1.0 g tolnaftate + 20.0 g NMP + 1.0 g norfloxacin + 2.0 g PVP K-90 + 1.0 g TDI/MDI"
               },
               "process": {
-                "surface_prep": "需依全文確認",
-                "coating_method": "room temperature mixing",
-                "drying": "需依全文確認",
-                "curing": "需依全文確認"
+                "surface_prep": "not stated",
+                "coating_method": "THF/Pellethane dissolved first; THF/tolnaftate added; NMP/PVP/norfloxacin fully dissolved then added; mix 15 min at room temperature and cap tightly",
+                "drying": "not stated",
+                "curing": "vehicle preparation at room temperature; device cure not stated in Example 3"
               },
               "results": {
-                "friction": "lubricious coating vehicle was prepared by blending at room temperature the following components in a mixing v；lubricious coating vehicle is prepared at room temperature",
-                "adhesion": "未明示",
-                "wca": "未明示",
-                "durability": "需依全文確認",
-                "other": "A lubricious coating vehicle was prepared by blending at room temperature the following components in a mixing vat for approximately 60 minutes until fully dissolved to form a crystal clear to pale yellow solution. In this illustrative example toluene was replaced with THF to achieve greater solubility of the isocyanate-terminated prepolymer. The ingredients are mixed in order given due to miscibility of antibiotics in a particular solvent. Ingredient % (wt) THF 34.0 g Pellethane ® AE80 3.0 g T…"
+                "friction": "PVP level makes the device more or less lubricious",
+                "adhesion": "not stated",
+                "wca": "not stated",
+                "durability": "release rate adjusted by Pellethane level, 0.5-5.0%",
+                "other": "Pellethane controls antibiotic release; PVP level does not change release rate but changes lubricity. Text states antibiotics are covalently bound to urethane."
               },
               "source_url": "https://patents.google.com/patent/US7141246/en"
             },
             {
-              "name": "EXAMPLE 4：silver salts / antimicrobial / heparin / hemocompatible / device coating",
+              "name": "Example 4: silver salt / heparin PVC device coating vehicle",
               "is_real": true,
               "credibility": "高",
-              "credibility_reason": "Google Patents 全文 EXAMPLE 4 明列；由批次解析寫入，需人工複核細節。",
-              "substrate": "PVC medical devices / thoracic catheter / catheters / medical devices",
+              "credibility_reason": "Google Patents US7141246 full text EXAMPLE 4 gives silver-salt options, heparin range, formula and hemocompatibility/lubricity signals.",
+              "substrate": "PVC medical devices / coated catheters",
               "formulation": {
-                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
-                "topcoat": "PVP + polyvinylpyrrolidone + Pellethane + THF + ethyl lactate + toluene + isocyanate + urethane + silver + heparin + norfloxacin + chlorhexidine"
+                "primer": "none stated; solvent choice adjusted for PVC device adherence",
+                "topcoat": "46.0 g THF + 3.0 g Pellethane AE80 + 19.0 g ethyl lactate + 1.5 g PVP + 1.0-3.0% silver salt + 0.5-1.5% heparin + 29.5 g cyclohexanone + 1.0 g MDI/TDI"
               },
               "process": {
-                "surface_prep": "需依全文確認",
-                "coating_method": "room temperature mixing",
-                "drying": "需依全文確認",
-                "curing": "需依全文確認"
+                "surface_prep": "not stated",
+                "coating_method": "ingredients mixed at room temperature; ethyl lactate/PVP/cyclohexanone solution added to THF/Pellethane mixture after dissolution",
+                "drying": "not stated",
+                "curing": "not stated in extracted segment"
               },
               "results": {
-                "friction": "friction to aid in the in vivo placement of medical devices；friction, decreased adherence with various surfaces, resistance to wet abrasion and efficacious anti-microbi；coefficient of friction to aid in the in vivo placement of medical devices；coefficient of friction, decreased adherence with various surfaces, resistance to wet abrasion and efficacious anti…",
-                "adhesion": "bonding of the silver salt to the urethane",
-                "wca": "未明示",
-                "durability": "resistance to wet abrasion and efficacious anti-microbial properties",
-                "other": "A lubricious coating vehicle, containing silver salts for use on PVC medical devices, is prepared by blending at room temperature the following components in a mixing vat for approximately 60 minutes until fully dissolved to form a crystal clear to pale yellow solution. The order combination of the ingredients is not imperative due to the lack of covalent bonding of the silver salt to the urethane. The release of the silver salt is regulated by Pellethane® to PVP ratio adjustment due to entrapm…"
+                "friction": "improved lubricity; protein adsorption and platelet adhesion reduced by more than 90%",
+                "adhesion": "PVP should not exceed about 2.5% because it detrimentally affects coating adherence and silver release; larger silver particles yield poor adherence/uniformity",
+                "wca": "not stated",
+                "durability": "release of silver salt regulated by Pellethane:PVP ratio due to entrapment/ionic bonding",
+                "other": "Successful silver salts include Giltech Powders 01-07, AlphaSan RC2000, silver sulfadiazine and silver oxide. Hemolysis testing showed no hemolysis in extracted text."
               },
               "source_url": "https://patents.google.com/patent/US7141246/en"
             }
@@ -9603,31 +9603,42 @@
             "用於導管內壁+支架輸送系統"
           ],
           "actionable_insights": [
-            "Cook的PVP+isocyanate路線與P06(Hydromer)同源，兩者都是熱固化PVP-PU interpolymer",
-            "抗菌添加劑緩釋概念可參考（Phase 3抗菌方向）",
-            "Vitamin E作為抗氧化保存穩定劑的做法可借鏡"
+            "For P30, do not summarize it only as PVP/PU/isocyanate: the important design knobs are Pellethane level for drug release, PVP level for lubricity, and silver particle/complex choice for adherence.",
+            "Example 2 is the cleanest device-level reference for heat-cured PVC catheter lubricity.",
+            "Example 3 and 4 are more valuable for antimicrobial-release design than Example 1.",
+            "UV/PDA/PEGDA or zwitterionic routes remain clearer design-around directions because P30 is a thermal urethane/isocyanate drug-carrier route."
           ],
           "red_flags": [
-            "P30/P31 族群是 Cook Medical 的核心抗菌塗層 IP",
-            "PVP + isocyanate 熱固化的廣義組合需謹慎"
+            "Toluene, THF, NMP, MDI/TDI and isocyanate chemistry create EHS and extractables concerns.",
+            "Antibiotic and silver release designs require dose-window and biocompatibility testing.",
+            "PVP above about 2.5% may hurt coating adherence and silver release in Example 4.",
+            "P30 and P31 are family-related; avoid counting P31 as an entirely separate technology leap."
           ],
           "vs_database": "與P06(Hydromer)同源的熱固化PVP-PU路線。差異化在抗菌添加劑。與P01(DSM UV雙層)完全不同世代。Cook走熱固化+抗菌，DSM走UV+polyelectrolyte",
           "bioteque_relevance": "P30 與 P31 需一併評估。UV 路線（Phase 2）是與 Cook 熱固化路線最清晰的設計迴避。Phase 3 抗菌設計需確認不落入 P30/P31 的 claim 範圍。",
           "evidence_level": "high",
           "source_quality": "google_patents_fulltext",
           "key_findings": [
-            "PVP + PU interpolymer + isocyanate 熱固化",
-            "PU interpolymer 提供機械強度（IPN 結構）",
-            "熱固化免 UV，可塗管腔內壁",
-            "P31（US7402620）的技術母案",
-            "Hydromer 類似路線的 Cook 版本",
-            "Google Patents 全文解析到 4 個 EXAMPLE 區段，已取代單一推論式 example。"
+            "Example 1 establishes the base PVP + ethyl lactate + toluene + isocyanate-terminated prepolymer coating vehicle.",
+            "Example 2 applies the coating to PVC thoracic catheters and reports wet lubricity plus up to 60% friction reduction.",
+            "Example 3 replaces toluene with THF for isocyanate-prepolymer solubility and adds tolnaftate/norfloxacin antimicrobial agents.",
+            "Example 3 states Pellethane level controls antibiotic release, while PVP level controls lubricity.",
+            "Example 4 adds silver salts and heparin; silver release is regulated by Pellethane:PVP ratio and particle size affects coating adherence/uniformity.",
+            "P30 is the platform bridge between the expired/precursor P34 route and the P31 antimicrobial sustained-release extension."
           ],
           "coating_technology": {
             "materials": [
-              "PVP",
-              "PU interpolymer",
-              "isocyanate（交聯劑）"
+              "PVP / PVP K-90",
+              "ethyl lactate",
+              "toluene",
+              "THF",
+              "Pellethane AE80",
+              "isocyanate-terminated prepolymer / MDI/TDI",
+              "tolnaftate",
+              "norfloxacin",
+              "silver salts",
+              "heparin",
+              "cyclohexanone"
             ],
             "surface_prep": [
               "可選 plasma"
@@ -9682,7 +9693,7 @@
             "US7141246 全文 claim 及法律狀態",
             "US6645483（祖案）"
           ],
-          "examples_note": "已由 Google Patents 全文自動解析 4 個 EXAMPLE 區段；請以原文連結複核比例與測試數據。"
+          "examples_note": "P30 was manually re-parsed from Google Patents US7141246 full text. Examples 1-4 are concrete working examples and should now display as full embodiment cards."
         }
       }
     },

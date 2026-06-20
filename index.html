@@ -3787,126 +3787,199 @@ function getPatentBadge(p) {
 
 function toggleValue(id){document.getElementById(id)?.classList.toggle('show')}
 
+function libraryAnalysisStats(p) {
+  const full = p?.patentResults?.full || {};
+  const examples = patentExamples(p);
+  const source = full.source_quality || p?.patentResults?.agent_reading?.source_quality || '';
+  const note = [full.examples_note, full.summary, full.bioteque_relevance].filter(Boolean).join(' ');
+  return {
+    examples: examples.length,
+    real: examples.filter(ex => ex?.is_real === true).length,
+    inferred: examples.filter(ex => ex?.is_real === false).length,
+    source,
+    evidence: full.evidence_level || p?.patentResults?.agent_reading?.evidence_level || '',
+    risks: Array.isArray(full.red_flags) ? full.red_flags.length : 0,
+    familyRepresentative: /family_representative/i.test(source) || /family representative/i.test(note),
+    noConcreteExamples: /no_relevant|no_concrete|claim_only/i.test(source) || /No concrete working examples|Excluded from coating example coverage/i.test(note),
+    inferredOnly: examples.length > 0 && examples.every(ex => ex?.is_real === false)
+  };
+}
+
+function renderLibraryStatusStrip(p) {
+  const st = libraryAnalysisStats(p);
+  const chip = (label, value, color='var(--muted)') => value || value===0 ? `<span class="tag tag-gray" style="color:${color};border-color:var(--border)">${label}: ${escHtml(String(value))}</span>` : '';
+  return `<div style="display:flex;gap:5px;flex-wrap:wrap;margin:8px 0">
+    ${chip('實施例', st.examples, st.real ? 'var(--accent2)' : 'var(--muted)')}
+    ${chip('真實', st.real, st.real ? 'var(--accent2)' : 'var(--muted)')}
+    ${chip('推論', st.inferred, st.inferred ? 'var(--warn)' : 'var(--muted)')}
+    ${chip('來源', st.source)}
+    ${chip('證據', st.evidence)}
+    ${chip('風險', st.risks, st.risks ? 'var(--danger)' : 'var(--muted)')}
+    ${st.familyRepresentative ? chip('同族代表例', '是', 'var(--warn)') : ''}
+    ${st.noConcreteExamples ? chip('實施例', '無可用', 'var(--danger)') : ''}
+  </div>`;
+}
+
+function renderLibraryQualityNotice(p) {
+  const st = libraryAnalysisStats(p);
+  if(st.noConcreteExamples) {
+    return `<div style="margin:8px 0;padding:9px 10px;background:#fff5f3;border:1px solid #e7a39a;border-radius:6px;font-size:12px;line-height:1.55;color:#9c2f24">
+      <b>資料定位：</b>此筆目前沒有可用的 coating / working examples，適合做 claim 或背景參考，不適合直接拿來當配方或實驗範本。
+    </div>`;
+  }
+  if(st.familyRepresentative) {
+    return `<div style="margin:8px 0;padding:9px 10px;background:#fffaf0;border:1px solid #ead49b;border-radius:6px;font-size:12px;line-height:1.55;color:#8a6400">
+      <b>資料定位：</b>此筆使用同族代表實施例。技術閱讀可以參考，但做 FTO / claim 判斷前仍需回到本篇原文核對。
+    </div>`;
+  }
+  if(st.inferredOnly) {
+    return `<div style="margin:8px 0;padding:9px 10px;background:#fffaf0;border:1px solid #ead49b;border-radius:6px;font-size:12px;line-height:1.55;color:#8a6400">
+      <b>資料定位：</b>目前只有推論式實施例，尚未真正解析全文。請先補全文再用於配方、實驗或 FTO 判斷。
+    </div>`;
+  }
+  return '';
+}
+
+function renderLibraryQuickRead(p) {
+  const full = p?.patentResults?.full || {};
+  const key = full.summary || p.abstract_note || p.purpose || '';
+  const value = full.bioteque_relevance || p.value_to_project || '';
+  const findings = Array.isArray(full.key_findings) ? full.key_findings.slice(0, 5) : [];
+  return `<section class="detail-section">
+    <div class="detail-section-title">快速判讀</div>
+    ${renderLibraryQualityNotice(p)}
+    ${key ? `<div class="detail-abstract">${escHtml(key)}</div>` : `<div style="font-size:12px;color:var(--muted)">尚無結構化分析</div>`}
+    ${findings.length ? `<ul style="margin:8px 0 0 18px;padding:0;font-size:12px;line-height:1.65">${findings.map(x=>`<li>${escHtml(String(x))}</li>`).join('')}</ul>` : ''}
+    ${value ? `<div style="margin-top:8px;padding:8px 10px;background:#eef8f2;border:1px solid #cfe8d8;border-radius:6px;font-size:12px;line-height:1.6"><b>對專案價值</b><br>${escHtml(value)}</div>` : ''}
+  </section>`;
+}
+
+function renderLibraryTechnicalDetail(p) {
+  const pr = p?.patentResults || {};
+  const blocks = [];
+  const st = libraryAnalysisStats(p);
+  if(pr.full) {
+    if(st.noConcreteExamples) {
+      blocks.push(`<div style="font-size:12px;color:var(--muted);padding:10px;background:var(--card);border-radius:6px;line-height:1.6">
+        這筆資料目前保留摘要、claim/背景判讀與來源品質，不展開實施例卡片；若未來補到 PDF 或原文 examples，可直接寫入 <code>patentResults.full.examples</code>，此區會自動套用同一框架。
+      </div>`);
+    }
+    blocks.push(renderPatentResult(pr.full));
+  }
+  else if(pr.review) blocks.push(renderReviewResult(pr.review));
+  else if(pr.commercial) blocks.push(renderCommercialResult(pr.commercial));
+  if(!blocks.length) blocks.push(`<div style="font-size:12px;color:var(--muted);padding:10px;background:var(--card);border-radius:6px">尚無結構化分析。若需補深度分析，請先補全文快取或原始專利頁面。</div>`);
+  return `<section class="detail-section">
+    <div class="detail-section-title">技術細節</div>
+    ${blocks.join('')}
+  </section>`;
+}
+
+function renderLibraryFulltextPanel(p, i) {
+  const text = getFulltext(p);
+  return `<details class="detail-section" style="display:block" ${text ? '' : ''}>
+    <summary class="detail-section-title" style="cursor:pointer">全文快取</summary>
+    <div id="fulltextStatus_${i}" style="font-size:12px;color:${text?'var(--accent2)':'var(--muted)'};margin:8px 0">${fulltextSourceLabel(p)}</div>
+    ${text ? `<div style="font-size:11px;color:var(--muted);background:var(--card);border:1px solid var(--border);border-radius:6px;padding:8px;max-height:120px;overflow:auto;margin-bottom:8px">${escHtml(compactText(text, 900))}</div>` : ''}
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn btn-s" onclick="fetchFulltextForPaper(${i})">自動抓取</button>
+      <button class="btn btn-s" onclick="openFulltextPaste(${i})">貼上全文</button>
+      ${text ? `<button class="btn btn-s" onclick="clearFulltext(${i})" style="color:var(--danger);border-color:var(--danger)">清除全文</button>` : ''}
+    </div>
+    <div id="fulltextPaste_${i}" style="display:none;margin-top:8px">
+      <textarea id="fulltextText_${i}" placeholder="Paste full text, methods, results, or claims here." style="width:100%;min-height:180px;font-size:12px;line-height:1.5;padding:8px;border:1px solid var(--border);border-radius:6px"></textarea>
+      <div style="display:flex;gap:6px;margin-top:6px">
+        <button class="btn btn-p" onclick="saveFulltextFromTextarea(${i})">儲存全文快取</button>
+        <button class="btn btn-s" onclick="openFulltextPaste(${i})">取消</button>
+      </div>
+    </div>
+  </details>`;
+}
+
+function renderLibraryManagementTools(p, i, link) {
+  const analysisBtn = p.doc_type==='專利' ? `<button class="btn btn-s" onclick="showPatentAnalysis(${i})">分析 / 重新分析</button>` : `<button class="btn btn-s" onclick="showPaperAnalysis(${i})">分析 / 重新分析</button>`;
+  const allModes = p.patentResults && Object.keys(p.patentResults).length ? `<div style="margin-top:10px;border-top:1px solid var(--border);padding-top:8px">
+    <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Stored analysis modes</div>
+    ${Object.entries(p.patentResults).map(([mode,r])=>{
+      const modeLabels = {full:'Full',avoidance:'Avoidance',formulation:'Formula',feasibility:'Feasibility',compare:'Compare',review:'Review',commercial:'Commercial',agent_reading:'Agent reading'};
+      if(mode==='agent_reading') return `<details style="margin-bottom:6px"><summary style="font-size:11px;color:var(--muted);cursor:pointer">${modeLabels[mode]||mode}</summary>${renderAgentReadingResult(r)}</details>`;
+      if(mode==='review') return `<details style="margin-bottom:6px"><summary style="font-size:11px;color:var(--muted);cursor:pointer">${modeLabels[mode]||mode}</summary>${renderReviewResult(r)}</details>`;
+      if(mode==='commercial') return `<details style="margin-bottom:6px"><summary style="font-size:11px;color:var(--muted);cursor:pointer">${modeLabels[mode]||mode}</summary>${renderCommercialResult(r)}</details>`;
+      return `<details style="margin-bottom:6px"><summary style="font-size:11px;color:var(--muted);cursor:pointer">${modeLabels[mode]||mode}</summary>${renderPatentResult(r)}</details>`;
+    }).join('')}
+  </div>` : '';
+  return `<details class="detail-section">
+    <summary class="detail-section-title" style="cursor:pointer">進階 / 內部工具</summary>
+    <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+      <button class="btn btn-s" onclick="pinPaper('${p.id}')">釘選到 AI</button>
+      <button class="btn btn-s" onclick="aiReadPaperById('${p.id}')" style="color:var(--warn);border-color:var(--warn)">AI 深讀此篇</button>
+      ${analysisBtn}
+      <button class="btn btn-s" onclick="loadCiteTree(${i})">引文樹</button>
+      ${link ? `<a href="${link}" target="_blank" class="btn btn-s">開啟原文</a>` : ''}
+      ${p._deleted ? `<button class="btn btn-s" onclick="restorePaper('${p.id}')" style="color:var(--accent2);border-color:var(--accent2)">復原</button><button class="btn btn-s" onclick="deletePaper('${p.id}')" style="color:var(--danger);border-color:var(--danger)">永久刪除</button>` : `<button class="btn btn-s" onclick="deletePaper('${p.id}')" style="color:var(--danger);border-color:var(--danger)">刪除</button>`}
+    </div>
+    <div id="patentAnalysis_${i}"></div>
+    <div id="citeTree_${i}"></div>
+    ${allModes}
+  </details>`;
+}
+
 function showDetail(i) {
   const statsEl = document.getElementById('libraryStatsPanel');
   if(statsEl) statsEl.innerHTML = '';
   const p = filtered[i];
   if(!p) return;
   const link = p.links ? Object.values(p.links)[0] : '';
-  const tags = (p.tags||[]).map(t=>`<span class="tag tag-gray">${t}</span>`).join('');
+  const tags = (p.tags||[]).map(t=>`<span class="tag tag-gray">${escHtml(t)}</span>`).join('');
   const typeColor = p.doc_type==='專利'?'tag-orange':p.doc_type==='商用產品'?'tag-green':'tag-blue';
-    const hasAnalysis = p.patentResults && Object.keys(p.patentResults).length > 0;
-    const analysisStyle = hasAnalysis ? 'border-left:4px solid #2d8c5a' : (p.doc_type==='專利' ? 'border-left:4px solid #c0392b' : '');
-
   document.getElementById('detailPanel').innerHTML = `
     <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap;align-items:center">
-      <span class="tag ${typeColor}">${p.doc_type||''}</span>
-      <span class="tag tag-gray">${p.id}</span>
+      <span class="tag ${typeColor}">${escHtml(p.doc_type||'')}</span>
+      <span class="tag tag-gray">${escHtml(p.id)}</span>
       ${p.year?`<span class="tag tag-gray">${p.year}</span>`:''}
-      ${p.access?`<span class="tag tag-gray">${p.access}</span>`:''}
+      ${p.access?`<span class="tag tag-gray">${escHtml(p.access)}</span>`:''}
       ${getPatentBadge(p)}
     </div>
-    <div class="detail-title">${p.title}</div>
+    <div class="detail-title">${escHtml(p.title||'')}</div>
     <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:4px 0 8px">
-      ${extractMainAuthor(p)?`<span style="background:#eaf5ef;color:#1a7040;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600">${extractMainAuthor(p)}</span>`:''}
-      ${extractOrg(p)?`<span style="background:#fff0e6;color:#b85c2a;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600">${extractOrg(p)}</span>`:''}
-      ${p.venue?`<span style="font-size:11px;color:var(--muted)">${p.venue}</span>`:''}
+      ${extractMainAuthor(p)?`<span style="background:#eaf5ef;color:#1a7040;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600">${escHtml(extractMainAuthor(p))}</span>`:''}
+      ${extractOrg(p)?`<span style="background:#fff0e6;color:#b85c2a;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600">${escHtml(extractOrg(p))}</span>`:''}
+      ${p.venue?`<span style="font-size:11px;color:var(--muted)">${escHtml(p.venue)}</span>`:''}
     </div>
-
     <div id="detailFigure_${i}"></div>
     ${renderSourceQualityWarning(p)}
-
-    ${p.purpose?`<div class="detail-section">
-      <div class="detail-section-title">📌 收錄目的</div>
-      <div class="detail-purpose">${p.purpose}</div>
-    </div>`:''}
-
-    ${p.abstract_note?`<div class="detail-section">
-      <div class="detail-section-title">📖 中文精華摘要</div>
-      <div class="detail-abstract">${p.abstract_note}</div>
-    </div>`:''}
-
-    ${p.value_to_project?`<div class="detail-section">
-      <div class="detail-section-title">💡 對專案價值</div>
-      <div class="detail-value">${p.value_to_project}</div>
-    </div>`:''}
-
-    <div class="detail-section">
-      <div class="detail-section-title">📄 全文快取</div>
-      <div id="fulltextStatus_${i}" style="font-size:12px;color:${getFulltext(p)?'var(--accent2)':'var(--muted)'};margin-bottom:8px">${fulltextSourceLabel(p)}</div>
-      ${getFulltext(p)?`<div style="font-size:11px;color:var(--muted);background:var(--card);border:1px solid var(--border);border-radius:6px;padding:8px;max-height:120px;overflow:auto;margin-bottom:8px">${escHtml(compactText(getFulltext(p), 900))}</div>`:''}
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button class="btn btn-s" onclick="fetchFulltextForPaper(${i})">🌐 自動抓取</button>
-        <button class="btn btn-s" onclick="openFulltextPaste(${i})">✍️ 貼上全文</button>
-        ${getFulltext(p)?`<button class="btn btn-s" onclick="clearFulltext(${i})" style="color:var(--danger);border-color:var(--danger)">🗑 清除全文</button>`:''}
-      </div>
-      <div id="fulltextPaste_${i}" style="display:none;margin-top:8px">
-        <textarea id="fulltextText_${i}" placeholder="貼上 PDF 或網頁全文文字；若全文太長，貼摘要、方法、結果、討論也可以。" style="width:100%;min-height:180px;font-size:12px;line-height:1.5;padding:8px;border:1px solid var(--border);border-radius:6px"></textarea>
-        <div style="display:flex;gap:6px;margin-top:6px">
-          <button class="btn btn-p" onclick="saveFulltextFromTextarea(${i})">儲存全文快取</button>
-          <button class="btn btn-s" onclick="openFulltextPaste(${i})">取消</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="detail-section">
-      <div class="detail-section-title">🏷 標籤</div>
-      <div class="detail-tags">${tags}</div>
-    </div>
-
+    ${renderLibraryStatusStrip(p)}
+    ${renderLibraryQuickRead(p)}
+    ${p.purpose?`<section class="detail-section"><div class="detail-section-title">收錄目的</div><div class="detail-purpose">${escHtml(p.purpose)}</div></section>`:''}
+    ${renderLibraryTechnicalDetail(p)}
+    <section class="detail-section"><div class="detail-section-title">標籤</div><div class="detail-tags">${tags || '<span style="font-size:12px;color:var(--muted)">尚無</span>'}</div></section>
     <div id="chemStructures_${i}"></div>
-
     ${renderSourceLinks(p)}
-
-    <div style="display:flex;gap:6px;margin-top:16px;flex-wrap:wrap">
-      <button class="btn btn-s" onclick="pinPaper('${p.id}')">📌 釘選到 AI</button>
-      ${link?`<a href="${link}" target="_blank" class="btn btn-s">↗ 開啟原文</a>`:''}
-      ${p._deleted?`<button class="btn btn-s" onclick="restorePaper('${p.id}')" style="color:var(--accent2);border-color:var(--accent2)">♻ 復原</button><button class="btn btn-s" onclick="deletePaper('${p.id}')" style="color:var(--danger);border-color:var(--danger)">⛔ 永久刪除</button>`:`<button class="btn btn-s" onclick="deletePaper('${p.id}')" style="color:var(--danger);border-color:var(--danger);margin-left:auto">🗑 刪除</button>`}
-      ${p.doc_type==='專利'?`<button class="btn btn-p" onclick="showPatentAnalysis(${i})">🧪 專利分析</button>`:`<button class="btn btn-s" onclick="showPaperAnalysis(${i})">📊 技術分析</button>`}
-      <button class="btn btn-s" onclick="aiReadPaperById('${p.id}')" style="color:var(--warn);border-color:var(--warn)">AI 深讀此篇</button>
-      <button class="btn btn-p" onclick="loadCiteTree(${i})" style="margin-left:auto">🌳 引文樹</button>
-    </div>
-    <div id="patentAnalysis_${i}"></div>
-    ${(p.patentResults && Object.keys(p.patentResults).length) ? `
-    <div style="margin-top:12px">
-      ${Object.entries(p.patentResults).map(([mode,r])=>{
-        const modeLabels = {full:'📊 完整分析',avoidance:'🚧 迴避設計',formulation:'🧪 配方萃取',feasibility:'🏭 可行性評估',compare:'🔄 對比分析',review:'📚 綜述分析',commercial:'🏢 商業分析'};
-        if(mode==='review') return renderReviewResult(r);
-        if(mode==='commercial') return renderCommercialResult(r);
-        if(mode==='agent_reading') return renderAgentReadingResult(r);
-        return `<div style="margin-bottom:6px;font-size:11px;color:var(--accent2);font-weight:600">${modeLabels[mode]||mode}</div>` + renderPatentResult(r);
-      }).join('')}
-      <button class="btn btn-s" onclick="${p.doc_type==='專利'?`showPatentAnalysis(${i})`:`showPaperAnalysis(${i})`}" style="width:100%;margin-top:8px">🔄 重新分析 / 其他模式</button>
-    </div>` : ''}
-    <!-- 筆記區 -->
-    <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:10px">
+    ${renderLibraryFulltextPanel(p, i)}
+    <section class="detail-section">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-        <span style="font-size:12px;font-weight:600;color:var(--accent)">📝 筆記</span>
+        <span class="detail-section-title" style="margin:0">筆記</span>
         <button class="btn btn-s" style="font-size:10px;padding:2px 8px" onclick="addNote('${p.id}')">+ 新增</button>
       </div>
       <div id="notes_${p.id}" style="font-size:12px">${renderNotes(p.id)}</div>
-    </div>
-    <div id="citeTree_${i}"></div>
+    </section>
+    ${renderLibraryManagementTools(p, i, link)}
   `;
 
-  // 載入圖片：先試 figure 欄位，再試 img/ID.png
   const figEl = document.getElementById('detailFigure_' + i);
   if(figEl) {
     const figUrl = p.figure || '';
     const localUrl = 'img/' + p.id + '.png';
-
     if(figUrl) {
-      figEl.innerHTML = `<img src="${figUrl}" class="detail-figure" onclick="window.open('${figUrl}','_blank')" onerror="tryLocalFig(this,'${localUrl}')"><div class="fig-caption">${p.figure_caption||'點擊放大'}</div>`;
+      figEl.innerHTML = `<img src="${figUrl}" class="detail-figure" onclick="window.open('${figUrl}','_blank')" onerror="tryLocalFig(this,'${localUrl}')"><div class="fig-caption">${escHtml(p.figure_caption||'Click to enlarge')}</div>`;
     } else {
-      // 嘗試本地圖片
       const img = new Image();
-      img.onload = () => { figEl.innerHTML = `<img src="${localUrl}" class="detail-figure" onclick="window.open('${localUrl}','_blank')"><div class="fig-caption">點擊放大</div>`; };
+      img.onload = () => { figEl.innerHTML = `<img src="${localUrl}" class="detail-figure" onclick="window.open('${localUrl}','_blank')"><div class="fig-caption">Click to enlarge</div>`; };
       img.onerror = () => { figEl.innerHTML = ''; };
       img.src = localUrl;
     }
   }
   loadChemStructures(p, i);
-  // 手機：滑入 detail panel
   if(window.innerWidth <= 600) {
     document.getElementById('colRight').classList.add('mobile-open');
     document.getElementById('colRight').scrollTop = 0;
