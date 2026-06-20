@@ -4304,9 +4304,9 @@ const PATENT_TREE_CONFIG = {
     aliases: ['cook medical','houghton pe','us7141246','us7402620'],
     centerIds: ['P31','P30'],
     evolution: [
-      {year:2003, id:null,  patent:'US6645483',    stage:'祖案',    theme:'PVP-PU 熱固化潤滑', meaning:'P30/P31 的根源；未收錄，需深度解析。', status:'missing'},
-      {year:2006, id:'P30', patent:'US7141246',    stage:'母案',    theme:'PVP+PU+isocyanate',  meaning:'Cook 潤滑塗層主骨架。', status:'known'},
-      {year:2008, id:'P31', patent:'US7402620',    stage:'續案/抗菌', theme:'CHX/silver緩釋',  meaning:'從潤滑走向抗菌與 biofilm 控制。', status:'known'}
+      {year:2003, id:null,  patent:'US6645483',    stage:'祖案',    theme:'PVP-PU 熱固化潤滑', formula:'PVP + PU/interpolymer + isocyanate thermal cure', meaning:'P30/P31 的根源；未收錄，需深度解析。', status:'missing'},
+      {year:2006, id:'P30', patent:'US7141246',    stage:'母案',    theme:'PVP+PU+isocyanate', formula:'PVP + PU interpolymer + isocyanate crosslinker',  meaning:'Cook 潤滑塗層主骨架。', status:'known'},
+      {year:2008, id:'P31', patent:'US7402620',    stage:'續案/抗菌', theme:'CHX/silver緩釋', formula:'PVP/PU/isocyanate + CHX / silver / triclosan + Vitamin E',  meaning:'從潤滑走向抗菌與 biofilm 控制。', status:'known'}
     ],
     gapSeeds: [{
       patent_no:'US6645483', role:'祖案/family root',
@@ -4321,12 +4321,12 @@ const PATENT_TREE_CONFIG = {
     aliases: ['dsm','comfortcoat','dsm-firmenich','us8133580','ep1957130','wo2009112548','cn107405430','us8957125'],
     centerIds: ['P01','P02','P03','C06','P28','R13'],
     evolution: [
-      {year:2009, id:'P03', patent:'WO2009112548A1', stage:'商業化核心', theme:'PVP+polyelectrolyte 通用化', meaning:'多基材製程標準化。', status:'known'},
-      {year:2012, id:'P01', patent:'US8133580B2',    stage:'核心平台',   theme:'UV-BP+PVP 雙層塗層', meaning:'DSM 核心 FTO 風險。', status:'known'},
-      {year:2013, id:'P02', patent:'EP1957130B1',    stage:'性能延伸',   theme:'polyelectrolyte/dry-out', meaning:'強化臨床使用情境。', status:'known'},
-      {year:2015, id:'R13', patent:'US8957125',      stage:'配方窗口',   theme:'UV水凝膠/PVP-BP',  meaning:'補強配方比例範圍。', status:'known'},
-      {year:2018, id:'C06', patent:'ComfortCoat™',   stage:'商用整合',   theme:'授權塗層平台',   meaning:'專利族轉商品化。', status:'known'},
-      {year:2019, id:'P28', patent:'CN107405430A',   stage:'附著力補強', theme:'adhesion primer', meaning:'底塗層面防線。', status:'known'}
+      {year:2009, id:'P03', patent:'WO2009112548A1', stage:'商業化核心', theme:'PVP+polyelectrolyte 通用化', formula:'PVP + polyelectrolyte hydrophilic topcoat', meaning:'多基材製程標準化。', status:'known'},
+      {year:2012, id:'P01', patent:'US8133580B2',    stage:'核心平台',   theme:'UV-BP+PVP 雙層塗層', formula:'base coat + PVP / benzophenone UV topcoat', meaning:'DSM 核心 FTO 風險。', status:'known'},
+      {year:2013, id:'P02', patent:'EP1957130B1',    stage:'性能延伸',   theme:'polyelectrolyte/dry-out', formula:'PVP / polyelectrolyte + dry-out control additives', meaning:'強化臨床使用情境。', status:'known'},
+      {year:2015, id:'R13', patent:'US8957125',      stage:'配方窗口',   theme:'UV水凝膠/PVP-BP', formula:'PVP-BP + UV hydrogel formulation window',  meaning:'補強配方比例範圍。', status:'known'},
+      {year:2018, id:'C06', patent:'ComfortCoat™',   stage:'商用整合',   theme:'授權塗層平台', formula:'ComfortCoat commercial hydrophilic coating package',   meaning:'專利族轉商品化。', status:'known'},
+      {year:2019, id:'P28', patent:'CN107405430A',   stage:'附著力補強', theme:'adhesion primer', formula:'adhesion-promoting primer + lubricious topcoat', meaning:'底塗層面防線。', status:'known'}
     ],
     gapSeeds: [
       {patent_no:'US8133580B2-family', role:'同族續案待補', reason:'P01同族美國續案/外國案未收錄。', source_ids:['P01'], next_task:'Google Patents family展開。'},
@@ -4339,10 +4339,10 @@ const PATENT_TREE_CONFIG = {
     aliases: ['coloplast','speedicath','ep1957127'],
     centerIds: ['P29','P44'],
     evolution: [
-      {year:1998, id:'P13', patent:'WO1998058990A1', stage:'早期底塗', theme:'TPU+nitrocellulose primer', meaning:'Coloplast 雙塗層製程基礎。', status:'known'},
-      {year:2007, id:'P44', patent:'EP1957127B1',    stage:'聚電解質配方', theme:'PVP+polyelectrolyte 複合', meaning:'快速活化+耐久潤滑。', status:'known'},
-      {year:2007, id:'P29', patent:'SpeediCath核心', stage:'光接枝共價', theme:'UV photografting', meaning:'間歇導尿最強 IP 護城河。', status:'known'},
-      {year:2008, id:null,  patent:'US7745561',      stage:'美國對應案',  theme:'SpeediCath 光接枝美國版', meaning:'未收錄，需FTO分析。', status:'missing'}
+      {year:1998, id:'P13', patent:'WO1998058990A1', stage:'早期底塗', theme:'TPU+nitrocellulose primer', formula:'TPU + nitrocellulose primer / hydrophilic topcoat', meaning:'Coloplast 雙塗層製程基礎。', status:'known'},
+      {year:2007, id:'P44', patent:'EP1957127B1',    stage:'聚電解質配方', theme:'PVP+polyelectrolyte 複合', formula:'PVP + polyelectrolyte composite hydrophilic layer', meaning:'快速活化+耐久潤滑。', status:'known'},
+      {year:2007, id:'P29', patent:'SpeediCath核心', stage:'光接枝共價', theme:'UV photografting', formula:'photo-grafted hydrophilic polymer on catheter surface', meaning:'間歇導尿最強 IP 護城河。', status:'known'},
+      {year:2008, id:null,  patent:'US7745561',      stage:'美國對應案',  theme:'SpeediCath 光接枝美國版', formula:'US counterpart: UV grafted hydrophilic coating', meaning:'未收錄，需FTO分析。', status:'missing'}
     ],
     gapSeeds: [{
       patent_no:'US7745561', role:'P29 美國對應案',
@@ -4357,8 +4357,8 @@ const PATENT_TREE_CONFIG = {
     aliases: ['surmodics','serene','us8871869'],
     centerIds: ['L02'],
     evolution: [
-      {year:2013, id:'L02', patent:'US8871869', stage:'界面活性劑UV塗層', theme:'surfactant+UV固化', meaning:'第一循環 COF < 20g，業界頂級。', status:'known'},
-      {year:2018, id:null,  patent:'US8357772', stage:'SBMA兩性離子基礎', theme:'zwitterionic coating', meaning:'Serene系列核心 IP，未收錄。', status:'missing'}
+      {year:2013, id:'L02', patent:'US8871869', stage:'界面活性劑UV塗層', theme:'surfactant+UV固化', formula:'hydrophilic polymer + surfactant + UV cure package', meaning:'第一循環 COF < 20g，業界頂級。', status:'known'},
+      {year:2018, id:null,  patent:'US8357772', stage:'SBMA兩性離子基礎', theme:'zwitterionic coating', formula:'SBMA / zwitterionic antifouling coating chemistry', meaning:'Serene系列核心 IP，未收錄。', status:'missing'}
     ],
     gapSeeds: [{
       patent_no:'US8357772', role:'SBMA兩性離子基礎專利',
@@ -4373,8 +4373,8 @@ const PATENT_TREE_CONFIG = {
     aliases: ['bard','us4515593','us10857324'],
     centerIds: ['P43','P18'],
     evolution: [
-      {year:1985, id:'P43', patent:'US4515593',   stage:'早期基礎（已過期）', theme:'NVP輻照接枝+抗菌', meaning:'最早親水+抗菌整合，技術已公開。', status:'known'},
-      {year:2020, id:'P18', patent:'US10857324',  stage:'現代抗結垢',     theme:'PAA-PEG 負電荷抗結垢', meaning:'Bard Foley 抗結垢核心新 IP。', status:'known'}
+      {year:1985, id:'P43', patent:'US4515593',   stage:'早期基礎（已過期）', theme:'NVP輻照接枝+抗菌', formula:'NVP radiation graft + antimicrobial additive concept', meaning:'最早親水+抗菌整合，技術已公開。', status:'known'},
+      {year:2020, id:'P18', patent:'US10857324',  stage:'現代抗結垢',     theme:'PAA-PEG 負電荷抗結垢', formula:'PAA + PEG / glycerin negative-charge anti-encrustation', meaning:'Bard Foley 抗結垢核心新 IP。', status:'known'}
     ],
     gapSeeds: []
   },
@@ -4384,8 +4384,8 @@ const PATENT_TREE_CONFIG = {
     aliases: ['hydromer','us5160790'],
     centerIds: ['P06'],
     evolution: [
-      {year:1992, id:'P06', patent:'US5160790',   stage:'熱固化 IPN 基礎', theme:'PVP+MDI isocyanate', meaning:'Hydromer路線基礎，已過期可自由使用。', status:'known'},
-      {year:2005, id:null,  patent:'US6887466',   stage:'多功能延伸',     theme:'PVP+抗血栓+親水', meaning:'Hydromer後期延伸案，未收錄。', status:'missing'}
+      {year:1992, id:'P06', patent:'US5160790',   stage:'熱固化 IPN 基礎', theme:'PVP+MDI isocyanate', formula:'PVP + MDI/polyisocyanate thermal IPN hydrogel', meaning:'Hydromer路線基礎，已過期可自由使用。', status:'known'},
+      {year:2005, id:null,  patent:'US6887466',   stage:'多功能延伸',     theme:'PVP+抗血栓+親水', formula:'PVP hydrophilic layer + antithrombogenic additive module', meaning:'Hydromer後期延伸案，未收錄。', status:'missing'}
     ],
     gapSeeds: [{
       patent_no:'US6887466', role:'Hydromer 多功能延伸',
@@ -4563,6 +4563,16 @@ function drawPatentTrain() {
     duplicate: {text:'同族', color:'#8a7e72', bg:'#f6f3ef'},
     low: {text:'低相關', color:'#8a7e72', bg:'#f6f3ef'}
   };
+  const trainFormulaText = (item, paper) => {
+    if(item.formula) return item.formula;
+    const ex = paper?.patentResults?.full?.examples?.[0];
+    const parts = [
+      ex?.formulation?.primer,
+      ex?.formulation?.topcoat,
+      ...(paper?.patentResults?.full?.coating_technology?.materials || []).slice(0, 4)
+    ].filter(Boolean).map(x => String(x).trim()).filter(Boolean);
+    return parts[0] || item.theme || item.meaning || '';
+  };
 
   el.innerHTML = companies.map((cfg, ci) => {
     const color = cfg.color || '#2d8c5a';
@@ -4571,7 +4581,7 @@ function drawPatentTrain() {
       const realStatus = paper ? 'known' : (item.status || 'missing');
       const meta = statusMeta[realStatus] || statusMeta.known;
       const title = paper?.title || item.theme || item.patent;
-      const summary = paper?.patentResults?.full?.summary || item.meaning || '';
+      const formula = trainFormulaText(item, paper);
       return `<button type="button" class="pt-train-card" data-ci="${ci}" data-ni="${ni}" style="width:172px;min-height:118px;flex:0 0 172px;text-align:left;background:${meta.bg};border:1px solid ${realStatus==='known'?color:'#dfc7bc'};border-top:4px solid ${realStatus==='known'?color:meta.color};border-radius:8px;padding:9px 10px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.06)">
         <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
           <span style="font-size:15px;font-weight:900;color:${realStatus==='known'?color:meta.color}">${escHtml(String(item.year || ''))}</span>
@@ -4580,7 +4590,7 @@ function drawPatentTrain() {
         <div style="font-size:11px;font-weight:900;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(item.patent || paper?.id || '')}</div>
         <div style="font-size:12px;font-weight:900;color:var(--text);margin-top:4px;line-height:1.25">${escHtml(item.stage || '節點')}</div>
         <div style="font-size:10px;color:var(--muted);margin-top:5px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escHtml(title)}</div>
-        ${summary ? `<div style="font-size:10px;color:${realStatus==='known'?'var(--accent2)':'#b85c2a'};margin-top:5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escHtml(summary)}</div>` : ''}
+        ${formula ? `<div style="font-size:10px;color:${realStatus==='known'?'var(--accent2)':'#b85c2a'};margin-top:5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">配方：${escHtml(formula)}</div>` : ''}
       </button>`;
     }).join('<div style="align-self:center;color:#bcae9f;font-weight:900;font-size:18px;flex:0 0 auto">→</div>');
 
@@ -4606,6 +4616,7 @@ function drawPatentTrain() {
         year: d.year,
         stage: d.stage,
         theme: d.theme,
+        formula: d.formula,
         meaning: d.meaning,
         status: paper ? 'known' : d.status,
         paperId: paper?.id || d.id,
@@ -4641,6 +4652,8 @@ function renderPatentTreeDetail(d) {
   const paper = d.paperId ? (DB.papers||[]).find(p=>p.id===d.paperId) : null;
   const full = paper?.patentResults?.full || {};
   const col = d.color || '#2d8c5a';
+  const ex0 = full.examples?.[0];
+  const formulaText = d.formula || ex0?.formulation?.topcoat || ex0?.formulation?.primer || (full.coating_technology?.materials || []).slice(0,4).join(' + ') || d.theme || '';
 
   const block = (label, items, c='var(--accent2)') => {
     if(!items?.length) return '';
@@ -4662,6 +4675,7 @@ function renderPatentTreeDetail(d) {
       <div style="font-size:14px;font-weight:900;color:var(--text)">${escHtml(d.patent||d.patentNo||'')}</div>
       <div style="font-size:12px;color:${col};font-weight:700;margin-top:2px">${escHtml(d.stage||'')} · ${escHtml(String(d.year||''))}</div>
       <div style="font-size:11px;color:var(--muted);margin-top:2px">${escHtml(d.theme||'')}</div>
+      ${formulaText?`<div style="font-size:11px;color:var(--accent2);font-weight:700;margin-top:5px;line-height:1.45">配方演進：${escHtml(formulaText)}</div>`:''}
     </div>
     ${d.status==='missing'?`<div style="background:#fff8f0;border:1px solid #f0c080;border-radius:6px;padding:8px 10px;font-size:12px;margin-bottom:8px">⚠️ <b>未收錄於 papers.json</b> — 下一輪深度解析候選<br><span style="color:#b85c2a;font-size:11px">${escHtml(d.meaning||'')}</span></div>`:''}
     ${full.summary?`<div style="font-size:12px;color:var(--text);line-height:1.65;margin-bottom:6px">${escHtml(full.summary)}</div>`:''}
