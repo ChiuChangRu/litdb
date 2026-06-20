@@ -751,12 +751,6 @@ async function doLogin(){
     </div>
     <!-- 保留隱藏元素供 AI 報告功能使用 -->
     <div style="display:none">
-      <input type="text" id="rptCompany" value="">
-      <input type="text" id="rptProduct" value="TPU 導管（輸尿管支架/Pigtail/泌尿導管）">
-      <input type="text" id="rptTitle" value="次世代親水性塗層開發計畫">
-      <input type="text" id="rptSubstrate" value="TPU / Pebax / PVC 等醫療級高分子基材">
-      <input type="text" id="rptEquipment" value="Dip coating / UV curing / 熱固化設備">
-      <input type="text" id="rptAuthor" value="LitDB">
       <div id="rptBatchStatus"></div>
       <div id="rptDataSummary"></div>
     </div>
@@ -2131,85 +2125,52 @@ ${spec.instructions}`}]
 async function generateReport() {
   if(!cfg.proxy){toast('請先設定 Claude API Proxy URL','error');return}
 
-  const company = document.getElementById('rptCompany').value.trim() || '________（公司名稱）';
-  const title = document.getElementById('rptTitle').value.trim();
-  const product = document.getElementById('rptProduct').value.trim();
-  const substrate = document.getElementById('rptSubstrate').value.trim();
-  const equipment = document.getElementById('rptEquipment').value.trim();
-  const author = document.getElementById('rptAuthor').value.trim() || '________';
-
   const scopePapers = getReportPapers();
-  // 收集目前篩選範圍中已分析文獻的數據（排除已刪除）
-  const analyzed = scopePapers.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0);
-  const dataLines = analyzed.map(p=>{
-    const r = p.patentResults?.full||{};
-    const exampleCount = patentExamples(p).length;
-    const primer = summarizePatentExamples(p, ex => ex.formulation?.primer);
-    const topcoat = summarizePatentExamples(p, ex => ex.formulation?.topcoat);
-    const curing = summarizePatentExamples(p, ex => ex.process?.curing);
-    const friction = summarizePatentExamples(p, ex => ex.results?.friction);
-    const adhesion = summarizePatentExamples(p, ex => ex.results?.adhesion);
-    const wca = summarizePatentExamples(p, ex => ex.results?.wca);
-    return `[${p.id}] ${p.title} (${p.doc_type})
-摘要:${r.summary||p.abstract_note||''}
-實施例數:${exampleCount}
-底塗:${primer||'-'} 面塗:${topcoat||'-'}
-固化:${curing||'-'}
-COF:${friction||'-'} 附著:${adhesion||'-'} WCA:${wca||'-'}
-可借鏡:${(r.actionable_insights||[]).join('; ')}
-${p.doc_type==='專利'?'迴避:'+((r.key_claims||[]).join('; ')):''}`;
-  }).join('\n---\n');
+  // 收集目前篩選範圍中已分析文獻（排除已刪除），上限10篇控制成本
+  // （與 generateDimensionalAIReport 共用同一套資料準備邏輯，含逐筆實施例光譜）
+  const analyzed = scopePapers.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0).slice(0,10);
+  if(!analyzed.length){ toast('目前篩選範圍內沒有已分析的文獻','error'); return; }
 
-  // 勾選的章節
-  const sections = [];
-  if(document.getElementById('rptSec1')?.checked) sections.push('1.專利風險與迴避分析：列出有效專利的claim範圍、迴避方案、難度。標示已過期和即將過期的專利');
-  if(document.getElementById('rptSec2')?.checked) sections.push('2.技術路線比較：按固化方式（UV/熱固/自聚合）分群，比較各路線的配方、性能、優缺點');
-  if(document.getElementById('rptSec3')?.checked) sections.push('3.配方候選與性能基準：從文獻數據彙整最佳COF、附著力、WCA作為開發目標');
-  if(document.getElementById('rptSec4')?.checked) sections.push('4.Primer/底塗策略：比較PDA/WPU/benzophenone/plasma等底塗方案的優缺點和適用性');
-  if(document.getElementById('rptSec5')?.checked) sections.push('5.供應商比較(Plan A)：列出Biocoat/Hydromer/DSM/Surmodics/Freudenberg的技術特點和合作模式');
-  if(document.getElementById('rptSec6')?.checked) sections.push('6.自主開發建議(Plan B)：基於文獻分析推薦的配方主線和實驗設計');
-  if(document.getElementById('rptSec7')?.checked) sections.push('7.驗證項目與目標值：WCA/COF/附著力/耐久性的具體數值目標（引用文獻來源）');
-  if(document.getElementById('rptSec8')?.checked) sections.push('8.抗結痂/抗菌方向：SBMA/MPC/chitosan/Zn²⁺的文獻依據和導入時程');
-  if(!sections.length) {
-    sections.push('1.篩選主題趨勢：根據目前篩選文獻整理主要技術、市場、年份變化');
-    sections.push('2.代表文獻解讀：挑出最關鍵的3-5篇並說明為什麼重要');
-    sections.push('3.產品開發啟示：把文獻結果轉成可執行的下一步建議');
-  }
+  const context = _deBuildAIContext(analyzed);
 
   const output = document.getElementById('rptOutput');
   output.style.display = 'block';
-  output.innerHTML = '<div class="cite-loading" style="padding:40px"><span class="spinner"></span> AI 產生開發策略報告中...</div>';
+  output.innerHTML = '<div class="cite-loading" style="padding:40px"><span class="spinner"></span> AI 產生技術分析報告中...</div>';
 
   try {
     const r = await fetch(cfg.proxy, {
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:4000,
-        system:`你是醫療器材親水塗層開發策略顧問。根據文獻分析數據，產生結構化的開發策略報告。
+        system:`你是醫療器材親水塗層專利與技術情報分析顧問。根據提供的文獻分析資料做技術情報報告。
 規則：
-1. 繁體中文
-2. 每個章節用 ## 標題
-3. 數據必須引用文獻ID如[P01][G12]
-4. 不確定的推論標(*)
-5. 公司名稱用「${company}」
+1. 繁體中文（台灣用語，勿用簡體字）
+2. 只根據提供的文獻資料做判斷，不要編造文獻中沒有的數據或結論；若某篇文獻資料有缺漏（如缺摘要或缺實施例），可以指出該篇缺什麼，但不能說「本批次文獻尚待補全」這種籠統說法去掩蓋你沒有使用提供的資料
+3. 每個判斷盡可能引用具體文獻ID如[P01]
+4. 不確定、屬於推論而非文獻明確記載的內容，標註(*)
+5. 比對配方時要具體到數值/條件層級（如「PVP K90 vs K30」「COF 0.16 vs 0.22」），不能只說「材料類似」這種籠統說法
 6. 簡潔務實，不要學術廢話
-7. 每個章節 3-8 句，精煉`,
-        messages:[{role:'user',content:`請根據以下文獻分析數據，產生開發策略報告。
-
-公司：${company}
-計畫：${title}
-目標產品：${product}
-基材：${substrate}
-現有設備：${equipment}
+7. 用 ## 標題分隔各節`,
+        messages:[{role:'user',content:`請根據以下文獻分析資料，產生技術情報分析報告。
 
 目前篩選範圍：${getReportScopeLabel()}
-篩選文獻：${scopePapers.length} 篇
-其中已分析文獻（${analyzed.length}篇）：
-${dataLines.slice(0,3000)}
+篩選文獻：${scopePapers.length} 篇，以下提供其中已分析的 ${analyzed.length} 篇完整資料（含逐篇實施例配方光譜）：
 
-需要產生的章節：
-${sections.join('\n')}
+${context}
 
-每章節引用具體文獻ID和數據。`}]})
+請產生以下三節內容：
+## 1. 技術路線與市場趨勢
+歸納這批文獻的技術路線分布、年份演進、市場信號。
+
+## 2. 專利間比較與配方光譜分析
+這是本報告最重要的部分，務必具體執行：
+- 逐篇列出各篇文獻內部不同實施例的配方差異（底塗/面塗/固化條件/數值結果），不能只看整篇摘要
+- 跨篇比較哪些文獻用了相近材料或製程，差異在哪裡，結果優劣如何（具體數值，不要籠統說「類似」）
+- 指出哪些是同一專利家族的延伸關係
+
+## 3. 產品開發啟示與行動建議
+基於以上分析，提出具體可執行的下一步建議，包含優先參考的配方、應迴避的claim範圍、資料缺口提示。
+
+每節都要引用具體文獻ID和數據。`}]})
     });
     const data = await r.json();
     trackUsage(data);
@@ -2220,14 +2181,13 @@ ${sections.join('\n')}
     text = text.replace(/^## (.+)$/gm, '<h3 style="color:var(--accent);margin:20px 0 8px;font-size:15px;border-bottom:2px solid var(--accent);padding-bottom:4px">$1</h3>');
     text = text.replace(/^### (.+)$/gm, '<h4 style="color:var(--text);margin:12px 0 6px;font-size:13px">$1</h4>');
     text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-    text = text.replace(/\[([A-Z]\d+)\]/g, '<span style="color:var(--accent2);font-weight:600">[$1]</span>');
+    text = text.replace(/\[([A-Z]\d+)\]/g, '<span onclick="goToPaper(\'$1\',{focus:true})" style="cursor:pointer;color:var(--accent2);font-weight:600;text-decoration:underline">[$1]</span>');
     text = text.replace(/\n/g, '<br>');
 
     const header = `<div style="text-align:center;padding:16px 0;border-bottom:2px solid var(--accent);margin-bottom:16px">
-      <div style="font-size:11px;color:var(--muted)">${company}</div>
-      <div style="font-size:18px;font-weight:700;color:var(--text);margin:4px 0">${title}</div>
-      <div style="font-size:12px;color:var(--muted)">${product} · ${substrate}</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:4px">撰寫：${author} · 日期：${new Date().toISOString().slice(0,10)} · 基於 ${analyzed.length} 篇文獻分析</div>
+      <div style="font-size:16px;font-weight:700;color:var(--text)">🤖 AI 技術情報分析報告</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px">${escHtml(getReportScopeLabel())}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">日期：${new Date().toISOString().slice(0,10)} · 基於 ${analyzed.length} 篇文獻分析${scopePapers.length>analyzed.length?`（篩選範圍共${scopePapers.length}篇，已分析部分共${analyzed.length}篇納入此次解讀）`:''}</div>
     </div>`;
 
     output.innerHTML = header + text;
@@ -2236,7 +2196,7 @@ ${sections.join('\n')}
     const reportData = {
       html: header + text,
       date: new Date().toISOString(),
-      company, title, product, substrate,
+      scope: getReportScopeLabel(),
       analyzedCount: analyzed.length
     };
     localStorage.setItem('litdb_report_saved', JSON.stringify(reportData));
