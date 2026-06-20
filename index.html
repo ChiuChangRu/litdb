@@ -5976,45 +5976,29 @@ function _deGetFull(p){
   return pr.full||pr.review||pr.commercial||{};
 }
 
-// 萃取實施例關鍵參數
-function _deExtractParams(ex){
-  const blob=JSON.stringify(ex);
-  const p={};
-  let m;
-  if(m=blob.match(/(\d+(?:\.\d+)?)\s*(?:mW\/cm2|mW\/cm²)/)) p['UV強度']=m[1]+'mW';
-  if(m=blob.match(/(\d+(?:\.\d+)?)\s*(?:J\/cm2|J\/cm²)/)) p['UV劑量']=m[1]+'J';
-  if(m=blob.match(/(\d+)\s*°?\s*F\b/)) p['溫度']=m[1]+'°F';
-  else if(m=blob.match(/(\d+)\s*°?\s*C\b/)) p['溫度']=m[1]+'°C';
-  if(m=blob.match(/(\d+)\s*(?:min|分鐘)/)) p['時間']=m[1]+'min';
-  else if(m=blob.match(/(\d+)\s*(?:sec|秒|\bs\b)/)) p['時間']=m[1]+'s';
-  if(m=blob.match(/(?:WCA|接觸角|water.contact)[^0-9]{0,12}(\d+(?:\.\d+)?)\s*°/i)) p['WCA']=m[1]+'°';
-  else if(m=blob.match(/(\b[12]?\d(?:\.\d+)?)\s*°(?![FC])/)){if(+m[1]<90) p['WCA']=m[1]+'°';}
-  if(m=blob.match(/COF[\s:]*[<≤]?\s*(0\.\d+)/i)) p['COF']=m[1];
-  if(m=blob.match(/[Gg]rade\s*([0-4])/)) p['附著']='Grade'+m[1];
-  return p;
-}
-
-// 路線歸類（看核心材料）
+// 路線歸類（嚴格看核心材料，不被迴避建議干擾）
 function _deClassifyRoute(p){
-  const mats=(_deGetFull(p).coating_technology?.materials||[]).join(' ').toLowerCase();
-  const core=mats+' '+p.title?.toLowerCase()+' '+( p.tags||[]).join(' ').toLowerCase();
-  if(/\bpda\b|polydopamine|dopamine|多巴胺/.test(core)) return 'PDA底塗';
-  if(/photograf|光接枝/.test(core)) return '光接枝';
-  if(/\bsbma\b|\bmpc\b|兩性離子|zwitterion/.test(core)) return '兩性離子';
+  const full = _deGetFull(p);
+  const mats = (full.coating_technology?.materials||[]).join(' ').toLowerCase();
+  const tags = (p.tags||[]).join(' ').toLowerCase();
+  // 只看 materials 欄位，不看 title/abstract（避免「提到 isocyanate」就被歸類）
+  if(/\bpda\b|polydopamine|dopamine/.test(mats)) return 'PDA底塗';
+  if(/photograf|光接枝/.test(mats)) return '光接枝';
+  if(/\bsbma\b|\bmpc\b|兩性離子|zwitterion/.test(mats+tags)) return '兩性離子';
   if(/plasma|電漿/.test(mats)) return 'Plasma接枝';
-  if(/silane|矽烷/.test(core)) return 'Silane偶聯';
-  if(/isocyanate|異氰酸|mdi\b|hdi\b/.test(mats)) return 'Isocyanate共價';
+  if(/silane|矽烷/.test(mats)) return 'Silane偶聯';
   if(/benzophenone|\bbp\b/.test(mats)) return 'UV-BP接枝';
-  if(/chitosan|幾丁聚醣/.test(core)) return '幾丁聚醣';
+  if(/chitosan|幾丁聚醣/.test(mats+tags)) return '幾丁聚醣';
+  if(/isocyanate|異氰酸|mdi\b|hdi\b/.test(mats)) return 'Isocyanate共價';
   return '其他';
 }
 
-// IP 風險（0=安全 ~ 3=地雷）
+// IP 風險
 function _deIpRisk(p){
   const tags=p.tags||[];
   const rf=(_deGetFull(p).red_flags||[]).join(' ').toLowerCase();
   const dt=p.doc_type||'';
-  if(tags.includes('expired')||/已過期|expired/.test(rf)) return ['🟢 已過期可用',0];
+  if(tags.includes('expired')||/已過期/.test(rf)) return ['🟢 已過期可用',0];
   if(['期刊論文','綜述review','方法'].includes(dt)) return ['🟢 學術/無claim',0];
   if(/fto|claim 風險|地雷|核心.*claim/.test(rf)) return ['🔴 核心地雷',3];
   if(dt==='商用產品') return ['🟡 競品IP',2];
@@ -6027,7 +6011,7 @@ function _deProcess(p){
   const route=_deClassifyRoute(p);
   if(route==='PDA底塗'||route==='幾丁聚醣') return ['常溫水溶液',0];
   const cure=(_deGetFull(p).coating_technology?.curing_or_process||[]).join(' ').toLowerCase();
-  if(/plasma|電漿/.test(cure)) return ['Plasma設備',3];
+  if(/plasma/.test(cure)) return ['Plasma設備',3];
   if(/熱固化|thermal|isocyanate/.test(cure)) return ['熱固化',2];
   if(/uv|光固化/.test(cure)) return ['UV固化',1];
   return ['其他',2];
@@ -6044,77 +6028,101 @@ function _deDataStrength(p){
   return s;
 }
 
-// ══════════════════════════════════════════════
-// ① 自由空間 vs 地雷格
-// ══════════════════════════════════════════════
+// 萃取實施例參數
+function _deExtractParams(ex){
+  const blob=JSON.stringify(ex);
+  const p={};
+  let m;
+  if(m=blob.match(/(\d+(?:\.\d+)?)\s*(?:J\/cm2|J\/cm²)/)) p['UV劑量']=m[1]+'J';
+  else if(m=blob.match(/(\d+(?:\.\d+)?)\s*(?:mW\/cm2|mW\/cm²)/)) p['UV劑量']=m[1]+'mW';
+  if(m=blob.match(/(\d+)\s*°?\s*F\b/)) p['溫度']=m[1]+'°F';
+  else if(m=blob.match(/(\d{2,3})\s*°?\s*C\b/)) p['溫度']=m[1]+'°C';
+  if(m=blob.match(/(?:WCA|接觸角|water.contact)[^0-9]{0,15}(\d+(?:\.\d+)?)\s*°/i)) p['WCA']=m[1]+'°';
+  else if(m=blob.match(/"wca"\s*:\s*"([^"]+)"/)) p['WCA']=m[1].slice(0,6);
+  if(m=blob.match(/COF[\s:]*[<≤]?\s*(0\.\d+)/i)) p['COF']=m[1];
+  else if(m=blob.match(/"(?:cof|friction|摩擦)"\s*:\s*"([^"]{1,12})"/i)) p['COF']=m[1].slice(0,8);
+  if(m=blob.match(/[Gg]rade\s*([0-4])/)) p['附著']='Grade'+m[1];
+  else if(m=blob.match(/"adhesion"\s*:\s*"([^"]{1,15})"/)) p['附著']=m[1].slice(0,10);
+  return p;
+}
+
+// ════════════════════════
+// ① 自由空間 vs 地雷
+// ════════════════════════
 function _buildFreedomBlock(papers){
-  // 空白地帶（學術/已過期 → 可做）
-  const free=[], danger=[];
+  // 去重（同路線只保留有最多設計迴避建議的篇）
+  const routeMap={};
   papers.forEach(p=>{
+    const r=_deClassifyRoute(p);
     const [ipL,ipS]=_deIpRisk(p);
-    const route=_deClassifyRoute(p);
     const full=_deGetFull(p);
-    if(ipS<=1){
-      // 可做：從 design_around_notes 或標題取迴避路徑
-      const hints=(full.patent_core?.design_around_notes||[]).slice(0,1);
-      free.push({id:p.id, route, label:ipL, hint:hints[0]||p.title?.slice(0,30)||''});
-    } else {
-      // 不能做：從 red_flags 取最關鍵地雷
-      const rf=(full.red_flags||[])[0]||'';
-      danger.push({id:p.id, route, label:ipL, hint:rf.slice(0,55)});
+    const da=(full.patent_core?.design_around_notes||[]);
+    const existing=routeMap[r];
+    if(!existing||da.length>(existing.da?.length||0)){
+      routeMap[r]={p,r,ipL,ipS,da,rf:(full.red_flags||[])};
     }
   });
 
-  // 去重：同路線只顯示一次（保留有 hint 的）
-  const dedupFree={}, dedupDanger={};
-  free.forEach(x=>{ if(!dedupFree[x.route]||x.hint) dedupFree[x.route]=x; });
-  danger.forEach(x=>{ if(!dedupDanger[x.route]||x.hint) dedupDanger[x.route]=x; });
-  const freeList=Object.values(dedupFree);
-  const dangerList=Object.values(dedupDanger);
+  const freeList=Object.values(routeMap).filter(x=>x.ipS<=1);
+  const dangerList=Object.values(routeMap).filter(x=>x.ipS>1);
 
-  let html=`<div style="margin-bottom:14px">
-    <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:8px">🚦 專利空間地圖</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">`;
+  // 「能做」：從 design_around_notes 萃取可執行技術（取最具體的那條）
+  const getBestDA = (da) => {
+    if(!da.length) return null;
+    // 優先選含「可」「能」「取代」「替代」「使用」「改用」的建議
+    const actionable = da.find(s=>/改用|取代|替代|以.+代替|使用.+可|採用|PDA|I-2959|SBMA|QCS/i.test(s));
+    return (actionable||da[0]).slice(0,65);
+  };
+
+  const H = (t,col) => `<div style="font-size:13px;font-weight:800;color:${col};margin-bottom:8px">${t}</div>`;
+  let html=`<div style="margin-bottom:16px">
+    <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:10px">🚦 專利空間地圖</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">`;
 
   // 能做欄
-  html+=`<div style="background:#f0faf5;border:1px solid #2d8c5a44;border-radius:8px;padding:10px">
-    <div style="font-size:10px;font-weight:800;color:#2d8c5a;margin-bottom:6px">✅ 可以做（空白地帶）</div>`;
+  html+=`<div style="background:#f0faf5;border:1.5px solid #2d8c5a55;border-radius:10px;padding:12px">
+    ${H('✅ 可以做（空白地帶）','#2d8c5a')}`;
   if(freeList.length){
     freeList.forEach(x=>{
-      html+=`<div style="margin-bottom:5px">
-        <span style="font-size:10px;font-weight:700;color:var(--text)">${escHtml(x.route)}</span>
-        <span style="font-size:9px;color:#2d8c5a;margin-left:4px">${escHtml(x.label)}</span>
-        ${x.hint?`<div style="font-size:9px;color:#555;margin-top:1px;line-height:1.4">${escHtml(x.hint.slice(0,60))}</div>`:''}
+      const hint=getBestDA(x.da)||'';
+      html+=`<div style="margin-bottom:8px;padding:6px 8px;background:#fff;border-radius:7px">
+        <div style="font-size:13px;font-weight:700;color:var(--text)">${escHtml(x.r)}</div>
+        <div style="font-size:11px;color:#2d8c5a;margin-top:1px">${escHtml(x.ipL)}</div>
+        ${hint?`<div style="font-size:12px;color:#444;margin-top:4px;line-height:1.5">→ ${escHtml(hint)}</div>`:''}
       </div>`;
     });
   } else {
-    html+=`<div style="font-size:10px;color:var(--muted)">篩選範圍內均有 IP 風險</div>`;
+    html+=`<div style="font-size:12px;color:var(--muted)">篩選範圍內均有 IP 風險，建議先做 FTO</div>`;
   }
   html+=`</div>`;
 
   // 不能做欄
-  html+=`<div style="background:#fff0f0;border:1px solid #c0392b44;border-radius:8px;padding:10px">
-    <div style="font-size:10px;font-weight:800;color:#c0392b;margin-bottom:6px">❌ 不能做（有效 claim）</div>`;
+  html+=`<div style="background:#fff0f0;border:1.5px solid #c0392b55;border-radius:10px;padding:12px">
+    ${H('❌ 不能做（有效 claim）','#c0392b')}`;
   if(dangerList.length){
     dangerList.forEach(x=>{
-      html+=`<div style="margin-bottom:5px">
-        <span style="font-size:10px;font-weight:700;color:var(--text)">${escHtml(x.route)}</span>
-        <span style="font-size:9px;color:#c0392b;margin-left:4px">${escHtml(x.label)}</span>
-        ${x.hint?`<div style="font-size:9px;color:#c0392b99;margin-top:1px;line-height:1.4">${escHtml(x.hint)}</div>`:''}
+      // 取最短、最關鍵的 red_flag（避免英文長句）
+      const rfChinese=x.rf.find(s=>/[\u4e00-\u9fff]/.test(s))||x.rf[0]||'';
+      html+=`<div style="margin-bottom:8px;padding:6px 8px;background:#fff;border-radius:7px">
+        <div style="font-size:13px;font-weight:700;color:var(--text)">${escHtml(x.r)}</div>
+        <div style="font-size:11px;color:#c0392b;margin-top:1px">${escHtml(x.ipL)}</div>
+        ${rfChinese?`<div style="font-size:12px;color:#c0392b99;margin-top:4px;line-height:1.5">${escHtml(rfChinese.slice(0,60))}</div>`:''}
       </div>`;
     });
   } else {
-    html+=`<div style="font-size:10px;color:var(--muted)">無明確地雷，仍建議 FTO</div>`;
+    html+=`<div style="font-size:12px;color:var(--muted)">無明確地雷，仍建議確認 FTO</div>`;
   }
   html+=`</div></div></div>`;
   return html;
 }
 
-// ══════════════════════════════════════════════
-// ② 實施例差異比對（所有篩選結果）
-// ══════════════════════════════════════════════
+// ════════════════════════
+// ② 實施例差異比對
+// ════════════════════════
 function _buildExampleDiff(papers){
+  const seen=new Set(); // 去重：同 example name 只取一次
   const rows=[];
+
   papers.forEach(p=>{
     const route=_deClassifyRoute(p);
     const [ipL,ipS]=_deIpRisk(p);
@@ -6122,75 +6130,80 @@ function _buildExampleDiff(papers){
     exs.forEach(ex=>{
       if(!ex.is_real) return;
       const pa=_deExtractParams(ex);
-      if(Object.keys(pa).length<2) return;
-      // 取底塗/面塗關鍵詞
-      const form=ex.formulation||{};
-      const primer=typeof form.primer==='string'?form.primer.slice(0,20):'';
-      const topcoat=typeof form.topcoat==='string'?form.topcoat.slice(0,20):'';
-      rows.push({id:p.id, route, ipL, ipS, pa, primer, topcoat, name:(ex.name||'').replace(/^[*\s]+/,'').slice(0,18)});
+      // 只顯示有至少一個有意義數值的實施例
+      const hasData = pa['WCA']||pa['COF']||pa['附著']||pa['UV劑量'];
+      if(!hasData) return;
+      // 去重：同名稱只取一次
+      const key=(ex.name||'').slice(0,20)+p.id;
+      const dedupKey=(ex.name||'').slice(0,20);
+      if(seen.has(dedupKey)) return;
+      seen.add(dedupKey);
+      const name=(ex.name||'').replace(/^[*\s]+/,'').slice(0,20);
+      rows.push({id:p.id,route,ipL,ipS,pa,name});
     });
   });
-  if(rows.length<2) return '';
 
-  // 偵測關鍵差異洞察
+  if(rows.length<2) return `<div style="background:var(--card);border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px;color:var(--muted)">
+    ⚗️ <b>實施例差異比對</b>：篩選結果中真實實施例的數值資料不足（需至少 2 個含 WCA/COF/附著 的實施例）。建議補強文獻全文後再查看。
+  </div>`;
+
+  // 差異洞察
   const insights=[];
-  const uvRows=rows.filter(r=>r.pa['UV劑量']||r.pa['UV強度']);
-  const thermalRows=rows.filter(r=>r.pa['溫度']&&r.pa['溫度'].includes('F'));
+  const uvRows=rows.filter(r=>r.pa['UV劑量']);
+  const thermalRows=rows.filter(r=>r.pa['溫度']);
   if(uvRows.length&&thermalRows.length)
-    insights.push(`UV 固化 ${uvRows.length} 例 vs 熱固化 ${thermalRows.length} 例 — 同路線兩條製程分支`);
-
+    insights.push(`UV 固化 ${uvRows.length} 例 vs 熱固化 ${thermalRows.length} 例 — 同主題兩條製程路線`);
   const wcas=rows.map(r=>parseFloat(r.pa['WCA'])).filter(v=>!isNaN(v));
   if(wcas.length>=2){
-    const min=Math.min(...wcas), max=Math.max(...wcas);
-    if(max-min>5) insights.push(`WCA 最低 ${min}°、最高 ${max}° — 差距 ${(max-min).toFixed(1)}°，底塗/前處理是關鍵變數`);
+    const mn=Math.min(...wcas),mx=Math.max(...wcas);
+    if(mx-mn>5) insights.push(`WCA 最低 ${mn}° 最高 ${mx}° — 差 ${(mx-mn).toFixed(1)}°，底塗或前處理條件是關鍵`);
   }
-
   const cofs=rows.map(r=>parseFloat(r.pa['COF'])).filter(v=>!isNaN(v));
   if(cofs.length>=2){
-    const min=Math.min(...cofs), max=Math.max(...cofs);
-    if(max-min>0.05) insights.push(`COF ${min} ~ ${max} — 差距 ${(max-min).toFixed(2)}，固化條件影響潤滑`);
+    const mn=Math.min(...cofs),mx=Math.max(...cofs);
+    if(mx-mn>0.04) insights.push(`COF ${mn} ~ ${mx} — 固化條件影響潤滑性`);
   }
 
-  let html=`<div style="margin-bottom:14px">
-    <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:6px">⚗️ 實施例差異比對（${rows.length} 個真實實施例）</div>
+  let html=`<div style="margin-bottom:16px">
+    <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:8px">⚗️ 實施例差異比對 <span style="font-size:12px;font-weight:400;color:var(--muted)">（${rows.length} 個有效實施例，僅顯示含數值者）</span></div>
     <div style="overflow-x:auto">
-    <table style="width:100%;border-collapse:collapse;font-size:9.5px">
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
       <thead><tr style="background:var(--card)">
-        <th style="padding:4px 5px;text-align:left;color:var(--muted);white-space:nowrap">ID</th>
-        <th style="padding:4px 5px;text-align:left;color:var(--muted)">路線</th>
-        <th style="padding:4px 5px;text-align:left;color:var(--muted)">實施例</th>
-        <th style="padding:4px 5px;text-align:center;color:var(--muted)">UV劑量</th>
-        <th style="padding:4px 5px;text-align:center;color:var(--muted)">溫度</th>
-        <th style="padding:4px 5px;text-align:center;color:var(--muted)">時間</th>
-        <th style="padding:4px 5px;text-align:center;color:var(--muted)">WCA</th>
-        <th style="padding:4px 5px;text-align:center;color:var(--muted)">COF</th>
-        <th style="padding:4px 5px;text-align:center;color:var(--muted)">附著</th>
-        <th style="padding:4px 5px;text-align:left;color:var(--muted)">IP</th>
+        <th style="padding:6px 8px;text-align:left;color:var(--muted)">ID</th>
+        <th style="padding:6px 8px;text-align:left;color:var(--muted)">路線</th>
+        <th style="padding:6px 8px;text-align:left;color:var(--muted)">實施例</th>
+        <th style="padding:6px 8px;text-align:center;color:var(--muted)">UV劑量</th>
+        <th style="padding:6px 8px;text-align:center;color:var(--muted)">溫度</th>
+        <th style="padding:6px 8px;text-align:center;color:var(--muted)">WCA</th>
+        <th style="padding:6px 8px;text-align:center;color:var(--muted)">COF</th>
+        <th style="padding:6px 8px;text-align:center;color:var(--muted)">附著</th>
+        <th style="padding:6px 8px;text-align:left;color:var(--muted)">IP</th>
       </tr></thead><tbody>`;
 
-  rows.slice(0,12).forEach((r,i)=>{
+  rows.slice(0,10).forEach((r,i)=>{
     const bg=i%2===0?'':'background:var(--card)';
-    const ipColor=r.ipS<=1?'#2d8c5a':r.ipS>=3?'#c0392b':'#d4a030';
+    const ipCol=r.ipS<=1?'#2d8c5a':r.ipS>=3?'#c0392b':'#d4a030';
+    const hiWCA=r.pa['WCA']&&parseFloat(r.pa['WCA'])<=15?'color:#2d8c5a;font-weight:700':'';
+    const hiCOF=r.pa['COF']&&parseFloat(r.pa['COF'])<=0.1?'color:#2d8c5a;font-weight:700':'';
     html+=`<tr style="${bg};cursor:pointer" onclick="goToPaper('${r.id}',{focus:true})">
-      <td style="padding:3px 5px;color:var(--accent);font-weight:700">${r.id}</td>
-      <td style="padding:3px 5px;color:var(--text)">${escHtml(r.route)}</td>
-      <td style="padding:3px 5px;color:var(--muted);font-size:9px">${escHtml(r.name)}</td>
-      <td style="padding:3px 5px;text-align:center">${r.pa['UV劑量']||r.pa['UV強度']||'—'}</td>
-      <td style="padding:3px 5px;text-align:center">${r.pa['溫度']||'—'}</td>
-      <td style="padding:3px 5px;text-align:center">${r.pa['時間']||'—'}</td>
-      <td style="padding:3px 5px;text-align:center;font-weight:${r.pa['WCA']?700:400}">${r.pa['WCA']||'—'}</td>
-      <td style="padding:3px 5px;text-align:center;font-weight:${r.pa['COF']?700:400}">${r.pa['COF']||'—'}</td>
-      <td style="padding:3px 5px;text-align:center;color:#2d8c5a">${r.pa['附著']||'—'}</td>
-      <td style="padding:3px 5px;font-size:9px;color:${ipColor}">${escHtml(r.ipL.replace('🟢','').replace('🔴','').replace('🟡','').trim())}</td>
+      <td style="padding:6px 8px;color:var(--accent);font-weight:700">${r.id}</td>
+      <td style="padding:6px 8px;font-size:12px">${escHtml(r.route)}</td>
+      <td style="padding:6px 8px;font-size:11px;color:var(--muted)">${escHtml(r.name)}</td>
+      <td style="padding:6px 8px;text-align:center">${r.pa['UV劑量']||'—'}</td>
+      <td style="padding:6px 8px;text-align:center">${r.pa['溫度']||'—'}</td>
+      <td style="padding:6px 8px;text-align:center;${hiWCA}">${r.pa['WCA']||'—'}</td>
+      <td style="padding:6px 8px;text-align:center;${hiCOF}">${r.pa['COF']||'—'}</td>
+      <td style="padding:6px 8px;text-align:center;color:#2d8c5a">${r.pa['附著']||'—'}</td>
+      <td style="padding:6px 8px;font-size:11px;color:${ipCol}">${escHtml(r.ipL.replace(/[🟢🔴🟡⚪]/g,'').trim())}</td>
     </tr>`;
   });
   html+=`</tbody></table></div>`;
 
   if(insights.length){
-    html+=`<div style="margin-top:6px;padding:6px 8px;background:#fffbe6;border-left:2px solid #d4a030;border-radius:0 6px 6px 0">
-      <div style="font-size:9px;font-weight:700;color:#b85c00;margin-bottom:2px">💡 差異洞察</div>`;
-    insights.forEach(ins=>{
-      html+=`<div style="font-size:9px;color:#7a4800;line-height:1.5">• ${escHtml(ins)}</div>`;
+    html+=`<div style="margin-top:8px;padding:8px 12px;background:#fffbe6;border-left:3px solid #d4a030;border-radius:0 8px 8px 0">
+      <div style="font-size:12px;font-weight:700;color:#b85c00;margin-bottom:3px">💡 差異洞察</div>`;
+    insights.forEach(s=>{
+      html+=`<div style="font-size:12px;color:#7a4800;line-height:1.6">• ${escHtml(s)}</div>`;
     });
     html+=`</div>`;
   }
@@ -6198,11 +6211,10 @@ function _buildExampleDiff(papers){
   return html;
 }
 
-// ══════════════════════════════════════════════
-// ③ 推薦配方（多選，依優先順序）
-// ══════════════════════════════════════════════
+// ════════════════════════
+// ③ 推薦配方
+// ════════════════════════
 function _buildRecipeBlock(papers){
-  // 聚合路線 → 評分
   const routes={};
   papers.forEach(p=>{
     const r=_deClassifyRoute(p);
@@ -6210,9 +6222,7 @@ function _buildRecipeBlock(papers){
     const [,ipS]=_deIpRisk(p);
     const [,pcS]=_deProcess(p);
     routes[r].papers.push(p);
-    routes[r].ipSum+=ipS;
-    routes[r].procSum+=pcS;
-    routes[r].dataSum+=_deDataStrength(p);
+    routes[r].ipSum+=ipS; routes[r].procSum+=pcS; routes[r].dataSum+=_deDataStrength(p);
   });
 
   const scoreRoute=r=>{
@@ -6223,74 +6233,85 @@ function _buildRecipeBlock(papers){
   const ranked=Object.keys(routes).filter(r=>r!=='其他').sort((a,b)=>scoreRoute(b)-scoreRoute(a));
   if(!ranked.length) return '';
 
-  let html=`<div style="margin-bottom:14px">
-    <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:8px">🎯 推薦配方（依優先順序）</div>`;
-
   const priority=['第一優先','第二選擇','備選方案'];
-  const priorityColor=['var(--accent)','#d4a030','#95a5a6'];
+  const pColor=['var(--accent)','#d4a030','#95a5a6'];
+
+  let html=`<div style="margin-bottom:14px">
+    <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:10px">🎯 推薦配方（依優先順序）</div>`;
 
   ranked.slice(0,3).forEach((route,ri)=>{
     const d=routes[route];
     const [ipL,ipS]=_deIpRisk(d.papers[0]);
     const [pcL]=_deProcess(d.papers[0]);
-    const score=scoreRoute(route);
-    const stars='★'.repeat(Math.max(1,Math.min(5,Math.round(score/3))));
+    const sc=scoreRoute(route);
+    const stars='★'.repeat(Math.max(1,Math.min(5,Math.round(sc/3))));
 
-    // 找最佳實施例配方
-    let bestEp=null, bestPaper=null;
+    // 找最佳 experimental_plan（優先中文、有 acceptance_tests）
+    let bestEp=null,bestPaper=null;
     d.papers.forEach(p=>{
       const ep=_deGetFull(p).experimental_plan||{};
       if(ep.steps?.length && ep.acceptance_tests?.length){
-        if(!bestEp||ep.steps.length>bestEp.steps.length){ bestEp=ep; bestPaper=p; }
+        const isChinese=/[\u4e00-\u9fff]/.test(ep.steps[0]||'');
+        if(!bestEp||isChinese) {bestEp=ep;bestPaper=p;}
       }
     });
 
-    html+=`<div style="border:1px solid ${priorityColor[ri]}55;border-radius:8px;padding:10px 12px;margin-bottom:8px;border-left:4px solid ${priorityColor[ri]}">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-        <span style="font-size:9px;font-weight:800;color:${priorityColor[ri]};background:${priorityColor[ri]}18;padding:2px 7px;border-radius:10px">${priority[ri]}</span>
-        <span style="font-size:12px;font-weight:900;color:var(--text)">${escHtml(route)}</span>
-        <span style="font-size:11px;color:${priorityColor[ri]};margin-left:auto">${stars}</span>
+    // 若無 experimental_plan，找最佳真實實施例
+    let bestEx=null;
+    if(!bestEp){
+      d.papers.forEach(p=>{
+        (_deGetFull(p).examples||[]).filter(e=>e.is_real).forEach(ex=>{
+          if(!bestEx) bestEx={ex,p};
+        });
+      });
+    }
+
+    const ipCol=ipS<=1?'#2d8c5a':ipS>=3?'#c0392b':'#d4a030';
+
+    html+=`<div style="border:1.5px solid ${pColor[ri]}66;border-left:5px solid ${pColor[ri]};border-radius:10px;padding:14px;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span style="font-size:11px;font-weight:800;color:${pColor[ri]};background:${pColor[ri]}18;padding:3px 10px;border-radius:12px">${priority[ri]}</span>
+        <span style="font-size:15px;font-weight:900;color:var(--text)">${escHtml(route)}</span>
+        <span style="font-size:13px;color:${pColor[ri]};margin-left:auto">${stars}</span>
       </div>
-      <div style="display:flex;gap:6px;font-size:9px;margin-bottom:6px">
-        <span style="padding:2px 6px;background:#f5f5f5;border-radius:4px;color:${ipS<=1?'#2d8c5a':'#c0392b'}">${escHtml(ipL)}</span>
-        <span style="padding:2px 6px;background:#f5f5f5;border-radius:4px;color:var(--muted)">${escHtml(pcL)}</span>
-        <span style="padding:2px 6px;background:#f5f5f5;border-radius:4px;color:var(--muted)">${d.papers.length} 篇支持</span>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+        <span style="font-size:12px;padding:3px 8px;background:#f5f5f5;border-radius:5px;color:${ipCol}">${escHtml(ipL)}</span>
+        <span style="font-size:12px;padding:3px 8px;background:#f5f5f5;border-radius:5px;color:var(--muted)">${escHtml(pcL)}</span>
+        <span style="font-size:12px;padding:3px 8px;background:#f5f5f5;border-radius:5px;color:var(--muted)">${d.papers.length} 篇支持</span>
       </div>`;
 
     if(bestEp){
-      html+=`<div style="background:var(--card);border-radius:6px;padding:8px;font-size:10px">
-        <div style="font-weight:700;color:var(--accent);margin-bottom:4px">📋 配方步驟 <span style="color:var(--muted);font-weight:400">[${bestPaper.id}]</span></div>
-        <ol style="margin:0 0 6px 16px;padding:0;line-height:1.7;color:var(--text)">
-          ${bestEp.steps.slice(0,4).map(s=>`<li>${escHtml(s)}</li>`).join('')}
+      html+=`<div style="background:var(--card);border-radius:8px;padding:12px">
+        <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px">📋 配方步驟 <span style="color:var(--muted);font-weight:400;font-size:11px">[${bestPaper.id}]</span></div>
+        <ol style="margin:0 0 8px 18px;padding:0;font-size:13px;line-height:1.8;color:var(--text)">
+          ${bestEp.steps.slice(0,5).map(s=>`<li>${escHtml(s)}</li>`).join('')}
         </ol>`;
       if(bestEp.acceptance_tests?.length){
-        html+=`<div style="color:#2d8c5a;font-weight:700;margin-bottom:3px">✅ 驗收標準</div>
-        <div style="color:var(--text);line-height:1.6">${bestEp.acceptance_tests.slice(0,3).map(t=>escHtml(t)).join(' · ')}</div>`;
+        html+=`<div style="font-size:12px;font-weight:700;color:#2d8c5a;margin-bottom:4px">✅ 驗收標準</div>
+        <ul style="margin:0 0 6px 16px;padding:0;font-size:13px;line-height:1.7;color:var(--text)">
+          ${bestEp.acceptance_tests.slice(0,4).map(t=>`<li>${escHtml(t)}</li>`).join('')}
+        </ul>`;
       }
       if(bestEp.materials?.length){
-        html+=`<div style="color:var(--muted);margin-top:4px;font-size:9px">🛒 ${bestEp.materials.slice(0,3).map(m=>escHtml(m)).join('、')}</div>`;
+        html+=`<div style="font-size:12px;color:var(--muted);margin-top:4px">🛒 ${bestEp.materials.slice(0,4).map(m=>escHtml(m)).join('、')}</div>`;
       }
       html+=`</div>`;
+    } else if(bestEx){
+      const f=bestEx.ex.formulation||{};
+      const pr=bestEx.ex.process||{};
+      const res=bestEx.ex.results||{};
+      const str=v=>typeof v==='string'?v.slice(0,60):typeof v==='object'?JSON.stringify(v).slice(0,60):'';
+      html+=`<div style="background:var(--card);border-radius:8px;padding:12px">
+        <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px">📋 實施例配方 <span style="color:var(--muted);font-weight:400;font-size:11px">[${bestEx.p.id}]</span></div>
+        ${f.primer?`<div style="font-size:13px;margin-bottom:4px"><b>底塗：</b>${escHtml(str(f.primer))}</div>`:''}
+        ${f.topcoat?`<div style="font-size:13px;margin-bottom:4px"><b>面塗：</b>${escHtml(str(f.topcoat))}</div>`:''}
+        ${pr.curing?`<div style="font-size:13px;margin-bottom:4px"><b>固化：</b>${escHtml(str(pr.curing))}</div>`:''}
+        ${(res.wca||res.friction||res.adhesion)?`<div style="font-size:13px;color:#2d8c5a;margin-top:6px">
+          ${res.wca?`WCA ${escHtml(String(res.wca))} `:''}${res.friction?`COF ${escHtml(String(res.friction))} `:''}${res.adhesion?escHtml(String(res.adhesion)):''}
+        </div>`:''}
+      </div>`;
     } else {
-      // 從最佳實施例取
-      let bestEx=null;
-      d.papers.forEach(p=>{
-        (_deGetFull(p).examples||[]).forEach(ex=>{
-          if(ex.is_real&&!bestEx) bestEx={ex,p};
-        });
-      });
-      if(bestEx){
-        const f=bestEx.ex.formulation||{};
-        const pr=bestEx.ex.process||{};
-        const res=bestEx.ex.results||{};
-        html+=`<div style="background:var(--card);border-radius:6px;padding:8px;font-size:10px">
-          <div style="font-weight:700;color:var(--accent);margin-bottom:4px">📋 實施例配方 <span style="color:var(--muted);font-weight:400">[${bestEx.p.id}]</span></div>
-          ${f.primer?`<div><b>底塗：</b>${escHtml(typeof f.primer==='string'?f.primer.slice(0,60):JSON.stringify(f.primer).slice(0,60))}</div>`:''}
-          ${f.topcoat?`<div><b>面塗：</b>${escHtml(typeof f.topcoat==='string'?f.topcoat.slice(0,60):JSON.stringify(f.topcoat).slice(0,60))}</div>`:''}
-          ${pr.curing?`<div><b>固化：</b>${escHtml(typeof pr.curing==='string'?pr.curing.slice(0,50):JSON.stringify(pr.curing).slice(0,50))}</div>`:''}
-          ${res.wca||res.friction?`<div style="color:#2d8c5a;margin-top:3px">${res.wca?`WCA ${res.wca}　`:''}${res.friction?`COF ${res.friction}`:''}${res.adhesion?`　${res.adhesion}`:''}</div>`:''}
-        </div>`;
-      }
+      html+=`<div style="font-size:13px;color:var(--muted);padding:8px">尚無實施例詳細資料，請補強文獻全文後再查看。</div>`;
     }
     html+=`</div>`;
   });
@@ -6298,55 +6319,47 @@ function _buildRecipeBlock(papers){
   return html;
 }
 
-// ══════════════════════════════════════════════
-// 主報告（特性篩選版）
-// ══════════════════════════════════════════════
+// 主報告
 function buildFeatureReport(papers, featureLabel){
   if(papers.length<2) return '';
-
-  let html=`<div style="background:linear-gradient(135deg,#fff8f0,#fff);border:2px solid var(--accent);border-radius:10px;padding:12px;margin-bottom:14px">
-    <div style="font-size:10px;color:var(--accent);font-weight:700;letter-spacing:1px">📊 ${featureLabel} — 技術決策報告 · ${papers.length} 篇</div>
+  let html=`<div style="background:linear-gradient(135deg,#fff8f0,#fff);border:2px solid var(--accent);border-radius:12px;padding:14px;margin-bottom:16px">
+    <div style="font-size:11px;color:var(--accent);font-weight:700;letter-spacing:1px">📊 技術決策報告</div>
+    <div style="font-size:16px;font-weight:900;color:var(--text);margin-top:4px">${escHtml(featureLabel)}</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:2px">${papers.length} 篇文獻 · 純規則引擎 · 無 API</div>
   </div>`;
-
-  // ① 自由空間 vs 地雷
   html += _buildFreedomBlock(papers);
-
-  // ② 實施例差異比對
   html += _buildExampleDiff(papers);
-
-  // ③ 推薦配方
   html += _buildRecipeBlock(papers);
-
   return html;
 }
 
-// 公司報告（保持精簡，加缺口）
 function buildCompanyReport(papers, companyLabel){
   if(!papers.length) return '';
   const sorted=[...papers].filter(p=>p.year).sort((a,b)=>(a.year||0)-(b.year||0));
-  const hasLandmine=papers.some(p=>{const rf=(_deGetFull(p).red_flags||[]).join(' ').toLowerCase();return /fto|claim 風險|地雷/.test(rf);});
+  const hasLandmine=papers.some(p=>(_deGetFull(p).red_flags||[]).join(' ').toLowerCase().match(/fto|claim 風險|地雷/));
   const expiredN=papers.filter(p=>(p.tags||[]).includes('expired')).length;
-  const threat=hasLandmine?['🔴 高威脅','#c0392b']:['🟢 低威脅','#2d8c5a'];
+  const [tLabel,tCol]=hasLandmine?['🔴 高威脅','#c0392b']:['🟢 低威脅','#2d8c5a'];
 
-  let html=`<div style="background:linear-gradient(135deg,${threat[1]}11,#fff);border:2px solid ${threat[1]};border-radius:10px;padding:12px;margin-bottom:14px">
-    <div style="font-size:10px;color:${threat[1]};font-weight:700">🏢 ${escHtml(companyLabel)} · ${papers.length} 件 · ${threat[0]}</div>
-    <div style="font-size:12px;color:var(--muted);margin-top:3px">${expiredN>0?`${expiredN} 件已過期 · `:''}${hasLandmine?'核心 claim 需整體迴避':'IP 風險可控'}</div>
+  let html=`<div style="background:linear-gradient(135deg,${tCol}11,#fff);border:2px solid ${tCol};border-radius:12px;padding:14px;margin-bottom:16px">
+    <div style="font-size:11px;color:${tCol};font-weight:700">🏢 競爭規避報告</div>
+    <div style="font-size:16px;font-weight:900;color:var(--text);margin-top:4px">${escHtml(companyLabel)}</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:2px">${papers.length} 件 · ${tLabel} · ${expiredN>0?expiredN+'件已過期':''}</div>
   </div>`;
 
-  // 自由空間
   html += _buildFreedomBlock(papers);
 
-  // 技術演進
   if(sorted.length){
-    html+=`<div style="margin-bottom:14px">
-      <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:6px">📅 技術演進脈絡</div>`;
+    html+=`<div style="margin-bottom:16px">
+      <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:8px">📅 技術演進脈絡</div>`;
     sorted.forEach(p=>{
       const [ipL]=_deIpRisk(p);
       const route=_deClassifyRoute(p);
-      html+=`<div style="display:flex;gap:8px;padding:4px 0;font-size:10px;cursor:pointer" onclick="goToPaper('${p.id}',{focus:true})">
-        <span style="font-weight:900;color:var(--accent);min-width:34px">${p.year||'—'}</span>
-        <span style="color:var(--text)"><b>[${p.id}]</b> ${escHtml(route)}</span>
-        <span style="font-size:9px;color:var(--muted)">${escHtml(ipL)}</span>
+      const ipCol=ipL.includes('過期')?'#2d8c5a':ipL.includes('地雷')?'#c0392b':'#d4a030';
+      html+=`<div style="display:flex;gap:10px;padding:6px 0;font-size:13px;cursor:pointer;border-bottom:1px solid var(--border)" onclick="goToPaper('${p.id}',{focus:true})">
+        <span style="font-weight:900;color:var(--accent);min-width:38px">${p.year||'—'}</span>
+        <span style="color:var(--text);font-weight:700">[${p.id}]</span>
+        <span style="color:var(--text)">${escHtml(route)}</span>
+        <span style="font-size:11px;color:${ipCol};margin-left:auto">${escHtml(ipL)}</span>
       </div>`;
     });
     html+=`</div>`;
@@ -6356,44 +6369,47 @@ function buildCompanyReport(papers, companyLabel){
   const avoidance=[];
   papers.forEach(p=>{
     (_deGetFull(p).patent_core?.design_around_notes||[]).forEach(n=>{
-      if(n.length>10&&!avoidance.some(a=>a.slice(0,20)===n.slice(0,20))) avoidance.push(n);
+      if(n.length>10&&/[\u4e00-\u9fff]/.test(n)&&!avoidance.some(a=>a.slice(0,20)===n.slice(0,20)))
+        avoidance.push(n);
     });
   });
   if(avoidance.length){
-    html+=`<div style="padding:10px;background:#f8f4ff;border-left:3px solid #8e44ad;border-radius:0 8px 8px 0;margin-bottom:14px">
-      <div style="font-size:11px;font-weight:700;color:#8e44ad;margin-bottom:4px">🔀 迴避路徑</div>
-      <ul style="margin:0 0 0 14px;padding:0;font-size:10px;line-height:1.7;color:var(--text)">
+    html+=`<div style="padding:12px 14px;background:#f8f4ff;border-left:4px solid #8e44ad;border-radius:0 10px 10px 0;margin-bottom:16px">
+      <div style="font-size:14px;font-weight:800;color:#8e44ad;margin-bottom:6px">🔀 迴避路徑</div>
+      <ul style="margin:0 0 0 16px;padding:0;font-size:13px;line-height:1.8;color:var(--text)">
         ${avoidance.slice(0,4).map(n=>`<li>${escHtml(n.slice(0,70))}</li>`).join('')}
       </ul>
     </div>`;
   }
 
-  // 實施例比對
   html += _buildExampleDiff(papers);
-
   return html;
 }
 
 // 主入口
 function buildDecisionReport(papers){
   const af=activeFilters||{};
-  const featureMap={'adhesion':'附著力','encrustation':'抗結痂','antimicrobial':'抗菌','lubricity':'潤滑','UV光固化':'UV固化路線','熱固化':'熱固化路線','PDA-polydopamine':'PDA底塗'};
+  const featureMap={
+    'adhesion':'附著力','encrustation':'抗結痂','antimicrobial':'抗菌',
+    'lubricity':'潤滑','UV光固化':'UV固化路線','熱固化':'熱固化路線',
+    'PDA-polydopamine':'PDA底塗','SBMA':'SBMA兩性離子','chitosan':'幾丁聚醣路線'
+  };
   let featureLabel=null;
-  if(af.topic&&af.topic.size===1) featureLabel=featureMap[[...af.topic][0]]||[...af.topic][0];
-  else if(af.sub&&af.sub.size===1) featureLabel=[...af.sub][0];
-  else if(af.cure&&af.cure.size===1) featureLabel=[...af.cure][0];
-  else if(af.app&&af.app.size===1) featureLabel=[...af.app][0];
-  else if(af.type&&af.type.size===1) featureLabel=[...af.type][0];
+  const firstSet = s=>s?.size?[...s][0]:null;
+  const tag=firstSet(af.topic)||firstSet(af.sub)||firstSet(af.cure)||firstSet(af.app)||firstSet(af.type);
+  if(tag) featureLabel=featureMap[tag]||tag;
+  if(!featureLabel&&activeTags?.size===1) featureLabel=featureMap[[...activeTags][0]]||[...activeTags][0];
 
   const orgs={};
   papers.forEach(p=>{const o=extractOrg(p);if(o) orgs[o]=(orgs[o]||0)+1;});
-  const topOrg=Object.entries(orgs).sort((a,b)=>b[1]-a[1])[0];
-  const isCompany=topOrg&&topOrg[1]>=papers.length*0.6&&papers.length<=15;
+  const top=Object.entries(orgs).sort((a,b)=>b[1]-a[1])[0];
+  const isCompany=top&&top[1]>=papers.length*0.6&&papers.length<=15&&papers.length>=2;
 
-  if(isCompany) return buildCompanyReport(papers,topOrg[0]);
+  if(isCompany) return buildCompanyReport(papers,top[0]);
   if(featureLabel&&papers.length>=2) return buildFeatureReport(papers,featureLabel);
   return '';
 }
+
 
 
 
