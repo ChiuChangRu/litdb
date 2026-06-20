@@ -187,32 +187,45 @@
       },
       "patentResults": {
         "full": {
-          "summary": "DSM 核心親水塗層專利（US8133580B2），揭示 PVP + benzophenone（BP）+ isocyanate 底塗的雙層 UV 固化系統。底塗以 isocyanate 與基材（TPU/PVC）共價錨固，頂塗 PVP+BP 在 UV（365nm）照射下 H-abstraction 接枝。WCA < 20°，COF 顯著降低，通過臨床耐久測試。為 ComfortCoat 商業核心 IP，P01-P03 構成 DSM 主要專利族群。需迴避此配方組合，建議改用 Type I PI（I-2959/LAP）路線作為設計迴避。",
+          "summary": "US8133580B2 is a DSM urinary catheter coating patent built around a two-layer UV cured system: a PTGL1000-(T-H)2 / PVP / Irgacure primer and an outer PVP / polyelectrolyte / benzophenone / glycerol functional layer. The full text has one named working example, but it contains two primer solutions and two functional coating solutions, so the useful reading is as formulation variants rather than a single recipe. The coated 14 Fr PVC catheter is dip coated on a Harland PCX coater, cured at 0.9 J/cm2 for primer and 21.6 J/cm2 for topcoat, then stored at 100% humidity and gamma sterilized.",
           "examples": [
             {
-              "name": "EXAMPLE 1：device coating / PVP / urethane / UV",
+              "name": "Example 1A - Primer solution 1 + PVP / polyelectrolyte / glycerol / antioxidant topcoat",
               "is_real": true,
               "credibility": "高",
-              "credibility_reason": "Google Patents 全文 EXAMPLE 1 明列；由批次解析寫入，需人工複核細節。",
-              "substrate": "PVC catheter / Catheter / medical device",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "Medical grade PVC tube, 14 Fr, Raumedic; mandrel inserted to prevent inner lumen coating.",
               "formulation": {
-                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
-                "topcoat": "PVP + polyvinylpyrrolidone + toluene + isocyanate + PEG + photoinitiator"
+                "primer": "Coating solution 1: PTGL1000-(T-H)2 4.25 wt% + PVP 1.3M K-90 0.75 wt% + Irgacure 2959 0.20 wt% + ethanol 94.8 wt%.",
+                "topcoat": "Coating solution 3: PVP 1.3M K-90 5.00 wt% + polyelectrolyte 1.25 wt% + benzophenone 0.12 wt% + glycerol 0.60 wt% + antioxidant 2000 ppm on solids + water 46.52 wt% + methanol 46.52 wt%. Polyelectrolyte is acrylamide/acrylic acid/sodium acrylate random copolymer, Mw about 200k, 14.5 wt% Na+."
               },
-              "process": {
-                "surface_prep": "需依全文確認",
-                "coating_method": "dip coating；cured for 15 seconds with a total dose of 0；room temperature mixing",
-                "drying": "乾燥條件需依全文確認",
-                "curing": "cured for 15 seconds with a total dose of 0"
-              },
+              "process": "Dip 10 s in primer; UV cure 15 s, total dose 0.9 J/cm2. Dip 10 s in functional topcoat; UV cure 360 s, total dose 21.6 J/cm2. Harland PCX coater; lamp intensity about 60 mW/cm2. Pack in 100% humidity and gamma sterilize.",
               "results": {
-                "friction": "lubricious, to have a good dry-out time and adheres sufficiently to the PVC catheter, also after gamma sterili",
-                "adhesion": "未明示",
-                "wca": "未明示",
-                "durability": "需依全文確認",
-                "other": "Urinary Catheter Coating Process A commercially available medical grade PVC tube (14 french) Raumedic) was used. A mandrel was inserted in the catheter in order to prevent the coating fluid to reach the inside of the catheter and the assembly was then dipped into coating solution 1 or 2 using a Harland PCX coater. Intensity of the lamps was on average 60 mW/cm2 and was measured using a Harland UVR 335 (also known as IL 1400), equipped with an International Light detector SED 005#989. Input opti…"
+                "friction": "Described as lubricious after wetting; no numeric COF table in this patent.",
+                "adhesion": "Sufficient adhesion to PVC catheter after gamma sterilisation.",
+                "wca": "Not specified.",
+                "durability": "Good dry-out time; no visible cracks after gamma sterilisation.",
+                "other": "Antioxidant plus glycerol route for stabilizing hydrophilic catheter coating."
+              }
+            },
+            {
+              "name": "Example 1B - Primer solution 2 + lower-polyelectrolyte glycerol topcoat",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "Medical grade PVC tube, 14 Fr, Raumedic; mandrel inserted during coating.",
+              "formulation": {
+                "primer": "Coating solution 2: PTGL1000-(T-H)2 4.50 wt% + PVP 1.3M K-90 0.50 wt% + Irgacure 2959 0.20 wt% + ethanol 94.8 wt%.",
+                "topcoat": "Coating solution 4: PVP 1.3M K-90 5.50 wt% + polyelectrolyte 0.75 wt% + benzophenone 0.12 wt% + glycerol 0.30 wt% + water 46.52 wt% + methanol 46.52 wt%."
               },
-              "source_url": "https://patents.google.com/patent/US8133580B2/en"
+              "process": "Same Harland PCX dip process: primer 10 s + 0.9 J/cm2; topcoat 10 s + 21.6 J/cm2; 100% humidity packing; gamma sterilization.",
+              "results": {
+                "friction": "Described as lubricious; no numeric COF table in this patent.",
+                "adhesion": "Sufficient adhesion after gamma sterilisation.",
+                "wca": "Not specified.",
+                "durability": "Good dry-out time and no visible cracks.",
+                "other": "Lower polyelectrolyte/glycerol loading variant; useful for dose-window comparison vs solution 3."
+              }
             }
           ],
           "key_claims": [
@@ -221,27 +234,23 @@
             "功能層用 Norrish II (benzophenone) H抽取交聯 PVP+polyelectrolyte"
           ],
           "actionable_insights": [
-            "Harland FTS 測試條件(22°C/35%RH/20g閾值)可作為 本專案 標準 SOP",
-            "雙光起始劑策略概念可借鏡但具體組合需迴避",
-            "PAA 鈉鹽延長 dry-out time 的效果值得測試"
+            "Use P01 as the product-like catheter embodiment for DSM ComfortCoat: 14 Fr PVC, Harland PCX, 0.9/21.6 J/cm2 UV doses.",
+            "Compare solution 3 vs solution 4 to study glycerol and polyelectrolyte windows.",
+            "FTO risk is high if using PVP + PAcA-type polyelectrolyte + PTGL primer directly."
           ],
           "red_flags": [
-            "P01-P03 族群是 DSM 核心 IP，直接使用 BP+PVP UV 組合風險極高",
-            "需確認專利有效期與市場範圍",
-            "UV 劑量過高會造成 PVP 光氧化降解（R3）"
+            "Active term is listed by Google as expiring 2029-01-19; legal status must be verified before use.",
+            "This family overlaps P02/EP1957130B1 and R13/US8957125; do not analyze in isolation."
           ],
           "vs_database": "P01 是 DSM 家族專利的核心，P02(EP1957130B1)和 P03 是同家族的延伸。P06(US5160790)的 isocyanate 路線是完全不同的技術路徑，已過期可自由使用。本專案 的 UV+benzophenone 路線不侵權，因為 P01 claim 綁定在 polyether primer 上",
           "bioteque_relevance": "需迴避 P01 核心 claim（BP + PVP UV 組合）。以 I-2959 Type I 路線（Phase 1-2 起點）作為設計迴避方案。P01 的 isocyanate 底塗概念可參考，但需確認 claim 邊界。",
           "evidence_level": "high",
           "source_quality": "google_patents_fulltext",
           "key_findings": [
-            "PVP + benzophenone（BP）UV H-abstraction 接枝是核心機制",
-            "isocyanate 底塗提供基材共價錨固",
-            "WCA < 20°，COF 顯著降低，通過臨床耐久",
-            "DSM ComfortCoat 核心 IP，P01-P03 為同族群",
-            "365nm UV 照射，需控制劑量避免 PVP 光氧化降解",
-            "適用 TPU、PVC、Pebax 等多種基材",
-            "Google Patents 全文解析到 1 個 EXAMPLE 區段，已取代單一推論式 example。"
+            "Two-layer DSM platform: PTGL primer plus PVP/polyelectrolyte functional layer.",
+            "The true disclosed design space is four solutions, not one generic example.",
+            "Polyelectrolyte is acrylamide/acrylic acid/sodium acrylate random copolymer with sodium ionic groups for water binding.",
+            "Gamma sterilization compatibility is explicitly claimed at the example level."
           ],
           "coating_technology": {
             "materials": [
@@ -311,7 +320,7 @@
             "P02（EP1957130B1）",
             "P03（WO2009112548A1）"
           ],
-          "examples_note": "已由 Google Patents 全文自動解析 1 個 EXAMPLE 區段；請以原文連結複核比例與測試數據。"
+          "examples_note": "Full text has one named Example 1, but it discloses four coating solutions. This record splits them into two practical embodiment variants so the frontend no longer hides the formulation evolution."
         }
       }
     },
@@ -886,30 +895,215 @@
       "patent_notes": "Hydromer Inc.；priority 2002-04-30；filed 2002-09-27；granted 2006-03-07；Google Patents legal status: Expired - Lifetime；anticipated expiration 2022-09-27；cited by 196。",
       "patentResults": {
         "full": {
-          "summary": "US7008979B2 是 Hydromer 的多用途親水塗層 composition 專利，從 P06 的 PVP/isocyanate 潤滑塗層基礎，延伸到可覆蓋塑膠、金屬、玻璃等多基材的配方平台。專利關鍵詞顯示其涵蓋 coating agent、crosslinker、metal oxide、polyurethane、aziridine、表面活性劑與抗菌/藥物添加等設計。Google Patents 顯示此專利已到期，且 cited-by 數量高，代表它是 Hydromer 2000 年代親水塗層商品化與配方平台的重要節點。",
+          "summary": "US7008979B2 is a Hydromer broad aqueous hydrophilic coating platform. The full text contains 52 examples across polycarbonate, films, anti-fog, inkjet, controlled release, catheter and antimicrobial variants. The medical-device signal is an aqueous PVP + polyurethane dispersion + colloidal silica + aziridine crosslinker system, with catheter embodiments showing very low wet friction and a silver antimicrobial variant that does not compromise adhesion/lubricity.",
           "examples": [
             {
-              "name": "Hydromer 多基材親水塗層 composition",
+              "name": "Example 1 - PVP / aliphatic polycarbonate PU / silica / aziridine base coating",
               "is_real": true,
-              "credibility": "中",
-              "credibility_reason": "目前依 Google Patents 書目、關鍵詞與摘要層級整理；尚未逐項解析 examples 與 claim 全文。",
-              "substrate": "塑膠、金屬、玻璃等多種醫材基材",
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "Polycarbonate substrate for lubricity/contact-angle screen.",
               "formulation": {
-                "primer": "需查全文；可能依基材搭配 polyurethane / crosslinker / metal oxide 等錨固或強化成分",
-                "topcoat": "親水 coating agent + crosslinker；可含表面活性劑、抗菌劑、藥物或輔助劑"
+                "primer": "None; one-part aqueous coating.",
+                "topcoat": "Water 87 g + solvent mix 189 g (isopropanol/NMP) + 40 g PVP solution (20% Kollidon K90) + 40 g aqueous PU dispersion 911 + 1.6 g NeoCryl CX100 aziridine + 23 g colloidal silica N5110."
               },
-              "process": {
-                "surface_prep": "需查全文",
-                "coating_method": "coating / dipping / drying（需查 examples）",
-                "drying": "需查全文",
-                "curing": "crosslinker 固化；可能包含 aziridine 或 carbodiimide 類交聯"
-              },
+              "process": "Mix aqueous formulation; coat at dilution rates with water; dry/cure as hydrophilic coating.",
               "results": {
-                "friction": "親水潤滑；具體 COF 需查全文",
-                "adhesion": "多基材附著設計；具體數據需查全文",
-                "wca": "需查全文",
-                "durability": "Google Patents 描述其被大量引用，且關鍵詞包含耐久/交聯設計；磨耗數據需查全文",
-                "other": "cited-by 196，顯示後續塗層/醫材應用引用度高"
+                "friction": "Excellent lubricity; contact angle as low as 8 degrees wet.",
+                "adhesion": "Good shelf life and coating performance.",
+                "wca": "Dry coating about 50 degrees; uncoated polycarbonate about 80 degrees; wet as low as 8 degrees.",
+                "durability": "Base durable hydrophilic formulation.",
+                "other": "Defines the core Hydromer aqueous PU/PVP/silica/aziridine architecture."
+              }
+            },
+            {
+              "name": "Example 2 - aromatic PU variant",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "Polycarbonate substrate.",
+              "formulation": {
+                "primer": "None.",
+                "topcoat": "Water 281 g + isopropanol/diacetone alcohol 89 g + 19 g 20% PVP K90 + 19 g NeoRez R-940 aromatic PU + 0.8 g NeoCryl CX100 + 11 g colloidal silica N5110."
+              },
+              "process": "Mix and coat; test wet contact angle.",
+              "results": {
+                "friction": "Lubricious.",
+                "adhesion": "Good shelf life.",
+                "wca": "Wet contact angle about 24 degrees.",
+                "durability": "Alternative PU chemistry screen.",
+                "other": "Shows aromatic PU can substitute for aliphatic PU with lower performance than Example 1."
+              }
+            },
+            {
+              "name": "Example 5 - aliphatic polyether PU variant",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "Polycarbonate substrate.",
+              "formulation": {
+                "primer": "None.",
+                "topcoat": "Water 326 g + isopropanol/NMP 79 g + 17 g 20% PVP K90 + 17 g aqueous PU dispersion 600 + 0.68 g aziridine + 10 g colloidal silica."
+              },
+              "process": "Mix, coat and wet-test.",
+              "results": {
+                "friction": "Excellent lubricity.",
+                "adhesion": "Good shelf life.",
+                "wca": "Wet contact angle as low as 20 degrees.",
+                "durability": "Polyether PU option.",
+                "other": "Broadens carrier polymer selection."
+              }
+            },
+            {
+              "name": "Example 7 - low-contact-angle polyester PU variant",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "Polycarbonate substrate.",
+              "formulation": {
+                "primer": "None.",
+                "topcoat": "Water 293 g + isopropanol/NMP 72 g + 15 g 20% PVP K90 + 15 g PU dispersion 910 + 0.6 g aziridine + 8.7 g colloidal silica."
+              },
+              "process": "Mix and coat.",
+              "results": {
+                "friction": "Excellent lubricity.",
+                "adhesion": "Good shelf life.",
+                "wca": "Wet contact angle as low as 10 degrees.",
+                "durability": "Durable hydrophilic coating.",
+                "other": "Strong low-WCA formulation with lower solids."
+              }
+            },
+            {
+              "name": "Example 19 - highly lubricious film formulation",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "Film / sheet coating.",
+              "formulation": {
+                "primer": "None.",
+                "topcoat": "Aqueous PU/PVP/silica/crosslinker Hydromer composition disclosed as Example 19."
+              },
+              "process": "Cast/coated film from viscous dispersion.",
+              "results": {
+                "friction": "Coefficient of friction substantially below 0.05; friction reduction from 0.28 kg to 0.015 kg, about 95%.",
+                "adhesion": "Durable film.",
+                "wca": "Contact angle below 10 degrees.",
+                "durability": "Key high-lubricity formulation reused in catheter Example 49.",
+                "other": "Central performance reference for medical catheter adaptation."
+              }
+            },
+            {
+              "name": "Example 22 - mixed PU carrier with 10-pull durability",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "Coated surfaces; stained with crystal violet for uniformity.",
+              "formulation": {
+                "primer": "None.",
+                "topcoat": "13 parts aromatic PU + 14 parts aliphatic polyester PU + 26 parts 20% PVP + 17 parts colloidal silica + 0.5 parts aziridine + 0.6 parts surfactant + 115 parts water + 128 parts isopropyl alcohol/NMP."
+              },
+              "process": "Dry coating becomes lubricious when wetted; 10-pull friction durability tested.",
+              "results": {
+                "friction": "COF about 0.016 for one pull; after 10 pulls 0.025.",
+                "adhesion": "Uniform coating by crystal violet stain.",
+                "wca": "Not specified.",
+                "durability": "Only slight COF increase after 10 pulls.",
+                "other": "Important for repeated abrasion durability."
+              }
+            },
+            {
+              "name": "Example 29 - triple-PU blend with abrasion resistance",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "Polycarbonate sheet.",
+              "formulation": {
+                "primer": "None.",
+                "topcoat": "Aromatic PU + aliphatic polyester PU + polycarbonate PU + PVP + colloidal silica + aziridine + surfactant in isopropyl alcohol/diacetone alcohol/water."
+              },
+              "process": "Film coating; abrasion rub with isopropyl alcohol soaked gauze.",
+              "results": {
+                "friction": "Lubricious when wet.",
+                "adhesion": "Minor abrasion traces after 25 rubs.",
+                "wca": "Moist film near 0 degrees.",
+                "durability": "Substantial toughness and abrasion resistance.",
+                "other": "Shows blend-PU carrier improves mechanical robustness."
+              }
+            },
+            {
+              "name": "Example 38 - excellent abrasion resistance formulation",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "Polycarbonate sheet.",
+              "formulation": {
+                "primer": "None.",
+                "topcoat": "PVP + aromatic PU + aliphatic polyester PU + polycarbonate PU + aziridine + colloidal silica + surfactant in water/isopropyl alcohol/diacetone alcohol/NMP."
+              },
+              "process": "Coat and abrasion-test.",
+              "results": {
+                "friction": "Hydrophilic/lubricious.",
+                "adhesion": "Abrasion resistance rated Excellent.",
+                "wca": "Dry 48 degrees; moist 16 degrees.",
+                "durability": "Excellent abrasion resistance.",
+                "other": "Useful robustness benchmark."
+              }
+            },
+            {
+              "name": "Example 41 - melamine crosslinker alternative",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "Polycarbonate sheet.",
+              "formulation": {
+                "primer": "None.",
+                "topcoat": "Similar mixed PU/PVP/silica formulation using 0.4 g melamine crosslinker instead of aziridine."
+              },
+              "process": "Coat and abrasion-test.",
+              "results": {
+                "friction": "Hydrophilic.",
+                "adhesion": "Abrasion resistance rated Good.",
+                "wca": "Dry 64 degrees; moist 22 degrees.",
+                "durability": "Good with non-aziridine crosslinker.",
+                "other": "Potential design-around for aziridine crosslinker concerns."
+              }
+            },
+            {
+              "name": "Example 49 - one-step latex Foley catheter coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "Latex Foley urinary catheter.",
+              "formulation": {
+                "primer": "None; one-step coating.",
+                "topcoat": "Composition of Example 19."
+              },
+              "process": "Dip coat catheter in one step and air dry without additional curing.",
+              "results": {
+                "friction": "Coefficient of friction substantially below 0.05.",
+                "adhesion": "Medical catheter coating retained adhesion/lubricity.",
+                "wca": "Not specified.",
+                "durability": "One-step catheter coating route.",
+                "other": "Most directly relevant medical-device embodiment."
+              }
+            },
+            {
+              "name": "Example 50 - antimicrobial colloidal silver catheter coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "Latex Foley urinary catheter.",
+              "formulation": {
+                "primer": "None; modified one-step Example 19 catheter coating.",
+                "topcoat": "Example 19 catheter coating composition modified with 25% commercially available antimicrobial colloidal silver (Milliken)."
+              },
+              "process": "One-step catheter coating; antimicrobial silver added.",
+              "results": {
+                "friction": "Lubricity was not compromised.",
+                "adhesion": "Adhesion was not compromised.",
+                "wca": "Not specified.",
+                "durability": "Antimicrobial modification compatible with catheter coating.",
+                "other": "Important Hydromer antimicrobial/silver direction."
               }
             }
           ],
@@ -920,27 +1114,24 @@
             "已到期，適合做為開放技術參考；仍需注意各國同族案與後續改良專利"
           ],
           "actionable_insights": [
-            "加入 Hydromer 專利樹：P06(1992 基礎 PVP/isocyanate) → P07(2006 多用途配方平台) → 後續商品化/設備服務 C04",
-            "可用於設計多基材通用 primer/topcoat 思路，特別是金屬、玻璃、polyurethane、polycarbonate 等跨基材應用",
-            "metal oxide / polyurethane / aziridine 這類強化成分值得進一步拆解，可能與耐磨、附著或抗菌功能有關",
-            "cited-by 高，下一步應抓出引用它的後續醫材塗層專利，建立 Hydromer 路徑樹"
+            "Use Hydromer as a benchmark for non-UV aqueous hydrophilic coating and silver antimicrobial add-on.",
+            "Track aziridine vs melamine crosslinker as a practical design choice.",
+            "For catheter strategy, focus on Example 19 -> Example 49 -> Example 50 path."
           ],
           "red_flags": [
-            "目前尚未解析完整 claim 與 examples，配方比例與實驗數據不能直接引用",
-            "aziridine 類交聯劑有毒性與法規風險，若做實驗應優先找低毒替代",
-            "雖然美國專利已到期，仍需確認 EP/JP/CA 等同族狀態與後續 continuation / improvement patents"
+            "Broad claims across many substrates; medical relevance must be filtered carefully.",
+            "Aziridine crosslinker may raise biocompatibility/process safety questions.",
+            "Patent has many examples; current LitDB captures representative subset, not all 52 individually."
           ],
           "vs_database": "P07 應接在 P06 之後：P06 是早期單步 PVP/isocyanate 熱固化潤滑水凝膠，P07 則把 Hydromer 技術擴張成多用途、多基材、多功能 composition 平台。與 P05 的 PEO/PVP 雙層備援親水性相比，P07 更像商品化配方平台；與 P26/Biocoat UV topcoat 相比，P07 是非單一 UV topcoat 的廣義 composition。",
           "bioteque_relevance": "此案已到期且屬 Hydromer 重要平台專利，可作為本專案理解商用親水塗層配方架構的核心參考。短期建議用它建立 Hydromer 技術路徑，並拆出 crosslinker、metal oxide、polyurethane、aziridine 等設計元素，評估哪些可安全轉成低毒、可量產、可耐磨的配方模組。",
-          "evidence_level": "medium",
-          "source_quality": "google_patents_metadata",
+          "evidence_level": "high",
+          "source_quality": "google_patents_fulltext",
           "key_findings": [
-            "Hydromer Inc. 原始與目前 assignee",
-            "專利已到期（Google Patents: Expired - Lifetime）",
-            "priority 2002-04-30；granted 2006-03-07",
-            "family 涵蓋 US/EP/JP/KR/AU/BR/CA/WO 等多國案",
-            "cited-by 196，後續影響大",
-            "關鍵詞包含 crosslinker、metal oxide、polyurethane、aziridine、surface-active agent、drug、antimicrobial"
+            "Hydromer platform is waterborne PU/PVP/silica/crosslinker, not a UV-PVP system.",
+            "Colloidal silica and crosslinker are recurring durability levers.",
+            "Example 49 and 50 are directly catheter-relevant; Example 50 adds colloidal silver without losing adhesion/lubricity.",
+            "Patent is broad and cross-industry; not every example is medical-device relevant."
           ],
           "coating_technology": {
             "materials": [
@@ -1022,7 +1213,8 @@
           "company_path_note": "Hydromer phase 3: broaden PU/PVP/bio-effecting know-how into multi-substrate, multi-additive coating composition platform.",
           "inference_flags": [
             "* Company-path placement is analyst synthesis from verified Hydromer assignee/date/technical direction."
-          ]
+          ],
+          "examples_note": "Patent contains 52 examples. This LitDB entry captures representative formulation families and the medical-device relevant catheter/antimicrobial examples; remaining non-medical examples are summarized in findings rather than individually expanded."
         }
       }
     },
@@ -1471,114 +1663,269 @@
       },
       "patentResults": {
         "full": {
-          "summary": "DSM 第二代親水塗層專利（EP1957130B1），在 P01 基礎上新增聚電解質（polyelectrolyte）成分，顯著提升塗層的抗乾燥性（dry-out resistance）與吸水速率。聚電解質的離子性使塗層在低濕度環境下維持較高水合度，延緩潤滑失效。同時改善導管插入前的快速活化時間。此專利是 DSM ComfortCoat 抗乾燥性能改善的關鍵 IP，與 P01 形成互補保護。",
+          "summary": "DSM / Astra Tech 的 EP1957130B1 是 ComfortCoat 路線中很重要的抗乾燥親水塗層專利。全文實施例顯示，其核心不是單純加入 PVP，而是在 PEG4000DA/PEO 或 PVP 面塗中加入 poly(acrylamide-co-acrylic acid) partial sodium salt（PAcA）作為 polyelectrolyte，藉由離子水合提升離水後的 dry-out lubricity。Examples 1-3 與 Comparative A-B 直接比較有無 polyelectrolyte 的摩擦維持時間；Example 4 則展示 PVP/PAcA/benzophenone/glycerol 配方經 gamma sterilisation 後仍維持潤滑、乾燥時間與附著，對導尿管抗乾燥設計很有參考價值。",
           "examples": [
             {
-              "name": "PVC 14Fr Pebax 導管",
+              "name": "Example 1 - PEG4000DA / PEO / PAcA / Tween 80 dry-out coating",
               "is_real": true,
-              "credibility": "中",
-              "credibility_reason": "與P01共享實施例基礎，有具體基材和測試方法，但配方比例寬泛",
-              "substrate": "PVC / Pebax 導管",
+              "credibility": "高",
+              "credibility_reason": "Google Patents 全文 Example 1 與 dry-out friction table 明確列出配方、基材、UV 劑量與 1-15 分鐘摩擦數據。",
+              "substrate": "PVC male catheter / PVC tubing，長 23 cm，OD 4.5 mm，ID 3 mm，14 Fr；一端封閉以避免管腔內壁被 dip coating。",
               "formulation": {
-                "primer": "Polyether diol 交聯網絡（Norrish I, Irgacure 2959）",
-                "topcoat": "PVP + polyelectrolyte（PAA Na salt）+ benzophenone（Norrish II）"
+                "primer": "PTGL1000(T-H)2 oligomer 4.25 wt% + PVP 1.3M 0.75 wt% + Irgacure 2959 0.20 wt% + ethanol 94.8 wt%。",
+                "topcoat": "PEG4000DA 5.00 wt% + PEO 200K 3.75 wt% + poly(acrylamide-co-acrylic acid) partial sodium salt / PAcA 1.25 wt% + Irgacure 2959 0.10 wt% + Tween 80 0.01 wt% + water 44.94 wt% + methanol 44.95 wt%。"
               },
               "process": {
-                "surface_prep": "未明示",
-                "coating_method": "Dip coating",
-                "drying": "未明示",
-                "curing": "UV（Norrish I 底塗 + Norrish II 面塗）"
+                "surface_prep": "PVC tubing 一端封閉；先上 primer，再上 hydrophilic topcoat。",
+                "coating_method": "Dip coating；Harland PCX coater/175/24。",
+                "drying": "UV 固化流程中完成溶劑移除/定著；全文重點放在 UV dose 與 dry-out friction。",
+                "curing": "Harland Medical Systems UVM 400 lamp；平均 60 mW/cm2；primer 約 1.8 J/cm2，hydrophilic coating 約 21.6 J/cm2。"
               },
               "results": {
-                "friction": "未在摘要中",
-                "adhesion": "未在摘要中",
+                "friction": "Dry-out friction: 1/2/5/7.5/10/12.5/15 min = 7.7 / 9.3 / 9.5 / 10.5 / 12.1 / 15.6 / 20.8 g。",
+                "adhesion": "形成均勻潤濕塗層；該例主要展示 polyelectrolyte 對 dry-out lubrication 的提升。",
                 "wca": "未明示",
-                "durability": "gamma滅菌後維持",
-                "other": "dry-out time 延長（polyelectrolyte保水）"
+                "durability": "15 分鐘 dry-out 後仍維持低摩擦，相較無 polyelectrolyte 對照組明顯改善。",
+                "other": "Tween 80 可能改善表面潤濕/配方均勻性；適合作為抗乾燥配方正對照。"
+              }
+            },
+            {
+              "name": "Example 2 - PEG4000DA / PEO / PAcA without Tween 80",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents 全文 Example 2 明確列出與 Example 1 類似但不含 Tween 80 的配方與 dry-out friction table。",
+              "substrate": "PVC male catheter / PVC tubing，長 23 cm，OD 4.5 mm，ID 3 mm，14 Fr。",
+              "formulation": {
+                "primer": "PTGL1000(T-H)2 oligomer 4.25 wt% + PVP 1.3M 0.75 wt% + Irgacure 2959 0.20 wt% + ethanol 94.8 wt%。",
+                "topcoat": "PEG4000DA 5.00 wt% + PEO 200K 3.75 wt% + PAcA 1.25 wt% + Irgacure 2959 0.10 wt% + water 44.95 wt% + methanol 44.95 wt%；不含 Tween 80。"
+              },
+              "process": {
+                "surface_prep": "PVC tubing 一端封閉；primer + topcoat 雙層 dip coating。",
+                "coating_method": "Dip coating；Harland PCX coater/175/24。",
+                "drying": "UV 固化流程中完成。",
+                "curing": "UVM 400 lamp；平均 60 mW/cm2；primer 約 1.8 J/cm2，topcoat 約 21.6 J/cm2。"
+              },
+              "results": {
+                "friction": "Dry-out friction: 1/2/5/7.5/10/12.5/15 min = 13.0 / 15.8 / 21.6 / 26.6 / 35.7 / 61.0 / 58.6 g。",
+                "adhesion": "均勻塗層；但 dry-out 後摩擦高於含 Tween 80 的 Example 1。",
+                "wca": "未明示",
+                "durability": "比無 PAcA 對照組好，但 12.5-15 分鐘摩擦上升較明顯。",
+                "other": "顯示 polyelectrolyte 有效，但 surfactant/潤濕助劑會影響長時間 dry-out 表現。"
+              }
+            },
+            {
+              "name": "Example 3 - PVP / PAcA / benzophenone Norrish II coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents 全文 Example 3 明確列出 PVP/PAcA/benzophenone 配方與摩擦數據。",
+              "substrate": "PVC male catheter / PVC tubing，長 23 cm，OD 4.5 mm，ID 3 mm，14 Fr。",
+              "formulation": {
+                "primer": "PTGL1000(T-H)2 oligomer 4.25 wt% + PVP 1.3M 0.75 wt% + Irgacure 2959 0.20 wt% + ethanol 94.8 wt%。",
+                "topcoat": "PVP 5.00 wt% + PAcA 1.25 wt% + benzophenone 0.10 wt% + water 46.83 wt% + methanol 46.83 wt%。"
+              },
+              "process": {
+                "surface_prep": "PVC tubing 一端封閉；primer + PVP/PAcA topcoat。",
+                "coating_method": "Dip coating；Harland PCX coater/175/24。",
+                "drying": "UV 固化流程中完成。",
+                "curing": "UVM 400 lamp；平均 60 mW/cm2；primer 約 1.8 J/cm2，topcoat 約 21.6 J/cm2；benzophenone 作 Norrish II 光引發/接枝。"
+              },
+              "results": {
+                "friction": "Dry-out friction: 1/2/5/7.5/10/12.5/15 min = 11.0 / 13.8 / 15.2 / 15.6 / 16.1 / 16.9 / 18.1 g。",
+                "adhesion": "PVP/PAcA 在 15 分鐘內保持相當穩定低摩擦；為本專利最有實用價值的 PVP 抗乾燥路線之一。",
+                "wca": "未明示",
+                "durability": "15 分鐘 dry-out 後摩擦仍低，優於 Comparative B（PVP/BP 無 PAcA）。",
+                "other": "對 Bioteque 類 PVP 親水塗層最有參考價值：PAcA 少量加入即可顯著延長 dry-out lubricity。"
+              }
+            },
+            {
+              "name": "Example 4 - PVP / PAcA / benzophenone / glycerol gamma-stable coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents 全文 Example 4 明確列出配方，並描述 gamma sterilisation 後仍有潤滑、dry-out time、附著與無裂紋表現。",
+              "substrate": "PVC catheter / tubing；同系列 PVC catheter 實驗。",
+              "formulation": {
+                "primer": "PTGL1000(T-H)2 oligomer 4.50 wt% + PVP 1.3M 0.50 wt% + Irgacure 2959 0.20 wt% + ethanol 94.8 wt%。",
+                "topcoat": "PVP 5.50 wt% + PAcA 0.75 wt% + benzophenone 0.12 wt% + glycerol 0.30 wt% + water 46.67 wt% + methanol 46.67 wt%。"
+              },
+              "process": {
+                "surface_prep": "PVC catheter 先上 primer，再上含 glycerol 的 PVP/PAcA topcoat。",
+                "coating_method": "Dip coating；Harland PCX coater/175/24。",
+                "drying": "UV 固化流程中完成。",
+                "curing": "UVM 400 lamp；平均 60 mW/cm2；primer 約 1.8 J/cm2，topcoat 約 21.6 J/cm2。"
+              },
+              "results": {
+                "friction": "全文描述 gamma 滅菌後仍 lubricious；未列出同 Examples 1-3 的完整摩擦表。",
+                "adhesion": "Gamma sterilisation 後對 PVC catheter 仍有足夠附著。",
+                "wca": "未明示",
+                "durability": "Gamma sterilisation 後仍維持良好 dry-out time，且表面無可見裂紋。",
+                "other": "Glycerol 可能作為保濕/塑化輔助；此例對實際產品滅菌後性能最接近。"
+              }
+            },
+            {
+              "name": "Comparative A - PEG4000DA / PEO without polyelectrolyte",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents 全文 comparative example A，作為 Example 1-2 的無 polyelectrolyte 對照。",
+              "substrate": "PVC male catheter / PVC tubing，長 23 cm，OD 4.5 mm，ID 3 mm，14 Fr。",
+              "formulation": {
+                "primer": "PTGL1000(T-H)2 oligomer 4.25 wt% + PVP 1.3M 0.75 wt% + Irgacure 2959 0.20 wt% + ethanol 94.8 wt%。",
+                "topcoat": "PEG4000DA 5.00 wt% + PEO 200K 5.00 wt% + Irgacure 2959 0.10 wt% + water 44.95 wt% + methanol 44.95 wt%；無 PAcA / 無 polyelectrolyte。"
+              },
+              "process": {
+                "surface_prep": "同 Examples 1-3。",
+                "coating_method": "Dip coating；Harland PCX coater/175/24。",
+                "drying": "UV 固化流程中完成。",
+                "curing": "UVM 400 lamp；平均 60 mW/cm2；primer 約 1.8 J/cm2，topcoat 約 21.6 J/cm2。"
+              },
+              "results": {
+                "friction": "Dry-out friction: 1/2/5/7.5/10/12.5/15 min = 26.1 / 31.2 / 41.8 / 68.4 / 187.1 / 238.7 g。",
+                "adhesion": "作為對照組，主要顯示無 polyelectrolyte 時 dry-out 後摩擦快速上升。",
+                "wca": "未明示",
+                "durability": "10 分鐘後摩擦大幅惡化，dry-out lubricity 不佳。",
+                "other": "證明 PEO/PEGDA 本身不足以維持長時間抗乾燥潤滑。"
+              }
+            },
+            {
+              "name": "Comparative B - PVP / benzophenone without polyelectrolyte",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents 全文 comparative example B，作為 Example 3 的無 polyelectrolyte 對照。",
+              "substrate": "PVC male catheter / PVC tubing，長 23 cm，OD 4.5 mm，ID 3 mm，14 Fr。",
+              "formulation": {
+                "primer": "PTGL1000(T-H)2 oligomer 4.25 wt% + PVP 1.3M 0.75 wt% + Irgacure 2959 0.20 wt% + ethanol 94.8 wt%。",
+                "topcoat": "PVP 5.00 wt% + benzophenone 0.10 wt% + water 47.45 wt% + methanol 47.45 wt%；無 PAcA / 無 polyelectrolyte。"
+              },
+              "process": {
+                "surface_prep": "同 Example 3。",
+                "coating_method": "Dip coating；Harland PCX coater/175/24。",
+                "drying": "UV 固化流程中完成。",
+                "curing": "UVM 400 lamp；平均 60 mW/cm2；primer 約 1.8 J/cm2，topcoat 約 21.6 J/cm2。"
+              },
+              "results": {
+                "friction": "Dry-out friction: 1/2/5/7.5/10 min = 21.3 / 24.1 / 54.6 / 87 / 193 g；表格摘錄中 12.5/15 min 未見完整值。",
+                "adhesion": "作為 PVP/BP 無 polyelectrolyte 對照組。",
+                "wca": "未明示",
+                "durability": "10 分鐘 dry-out 後摩擦已大幅上升，明顯差於 Example 3。",
+                "other": "凸顯 PVP 系統中加入 PAcA 對 dry-out lubrication 的核心貢獻。"
               }
             }
           ],
           "key_claims": [
-            "非離子親水高分子(PVP)+polyelectrolyte組合面塗",
-            "Benzophenone Norrish II型UV交聯",
-            "與P01的polyether primer搭配構成完整雙層系統"
+            "親水塗層包含親水聚合物與 polyelectrolyte，以提升 dry-out lubrication。",
+            "PAcA 類 poly(acrylamide-co-acrylic acid) partial sodium salt 是全文實施例的核心聚電解質。",
+            "PVP/benzophenone Norrish II 路線與 PEG4000DA/PEO/Irgacure Norrish I 路線都可搭配 polyelectrolyte。",
+            "與 P01 的 polyether/PVP primer 搭配形成 DSM 雙層 UV 固化親水塗層系統。"
           ],
           "actionable_insights": [
-            "Dry-out time概念：polyelectrolyte(PAA Na)的離子水合延長塗層離水後潤滑時間",
-            "Pebax基材已驗證可行",
-            "2026/12/11到期後polyelectrolyte配方可自由使用"
+            "Dry-out time 的真正可操作變因是 PAcA / polyelectrolyte 的離子水合，而不是單純提高 PVP 或 PEO 比例。",
+            "Example 3 的 PVP 5% + PAcA 1.25% + BP 0.1% 是最值得作為 PVP 系統抗乾燥正對照的配方。",
+            "Example 4 顯示 glycerol + PAcA 可改善 gamma sterilisation 後的 dry-out / cracking / adhesion，適合往產品化驗證延伸。",
+            "Comparative A/B 可作為內部實驗的陰性對照，量化 polyelectrolyte 的增益。"
           ],
           "red_flags": [
-            "聚電解質具體化學結構未知，claim 邊界不確定",
-            "與 P01 族群共同構成 DSM 強力 IP 保護"
+            "PAcA / polyelectrolyte 是 claim 風險核心，若直接使用 acrylic acid/acrylamide 鹽類共聚物需做 FTO。",
+            "與 P01 primer 族群共同構成 DSM ComfortCoat 壁壘，不能只看面塗。",
+            "Comparative data 顯示無 polyelectrolyte 的 dry-out 表現很差；若設計迴避，需用其他保水機制補足。",
+            "到期日、各國法律狀態與 EP/US family claim 範圍仍需逐案核對。"
           ],
           "vs_database": "P02與P01是同一DSM家族，P01保護底塗+雙層結構，P02保護面塗配方（PVP+polyelectrolyte）。P03(WO2009112548A1)是更早期的國際公開版本。三者構成DSM專利壁壘",
           "bioteque_relevance": "抗乾燥性是間歇導尿管的重要功能需求。建議以 PEO 或 PVA 取代聚電解質作為抗乾燥設計，迴避 P02 的聚電解質 claim。",
-          "evidence_level": "medium",
-          "source_quality": "abstract",
+          "evidence_level": "high",
+          "source_quality": "google_patents_fulltext",
+          "examples_note": "已依 Google Patents EP1957130B1 全文補入 Examples 1-4 與 Comparative A-B；前台應顯示 6 個實驗單元，其中 4 個正式實施例、2 個對照實驗。",
           "key_findings": [
-            "新增聚電解質成分提升抗乾燥性（dry-out resistance）",
-            "聚電解質在低濕度環境維持水合度",
-            "加速塗層活化（更快的吸水速率）",
-            "與 P01 互補，構成 DSM 更完整的保護族群",
-            "適用於術中可能出現暫時乾燥的臨床場景"
+            "Examples 1-3 直接證明加入 PAcA / polyelectrolyte 可顯著降低 dry-out 後摩擦。",
+            "Example 3（PVP + PAcA + benzophenone）15 分鐘仍維持約 18.1 g 摩擦，遠優於 Comparative B 10 分鐘約 193 g。",
+            "Example 1（PEG4000DA + PEO + PAcA + Tween 80）15 分鐘約 20.8 g，優於無 PAcA 的 Comparative A 15 分鐘約 238.7 g。",
+            "Example 4 加入 glycerol，並提到 gamma sterilisation 後仍潤滑、乾燥時間佳、附著足夠且無可見裂紋。",
+            "此專利將抗乾燥性能從概念推進到可量化配方與摩擦表，是 DSM ComfortCoat 演進中的關鍵節點。"
           ],
           "coating_technology": {
             "materials": [
-              "PVP",
-              "benzophenone（BP）",
-              "聚電解質（具體種類需查全文）",
-              "isocyanate"
+              "PTGL1000(T-H)2 oligomer",
+              "PVP 1.3M / PVP",
+              "PEG4000DA",
+              "PEO 200K",
+              "poly(acrylamide-co-acrylic acid) partial sodium salt / PAcA",
+              "Irgacure 2959",
+              "benzophenone",
+              "Tween 80",
+              "glycerol",
+              "ethanol / water / methanol"
             ],
             "surface_prep": [
-              "可選 plasma"
+              "PVC catheter/tubing 一端封閉避免內腔被 coating",
+              "先上 primer，再上 hydrophilic topcoat"
             ],
             "curing_or_process": [
-              "UV 固化（365nm）",
-              "Dip coating"
+              "Dip coating",
+              "Harland PCX coater/175/24",
+              "Harland UVM 400 lamp",
+              "平均 60 mW/cm2",
+              "primer 約 1.8 J/cm2；topcoat 約 21.6 J/cm2"
             ],
             "test_methods": [
-              "Dry-out resistance 測試（需查方法）",
-              "WCA 量測",
-              "COF 測試"
+              "Dry-out friction at 1, 2, 5, 7.5, 10, 12.5, 15 minutes",
+              "Gamma sterilisation 後外觀/潤滑/附著確認（Example 4）",
+              "Uniform wetting / coating observation"
             ]
           },
           "patent_core": {
             "claim_focus": [
-              "PVP + BP + 聚電解質三元複合塗層（推估）",
-              "聚電解質對抗乾燥性的功能性 claim"
+              "親水聚合物 + polyelectrolyte 的抗乾燥潤滑塗層。",
+              "PVP/BP 或 PEGDA/PEO/Irgacure 系統中加入 PAcA 類聚電解質。",
+              "Polyelectrolyte 對 dry-out lubricity / water retention 的功能性保護。",
+              "與 DSM primer 技術組合形成雙層塗層平台。"
             ],
             "design_around_notes": [
-              "使用非離子性親水添加劑取代聚電解質",
-              "PEG/PEO 也可提供部分抗乾燥效果（不同機制）",
-              "需查全文確認聚電解質的化學結構是否被 claim 保護"
+              "若要避開，優先考慮非離子保水系統（PEG/PEO/glycerol/sorbitol 類）或 zwitterionic anti-fouling，而非 acrylic acid/acrylamide 鹽類 polyelectrolyte。",
+              "可比較 SBMA/CBMA 與 PAcA 的抗乾燥/抗結垢雙功能差異，建立不同作用機制。",
+              "若必須使用 PAcA 類材料，需查 family claims 與到期狀態，不宜只看單一 EP B1。"
             ]
           },
           "experimental_plan": {
             "materials": [
               "PVP K90",
               "PEGDA（Mn 700）",
-              "PEO（提供抗乾燥效果，非聚電解質）"
+              "PEO 200K",
+              "PAcA 或 sodium polyacrylate/acrylamide-acrylic acid copolymer",
+              "Benzophenone",
+              "Irgacure 2959",
+              "Glycerol",
+              "Tween 80",
+              "PVC catheter coupon / tubing"
             ],
             "suppliers": [
-              "Sigma-Aldrich"
+              "Sigma-Aldrich / Merck",
+              "TCI",
+              "Polysciences（聚電解質候選）"
             ],
             "steps": [
-              "PEO 替代聚電解質的抗乾燥性比較實驗",
-              "乾燥條件下（RH 20%，1h）後 COF 測試"
+              "複製 Example 3 作為 PVP/PAcA 抗乾燥正對照：PVP 5%、PAcA 1.25%、BP 0.1%。",
+              "建立陰性對照 Comparative B：PVP 5%、BP 0.1%，不加 PAcA。",
+              "建立產品化候選 Example 4 route：PVP 5.5%、PAcA 0.75%、BP 0.12%、glycerol 0.30%。",
+              "做 dry-out friction time course：1、2、5、7.5、10、12.5、15 分鐘。",
+              "做 gamma sterilisation 前後比較：摩擦、表面裂紋、附著、再水化速度。",
+              "設計迴避組：以 PEO/glycerol/SBMA 替代 PAcA，確認是否能達到類似 dry-out 表現。"
             ],
             "acceptance_tests": [
-              "乾燥後 COF ≤ 0.20（目標）",
-              "再水化後 WCA ≤ 20°"
+              "15 分鐘 dry-out 後摩擦接近 Example 3/1 等級，明顯低於無 polyelectrolyte 對照。",
+              "Gamma sterilisation 後無可見裂紋。",
+              "Gamma sterilisation 後附著足夠，濕摩擦不顯著惡化。",
+              "若採非 polyelectrolyte 迴避組，需同時達到 dry-out 與 FTO 目標。"
             ]
           },
           "next_actions": [
-            "查 EP1957130B1 全文 claim，確認聚電解質的化學定義",
-            "確認 P02 在台灣/歐洲的有效性",
-            "評估 PEO 加入對抗乾燥性的改善效果"
+            "逐條比對 EP1957130B1 claims 中 polyelectrolyte 的定義與濃度範圍。",
+            "比對 US family / WO family claims，確認 PAcA、PVP/BP、PEGDA/PEO 路線是否同樣被覆蓋。",
+            "把 Example 3、Example 4 加入內部實驗矩陣，作為抗乾燥正對照。",
+            "建立非 polyelectrolyte design-around 組，避免直接落入 DSM 核心 claim。",
+            "確認 EP1957130B1 及同族專利在目標市場的法律狀態。"
           ],
           "citations_needed": [
-            "EP1957130B1 全文 claim"
+            "EP1957130B1 Google Patents full text Examples 1-4 and Comparative A-B",
+            "EP1957130B1 claims",
+            "WO2008071925A1 / US family claims"
           ]
         }
       }
@@ -1612,30 +1959,63 @@
       },
       "patentResults": {
         "full": {
-          "summary": "DSM ComfortCoat 最終商業化核心專利（WO2009112548A1），在 P01/P02 基礎上進一步揭示 Pebax 等新型基材的適用性及製程優化。此專利涵蓋多種聚合物基材（TPU/PVC/Pebax/矽膠）的通用親水塗層系統，配合 Harland PCX 設備的標準化製程。P03 是 DSM-Harland 生態系統的整合性專利，商業化程度最高。",
+          "summary": "WO2009112548A1 is DSM hydrophilic coating work focused on low particulate release from a UV cured Pebax catheter shaft coating. The key formulation combines PEG1500 diacrylamide, PVP, PAcA, benzophenone, Irgacure 2959 and Tween 80 over a PTGL1000(T-H)2 primer. Comparative experiments remove the Norrish Type II photoinitiator or use PEGDA instead of the claimed multifunctional polymerizable compound, showing the invention reduces particulate release under a wear test.",
           "examples": [
             {
-              "name": "Pebax 導管實施例",
+              "name": "Example 1 - PEG1500 diacrylamide / PVP / PAcA dual-photoinitiator topcoat",
               "is_real": true,
-              "credibility": "中",
-              "credibility_reason": "有指名基材(Pebax)和具體比例範圍(10-20wt%)，但 polyelectrolyte 種類列了一大串只測了1-2種",
-              "substrate": "Pebax 導管",
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "Pebax 7233 catheter shafts, OD 0.034 inch / 0.86 mm; coated length 27 cm.",
               "formulation": {
-                "primer": "與P01共用 polyether primer 系統",
-                "topcoat": "PVP + poly(acrylamide-co-acrylic acid) sodium salt + benzophenone，polyelectrolyte 10-20wt% of dry coating"
+                "primer": "PTGL1000(T-H)2 5.00 wt% + Irgacure 2959 0.20 wt% + ethanol 94.8 wt%; mixed overnight.",
+                "topcoat": "PEG1500 diacrylamide 2.00 wt% + PVP 1.3M 1.33 wt% + PAcA 0.67 wt% + benzophenone 0.08 wt% + Irgacure 2959 0.04 wt% + Tween 80 0.04 wt% + water 47.92 wt% + methanol 47.92 wt%."
               },
-              "process": {
-                "surface_prep": "未明示",
-                "coating_method": "Dip coating",
-                "drying": "未明示",
-                "curing": "UV（benzophenone H抽取交聯）"
-              },
+              "process": "Harland 175-24 PCX coater. Primer UV exposure 15 s, topcoat 360 s; average 60 mW/cm2; UV dose 0.9 J/cm2 primer and 21.6 J/cm2 topcoat; 21 C and 50% RH.",
               "results": {
-                "friction": "未在抓取範圍內",
-                "adhesion": "未在抓取範圍內",
-                "wca": "未明示",
-                "durability": "未在抓取範圍內",
-                "other": "Dry-out time 顯著延長（Table 3 有數據但未在抓取範圍內）"
+                "friction": "Not the main endpoint; particulate release/wear is main test.",
+                "adhesion": "Coated Pebax shafts subjected to particulate release wear test.",
+                "wca": "Not specified.",
+                "durability": "Table reports large reduction in particulates release vs comparatives.",
+                "other": "Congo-red staining, Zwick wear test and USP particle criteria used."
+              }
+            },
+            {
+              "name": "Comparative A - same formulation without Norrish Type II photoinitiator",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "Pebax 7233 catheter shafts.",
+              "formulation": {
+                "primer": "Same PTGL1000(T-H)2 / Irgacure primer.",
+                "topcoat": "PEG1500 diacrylamide 2.00 wt% + PVP 1.3M 1.33 wt% + PAcA 0.67 wt% + Irgacure 2959 0.04 wt% + Tween 80 0.04 wt% + water 47.96 wt% + methanol 47.96 wt%; no benzophenone."
+              },
+              "process": "Same Harland PCX application and UV process as Example 1.",
+              "results": {
+                "friction": "Not primary endpoint.",
+                "adhesion": "Comparative for particulate release.",
+                "wca": "Not specified.",
+                "durability": "Higher particulate release than Example 1.",
+                "other": "Shows Norrish Type II photoinitiator is important."
+              }
+            },
+            {
+              "name": "Comparative B - PEGDA replacement without Norrish Type II photoinitiator",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "Pebax 7233 catheter shafts.",
+              "formulation": {
+                "primer": "Same primer.",
+                "topcoat": "PEGDA 2.00 wt% + PVP 1.3M 1.33 wt% + PAcA 0.67 wt% + Irgacure 2959 0.04 wt% + Tween 80 0.04 wt% + water 47.96 wt% + methanol 47.96 wt%; no Norrish Type II photoinitiator and different multifunctional polymerizable compound."
+              },
+              "process": "Same Harland PCX application and UV process.",
+              "results": {
+                "friction": "Not primary endpoint.",
+                "adhesion": "Comparative for particulate release.",
+                "wca": "Not specified.",
+                "durability": "Higher particulate release than Example 1.",
+                "other": "Separates effect of claimed PEG1500 diacrylamide structure from PEGDA."
               }
             }
           ],
@@ -1645,24 +2025,23 @@
             "Benzophenone 作為 Norrish II 型交聯劑"
           ],
           "actionable_insights": [
-            "Dry-out time 概念：塗層離水後多久還滑，是臨床重要指標，本專案 應建立此測試",
-            "Polyelectrolyte 保水機制（離子水合）可在2027年專利到期後使用",
-            "Pebax 基材已驗證可行，本專案 Pebax 產線可參考"
+            "Use P03 for particulate-release test design: Congo red stain, Zwick wear test, USP particle criteria.",
+            "For FTO, watch PEG-diacrylamide + PVP + PAcA + BP/Irgacure combination.",
+            "If our focus is catheter coating durability, this patent fills a gap between lubricity and particulate shedding."
           ],
           "red_flags": [
-            "P01-P03 族群保護範圍廣，是業界最強的親水塗層 IP",
-            "直接模仿 DSM 商業配方有極高侵權風險"
+            "Do not treat P03 as a generic Pebax coating only; its novelty is low particulate release through dual photoinitiator chemistry.",
+            "Images/tables on Google Patents contain some numeric results not fully text-extracted; original PDF should be consulted for exact particle counts."
           ],
           "vs_database": "P03 是 P01 面塗的獨立專利。P01 保護雙層結構，P03 保護面塗配方（PVP+polyelectrolyte）。兩者搭配形成 DSM 的專利壁壘。重要：P03 2026/12/11 到期，屆時 polyelectrolyte 技術可自由使用",
           "bioteque_relevance": "P01-P03 是 本專案 最需要完整迴避的 DSM 族群。建議委託專利律師做完整 FTO 後，以 I-2959+PDA 路線作為整體迴避方案。",
-          "evidence_level": "medium",
-          "source_quality": "abstract",
+          "evidence_level": "high",
+          "source_quality": "google_patents_fulltext",
           "key_findings": [
-            "擴展至 Pebax/矽膠等新型基材",
-            "標準化製程（配合 Harland PCX 設備）",
-            "與 P01/P02 形成 DSM 三件核心族群",
-            "是目前業界最廣泛使用的商業化親水塗層方案",
-            "通過多種基材的臨床耐久性驗證"
+            "The invention combines Norrish Type I and Type II initiation for improved wear/particulate behavior.",
+            "PEG1500 diacrylamide is synthesized and used as the claimed multifunctional polymerizable compound.",
+            "Main performance endpoint is particulate release, not COF.",
+            "The formulation is a close technical neighbor to P01/P02 but focused on particulates."
           ],
           "coating_technology": {
             "materials": [
@@ -1720,7 +2099,8 @@
           "citations_needed": [
             "WO2009112548A1 全文",
             "P01/P02 claim 比對"
-          ]
+          ],
+          "examples_note": "Full text has Example 1 plus Comparative Experiments A and B. These are now separated so the frontend can show the actual experiment structure."
         }
       }
     },
@@ -2373,31 +2753,85 @@
       },
       "patentResults": {
         "full": {
-          "summary": "即用型滅菌導管雙層 PVP UV 固化塗層（US9138510），揭示在輻照滅菌前後均能維持塗層性能的製程設計。底塗為 PVC 底塗層，頂塗為 PVP（K90）UV 固化層。COF < 0.1，可耐 Gamma 或 e-beam 滅菌。此設計解決「UV 塗層耐輻照滅菌」的工程挑戰，是即用型間歇導尿管的重要技術。",
+          "summary": "US9138510 is a Coloplast/Astra-style ready-to-use hydrophilic catheter patent. The key invention is not only the catheter coating, but sterilizing/storing the wetted hydrophilic catheter in an aqueous liquid containing dissolved hydrophilic polymer such as PVP K-25. Full text includes catheter coating Examples 1-4 and water-retention/friction Examples 5-6, showing that irradiation in saline alone hurts retention/friction, while saline plus 6% PVP maintains performance.",
           "examples": [
             {
-              "name": "PVC導管雙層PVP UV交聯",
+              "name": "Example 1 - two-layer PVP/urea UV catheter sterilized wet in PVP solution",
               "is_real": true,
               "credibility": "高",
-              "credibility_reason": "有具體配方比例(5:0.05:94.95)、溫度(70°C)、UV時間(5min)、波長(200-300nm)、摩擦力數據(0.02N)",
+              "credibility_reason": "Explicit Example 1 from full text.",
               "substrate": "PVC catheter",
               "formulation": {
-                "primer": "PVP K90 5份 + Esacure KIP 150 0.05份 / ethanol:gamma-butyrolactone溶劑",
-                "topcoat": "PVP 5份 + urea 1份 / ethanol:gamma-butyrolactone(85:15) — 較低交聯度面塗"
+                "primer": "PVP K90 5 parts + ESACURE KIP 150 0.05 part in ethanol/gamma-butyrolactone; first dip layer.",
+                "topcoat": "PVP 5 parts + urea 1 part + ethanol/gamma-butyrolactone 94 parts; second dip topcoat."
               },
-              "process": {
-                "surface_prep": "無（直接dip coat）",
-                "coating_method": "兩次dip coating（primer→乾燥→topcoat→乾燥）",
-                "drying": "室溫1min + 70°C 30min",
-                "curing": "UV 200-300nm, 5-6 min"
+              "process": "Dip first layer, dry 1 min ambient; dip topcoat, dry 30 min at 70 C; UV 200-300 nm for 5 min; sterilize while wetted with PVP solution.",
+              "results": "Lubricious hydrophilic catheter; used as reference coating in water-retention tests."
+            },
+            {
+              "name": "Example 2 - Gantrez/HEMA unsaturated prepolymer e-beam crosslinked catheter",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit Example 2 from full text.",
+              "substrate": "PVC catheter",
+              "formulation": {
+                "primer": "50:50 primer mixture with medical grade polyurethane and poly(methyl vinyl ether/maleic anhydride)/HEMA unsaturated prepolymer in THF/acetone.",
+                "topcoat": "Poly(methyl vinyl ether/maleic anhydride)/HEMA unsaturated prepolymer in acetone."
               },
-              "results": {
-                "friction": "0.02 N（ASTM D 1894-93 修改版）",
-                "adhesion": "高耐磨耗",
-                "wca": "未明示",
-                "durability": "50次往返磨耗後COF維持（PEGDA Mn250-700）；Mn≥1000劣化。gamma滅菌後維持。drain-off time>3min",
-                "other": "drain-off time > 3 min（離水後仍潤滑）；在溼潤PVP溶液中滅菌"
-              }
+              "process": "React Gantrez AN119 with 5 mol% HEMA using 1-methylimidazole; dip primer and topcoat; expose to 5 Mrad high-energy electron beam; hydrolyze/neutralize in sodium bicarbonate buffer; sterilize wet with PVP solution.",
+              "results": "Modified ASTM D1894 friction force 0.02 N in water."
+            },
+            {
+              "name": "Example 3 - Darocure 1173 UV-crosslinked Gantrez/HEMA catheter",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit Example 3 from full text.",
+              "substrate": "PVC catheter",
+              "formulation": {
+                "primer": "Primer as in Example b plus 1 wt% Darocure 1173 on solids.",
+                "topcoat": "Topcoat as in Example b plus 1 wt% Darocure 1173 on solids."
+              },
+              "process": "Dip primer, dry 30 min; dip topcoat, dry 30 min; UV crosslink; hydrolyze/neutralize one hour in sodium bicarbonate; sterilize wet with PVP solution.",
+              "results": "Modified ASTM D1894 friction force 0.02 N in water."
+            },
+            {
+              "name": "Example 4 - single-layer PVP K90 UV catheter sterilized wet",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit Example 4 from full text.",
+              "substrate": "PVC catheter",
+              "formulation": {
+                "primer": "None.",
+                "topcoat": "PVP K90 5 parts in ethanol/gamma-butyrolactone 95 parts (85/15)."
+              },
+              "process": "Dip, dry 30 min at 70 C; UV 200-300 nm for 6 min; sterilize while wetted with PVP solution.",
+              "results": "Catheter lubricious in wet condition and high abrasion resistance."
+            },
+            {
+              "name": "Example 5 - PVP wetting liquid improves water retention and friction vs saline",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit Example 5 test table.",
+              "substrate": "Crosslinked coated catheters and commercial catheters",
+              "formulation": {
+                "primer": "Test method, not a coating primer.",
+                "topcoat": "Wetting/storage liquids: saline, 6% Plasdone K-25, CMC, xanthan."
+              },
+              "process": "Store coated catheters in wetting liquid and irradiate; measure water retention and friction.",
+              "results": "Example a retention improves from 1-3 min saline to 9 min in 6% PVP K-25; friction improves from 0.06 N to 0.04 N. Commercial catheters also improve."
+            },
+            {
+              "name": "Example 6 - sterilization comparison before/after irradiation",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit Example 6 tables 2-3.",
+              "substrate": "Crosslinked catheter coatings and commercial catheters",
+              "formulation": {
+                "primer": "Test method, not a coating primer.",
+                "topcoat": "0.9% saline versus 0.9% saline + Plasdone K25 storage liquid."
+              },
+              "process": "Store 48 h with/without radiation sterilization; measure retention and friction.",
+              "results": "Sterilization in saline reduces retention and increases friction, while saline + PVP avoids adverse effect; Example a retention 9 min and friction 0.04 N after sterilization in PVP-containing liquid."
             }
           ],
           "key_claims": [
@@ -2407,27 +2841,22 @@
             "UV 200-300nm短波交聯"
           ],
           "actionable_insights": [
-            "Esacure KIP 150是你剛討論的高分子型光起始劑！此專利證實KIP 150用於醫材PVP塗層的可行性",
-            "雙層不同交聯度策略：底塗高交聯(耐磨)+面塗低交聯(高潤滑)→解決潤滑vs耐磨矛盾",
-            "0.02N摩擦力是極低的基準值，可作為本專案目標",
-            "Coloplast另一專利US10850009有50次往返磨耗數據：PEGDA Mn250-700在50次後COF維持低位，Mn≥1000開始劣化",
-            "PEGDA分子量是耐磨關鍵：Mn越小→交聯密度越高→耐磨越好。本專案的SR344(Mn508)/SR610(Mn508-742)落在甜蜜區",
-            "Coloplast US10850009B2 耐磨測試：50次往返磨耗（25 back-and-forth through silicone孔）。PEGDA Mn250-700維持低COF，Mn≥1000劣化。本專案用SR344(Mn508)/SR610(Mn508-742)剛好在甜蜜區"
+            "For product strategy, separate coating formulation from package wetting-liquid formulation.",
+            "Use PVP-containing storage liquid as benchmark for ready-to-use catheter aging/sterilization tests.",
+            "If avoiding this family, be careful with claims covering aqueous hydrophilic polymer storage liquid plus sterilized hydrophilic catheter."
           ],
           "red_flags": [
-            "PVP UV 塗層的輻照降解風險需獨立評估",
-            "E-beam vs Gamma 對塗層影響不同，需分別測試"
+            "This is an important ready-to-use catheter packaging/sterilization patent, not merely a two-layer coating patent.",
+            "Claim scope may catch storage-liquid design even if coating chemistry differs."
           ],
           "vs_database": "與P01(DSM)比：P12用PVP自交聯（KIP 150 Type I），P01用benzophenone H抽取（Type II），技術路徑不同。P12的0.02N COF比P01的≤20g更優。P12的雙層不同交聯度策略是獨特貢獻",
           "bioteque_relevance": "若 本專案 未來開發即用型產品，耐輻照滅菌是必要設計要求。建議在 Phase 2 完成後加入滅菌耐受性驗證實驗。",
-          "evidence_level": "medium",
-          "source_quality": "abstract",
+          "evidence_level": "high",
+          "source_quality": "google_patents_fulltext",
           "key_findings": [
-            "PVC 底塗 + PVP UV 固化頂塗雙層結構",
-            "COF < 0.1，通過臨床摩擦測試",
-            "耐輻照滅菌（Gamma/e-beam）設計",
-            "即用型間歇導尿管核心技術",
-            "滅菌前後塗層性能維持"
+            "The core innovation is ready-to-use wet storage/sterilization with dissolved hydrophilic polymer, not only coating chemistry.",
+            "6% Plasdone K-25/PVP in saline preserves water retention and low friction after irradiation.",
+            "Examples 2-3 show Gantrez/HEMA e-beam or UV crosslinked alternatives with 0.02 N friction."
           ],
           "coating_technology": {
             "materials": [
@@ -2484,7 +2913,8 @@
           ],
           "citations_needed": [
             "US9138510 全文 claim"
-          ]
+          ],
+          "examples_note": "Full text has Examples 1-6. Examples 1-4 are coating preparations; Examples 5-6 are water-retention/friction and sterilization storage tests."
         }
       },
       "related_patents": [
@@ -2519,30 +2949,139 @@
       },
       "patentResults": {
         "full": {
-          "summary": "Coloplast 早期親水塗層製程專利（WO1998058990A1），揭示 TPU primer + PVP 頂塗 dip coating + UV 固化的雙層製程。底塗以 TPU + 硝化纖維素（nitrocellulose）THF 溶液於 60°C 乾燥 15 分鐘；頂塗 PVP K90 水溶液浸塗，可單塗或雙塗。摩擦測試顯示雙塗結構 COF 顯著低於單塗。此為 Coloplast 間歇導尿管塗層的早期基礎 IP，1998 年申請，核心可能接近過期。",
+          "summary": "WO1998058990A1 is an early Astra/Medicon-style UV crosslinked PVP hydrophilic coating patent. It discloses seven working examples using PVP K90 in ethanol/gamma-butyrolactone, UV exposure at 200-300 nm, and single- or two-layer coatings on PVC catheters or polyurethane tubes. The important design evolution is from single crosslinked PVP layer to two-layer coatings, then to urea or hydroxypropylcellulose additives and differential crosslinking to balance abrasion resistance and low friction.",
           "examples": [
             {
-              "name": "TPU+nitrocellulose primer / PVP K90 topcoat",
+              "name": "Example 1 - single-layer UV crosslinked PVP on PVC catheter",
               "is_real": true,
               "credibility": "高",
-              "credibility_reason": "WO專利實施例，有明確配方比較",
-              "substrate": "PVC導管（primer為TPU）",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "PVC catheter.",
               "formulation": {
-                "primer": "醫療級TPU + nitrocellulose / THF溶液",
-                "topcoat": "PVP K90 水溶液"
+                "primer": "None.",
+                "topcoat": "5 parts PVP K90 in 95 parts ethanol/gamma-butyrolactone 85/15."
               },
-              "process": {
-                "surface_prep": "dip primer溶液",
-                "coating_method": "dip塗覆",
-                "drying": "60°C 15min",
-                "curing": "UV光固化"
-              },
+              "process": "Dip coat; dry 30 min at 70 C; UV 200-300 nm for 6 min.",
               "results": {
-                "friction": "雙層 < 單層（具體值專利中）",
-                "adhesion": "—",
-                "wca": "<30°*（PVP dip 塗層，未在專利中量化 WCA）",
-                "durability": "—",
-                "other": "含HPC（羥丙基纖維素）變體也比較"
+                "friction": "Lubricious in wet condition.",
+                "adhesion": "High abrasion resistance.",
+                "wca": "Not specified.",
+                "durability": "High abrasion resistance when wetted.",
+                "other": "Baseline single-layer crosslinked PVP catheter coating."
+              }
+            },
+            {
+              "name": "Example 2 - single-layer UV crosslinked PVP on polyurethane tube",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "Polyurethane tube.",
+              "formulation": {
+                "primer": "None.",
+                "topcoat": "5 parts PVP K90 in 95 parts ethanol/gamma-butyrolactone 85/15."
+              },
+              "process": "Dip coat; dry 30 min at 70 C; UV 200-300 nm for 6 min.",
+              "results": {
+                "friction": "Low friction coefficient.",
+                "adhesion": "High abrasion resistance in water.",
+                "wca": "Not specified.",
+                "durability": "Shows substrate transfer from PVC to PU.",
+                "other": "Same chemistry on PU tube."
+              }
+            },
+            {
+              "name": "Example 3 - two-layer PVC catheter with ESACURE KIP 150 first layer",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "PVC catheter.",
+              "formulation": {
+                "primer": "First layer: 5 parts PVP K90 + 0.05 parts ESACURE KIP 150 in 94.95 parts ethanol/gamma-butyrolactone 15/85.",
+                "topcoat": "Second dip in PVP solution from Example 1."
+              },
+              "process": "Dip first layer; dry 1 min ambient; dip top layer; dry 30 min at 70 C; UV 200-300 nm for 5 min.",
+              "results": {
+                "friction": "Lower than single dip coating in Examples 1 and 2.",
+                "adhesion": "Two-layer crosslinked coating.",
+                "wca": "Not specified.",
+                "durability": "Improved friction while retaining abrasion resistance.",
+                "other": "First clear two-layer improvement."
+              }
+            },
+            {
+              "name": "Example 4 - two-layer PVP/urea topcoat",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "PVC catheter.",
+              "formulation": {
+                "primer": "First layer: PVP K90 + ESACURE KIP 150 in ethanol/gamma-butyrolactone.",
+                "topcoat": "Topcoat: 5 parts PVP + 1 part urea + 94 parts ethanol/gamma-butyrolactone 85/15."
+              },
+              "process": "First dip/dry; second dip; dry 30 min at 70 C; UV 200-300 nm for 5 min.",
+              "results": {
+                "friction": "Lower than Examples 1-3.",
+                "adhesion": "Two-layer coating with urea.",
+                "wca": "Not specified.",
+                "durability": "Urea improves lubricity compared with non-urea two-layer.",
+                "other": "Hydrogen-bonding/solvation additive concept."
+              }
+            },
+            {
+              "name": "Example 5 - hydroxypropylcellulose modified first layer",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "PVC catheter.",
+              "formulation": {
+                "primer": "First layer: 5 parts PVP K90 + 1 part hydroxypropylcellulose + 0.05 parts ESACURE KIP 150 in 93.95 parts ethanol/gamma-butyrolactone 15/85.",
+                "topcoat": "Second dip in PVP solution from Example 1."
+              },
+              "process": "Dip first layer; dry ambient 1 min; dip topcoat; dry 30 min at 70 C; UV 200-300 nm for 5 min.",
+              "results": {
+                "friction": "Equivalent to single dip coatings in Examples 1 and 2.",
+                "adhesion": "Two-layer variant.",
+                "wca": "Not specified.",
+                "durability": "Does not improve friction like urea route.",
+                "other": "HPC additive did not deliver the same friction benefit."
+              }
+            },
+            {
+              "name": "Example 6 - differential crosslinking two-layer PVP",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "PVC catheter.",
+              "formulation": {
+                "primer": "Primer layer: PVP K90 solution as Example 1, UV for 10 min to create higher crosslink density near substrate.",
+                "topcoat": "Topcoat: same PVP solution, UV only 5 min for more swellable outer layer."
+              },
+              "process": "First dip/dry/UV 10 min; second dip/dry/UV 5 min.",
+              "results": {
+                "friction": "Lubricious when wetted.",
+                "adhesion": "High abrasion resistance.",
+                "wca": "Not specified.",
+                "durability": "Higher crosslinking near substrate, lower crosslinking at surface.",
+                "other": "Important architecture idea: gradient crosslink density."
+              }
+            },
+            {
+              "name": "Example 7 - differential crosslinking plus urea topcoat",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "PVC catheter.",
+              "formulation": {
+                "primer": "Primer: PVP K90 solution, UV 10 min for high crosslink density.",
+                "topcoat": "Topcoat: 5 parts PVP + 1 part urea + 94 parts ethanol/gamma-butyrolactone 85/15; UV 5 min."
+              },
+              "process": "Sequential dip coating with differential UV exposure.",
+              "results": {
+                "friction": "Lower than single dip Examples 1/2 and lower than Example 6; comparable to Example 4 two-layer urea route.",
+                "adhesion": "Maintains crosslinked base layer.",
+                "wca": "Not specified.",
+                "durability": "Best balance of low friction and crosslinked support among disclosed examples.",
+                "other": "Strong design concept for primer/topcoat crosslink gradient plus humectant additive."
               }
             }
           ],
@@ -2552,22 +3091,22 @@
             "TPU+nitrocellulose作primer，PVC導管雙層親水塗層"
           ],
           "actionable_insights": [
-            "醫療級TPU直接作primer溶液，省去化學改性步驟",
-            "HPC加入PVP可調整塗層韌性"
+            "Use Examples 6-7 as a simple conceptual model for hard primer / swellable topcoat design.",
+            "Use Example 4/7 urea topcoat as a low-cost humectant/lubricity benchmark.",
+            "Modern design can replace old 200-300 nm UV/KIP system with safer/current photoinitiators, but FTO should account for the two-layer concept."
           ],
           "red_flags": [
-            "THF 溶劑毒性高，不適合現代 GMP 製造",
-            "硝化纖維素底塗有易燃性安全疑慮"
+            "Old patent but core concepts may appear in later continuation/improvement patents.",
+            "Gamma-butyrolactone and UV 200-300 nm may be unattractive for current production."
           ],
           "bioteque_relevance": "若 P13 已過期，雙層塗覆製程（底塗 + 頂塗）可自由使用。PDA 取代硝化纖維素底塗是現代版本的自然演進，不需擔心 IP 問題。",
-          "evidence_level": "medium",
-          "source_quality": "abstract",
+          "evidence_level": "high",
+          "source_quality": "google_patents_fulltext",
           "key_findings": [
-            "TPU + 硝化纖維素 THF 溶液底塗，60°C/15 min 熱乾燥",
-            "PVP K90 頂塗雙塗結構 COF 優於單塗",
-            "1998 年 Coloplast 早期基礎 IP",
-            "UV 固化製程（具體條件需查全文）",
-            "HPC（羥丙基纖維素）作黏度調整劑"
+            "Early UV-PVP patent already teaches two-layer and differential-crosslinking architecture.",
+            "Urea topcoat is a clear friction-reduction additive.",
+            "The test method adapts ASTM D1894 for wet tubes/catheters.",
+            "PVP K90 + ethanol/gamma-butyrolactone + UV 200-300 nm is the base platform."
           ],
           "coating_technology": {
             "materials": [
@@ -2627,7 +3166,8 @@
           ],
           "citations_needed": [
             "WO1998058990A1 法律狀態"
-          ]
+          ],
+          "examples_note": "Full text contains Examples 1-7 plus comparative discussion; all seven working examples are now represented."
         }
       }
     },
@@ -2660,48 +3200,80 @@
       },
       "patentResults": {
         "full": {
-          "summary": "PVC導管Plasdone K90+ESACURE KIP150 UV固化，比較表面粗糙度，isocyanate熱固替代版本",
+          "summary": "US20150038947A1 / US9931442B2 is an Astra Tech hydrophilic catheter patent focused on substrate surface roughness/texture rather than a new coating chemistry. Full text compares rough versus smooth versions of Pebax, PVC and Meliflex substrates coated with the same Desmodur IL/PVP isocyanate coating, and a UV-PVP PVC pair. Increased Ra/Rdc improves water retention after wetting.",
           "examples": [
             {
-              "name": "Plasdone K90/ESACURE KIP150 UV on PVC",
+              "name": "Ex A vs A prime - rough Pebax improves water retention",
               "is_real": true,
               "credibility": "高",
-              "credibility_reason": "專利實施例，含dip速度等具體參數",
-              "substrate": "PVC導管",
+              "credibility_reason": "Explicit comparison table in full text.",
+              "substrate": "Pebax catheter substrate; Ex A rough, Ex A prime smooth.",
               "formulation": {
-                "primer": "—",
-                "topcoat": "Plasdone K90（PVP）+ESACURE KIP150 / 乙醇:GBL 85:15"
+                "primer": "Desmodur IL diisocyanate 2% w/v in methylene chloride; dip 15 s; dry 60 s ambient.",
+                "topcoat": "PVP K90 6% w/v in methylene chloride; dip 3 s; flush off 35 C 30 min; cure 80 C 60 min; rinse water."
               },
-              "process": {
-                "surface_prep": "—",
-                "coating_method": "dip 20mm/s ~20秒",
-                "drying": "室溫 1分鐘",
-                "curing": "UV光固化"
+              "process": "Measure Ra/Rdc with Hommel Tester T1000; wet 30 s; weigh water content after 6 min.",
+              "results": "Water retention: rough Pebax Ex A 8.97 mg/cm2 vs smooth A prime 7.59 mg/cm2; Ra 5.80 vs 0.15 um; Rdc 33.14 vs 0.88 um."
+            },
+            {
+              "name": "Ex B vs B prime - rough PVC improves water retention",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit comparison table in full text.",
+              "substrate": "PVC catheter substrate; rough vs smooth pair.",
+              "formulation": {
+                "primer": "Same Desmodur IL primer.",
+                "topcoat": "Same PVP K90 isocyanate-cured hydrophilic coating."
               },
-              "results": {
-                "friction": "表面粗糙度Ra比較",
-                "adhesion": "—",
-                "wca": "<30°*（Plasdone K90 PVP 塗層，未在專利中量化 WCA）",
-                "durability": "isocyanate熱固版耐久更佳*"
-              }
+              "process": "Same roughness and retention test.",
+              "results": "Water retention: rough PVC Ex B 5.14 mg/cm2 vs smooth B prime 3.85 mg/cm2; Ra 7.14 vs 0.85 um; Rdc 41.99 vs 5.19 um."
+            },
+            {
+              "name": "Ex C vs C prime - rough Meliflex improves water retention",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit comparison table in full text.",
+              "substrate": "Meliflex catheter substrate; rough vs smooth pair.",
+              "formulation": {
+                "primer": "Same Desmodur IL primer.",
+                "topcoat": "Same PVP K90 isocyanate-cured hydrophilic coating."
+              },
+              "process": "Same roughness and retention test.",
+              "results": "Water retention: rough Meliflex Ex C 5.50 mg/cm2 vs smooth C prime 4.62 mg/cm2; Ra 3.27 vs 1.04 um; Rdc 18.88 vs 5.79 um."
+            },
+            {
+              "name": "Ex D vs D prime - rough PVC improves UV-PVP coating retention",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit UV-PVP roughness comparison in full text.",
+              "substrate": "PVC catheter substrate; rough vs smooth pair.",
+              "formulation": {
+                "primer": "PVP K90 4.9 parts + ESACURE KIP 150 0.1 part in ethanol/gamma-butyrolactone 95 parts; dip 20 mm/s, about 20 s; dry 1 min at 20 C.",
+                "topcoat": "PVP K90 4 parts in ethanol/gamma-butyrolactone 96 parts; dip 20 mm/s, about 20 s; dry 30 min at 70 C; UV 254 nm for 150 s."
+              },
+              "process": "Same water retention test after wetting.",
+              "results": "Water retention: rough Ex D 13.07 mg/cm2 vs smooth D prime 12.62 mg/cm2."
             }
           ],
           "mechanism": "KIP150水溶性光起始劑引發PVP交聯；isocyanate版本與基材共價結合更耐久",
           "key_findings": [
-            "ESACURE KIP150是PVP UV固化良好選擇",
-            "GBL（γ-butyrolactone）溶劑比乙醇低毒性*",
-            "dip速度20mm/s是標準拉升速度"
+            "Novelty is surface texture: Ra at least about 3 um and/or Rdc at least about 18 um improves water retention.",
+            "Effect appears across Pebax, PVC, Meliflex and both isocyanate-cured PVP and UV-PVP coatings.",
+            "This is more a substrate/process patent than a coating-recipe patent."
           ],
           "actionable_insights": [
-            "KIP150作光起始劑比I-2959水溶性更好",
-            "20mm/s dip速度可作本專案製程基準",
-            "熱固版本適合不耐UV照射的基材"
+            "Add substrate roughness as a design variable in internal hydrophilic coating DOE.",
+            "For FTO, avoid copying claimed Ra/Rdc windows if using similar hydrophilic catheter coating.",
+            "Use Ex B/D as PVC-relevant benchmarks."
           ],
           "red_flags": [
-            "GBL溶劑殘留需驗證",
-            "KIP150殘留生物安全評估*"
+            "Family has litigation marker on Google Patents; treat as higher legal attention.",
+            "Do not misread this patent as Plasdone/KIP chemistry only; the claim target is roughness-enhanced retention."
           ],
-          "bioteque_relevance": "提供PVP UV固化光起始劑選擇依據，ESACURE KIP150可與I-2959比較"
+          "bioteque_relevance": "提供PVP UV固化光起始劑選擇依據，ESACURE KIP150可與I-2959比較",
+          "evidence_level": "high",
+          "source_quality": "google_patents_fulltext",
+          "examples_note": "Full text uses Ex A/A prime, B/B prime, C/C prime and D/D prime comparison sets rather than numbered examples. They are represented as four experimental comparison groups."
         }
       }
     },
@@ -2734,51 +3306,105 @@
       },
       "patentResults": {
         "full": {
-          "summary": "雙層 PU-PVP 熱固化塗層（US20110144579A1），底塗為 isocyanate + polyol 熱固化 PU 網絡，頂塗為 isocyanate + PVP 複合層。關鍵製程：PVP 需預乾燥至含水量 < 0.5%（220°F 熱處理），防止水分與 NCO 基反應。免 UV 設備，可塗管腔內壁。與 P30/P31（Cook）路線相似，但底塗材料不同。",
+          "summary": "US20110144579A1 is a lubricious two-layer thermoset coating patent for balloon catheters and similar devices. The platform is a polyurethane or polyurea primer carrying PEO, followed by a polyurethane/polyurea PVP topcoat. Full text provides several formulation variants under Example 1 and comparative examples showing that omitting the PEO primer causes poor durability after rubbing.",
           "examples": [
             {
-              "name": "PU/PVP isocyanate熱固塗層",
+              "name": "Example 1A - polyurea/PEO primer + polyurethane/PVP topcoat on PET balloon catheter",
               "is_real": true,
               "credibility": "高",
-              "credibility_reason": "專利，製程細節詳細",
-              "substrate": "導管/balloon",
+              "credibility_reason": "Explicit formulation variant in full text.",
+              "substrate": "Balloon catheter with inflated PET balloon.",
               "formulation": {
-                "primer": "—",
-                "topcoat": "isocyanate+polyol+PVP熱固成PU/PVP互穿"
+                "primer": "Desmodur L67 MPA/X 17.0 g + Jeffamine EDR148 1.11 g + 200 g of 5% PEO Mw about 200k in methylene bromide + 507 g 1,3-dioxolane; about 3.1% solids, NCO/NH 1.1, polyurea/PEO solids ratio 1.25.",
+                "topcoat": "Desmodur L67 MPA/X 5.99 g + castor oil polyol DB Oil 2.99 g + 200 g of 5% dried PVP Plasdone 90 in 1,3-dioxolane + 196 g 1,3-dioxolane."
               },
-              "process": {
-                "surface_prep": "PVP預乾燥220°F數小時（水分<0.5%）",
-                "coating_method": "dip/spray/brush",
-                "drying": "220°F乾燥",
-                "curing": "熱固化（無UV）"
+              "process": "Dip primer at 1.5 in/s, withdraw 0.5 in/s; dry 30 min ambient; bake 165 F 4 h; dip topcoat same conditions and bake.",
+              "results": "Very lubricious when wetted; only modest lubricity decrease after 10 rubbing cycles."
+            },
+            {
+              "name": "Example 1B - polyurethane/PEO primer + polyurea/PVP topcoat",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit formulation variant in full text.",
+              "substrate": "Balloon catheter with PET balloon.",
+              "formulation": {
+                "primer": "Vorite 63 11.7 g + Poly THF 650 8.26 g + 400 g of 2.5% PEO Alkox R400 in methylene bromide + 2080 g methylene bromide; about 1.2% solids, NCO/OH 1.3.",
+                "topcoat": "Baytec MP-080 3.1 g + Jeffamine ED600 0.9 g + 200 g of 5% dried Plasdone 90 in acetonitrile + 85.7 g acetonitrile; about 4.9% solids, NCO/NH 1.4."
               },
-              "results": {
-                "friction": "潤滑性良好",
-                "adhesion": "PU/PVP互穿附著佳",
-                "wca": "<30°"
-              }
+              "process": "Dip 1.2 in/s, withdraw 0.4 in/s; dry 20 min; bake 170 F 4 h; topcoat same.",
+              "results": "Lubricious and durable after rubbing."
+            },
+            {
+              "name": "Example 1C - Desmodur IL / PolyTHF primer + Baytec/PVP topcoat",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit formulation variant in full text.",
+              "substrate": "Balloon catheter with PET balloon.",
+              "formulation": {
+                "primer": "Desmodur IL 8.7 g + Poly THF 1000 6.4 g + 200 g of 5% PEO Alkox R400 in 1,3-dioxolane + 896 g methylene bromide; about 2.25% solids, NCO/OH 1.3.",
+                "topcoat": "Baytec MP-210 3.1 g + Polycin 12 5.31 g + 400 g of 5% dried PVP in acetonitrile + 499 g 1,3-dioxolane; about 4.5% solids."
+              },
+              "process": "Dip 1.0 in/s, withdraw 0.3 in/s; dry 20 min; bake 175 F 3.5 h; topcoat same.",
+              "results": "Lubricious thermoset two-layer coating."
+            },
+            {
+              "name": "Example 1D - TDI/Jeffamine/PEO primer + TDI/Jeffamine/PVP topcoat",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit formulation variant in full text.",
+              "substrate": "Balloon catheter with PET balloon.",
+              "formulation": {
+                "primer": "Desmodur L67 MPA/X 26 g + Jeffamine T-403 4.6 g + 400 g of 5% PEO Alkox 8150 in methylene bromide + 1329 g acetonitrile; about 2.5% solids.",
+                "topcoat": "Desmodur L67 MPA/X 10.0 g + Jeffamine ED600 3.3 g + 400 g of 5% Kollidon 90F in methylene bromide + 1405 g methylene bromide; about 1.65% solids."
+              },
+              "process": "Dip 2.0 in/s, withdraw 0.5 in/s; dry 20 min; bake 150 F 8 h; topcoat same.",
+              "results": "Lubricious coating with PEO primer durability concept."
+            },
+            {
+              "name": "Comparative Example 1 - PVP topcoat without PEO primer",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit comparative example.",
+              "substrate": "Balloon catheter with PET balloon.",
+              "formulation": {
+                "primer": "No polyurethane/PEO primer.",
+                "topcoat": "Polyurethane/PVP topcoat as in Example 1."
+              },
+              "process": "Apply topcoat by dipping and baking as in Example 1.",
+              "results": "Initially lubricious, but coating easily removed by rubbing; after fewer than 10 cycles surface became noticeably less lubricious."
+            },
+            {
+              "name": "Comparative Example 2 - polyurethane primer without PEO",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit comparative example.",
+              "substrate": "Balloon catheter with PET balloon.",
+              "formulation": {
+                "primer": "Polyurethane primer: Desmodur L67 MPA/X 13.8 g + Polycin 12 6.1 g + butyl acetate 364 g; about 4% solids.",
+                "topcoat": "Polyurethane/PVP topcoat using Desmodur L67 MPA/X + Desmophen 1800 + Kollidon 90F in methylene bromide."
+              },
+              "process": "Dip/bake as in Example 1.",
+              "results": "Used to compare non-PEO primer against invention; weaker durability rationale than PEO primer."
             }
           ],
           "mechanism": "isocyanate-NCO基與PVP/polyol交聯形成PU網絡，PVP均勻分散其中；高水分會消耗NCO基影響固化",
           "key_findings": [
-            "雙層：PU 網絡底塗 + isocyanate/PVP 頂塗",
-            "PVP 必須預乾燥至 < 0.5% 水分（220°F）",
-            "熱固化免 UV，可塗管腔內壁",
-            "WCA 顯著降低，附著力強",
-            "適用 balloon 導管和一般導管"
+            "PEO-containing primer is the durability lever; PVP topcoat alone is easily rubbed off.",
+            "Thermal curing uses isocyanate/polyol or isocyanate/amine chemistry rather than UV.",
+            "Balloon catheter/PET balloon compatibility is directly disclosed."
           ],
           "actionable_insights": [
-            "若本專案無UV設備，P15熱固方案可先導入",
-            "PVP乾燥步驟必須加入SOP"
+            "Use as reference for non-UV thermoset lubricious coating on balloon catheter.",
+            "Compare PEO primer vs non-PEO primer in abrasion durability tests.",
+            "FTO risk centers on PEO-containing polyurethane/polyurea primer plus PVP topcoat architecture."
           ],
           "red_flags": [
-            "Isocyanate 毒性需嚴格管控",
-            "高溫可能影響 TPU 軟化點（需確認 Pellethane 的 Tg）",
-            "PVP 預乾燥製程增加生產複雜度"
+            "Uses methylene bromide, acetonitrile and isocyanates; manufacturing/EHS burden is high.",
+            "Google text merges variants; original PDF should be checked for exact example numbering before legal memo."
           ],
           "bioteque_relevance": "管腔內壁熱固化是解決 UV line-of-sight 限制的重要方案。PVP 預乾燥要求是重要製程知識。若採用熱固化路線，需確認 TPU 在固化溫度下的熱穩定性。",
           "evidence_level": "high",
-          "source_quality": "abstract",
+          "source_quality": "google_patents_fulltext",
           "coating_technology": {
             "materials": [
               "PU prepolymer（底塗）",
@@ -2836,7 +3462,8 @@
           ],
           "citations_needed": [
             "US20110144579A1 全文 claim 及法律狀態"
-          ]
+          ],
+          "examples_note": "Google Patents text merges multiple Example 1 variants; this entry separates the disclosed primer/topcoat formulation variants and comparative tests."
         }
       }
     },
@@ -2869,31 +3496,59 @@
       },
       "patentResults": {
         "full": {
-          "summary": "Bard PAA-PEG 抗結垢親水塗層（US10857324），以聚丙烯酸（PAA）與 PEG 複合，兼顧親水潤滑與蛋白質抗沾附。PAA 提供負電荷排斥尿液中帶正電的結垢前驅物，PEG 提供空間位阻。適用矽膠 Foley 導尿管，長期留置場景。此為 Bard/BD 在抗結垢泌尿導管領域的核心 IP，與 SBMA 路線構成市場競爭。",
+          "summary": "US10857324 is a C.R. Bard urinary catheter patent with broad description/claims for a wet, hygroscopic/hydrophilic catheter coating based on hydrogel or PAA, glycerin and/or water, and PEG. The full text does not expose clean numbered working examples in Google Patents text, but it gives multiple concrete formulation ranges and a preferred composition. This should be treated as claim/coverage intelligence rather than proven experimental recipes.",
           "examples": [
             {
-              "name": "PAA+PEG+glycerin導尿管塗層",
-              "is_real": true,
+              "name": "** Claim-derived embodiment 1 - Lubrajel RR CG / water / PEG 400 preferred wet coating",
+              "is_real": false,
               "credibility": "中",
-              "credibility_reason": "Claims有具體配方描述，但比例範圍寬泛",
-              "substrate": "Silicone導尿管（C.R.Bard產品線）",
+              "credibility_reason": "** Claim/description-derived embodiment. Full text provides ranges or architecture but not a numbered working example.",
+              "substrate": "Urinary catheter shaft; optional underlying hydrophilic second coating.",
               "formulation": {
-                "primer": "可選第二層親水塗層（底塗）",
-                "topcoat": "PAA hydrogel + glycerin + PEG + 水 — 吸濕親水配方"
+                "primer": "Optional existing hydrophilic coating beneath wet first coating.",
+                "topcoat": "Lubrajel RR CG hydrogel 23.5 wt% + water 25 wt% + PEG 400 51.5 wt%."
               },
-              "process": {
-                "surface_prep": "未明示",
-                "coating_method": "塗覆",
-                "drying": "未明示",
-                "curing": "可選UV固化silicone外膜"
+              "process": "Apply wet hygroscopic/hydrophilic coating to catheter shaft; can be e-beam or EtO sterilized; anti-blocking toward package.",
+              "results": "Claimed to stay wet/lubricious and avoid external lubricant; no working-example test data in extracted text."
+            },
+            {
+              "name": "** Claim-derived embodiment 2 - Lubrajel / glycerin / PEG 400 wet coating",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "** Claim/description-derived embodiment. Full text provides ranges or architecture but not a numbered working example.",
+              "substrate": "Urinary catheter shaft.",
+              "formulation": {
+                "primer": "Optional hydrophilic second coating.",
+                "topcoat": "Lubrajel RR CG hydrogel 20-30 wt% + glycerin 20-30 wt% + PEG 400 40-60 wt%."
               },
-              "results": {
-                "friction": "潤滑（具體數據在全文中）",
-                "adhesion": "未明示",
-                "wca": "未明示",
-                "durability": "e-beam/EtO滅菌相容",
-                "other": "touchless layer：UV silicone外膜可滑動→使用時推開露出潤滑層"
-              }
+              "process": "Wet coating applied over catheter shaft; sterilizable by e-beam or EtO.",
+              "results": "Coverage route for glycerin replacing water as humectant."
+            },
+            {
+              "name": "** Claim-derived embodiment 3 - Lubrajel / high glycerin / PEG 300 coating",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "** Claim/description-derived embodiment. Full text provides ranges or architecture but not a numbered working example.",
+              "substrate": "Urinary catheter shaft.",
+              "formulation": {
+                "primer": "Optional hydrophilic second coating.",
+                "topcoat": "Lubrajel RR CG hydrogel 20-30 wt% + glycerin 40-60 wt% + PEG 300 20-30 wt%."
+              },
+              "process": "Apply as wet hygroscopic coating.",
+              "results": "High-glycerin route for longer wet feel; no example data."
+            },
+            {
+              "name": "** Claim-derived embodiment 4 - PAA or hydrogel plus PEG/glycerin with UV silicone touchless film",
+              "is_real": false,
+              "credibility": "中",
+              "credibility_reason": "** Claim/description-derived embodiment. Full text provides ranges or architecture but not a numbered working example.",
+              "substrate": "Urinary catheter shaft with handle.",
+              "formulation": {
+                "primer": "Optional hydrophilic base coating.",
+                "topcoat": "First coating: hydrogel or PAA + glycerin and/or water + PEG; optional UV-curable silicone film over coating as movable/touchless layer."
+              },
+              "process": "Apply first wet coating; optionally UV-cure silicone film over it; film can be moved toward handle during use.",
+              "results": "Important product architecture coverage rather than recipe."
             }
           ],
           "key_claims": [
@@ -2902,24 +3557,22 @@
             "non-adhesion（抗包裝黏著）特性"
           ],
           "actionable_insights": [
-            "Touchless layer概念：UV silicone外膜在包裝時防止塗層黏著包材，使用時推開→可解決本專案塗層黏包裝的問題*",
-            "PAA+PEG配方是PVP路線的替代方案",
-            "glycerin作為保濕劑延長dry-out"
+            "Treat as packaging/product architecture and humectant coating coverage.",
+            "For anti-encrustation project, useful as wet-state catheter handling concept, not as durable covalent coating recipe.",
+            "Design-around may use covalent hydrophilic coating plus separate package liquid rather than permanent wet hydrogel layer."
           ],
           "red_flags": [
-            "Bard/BD 在泌尿導管領域 IP 廣泛，需整體 FTO",
-            "PAA 的長期生物相容性需評估（酸性官能基）"
+            "No explicit examples detected; do not use as experimental protocol.",
+            "Broad claim coverage around hydrogel/PAA + PEG/glycerin wet catheter may matter for ready-to-use designs."
           ],
           "vs_database": "與P01(DSM PVP路線)完全不同的配方思路。P18用PAA+PEG，P01用PVP+polyelectrolyte。與P24(US6610035 PEG hydrogel)有相似之處。C.R.Bard是泌尿導管市場領導者，此專利代表矽膠導管的主流塗層方向",
           "bioteque_relevance": "PAA-PEG 是 Phase 3 抗結垢的競爭設計，SBMA 兩性離子是更強力的替代方案。FTO 確認後，SBMA 路線可安全迴避 P18。",
-          "evidence_level": "medium",
-          "source_quality": "abstract",
+          "evidence_level": "high",
+          "source_quality": "google_patents_fulltext_claim_coverage",
           "key_findings": [
-            "PAA（聚丙烯酸）+ PEG 複合塗層",
-            "PAA 負電荷排斥結垢前驅物",
-            "PEG 提供空間位阻抗蛋白質",
-            "適用矽膠 Foley 導尿管",
-            "Bard/BD 抗結垢泌尿塗層核心 IP"
+            "Bard claim target is wet/hygroscopic catheter coating that remains lubricious without external gel or water sachet.",
+            "Preferred chemistry uses Lubrajel hydrogel/PAA, PEG 300/400, glycerin/water.",
+            "Optional UV-curable silicone film acts as touchless protective layer."
           ],
           "coating_technology": {
             "materials": [
@@ -2974,7 +3627,8 @@
           ],
           "citations_needed": [
             "US10857324 全文 claim"
-          ]
+          ],
+          "examples_note": "No clean numbered working examples detected in Google Patents text. The following are claim/description-derived formulation embodiments and are intentionally marked inferred."
         }
       }
     },
@@ -3462,46 +4116,107 @@
       },
       "patentResults": {
         "full": {
-          "summary": "親水潤滑+echogenic回聲雙功能活檢針塗層，親水層下嵌微氣泡/微粒增超音波可見度",
+          "summary": "WO2007089761A2 is an InterV/Merit lubricious echogenic coating application. The invention combines primer/tie layers, echogenic microparticles such as EXPANCEL gas/liquid-containing particles, and optional hydrophilic/lubricious topcoats on needles, wires, guidewires and related devices. Full text contains many examples; this record captures the clinically relevant architecture variants rather than every repetitive substrate example.",
           "examples": [
             {
-              "name": "Lubricious+echogenic dual coating",
+              "name": "Example 2 - stainless steel wire primer / tie / echogenic layer",
               "is_real": true,
               "credibility": "高",
-              "credibility_reason": "專利，活檢針直接應用",
-              "substrate": "活檢針/trocar 16G/18G",
+              "credibility_reason": "Explicit wire coating example in full text.",
+              "substrate": "Stainless steel wire.",
               "formulation": {
-                "primer": "—",
-                "topcoat": "PVP親水層+echogenic微結構"
+                "primer": "Coating Solution A; dried 10-15 min at 75 C to improve adhesion.",
+                "topcoat": "Coating Solution B tie layer, then Coating Solution C echogenic layer with microparticles."
               },
-              "process": {
-                "surface_prep": "—",
-                "coating_method": "dip兩層",
-                "drying": "—",
-                "curing": "UV"
+              "process": "Coat A, dry; coat B, dry 12-15 min at 75 C; coat C, incubate 70% RH at 40 C for 60 min; cure 75 C at least 15 min.",
+              "results": "Forms echogenic coating on wire; adhesion/tie-layer architecture."
+            },
+            {
+              "name": "Example 3 - venous access needle echogenic coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit needle example.",
+              "substrate": "Venous access needle / V-stick by InterV.",
+              "formulation": {
+                "primer": "Coating Solution A.",
+                "topcoat": "Solution B tie layer + Solution C echogenic layer."
               },
-              "results": {
-                "friction": "COF降低（插入力減少）",
-                "other": "超音波可見度提升3倍+*",
-                "wca": "<30°*（PVP 親水層，WCA 未在此專利量化）"
-              }
+              "process": "Same A/B/C coating, humidity incubation and 75 C cure.",
+              "results": "Forms echogenic coating on needle."
+            },
+            {
+              "name": "Example 4 - needle tip silicone spray to reduce penetration force",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit silicone tip modification.",
+              "substrate": "Venous access needle with echogenic coating.",
+              "formulation": {
+                "primer": "A/B/C echogenic coating as previous example.",
+                "topcoat": "Aminofunctional dimethylsiloxane copolymer MDX4-4159 sprayed at needle tip."
+              },
+              "process": "After echogenic coating, spray only needle tip with MDX4-4159.",
+              "results": "Reduced needle penetration force without deleterious effect on echogenicity."
+            },
+            {
+              "name": "Example 19 - EXPANCEL microparticles in first/intermediate layer",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit Example 19.",
+              "substrate": "Stainless steel wire or needle.",
+              "formulation": {
+                "primer": "Coating Solution A doped with 0.5-5 wt% EXPANCEL microparticles; dried 15 min at 75 C.",
+                "topcoat": "Coating Solution B over layer, dried at least 15 min at 75 C."
+              },
+              "process": "Layered coating with polymeric gas/liquid microparticles.",
+              "results": "Smooth echogenic coating adhered well, resisted wet/dry abrasion, and was lubricious when wet; expected ultrasound visibility for weeks/months."
+            },
+            {
+              "name": "Example 20 - EXPANCEL microparticles in tie layer",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit Example 20.",
+              "substrate": "Stainless steel wire or needle.",
+              "formulation": {
+                "primer": "Coating Solution A primer.",
+                "topcoat": "Coating Solution B doped with 0.5-10 wt% EXPANCEL microparticles."
+              },
+              "process": "Primer dry 15 min at 75 C; doped tie layer dry at least 15 min at 75 C.",
+              "results": "Smooth echogenic coating adhered well and resisted abrasion under wet/dry conditions."
+            },
+            {
+              "name": "Hydrophilic topcoat variant - echogenic layer plus hydrophilic Solution F",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Disclosed in full text near examples 20-21 as topcoat placement variant.",
+              "substrate": "Stainless steel wire or needle.",
+              "formulation": {
+                "primer": "Coating Solution A + Coating Solution B intermediate layer.",
+                "topcoat": "Hydrophilic Coating Solution F doped with 0.5-10 wt% EXPANCEL microparticles."
+              },
+              "process": "Dip hydrophilic solution F; dry at least 30 min at 75 C.",
+              "results": "Smooth echogenic and lubricious coating; adhered well and resisted abrasion."
             }
           ],
           "mechanism": "親水層降低插入摩擦；微氣泡/微粒強散射超音波；兩功能分層不互相干擾",
           "key_findings": [
-            "雙功能塗層對超音波引導穿刺有直接臨床意義",
-            "echogenic結構在親水層下，不影響潤滑性",
-            "適合超音波引導活檢"
+            "Echogenicity is provided by gas/liquid-containing microparticles, often EXPANCEL.",
+            "Lubricity can be added as a hydrophilic topcoat or combined layer.",
+            "Layer location of microparticles can vary: primer/intermediate/topcoat.",
+            "Medical targets include needles, guidewires, dilators and catheters."
           ],
           "actionable_insights": [
-            "本專案活檢針若要進超音波引導市場，P25是直接參考",
-            "echogenic層可用現有微粒（PMMA/尼龍粒）達成*"
+            "For product mapping, P25/P32 should be linked as Merit/InterV echogenic-lubricious coating branch.",
+            "Do not overfocus on catheter coating; many embodiments are metal needles/wires.",
+            "If adding ultrasound visibility to lubricious devices, microparticle layer placement is the key variable."
           ],
           "red_flags": [
-            "微粒脫落風險需驗證",
-            "超音波頻率與粒徑匹配需優化*"
+            "Examples are repetitive and device-specific; exact Coating Solution formulas should be extracted from PDF tables before lab replication.",
+            "Echogenic microparticles may conflict with smoothness/particulate requirements for vascular devices."
           ],
-          "bioteque_relevance": "本專案活檢針高階版本可加入echogenic功能提升競爭差異化"
+          "bioteque_relevance": "本專案活檢針高階版本可加入echogenic功能提升競爭差異化",
+          "evidence_level": "high",
+          "source_quality": "google_patents_fulltext",
+          "examples_note": "Full text contains numerous examples. This entry captures representative echogenic/lubricious layer architectures and device embodiments."
         }
       }
     },
@@ -3532,31 +4247,59 @@
       },
       "patentResults": {
         "full": {
-          "summary": "PAA + BP UV 固化頂塗（US12037560B2），以聚丙烯酸（PAA）取代 PVP 作親水成分，配合 benzophenone 光起始劑 UV 接枝。PAA 的羧酸基提供負電荷抗蛋白質能力，同時具備血液相容性（hemocompatibility）。適用心血管導管和血液接觸器材。此為較新的 PAA 路線代表性專利。",
+          "summary": "US12037560B2 is a Biocoat/Integer UV-cure topcoat patent for medical devices. The useful content is polymer synthesis and coating application: poly(HEAA-co-AA) or photoactive poly(HEAA-co-AA-co-MHB) polymers are made, then coated onto Pebax tubing with a basecoat/topcoat UV process. This is more a monomer/polymer synthesis and UV topcoat platform than a traditional catheter recipe.",
           "examples": [
             {
-              "name": "Bi-laminar UV 面塗系統",
+              "name": "Example 1A - poly(HEAA-co-AA) non-photoactive polymer synthesis",
               "is_real": true,
               "credibility": "高",
-              "credibility_reason": "已核准專利(B2)，有具體Claims和實施例。Biocoat已商業化(HYDAK)，已有FDA 510(k)前案",
-              "substrate": "醫療器材通用（catheters, guidewires, implants）",
+              "credibility_reason": "Explicit synthesis text.",
+              "substrate": "Polymer synthesis; later used in coating studies.",
               "formulation": {
-                "primer": "Biocoat bi-laminar basecoat（參照US20110200828A1，acrylic primer含OH/COOH基團，polyisocyanate+aziridine交聯）",
-                "topcoat": "共聚物：4-methacryloxy-2-hydroxybenzophenone（光引發）+ N-(2-hydroxyethyl)acrylamide + acrylic acid，比例40:1~200:1，水/醇溶劑"
+                "primer": "Not applicable.",
+                "topcoat": "HEAA 29.79 g + acrylic acid 6.21 g in 263 mL water; ammonium persulfate/sodium hydroxymethanesulfinate initiator; FeSO4 catalyst."
               },
-              "process": {
-                "surface_prep": "basecoat塗覆+乾燥",
-                "coating_method": "Dip coating（水/水-醇溶液）",
-                "drying": "乾燥",
-                "curing": "UV照射（benzophenone在骨架中原位產生自由基→交聯）"
+              "process": "Polymerize under nitrogen at 40 C; purify by dialysis or acetone precipitation.",
+              "results": "Produces poly(HEAA-co-AA) listed in Table 1."
+            },
+            {
+              "name": "Example 1B - photoactive poly(HEAA-co-AA-co-MHB) in IPA/water",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit synthesis text.",
+              "substrate": "Polymer synthesis for UV topcoat.",
+              "formulation": {
+                "primer": "Not applicable.",
+                "topcoat": "HEAA 15.29 g + AA 3.19 g + MHB 1.00, 0.50 or 0.25 g in 40 mL IPA + 30 mL water; AIBN in THF."
               },
-              "results": {
-                "friction": "COF降低>95%（HYDAK商業數據）",
-                "adhesion": "bi-laminar basecoat確保附著",
-                "wca": "未明示",
-                "durability": "耐gamma/e-beam/EtO滅菌後性能維持",
-                "other": "抗血栓性（改善PTT）；水性系統無有機溶劑殘留風險"
-              }
+              "process": "Sparge 30 min; heat 60 C for 24 h; precipitate with ethyl acetate; dry at 60 C/vacuum; dissolve in 50:50 IPA/water.",
+              "results": "Produces Poly(HEAA-co-AA-co-MHB) 1-4 variants."
+            },
+            {
+              "name": "Example 1C - photoactive polymer in ethanol/water",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit synthesis text.",
+              "substrate": "Polymer synthesis for UV topcoat.",
+              "formulation": {
+                "primer": "Not applicable.",
+                "topcoat": "HEAA 15.29 g + AA 3.19 g + MHB 1.00, 0.50 or 0.25 g in 40 mL ethanol + 30 mL water; AIBN in THF."
+              },
+              "process": "Sparge 30 min; heat 60 C for 24 h; precipitate ethyl acetate; dry and redissolve in ethanol/water.",
+              "results": "Solvent-system variant for photoactive polymer."
+            },
+            {
+              "name": "Example 1D - basecoat/topcoat UV coating on Pebax tubing",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit coating application method.",
+              "substrate": "Pebax 55D plastic tubing; OD 0.079 inch, wall 0.005 inch; stainless steel support rod.",
+              "formulation": {
+                "primer": "Basecoat dipped and UV cured.",
+                "topcoat": "Topcoat containing synthesized UV-cure polymer."
+              },
+              "process": "Dip basecoat at 0.2 in/s; rotate in UV chamber 5 min; dip topcoat at 0.2 in/s; rotate in UV chamber 5 min; Uvitron IntelliRay UV0832, UVA 600 W metal halide lamp.",
+              "results": "Creates UV-cured hydrophilic topcoat on Pebax tubing; performance tied to Table data."
             }
           ],
           "key_claims": [
@@ -3565,24 +4308,23 @@
             "水/水-醇溶劑系統（無有機溶劑），Mw 20,000~800,000"
           ],
           "actionable_insights": [
-            "本專案用外加benzophenone+PVP/PEGDA完全不侵權（非共聚合）",
-            "水/醇溶劑系統可參考，降低DMAc殘留風險",
-            "滅菌後性能測試應納入Phase 2驗證（gamma/e-beam/EtO）"
+            "Biocoat/Integer route is a modern UV topcoat competitor to DSM/Surmodics platforms.",
+            "For FTO, watch photoactive HEAA/AA/MHB copolymer use.",
+            "For experiments, compare HEAA/AA/MHB topcoat against PVP/PEGDA and SBMA alternatives."
           ],
           "red_flags": [
-            "US12037560B2 為近年新專利，保護期長（至 2040+ 年）",
-            "PAA 的低 pH 可能影響長期生物相容性"
+            "Active recent patent; high FTO risk for direct use.",
+            "Full tables need PDF extraction for exact polymer Mw/composition/performance before recipe replication."
           ],
           "vs_database": "此專利是C01(Biocoat HYDAK)的核心UV面塗技術。與P01(DSM)比：DSM用外加benzophenone做H抽取，Biocoat用共聚合benzophenone做原位交聯，技術路徑不同。與P06(Hydromer)比：完全不同世代，P06是isocyanate熱固化。本專案的技術路線（外加benzophenone+PVP）與此專利不衝突",
           "bioteque_relevance": "若 本專案 開發心血管血液接觸導管，PAA 路線是競爭 IP，MPC 或 SBMA 路線是較安全的替代方向。短期（泌尿科為主）影響較小。",
-          "evidence_level": "medium",
-          "source_quality": "abstract",
+          "evidence_level": "high",
+          "source_quality": "google_patents_fulltext",
           "key_findings": [
-            "PAA（聚丙烯酸）取代 PVP 作親水成分",
-            "BP UV 接枝 PAA 至基材表面",
-            "羧酸基提供負電荷抗蛋白質",
-            "血液相容性（hemocompatibility）評估通過",
-            "適用心血管血液接觸器材"
+            "Core polymer is HEAA/AA with photoactive MHB comonomer.",
+            "UV topcoat is coated over a basecoat on Pebax tubing.",
+            "Assignee path changed to Integer Hydrophilic Technologies LLC by 2026 assignment data.",
+            "Patent expires far in future per Google, 2041-05-03 assumption."
           ],
           "coating_technology": {
             "materials": [
@@ -3638,7 +4380,8 @@
           ],
           "citations_needed": [
             "US12037560B2 全文 claim"
-          ]
+          ],
+          "examples_note": "Google Patents exposes one example section but several polymer variants. They are separated here into practical synthesis/coating embodiments."
         }
       },
       "related_patents": [
@@ -7834,52 +8577,79 @@
       },
       "patentResults": {
         "full": {
-          "summary": "Coloplast 光接枝親水塗層（SpeediCath 核心 IP），以光接枝（photografting）技術將親水高分子共價接枝至導管基材，COF < 0.05，WCA < 10°，耐久性比物理塗覆提升 3 倍以上。是間歇導尿市場的核心 IP，護城河深。Coloplast SpeediCath 全球市占第一，此 IP 是主要競爭壁壘。",
+          "summary": "US7745561B2 full text does not match the current LitDB title/interpretation as a Coloplast hydrophilic coating recipe. The examples are macrocyclic polyester oligomer / PBT-polytetramethylene ether glycol block copolymer material synthesis and polymer property tests. It should be treated as a material/polymer substrate intelligence item or reclassified/removed from hydrophilic coating workflow unless a different Coloplast patent was intended.",
           "examples": [
             {
-              "name": "Coloplast photografting coating",
+              "name": "Example 1 - 75/25 cPBT / Terathane 2900 block copolymer extrusion",
               "is_real": true,
               "credibility": "高",
-              "credibility_reason": "上市主流產品，全球市占最大*",
-              "substrate": "間歇導尿管（PVC/TPU）",
+              "credibility_reason": "Explicit Example 1; not coating-related.",
+              "substrate": "Polymer material synthesis; not a coated medical device.",
               "formulation": {
-                "primer": "—",
-                "topcoat": "光接枝PVP/親水高分子"
+                "primer": "Not applicable.",
+                "topcoat": "75 wt% XB3-CA4 cyclic PBT oligomer blend + 25 wt% Terathane 2900 PTMEG."
               },
-              "process": {
-                "surface_prep": "—",
-                "coating_method": "photografting UV接枝",
-                "drying": "—",
-                "curing": "UV光接枝"
+              "process": "Extrude in Randcastle single-screw extruder at 240-260 C.",
+              "results": "GPC: isolated copolymer Mw about 38,000; >90% conversion of CBT oligomer."
+            },
+            {
+              "name": "Example 2 - vacuum heat treatment molecular-weight increase",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit Example 2; not coating-related.",
+              "substrate": "Block copolymer from Example 1.",
+              "formulation": {
+                "primer": "Not applicable.",
+                "topcoat": "Example 1 PBT-PTMEG block copolymer."
               },
-              "results": {
-                "friction": "COF極低（<0.1）",
-                "adhesion": "共價接枝，最高耐久",
-                "wca": "<10°",
-                "durability": "臨床驗證多年"
-              }
+              "process": "Heat in test tubes with vacuum adapters at 210 C up to 16 h; analyze GPC.",
+              "results": "Molecular weight increase summarized in Table 2."
+            },
+            {
+              "name": "Example 3 - 50/50 cPBT / Terathane 2900 block copolymer extrusion",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit Example 3; not coating-related.",
+              "substrate": "Polymer material synthesis.",
+              "formulation": {
+                "primer": "Not applicable.",
+                "topcoat": "50 wt% XB3-CA4 + 50 wt% Terathane 2900."
+              },
+              "process": "Extrude at 250-260 C.",
+              "results": "GPC: Mw about 18,000; about 94% conversion."
+            },
+            {
+              "name": "Example 4 - high-Mw 50/50 block copolymer and tensile testing",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit Example 4; not coating-related.",
+              "substrate": "Polymer material from Example 3.",
+              "formulation": {
+                "primer": "Not applicable.",
+                "topcoat": "PBT-PTMEG block copolymer."
+              },
+              "process": "Heat at 210 C in batches for 3-6 h; combine; injection mold tensile bars.",
+              "results": "Average Mw about 190,000 g/mol; physical properties compared with commercial thermoplastic polyester elastomers."
             }
           ],
           "mechanism": "UV照射在聚合物表面產生自由基，親水高分子共價接枝；非塗覆，是真正的表面改性",
           "key_findings": [
-            "光接枝（photografting）技術，共價鍵結親水高分子",
-            "COF < 0.05，WCA < 10°（文獻最佳值之一）",
-            "耐久性 > 物理塗覆 3 倍",
-            "Coloplast SpeediCath 核心 IP",
-            "間歇導尿市場第一品牌的保護技術"
+            "This is not a hydrophilic coating working-example patent as currently labeled.",
+            "Examples are polymer substrate/material synthesis, not PVP/UV/PU coating.",
+            "Potential relevance is substrate elastomer or catheter material, not coating chemistry."
           ],
           "actionable_insights": [
-            "本專案若做間歇導尿管，必須以Coloplast為對標",
-            "光接枝需UV設備，但耐久性遠超物理塗覆"
+            "Flag P29 for curator review: either retitle/reclassify or replace with the intended Coloplast hydrophilic coating patent.",
+            "Do not feed P29 into coating recipe reports as evidence for hydrophilic coating formulation.",
+            "If retained, tag as substrate-material/polyester elastomer."
           ],
           "red_flags": [
-            "Coloplast P29 是間歇導尿市場最強的 IP 護城河",
-            "光接枝的定義可能很廣，需嚴格法律確認",
-            "若 claim 涵蓋所有 UV 誘發接枝，本專案 UV 路線可能有風險"
+            "High risk of database misclassification.",
+            "The current title says Coloplast hydrophilic coating, but Google full text points to block copolymer material examples."
           ],
           "bioteque_relevance": "Coloplast P29 是間歇導尿市場最難迴避的 IP，建議優先評估泌尿科以外的市場（胸腔引流管、輸尿管支架）作為切入點。若進入間歇導尿市場，需完整 FTO 分析。",
           "evidence_level": "high",
-          "source_quality": "abstract",
+          "source_quality": "google_patents_fulltext_reclassification_needed",
           "coating_technology": {
             "materials": [
               "PVP 或類似親水高分子",
@@ -7936,7 +8706,8 @@
           "citations_needed": [
             "P29 全文 claim（Coloplast）",
             "L02（Surmodics）claim 比對"
-          ]
+          ],
+          "examples_note": "Full text has polymer synthesis Examples 1-4, not hydrophilic coating examples. These are retained to reveal the mismatch and prevent false coating analysis."
         }
       }
     },
@@ -7969,49 +8740,180 @@
       },
       "patentResults": {
         "full": {
-          "summary": "光固化水凝膠親水塗層配方（US8957125），揭示一種含 PVP + benzophenone + 交聯劑的 UV 固化水凝膠配方，適用多種醫材基材。WCA < 20°，COF 顯著降低，附著力良好。此為 DSM 或類似廠商的水凝膠配方型專利，提供具體的塗層組成與製程窗口數據。",
+          "summary": "US8957125B2 is a later DSM coating formulation patent targeting faster/cleaner curing using substituted Norrish Type II photoinitiators. It uses a common PTGL1000(T-H)2 / PVP / Irgacure primer and a PVP K85 / PAcA hydrophilic topcoat in ethanol/water. Comparative A-C use Irgacure, benzophenone, or a simple combination and fail under 240 s cure; Examples I-V use substituted benzophenone-type photoinitiators and reach COF 0.03 with good feel at 240 s. At 180 s, IV and V remain best, especially V.",
           "examples": [
             {
-              "name": "DSM UV PVP塗層配方",
+              "name": "Comparative A - Irgacure 2959 only",
               "is_real": true,
               "credibility": "高",
-              "credibility_reason": "DSM核心配方專利",
-              "substrate": "導管（通用）",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "PVC tubes, Raumedic, 14 Fr, length 40 cm.",
               "formulation": {
-                "primer": "DSM proprietary primer",
-                "topcoat": "UV固化PVP配方"
+                "primer": "PTGL1000(T-H)2 4.25 wt% + PVP K85 0.75 wt% + Irgacure 2959 0.20 wt% + ethanol 94.8 wt%.",
+                "topcoat": "PVP K85 5.2 wt% + PAcA 0.35 wt% + Irgacure 2959 3 dry wt% + ethanol/water carrier; no Type II photoinitiator."
               },
-              "process": {
-                "surface_prep": "—",
-                "coating_method": "dip",
-                "drying": "—",
-                "curing": "UV"
-              },
+              "process": "Harland PCX 175/24; primer dip then topcoat dip; UVM 400 lamp 60 mW/cm2; topcoat cure 240/180/360 s evaluated.",
               "results": {
-                "friction": "行業標準COF",
-                "adhesion": "臨床驗證",
-                "wca": "<20°"
+                "friction": "COF >0.1 at 240 s.",
+                "adhesion": "Feel test very bad.",
+                "wca": "Not specified.",
+                "durability": "Insufficient cure/leachables.",
+                "other": "Shows Type I alone is inadequate."
+              }
+            },
+            {
+              "name": "Comparative B - benzophenone only",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "PVC tubes, 14 Fr, 40 cm.",
+              "formulation": {
+                "primer": "Same DSM primer.",
+                "topcoat": "PVP K85 + PAcA + benzophenone 2 dry wt%; no Irgacure 2959."
+              },
+              "process": "Same Harland coating and HFT test.",
+              "results": {
+                "friction": "COF >0.1 at 240 s.",
+                "adhesion": "Feel test very bad.",
+                "wca": "Not specified.",
+                "durability": "Insufficient cure.",
+                "other": "Unsubstituted benzophenone alone fails."
+              }
+            },
+            {
+              "name": "Comparative C - Irgacure + benzophenone",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "PVC tubes, 14 Fr, 40 cm.",
+              "formulation": {
+                "primer": "Same DSM primer.",
+                "topcoat": "PVP K85 + PAcA + Irgacure 2959 1 dry wt% + benzophenone 1 dry wt%."
+              },
+              "process": "Same process.",
+              "results": {
+                "friction": "COF >0.1 at 240 s.",
+                "adhesion": "Feel test very bad.",
+                "wca": "Not specified.",
+                "durability": "Still inadequate with simple BP combination.",
+                "other": "Just mixing Type I + unsubstituted BP is not enough."
+              }
+            },
+            {
+              "name": "Example I - 3-benzoyl benzoic acid Type II photoinitiator",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "PVC tubes, 14 Fr, 40 cm.",
+              "formulation": {
+                "primer": "Same DSM primer.",
+                "topcoat": "PVP K85 5.2 wt% + PAcA 0.35 wt% + 3-benzoyl benzoic acid 2 dry wt% + ethanol/water carrier."
+              },
+              "process": "Same process; HFT 25 rubs; topcoat cure 240 and 180 s tested.",
+              "results": {
+                "friction": "COF 0.03 at 240 s; >0.1 at 180 s.",
+                "adhesion": "Feel good at 240 s; very bad at 180 s.",
+                "wca": "Not specified.",
+                "durability": "Good at 240 s only.",
+                "other": "Substituted benzophenone acid improves cure vs comparatives."
+              }
+            },
+            {
+              "name": "Example II - 4-benzoyl benzoic acid Type II photoinitiator",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "PVC tubes, 14 Fr, 40 cm.",
+              "formulation": {
+                "primer": "Same DSM primer.",
+                "topcoat": "PVP K85 + PAcA + 4-benzoyl benzoic acid 2 dry wt%."
+              },
+              "process": "Same process.",
+              "results": {
+                "friction": "COF 0.03 at 240 s; >0.1 at 180 s.",
+                "adhesion": "Feel good at 240 s; very bad at 180 s.",
+                "wca": "Not specified.",
+                "durability": "Good at 240 s only.",
+                "other": "Position isomer of benzoyl benzoic acid works at longer cure."
+              }
+            },
+            {
+              "name": "Example III - benzophenone tetracarboxylic acid anhydride Type II only",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "PVC tubes, 14 Fr, 40 cm.",
+              "formulation": {
+                "primer": "Same DSM primer.",
+                "topcoat": "PVP K85 + PAcA + 3,3,4,4-benzophenone tetracarboxylic acid anhydride 2 dry wt%."
+              },
+              "process": "Same process.",
+              "results": {
+                "friction": "COF 0.03 at 240 s.",
+                "adhesion": "Feel good at 240 s.",
+                "wca": "Not specified.",
+                "durability": "Good at 240 s; 180 s not listed in extracted result table.",
+                "other": "Multi-acid/anhydride substituted benzophenone route."
+              }
+            },
+            {
+              "name": "Example IV - Irgacure + 3-benzoyl benzoic acid",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "PVC tubes, 14 Fr, 40 cm.",
+              "formulation": {
+                "primer": "Same DSM primer.",
+                "topcoat": "PVP K85 + PAcA + Irgacure 2959 1 dry wt% + 3-benzoyl benzoic acid 1 dry wt%."
+              },
+              "process": "Same process.",
+              "results": {
+                "friction": "COF 0.03 at 240 s and 0.03 at 180 s.",
+                "adhesion": "Feel good at 240 s; reasonable at 180 s.",
+                "wca": "Not specified.",
+                "durability": "Fast-cure candidate.",
+                "other": "Type I + substituted Type II combination improves cure speed."
+              }
+            },
+            {
+              "name": "Example V - Irgacure + benzophenone tetracarboxylic acid anhydride",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Parsed from the Google Patents full-text examples / experimental section; formulation, substrate, process or result is explicitly disclosed.",
+              "substrate": "PVC tubes, 14 Fr, 40 cm.",
+              "formulation": {
+                "primer": "Same DSM primer.",
+                "topcoat": "PVP K85 + PAcA + Irgacure 2959 1 dry wt% + 3,3,4,4-benzophenone tetracarboxylic acid anhydride 1 dry wt%."
+              },
+              "process": "Same process.",
+              "results": {
+                "friction": "COF 0.03 at 240 s and 0.03 at 180 s.",
+                "adhesion": "Feel good at both 240 s and 180 s.",
+                "wca": "Not specified.",
+                "durability": "Best short-cure performance among extracted examples.",
+                "other": "Most practical fast UV cure formulation in this patent."
               }
             }
           ],
           "mechanism": "UV PVP交聯，專利配方比例",
           "key_findings": [
-            "PVP + benzophenone + 交聯劑 UV 固化水凝膠配方",
-            "WCA < 20°，附著力良好",
-            "提供具體配方組成數據",
-            "多種醫材基材適用"
+            "Substituted Norrish Type II photoinitiators outperform Irgacure-only or benzophenone-only systems.",
+            "Examples IV and V are most important for faster cure; V is best at 180 s.",
+            "Endpoint is COF after 25 rubs plus feel/leachables test.",
+            "This patent continues DSM PVP/PAcA/primer platform but shifts novelty to photoinitiator selection."
           ],
           "actionable_insights": [
-            "本專案需做US8133580族全面迴避分析",
-            "確認哪些請求項已過期，哪些仍有效*"
+            "Use Example V as benchmark for short UV cure while retaining low COF.",
+            "If avoiding DSM, do not copy PVP K85 + PAcA + substituted benzophenone acid/anhydride directly.",
+            "For internal tests, compare BP, benzoyl benzoic acid and tetracarboxybenzophenone anhydride under same UV dose."
           ],
           "red_flags": [
-            "BP + PVP UV 組合可能落入 DSM P01-P03 claim 範圍",
-            "需確認 R13 的獨立 IP 主張範圍"
+            "Active term listed by Google as expiring 2031-10-17; verify legal status.",
+            "Claims target substituted Type II photoinitiator in hydrophilic polymer/polyelectrolyte carrier liquid; FTO risk remains high for DSM-like systems."
           ],
           "bioteque_relevance": "R13 提供 UV 固化水凝膠的配方窗口參考，但其 BP 成分與 DSM P01-P03 族群重疊，需以 I-2959 路線作為設計迴避。",
-          "evidence_level": "medium",
-          "source_quality": "abstract",
+          "evidence_level": "high",
+          "source_quality": "google_patents_fulltext",
           "coating_technology": {
             "materials": [
               "PVP",
@@ -8069,7 +8971,8 @@
           "citations_needed": [
             "US8957125 全文 claim",
             "與 P01-P03 族群的 claim 比對"
-          ]
+          ],
+          "examples_note": "Full text contains Comparative Experiments A-C and Examples I-V. All eight formulation variants are now represented."
         }
       }
     },
@@ -10396,31 +11299,85 @@
       "patent_notes": "InterV（後被Merit收購）的echogenic塗層專利。A1公開，超過5年未見B版本→可能已放棄*",
       "patentResults": {
         "full": {
-          "summary": "聲學可視性增強（Echogenic）潤滑塗層（US20090048537），在 PVP 親水塗層中嵌入含氣體的聚合物微球，賦予器材超音波可視性同時維持表面潤滑。適用活檢針、導管、guidewire 等需超音波引導的介入器材。雙功能設計（潤滑 + 可視）是差異化競爭策略。",
+          "summary": "US20090048537A1 is a Merit/InterV lubricious coating patent with a large example set for blades, needles, guidewires and related devices. It uses multilayer primer/intermediate/hydrophilic polymer coatings, dye uniformity and wet abrasion tests, and many device demonstrations. This entry captures representative examples most relevant to lubricious medical devices and links conceptually to P25 echogenic-lubricious coating work.",
           "examples": [
             {
-              "name": "Lubricious echogenic複合塗層",
+              "name": "Example 1 - ophthalmic slit blade multilayer lubricious coating",
               "is_real": true,
-              "credibility": "中",
-              "credibility_reason": "有具體技術描述，但A1公開超過5年未核准*",
-              "substrate": "Biopsy needle, catheter, guidewire, trocar（不鏽鋼/nitinol/PE/PP/PVC/silicone）",
+              "credibility": "高",
+              "credibility_reason": "Explicit Example 1.",
+              "substrate": "Stainless steel ophthalmic slit blade / Sharpoint.",
               "formulation": {
-                "primer": "可選primer",
-                "topcoat": "PVP或PVA親水層+echogenic微粒（isopentane/氟碳化合物封裝聚合物微球）"
+                "primer": "Coating Solution 1: ethylene acrylic acid copolymer + epoxy resin in THF/DMAC/anisole/xylenes; dry 15 min at 120 C.",
+                "topcoat": "Coating Solution 2: aromatic polycarbonate-based polyurethane + nitrocellulose in DMAC/anisole/MEK/IPA/cyclohexanone; followed by hydrophilic coating solution variants."
               },
-              "process": {
-                "surface_prep": "未明示",
-                "coating_method": "多層塗覆（潤滑層+echogenic層可分開或混合）",
-                "drying": "未明示",
-                "curing": "未明示"
+              "process": "Dip coat primer and intermediate layers; oven dry 15 min at 120 C.",
+              "results": "Coating insoluble in water and lubricious when wet; no buildup at knife blade edge by SEM."
+            },
+            {
+              "name": "Example 2 - Gentian Violet dye uniformity test",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit Example 2 test.",
+              "substrate": "Coated blades from Example 1.",
+              "formulation": {
+                "primer": "Test method.",
+                "topcoat": "Gentian Violet dye challenge."
               },
-              "results": {
-                "friction": "潤滑（具體數據未見）",
-                "adhesion": "未明示",
-                "wca": "未明示",
-                "durability": "未明示",
-                "other": "超音波下可視（echogenic微粒提供回聲信號）；可加染料/顏料/放射性標記"
-              }
+              "process": "Dip coated blade in dye; rinse until runoff clear; inspect color uniformity.",
+              "results": "Five blades coated with solutions 1/2/3 passed; additional blades with solutions 4/5 passed."
+            },
+            {
+              "name": "Example 3 - wet abrasion test",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit Example 3 test.",
+              "substrate": "Dyed coated substrates.",
+              "formulation": {
+                "primer": "Test method.",
+                "topcoat": "Wet brown paper towel abrasion."
+              },
+              "process": "Rub dyed substrate 50 cycles with saturated paper towel; optionally re-dye after dye loss.",
+              "results": "Assesses wet abrasion resistance and retained lubricity."
+            },
+            {
+              "name": "Guidewire embodiment - polyurethane clad guidewire hydrophilic coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit guidewire paragraph in full text.",
+              "substrate": "Polyurethane clad guidewire from PBN Medicals/InterV.",
+              "formulation": {
+                "primer": "Coating Solution A primer; oven 30 min at 85 C.",
+                "topcoat": "Hydrophilic polymer Coating Solution B."
+              },
+              "process": "Dip coat primer; dry 30 min at 85 C; coat hydrophilic polymer solution.",
+              "results": "Coatings insoluble in water and lubricious when wet."
+            },
+            {
+              "name": "Needle embodiment - stainless steel suture/biopsy needle coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit needle/device embodiments.",
+              "substrate": "Stainless steel taper point/cut point suture needles, biopsy needles and related metal needles.",
+              "formulation": {
+                "primer": "Coating Solutions A/B/C depending on layer architecture.",
+                "topcoat": "Hydrophilic/lubricious top layer."
+              },
+              "process": "Coat using layered solutions similar to Example 1; dry/cure per solution conditions.",
+              "results": "Water-insoluble and lubricious when wet; uniformity/abrasion tested."
+            },
+            {
+              "name": "Viscosity series - Coating Solutions 3/4/5 thickness control",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Explicit viscosity/thickness control example.",
+              "substrate": "Thirteen coated blades.",
+              "formulation": {
+                "primer": "Solutions 1 and 2 base layers.",
+                "topcoat": "Coating Solution 3 diluted to 54 cps, 45 cps and 32 cps variants."
+              },
+              "process": "Coat samples with different viscosity solutions; measure final thickness using TENCOR profilometer.",
+              "results": "Used to tune coating thickness and uniformity."
             }
           ],
           "key_claims": [
@@ -10429,23 +11386,23 @@
             "適用biopsy needle/catheter/guidewire/trocar多種器材"
           ],
           "actionable_insights": [
-            "Echogenic+lubricious雙功能概念：穿刺針產品可考慮（超音波可視+潤滑）",
-            "多層結構：潤滑底層+echogenic面層（或反過來）的設計彈性",
-            "此專利可能已失效（A1超過5年未核准）→技術可參考*"
+            "Use P32 to build test-method checklist for coating uniformity and wet abrasion.",
+            "For product mapping, guidewire and needle embodiments are more relevant than urinary catheter.",
+            "If copying multilayer PU/nitrocellulose/hydrophilic architecture, perform FTO around Merit/InterV claims."
           ],
           "red_flags": [
-            "若未來開發 echogenic 器材需注意此 IP"
+            "Large example set; current entry is representative, not exhaustive.",
+            "Many coating-solution recipes are in dense tables; PDF/table extraction should be done before lab replication."
           ],
           "vs_database": "與P25(WO2007089761)是同家族。Merit的TEMNO系列重點在針體結構不在塗層。與其他塗層專利(P01/P06/P12)比：Merit加入echogenic是獨特差異化",
           "bioteque_relevance": "低優先度，本專案 目前不開發超音波引導器材。長期若進入此市場再評估。",
-          "evidence_level": "medium",
-          "source_quality": "abstract",
+          "evidence_level": "high",
+          "source_quality": "google_patents_fulltext",
           "key_findings": [
-            "PVP 親水塗層 + echogenic 微球（含氣體聚合物）嵌入",
-            "超音波可視度提升 3 倍以上（動物實驗）",
-            "維持親水潤滑性能",
-            "適用超音波引導介入器材",
-            "雙功能（潤滑 + 可視）差異化設計"
+            "Merit/InterV platform is broad across metal blades, needles and guidewires.",
+            "Performance tests include dye uniformity, wet abrasion, thickness by profilometer and SEM edge inspection.",
+            "Coating is water-insoluble but wet-lubricious; nitrocellulose/polyurethane intermediate layers appear important.",
+            "P25 and P32 should be read together as echogenic + lubricious device surface branch."
           ],
           "coating_technology": {
             "materials": [
@@ -10491,7 +11448,8 @@
           ],
           "citations_needed": [
             "US20090048537 法律狀態（低優先）"
-          ]
+          ],
+          "examples_note": "Full text contains at least 28 examples. This entry captures representative device and test-method examples rather than every repetitive substrate variant."
         }
       }
     },
@@ -12205,68 +13163,6 @@
             }
           ],
           "examples_note": "已由 Google Patents 全文自動解析 3 個 EXAMPLE 區段；請以原文連結複核比例與測試數據。"
-        }
-      }
-    },
-    {
-      "id": "P42",
-      "title": "Esophageal stent (US5876448A / Boston low-relevance structural stent node)",
-      "authors": "Richard J. Thompson; Joseph E. Laptewicz Jr.; Paul J. Thompson / Schneider USA Inc",
-      "year": 1999,
-      "venue": "Google Patents",
-      "doi": null,
-      "pmid": null,
-      "doc_type": "專利",
-      "access": "專利全文",
-      "tags": [
-        "Boston Scientific",
-        "Schneider",
-        "stent",
-        "silicone coating",
-        "esophageal stent",
-        "low-relevance",
-        "structural-patent",
-        "expired"
-      ],
-      "purpose": "Boston/Schneider structural stent patent previously flagged as a possible Boston historical node; metadata shows it is not a hydrophilic coating patent.",
-      "abstract_note": "Google Patents describes a radially self-expanding esophageal stent with silicone-coated medial region and uncoated cuffs to resist migration and block tumor ingrowth.",
-      "value_to_project": "Keep as low-priority Boston product/IP context, but do not use as hydrophilic coating prior art.",
-      "links": {
-        "google_patents": "https://patents.google.com/patent/US5876448A/en"
-      },
-      "related_patents": [],
-      "patent_notes": "Google Patents: filed 1996-03-13; granted 1999-03-02; assignee Schneider USA Inc; status Expired - Lifetime.",
-      "patentResults": {
-        "full": {
-          "evidence_level": "high",
-          "source_quality": "fulltext_no_relevant_coating_examples",
-          "inference_flags": [
-            "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
-          ],
-          "summary": "US5876448A is a Boston Scientific esophageal stent structural patent. Google Patents full text does not provide hydrophilic catheter-coating working examples relevant to this database.",
-          "key_findings": [
-            "Not a hydrophilic coating patent.",
-            "Relevant to Boston/Schneider stent product IP history only.",
-            "Silicone coating is structural/barrier related, not lubricity/anti-encrustation chemistry.",
-            "Should be low priority for coating FTO."
-          ],
-          "patent_core": {
-            "claim_focus": [
-              "Self-expanding esophageal stent geometry.",
-              "Silicone-coated medial region with uncoated cuffs.",
-              "Deployment/recapture device features."
-            ],
-            "design_around_notes": [
-              "Do not use this as evidence for hydrophilic catheter coating strategy.",
-              "Keep separate from Boston/Scimed P24/P35 hydrophilic coating path."
-            ]
-          },
-          "company_path_note": "Boston tree candidate rejected/low-ranked for coating analysis; useful mainly as product-IP context.",
-          "next_actions": [
-            "Only revisit if mapping Boston stent product families, not coating chemistry."
-          ],
-          "examples": [],
-          "examples_note": "Excluded from coating example coverage: no relevant hydrophilic coating examples found; keep only as low-relevance structural/IP-history node."
         }
       }
     },
