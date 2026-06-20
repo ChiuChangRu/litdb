@@ -6361,7 +6361,7 @@ function _buildRecipeBlock(papers){
     const sc=scoreRoute(route);
     const stars='★'.repeat(Math.max(1,Math.min(5,Math.round(sc/3))));
 
-    // 找最佳 experimental_plan（優先中文、有 acceptance_tests）
+    // 找最佳 experimental_plan（優先中文、有 acceptance_tests），同時保留候選文獻清單
     let bestEp=null,bestPaper=null;
     d.papers.forEach(p=>{
       const ep=_deGetFull(p).experimental_plan||{};
@@ -6370,16 +6370,6 @@ function _buildRecipeBlock(papers){
         if(!bestEp||isChinese) {bestEp=ep;bestPaper=p;}
       }
     });
-
-    // 若無 experimental_plan，找最佳真實實施例
-    let bestEx=null;
-    if(!bestEp){
-      d.papers.forEach(p=>{
-        (_deGetFull(p).examples||[]).filter(e=>e.is_real).forEach(ex=>{
-          if(!bestEx) bestEx={ex,p};
-        });
-      });
-    }
 
     const ipCol=ipS<=1?'#2d8c5a':ipS>=3?'#c0392b':'#d4a030';
 
@@ -6393,10 +6383,13 @@ function _buildRecipeBlock(papers){
         <span style="font-size:13px;padding:4px 10px;background:#f5f5f5;border-radius:5px;color:${ipCol}">${escHtml(ipL)}</span>
         <span style="font-size:13px;padding:4px 10px;background:#f5f5f5;border-radius:5px;color:var(--muted)">${escHtml(pcL)}</span>
         <span style="font-size:13px;padding:4px 10px;background:#f5f5f5;border-radius:5px;color:var(--muted)">${d.papers.length} 篇支持</span>
+      </div>
+      <div style="font-size:13px;color:var(--accent);margin-bottom:8px">
+        ${d.papers.map(p=>`<span onclick="goToPaper('${p.id}',{focus:true})" style="cursor:pointer;text-decoration:underline;margin-right:8px">[${p.id}]</span>`).join('')}
       </div>`;
 
     if(bestEp){
-      html+=`<div style="background:var(--card);border-radius:8px;padding:12px">
+      html+=`<div style="background:var(--card);border-radius:8px;padding:12px;margin-bottom:8px">
         <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px">📋 配方步驟 <span style="color:var(--muted);font-weight:400;font-size:12px">[${bestPaper.id}]</span></div>
         <ol style="margin:0 0 8px 18px;padding:0;font-size:13px;line-height:1.8;color:var(--text)">
           ${bestEp.steps.slice(0,5).map(s=>`<li>${escHtml(s)}</li>`).join('')}
@@ -6411,22 +6404,35 @@ function _buildRecipeBlock(papers){
         html+=`<div style="font-size:13px;color:var(--muted);margin-top:6px">🛒 ${bestEp.materials.slice(0,4).map(m=>escHtml(m)).join('、')}</div>`;
       }
       html+=`</div>`;
-    } else if(bestEx){
-      const f=bestEx.ex.formulation||{};
-      const pr=bestEx.ex.process||{};
-      const res=bestEx.ex.results||{};
-      const str=v=>typeof v==='string'?v.slice(0,60):typeof v==='object'?JSON.stringify(v).slice(0,60):'';
-      const validRes=(v)=>v && !_isNoData(v);
-      html+=`<div style="background:var(--card);border-radius:8px;padding:12px">
-        <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px">📋 實施例配方 <span style="color:var(--muted);font-weight:400;font-size:12px">[${bestEx.p.id}]</span></div>
-        ${f.primer?`<div style="font-size:13px;margin-bottom:4px"><b>底塗：</b>${escHtml(str(f.primer))}</div>`:''}
-        ${f.topcoat?`<div style="font-size:13px;margin-bottom:4px"><b>面塗：</b>${escHtml(str(f.topcoat))}</div>`:''}
-        ${pr.curing?`<div style="font-size:13px;margin-bottom:4px"><b>固化：</b>${escHtml(str(pr.curing))}</div>`:''}
-        ${(validRes(res.wca)||validRes(res.friction)||validRes(res.adhesion))?`<div style="font-size:13px;color:#2d8c5a;margin-top:6px">
-          ${validRes(res.wca)?`WCA ${escHtml(String(res.wca))} `:''}${validRes(res.friction)?`COF ${escHtml(String(res.friction))} `:''}${validRes(res.adhesion)?escHtml(String(res.adhesion)):''}
-        </div>`:''}
-      </div>`;
-    } else {
+    }
+
+    // 依序展示每篇文獻自己的實施例（不再只挑單篇代表），每篇最多列2個
+    d.papers.forEach(p=>{
+      const full=_deGetFull(p);
+      const exs=(full.examples||[]).filter(e=>e.is_real);
+      if(!exs.length) return;
+      html+=`<div style="background:var(--card);border-radius:8px;padding:12px;margin-bottom:8px">
+        <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px">📋 [${p.id}] ${escHtml((p.title||'').slice(0,40))}</div>`;
+      exs.slice(0,2).forEach(ex=>{
+        const f=ex.formulation||{};
+        const pr=ex.process||{};
+        const res=ex.results||{};
+        const str=v=>typeof v==='string'?v.slice(0,70):typeof v==='object'?JSON.stringify(v).slice(0,70):'';
+        const validRes=(v)=>v && !_isNoData(v);
+        html+=`<div style="padding:6px 0;border-top:1px solid var(--border)">
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px">${escHtml((ex.name||'').slice(0,45))}</div>
+          ${f.primer?`<div style="font-size:12px;margin-bottom:2px"><b>底塗：</b>${escHtml(str(f.primer))}</div>`:''}
+          ${f.topcoat?`<div style="font-size:12px;margin-bottom:2px"><b>面塗：</b>${escHtml(str(f.topcoat))}</div>`:''}
+          ${pr.curing?`<div style="font-size:12px;margin-bottom:2px"><b>固化：</b>${escHtml(str(pr.curing))}</div>`:''}
+          ${(validRes(res.wca)||validRes(res.friction)||validRes(res.adhesion))?`<div style="font-size:12px;color:#2d8c5a">
+            ${validRes(res.wca)?`WCA ${escHtml(String(res.wca).slice(0,30))} `:''}${validRes(res.friction)?`COF ${escHtml(String(res.friction).slice(0,30))} `:''}${validRes(res.adhesion)?escHtml(String(res.adhesion).slice(0,30)):''}
+          </div>`:''}
+        </div>`;
+      });
+      html+=`</div>`;
+    });
+
+    if(!bestEp && !d.papers.some(p=>(_deGetFull(p).examples||[]).some(e=>e.is_real))){
       html+=`<div style="font-size:13px;color:var(--muted);padding:8px">尚無實施例詳細資料，請補強文獻全文後再查看。</div>`;
     }
     html+=`</div>`;
@@ -6500,58 +6506,50 @@ function _buildMechanismRecipeBlock(papers){
         ${core.map(p=>`<span onclick="goToPaper('${p.id}',{focus:true})" style="cursor:pointer;text-decoration:underline;margin-right:8px">[${p.id}]</span>`).join('')}
       </div>`;
 
-    // 找最佳 experimental_plan 或實施例
-    let bestEp=null,bestPaper=null;
+    // 依序展示每一篇核心證據自己的配方依據（experimental_plan 優先，否則列實施例），
+    // 不再只挑單篇代表——使用者需要看到每篇各自的證據，才能自行判斷取捨
     core.forEach(p=>{
-      const ep=_deGetFull(p).experimental_plan||{};
-      if(ep.steps?.length && ep.acceptance_tests?.length){
-        const isChinese=/[\u4e00-\u9fff]/.test(ep.steps[0]||'');
-        if(!bestEp||isChinese){bestEp=ep;bestPaper=p;}
-      }
-    });
-    let bestEx=null;
-    if(!bestEp){
-      core.forEach(p=>{
-        (_deGetFull(p).examples||[]).filter(e=>e.is_real).forEach(ex=>{
-          if(!bestEx) bestEx={ex,p};
-        });
-      });
-    }
+      const full=_deGetFull(p);
+      const ep=full.experimental_plan||{};
+      const exs=(full.examples||[]).filter(e=>e.is_real);
+      const hasEp = ep.steps?.length>0;
 
-    if(bestEp){
-      html+=`<div style="background:var(--card);border-radius:8px;padding:12px">
-        <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px">📋 配方步驟 <span style="color:var(--muted);font-weight:400;font-size:12px">[${bestPaper.id}]</span></div>
-        <ol style="margin:0 0 8px 18px;padding:0;font-size:13px;line-height:1.8;color:var(--text)">
-          ${bestEp.steps.slice(0,5).map(s=>`<li>${escHtml(s)}</li>`).join('')}
+      html+=`<div style="background:var(--card);border-radius:8px;padding:12px;margin-bottom:8px">
+        <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px">📋 [${p.id}] ${escHtml((p.title||'').slice(0,40))}</div>`;
+
+      if(hasEp){
+        html+=`<ol style="margin:0 0 8px 18px;padding:0;font-size:13px;line-height:1.7;color:var(--text)">
+          ${ep.steps.slice(0,4).map(s=>`<li>${escHtml(s)}</li>`).join('')}
         </ol>`;
-      if(bestEp.acceptance_tests?.length){
-        html+=`<div style="font-size:13px;font-weight:700;color:#2d8c5a;margin-bottom:6px">✅ 驗收標準</div>
-        <ul style="margin:0 0 6px 16px;padding:0;font-size:13px;line-height:1.7;color:var(--text)">
-          ${bestEp.acceptance_tests.slice(0,4).map(t=>`<li>${escHtml(t)}</li>`).join('')}
-        </ul>`;
-      }
-      if(bestEp.materials?.length){
-        html+=`<div style="font-size:13px;color:var(--muted);margin-top:6px">🛒 ${bestEp.materials.slice(0,4).map(m=>escHtml(m)).join('、')}</div>`;
+        if(ep.acceptance_tests?.length){
+          html+=`<div style="font-size:12px;color:#2d8c5a;margin-bottom:4px">✅ ${ep.acceptance_tests.slice(0,3).map(t=>escHtml(t)).join('；')}</div>`;
+        }
+        if(ep.materials?.length){
+          html+=`<div style="font-size:12px;color:var(--muted)">🛒 ${ep.materials.slice(0,4).map(m=>escHtml(m)).join('、')}</div>`;
+        }
+      } else if(exs.length){
+        // 每篇最多列2個實施例，避免單篇灌爆整個報告
+        exs.slice(0,2).forEach(ex=>{
+          const f=ex.formulation||{};
+          const pr=ex.process||{};
+          const res=ex.results||{};
+          const str=v=>typeof v==='string'?v.slice(0,70):typeof v==='object'?JSON.stringify(v).slice(0,70):'';
+          const validRes=(v)=>v && !_isNoData(v);
+          html+=`<div style="padding:6px 0;border-top:1px solid var(--border)">
+            <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px">${escHtml((ex.name||'').slice(0,45))}</div>
+            ${f.primer?`<div style="font-size:12px;margin-bottom:2px"><b>底塗：</b>${escHtml(str(f.primer))}</div>`:''}
+            ${f.topcoat?`<div style="font-size:12px;margin-bottom:2px"><b>面塗：</b>${escHtml(str(f.topcoat))}</div>`:''}
+            ${pr.curing?`<div style="font-size:12px;margin-bottom:2px"><b>固化：</b>${escHtml(str(pr.curing))}</div>`:''}
+            ${(validRes(res.wca)||validRes(res.friction)||validRes(res.adhesion))?`<div style="font-size:12px;color:#2d8c5a">
+              ${validRes(res.wca)?`WCA ${escHtml(String(res.wca).slice(0,30))} `:''}${validRes(res.friction)?`COF ${escHtml(String(res.friction).slice(0,30))} `:''}${validRes(res.adhesion)?escHtml(String(res.adhesion).slice(0,30)):''}
+            </div>`:''}
+          </div>`;
+        });
+      } else {
+        html+=`<div style="font-size:12px;color:var(--muted)">尚無實施例詳細資料，請補強文獻全文後再查看。</div>`;
       }
       html+=`</div>`;
-    } else if(bestEx){
-      const f=bestEx.ex.formulation||{};
-      const pr=bestEx.ex.process||{};
-      const res=bestEx.ex.results||{};
-      const str=v=>typeof v==='string'?v.slice(0,60):typeof v==='object'?JSON.stringify(v).slice(0,60):'';
-      const validRes=(v)=>v && !_isNoData(v);
-      html+=`<div style="background:var(--card);border-radius:8px;padding:12px">
-        <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px">📋 實施例配方 <span style="color:var(--muted);font-weight:400;font-size:12px">[${bestEx.p.id}]</span></div>
-        ${f.primer?`<div style="font-size:13px;margin-bottom:4px"><b>底塗：</b>${escHtml(str(f.primer))}</div>`:''}
-        ${f.topcoat?`<div style="font-size:13px;margin-bottom:4px"><b>面塗：</b>${escHtml(str(f.topcoat))}</div>`:''}
-        ${pr.curing?`<div style="font-size:13px;margin-bottom:4px"><b>固化：</b>${escHtml(str(pr.curing))}</div>`:''}
-        ${(validRes(res.wca)||validRes(res.friction)||validRes(res.adhesion))?`<div style="font-size:13px;color:#2d8c5a;margin-top:6px">
-          ${validRes(res.wca)?`WCA ${escHtml(String(res.wca))} `:''}${validRes(res.friction)?`COF ${escHtml(String(res.friction))} `:''}${validRes(res.adhesion)?escHtml(String(res.adhesion)):''}
-        </div>`:''}
-      </div>`;
-    } else {
-      html+=`<div style="font-size:13px;color:var(--muted);padding:8px">尚無實施例詳細資料，請補強文獻全文後再查看。</div>`;
-    }
+    });
     html+=`</div>`;
   });
   html+=`</div>`;
@@ -6608,11 +6606,9 @@ function buildFeatureReport(papers, featureLabel, tag){
   </div>`;
   if(useMechanism){
     html += _buildMechanismFreedomBlock(papers);
-    html += _buildExampleDiff(papers, true);
     html += _buildMechanismRecipeBlock(papers);
   } else {
     html += _buildFreedomBlock(papers);
-    html += _buildExampleDiff(papers, false);
     html += _buildRecipeBlock(papers);
   }
   html += _buildAllCandidatesBlock(papers, useMechanism);
@@ -6668,7 +6664,6 @@ function buildCompanyReport(papers, companyLabel){
     </div>`;
   }
 
-  html += _buildExampleDiff(papers, false);
   return html;
 }
 
