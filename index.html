@@ -337,6 +337,7 @@ function doLogin(){
   <div class="tab" onclick="showView('browse',this)">📚<span class="tab-text"> 文庫</span> <span class="badge" id="browseCount">0</span><span class="badge" id="analyzedCount" style="background:var(--accent2)">0</span></div>
   <div class="tab" onclick="showView('patent-tree',this)">🌳<span class="tab-text"> 專利樹</span></div>
   <div class="tab" onclick="showView('report',this)">📋<span class="tab-text"> 報告</span></div>
+  <div class="tab" onclick="showView('manual',this)">📘<span class="tab-text"> 使用說明</span></div>
 </div>
 
 <div class="main">
@@ -694,6 +695,162 @@ function doLogin(){
 </div>
 
 <!-- ═══════════════ VIEW: AI CHAT ═══════════════ -->
+<!-- VIEW: MANUAL -->
+<div class="view" id="v-manual">
+  <div style="max-width:980px;margin:0 auto;padding:20px 16px">
+    <div class="panel" style="margin-bottom:14px">
+      <div class="panel-h">📘 AI Agent 文獻閱讀使用說明書</div>
+      <div style="padding:16px;font-size:13px;line-height:1.8;color:var(--text)">
+        <div style="font-size:18px;font-weight:800;color:var(--accent);margin-bottom:6px">全文實施例拆解 + Claim Coverage 分類</div>
+        <div style="color:var(--muted);margin-bottom:12px">
+          這份 memo 是 LitDB 的 AI 閱讀規格。之後換成不同案件時，請先讓 AI 依照此規格閱讀專利與文獻，再回寫資料庫。
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px">
+          <div style="border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--card)">
+            <div style="font-weight:800;margin-bottom:4px">1. 先讀全文</div>
+            <div style="color:var(--muted)">不要只看 abstract、metadata 或 patent title。專利要優先讀 Google Patents / PDF 的 examples、claims、description。</div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--card)">
+            <div style="font-weight:800;margin-bottom:4px">2. 拆實施例</div>
+            <div style="color:var(--muted)">把 numbered examples、embodiments、comparative examples、test tables 分開，不要濃縮成一筆。</div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--card)">
+            <div style="font-weight:800;margin-bottom:4px">3. 分辨資料型態</div>
+            <div style="color:var(--muted)">有實施例看「怎麼做」；沒有實施例但 claim 很寬，看「涵蓋什麼、要避開什麼」。</div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--card)">
+            <div style="font-weight:800;margin-bottom:4px">4. 不硬套</div>
+            <div style="color:var(--muted)">若是材料、結構、包裝、設備或低相關專利，要標註重新分類或低相關，不能硬寫成 coating recipe。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:14px">
+      <div class="panel-h">🧭 判讀流程</div>
+      <div style="padding:16px;font-size:13px;line-height:1.8">
+        <ol style="margin:0;padding-left:22px">
+          <li>確認文獻類型：專利、論文、綜述、市場報告、商用品、設備或測試方法。</li>
+          <li>若是專利，先找 <b>Examples / Embodiments / Comparative Examples / Tables / Claims</b>。</li>
+          <li>若只有 1 個實施例，通常視為疑慮，需回查全文；但中華民國或中國專利可先保守排除。</li>
+          <li>若沒有實施例但 claims 或 description 有明確配方範圍，標為 <code>claim-derived embodiment</code>。</li>
+          <li>若全文內容與資料庫標題不符，標示 <code>reclassification_needed</code>，避免誤導報告。</li>
+          <li>最後輸出固定欄位，讓前台可一致呈現，不為單篇文獻寫特殊版型。</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:14px">
+      <div class="panel-h">🧪 每個實施例必填欄位</div>
+      <div style="padding:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;font-size:13px;line-height:1.7">
+        <div><b>substrate</b><br><span style="color:var(--muted)">基材、尺寸、器械類型，例如 PVC catheter、Pebax tubing、needle、guidewire。</span></div>
+        <div><b>formulation.primer</b><br><span style="color:var(--muted)">底塗、basecoat、tie layer、surface treatment；若無則寫 None。</span></div>
+        <div><b>formulation.topcoat</b><br><span style="color:var(--muted)">面塗、functional layer、active polymer、additive、humectant、antimicrobial。</span></div>
+        <div><b>process</b><br><span style="color:var(--muted)">dip/spray、drying、UV/thermal/e-beam curing、劑量、時間、溫度。</span></div>
+        <div><b>results</b><br><span style="color:var(--muted)">friction、adhesion、WCA、durability、dry-out、antimicrobial、encrustation、table data。</span></div>
+        <div><b>credibility_reason</b><br><span style="color:var(--muted)">說明資料來自全文、表格、claim，或是推論；不要讓推論看起來像事實。</span></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:14px">
+      <div class="panel-h">🏷 可信度與標記規則</div>
+      <div style="padding:16px;font-size:13px;line-height:1.8">
+        <table class="patent-table">
+          <tr><th>標記</th><th>意思</th><th>使用時機</th></tr>
+          <tr><td><code>is_real: true</code></td><td>真實實施例</td><td>全文有 numbered example、comparative example、test table 或明確實驗流程。</td></tr>
+          <tr><td><code>is_real: false</code></td><td>推論或 claim-derived</td><td>沒有實驗，但 claim/description 提供明確技術架構或配方範圍。</td></tr>
+          <tr><td><code>*</code></td><td>推論較少</td><td>摘要、claim 或 description 很明確，但缺少完整實驗數據。</td></tr>
+          <tr><td><code>**</code></td><td>推論較多</td><td>由 claim coverage 或技術脈絡推導，不可當作已實作配方。</td></tr>
+          <tr><td><code>reclassification_needed</code></td><td>需重新分類</td><td>全文顯示不是原本標題所說的親水塗層或不是本案核心。</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:14px">
+      <div class="panel-h">📋 可直接貼給 AI 的 Prompt</div>
+      <div style="padding:16px">
+        <textarea readonly style="width:100%;min-height:310px;font-size:12px;line-height:1.55;font-family:var(--font-mono);padding:12px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text)">請用「專利全文導向」方式整理，不要只看摘要或 metadata。
+
+每篇專利請先判斷資料型態：
+1. 若有 numbered examples / embodiments / comparative examples / test tables，請逐一拆出。
+2. 若沒有實施例，但 claims 或 description 有明確配方範圍或技術架構，請標為 claim-derived embodiment，不可假裝是真實實施例。
+3. 若內容不是本案核心，例如材料、結構、包裝、設備或低相關專利，請明確標註「重新分類」或「低相關」，不要硬套成 coating recipe。
+4. 若只有 1 個實施例，通常視為疑慮，除非是中華民國或中國專利，或全文確實只有一個實施例。
+
+呈現方式請固定成：
+- 專利核心摘要
+- 實施例 / 對照實驗 / claim-derived embodiments
+- 每個實施例列出 substrate、primer/basecoat、topcoat/functional layer、process/curing、results/performance、credibility_reason
+- key_claims 或 patent_core.claim_focus
+- design-around notes
+- actionable insights
+- red flags
+- next actions
+
+可信度標示：
+- is_real: true = 真實實施例
+- is_real: false = claim-derived 或推論實施例
+- * = 推論較少
+- ** = 推論較多
+- 不可把推論內容寫成確定事實
+
+目標不是寫漂亮摘要，而是讓資料庫能回答：
+1. 別人實際怎麼設計？
+2. claim 想涵蓋什麼？
+3. 我們可能踩到什麼專利？
+4. 可以怎麼 design around？
+5. 哪些資料需要回查全文或重新分類？</textarea>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-h">🗂 建議 JSON 欄位骨架</div>
+      <div style="padding:16px">
+        <pre style="white-space:pre-wrap;font-size:12px;line-height:1.55;background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px;margin:0"><code>{
+  "summary": "...",
+  "evidence_level": "high / medium / low",
+  "source_quality": "google_patents_fulltext / claim_coverage / reclassification_needed",
+  "examples_note": "...",
+  "examples": [
+    {
+      "name": "Example 1 - ...",
+      "is_real": true,
+      "credibility": "高 / 中 / 低",
+      "credibility_reason": "...",
+      "substrate": "...",
+      "formulation": {
+        "primer": "...",
+        "topcoat": "..."
+      },
+      "process": {
+        "surface_prep": "...",
+        "coating_method": "...",
+        "drying": "...",
+        "curing": "..."
+      },
+      "results": {
+        "friction": "...",
+        "adhesion": "...",
+        "wca": "...",
+        "durability": "...",
+        "other": "..."
+      }
+    }
+  ],
+  "key_findings": ["..."],
+  "patent_core": {
+    "claim_focus": ["..."],
+    "design_around_notes": ["..."]
+  },
+  "actionable_insights": ["..."],
+  "red_flags": ["..."],
+  "next_actions": ["..."]
+}</code></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="view" id="v-chat" style="display:none">
   <div class="chat-layout">
     <div class="chat-panel panel">
