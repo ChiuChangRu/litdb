@@ -283,28 +283,98 @@ table.heatmap td:hover{outline:2px solid var(--accent)}
 
 <script>
 // ── 登入驗證 ──────────────────────────────────
-const AUTH_LIST = [
-  {u:'jeremy', p:'LitDB2026'},
-  {u:'guest',  p:'LitDB888'},
+// Static-site gate only: this hides the workspace from casual visitors, but
+// GitHub Pages cannot provide true data secrecy because files are public.
+const AUTH_VERSION = 'v2';
+const AUTH_SESSION_MS = 8 * 60 * 60 * 1000;
+const AUTH_MAX_FAILS = 5;
+const AUTH_LOCK_MS = 5 * 60 * 1000;
+const AUTH_USERS = [
+  {
+    u: 'owner',
+    salt: 'GYZH5uMS0GTkXXirkhjP0g',
+    hash: 'Mu5poz4qweaHIFsD1y6GLijVDwTKZNty0x9GiXycUxs',
+    iterations: 150000
+  }
 ];
 
+function readAuthSession() {
+  try { return JSON.parse(sessionStorage.getItem('litdb_auth') || '{}'); }
+  catch(e) { return {}; }
+}
+
+function readAuthFails() {
+  try { return JSON.parse(localStorage.getItem('litdb_auth_fails') || '{"count":0,"lockedUntil":0}'); }
+  catch(e) { return {count:0, lockedUntil:0}; }
+}
+
+function writeAuthFails(data) {
+  localStorage.setItem('litdb_auth_fails', JSON.stringify(data));
+}
+
+function base64Url(bytes) {
+  const bin = Array.from(new Uint8Array(bytes), b => String.fromCharCode(b)).join('');
+  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+}
+
+async function pbkdf2Hash(password, salt, iterations) {
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits(
+    {name: 'PBKDF2', salt: enc.encode(salt), iterations, hash: 'SHA-256'},
+    key,
+    256
+  );
+  return base64Url(bits);
+}
+
 (function(){
-  if(sessionStorage.getItem('litdb_auth')==='ok'){
+  const s = readAuthSession();
+  if(s.version === AUTH_VERSION && s.exp && Date.now() < s.exp){
     document.getElementById('loginOverlay').style.display='none';
+  } else {
+    sessionStorage.removeItem('litdb_auth');
   }
 })();
 
-function doLogin(){
+async function doLogin(){
+  const err = document.getElementById('loginErr');
+  const btn = document.querySelector('#loginBox button');
+  const fails = readAuthFails();
+  if(fails.lockedUntil && Date.now() < fails.lockedUntil){
+    const min = Math.ceil((fails.lockedUntil - Date.now()) / 60000);
+    err.textContent = `嘗試次數過多，請 ${min} 分鐘後再試`;
+    return;
+  }
+
   const u = document.getElementById('loginUser').value.trim().toLowerCase();
   const p = document.getElementById('loginPass').value;
-  const ok = AUTH_LIST.some(a=>a.u===u && a.p===p);
-  if(ok){
-    sessionStorage.setItem('litdb_auth','ok');
-    document.getElementById('loginOverlay').style.display='none';
-  } else {
-    document.getElementById('loginErr').textContent='帳號或密碼錯誤';
-    document.getElementById('loginPass').value='';
-    document.getElementById('loginPass').focus();
+  const user = AUTH_USERS.find(a=>a.u===u);
+  btn.disabled = true;
+  btn.textContent = '驗證中...';
+  try {
+    const ok = !!user && await pbkdf2Hash(p, user.salt, user.iterations) === user.hash;
+    if(ok){
+      sessionStorage.setItem('litdb_auth', JSON.stringify({
+        version: AUTH_VERSION,
+        user: user.u,
+        exp: Date.now() + AUTH_SESSION_MS
+      }));
+      localStorage.removeItem('litdb_auth_fails');
+      document.getElementById('loginOverlay').style.display='none';
+    } else {
+      const count = (fails.count || 0) + 1;
+      const lockedUntil = count >= AUTH_MAX_FAILS ? Date.now() + AUTH_LOCK_MS : 0;
+      writeAuthFails({count, lockedUntil});
+      err.textContent = lockedUntil ? '嘗試次數過多，已鎖定 5 分鐘' : `帳號或密碼錯誤（${count}/${AUTH_MAX_FAILS}）`;
+      document.getElementById('loginPass').value='';
+      document.getElementById('loginPass').focus();
+    }
+  } catch(e) {
+    err.textContent = '此瀏覽器不支援安全登入驗證';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '登入';
   }
 }
 </script>
