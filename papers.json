@@ -1063,9 +1063,9 @@
       "patent_notes": "Priority/filed 2006-11-09; published 2008-05-15; original/current assignee Hydromer Inc.; Google status Abandoned.",
       "patentResults": {
         "full": {
-          "summary": "US20080114096A1 is a Hydromer application for lubricious biopolymeric network compositions. Google Patents metadata emphasizes chitosan, carbohydrates, carboxylic acid/aldehyde linkages, monomers, vinyl polymers, active agents, anti-bacterial/antifouling functions and coating methods. It appears to extend Hydromer beyond classic PU/PVP systems toward bio-derived network chemistry, but it is abandoned, so it should be treated as a technical idea source rather than a granted blocking patent.",
-          "evidence_level": "medium",
-          "source_quality": "google_patents_metadata",
+          "summary": "US20080114096A1 is the US publication for the same Hydromer chitosan biopolymeric-network branch represented by P49. Use P49 full-text examples as the family representative until the US publication is separately table-checked.",
+          "evidence_level": "high",
+          "source_quality": "fulltext_family_representative",
           "key_findings": [
             "Hydromer-owned application; status abandoned.",
             "Core keywords include chitosan, carbohydrates, carboxylic acids and aldehyde linkages.",
@@ -1116,31 +1116,332 @@
           ],
           "examples": [
             {
-              "name": "* Embodiment A：幾丁聚醣生物聚合物網絡塗層",
-              "is_real": false,
+              "name": "Example 6a: diluted aqueous network coating on PU tubing [family representative from P49]",
+              "is_real": true,
               "credibility": "中",
-              "credibility_reason": "* 推論：US20080112617 摘要描述 chitosan + 碳水化合物 + 醛基交聯，狀態為 Abandoned，比例需查全文。",
-              "substrate": "醫療器材表面（生物可相容塗層）",
+              "credibility_reason": "P38 is the US publication in the same Hydromer chitosan-network family as P49. Source examples copied from P49; verify exact claim/example differences before legal use. Original reason: Real Example 6a in Google Patents full text; includes dilution, substrate, curing and qualitative lubricity/durability.",
+              "substrate": "polyurethane tubing",
               "formulation": {
-                "primer": "基材活化",
-                "topcoat": "chitosan + 多醣 + 羧酸官能基，以醛基（aldehyde）交聯"
+                "primer": "Example 6a formulation diluted 50% with water",
+                "topcoat": "chitosan/lactic-acid based network formulation"
               },
               "process": {
-                "surface_prep": "基材清潔",
-                "coating_method": "Dip coating",
-                "drying": "溶劑/水揮發",
-                "curing": "醛基交聯（Schiff base）"
+                "surface_prep": "see primer field",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "100C, 1 hr"
               },
               "results": {
-                "friction": "幾丁聚醣親水潤滑",
-                "adhesion": "醛基交聯網絡",
-                "wca": "未明示",
-                "durability": "專利已放棄（Abandoned）",
-                "other": "天然生物聚合物路線，幾丁聚醣兼具潤滑與抗菌潛力"
-              }
+                "friction": "wet touch lubricity comparable to Example 6",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "durability to touch after water contact",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              },
+              "source_family_reference": "P49"
+            },
+            {
+              "name": "Example 7a: chitosan / lactic acid / acrylic acid coating on PVC tubing [family representative from P49]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P38 is the US publication in the same Hydromer chitosan-network family as P49. Source examples copied from P49; verify exact claim/example differences before legal use. Original reason: Real Example 7a in Google Patents full text; gram-level formula and PVC tubing are stated.",
+              "substrate": "PVC tubing",
+              "formulation": {
+                "primer": "none stated",
+                "topcoat": "0.5 g chitosan + 1.5 g lactic acid + 10 g IPA + 2.5 g THF + 2.5 g NMP + 0.01 g FC-170 + 83 g water + 0.05 g acrylic acid"
+              },
+              "process": {
+                "surface_prep": "not stated",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "100C, 30 min"
+              },
+              "results": {
+                "friction": "wet touch lubricity similar to Example 7",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "durability to touch after water contact",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              },
+              "source_family_reference": "P49"
+            },
+            {
+              "name": "Guidewire example: standard primer + double topcoat on PU-clad guidewire [family representative from P49]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P38 is the US publication in the same Hydromer chitosan-network family as P49. Source examples copied from P49; verify exact claim/example differences before legal use. Original reason: Full text states primer, double topcoat, curing and pulling-force data.",
+              "substrate": "polyurethane-cladded guidewire",
+              "formulation": {
+                "primer": "standard primer",
+                "topcoat": "chitosan / lactic acid / IPA / THF / NMP / water / FC-170 / acrylic acid network formulation"
+              },
+              "process": {
+                "surface_prep": "see primer field",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "90C 30 min + 120C 10 min"
+              },
+              "results": {
+                "friction": "uncoated 0.24 lbs to coated 0.015 lbs; almost 94% friction reduction",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "stable network after carrier solvent evaporation",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              },
+              "source_family_reference": "P49"
+            },
+            {
+              "name": "Example 16: primer vs non-primer comparison on PU-clad guidewire [family representative from P49]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P38 is the US publication in the same Hydromer chitosan-network family as P49. Source examples copied from P49; verify exact claim/example differences before legal use. Original reason: Real Example 16 in full text; useful for primer/no-primer comparison.",
+              "substrate": "PU-cladded guidewire",
+              "formulation": {
+                "primer": "one guidewire primed first; one non-primed",
+                "topcoat": "5 g chitosan + 15 g lactic acid + 100 g IPA + 25 g NMP + 25 g THF + 329.4 g water + 0.5% acrylic acid"
+              },
+              "process": {
+                "surface_prep": "see primer field",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "same thermal-cure series; exact line should be checked"
+              },
+              "results": {
+                "friction": "primed 93% friction reduction; non-primed 92.8%",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "primer did not materially change friction reduction in this comparison",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              },
+              "source_family_reference": "P49"
+            },
+            {
+              "name": "PU / Pebax / silicone comparative coating: substrate breadth test [family representative from P49]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P38 is the US publication in the same Hydromer chitosan-network family as P49. Source examples copied from P49; verify exact claim/example differences before legal use. Original reason: Collapsed full-text paragraph lists multiple substrates and friction reduction; exact example number should be verified.",
+              "substrate": "polyurethane, Pebax, silicone",
+              "formulation": {
+                "primer": "not clearly stated in collapsed text",
+                "topcoat": "chitosan / lactic acid / acrylic-acid network formulation"
+              },
+              "process": {
+                "surface_prep": "see primer field",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "thermal cure"
+              },
+              "results": {
+                "friction": "polyurethane 93% first cycle and almost 97% after 50 cycles; Pebax 95% first cycle in extracted text",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "50-cycle friction data suggests durable lubricity",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              },
+              "source_family_reference": "P49"
+            },
+            {
+              "name": "pH 6 guidewire coating: acrylic acid effect window [family representative from P49]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P38 is the US publication in the same Hydromer chitosan-network family as P49. Source examples copied from P49; verify exact claim/example differences before legal use. Original reason: Full text gives pH 6 testing and multiple related variants.",
+              "substrate": "PU-cladded guidewire",
+              "formulation": {
+                "primer": "none stated",
+                "topcoat": "1 g chitosan + DI water + 3 g lactic acid + 20 g IPA + 5 g NMP + 5 g THF + 0.02 g FC-170; variants with acrylic acid and radical initiator"
+              },
+              "process": {
+                "surface_prep": "not stated",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "120C, 20 min; tested at pH 6"
+              },
+              "results": {
+                "friction": "85-92% friction reduction depending on acrylic-acid/initiator variant",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "not stated",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              },
+              "source_family_reference": "P49"
+            },
+            {
+              "name": "Glass disk cytotoxicity / cell proliferation test [family representative from P49]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P38 is the US publication in the same Hydromer chitosan-network family as P49. Source examples copied from P49; verify exact claim/example differences before legal use. Original reason: Full text reports Murine L929 cell proliferation decreased by 67% after 3 days; this is a biocompatibility red flag.",
+              "substrate": "18 mm glass disks / cover slips",
+              "formulation": {
+                "primer": "Example 3 formula, verify in PDF",
+                "topcoat": "chitosan network coating"
+              },
+              "process": {
+                "surface_prep": "see primer field",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "not stated in extracted segment"
+              },
+              "results": {
+                "friction": "not a friction test",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "not stated",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              },
+              "source_family_reference": "P49"
+            },
+            {
+              "name": "Heparin topcoat dose series: anti-coagulative PU film [family representative from P49]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P38 is the US publication in the same Hydromer chitosan-network family as P49. Source examples copied from P49; verify exact claim/example differences before legal use. Original reason: Full text gives heparin dose series: 1%, 0.5%, 0.25% no clot; 0.125% tiny clot; 0% clot.",
+              "substrate": "primed polyurethane film",
+              "formulation": {
+                "primer": "PU film primed and coated with chitosan/lactic-acid network formula",
+                "topcoat": "heparin in water + 3% lactic acid at 1%, 0.5%, 0.25%, 0.125% or 0%"
+              },
+              "process": {
+                "surface_prep": "see primer field",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "120C, 30 min for network layer and heparin topcoat"
+              },
+              "results": {
+                "friction": "not a friction-focused example",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "overnight water leach before blood test",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              },
+              "source_family_reference": "P49"
+            },
+            {
+              "name": "Heparin / acrylic acid / FC-170 topcoat: no-clot layered coating [family representative from P49]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P38 is the US publication in the same Hydromer chitosan-network family as P49. Source examples copied from P49; verify exact claim/example differences before legal use. Original reason: Full text states no clot and dark Toluidine Blue staining after leach.",
+              "substrate": "polyurethane film",
+              "formulation": {
+                "primer": "primed PU film with chitosan network base",
+                "topcoat": "3% heparin + 9% lactic acid + 0.7% acrylic acid + 20% IPA + 5% NMP + 5% THF + 0.1% FC-170"
+              },
+              "process": {
+                "surface_prep": "see primer field",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "100C 60 min + room temperature overnight + 100C 1 hr"
+              },
+              "results": {
+                "friction": "not stated",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "washed/leached overnight; no clot after leach",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              },
+              "source_family_reference": "P49"
+            },
+            {
+              "name": "Stent spray coating: chitosan base + 3% heparin topcoat [family representative from P49]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P38 is the US publication in the same Hydromer chitosan-network family as P49. Source examples copied from P49; verify exact claim/example differences before legal use. Original reason: Full text states spray coating on stents and PBS overnight leach.",
+              "substrate": "stents",
+              "formulation": {
+                "primer": "stents were primed",
+                "topcoat": "base: 5 g chitosan + 15 g lactic acid + 100 g IPA + 25 g THF + 25 g NMP + 0.1 g FC-170 + 329.40 g water + 0.5 g acrylic acid; topcoat: 3% heparin + 22% lactic acid in water"
+              },
+              "process": {
+                "surface_prep": "see primer field",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "120C, 30 min for base; 120C, 30 min for topcoat"
+              },
+              "results": {
+                "friction": "not stated",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "overnight PBS leach before blood testing",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              },
+              "source_family_reference": "P49"
+            },
+            {
+              "name": "Glutaraldehyde / semialdehyde variants: alternative crosslinking comparison [family representative from P49]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P38 is the US publication in the same Hydromer chitosan-network family as P49. Source examples copied from P49; verify exact claim/example differences before legal use. Original reason: Full text describes alternative crosslinking variants; exact example number should be checked.",
+              "substrate": "polyurethane film",
+              "formulation": {
+                "primer": "none stated",
+                "topcoat": "chitosan network using semialdehyde or glutaraldehyde variant with NMP and FC-170"
+              },
+              "process": {
+                "surface_prep": "not stated",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "120C, 30 min"
+              },
+              "results": {
+                "friction": "semialdehyde less lubricious than lactic acid; glutaraldehyde very lubricious but slightly less than acrylic acid",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "stable network after solvent evaporation",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              },
+              "source_family_reference": "P49"
+            },
+            {
+              "name": "Example 42: chitosan / salicylic acid + heparin topcoat anti-clot film [family representative from P49]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P38 is the US publication in the same Hydromer chitosan-network family as P49. Source examples copied from P49; verify exact claim/example differences before legal use. Original reason: Real Example 42 in full text; whole human blood test showed no clot formation.",
+              "substrate": "polyurethane film",
+              "formulation": {
+                "primer": "none stated",
+                "topcoat": "1 g chitosan + 3 g salicylic acid + 20 g IPA + 65.88 g water + 5 g THF + 5 g NMP + 0.1 g acrylic acid + 0.02 g FC-170; then 1% heparin + 3% lactic acid in water topcoat"
+              },
+              "process": {
+                "surface_prep": "not stated",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "120C, 30 min for base; 120C, 30 min for heparin topcoat"
+              },
+              "results": {
+                "friction": "wet touch similar lubricity",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "overnight PBS leach before blood test",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              },
+              "source_family_reference": "P49"
+            },
+            {
+              "name": "Example 48: antimicrobial colonization prevention over two weeks [family representative from P49]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P38 is the US publication in the same Hydromer chitosan-network family as P49. Source examples copied from P49; verify exact claim/example differences before legal use. Original reason: Full text explicitly says Example 48 prevented E. coli and P. aeruginosa colonization over two weeks; exact formula should be located in PDF.",
+              "substrate": "network-composition coated medical surface; verify exact substrate in PDF",
+              "formulation": {
+                "primer": "verify in PDF",
+                "topcoat": "non-leachable network composition with antimicrobial colonization control"
+              },
+              "process": {
+                "surface_prep": "see primer field",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "verify in PDF"
+              },
+              "results": {
+                "friction": "not stated",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "up to two weeks microbial colonization prevention",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              },
+              "source_family_reference": "P49"
             }
           ],
-          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
+          "examples_note": "Family representative examples imported from P49/WO2008133646A1. This fixes the previous inferred-only placeholder; exact US publication wording should still be checked for legal/FTO use."
         }
       }
     },
@@ -4723,7 +5024,7 @@
       "abstract_note": "UV固化收縮影響附著、裂紋與coating應力,對耐磨耗有間接影響。",
       "value_to_project": "UV收縮應力對附著裂紋的間接影響",
       "links": {
-        "scholar": "https://scholar.google.com/scholar?q=Shrinkage+of+UV+oligomers+and+monomers+RadTech+2014"
+        "scholar": "https://scholar.google.com/scholarunknownq=Shrinkage+of+UV+oligomers+and+monomers+RadTech+2014"
       },
       "patentResults": {
         "full": {
@@ -7528,7 +7829,8 @@
       "abstract_note": "Coloplast塗層組合物;光起始劑/photografting為基礎的親水塗層;用於間歇導尿管。",
       "value_to_project": "競品導尿管大廠塗層專利",
       "links": {
-        "patents": "https://patents.google.com/patent/WO2008071796A2/en"
+        "patents": "https://patents.google.com/patent/WO2008071796A2/en",
+        "google_patents": "https://patents.google.com/patent/US7745561B2/en"
       },
       "patentResults": {
         "full": {
@@ -11641,12 +11943,12 @@
       "patent_notes": "Google Patents: filed 2001-12-13; published 2002-08-01; assignee Sherwood Service AG; status Ceased.",
       "patentResults": {
         "full": {
-          "evidence_level": "medium",
-          "source_quality": "google_patents_metadata",
+          "evidence_level": "high",
+          "source_quality": "google_patents_fulltext",
           "inference_flags": [
             "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
           ],
-          "summary": "WO2002058756A2 is the PCT/international counterpart of the Sherwood/Covidien lubricious coating family. It repeats the same core idea: a lubricious coating vehicle for medical devices with pharmacological additive release controlled through additive salt form and urethane pre-polymer concentration.",
+          "summary": "WO2002058756A2 discloses Sherwood/Cook-family lubricious coatings with PVP/isocyanate base chemistry and pharmacological additive modules including tolnaftate and silver salts.",
           "key_findings": [
             "PCT family node, not an independent product path.",
             "Assignee is Sherwood Service AG.",
@@ -11671,31 +11973,79 @@
           ],
           "examples": [
             {
-              "name": "* Embodiment A：含藥理添加劑潤滑塗層（PCT）",
-              "is_real": false,
-              "credibility": "中",
-              "credibility_reason": "* 推論：Sherwood 潤滑塗層族群的 PCT 版本，涵蓋藥物釋放，具體藥物需查全文。",
-              "substrate": "醫療器材潤滑塗層 vehicle",
+              "name": "Example 1: PVP / ethyl lactate / toluene / isocyanate base lubricious coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents full text Example 1 states the formulation and mixing conditions.",
+              "substrate": "coating vehicle / medical device coating",
               "formulation": {
-                "primer": "urethane prepolymer 底塗",
-                "topcoat": "PVP/PU + urethane prepolymer + 藥理添加劑（pharmacological additive）"
+                "primer": "none stated",
+                "topcoat": "2.0 wt% PVP + 18.0 wt% ethyl lactate + 77.8 wt% toluene + 1.2 wt% isocyanate-terminated prepolymer"
               },
               "process": {
-                "surface_prep": "基材清潔",
-                "coating_method": "Dip/spray",
-                "drying": "溶劑揮發",
-                "curing": "urethane 熱固化"
+                "surface_prep": "as stated in full text or not stated",
+                "coating_method": "as stated in full text",
+                "drying": "as stated in full text",
+                "curing": "room-temperature mixing about 30 min; curing occurs in device-coating examples"
               },
               "results": {
-                "friction": "遇濕潤滑",
-                "adhesion": "urethane 錨固",
-                "wca": "未明示",
-                "durability": "含藥緩釋",
-                "other": "Sherwood 潤滑+藥釋整合，與 Cook P30/P31 抗菌路線思路相似"
+                "friction": "not measured in Example 1",
+                "adhesion": "crystal clear solution formed",
+                "wca": "not stated",
+                "durability": "crystal clear solution formed",
+                "other": "base vehicle for later catheter coating"
+              }
+            },
+            {
+              "name": "Example 2: PVC thoracic catheter dip coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents full text Example 2 states catheter washing, dip time, bake condition and friction reduction.",
+              "substrate": "PVC thoracic catheter",
+              "formulation": {
+                "primer": "isopropanol wash; dried at 80C for 30 min",
+                "topcoat": "Example 1 lubricious coating vehicle"
+              },
+              "process": {
+                "surface_prep": "as stated in full text or not stated",
+                "coating_method": "as stated in full text",
+                "drying": "as stated in full text",
+                "curing": "80C, 60 min after 10 s dip coat"
+              },
+              "results": {
+                "friction": "friction reduction up to 60%",
+                "adhesion": "transparent/colorless coating with good bonding",
+                "wca": "not stated",
+                "durability": "transparent/colorless coating with good bonding",
+                "other": "wet lubricious coating on PVC catheter"
+              }
+            },
+            {
+              "name": "Example 4: silver-salt pharmacological additive lubricious vehicle",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents full text Example 4 lists silver salt options and Pellethane/PVP release-control concept.",
+              "substrate": "PVC medical devices",
+              "formulation": {
+                "primer": "not stated",
+                "topcoat": "lubricious vehicle with silver salts; successful salts include Giltech powders, AlphaSan RC2000, silver sulfadiazine and silver oxide; release regulated by Pellethane-to-PVP ratio"
+              },
+              "process": {
+                "surface_prep": "as stated in full text or not stated",
+                "coating_method": "as stated in full text",
+                "drying": "as stated in full text",
+                "curing": "prepared by room-temperature blending about 60 min; cure conditions follow device coating practice"
+              },
+              "results": {
+                "friction": "not stated",
+                "adhesion": "additive entrapped/ionically associated in urethane/PVP vehicle",
+                "wca": "not stated",
+                "durability": "additive entrapped/ionically associated in urethane/PVP vehicle",
+                "other": "pharmacological additive module for antimicrobial/release design"
               }
             }
           ],
-          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
+          "examples_note": "Re-parsed from Google Patents full text; Examples 1, 2 and 4 are concrete representative examples."
         }
       }
     },
@@ -11877,12 +12227,12 @@
       "patent_notes": "Google Patents: filed 1996-03-13; granted 1999-03-02; assignee Schneider USA Inc; status Expired - Lifetime.",
       "patentResults": {
         "full": {
-          "evidence_level": "medium",
-          "source_quality": "google_patents_metadata",
+          "evidence_level": "high",
+          "source_quality": "fulltext_no_relevant_coating_examples",
           "inference_flags": [
             "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
           ],
-          "summary": "US5876448A was suspected as a Boston Scientific historical node, but first-pass reading shows it is an esophageal stent structure patent, not a hydrophilic lubricious coating patent. It uses silicone coating on a stent medial region for tumor ingrowth barrier and radial force, while leaving cuffs uncoated to resist migration.",
+          "summary": "US5876448A is a Boston Scientific esophageal stent structural patent. Google Patents full text does not provide hydrophilic catheter-coating working examples relevant to this database.",
           "key_findings": [
             "Not a hydrophilic coating patent.",
             "Relevant to Boston/Schneider stent product IP history only.",
@@ -11904,33 +12254,8 @@
           "next_actions": [
             "Only revisit if mapping Boston stent product families, not coating chemistry."
           ],
-          "examples": [
-            {
-              "name": "** Embodiment A：矽膠塗層食道支架（低關聯）",
-              "is_real": false,
-              "credibility": "低",
-              "credibility_reason": "** 推論且低關聯：US5876448A 是 Boston 食道支架結構專利，矽膠塗層非親水潤滑，與本專案關聯低。",
-              "substrate": "食道支架（self-expanding stent）",
-              "formulation": {
-                "primer": "無（結構性塗層）",
-                "topcoat": "矽膠塗層於支架中段，兩端裸金屬 cuff"
-              },
-              "process": {
-                "surface_prep": "支架表面處理",
-                "coating_method": "矽膠包覆",
-                "drying": "矽膠硫化",
-                "curing": "矽膠交聯"
-              },
-              "results": {
-                "friction": "非親水潤滑訴求",
-                "adhesion": "矽膠包覆",
-                "wca": "疏水（矽膠）",
-                "durability": "結構性塗層",
-                "other": "⚠ 與親水潤滑塗層關聯低，僅作 Boston Scientific IP 地圖參考"
-              }
-            }
-          ],
-          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
+          "examples": [],
+          "examples_note": "Excluded from coating example coverage: no relevant hydrophilic coating examples found; keep only as low-relevance structural/IP-history node."
         }
       }
     },
@@ -11969,12 +12294,12 @@
       "patent_notes": "Google Patents: filed 2007-12-27; published 2009-07-02; assignee Scimed Life Systems Inc; status Granted.",
       "patentResults": {
         "full": {
-          "evidence_level": "medium",
-          "source_quality": "google_patents_metadata",
+          "evidence_level": "high",
+          "source_quality": "google_patents_fulltext",
           "inference_flags": [
             "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
           ],
-          "summary": "US20090171302A1 is the publication counterpart to Boston/Scimed P35. It covers durable hydrophilic lubricious coatings including hydrophilic polymer, flow modifier, acrylic monomer, photoinitiator and solvent, and can coat inner, outer or intermediate medical-device surfaces.",
+          "summary": "US20090171302A1 is the Boston/Scimed publication for durable hydrophilic coatings. The full text includes concrete Example 1 and Example 2 formulations based on PEO, flow modifier, silane, acrylic monomer and photoinitiator.",
           "key_findings": [
             "Same family as P35/US8378011B2.",
             "Important because it explicitly mentions inner, outer and intermediate surfaces.",
@@ -11999,31 +12324,55 @@
           ],
           "examples": [
             {
-              "name": "* Embodiment A：耐久親水塗層（P35 同族）",
-              "is_real": false,
-              "credibility": "中",
-              "credibility_reason": "* 推論：US20090171302A1 與 P35 同族，配方相同（PEO+flow modifier+acrylic+光起始劑）。",
-              "substrate": "導線、導管、血管內器材",
+              "name": "Example 1: PEO / Modaflow / silane / acrylic monomer / Irgacure 907 / aziridine coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents full text Example 1 gives gram-level formulation and UV cure sequence.",
+              "substrate": "metal or medical-device substrate",
               "formulation": {
-                "primer": "silane 底塗",
-                "topcoat": "親水高分子 + flow modifier + acrylic monomer + 光起始劑"
+                "primer": "0.025 g Dow Z-6020 silane; known metal-binding anchor",
+                "topcoat": "78.2 g IPA + 2.4 g PEO 900k + 20 g RO water + 0.1 g Modaflow AQ3025 + 0.8 g Sartomer SR9035 + 0.03 g Irgacure 907 + 0.1 g NeoCryl CX-100 aziridine"
               },
               "process": {
-                "surface_prep": "silane 處理",
-                "coating_method": "Dip/spray",
-                "drying": "溶劑揮發",
-                "curing": "UV 光固化"
+                "surface_prep": "as stated in full text or not stated",
+                "coating_method": "as stated in full text",
+                "drying": "as stated in full text",
+                "curing": "UV exposure after wet coating application"
               },
               "results": {
-                "friction": "低 COF",
-                "adhesion": "silane 共價",
-                "wca": "未明示",
-                "durability": "耐久性強化",
-                "other": "Boston Scientific P35 美國同族案"
+                "friction": "not stated in extracted segment",
+                "adhesion": "durable lubricious coating concept",
+                "wca": "not stated",
+                "durability": "durable lubricious coating concept",
+                "other": "Boston/Scimed durable hydrophilic coating formulation"
+              }
+            },
+            {
+              "name": "Example 2: lower PEO/acrylate with Joncryl binder variant",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents full text Example 2 gives gram-level formulation and binder variant.",
+              "substrate": "metal or medical-device substrate",
+              "formulation": {
+                "primer": "0.025 g Dow Z-6020 silane",
+                "topcoat": "78.2 g IPA + 1.8 g PEO 900k + 20 g RO water + 0.1 g Modaflow AQ3025 + 0.4 g Sartomer SR9035 + 0.015 g Irgacure 907 + 0.6 g Joncryl 67 binder"
+              },
+              "process": {
+                "surface_prep": "as stated in full text or not stated",
+                "coating_method": "as stated in full text",
+                "drying": "as stated in full text",
+                "curing": "UV exposure after wet coating application"
+              },
+              "results": {
+                "friction": "not stated in extracted segment",
+                "adhesion": "binder-containing durable coating variant",
+                "wca": "not stated",
+                "durability": "binder-containing durable coating variant",
+                "other": "variant lowers PEO/acrylate and uses styrene/carboxylic-acid copolymer binder"
               }
             }
           ],
-          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
+          "examples_note": "Re-parsed from Google Patents full text; publication has concrete Examples 1-2."
         }
       }
     },
@@ -12060,12 +12409,12 @@
       "patent_notes": "Google Patents: filed 2008-12-22; published 2009-07-09; assignee Scimed Life Systems Inc; status Ceased.",
       "patentResults": {
         "full": {
-          "evidence_level": "medium",
-          "source_quality": "google_patents_metadata",
+          "evidence_level": "high",
+          "source_quality": "fulltext_family_representative",
           "inference_flags": [
             "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
           ],
-          "summary": "WO2009086318A1 is the PCT/international counterpart of the Boston/Scimed enhanced-durability hydrophilic coating family. It should be used to map international coverage and national phase entries rather than as a standalone innovation.",
+          "summary": "WO2009086318A1 is the PCT family member for the Boston/Scimed durable hydrophilic coating route. The examples match the P43/P35 family and are stored here as family representative examples.",
           "key_findings": [
             "PCT family node for P35.",
             "Status shown as Ceased on Google Patents.",
@@ -12088,31 +12437,55 @@
           ],
           "examples": [
             {
-              "name": "* Embodiment A：耐久親水塗層（P35 PCT）",
-              "is_real": false,
+              "name": "Example 1: PEO / Modaflow / silane / acrylic monomer / Irgacure 907 / aziridine coating",
+              "is_real": true,
               "credibility": "中",
-              "credibility_reason": "* 推論：WO2009086363 與 P35/P43 同族 PCT 版本，配方相同。",
-              "substrate": "導線、導管、血管內器材",
+              "credibility_reason": "Google Patents full text Example 1 gives gram-level formulation and UV cure sequence. Family representative for WO/PCT member; verify exact WO formatting before legal use.",
+              "substrate": "metal or medical-device substrate",
               "formulation": {
-                "primer": "silane 底塗",
-                "topcoat": "親水高分子 + flow modifier + acrylic monomer + 光起始劑"
+                "primer": "0.025 g Dow Z-6020 silane; known metal-binding anchor",
+                "topcoat": "78.2 g IPA + 2.4 g PEO 900k + 20 g RO water + 0.1 g Modaflow AQ3025 + 0.8 g Sartomer SR9035 + 0.03 g Irgacure 907 + 0.1 g NeoCryl CX-100 aziridine"
               },
               "process": {
-                "surface_prep": "silane 處理",
-                "coating_method": "Dip/spray",
-                "drying": "溶劑揮發",
-                "curing": "UV 光固化"
+                "surface_prep": "as stated in full text or not stated",
+                "coating_method": "as stated in full text",
+                "drying": "as stated in full text",
+                "curing": "UV exposure after wet coating application"
               },
               "results": {
-                "friction": "低 COF",
-                "adhesion": "silane 共價",
-                "wca": "未明示",
-                "durability": "耐久性強化",
-                "other": "Boston Scientific P35 族群 PCT 國際案"
+                "friction": "not stated in extracted segment",
+                "adhesion": "durable lubricious coating concept",
+                "wca": "not stated",
+                "durability": "durable lubricious coating concept",
+                "other": "Boston/Scimed durable hydrophilic coating formulation"
+              }
+            },
+            {
+              "name": "Example 2: lower PEO/acrylate with Joncryl binder variant",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "Google Patents full text Example 2 gives gram-level formulation and binder variant. Family representative for WO/PCT member; verify exact WO formatting before legal use.",
+              "substrate": "metal or medical-device substrate",
+              "formulation": {
+                "primer": "0.025 g Dow Z-6020 silane",
+                "topcoat": "78.2 g IPA + 1.8 g PEO 900k + 20 g RO water + 0.1 g Modaflow AQ3025 + 0.4 g Sartomer SR9035 + 0.015 g Irgacure 907 + 0.6 g Joncryl 67 binder"
+              },
+              "process": {
+                "surface_prep": "as stated in full text or not stated",
+                "coating_method": "as stated in full text",
+                "drying": "as stated in full text",
+                "curing": "UV exposure after wet coating application"
+              },
+              "results": {
+                "friction": "not stated in extracted segment",
+                "adhesion": "binder-containing durable coating variant",
+                "wca": "not stated",
+                "durability": "binder-containing durable coating variant",
+                "other": "variant lowers PEO/acrylate and uses styrene/carboxylic-acid copolymer binder"
               }
             }
           ],
-          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
+          "examples_note": "Family representative examples from the Boston P35/P43 durable hydrophilic coating family."
         }
       }
     },
@@ -12150,11 +12523,11 @@
       "patentResults": {
         "full": {
           "evidence_level": "medium",
-          "source_quality": "google_patents_metadata",
+          "source_quality": "google_patents_fulltext",
           "inference_flags": [
             "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
           ],
-          "summary": "US4550126A is an early Hydromer biomedical material patent. It uses polyurethane-poly(N-vinyl lactam) interpolymer foam to create hydrophilic, flexible, open-cell absorptive materials for biomedical products. It is not primarily a catheter lubricious coating patent, but it helps show Hydromer early expertise in PU/vinyl-lactam hydrophilic materials.",
+          "summary": "US4550126A is a Hydromer biomedical foam/material patent, not a primary catheter coating patent. It has real foam examples showing polyurethane-PVP interpolymer foam preparation and absorbency/adhesion comparisons.",
           "key_findings": [
             "Hydromer-owned and expired.",
             "Core material is polyurethane-poly(N-vinyl lactam) interpolymer foam.",
@@ -12177,31 +12550,55 @@
           ],
           "examples": [
             {
-              "name": "* Embodiment A：PU-PVP 開孔發泡材",
-              "is_real": false,
-              "credibility": "中",
-              "credibility_reason": "* 推論：Hydromer 開孔發泡 PU-poly(N-vinyl lactam) 互聚物，用於牙科/生醫，比例需查全文。",
-              "substrate": "牙科及生醫產品（發泡材形式）",
+              "name": "Foam Example 1: cross-linked PU foam with PVP absorbency comparison",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents full text example describes Hypol 2002/TDI PEG prepolymer, aqueous component and PVP variation for absorptive capacity.",
+              "substrate": "polyurethane open-cell foam / biomedical foam",
               "formulation": {
-                "primer": "無（本體材料非塗層）",
-                "topcoat": "polyurethane + poly(N-vinyl lactam)/PVP 開孔發泡互聚物"
+                "primer": "not applicable; bulk foam material",
+                "topcoat": "Hypol 2002 isocyanate-capped PEG/TDI prepolymer + water + Pluronic F-88 + polyvinylpyrrolidone variation"
               },
               "process": {
-                "surface_prep": "N/A",
-                "coating_method": "發泡成型",
-                "drying": "發泡乾燥",
-                "curing": "PU 發泡交聯"
+                "surface_prep": "as stated in full text or not stated",
+                "coating_method": "as stated in full text",
+                "drying": "as stated in full text",
+                "curing": "foam reaction/molding; see full text for mold conditions"
               },
               "results": {
-                "friction": "親水潤滑",
-                "adhesion": "互聚物網絡",
-                "wca": "親水",
-                "durability": "開孔吸液結構",
-                "other": "Hydromer 發泡材延伸，非導管塗層但同屬 PVP-PU 化學"
+                "friction": "not a lubricity example",
+                "adhesion": "aqueous absorptive capacity compared across PVP loading",
+                "wca": "not stated",
+                "durability": "aqueous absorptive capacity compared across PVP loading",
+                "other": "low relevance to coating FTO; useful only as Hydromer material-history node"
+              }
+            },
+            {
+              "name": "Foam Example 2: linear PU-PVP interpolymer foam vs TELFA",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents full text example describes Trepol A-15 PEG/TDI prepolymer and compares peel adhesion/fluid absorption versus TELFA.",
+              "substrate": "linear polyurethane-polyvinylpyrrolidone interpolymer foam",
+              "formulation": {
+                "primer": "not applicable",
+                "topcoat": "Trepol A-15 PEG/TDI prepolymer + water + Pluronic F-88; PVP interpolymerized in foam"
+              },
+              "process": {
+                "surface_prep": "as stated in full text or not stated",
+                "coating_method": "as stated in full text",
+                "drying": "as stated in full text",
+                "curing": "foam preparation and molding"
+              },
+              "results": {
+                "friction": "not a lubricity example",
+                "adhesion": "superior peel adhesion and increased aqueous liquid absorptive capacity reported",
+                "wca": "not stated",
+                "durability": "superior peel adhesion and increased aqueous liquid absorptive capacity reported",
+                "other": "biomedical foam branch, not a hydrophilic catheter coating recipe"
               }
             }
           ],
-          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
+          "examples_note": "Re-parsed from Google Patents full text. These are real foam/material examples, but relevance to catheter coating is low."
         }
       }
     },
@@ -12610,12 +13007,12 @@
       "patent_notes": "Google Patents: filed 2003-03-31; published 2003-11-13; assignee Hydromer Inc; status Ceased.",
       "patentResults": {
         "full": {
-          "evidence_level": "medium",
-          "source_quality": "google_patents_metadata",
+          "evidence_level": "high",
+          "source_quality": "fulltext_family_representative",
           "inference_flags": [
             "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
           ],
-          "summary": "WO2003093357A1 is the PCT counterpart of the Hydromer P07 multi-purpose hydrophilic coating family. It should be kept in the patent tree for international coverage and priority mapping, not counted as a separate technical invention.",
+          "summary": "WO2003093357A1 is the PCT family member for Hydromer P07 multi-purpose hydrophilic coating compositions. Use P46 examples as family representative examples.",
           "key_findings": [
             "PCT family node for P07.",
             "Core composition matches US20030203991A1/P07.",
@@ -12638,31 +13035,319 @@
           ],
           "examples": [
             {
-              "name": "* Embodiment A：水性膠體金屬氧化物塗層（PCT）",
-              "is_real": false,
+              "name": "Example 1：PVP / urethane [family representative from P46]",
+              "is_real": true,
               "credibility": "中",
-              "credibility_reason": "* 推論：Hydromer P07 族群 PCT 版本，配方同 P46。",
-              "substrate": "多種親水應用器材",
+              "credibility_reason": "P47 is the PCT family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 1 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
               "formulation": {
-                "primer": "水性聚合物基質",
-                "topcoat": "親水高分子 + 膠體金屬氧化物 + 交聯劑"
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
               },
               "process": {
-                "surface_prep": "基材清潔",
-                "coating_method": "水性 dip coating",
-                "drying": "水分揮發",
-                "curing": "交聯劑固化"
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 40 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 40 g aqueous polyurethane dis",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
               },
               "results": {
-                "friction": "親水潤滑",
-                "adhesion": "金屬氧化物增強",
+                "friction": "To 87 g of water was added a solvent mix of 189 g which consisted of isopropanol and N-methylpyrrolidone, 40 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 40 g aqueous polyurethane dispersion 911 (Alberdinck&Boley), 1.6 g aziridine cross linke…",
+                "adhesion": "未明示",
                 "wca": "未明示",
-                "durability": "交聯網絡",
-                "other": "Hydromer P07 族群 PCT 國際案"
-              }
+                "durability": "需依全文確認",
+                "other": "To 87 g of water was added a solvent mix of 189 g which consisted of isopropanol and N-methylpyrrolidone, 40 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 40 g aqueous polyurethane dispersion 911 (Alberdinck&Boley), 1.6 g aziridine cross linker NeoCryl CX 100 (Zeneca Resin) and 23 g aqueous colloidal silica solution N 5110 (Eka-Akzo). The polyurethane dispersion 911 is an aliphatic polycarbonate modified polyurethane dispersion. The hydrophilic formulation was mixed and revealed…"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 2：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P47 is the PCT family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 2 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and diacetone alcohol, 19 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 19 g of aqueous aromatic polyur",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
+              },
+              "results": {
+                "friction": "To 281 g of water was added a solvent mix of 89 g which consisted of isopropanol and diacetone alcohol, 19 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 19 g of aqueous aromatic polyurethane dispersion NeoRez R-940 (NeoResins), 0.8 g aziridine…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 281 g of water was added a solvent mix of 89 g which consisted of isopropanol and diacetone alcohol, 19 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 19 g of aqueous aromatic polyurethane dispersion NeoRez R-940 (NeoResins), 0.8 g aziridine crosslinker NeoCryl CX 100 (Zeneca Resin) and 11 g aqueous colloidal silica solution N5110 (Eka-Akzo). The hydrophilic formulation was mixed and revealed good shelf life. [0235] Coatings with various dilution rates with water showed on a p…"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 3：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P47 is the PCT family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 3 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 31",
+                "coating_method": "isopropanol 清洗；cure 898 (BF Goodrich), 1",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "cure 898 (BF Goodrich), 1"
+              },
+              "results": {
+                "friction": "To 94 g of water was added a solvent mix of 152 g which consisted of isopropanol and N-methylpyrrolidone, 31.7 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 32.2 g aqueous polyurethane dispersion Sancure 898 (BF Goodrich), 1.3 g aziridine cros…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 94 g of water was added a solvent mix of 152 g which consisted of isopropanol and N-methylpyrrolidone, 31.7 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 32.2 g aqueous polyurethane dispersion Sancure 898 (BF Goodrich), 1.3 g aziridine cross linker NeoCryl CX 100 (NeoResins) and 18.4 g aqueous colloidal silica solution N 5110 (Eka-Akzo). The hydrophilic formulation was mixed and revealed good shelf life. [0237] Coatings with various dilution rates with water showed on a polyc…"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 4：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P47 is the PCT family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 4 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 23 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 24 g aqueous aliphatic polyur",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
+              },
+              "results": {
+                "friction": "To 173 g of water was added a solvent mix of 115 g which consisted of isopropanol and N-methylpyrrolidone, 23 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 24 g aqueous aliphatic polyurethane dispersion NeoRez R-960 (NeoResins), 0.95 g aziridi…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 173 g of water was added a solvent mix of 115 g which consisted of isopropanol and N-methylpyrrolidone, 23 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 24 g aqueous aliphatic polyurethane dispersion NeoRez R-960 (NeoResins), 0.95 g aziridine cross linker NeoCryl CX 100 (NeoResins) and 13.5 g aqueous colloidal silica solution N 5110 (Eka-Akzo). The hydrophilic formulation was mixed and revealed good shelf life. [0239] Coatings with various dilution rates with water showed on …"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 5：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P47 is the PCT family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 5 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 17 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 17 g aqueous polyurethane dis",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
+              },
+              "results": {
+                "friction": "To 326 g of water was added a solvent mix of 79 g which consisted of isopropanol and N-methylpyrrolidone, 17 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 17 g aqueous polyurethane dispersion 600 (Alberdinck&Boley), 0.68 g aziridine cross link…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 326 g of water was added a solvent mix of 79 g which consisted of isopropanol and N-methylpyrrolidone, 17 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 17 g aqueous polyurethane dispersion 600 (Alberdinck&Boley), 0.68 g aziridine cross linker NeoCryl CX 100 (NeoResins) and 10 g aqueous colloidal silica solution N 5110 (Eka-Akzo). The polyurethane dispersion 600 is an aliphatic polyether modified polyurethane dispersion. The hydrophilic formulation was mixed and revealed good …"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 6：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P47 is the PCT family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 6 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 21 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 22 g aqueous polyurethane dis",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
+              },
+              "results": {
+                "friction": "To 246 g of water was added a solvent mix of 103 g which consisted of isopropanol and N-methylpyrrolidone, 21 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 22 g aqueous polyurethane dispersion 915 (Alberdinck&Boley), 0.87 g aziridine cross lin…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 246 g of water was added a solvent mix of 103 g which consisted of isopropanol and N-methylpyrrolidone, 21 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 22 g aqueous polyurethane dispersion 915 (Alberdinck&Boley), 0.87 g aziridine cross linker NeoCryl CX 100 (NeoResins) and 12.6 g aqueous colloidal silica solution N 5110 (Eka-Akzo). The polyurethane dispersion 915 is an aliphatic polyester modified polyurethane dispersion. The hydrophilic formulation was mixed and revealed go…"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 7：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P47 is the PCT family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 7 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 15 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 15 g aqueous polyurethane dis",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
+              },
+              "results": {
+                "friction": "To 293 g of water was added a solvent mix of 72 g which consisted of isopropanol and N-methylpyrrolidone, 15 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 15 g aqueous polyurethane dispersion 910 (Alberdinck&Boley), 0.6 g aziridine cross linke…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 293 g of water was added a solvent mix of 72 g which consisted of isopropanol and N-methylpyrrolidone, 15 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 15 g aqueous polyurethane dispersion 910 (Alberdinck&Boley), 0.6 g aziridine cross linker NeoCryl CX 100 (NeoResins) and 8.7 g aqueous colloidal silica solution N 5110 (Eka-Akzo). The polyurethane dispersion 910 is an aliphatic polyester modified polyurethane dispersion. The hydrophilic formulation was mixed and revealed good …"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 8 (Comparative Sample)：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P47 is the PCT family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 8 (Comparative Sample) 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 40 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 40 g aqueous polyurethane dis",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
+              },
+              "results": {
+                "friction": "To 110 g of water was added a solvent mix of 189 g which consisted of isopropanol and N-methylpyrrolidone, 40 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 40 g aqueous polyurethane dispersion 911 (Alberdinck&Boley), 1.6 g aziridine cross link…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 110 g of water was added a solvent mix of 189 g which consisted of isopropanol and N-methylpyrrolidone, 40 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 40 g aqueous polyurethane dispersion 911 (Alberdinck&Boley), 1.6 g aziridine cross linker NeoCryl CX 100 (NeoResins) and no silica. The hydrophilic formulation was mixed and revealed reasonable shelf life. [0247] Coatings with various dilution rates with water showed on a polycarbonate substrate excellent lubricity with conta…"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 9 (Comparative Sample)：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P47 is the PCT family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 9 (Comparative Sample) 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and diacetone alcohol, 19 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 19 g of aqueous polyurethane di",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
+              },
+              "results": {
+                "friction": "To 292 g of water was added a solvent mix of 89 g which consisted of isopropanol and diacetone alcohol, 19 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 19 g of aqueous polyurethane dispersion NeoRez R-940 (NeoResins), 0.8 g aziridine crosslin…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 292 g of water was added a solvent mix of 89 g which consisted of isopropanol and diacetone alcohol, 19 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 19 g of aqueous polyurethane dispersion NeoRez R-940 (NeoResins), 0.8 g aziridine crosslinker NeoCryl CX100 (NeoResins) and no colloidal silica. The hydrophilic formulation was mixed and revealed good shelf life. [0249] Coatings with various dilution rates with water showed on a polycarbonate substrate lubricity with contact ang…"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 10 (Comparative Sample)：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P47 is the PCT family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 10 (Comparative Sample) 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 31",
+                "coating_method": "isopropanol 清洗；cure 898 (BF Goodrich), 1",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "cure 898 (BF Goodrich), 1"
+              },
+              "results": {
+                "friction": "To 112 g of water was added a solvent mix of 152 g which consisted of isopropanol and N-methylpyrrolidone, 31.7 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 32.2 g aqueous polyurethane dispersion Sancure 898 (BF Goodrich), 1.3 g aziridine cro…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 112 g of water was added a solvent mix of 152 g which consisted of isopropanol and N-methylpyrrolidone, 31.7 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 32.2 g aqueous polyurethane dispersion Sancure 898 (BF Goodrich), 1.3 g aziridine cross linker NeoCryl CX 100 (NeoResins) and no colloidal silica. The hydrophilic formulation was mixed and revealed reasonable shelf life. [0251] Coatings with various dilution rates with water showed on a polycarbonate substrate excellent lub…"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 11 (Comparative Sample)：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P47 is the PCT family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 11 (Comparative Sample) 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 23 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 24 g aqueous polyurethane dis",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
+              },
+              "results": {
+                "friction": "To 190 g of water was added a solvent mix of 112 g which consisted of isopropanol and N-methylpyrrolidone, 23 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 24 g aqueous polyurethane dispersion NeoResin R-960 (NeoResins), 0.95 g aziridine cross…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 190 g of water was added a solvent mix of 112 g which consisted of isopropanol and N-methylpyrrolidone, 23 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 24 g aqueous polyurethane dispersion NeoResin R-960 (NeoResins), 0.95 g aziridine cross linker NeoCryl CX 100 (NeoResins) and no colloidal silica. The hydrophilic formulation was mixed and revealed good shelf life. [0253] Coatings with various dilution rates with water showed on a polycarbonate substrate excellent lubricity w…"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 12 (Comparative Sample)：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P47 is the PCT family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 12 (Comparative Sample) 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 17 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 17 g aqueous polyurethane dis",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
+              },
+              "results": {
+                "friction": "To 336 g of water was added a solvent mix of 79 g which consisted of isopropanol and N-methylpyrrolidone, 17 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 17 g aqueous polyurethane dispersion 600 (Alberdinck&Boley), 0.68 g aziridine cross link…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 336 g of water was added a solvent mix of 79 g which consisted of isopropanol and N-methylpyrrolidone, 17 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 17 g aqueous polyurethane dispersion 600 (Alberdinck&Boley), 0.68 g aziridine cross linker NeoCryl CX 100 (NeoResins) and no colloidal silica. The hydrophilic formulation was mixed and revealed good shelf life. [0255] Coatings with various dilution rates with water showed on a polycarbonate substrate excellent lubricity with c…"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
             }
           ],
-          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
+          "examples_note": "Family representative examples imported from P46/US20030203991A1. Exact PCT claim/example formatting should be checked before legal use."
         }
       }
     },
@@ -12699,12 +13384,12 @@
       "patent_notes": "Google Patents: filed 2003-03-31; granted 2013-08-14; assignee Hydromer Inc; status Expired - Lifetime.",
       "patentResults": {
         "full": {
-          "evidence_level": "medium",
-          "source_quality": "google_patents_metadata",
+          "evidence_level": "high",
+          "source_quality": "fulltext_family_representative",
           "inference_flags": [
             "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
           ],
-          "summary": "EP1499667B1 is the European granted member of the Hydromer P07 family. Although Google Patents shows expired lifetime status, it is still useful for understanding how P07 was claimed in Europe and whether the EP claim language differed from the US grant.",
+          "summary": "EP1499667B1 is the EP family member for Hydromer P07 multi-purpose hydrophilic coating compositions. Use P46 examples as family representative examples.",
           "key_findings": [
             "EP granted family member of P07.",
             "Assignee Hydromer Inc.",
@@ -12728,31 +13413,319 @@
           ],
           "examples": [
             {
-              "name": "* Embodiment A：水性膠體金屬氧化物塗層（EP）",
-              "is_real": false,
+              "name": "Example 1：PVP / urethane [family representative from P46]",
+              "is_real": true,
               "credibility": "中",
-              "credibility_reason": "* 推論：Hydromer P07 族群 EP 授權案（已過期），配方同 P46。",
-              "substrate": "多種親水應用器材",
+              "credibility_reason": "P48 is the EP family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 1 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
               "formulation": {
-                "primer": "水性聚合物基質",
-                "topcoat": "親水高分子 + 膠體金屬氧化物 + 交聯劑"
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
               },
               "process": {
-                "surface_prep": "基材清潔",
-                "coating_method": "水性 dip coating",
-                "drying": "水分揮發",
-                "curing": "交聯劑固化"
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 40 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 40 g aqueous polyurethane dis",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
               },
               "results": {
-                "friction": "親水潤滑",
-                "adhesion": "金屬氧化物增強",
+                "friction": "To 87 g of water was added a solvent mix of 189 g which consisted of isopropanol and N-methylpyrrolidone, 40 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 40 g aqueous polyurethane dispersion 911 (Alberdinck&Boley), 1.6 g aziridine cross linke…",
+                "adhesion": "未明示",
                 "wca": "未明示",
-                "durability": "已過期，可自由使用",
-                "other": "Hydromer P07 族群歐洲授權案，已過期"
-              }
+                "durability": "需依全文確認",
+                "other": "To 87 g of water was added a solvent mix of 189 g which consisted of isopropanol and N-methylpyrrolidone, 40 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 40 g aqueous polyurethane dispersion 911 (Alberdinck&Boley), 1.6 g aziridine cross linker NeoCryl CX 100 (Zeneca Resin) and 23 g aqueous colloidal silica solution N 5110 (Eka-Akzo). The polyurethane dispersion 911 is an aliphatic polycarbonate modified polyurethane dispersion. The hydrophilic formulation was mixed and revealed…"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 2：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P48 is the EP family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 2 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and diacetone alcohol, 19 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 19 g of aqueous aromatic polyur",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
+              },
+              "results": {
+                "friction": "To 281 g of water was added a solvent mix of 89 g which consisted of isopropanol and diacetone alcohol, 19 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 19 g of aqueous aromatic polyurethane dispersion NeoRez R-940 (NeoResins), 0.8 g aziridine…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 281 g of water was added a solvent mix of 89 g which consisted of isopropanol and diacetone alcohol, 19 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 19 g of aqueous aromatic polyurethane dispersion NeoRez R-940 (NeoResins), 0.8 g aziridine crosslinker NeoCryl CX 100 (Zeneca Resin) and 11 g aqueous colloidal silica solution N5110 (Eka-Akzo). The hydrophilic formulation was mixed and revealed good shelf life. [0235] Coatings with various dilution rates with water showed on a p…"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 3：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P48 is the EP family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 3 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 31",
+                "coating_method": "isopropanol 清洗；cure 898 (BF Goodrich), 1",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "cure 898 (BF Goodrich), 1"
+              },
+              "results": {
+                "friction": "To 94 g of water was added a solvent mix of 152 g which consisted of isopropanol and N-methylpyrrolidone, 31.7 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 32.2 g aqueous polyurethane dispersion Sancure 898 (BF Goodrich), 1.3 g aziridine cros…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 94 g of water was added a solvent mix of 152 g which consisted of isopropanol and N-methylpyrrolidone, 31.7 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 32.2 g aqueous polyurethane dispersion Sancure 898 (BF Goodrich), 1.3 g aziridine cross linker NeoCryl CX 100 (NeoResins) and 18.4 g aqueous colloidal silica solution N 5110 (Eka-Akzo). The hydrophilic formulation was mixed and revealed good shelf life. [0237] Coatings with various dilution rates with water showed on a polyc…"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 4：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P48 is the EP family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 4 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 23 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 24 g aqueous aliphatic polyur",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
+              },
+              "results": {
+                "friction": "To 173 g of water was added a solvent mix of 115 g which consisted of isopropanol and N-methylpyrrolidone, 23 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 24 g aqueous aliphatic polyurethane dispersion NeoRez R-960 (NeoResins), 0.95 g aziridi…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 173 g of water was added a solvent mix of 115 g which consisted of isopropanol and N-methylpyrrolidone, 23 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 24 g aqueous aliphatic polyurethane dispersion NeoRez R-960 (NeoResins), 0.95 g aziridine cross linker NeoCryl CX 100 (NeoResins) and 13.5 g aqueous colloidal silica solution N 5110 (Eka-Akzo). The hydrophilic formulation was mixed and revealed good shelf life. [0239] Coatings with various dilution rates with water showed on …"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 5：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P48 is the EP family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 5 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 17 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 17 g aqueous polyurethane dis",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
+              },
+              "results": {
+                "friction": "To 326 g of water was added a solvent mix of 79 g which consisted of isopropanol and N-methylpyrrolidone, 17 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 17 g aqueous polyurethane dispersion 600 (Alberdinck&Boley), 0.68 g aziridine cross link…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 326 g of water was added a solvent mix of 79 g which consisted of isopropanol and N-methylpyrrolidone, 17 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 17 g aqueous polyurethane dispersion 600 (Alberdinck&Boley), 0.68 g aziridine cross linker NeoCryl CX 100 (NeoResins) and 10 g aqueous colloidal silica solution N 5110 (Eka-Akzo). The polyurethane dispersion 600 is an aliphatic polyether modified polyurethane dispersion. The hydrophilic formulation was mixed and revealed good …"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 6：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P48 is the EP family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 6 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 21 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 22 g aqueous polyurethane dis",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
+              },
+              "results": {
+                "friction": "To 246 g of water was added a solvent mix of 103 g which consisted of isopropanol and N-methylpyrrolidone, 21 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 22 g aqueous polyurethane dispersion 915 (Alberdinck&Boley), 0.87 g aziridine cross lin…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 246 g of water was added a solvent mix of 103 g which consisted of isopropanol and N-methylpyrrolidone, 21 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 22 g aqueous polyurethane dispersion 915 (Alberdinck&Boley), 0.87 g aziridine cross linker NeoCryl CX 100 (NeoResins) and 12.6 g aqueous colloidal silica solution N 5110 (Eka-Akzo). The polyurethane dispersion 915 is an aliphatic polyester modified polyurethane dispersion. The hydrophilic formulation was mixed and revealed go…"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 7：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P48 is the EP family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 7 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 15 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 15 g aqueous polyurethane dis",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
+              },
+              "results": {
+                "friction": "To 293 g of water was added a solvent mix of 72 g which consisted of isopropanol and N-methylpyrrolidone, 15 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 15 g aqueous polyurethane dispersion 910 (Alberdinck&Boley), 0.6 g aziridine cross linke…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 293 g of water was added a solvent mix of 72 g which consisted of isopropanol and N-methylpyrrolidone, 15 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 15 g aqueous polyurethane dispersion 910 (Alberdinck&Boley), 0.6 g aziridine cross linker NeoCryl CX 100 (NeoResins) and 8.7 g aqueous colloidal silica solution N 5110 (Eka-Akzo). The polyurethane dispersion 910 is an aliphatic polyester modified polyurethane dispersion. The hydrophilic formulation was mixed and revealed good …"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 8 (Comparative Sample)：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P48 is the EP family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 8 (Comparative Sample) 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 40 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 40 g aqueous polyurethane dis",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
+              },
+              "results": {
+                "friction": "To 110 g of water was added a solvent mix of 189 g which consisted of isopropanol and N-methylpyrrolidone, 40 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 40 g aqueous polyurethane dispersion 911 (Alberdinck&Boley), 1.6 g aziridine cross link…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 110 g of water was added a solvent mix of 189 g which consisted of isopropanol and N-methylpyrrolidone, 40 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 40 g aqueous polyurethane dispersion 911 (Alberdinck&Boley), 1.6 g aziridine cross linker NeoCryl CX 100 (NeoResins) and no silica. The hydrophilic formulation was mixed and revealed reasonable shelf life. [0247] Coatings with various dilution rates with water showed on a polycarbonate substrate excellent lubricity with conta…"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 9 (Comparative Sample)：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P48 is the EP family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 9 (Comparative Sample) 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and diacetone alcohol, 19 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 19 g of aqueous polyurethane di",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
+              },
+              "results": {
+                "friction": "To 292 g of water was added a solvent mix of 89 g which consisted of isopropanol and diacetone alcohol, 19 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 19 g of aqueous polyurethane dispersion NeoRez R-940 (NeoResins), 0.8 g aziridine crosslin…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 292 g of water was added a solvent mix of 89 g which consisted of isopropanol and diacetone alcohol, 19 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 19 g of aqueous polyurethane dispersion NeoRez R-940 (NeoResins), 0.8 g aziridine crosslinker NeoCryl CX100 (NeoResins) and no colloidal silica. The hydrophilic formulation was mixed and revealed good shelf life. [0249] Coatings with various dilution rates with water showed on a polycarbonate substrate lubricity with contact ang…"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 10 (Comparative Sample)：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P48 is the EP family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 10 (Comparative Sample) 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 31",
+                "coating_method": "isopropanol 清洗；cure 898 (BF Goodrich), 1",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "cure 898 (BF Goodrich), 1"
+              },
+              "results": {
+                "friction": "To 112 g of water was added a solvent mix of 152 g which consisted of isopropanol and N-methylpyrrolidone, 31.7 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 32.2 g aqueous polyurethane dispersion Sancure 898 (BF Goodrich), 1.3 g aziridine cro…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 112 g of water was added a solvent mix of 152 g which consisted of isopropanol and N-methylpyrrolidone, 31.7 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 32.2 g aqueous polyurethane dispersion Sancure 898 (BF Goodrich), 1.3 g aziridine cross linker NeoCryl CX 100 (NeoResins) and no colloidal silica. The hydrophilic formulation was mixed and revealed reasonable shelf life. [0251] Coatings with various dilution rates with water showed on a polycarbonate substrate excellent lub…"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 11 (Comparative Sample)：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P48 is the EP family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 11 (Comparative Sample) 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 23 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 24 g aqueous polyurethane dis",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
+              },
+              "results": {
+                "friction": "To 190 g of water was added a solvent mix of 112 g which consisted of isopropanol and N-methylpyrrolidone, 23 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 24 g aqueous polyurethane dispersion NeoResin R-960 (NeoResins), 0.95 g aziridine cross…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 190 g of water was added a solvent mix of 112 g which consisted of isopropanol and N-methylpyrrolidone, 23 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 24 g aqueous polyurethane dispersion NeoResin R-960 (NeoResins), 0.95 g aziridine cross linker NeoCryl CX 100 (NeoResins) and no colloidal silica. The hydrophilic formulation was mixed and revealed good shelf life. [0253] Coatings with various dilution rates with water showed on a polycarbonate substrate excellent lubricity w…"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
+            },
+            {
+              "name": "Example 12 (Comparative Sample)：PVP / urethane [family representative from P46]",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "P48 is the EP family member of the Hydromer P07/P46 multi-purpose coating family. Source examples copied from P46; verify exact claim/example differences before legal use. Original reason: Google Patents 全文 Example 12 (Comparative Sample) 明列；由批次解析寫入，需人工複核細節。",
+              "substrate": "全文實施例未明確限定；依專利脈絡為醫療器材表面",
+              "formulation": {
+                "primer": "全文 example 未必分底塗；請依原文確認 primer/base coat 邊界",
+                "topcoat": "polyvinylpyrrolidone + urethane"
+              },
+              "process": {
+                "surface_prep": "isopropanol and N-methylpyrrolidone, 17 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 17 g aqueous polyurethane dis",
+                "coating_method": "isopropanol 清洗",
+                "drying": "乾燥條件需依全文確認",
+                "curing": "需依全文確認"
+              },
+              "results": {
+                "friction": "To 336 g of water was added a solvent mix of 79 g which consisted of isopropanol and N-methylpyrrolidone, 17 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 17 g aqueous polyurethane dispersion 600 (Alberdinck&Boley), 0.68 g aziridine cross link…",
+                "adhesion": "未明示",
+                "wca": "未明示",
+                "durability": "需依全文確認",
+                "other": "To 336 g of water was added a solvent mix of 79 g which consisted of isopropanol and N-methylpyrrolidone, 17 g polyvinylpyrrolidone solution (20% of Kollidone K90, BASF), 17 g aqueous polyurethane dispersion 600 (Alberdinck&Boley), 0.68 g aziridine cross linker NeoCryl CX 100 (NeoResins) and no colloidal silica. The hydrophilic formulation was mixed and revealed good shelf life. [0255] Coatings with various dilution rates with water showed on a polycarbonate substrate excellent lubricity with c…"
+              },
+              "source_url": "https://patents.google.com/patent/US20030203991A1/en",
+              "source_family_reference": "P46"
             }
           ],
-          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
+          "examples_note": "Family representative examples imported from P46/US20030203991A1. Exact EP granted claim/example formatting should be checked before legal use."
         }
       }
     },
@@ -12790,17 +13763,19 @@
       "patent_notes": "Google Patents: filed 2007-10-31; published 2008-11-06; status Ceased.",
       "patentResults": {
         "full": {
-          "evidence_level": "medium",
-          "source_quality": "google_patents_metadata",
+          "evidence_level": "high",
+          "source_quality": "fulltext",
           "inference_flags": [
             "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
           ],
-          "summary": "WO2008133646A1 is the PCT family node for Hydromer P38, the lubricious biopolymeric network composition branch. It broadens the description around saccharide chains and monomers linked by multiple chemistries, with substrate adhesion. It is valuable as an idea map but should be tied to the abandoned US application and checked for any surviving national phase rights.",
+          "summary": "WO2008133646A1 is the PCT family member of Hydromer P38. The full text contains many chitosan / lactic acid / acrylic acid network-coating examples, with heparin, salicylic acid/aspirin, glutaraldehyde, semialdehyde, polyurethane, PVC, silicone, glass, guidewire and stent variants. The core value is a biopolymeric network route outside the classic PVP/BP or PU-isocyanate hydrophilic coating routes.",
           "key_findings": [
-            "Same family branch as P38/US20080114096A1.",
-            "Biopolymeric network based on saccharide chains and linked monomers.",
-            "Linkages include ester, ether, amide, ketone, urea, carbamate, aluminum oxide and siloxane.",
-            "Status shown as Ceased on Google Patents."
+            "The document has many real examples, not only one inferred embodiment.",
+            "A frequent base formula is chitosan + lactic acid + IPA/THF/NMP/water + FC-170 + acrylic acid, thermally cured around 100-120C.",
+            "Substrates include PU tubing, PVC tubing, PU-clad guidewire, silicone catheter, polyurethane film, glass coverslip and stent.",
+            "Function modules include lubricity/friction reduction, water-soak adhesion, heparin anti-clotting, salicylic acid/aspirin release and antimicrobial colonization control.",
+            "Some examples show high friction reduction with and without primer; primer still matters for adhesion and device geometry.",
+            "This patent is useful as a non-PVP/BP, non-classic PU-isocyanate biopolymer-network design space."
           ],
           "patent_core": {
             "claim_focus": [
@@ -12820,31 +13795,326 @@
           ],
           "examples": [
             {
-              "name": "* Embodiment A：生物聚合物網絡塗層（P38 PCT）",
-              "is_real": false,
-              "credibility": "中",
-              "credibility_reason": "* 推論：與 P38 同族 PCT，醣鏈 + 單體以酯/醚/醛鍵連結。",
-              "substrate": "醫療器材生物可相容塗層",
+              "name": "Example 6a: diluted aqueous network coating on PU tubing",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Real Example 6a in Google Patents full text; includes dilution, substrate, curing and qualitative lubricity/durability.",
+              "substrate": "polyurethane tubing",
               "formulation": {
-                "primer": "基材活化",
-                "topcoat": "幾丁聚醣 + 醣鏈 + 單體，以酯/醚/醛鍵交聯"
+                "primer": "Example 6a formulation diluted 50% with water",
+                "topcoat": "chitosan/lactic-acid based network formulation"
               },
               "process": {
-                "surface_prep": "基材清潔",
-                "coating_method": "Dip coating",
-                "drying": "溶劑/水揮發",
-                "curing": "酯/醚/醛鍵交聯"
+                "surface_prep": "see primer field",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "100C, 1 hr"
               },
               "results": {
-                "friction": "幾丁聚醣親水潤滑",
-                "adhesion": "多鍵結網絡",
-                "wca": "未明示",
-                "durability": "生物可降解",
-                "other": "Hydromer P38 生物聚合物族群 PCT 案"
+                "friction": "wet touch lubricity comparable to Example 6",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "durability to touch after water contact",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              }
+            },
+            {
+              "name": "Example 7a: chitosan / lactic acid / acrylic acid coating on PVC tubing",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Real Example 7a in Google Patents full text; gram-level formula and PVC tubing are stated.",
+              "substrate": "PVC tubing",
+              "formulation": {
+                "primer": "none stated",
+                "topcoat": "0.5 g chitosan + 1.5 g lactic acid + 10 g IPA + 2.5 g THF + 2.5 g NMP + 0.01 g FC-170 + 83 g water + 0.05 g acrylic acid"
+              },
+              "process": {
+                "surface_prep": "not stated",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "100C, 30 min"
+              },
+              "results": {
+                "friction": "wet touch lubricity similar to Example 7",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "durability to touch after water contact",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              }
+            },
+            {
+              "name": "Guidewire example: standard primer + double topcoat on PU-clad guidewire",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Full text states primer, double topcoat, curing and pulling-force data.",
+              "substrate": "polyurethane-cladded guidewire",
+              "formulation": {
+                "primer": "standard primer",
+                "topcoat": "chitosan / lactic acid / IPA / THF / NMP / water / FC-170 / acrylic acid network formulation"
+              },
+              "process": {
+                "surface_prep": "see primer field",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "90C 30 min + 120C 10 min"
+              },
+              "results": {
+                "friction": "uncoated 0.24 lbs to coated 0.015 lbs; almost 94% friction reduction",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "stable network after carrier solvent evaporation",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              }
+            },
+            {
+              "name": "Example 16: primer vs non-primer comparison on PU-clad guidewire",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Real Example 16 in full text; useful for primer/no-primer comparison.",
+              "substrate": "PU-cladded guidewire",
+              "formulation": {
+                "primer": "one guidewire primed first; one non-primed",
+                "topcoat": "5 g chitosan + 15 g lactic acid + 100 g IPA + 25 g NMP + 25 g THF + 329.4 g water + 0.5% acrylic acid"
+              },
+              "process": {
+                "surface_prep": "see primer field",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "same thermal-cure series; exact line should be checked"
+              },
+              "results": {
+                "friction": "primed 93% friction reduction; non-primed 92.8%",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "primer did not materially change friction reduction in this comparison",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              }
+            },
+            {
+              "name": "PU / Pebax / silicone comparative coating: substrate breadth test",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "Collapsed full-text paragraph lists multiple substrates and friction reduction; exact example number should be verified.",
+              "substrate": "polyurethane, Pebax, silicone",
+              "formulation": {
+                "primer": "not clearly stated in collapsed text",
+                "topcoat": "chitosan / lactic acid / acrylic-acid network formulation"
+              },
+              "process": {
+                "surface_prep": "see primer field",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "thermal cure"
+              },
+              "results": {
+                "friction": "polyurethane 93% first cycle and almost 97% after 50 cycles; Pebax 95% first cycle in extracted text",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "50-cycle friction data suggests durable lubricity",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              }
+            },
+            {
+              "name": "pH 6 guidewire coating: acrylic acid effect window",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Full text gives pH 6 testing and multiple related variants.",
+              "substrate": "PU-cladded guidewire",
+              "formulation": {
+                "primer": "none stated",
+                "topcoat": "1 g chitosan + DI water + 3 g lactic acid + 20 g IPA + 5 g NMP + 5 g THF + 0.02 g FC-170; variants with acrylic acid and radical initiator"
+              },
+              "process": {
+                "surface_prep": "not stated",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "120C, 20 min; tested at pH 6"
+              },
+              "results": {
+                "friction": "85-92% friction reduction depending on acrylic-acid/initiator variant",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "not stated",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              }
+            },
+            {
+              "name": "Glass disk cytotoxicity / cell proliferation test",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Full text reports Murine L929 cell proliferation decreased by 67% after 3 days; this is a biocompatibility red flag.",
+              "substrate": "18 mm glass disks / cover slips",
+              "formulation": {
+                "primer": "Example 3 formula, verify in PDF",
+                "topcoat": "chitosan network coating"
+              },
+              "process": {
+                "surface_prep": "see primer field",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "not stated in extracted segment"
+              },
+              "results": {
+                "friction": "not a friction test",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "not stated",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              }
+            },
+            {
+              "name": "Heparin topcoat dose series: anti-coagulative PU film",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Full text gives heparin dose series: 1%, 0.5%, 0.25% no clot; 0.125% tiny clot; 0% clot.",
+              "substrate": "primed polyurethane film",
+              "formulation": {
+                "primer": "PU film primed and coated with chitosan/lactic-acid network formula",
+                "topcoat": "heparin in water + 3% lactic acid at 1%, 0.5%, 0.25%, 0.125% or 0%"
+              },
+              "process": {
+                "surface_prep": "see primer field",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "120C, 30 min for network layer and heparin topcoat"
+              },
+              "results": {
+                "friction": "not a friction-focused example",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "overnight water leach before blood test",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              }
+            },
+            {
+              "name": "Heparin / acrylic acid / FC-170 topcoat: no-clot layered coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Full text states no clot and dark Toluidine Blue staining after leach.",
+              "substrate": "polyurethane film",
+              "formulation": {
+                "primer": "primed PU film with chitosan network base",
+                "topcoat": "3% heparin + 9% lactic acid + 0.7% acrylic acid + 20% IPA + 5% NMP + 5% THF + 0.1% FC-170"
+              },
+              "process": {
+                "surface_prep": "see primer field",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "100C 60 min + room temperature overnight + 100C 1 hr"
+              },
+              "results": {
+                "friction": "not stated",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "washed/leached overnight; no clot after leach",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              }
+            },
+            {
+              "name": "Stent spray coating: chitosan base + 3% heparin topcoat",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Full text states spray coating on stents and PBS overnight leach.",
+              "substrate": "stents",
+              "formulation": {
+                "primer": "stents were primed",
+                "topcoat": "base: 5 g chitosan + 15 g lactic acid + 100 g IPA + 25 g THF + 25 g NMP + 0.1 g FC-170 + 329.40 g water + 0.5 g acrylic acid; topcoat: 3% heparin + 22% lactic acid in water"
+              },
+              "process": {
+                "surface_prep": "see primer field",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "120C, 30 min for base; 120C, 30 min for topcoat"
+              },
+              "results": {
+                "friction": "not stated",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "overnight PBS leach before blood testing",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              }
+            },
+            {
+              "name": "Glutaraldehyde / semialdehyde variants: alternative crosslinking comparison",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Full text describes alternative crosslinking variants; exact example number should be checked.",
+              "substrate": "polyurethane film",
+              "formulation": {
+                "primer": "none stated",
+                "topcoat": "chitosan network using semialdehyde or glutaraldehyde variant with NMP and FC-170"
+              },
+              "process": {
+                "surface_prep": "not stated",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "120C, 30 min"
+              },
+              "results": {
+                "friction": "semialdehyde less lubricious than lactic acid; glutaraldehyde very lubricious but slightly less than acrylic acid",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "stable network after solvent evaporation",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              }
+            },
+            {
+              "name": "Example 42: chitosan / salicylic acid + heparin topcoat anti-clot film",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Real Example 42 in full text; whole human blood test showed no clot formation.",
+              "substrate": "polyurethane film",
+              "formulation": {
+                "primer": "none stated",
+                "topcoat": "1 g chitosan + 3 g salicylic acid + 20 g IPA + 65.88 g water + 5 g THF + 5 g NMP + 0.1 g acrylic acid + 0.02 g FC-170; then 1% heparin + 3% lactic acid in water topcoat"
+              },
+              "process": {
+                "surface_prep": "not stated",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "120C, 30 min for base; 120C, 30 min for heparin topcoat"
+              },
+              "results": {
+                "friction": "wet touch similar lubricity",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "overnight PBS leach before blood test",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
+              }
+            },
+            {
+              "name": "Example 48: antimicrobial colonization prevention over two weeks",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Full text explicitly says Example 48 prevented E. coli and P. aeruginosa colonization over two weeks; exact formula should be located in PDF.",
+              "substrate": "network-composition coated medical surface; verify exact substrate in PDF",
+              "formulation": {
+                "primer": "verify in PDF",
+                "topcoat": "non-leachable network composition with antimicrobial colonization control"
+              },
+              "process": {
+                "surface_prep": "see primer field",
+                "coating_method": "coating / dip coating / spraying as stated by example",
+                "drying": "carrier solvent evaporation / leach where stated",
+                "curing": "verify in PDF"
+              },
+              "results": {
+                "friction": "not stated",
+                "adhesion": "see durability / leach notes",
+                "wca": "not stated",
+                "durability": "up to two weeks microbial colonization prevention",
+                "other": "Hydromer chitosan biopolymeric network coating branch"
               }
             }
           ],
-          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
+          "examples_note": "P49 was re-parsed from Google Patents full text. The source contains many Examples, at least up to Example 48. Google Patents collapses tables and headings, so exact example numbering should still be checked against the original PDF before legal/FTO use.",
+          "red_flags": [
+            "Google Patents text quality is poor for this document; verify exact example numbers and tables against the PDF.",
+            "Chitosan / lactic acid / acrylic acid route may carry cytotoxicity risk; the text includes an L929 proliferation reduction signal.",
+            "NMP, THF, glutaraldehyde and some crosslinking additives raise residual solvent and biocompatibility concerns.",
+            "Heparin, salicylic acid or aspirin modules may move the product toward drug-device combination complexity."
+          ],
+          "bioteque_relevance": "P49 is important because it gives Hydromer a chitosan biopolymer-network branch outside the PVP/PU family. It is a useful concept library for anti-encrustation, anti-thrombotic and antimicrobial coating design, but the exact recipes should not be copied directly without solvent, cytotoxicity, extractables and regulatory review."
         }
       }
     },
@@ -12882,12 +14152,12 @@
       "patent_notes": "Google Patents: filed 2011-02-07; published 2011-08-18; assignee Biocoat Inc; status Abandoned.",
       "patentResults": {
         "full": {
-          "evidence_level": "medium",
-          "source_quality": "google_patents_metadata",
+          "evidence_level": "high",
+          "source_quality": "google_patents_fulltext",
           "inference_flags": [
             "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
           ],
-          "summary": "US20110200828A1 is an abandoned Biocoat application but technically important. It describes a durable hydrophilic coating with a highly adherent carboxylic-acid-containing base coat and chemically grafted/crosslinked hydrophilic top coat. The top coat includes carboxylic acid hydrophilic polymer and chromium(III) ion crosslinking, with claims of lubricity, abrasion resistance, chemical stability and sterilization stability.",
+          "summary": "US20110200828A1 is an early Biocoat/HYDAK hydrophilic coating family application built around cross-linked poly(acrylic acid), especially chromium(III)-crosslinked PAA, with durability, sterilization and pinch-tester examples.",
           "key_findings": [
             "Biocoat-owned abandoned application.",
             "Base/top-coat architecture resembles later HYDAK service logic.",
@@ -12912,31 +14182,79 @@
           ],
           "examples": [
             {
-              "name": "* Embodiment A：base/top coat 羧酸聚合物塗層",
-              "is_real": false,
-              "credibility": "中",
-              "credibility_reason": "* 推論：US20110200828（Biocoat HYDAK 相關）描述高附著底塗 + 化學鍵結頂塗，羧酸聚合物，比例需查全文。",
-              "substrate": "醫療器材（HYDAK 適用基材）",
+              "name": "Example 1: chromium(III)-crosslinked poly(acrylic acid) water-insoluble gel",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents full text Example 1 gives amounts, bake and water/NaCl soaking observations.",
+              "substrate": "cast film / model coating material",
               "formulation": {
-                "primer": "高附著 base-coat",
-                "topcoat": "羧酸聚合物（carboxylic acid polymer）化學鍵結頂塗"
+                "primer": "none stated",
+                "topcoat": "0.5 g of 0.1 wt% chromium(III) acetate hydroxide solution + 2 g of 5 wt% poly(acrylic acid) solution"
               },
               "process": {
-                "surface_prep": "基材清潔",
-                "coating_method": "base/top coat 雙層 dip",
-                "drying": "溶劑揮發",
-                "curing": "化學鍵結固化"
+                "surface_prep": "as stated in full text or not stated",
+                "coating_method": "as stated in full text",
+                "drying": "as stated in full text",
+                "curing": "60C, 16 hr bake; water soak 3 hr"
               },
               "results": {
-                "friction": "低 COF 潤滑",
-                "adhesion": "高附著 base-coat",
-                "wca": "親水",
-                "durability": "通過 HYDAK 耐久標準",
-                "other": "Biocoat HYDAK 雙層塗層族群核心"
+                "friction": "not a device friction example",
+                "adhesion": "forms swollen water-insoluble gel; PAA-only control dissolves within 10 min",
+                "wca": "not stated",
+                "durability": "forms swollen water-insoluble gel; PAA-only control dissolves within 10 min",
+                "other": "establishes Cr(III)-PAA crosslinked hydrophilic network"
+              }
+            },
+            {
+              "name": "Example 3: pinch-tester friction and durability of Cr(III)-PAA coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents full text Example 3 describes pinch tester, 1070 g pinch force, 3-inch sample and 20-cycle average friction.",
+              "substrate": "medical-device coating sample",
+              "formulation": {
+                "primer": "Cr(III)-PAA coating system from earlier examples",
+                "topcoat": "poly(acrylic acid) cross-linked with chromium(III) acetate hydroxide"
+              },
+              "process": {
+                "surface_prep": "as stated in full text or not stated",
+                "coating_method": "as stated in full text",
+                "drying": "as stated in full text",
+                "curing": "tested wet in PBS at 37C; coating prep from previous examples"
+              },
+              "results": {
+                "friction": "remarkably low dynamic friction; 20-cycle average reported in table",
+                "adhesion": "durability monitored by repeated testing",
+                "wca": "not stated",
+                "durability": "durability monitored by repeated testing",
+                "other": "important HYDAK-style friction/durability test example"
+              }
+            },
+            {
+              "name": "Examples 11-14: sterilization, PBS soaking and accelerated aging durability",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "Google Patents figures and text describe E-beam, EtO, PBS soaking and 52C accelerated aging tests. Exact numeric tables/graphs should be checked in original.",
+              "substrate": "Cr(III)-PAA coated medical-device samples",
+              "formulation": {
+                "primer": "Cr(III)-PAA crosslinked coating",
+                "topcoat": "same coating family"
+              },
+              "process": {
+                "surface_prep": "as stated in full text or not stated",
+                "coating_method": "as stated in full text",
+                "drying": "as stated in full text",
+                "curing": "E-beam / EtO / PBS soaking / 52C aging test conditions"
+              },
+              "results": {
+                "friction": "dynamic friction coefficient and durability measured by pinch tester",
+                "adhesion": "coating designed to withstand sterilization, soaking and accelerated aging",
+                "wca": "not stated",
+                "durability": "coating designed to withstand sterilization, soaking and accelerated aging",
+                "other": "useful for validation-plan design rather than a new formula"
               }
             }
           ],
-          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
+          "examples_note": "Re-parsed from Google Patents full text; representative Examples 1, 3 and 11-14 were extracted."
         }
       }
     },
@@ -12973,12 +14291,12 @@
       "patent_notes": "Google Patents: filed 2012-05-31; published 2013-12-05; assignee Biocoat Inc; status Abandoned.",
       "patentResults": {
         "full": {
-          "evidence_level": "medium",
-          "source_quality": "google_patents_metadata",
+          "evidence_level": "high",
+          "source_quality": "google_patents_fulltext",
           "inference_flags": [
             "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
           ],
-          "summary": "US20130323291A1 is another abandoned Biocoat application, focused on hydrophilic and non-thrombogenic copolymers. It uses an acidic monomer plus a second hydrophilic monomer, with reactive functional groups enabling covalent attachment to a primer/base coat. It claims durable lubricity, non-thrombogenic and non-cytotoxic behavior, and stability to gamma, e-beam and ethylene oxide sterilization.",
+          "summary": "US20130323291A1 discloses Biocoat hydrophilic and non-thrombogenic polymer topcoats, including HEAA/AA and NVP/AA copolymers, bilaminar HYDAK coatings, PTT/thrombogenicity, gamma sterilization and PBS-soak durability examples.",
           "key_findings": [
             "Biocoat-owned abandoned application.",
             "Focus is hemocompatibility/non-thrombogenicity plus lubricity.",
@@ -13003,31 +14321,103 @@
           ],
           "examples": [
             {
-              "name": "* Embodiment A：非血栓親水共聚物塗層",
-              "is_real": false,
-              "credibility": "中",
-              "credibility_reason": "* 推論：Biocoat 酸性單體 + 親水單體共聚物，共價附著於 primer base-coat，比例需查全文。",
-              "substrate": "血液接觸醫療器材",
+              "name": "Poly(HEAA-co-AA) 75/25 preparation example",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents full text gives HEAA/AA amounts, APS/SHMS initiators, FeSO4 catalyst, nitrogen and 40C polymerization.",
+              "substrate": "polymer synthesis for topcoat",
               "formulation": {
-                "primer": "primer base-coat",
-                "topcoat": "酸性單體 + 第二親水單體共聚物，共價接枝"
+                "primer": "not applicable",
+                "topcoat": "33.10 g HEAA + 6.90 g acrylic acid in 360 g water; APS/SHMS redox initiation with FeSO4 catalyst"
               },
               "process": {
-                "surface_prep": "基材清潔",
-                "coating_method": "base/top coat dip",
-                "drying": "溶劑揮發",
-                "curing": "共價接枝固化"
+                "surface_prep": "as stated in full text or not stated",
+                "coating_method": "as stated in full text",
+                "drying": "as stated in full text",
+                "curing": "40C under nitrogen with stirring"
               },
               "results": {
-                "friction": "親水潤滑",
-                "adhesion": "共價附著 primer",
-                "wca": "親水",
-                "durability": "非血栓（non-thrombogenic）",
-                "other": "Biocoat 血液相容塗層，酸性單體提供抗血栓"
+                "friction": "not a friction example",
+                "adhesion": "monomer conversion and GPC measured",
+                "wca": "not stated",
+                "durability": "monomer conversion and GPC measured",
+                "other": "polymer-building block for non-thrombogenic hydrophilic topcoat"
+              }
+            },
+            {
+              "name": "Example 5: thrombogenic performance / PTT testing",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents full text describes PTT test by Nelson Labs and plasma exposure protocol.",
+              "substrate": "test articles from coating examples",
+              "formulation": {
+                "primer": "HYDAK/bilaminar coating context",
+                "topcoat": "non-thrombogenic hydrophilic polymer coating samples"
+              },
+              "process": {
+                "surface_prep": "as stated in full text or not stated",
+                "coating_method": "as stated in full text",
+                "drying": "as stated in full text",
+                "curing": "PTT test; 6 cm2 test article in 2.0 mL plasma"
+              },
+              "results": {
+                "friction": "not friction-focused",
+                "adhesion": "screens material-mediated coagulation abnormalities",
+                "wca": "not stated",
+                "durability": "screens material-mediated coagulation abnormalities",
+                "other": "key hemocompatibility evidence"
+              }
+            },
+            {
+              "name": "Example 8: bilaminar P(HEAA-AA) 75/25 topcoat after gamma sterilization and aging",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents full text Example 8 states topcoat, gamma sterilization dose, aging and pinch-test conditions.",
+              "substrate": "PETG rods / bilaminar coated samples",
+              "formulation": {
+                "primer": "HYDAK B-500 base coat",
+                "topcoat": "P(HEAA-AA) 75/25 topcoat"
+              },
+              "process": {
+                "surface_prep": "as stated in full text or not stated",
+                "coating_method": "as stated in full text",
+                "drying": "as stated in full text",
+                "curing": "gamma sterilization about 25 kGy; accelerated aging at 52C; pinch forces 770 g and 1070 g"
+              },
+              "results": {
+                "friction": "pinch tester friction evaluated after sterilization/aging",
+                "adhesion": "non-cytotoxic samples reported; durability after sterilization/aging tested",
+                "wca": "not stated",
+                "durability": "non-cytotoxic samples reported; durability after sterilization/aging tested",
+                "other": "important Biocoat topcoat validation example"
+              }
+            },
+            {
+              "name": "Example 13: prolonged PBS soaking stability of P(HEAA-AA)/HYDAK B-500 bilaminar coating",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents full text Example 13 states 37C PBS soaking, 7/16 hr timepoints and 50-cycle pinch test.",
+              "substrate": "coated PETG rods",
+              "formulation": {
+                "primer": "HYDAK B-500 base coat",
+                "topcoat": "P(HEAA-AA) bilaminar topcoat"
+              },
+              "process": {
+                "surface_prep": "as stated in full text or not stated",
+                "coating_method": "as stated in full text",
+                "drying": "as stated in full text",
+                "curing": "37C PBS soaking for 7 hr and 16 hr; 50-cycle pinch test"
+              },
+              "results": {
+                "friction": "friction coefficient and total friction growth measured",
+                "adhesion": "stability after prolonged PBS soaking",
+                "wca": "not stated",
+                "durability": "stability after prolonged PBS soaking",
+                "other": "useful durability benchmark for hydrophilic topcoat"
               }
             }
           ],
-          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
+          "examples_note": "Re-parsed from Google Patents full text; representative polymer synthesis, PTT, gamma-aging and PBS-soak examples were extracted."
         }
       }
     },
@@ -13066,11 +14456,11 @@
       "patentResults": {
         "full": {
           "evidence_level": "medium",
-          "source_quality": "google_patents_metadata",
+          "source_quality": "fulltext_no_concrete_examples_found",
           "inference_flags": [
             "* First-pass agent reading from Google Patents metadata/abstract. Claim-by-claim parsing still needed before FTO use."
           ],
-          "summary": "US20230285641A1 is a high-priority pending Surmodics application. It combines a non-fouling basecoat containing hydrophilic and hydrophobic components with a lubricious topcoat containing photo-reactive PVP and a crosslinking agent. This is highly relevant to modern PhotoLink/Serene-style coating strategy and should be parsed claim-by-claim before using similar basecoat/topcoat ideas.",
+          "summary": "US20230285641A1 is a Surmodics thromboresistant coating application. Google Patents full text was checked, but no explicit Example headings or concrete working examples were detected in the page text. Treat this as claim/description intelligence, not as an example-derived recipe.",
           "key_findings": [
             "Surmodics Coatings LLC assignee; status pending.",
             "Architecture: substrate + non-fouling basecoat + lubricious topcoat.",
@@ -13096,33 +14486,8 @@
             "Compare with C03 Serene and C09 Surmodics/Harland commercial notes.",
             "Extract specific photo-reactive PVP/crosslinker language."
           ],
-          "examples": [
-            {
-              "name": "* Embodiment A：PhotoLink 抗血栓光反應塗層",
-              "is_real": false,
-              "credibility": "中",
-              "credibility_reason": "* 推論：Surmodics PhotoLink 技術，非汙底塗 + 光反應 PVP 潤滑頂塗，比例需查全文。",
-              "substrate": "植入/部分植入/穿戴醫療器材",
-              "formulation": {
-                "primer": "non-fouling base-coat（抗汙底塗）",
-                "topcoat": "光反應 PVP（photo-reactive PVP）潤滑頂塗"
-              },
-              "process": {
-                "surface_prep": "基材清潔",
-                "coating_method": "PhotoLink dip/spray",
-                "drying": "溶劑揮發",
-                "curing": "UV 光接枝（PhotoLink 專利技術）"
-              },
-              "results": {
-                "friction": "低 COF 潤滑",
-                "adhesion": "光接枝共價",
-                "wca": "親水",
-                "durability": "抗血栓 + 抗汙雙功能",
-                "other": "Surmodics PhotoLink 核心技術，抗血栓+潤滑整合"
-              }
-            }
-          ],
-          "examples_note": "實施例基於專利摘要/claim 脈絡推論（標 *），具體比例與測試數據需查全文 example。"
+          "examples": [],
+          "examples_note": "No concrete working examples detected in Google Patents text. Do not use this record as an experimental recipe until a PDF/manual review confirms examples or tables."
         }
       }
     }

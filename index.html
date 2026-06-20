@@ -1666,6 +1666,26 @@ async function batchAnalyzeAll() {
   toast(`批次分析完成：${done} 成功 / ${fail} 失敗`,'success');
 }
 
+function patentExamples(p) {
+  return Array.isArray(p?.patentResults?.full?.examples) ? p.patentResults.full.examples : [];
+}
+
+function primaryPatentExample(p) {
+  const examples = patentExamples(p);
+  return examples.find(ex => ex?.is_real === true) || examples[0] || {};
+}
+
+function summarizePatentExamples(p, getter, max=4) {
+  const vals = patentExamples(p)
+    .map(ex => getter(ex))
+    .filter(Boolean)
+    .map(v => String(v).replace(/\s+/g, ' ').trim())
+    .filter(Boolean);
+  const unique = [...new Set(vals)];
+  const summary = unique.slice(0, max).join(' | ');
+  return unique.length > max ? `${summary} | +${unique.length - max} more` : summary;
+}
+
 function buildReportSummary() {
   const el = document.getElementById('rptDataSummary');
   if(!el) return;
@@ -1676,10 +1696,12 @@ function buildReportSummary() {
   // 收集所有性能數據
   const frictions = [], adhesions = [], wcas = [];
   analyzed.forEach(p=>{
-    const r = p.patentResults?.full?.examples?.[0]?.results||{};
-    if(r.friction) frictions.push(`${p.id}: ${r.friction}`);
-    if(r.adhesion) adhesions.push(`${p.id}: ${r.adhesion}`);
-    if(r.wca) wcas.push(`${p.id}: ${r.wca}`);
+    patentExamples(p).forEach(ex=>{
+      const r = ex.results || {};
+      if(r.friction) frictions.push(`${p.id}: ${r.friction}`);
+      if(r.adhesion) adhesions.push(`${p.id}: ${r.adhesion}`);
+      if(r.wca) wcas.push(`${p.id}: ${r.wca}`);
+    });
   });
 
   el.innerHTML = `
@@ -1709,12 +1731,19 @@ async function generateReport() {
   const analyzed = scopePapers.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0);
   const dataLines = analyzed.map(p=>{
     const r = p.patentResults?.full||{};
-    const ex = r.examples?.[0]||{};
+    const exampleCount = patentExamples(p).length;
+    const primer = summarizePatentExamples(p, ex => ex.formulation?.primer);
+    const topcoat = summarizePatentExamples(p, ex => ex.formulation?.topcoat);
+    const curing = summarizePatentExamples(p, ex => ex.process?.curing);
+    const friction = summarizePatentExamples(p, ex => ex.results?.friction);
+    const adhesion = summarizePatentExamples(p, ex => ex.results?.adhesion);
+    const wca = summarizePatentExamples(p, ex => ex.results?.wca);
     return `[${p.id}] ${p.title} (${p.doc_type})
 摘要:${r.summary||p.abstract_note||''}
-底塗:${ex.formulation?.primer||'—'} 面塗:${ex.formulation?.topcoat||'—'}
-固化:${ex.process?.curing||'—'}
-COF:${ex.results?.friction||'—'} 附著:${ex.results?.adhesion||'—'} WCA:${ex.results?.wca||'—'}
+實施例數:${exampleCount}
+底塗:${primer||'-'} 面塗:${topcoat||'-'}
+固化:${curing||'-'}
+COF:${friction||'-'} 附著:${adhesion||'-'} WCA:${wca||'-'}
 可借鏡:${(r.actionable_insights||[]).join('; ')}
 ${p.doc_type==='專利'?'迴避:'+((r.key_claims||[]).join('; ')):''}`;
   }).join('\n---\n');
@@ -2013,7 +2042,7 @@ function renderCompareGroups(groups, container, allPapers) {
     papers.forEach(p => {
       const hasA = p.patentResults && Object.keys(p.patentResults).length > 0;
       const r = p.patentResults?.full || {};
-      const ex = r.examples?.[0] || {};
+      const ex = primaryPatentExample(p);
       const res = ex.results || {};
       const fm = ex.formulation || {};
       const org = extractOrg(p);
@@ -4565,7 +4594,7 @@ function drawPatentTrain() {
   };
   const trainFormulaText = (item, paper) => {
     if(item.formula) return item.formula;
-    const ex = paper?.patentResults?.full?.examples?.[0];
+    const ex = primaryPatentExample(paper);
     const parts = [
       ex?.formulation?.primer,
       ex?.formulation?.topcoat,
@@ -4652,7 +4681,7 @@ function renderPatentTreeDetail(d) {
   const paper = d.paperId ? (DB.papers||[]).find(p=>p.id===d.paperId) : null;
   const full = paper?.patentResults?.full || {};
   const col = d.color || '#2d8c5a';
-  const ex0 = full.examples?.[0];
+  const ex0 = primaryPatentExample(paper);
   const formulaText = d.formula || ex0?.formulation?.topcoat || ex0?.formulation?.primer || (full.coating_technology?.materials || []).slice(0,4).join(' + ') || d.theme || '';
 
   const block = (label, items, c='var(--accent2)') => {
@@ -5027,7 +5056,7 @@ function countRoutePapers(route, papers) {
     const hay = [p.title, p.abstract_note, p.purpose, p.value_to_project,
       (p.tags||[]).join(' '),
       p.patentResults?.full?.summary||'',
-      JSON.stringify(p.patentResults?.full?.examples?.[0]?.formulation||{})
+      JSON.stringify(patentExamples(p).map(ex=>ex.formulation||{}))
     ].join(' ');
     return route.pattern.test(hay);
   }).length;
@@ -6027,7 +6056,7 @@ function exportExcel() {
   // ── Sheet 2：配方分析（所有已分析文獻）──
   const analyzed = papers.filter(p=>p.patentResults?.full).map(p=>{
     const r = p.patentResults.full;
-    const ex = r.examples?.[0]||{};
+    const ex = primaryPatentExample(p);
     const fm = ex.formulation||{};
     const proc = ex.process||{};
     const res = ex.results||{};
@@ -6062,7 +6091,7 @@ function exportExcel() {
     const hay=`${p.title} ${p.abstract_note||''} ${p.purpose||''} ${(p.tags||[]).join(' ')} ${p.id}`;
     return (import_re.test(hay)||p.id.startsWith('U')) && p.patentResults?.full;
   }).map(p=>{
-    const r=p.patentResults.full; const ex=r.examples?.[0]||{};
+    const r=p.patentResults.full; const ex=primaryPatentExample(p);
     const fm=ex.formulation||{}; const proc=ex.process||{}; const res=ex.results||{};
     return {
       'ID':p.id,'類型':p.doc_type,'標題':p.title||'',
@@ -6084,7 +6113,7 @@ function exportExcel() {
 
   // ── Sheet 4：TPU 配方比較 ──
   const tpu = papers.filter(p=>(p.tags||[]).includes('TPU') && p.patentResults?.full).map(p=>{
-    const r=p.patentResults.full; const ex=r.examples?.[0]||{};
+    const r=p.patentResults.full; const ex=primaryPatentExample(p);
     const fm=ex.formulation||{}; const proc=ex.process||{}; const res=ex.results||{};
     return {
       'ID':p.id,'類型':p.doc_type,'標題':p.title||'',
@@ -6849,6 +6878,10 @@ function shouldShowAllPatentExamples(examples) {
   return Array.isArray(examples) && examples.length > 1 && examples.some(ex => ex.is_real === true);
 }
 
+function patentExamplesNeedFulltextParse(examples) {
+  return Array.isArray(examples) && examples.length > 0 && examples.every(ex => ex.is_real === false);
+}
+
 function renderPatentResult(a) {
   let html = '<div class="patent-result">';
 
@@ -6866,6 +6899,9 @@ function renderPatentResult(a) {
   // 實施例
   const examples = a.examples || [];
   const showAllExamples = shouldShowAllPatentExamples(examples);
+  if(patentExamplesNeedFulltextParse(examples)) {
+    html += `<div class="patent-example-hint" style="border-color:var(--danger);color:var(--danger);background:#fff5f3">⚠️ 目前只有推論式實施例，尚未真正解析全文 examples；這篇需要重跑全文解析後再用於 FTO 或配方判斷。</div>`;
+  }
   if(examples.length > 1) {
     html += `<div class="patent-example-hint">${showAllExamples ? '\u5df2\u5c55\u958b\u5168\u90e8\u5168\u6587\u5be6\u65bd\u4f8b\uff1b\u53ef\u9ede\u300c\u6536\u5408\u5be6\u65bd\u4f8b\u300d\u7c21\u5316\u756b\u9762\u3002' : '\u53f3\u9375\u4efb\u4e00\u5be6\u65bd\u4f8b\u5361\u7247\uff0c\u6216\u9ede\u300c\u5168\u90e8\u5be6\u65bd\u4f8b\u300d\uff0c\u53ef\u5c55\u958b\u540c\u4e00\u7bc7\u5c08\u5229\u7684\u4e0d\u540c embodiment\u3002'}</div>`;
   }
@@ -7399,7 +7435,7 @@ function onGraphClick(event) {
     const mainAuthor = extractMainAuthor(p);
     const hasA = p.patentResults && Object.keys(p.patentResults).length>0;
     const r = p.patentResults?.full||{};
-    const ex = r.examples?.[0]||{};
+    const ex = primaryPatentExample(p);
     const tags = (p.tags||[]).map(t=>`<span class="tag tag-gray" style="font-size:10px">${t}</span>`).join(' ');
     const patBadge = getPatentBadge(p);
 
