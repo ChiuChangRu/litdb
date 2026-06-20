@@ -4625,10 +4625,87 @@ const PATENT_TREE_CONFIG = {
   'Cook Medical': {
     label: 'Cook Medical',
     color: '#c0392b',
+    axis: 'PVP-PU interpolymer 熱固化骨架 → 抗菌緩釋延伸',
     aliases: ['cook medical','houghton pe','us7141246','us7402620'],
     centerIds: ['P31','P30'],
     evolution: [
-      {year:2003, id:null,  patent:'US6645483',    stage:'祖案',    theme:'PVP-PU 熱固化潤滑', formula:'PVP + PU/interpolymer + isocyanate thermal cure', meaning:'P30/P31 的根源；未收錄，需深度解析。', status:'missing'},
+      {year:2003, id:null,  patent:'US6645483',    stage:'祖案',       theme:'PVP-PU 熱固化潤滑', formula:'PVP + PU/interpolymer + isocyanate thermal cure', meaning:'P30/P31 的技術根源；claim 邊界未知，需 FTO。', status:'missing', ipLevel:'gap'},
+      {year:2006, id:'P30', patent:'US7141246',    stage:'母案',       theme:'PVP+PU+isocyanate',  formula:'PVP + PU interpolymer + isocyanate crosslinker',  meaning:'Cook 潤滑骨架建立；PVP+isocyanate 熱固化是核心地雷，UV 路線可迴避。', status:'known', ipLevel:'landmine'},
+      {year:2008, id:'P31', patent:'US7402620',    stage:'續案/抗菌',  theme:'CHX/silver緩釋',    formula:'PVP/PU/isocyanate + CHX / silver / triclosan + Vitamin E', meaning:'抗菌延伸；triclosan FDA 限制、CHX 過敏風險；QCS/SBMA 高分子抗菌可迴避。', status:'known', ipLevel:'landmine'}
+    ],
+    gapSeeds: [{ patent_no:'US6645483', role:'祖案/family root', reason:'P30/P31 related_patents 提到，無獨立條目。', source_ids:['P30','P31'], next_task:'讀全文 claims，確認 PVP-PU claim 邊界與設計迴避空間。' }]
+  },
+  'DSM': {
+    label: 'DSM / ComfortCoat',
+    color: '#e86c3a',
+    axis: 'UV-BP/PVP 平台逐步分層包圍：配方 → 抗乾燥 → primer',
+    aliases: ['dsm','comfortcoat','dsm-firmenich','us8133580','ep1957130','wo2009112548','cn107405430','us8957125'],
+    centerIds: ['P01','P02','P03','C06','P28','R13'],
+    evolution: [
+      {year:2009, id:'P03', patent:'WO2009112548A1', stage:'商業化核心', theme:'PVP+polyelectrolyte 通用化', formula:'PVP + polyelectrolyte hydrophilic topcoat', meaning:'多基材製程標準化，接近商品化平台。BP+PVP 組合為核心地雷。', status:'known', ipLevel:'landmine'},
+      {year:2012, id:'P01', patent:'US8133580B2',    stage:'核心平台',   theme:'UV-BP+PVP 雙層',     formula:'base coat + PVP / benzophenone UV topcoat',            meaning:'最核心 FTO 風險；BP 取代 Type II PI，改用 I-2959（Type I）可迴避。', status:'known', ipLevel:'landmine'},
+      {year:2013, id:'P02', patent:'EP1957130B1',    stage:'性能延伸',   theme:'polyelectrolyte/干燥保持', formula:'PVP / polyelectrolyte + dry-out control additives',  meaning:'抗乾燥功能延伸；以 PEO 替代聚電解質可能迴避。', status:'known', ipLevel:'avoidable'},
+      {year:2015, id:'R13', patent:'US8957125',      stage:'配方窗口',   theme:'UV水凝膠/PVP-BP',    formula:'PVP-BP + UV hydrogel formulation window',              meaning:'補強配方範圍；需查是否與 P01-P03 重疊。', status:'known', ipLevel:'avoidable'},
+      {year:2018, id:'C06', patent:'ComfortCoat™',   stage:'商用整合',   theme:'授權塗層平台',       formula:'ComfortCoat commercial hydrophilic coating package',   meaning:'專利族商品化；OEM 授權是合作選項。', status:'known', ipLevel:'avoidable'},
+      {year:2019, id:'P28', patent:'CN107405430A',   stage:'附著力補強', theme:'adhesion primer',    formula:'adhesion-promoting primer + lubricious topcoat',       meaning:'底塗層防線；PDA 底塗是安全迴避方案。', status:'known', ipLevel:'avoidable'}
+    ],
+    gapSeeds: [
+      {patent_no:'US8133580B2-family', role:'同族續案待補', reason:'P01同族美國續案/外國案未收錄。', source_ids:['P01'], next_task:'Google Patents family 展開。'},
+      {patent_no:'EP1957130B1-family', role:'抗乾燥族群待補', reason:'P02 cited-by 未完整。', source_ids:['P02'], next_task:'補齊 P02 cited-by 網絡。'}
+    ]
+  },
+  'Coloplast': {
+    label: 'Coloplast',
+    color: '#2980b9',
+    axis: '共價光接枝為核心護城河，SpeediCath 全球第一品牌',
+    aliases: ['coloplast','speedicath','ep1957127'],
+    centerIds: ['P29','P44'],
+    evolution: [
+      {year:1998, id:'P13', patent:'WO1998058990A1', stage:'早期底塗',     theme:'TPU+nitrocellulose primer', formula:'TPU + nitrocellulose primer / hydrophilic topcoat', meaning:'雙塗層製程基礎；1998 年申請，可能已過期，需確認。', status:'known', ipLevel:'expired'},
+      {year:2007, id:'P44', patent:'EP1957127B1',    stage:'聚電解質配方', theme:'PVP+polyelectrolyte 複合',  formula:'PVP + polyelectrolyte composite hydrophilic layer',meaning:'快速活化+耐久；聚電解質 claim 需注意。', status:'known', ipLevel:'landmine'},
+      {year:2007, id:'P29', patent:'SpeediCath核心', stage:'光接枝共價',   theme:'UV photografting',          formula:'photo-grafted hydrophilic polymer on catheter surface', meaning:'間歇導尿最強護城河；PDA+I-2959（非光接枝）可能迴避，需律師確認。', status:'known', ipLevel:'landmine'},
+      {year:2008, id:null,  patent:'US7745561',      stage:'美國對應案',   theme:'SpeediCath 光接枝美國版',   formula:'US counterpart: UV grafted hydrophilic coating',   meaning:'未收錄，FTO 分析前不能進入間歇導尿美國市場。', status:'missing', ipLevel:'gap'}
+    ],
+    gapSeeds: [{ patent_no:'US7745561', role:'P29 美國對應案', reason:'EP SpeediCath核心的美國版，未獨立收錄。', source_ids:['P29','P44'], next_task:'查 US7745561 claims，確認光接枝方法的保護範圍。' }]
+  },
+  'Surmodics': {
+    label: 'Surmodics',
+    color: '#8e44ad',
+    axis: '界面活性劑 UV 提升初始潤滑，往兩性離子抗汙演進',
+    aliases: ['surmodics','serene','us8871869'],
+    centerIds: ['L02'],
+    evolution: [
+      {year:2013, id:'L02', patent:'US8871869', stage:'界面活性劑UV', theme:'surfactant+UV固化', formula:'hydrophilic polymer + surfactant + UV cure package', meaning:'第一循環 COF < 20g 業界頂級；以 PEO 替代界面活性劑可能迴避。', status:'known', ipLevel:'avoidable'},
+      {year:2018, id:null,  patent:'US8357772', stage:'SBMA兩性離子', theme:'zwitterionic coating', formula:'SBMA / zwitterionic antifouling coating chemistry', meaning:'Serene 系列根源；使用 SBMA 前需先做 FTO 分析。', status:'missing', ipLevel:'gap'}
+    ],
+    gapSeeds: [{ patent_no:'US8357772', role:'SBMA兩性離子基礎專利', reason:'Surmodics Serene 系列的技術根源，未收錄。', source_ids:['L02'], next_task:'查 SBMA claim 邊界，確認本專案 SBMA 路線是否需要 FTO。' }]
+  },
+  'C.R. Bard / BD': {
+    label: 'C.R. Bard / BD',
+    color: '#16a085',
+    axis: 'NVP 輻照接枝起家（已過期），現轉向 PAA-PEG 抗結垢',
+    aliases: ['bard','us4515593','us10857324'],
+    centerIds: ['P43','P18'],
+    evolution: [
+      {year:1985, id:'P43', patent:'US4515593', stage:'早期基礎', theme:'NVP輻照接枝+抗菌', formula:'NVP radiation graft + antimicrobial additive concept', meaning:'最早親水+抗菌整合；已過期，技術可自由使用。', status:'known', ipLevel:'expired'},
+      {year:2020, id:'P18', patent:'US10857324', stage:'現代抗結垢', theme:'PAA-PEG 負電荷抗結垢', formula:'PAA + PEG / glycerin negative-charge anti-encrustation', meaning:'Bard Foley 新 IP；SBMA 兩性離子路線是迴避方向。', status:'known', ipLevel:'landmine'}
+    ],
+    gapSeeds: []
+  },
+  'Hydromer': {
+    label: 'Hydromer',
+    color: '#7f8c8d',
+    axis: 'PVP-PU IPN 熱固化起家（已過期），可自由使用技術基礎',
+    aliases: ['hydromer','us5160790'],
+    centerIds: ['P06'],
+    evolution: [
+      {year:1992, id:'P06', patent:'US5160790', stage:'IPN 熱固化', theme:'PVP+MDI isocyanate', formula:'PVP + MDI/polyisocyanate thermal IPN hydrogel', meaning:'Hydromer路線基礎；1992 年申請，已過期，技術可自由使用。', status:'known', ipLevel:'expired'},
+      {year:2005, id:null,  patent:'US6887466', stage:'多功能延伸', theme:'PVP+抗血栓+親水', formula:'PVP hydrophilic layer + antithrombogenic additive module', meaning:'Hydromer 後期延伸；需確認法律狀態是否仍有效。', status:'missing', ipLevel:'gap'}
+    ],
+    gapSeeds: [{ patent_no:'US6887466', role:'Hydromer 多功能延伸', reason:'Hydromer後期配方延伸，未獨立收錄。', source_ids:['P06'], next_task:'確認法律狀態，評估是否仍有效。' }]
+  }
+};
+
       {year:2006, id:'P30', patent:'US7141246',    stage:'母案',    theme:'PVP+PU+isocyanate', formula:'PVP + PU interpolymer + isocyanate crosslinker',  meaning:'Cook 潤滑塗層主骨架。', status:'known'},
       {year:2008, id:'P31', patent:'US7402620',    stage:'續案/抗菌', theme:'CHX/silver緩釋', formula:'PVP/PU/isocyanate + CHX / silver / triclosan + Vitamin E',  meaning:'從潤滑走向抗菌與 biofilm 控制。', status:'known'}
     ],
@@ -4976,149 +5053,271 @@ function renderPatentTreeDetail(d) {
   const paper = d.paperId ? (DB.papers||[]).find(p=>p.id===d.paperId) : null;
   const full = paper?.patentResults?.full || {};
   const col = d.color || '#2d8c5a';
-  const ex0 = primaryPatentExample(paper);
-  const formulaText = d.formula || ex0?.formulation?.topcoat || ex0?.formulation?.primer || (full.coating_technology?.materials || []).slice(0,4).join(' + ') || d.theme || '';
+  const IP_BG = {landmine:'#fff0f0',avoidable:'#fffbe6',expired:'#f0faf5',gap:'#f5f5f5'};
+  const IP_LABEL = {landmine:'🔴 核心地雷：需整體迴避',avoidable:'🟡 可迴避：設計繞路方向存在',expired:'🟢 已過期：技術可自由使用',gap:'⬜ 缺口：待 FTO 分析後確認'};
 
-  const block = (label, items, c='var(--accent2)') => {
+  const block = (label, items, c) => {
     if(!items?.length) return '';
-    const li = Array.isArray(items)?items.map(x=>`<li style="margin-bottom:3px">${escHtml(String(x))}</li>`).join(''):`<li>${escHtml(String(items))}</li>`;
-    return `<div style="margin-top:9px"><div style="font-weight:800;color:${c};font-size:11px;margin-bottom:4px">${label}</div><ul style="margin:0 0 0 16px;padding:0;font-size:11px;line-height:1.6">${li}</ul></div>`;
-  };
-
-  const techTable = ct => {
-    if(!ct) return '';
-    const rows=[['材料',ct.materials],['前處理',ct.surface_prep],['固化',ct.curing_or_process],['測試',ct.test_methods]].filter(([,v])=>v?.length);
-    if(!rows.length) return '';
-    return `<div style="margin-top:9px"><div style="font-weight:800;color:var(--muted);font-size:11px;margin-bottom:4px">⚗️ 塗層技術</div><table style="font-size:11px;width:100%;border-collapse:collapse">${rows.map(([k,v])=>`<tr><td style="padding:3px 6px 3px 0;color:var(--muted);white-space:nowrap;vertical-align:top">${k}</td><td style="padding:3px 0;color:var(--text)">${Array.isArray(v)?v.join('、'):v}</td></tr>`).join('')}</table></div>`;
+    const li = items.map(x=>`<li style="margin-bottom:3px">${escHtml(String(x))}</li>`).join('');
+    return `<div style="margin-top:8px"><div style="font-weight:800;color:${c};font-size:11px;margin-bottom:3px">${label}</div><ul style="margin:0 0 0 14px;padding:0;font-size:11px;line-height:1.65">${li}</ul></div>`;
   };
 
   const pc = full.patent_core||{}, ep = full.experimental_plan||{};
 
   el.innerHTML = `
-    <div style="border-left:3px solid ${d.status==='missing'?'#c0392b':col};padding-left:10px;margin-bottom:10px">
-      <div style="font-size:14px;font-weight:900;color:var(--text)">${escHtml(d.patent||d.patentNo||'')}</div>
+    <div style="border-left:4px solid ${col};padding-left:10px;margin-bottom:10px">
+      <div style="font-size:14px;font-weight:900;color:var(--text)">${escHtml(d.patent||'')}</div>
       <div style="font-size:12px;color:${col};font-weight:700;margin-top:2px">${escHtml(d.stage||'')} · ${escHtml(String(d.year||''))}</div>
       <div style="font-size:11px;color:var(--muted);margin-top:2px">${escHtml(d.theme||'')}</div>
-      ${formulaText?`<div style="font-size:11px;color:var(--accent2);font-weight:700;margin-top:5px;line-height:1.45">配方演進：${escHtml(formulaText)}</div>`:''}
     </div>
-    ${d.status==='missing'?`<div style="background:#fff8f0;border:1px solid #f0c080;border-radius:6px;padding:8px 10px;font-size:12px;margin-bottom:8px">⚠️ <b>未收錄於 papers.json</b> — 下一輪深度解析候選<br><span style="color:#b85c2a;font-size:11px">${escHtml(d.meaning||'')}</span></div>`:''}
-    ${full.summary?`<div style="font-size:12px;color:var(--text);line-height:1.65;margin-bottom:6px">${escHtml(full.summary)}</div>`:''}
-    ${!paper&&d.meaning&&d.status!=='missing'?`<div style="font-size:12px;color:var(--text);line-height:1.65">${escHtml(d.meaning)}</div>`:''}
-    ${block('📌 關鍵發現',full.key_findings,'#2d8c5a')}
-    ${techTable(full.coating_technology)}
-    ${pc.claim_focus?.length?`<div style="margin-top:9px"><div style="font-weight:800;color:#d4a030;font-size:11px;margin-bottom:4px">⚖️ Claim 重點</div><ul style="margin:0 0 0 16px;padding:0;font-size:11px;line-height:1.6">${pc.claim_focus.map(x=>`<li style="margin-bottom:3px">${escHtml(x)}</li>`).join('')}</ul></div>`:''}
-    ${pc.design_around_notes?.length?`<div style="margin-top:9px"><div style="font-weight:800;color:#8e44ad;font-size:11px;margin-bottom:4px">🔀 設計迴避</div><ul style="margin:0 0 0 16px;padding:0;font-size:11px;line-height:1.6">${pc.design_around_notes.map(x=>`<li style="margin-bottom:3px">${escHtml(x)}</li>`).join('')}</ul></div>`:''}
-    ${ep.steps?.length?`<div style="margin-top:9px"><div style="font-weight:800;color:var(--accent);font-size:11px;margin-bottom:4px">🔬 實驗規劃</div><ul style="margin:0 0 0 16px;padding:0;font-size:11px;line-height:1.6">${ep.steps.map(x=>`<li style="margin-bottom:3px">${escHtml(x)}</li>`).join('')}</ul></div>`:''}
-    ${block('📋 下一步',full.next_actions,'var(--accent)')}
-    ${block('🚩 紅旗',full.red_flags,'#c0392b')}
-    ${full.bioteque_relevance?`<div style="margin-top:9px;padding:8px 10px;background:var(--card);border-left:2px solid var(--accent);border-radius:0 6px 6px 0;font-size:11px;line-height:1.6"><b style="color:var(--accent)">🎯 本專案建議</b><br>${escHtml(full.bioteque_relevance)}</div>`:''}
-    ${paper?`<div style="margin-top:10px;text-align:right"><button class="btn btn-s" onclick="goToPaper('${paper.id}',{focus:true})" style="font-size:11px">📚 查看文庫完整條目 ${paper.id} →</button></div>`:''}
+
+    ${d.ipLevel ? `<div style="background:${IP_BG[d.ipLevel]||'#f5f5f5'};border:1px solid ${col}44;border-radius:7px;padding:8px 10px;margin-bottom:10px;font-size:11px">
+      <b style="color:${col}">${IP_LABEL[d.ipLevel]||''}</b>
+      <div style="color:var(--text);margin-top:4px;line-height:1.6">${escHtml(d.meaning||'')}</div>
+    </div>` : ''}
+
+    ${full.summary ? `<div style="font-size:12px;color:var(--text);line-height:1.65;margin-bottom:8px">${escHtml(full.summary)}</div>` : ''}
+    ${!paper && d.meaning && d.ipLevel ? '' : (!paper && d.meaning ? `<div style="font-size:12px;color:var(--text);line-height:1.65">${escHtml(d.meaning)}</div>` : '')}
+
+    ${block('📌 關鍵發現', full.key_findings, '#2d8c5a')}
+
+    ${pc.claim_focus?.length ? `<div style="margin-top:8px"><div style="font-weight:800;color:#d4a030;font-size:11px;margin-bottom:3px">⚖️ Claim 重點</div><ul style="margin:0 0 0 14px;padding:0;font-size:11px;line-height:1.65">${pc.claim_focus.map(x=>`<li style="margin-bottom:3px">${escHtml(x)}</li>`).join('')}</ul></div>` : ''}
+
+    ${pc.design_around_notes?.length ? `<div style="margin-top:8px;padding:8px 10px;background:#f8f4ff;border-left:3px solid #8e44ad;border-radius:0 6px 6px 0"><div style="font-weight:800;color:#8e44ad;font-size:11px;margin-bottom:3px">🔀 設計迴避路徑</div><ul style="margin:0 0 0 14px;padding:0;font-size:11px;line-height:1.65">${pc.design_around_notes.map(x=>`<li style="margin-bottom:3px">${escHtml(x)}</li>`).join('')}</ul></div>` : ''}
+
+    ${ep.steps?.length ? `<div style="margin-top:8px"><div style="font-weight:800;color:var(--accent);font-size:11px;margin-bottom:3px">🔬 實驗規劃</div><ul style="margin:0 0 0 14px;padding:0;font-size:11px;line-height:1.65">${ep.steps.map(x=>`<li style="margin-bottom:3px">${escHtml(x)}</li>`).join('')}</ul></div>` : ''}
+
+    ${block('🚩 紅旗警告', full.red_flags, '#c0392b')}
+    ${block('📋 下一步', full.next_actions, 'var(--accent)')}
+
+    ${full.bioteque_relevance ? `<div style="margin-top:8px;padding:8px 10px;background:var(--card);border-left:2px solid var(--accent);border-radius:0 6px 6px 0;font-size:11px;line-height:1.6"><b style="color:var(--accent)">🎯 本專案建議</b><br>${escHtml(full.bioteque_relevance)}</div>` : ''}
+
+    ${paper ? `<div style="margin-top:10px;text-align:right"><button class="btn btn-s" onclick="goToPaper('${paper.id}',{focus:true})" style="font-size:11px">📚 查看文庫完整條目 ${paper.id} →</button></div>` : ''}
   `;
 }
+
 
 function drawPatentFamilyTree() {
   const svgEl = document.getElementById('patentTreeSvg');
   if(!svgEl || typeof d3 === 'undefined') return;
 
   const companies = Object.values(PATENT_TREE_CONFIG);
-  const LABEL_W=124, LANE_H=140, PAD_T=44, PAD_B=24, PAD_R=40, NODE_W=90, NODE_H=68, STAGGER=NODE_H+10;
 
+  // ── IP 分級顏色 ──
+  const IP_COLOR = {
+    landmine: '#c0392b',   // 🔴 核心地雷
+    avoidable:'#d4a030',   // 🟡 可迴避
+    expired:  '#2d8c5a',   // 🟢 已過期可用
+    gap:      '#95a5a6',   // ⬜ 缺口未收錄
+    known:    '#2d8c5a'    // 預設已收錄
+  };
+  const IP_LABEL = {
+    landmine: '🔴 核心地雷',
+    avoidable:'🟡 可迴避',
+    expired:  '🟢 已過期',
+    gap:      '⬜ 缺口'
+  };
+
+  // ── 尺寸 ──
+  const LABEL_W=130, LANE_H=150, PAD_T=44, PAD_B=44, PAD_R=40, NODE_W=92, NODE_H=72, STAGGER=NODE_H+12;
   const containerW = svgEl.parentElement?.clientWidth||900;
   const CONTENT_W = Math.max(containerW-LABEL_W-PAD_R, 500);
   const totalW = LABEL_W+CONTENT_W+PAD_R;
-  const totalH = PAD_T+companies.length*LANE_H+PAD_B+20;
+  const totalH = PAD_T + companies.length*LANE_H + PAD_B;
 
-  const allYears=companies.flatMap(c=>(c.evolution||[]).map(e=>Number(e.year)));
+  const allYears = companies.flatMap(c=>(c.evolution||[]).map(e=>Number(e.year)));
   const yMin=Math.min(...allYears), yMax=Math.max(...allYears);
   const yPad=(yMax-yMin)*0.06;
-  const xScale=yr=>LABEL_W+((yr-(yMin-yPad))/((yMax+yPad)-(yMin-yPad)))*CONTENT_W;
+  const xScale = yr => LABEL_W+((yr-(yMin-yPad))/((yMax+yPad)-(yMin-yPad)))*CONTENT_W;
 
-  const svg=d3.select(svgEl).attr('width',totalW).attr('height',totalH)
+  const svg = d3.select(svgEl).attr('width',totalW).attr('height',totalH)
     .attr('style',`display:block;width:${totalW}px;height:${totalH}px`);
   svg.selectAll('*').remove();
-  const defs=svg.append('defs');
+  const defs = svg.append('defs');
 
-  const yearTicks=d3.range(Math.ceil(yMin/5)*5,yMax+1,5);
-  const gridG=svg.append('g');
+  // ── 年份格線 ──
+  const yearTicks = d3.range(Math.ceil(yMin/5)*5, yMax+1, 5);
+  const gridG = svg.append('g');
   yearTicks.forEach(yr=>{
-    const x=xScale(yr);
-    gridG.append('line').attr('x1',x).attr('y1',PAD_T-8).attr('x2',x).attr('y2',totalH-PAD_B).attr('stroke','#ece8e2').attr('stroke-width',1);
-    gridG.append('text').attr('x',x).attr('y',PAD_T-12).attr('text-anchor','middle').attr('font-size',10).attr('fill','#bbb').attr('font-weight',600).text(yr);
+    const x = xScale(yr);
+    gridG.append('line').attr('x1',x).attr('y1',PAD_T-8).attr('x2',x).attr('y2',totalH-PAD_B)
+      .attr('stroke','#ece8e2').attr('stroke-width',1);
+    gridG.append('text').attr('x',x).attr('y',PAD_T-12).attr('text-anchor','middle')
+      .attr('font-size',10).attr('fill','#bbb').attr('font-weight',600).text(yr);
   });
-  svg.append('line').attr('x1',LABEL_W).attr('y1',PAD_T-2).attr('x2',totalW-PAD_R).attr('y2',PAD_T-2).attr('stroke','#ddd').attr('stroke-width',1.5);
+  svg.append('line').attr('x1',LABEL_W).attr('y1',PAD_T-2).attr('x2',totalW-PAD_R).attr('y2',PAD_T-2)
+    .attr('stroke','#ddd').attr('stroke-width',1.5);
 
+  // ── 圖例（底部）──
+  const legItems = [
+    ['🔴 核心地雷（需迴避）','#c0392b'],
+    ['🟡 可迴避（設計繞路）','#d4a030'],
+    ['🟢 已過期（可自由用）','#2d8c5a'],
+    ['⬜ 缺口（待 FTO 分析）','#95a5a6']
+  ];
+  const legG = svg.append('g').attr('transform',`translate(${LABEL_W},${totalH-PAD_B+10})`);
+  legItems.forEach(([lb,col],i)=>{
+    legG.append('text').attr('x',i*190).attr('y',12)
+      .attr('font-size',9).attr('fill',col).attr('font-weight',700).text(lb);
+  });
+
+  // ── 每家公司泳道 ──
   companies.forEach((cfg,ci)=>{
-    const laneY=PAD_T+ci*LANE_H, midY=laneY+LANE_H/2, col=cfg.color||'#888', evo=cfg.evolution||[];
-    svg.append('rect').attr('x',0).attr('y',laneY).attr('width',totalW).attr('height',LANE_H).attr('fill',ci%2===0?'#fafaf8':'#f5f3ef').attr('opacity',0.65);
-    svg.append('line').attr('x1',0).attr('y1',laneY).attr('x2',totalW).attr('y2',laneY).attr('stroke','#e8e2db').attr('stroke-width',1);
+    const laneY = PAD_T + ci*LANE_H;
+    const midY  = laneY + LANE_H/2;
+    const col   = cfg.color||'#888';
+    const evo   = cfg.evolution||[];
 
-    const labG=svg.append('g').attr('transform',`translate(6,${midY})`);
-    labG.append('rect').attr('x',0).attr('y',-14).attr('width',112).attr('height',28).attr('rx',6).attr('fill',col+'22').attr('stroke',col+'44').attr('stroke-width',1);
-    labG.append('text').attr('x',56).attr('y',5).attr('text-anchor','middle').attr('font-size',11).attr('font-weight',800).attr('fill',col).text(cfg.label.length>14?cfg.label.slice(0,13)+'…':cfg.label);
+    // 泳道背景
+    svg.append('rect').attr('x',0).attr('y',laneY).attr('width',totalW).attr('height',LANE_H)
+      .attr('fill', ci%2===0 ? '#fafaf8' : '#f5f3ef').attr('opacity',0.65);
+    svg.append('line').attr('x1',0).attr('y1',laneY).attr('x2',totalW).attr('y2',laneY)
+      .attr('stroke','#e8e2db').attr('stroke-width',1);
 
-    svg.append('line').attr('x1',LABEL_W).attr('y1',midY).attr('x2',totalW-PAD_R).attr('y2',midY).attr('stroke',col+'33').attr('stroke-width',2).attr('stroke-dasharray','4,4');
+    // 公司標籤（左）
+    const labG = svg.append('g').attr('transform',`translate(6,${laneY+22})`);
+    labG.append('rect').attr('x',0).attr('y',-14).attr('width',118).attr('height',26).attr('rx',5)
+      .attr('fill',col+'22').attr('stroke',col+'55').attr('stroke-width',1);
+    labG.append('text').attr('x',59).attr('y',6).attr('text-anchor','middle')
+      .attr('font-size',11).attr('font-weight',800).attr('fill',col)
+      .text(cfg.label.length>14 ? cfg.label.slice(0,13)+'…' : cfg.label);
 
-    defs.append('marker').attr('id',`arr-${ci}`).attr('markerWidth',7).attr('markerHeight',5).attr('refX',6).attr('refY',2.5).attr('orient','auto').append('path').attr('d','M0,0 L0,5 L7,2.5 z').attr('fill',col+'88');
-
-    const nodes=evo.map(item=>({...item,cx:xScale(Number(item.year)),stagger:0}));
-    nodes.sort((a,b)=>a.cx-b.cx);
-    nodes.forEach((node,i)=>{
-      const prev=nodes.slice(0,i).filter(n=>Math.abs(n.cx-node.cx)<NODE_W+6);
-      if(!prev.length){node.stagger=0;return;}
-      const used=prev.map(n=>n.stagger);
-      node.stagger=used.includes(0)?(used.includes(-1)?1:-1):0;
-    });
-    nodes.forEach(n=>{n.cardY=midY+n.stagger*STAGGER-NODE_H/2;});
-
-    for(let i=0;i<nodes.length-1;i++){
-      const s=nodes[i],t=nodes[i+1];
-      const sy=s.cardY+NODE_H/2,ty=t.cardY+NODE_H/2,sx=s.cx+NODE_W/2,tx2=t.cx-NODE_W/2;
-      svg.append('path').attr('d',`M${sx},${sy} C${(sx+tx2)/2},${sy} ${(sx+tx2)/2},${ty} ${tx2},${ty}`)
-        .attr('fill','none').attr('stroke',s.status==='missing'?col+'55':col+'88').attr('stroke-width',2)
-        .attr('stroke-dasharray',s.status==='missing'?'5,3':'none').attr('marker-end',`url(#arr-${ci})`);
+    // 技術主軸（左側第二行）
+    if(cfg.axis){
+      const words = cfg.axis.split('');
+      const maxLen = 16;
+      let line1 = '', line2 = '';
+      for(const ch of cfg.axis){
+        if(line1.length < maxLen) line1 += ch;
+        else line2 += ch;
+      }
+      labG.append('text').attr('x',0).attr('y',20).attr('font-size',8).attr('fill',col+'99')
+        .text(line1.slice(0,maxLen));
+      if(line2) labG.append('text').attr('x',0).attr('y',30).attr('font-size',8).attr('fill',col+'99')
+        .text(line2.slice(0,maxLen)+'…');
     }
 
+    // 中心軸線
+    svg.append('line').attr('x1',LABEL_W).attr('y1',midY).attr('x2',totalW-PAD_R).attr('y2',midY)
+      .attr('stroke',col+'33').attr('stroke-width',2).attr('stroke-dasharray','4,4');
+
+    // Arrow marker
+    defs.append('marker').attr('id',`arr-${ci}`)
+      .attr('markerWidth',7).attr('markerHeight',5)
+      .attr('refX',6).attr('refY',2.5).attr('orient','auto')
+      .append('path').attr('d','M0,0 L0,5 L7,2.5 z').attr('fill',col+'88');
+
+    // Stagger 計算
+    const nodes = evo.map(item=>({...item, cx:xScale(Number(item.year)), stagger:0}));
+    nodes.sort((a,b)=>a.cx-b.cx);
+    nodes.forEach((node,i)=>{
+      const prev = nodes.slice(0,i).filter(n=>Math.abs(n.cx-node.cx)<NODE_W+6);
+      if(!prev.length){ node.stagger=0; return; }
+      const used = prev.map(n=>n.stagger);
+      node.stagger = used.includes(0) ? (used.includes(-1)?1:-1) : 0;
+    });
+    nodes.forEach(n=>{ n.cardY = midY + n.stagger*STAGGER - NODE_H/2; });
+
+    // 連線
+    for(let i=0;i<nodes.length-1;i++){
+      const s=nodes[i], t=nodes[i+1];
+      const sy=s.cardY+NODE_H/2, ty=t.cardY+NODE_H/2;
+      const sx=s.cx+NODE_W/2, tx=t.cx-NODE_W/2;
+      svg.append('path')
+        .attr('d',`M${sx},${sy} C${(sx+tx)/2},${sy} ${(sx+tx)/2},${ty} ${tx},${ty}`)
+        .attr('fill','none')
+        .attr('stroke', s.ipLevel==='gap' ? '#ccc' : col+'88')
+        .attr('stroke-width',2)
+        .attr('stroke-dasharray', s.ipLevel==='gap'?'5,3':'none')
+        .attr('marker-end',`url(#arr-${ci})`);
+    }
+
+    // Stagger 垂直連結
     nodes.filter(n=>n.stagger!==0).forEach(n=>{
-      svg.append('line').attr('x1',n.cx+NODE_W/2).attr('y1',midY).attr('x2',n.cx+NODE_W/2).attr('y2',n.cardY+(n.stagger>0?0:NODE_H)).attr('stroke',col+'44').attr('stroke-width',1.5).attr('stroke-dasharray','3,2');
+      svg.append('line')
+        .attr('x1',n.cx+NODE_W/2).attr('y1',midY)
+        .attr('x2',n.cx+NODE_W/2).attr('y2',n.cardY+(n.stagger>0?0:NODE_H))
+        .attr('stroke',col+'44').attr('stroke-width',1.5).attr('stroke-dasharray','3,2');
     });
 
-    const nodeG=svg.selectAll(`.node-${ci}`).data(nodes).join('g').attr('class',`node-${ci}`)
-      .attr('transform',d=>`translate(${d.cx-NODE_W/2},${d.cardY})`).attr('cursor','pointer')
+    // ── 節點卡片 ──
+    const nodeG = svg.selectAll(`.node-${ci}`).data(nodes).join('g')
+      .attr('class',`node-${ci}`)
+      .attr('transform',d=>`translate(${d.cx-NODE_W/2},${d.cardY})`)
+      .attr('cursor','pointer')
       .on('click',(e,d)=>{
         svg.selectAll('.pt-card-bg').attr('stroke-width',1.8);
-        d3.select(e.currentTarget).select('.pt-card-bg').attr('stroke-width',3.5);
-        renderPatentTreeDetail({patent:d.patent,year:d.year,stage:d.stage,theme:d.theme,meaning:d.meaning,status:d.status,paperId:d.id,color:col});
+        d3.select(e.currentTarget).select('.pt-card-bg').attr('stroke-width',4);
+        renderPatentTreeDetail({
+          patent:d.patent, year:d.year, stage:d.stage, theme:d.theme,
+          meaning:d.meaning, status:d.status, paperId:d.id,
+          color: IP_COLOR[d.ipLevel]||col, ipLevel:d.ipLevel
+        });
         document.getElementById('patentTreeDetail')?.scrollIntoView({behavior:'smooth',block:'nearest'});
       })
       .on('mouseover',(e,d)=>{
-        const tip=document.getElementById('patentTreeTip');if(!tip)return;
-        tip.style.display='block';tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';
-        tip.innerHTML=`<b style="color:${d.status==='missing'?'#c0392b':col}">${escHtml(d.patent)}</b><br><b style="font-size:11px">${escHtml(d.stage)}</b><br><span style="color:#777;font-size:11px">${escHtml((d.theme||'').slice(0,55))}</span><br><span style="color:#aaa;font-size:10px">${d.status==='missing'?'⚠ 未收錄':'✅ 已收錄'} · 點擊查看詳情</span>`;
+        const tip=document.getElementById('patentTreeTip'); if(!tip) return;
+        const ipCol = IP_COLOR[d.ipLevel]||col;
+        tip.style.display='block';
+        tip.style.left=(e.clientX+14)+'px';
+        tip.style.top=(e.clientY-10)+'px';
+        tip.innerHTML=`<b style="color:${ipCol}">${d.patent||''}</b>
+          <span style="display:inline-block;background:${ipCol}22;color:${ipCol};font-size:9px;padding:1px 5px;border-radius:4px;margin-left:4px">${IP_LABEL[d.ipLevel]||''}</span>
+          <br><b style="font-size:11px;color:var(--text)">${d.stage||''}</b>
+          <br><span style="font-size:10px;color:#777">${(d.theme||'').slice(0,55)}</span>
+          <br><span style="font-size:10px;color:#aaa;line-height:1.5">${(d.meaning||'').slice(0,80)}</span>`;
       })
-      .on('mouseout',()=>{const t=document.getElementById('patentTreeTip');if(t)t.style.display='none';});
+      .on('mouseout',()=>{ const t=document.getElementById('patentTreeTip'); if(t) t.style.display='none'; });
 
-    nodeG.append('rect').attr('class','pt-card-bg').attr('width',NODE_W).attr('height',NODE_H).attr('rx',7)
-      .attr('fill','var(--card)').attr('stroke',d=>d.status==='missing'?'#c0392b':col).attr('stroke-width',1.8)
+    // 卡片底色
+    const ipCol = d => IP_COLOR[d.ipLevel] || (d.status==='missing' ? '#95a5a6' : col);
+
+    nodeG.append('rect').attr('class','pt-card-bg')
+      .attr('width',NODE_W).attr('height',NODE_H).attr('rx',8)
+      .attr('fill','var(--card)')
+      .attr('stroke',ipCol).attr('stroke-width',2)
       .attr('filter','drop-shadow(0 1px 5px rgba(0,0,0,0.10))');
-    nodeG.append('rect').attr('width',NODE_W).attr('height',4).attr('rx',7).attr('fill',d=>d.status==='missing'?'#c0392b':col);
-    nodeG.append('text').attr('x',7).attr('y',17).attr('font-size',11).attr('font-weight',900).attr('fill',d=>d.status==='missing'?'#c0392b':col).text(d=>d.year);
-    nodeG.append('text').attr('x',NODE_W-6).attr('y',17).attr('text-anchor','end').attr('font-size',8).attr('font-weight',700).attr('fill',d=>d.status==='missing'?'#c0392b':'#2d8c5a').text(d=>d.status==='missing'?'⚠':'✅');
-    nodeG.append('text').attr('x',7).attr('y',29).attr('font-size',8).attr('font-weight',700).attr('fill','var(--accent)').text(d=>(d.patent||'').slice(0,14));
-    nodeG.append('text').attr('x',7).attr('y',42).attr('font-size',10).attr('font-weight',800).attr('fill','var(--text)').text(d=>(d.stage||'').slice(0,14));
+
+    // 頂色條（IP分級顏色）
+    nodeG.append('rect').attr('width',NODE_W).attr('height',5).attr('rx',8).attr('fill',ipCol);
+
+    // IP 徽章
+    nodeG.append('text').attr('x',NODE_W-6).attr('y',17)
+      .attr('text-anchor','end').attr('font-size',9)
+      .attr('fill',ipCol)
+      .text(d => d.ipLevel==='landmine'?'🔴':d.ipLevel==='avoidable'?'🟡':d.ipLevel==='expired'?'🟢':'⬜');
+
+    // 年份
+    nodeG.append('text').attr('x',7).attr('y',18)
+      .attr('font-size',11).attr('font-weight',900).attr('fill',ipCol)
+      .text(d=>d.year);
+
+    // 專利號
+    nodeG.append('text').attr('x',7).attr('y',30)
+      .attr('font-size',8).attr('font-weight',700).attr('fill','var(--accent)')
+      .text(d=>(d.patent||'').slice(0,14));
+
+    // 角色
+    nodeG.append('text').attr('x',7).attr('y',43)
+      .attr('font-size',10).attr('font-weight',800).attr('fill','var(--text)')
+      .text(d=>(d.stage||'').slice(0,14));
+
+    // 技術主題（兩行）
     nodeG.each(function(d){
+      const el2=d3.select(this);
       const words=(d.theme||'').split(/\s*[+\/]\s*|\s+/);
-      const el2=d3.select(this);let line='',lineY=54,ln=0;
-      words.forEach(w=>{if(ln>=2)return;const t=line?line+' '+w:w;if(t.length>16){el2.append('text').attr('x',7).attr('y',lineY).attr('font-size',8).attr('fill','#999').text(line);line=w;lineY+=11;ln++;}else line=t;});
-      if(line&&ln<2)el2.append('text').attr('x',7).attr('y',lineY).attr('font-size',8).attr('fill','#999').text(line.slice(0,18));
+      let line='',lineY=56,ln=0;
+      words.forEach(w=>{
+        if(ln>=2) return;
+        const t=line?line+' '+w:w;
+        if(t.length>16){el2.append('text').attr('x',7).attr('y',lineY).attr('font-size',8).attr('fill','#888').text(line);line=w;lineY+=11;ln++;}
+        else line=t;
+      });
+      if(line&&ln<2) el2.append('text').attr('x',7).attr('y',lineY).attr('font-size',8).attr('fill','#888').text(line.slice(0,18));
     });
   });
-
-  svg.append('line').attr('x1',0).attr('y1',totalH-PAD_B).attr('x2',totalW).attr('y2',totalH-PAD_B).attr('stroke','#e8e2db');
-  const legG=svg.append('g').attr('transform',`translate(${LABEL_W},${totalH-PAD_B+8})`);
-  [['✅ 已收錄','#2d8c5a'],['⚠ 未收錄（待深度解析）','#c0392b'],['── 虛線 = 從缺口延伸','#aaa']].forEach(([lb,c],i)=>{
-    legG.append('text').attr('x',i*195).attr('y',10).attr('font-size',10).attr('fill',c).text(lb);
-  });
 }
+
 
 
 
