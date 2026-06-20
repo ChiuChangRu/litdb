@@ -126,6 +126,11 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 .patent-example-toggle{float:right;margin-left:8px;border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:5px;padding:2px 7px;font-size:11px;cursor:pointer}
 .patent-example-toggle:hover{color:var(--accent);border-color:var(--accent)}
 .patent-example-hint{font-size:11px;color:var(--muted);margin:-2px 0 6px}
+.patent-example-compare{margin:8px 0 10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.patent-example-compare-title{padding:8px 10px;font-size:12px;font-weight:800;color:var(--accent);border-bottom:1px solid var(--border);background:var(--card)}
+.patent-example-compare table{width:100%;border-collapse:collapse;font-size:11px}
+.patent-example-compare th,.patent-example-compare td{padding:7px 8px;border:1px solid var(--border);vertical-align:top;line-height:1.45}
+.patent-example-compare th{background:var(--card);color:var(--muted);font-weight:700;white-space:nowrap}
 
 /* Patent modal */
 .patent-modal{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,0.5);overflow-y:auto;padding:24px}
@@ -6793,6 +6798,39 @@ function togglePatentExamples(target) {
   });
 }
 
+function renderPatentExampleComparison(examples) {
+  if(!Array.isArray(examples) || examples.length < 2) return '';
+  const short = (text, max=115) => {
+    const s = String(text || '').replace(/\s+/g, ' ').trim();
+    return s.length > max ? s.slice(0, max - 1) + '…' : (s || '—');
+  };
+  const activeHint = ex => {
+    const txt = `${ex.name||''} ${ex.formulation?.topcoat||''} ${ex.results?.other||''}`.toLowerCase();
+    if(txt.includes('chlorhexidine') || txt.includes('chx')) return 'CHX 緩釋抗菌';
+    if(txt.includes('silver')) return 'Silver 抗 biofilm';
+    if(txt.includes('triclosan')) return 'Triclosan / 保存穩定';
+    if(txt.includes('lumen') || txt.includes('內壁') || txt.includes('管腔')) return '內壁塗佈製程';
+    return short(ex.results?.other || ex.formulation?.topcoat, 42);
+  };
+  const rows = [
+    ['定位差異', ex => activeHint(ex)],
+    ['面塗配方', ex => short(ex.formulation?.topcoat)],
+    ['基材/使用情境', ex => short(ex.substrate)],
+    ['塗覆/固化', ex => short([ex.process?.coating_method, ex.process?.curing].filter(Boolean).join('；'))],
+    ['主要待確認', ex => short(ex.credibility_reason || ex.results?.wca || ex.results?.durability)],
+    ['主要風險/限制', ex => short(ex.results?.other || ex.results?.friction)]
+  ];
+  return `<div class="patent-example-compare">
+    <div class="patent-example-compare-title">實施例差異比較</div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>比較項目</th>${examples.map((ex,i)=>`<th>${escHtml(ex.name || `實施例 ${i+1}`)}</th>`).join('')}</tr></thead>
+        <tbody>${rows.map(([label, getter])=>`<tr><th>${escHtml(label)}</th>${examples.map(ex=>`<td>${escHtml(getter(ex))}</td>`).join('')}</tr>`).join('')}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
 function renderPatentResult(a) {
   let html = '<div class="patent-result">';
 
@@ -6815,6 +6853,7 @@ function renderPatentResult(a) {
   if(a.examples_note) {
     html += `<div class="patent-example-hint">${a.examples_note}</div>`;
   }
+  html += renderPatentExampleComparison(examples);
   examples.forEach((ex, idx) => {
     const credColor = ex.credibility==='高'?'var(--accent2)':ex.credibility==='中'?'var(--warn)':'var(--danger)';
     const realLabel = ex.is_real ?
