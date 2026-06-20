@@ -5971,6 +5971,29 @@ function renderIntegratedReport() {
 // 篩選決策報告引擎（純前端規則引擎，無需 API）
 // ════════════════════════════════════════════════════════════
 
+// 公司正規化（用於決策報告的公司分組判斷，不影響其他頁面既有的 extractOrg 顯示）：
+// extractOrg() 只看 authors 欄位尾段做精確字串分割，但同一家公司在不同文獻的
+// authors 寫法可能不一致（如「Scimed Life Systems Inc」vs「Scimed Life Systems;
+// Boston Scientific Scimed」），導致同公司被拆成不同分組、永遠湊不到判斷門檻。
+// 這裡改用 tags 裡的已知公司關鍵字做模糊比對（跟「市場玩家」頁的邏輯一致），
+// 同一家公司不論 authors 怎麼寫，只要 tags 有標準名稱就能正確歸併。
+const _DE_KNOWN_COMPANIES = ['Boston Scientific','Scimed','Cook Medical','Cook','Argon','Coloplast','C.R. Bard','Bard','BD','Teleflex','Surmodics','Hydromer','DSM','Biocoat','Covidien','Sherwood','Tyco'];
+function _deNormalizeCompany(p){
+  const tags=(p.tags||[]).join(' ');
+  // 較長、較完整的公司名優先比對（避免「Cook」子字串先命中，蓋掉「Cook Medical」的精確比對機會）
+  const sortedNames=[..._DE_KNOWN_COMPANIES].sort((a,b)=>b.length-a.length);
+  for(const name of sortedNames){
+    // 比對該名稱本身，或「名稱-related」這種後綴形式（如 tags 裡的 "Cook-related"）
+    if(tags.includes(name+'-related') || tags.includes(name)){
+      // 只統一公開、明確的併購關係（Scimed 已被 Boston Scientific 收購是公開事實），
+      // 其餘品牌名稱各自獨立呈現，不臆測「Cook-related」代表的歷史品牌就是 Cook 本身
+      return name==='Scimed' ? 'Boston Scientific' : name;
+    }
+  }
+  // tags 沒有已知公司名時，fallback 回原本的 authors 字串分割（盡力而為，不強求）
+  return extractOrg(p) || '';
+}
+
 function _deGetFull(p){
   const pr=p.patentResults||{};
   return pr.full||pr.review||pr.commercial||{};
@@ -6700,7 +6723,7 @@ function buildDecisionReport(papers){
   if(!featureLabel&&activeTags?.size===1) featureLabel=featureMap[[...activeTags][0]]||[...activeTags][0];
 
   const orgs={};
-  papers.forEach(p=>{const o=extractOrg(p);if(o) orgs[o]=(orgs[o]||0)+1;});
+  papers.forEach(p=>{const o=_deNormalizeCompany(p);if(o) orgs[o]=(orgs[o]||0)+1;});
   const top=Object.entries(orgs).sort((a,b)=>b[1]-a[1])[0];
   const isCompany=top&&top[1]>=papers.length*0.6&&papers.length<=15&&papers.length>=2;
 
