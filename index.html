@@ -6708,6 +6708,59 @@ function buildCompanyReport(papers, companyLabel){
   return html;
 }
 
+// 多公司比較報告（用於篩選池橫跨多家已知公司、無單一公司過半的情境，
+// 例如「Argon OR Cook OR Boston OR BD」這類刻意做多公司比較的搜尋）：
+// 不強求單一公司門檻，改為列出每家公司各自的篇數、IP風險概況、技術路線，
+// 讓使用者能快速掃過競品地圖，而不是因為「沒有單一贏家」就完全不顯示報告。
+function buildMultiCompanyReport(papers, orgGroups){
+  const sortedOrgs = Object.entries(orgGroups).sort((a,b)=>b[1].length-a[1].length);
+  let html=`<div style="background:linear-gradient(135deg,#f0f4ff,#fff);border:2px solid #4a6fa5;border-radius:12px;padding:14px;margin-bottom:16px">
+    <div style="font-size:12px;color:#4a6fa5;font-weight:700;letter-spacing:1px">🏢 多公司競品比較</div>
+    <div style="font-size:16px;font-weight:900;color:var(--text);margin-top:4px">${sortedOrgs.map(([org])=>escHtml(org)).join(' vs ')}</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:4px">${papers.length} 篇文獻 · ${sortedOrgs.length} 家可識別公司 · 純規則引擎 · 無 API</div>
+  </div>`;
+
+  html+=`<div style="margin-bottom:16px">
+    <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:10px">📊 各公司概況</div>`;
+
+  sortedOrgs.forEach(([org, orgPapers])=>{
+    const hasLandmine=orgPapers.some(p=>(_deGetFull(p).red_flags||[]).join(' ').toLowerCase().match(/fto|claim 風險|地雷/));
+    const expiredN=orgPapers.filter(p=>(p.tags||[]).includes('expired')).length;
+    const [tLabel,tCol]=hasLandmine?['🔴 高威脅','#c0392b']:['🟢 低威脅','#2d8c5a'];
+    const routes={};
+    orgPapers.forEach(p=>{ const r=_deClassifyRoute(p); routes[r]=(routes[r]||0)+1; });
+    const routeStr=Object.entries(routes).sort((a,b)=>b[1]-a[1]).map(([r,n])=>`${r}×${n}`).join('、');
+
+    html+=`<div style="border:1.5px solid ${tCol}55;border-left:5px solid ${tCol};border-radius:10px;padding:12px;margin-bottom:8px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap">
+        <span style="font-size:15px;font-weight:800;color:var(--text)">${escHtml(org)}</span>
+        <span style="font-size:12px;color:${tCol}">${tLabel}</span>
+        <span style="font-size:12px;color:var(--muted);margin-left:auto">${orgPapers.length} 篇${expiredN>0?` · ${expiredN}件已過期`:''}</span>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px">${escHtml(routeStr)}</div>
+      <div style="font-size:12px;color:var(--accent)">
+        ${orgPapers.slice(0,8).map(p=>`<span onclick="goToPaper('${p.id}',{focus:true})" style="cursor:pointer;text-decoration:underline;margin-right:6px">[${p.id}]</span>`).join('')}
+        ${orgPapers.length>8?`<span style="color:var(--muted)">+${orgPapers.length-8} 篇</span>`:''}
+      </div>
+    </div>`;
+  });
+  html+=`</div>`;
+
+  // 未被歸入任何已知公司的文獻，也要列出，避免被默默丟掉
+  const grouped=new Set(sortedOrgs.flatMap(([,ps])=>ps.map(p=>p.id)));
+  const ungrouped=papers.filter(p=>!grouped.has(p.id));
+  if(ungrouped.length){
+    html+=`<div style="margin-bottom:16px;padding:10px 12px;background:var(--card);border-radius:8px">
+      <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px">未識別出公司的文獻（${ungrouped.length} 篇，未列入上方分組）</div>
+      <div style="font-size:12px;color:var(--accent)">
+        ${ungrouped.slice(0,12).map(p=>`<span onclick="goToPaper('${p.id}',{focus:true})" style="cursor:pointer;text-decoration:underline;margin-right:6px">[${p.id}]</span>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  return html;
+}
+
 // 主入口
 function buildDecisionReport(papers){
   const af=activeFilters||{};
@@ -6722,12 +6775,23 @@ function buildDecisionReport(papers){
   if(tag) featureLabel=featureMap[tag]||tag;
   if(!featureLabel&&activeTags?.size===1) featureLabel=featureMap[[...activeTags][0]]||[...activeTags][0];
 
-  const orgs={};
-  papers.forEach(p=>{const o=_deNormalizeCompany(p);if(o) orgs[o]=(orgs[o]||0)+1;});
-  const top=Object.entries(orgs).sort((a,b)=>b[1]-a[1])[0];
-  const isCompany=top&&top[1]>=papers.length*0.6&&papers.length<=15&&papers.length>=2;
+  // 依正規化公司名分組（蒐集實際文獻，而非只計數，供多公司報告使用）
+  const orgGroups={};
+  papers.forEach(p=>{
+    const o=_deNormalizeCompany(p);
+    if(o){ if(!orgGroups[o]) orgGroups[o]=[]; orgGroups[o].push(p); }
+  });
+  const orgEntries=Object.entries(orgGroups).sort((a,b)=>b[1].length-a[1].length);
+  const top=orgEntries[0];
+  const isCompany=top&&top[1].length>=papers.length*0.6&&papers.length<=15&&papers.length>=2;
 
   if(isCompany) return buildCompanyReport(papers,top[0]);
+
+  // 多公司比較：篩選池橫跨多家已知公司、無單一公司過半，但至少2家公司各有≥2篇可比較
+  // （例如刻意搜尋多家公司做競品分析），仍應提供比較總覽，而非直接放棄
+  const comparableOrgs=orgEntries.filter(([,ps])=>ps.length>=2);
+  if(comparableOrgs.length>=2) return buildMultiCompanyReport(papers, Object.fromEntries(comparableOrgs));
+
   if(featureLabel&&papers.length>=2) return buildFeatureReport(papers,featureLabel,tag);
   return '';
 }
@@ -6760,10 +6824,10 @@ function renderLibraryStats(papers) {
   const years = Object.keys(byYear).sort();
   const maxYearCnt = Math.max(...Object.values(byYear));
 
-  // ── 機構分布 ──
+  // ── 機構分布 ──（優先用已知公司名正規化，避免同公司因 authors 寫法差異被拆組）
   const byOrg = {};
   ps.forEach(p=>{
-    const org = extractOrg(p);
+    const org = _deNormalizeCompany(p);
     if(org && org.length>1) byOrg[org]=(byOrg[org]||0)+1;
   });
   const topOrgs = Object.entries(byOrg).sort((a,b)=>b[1]-a[1]).slice(0,8);
