@@ -520,7 +520,7 @@ async function doLogin(){
             <span class="ftag" data-filter="topic" data-value="adhesion" onclick="toggleFilter(this)">🔧 附著</span>
           </span>
           <select id="fSort" onchange="filterPapers()" style="padding:2px 4px;font-size:10px;border-radius:4px;border:1px solid var(--border);vertical-align:middle"><option value="id-desc">最新加入</option><option value="id">ID↑</option><option value="year-desc">年↓</option><option value="year-asc">年↑</option></select>
-          <details style="display:inline-block;vertical-align:middle;margin-left:4px">
+          <details id="moreFiltersDetails" style="display:inline-block;vertical-align:middle;margin-left:4px">
             <summary class="ftag" style="display:inline-block;cursor:pointer">更多篩選</summary>
             <div style="position:absolute;z-index:20;margin-top:6px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;box-shadow:0 4px 16px rgba(0,0,0,.12);max-width:520px;line-height:2">
               <span class="filter-group" id="fTypeGroup"><span class="filter-label">類型</span></span>
@@ -1033,9 +1033,9 @@ async function doLogin(){
 <div class="patent-modal" id="patentModal" onclick="if(event.target===this)closePatentModal()">
   <div class="patent-modal-body">
     <div class="patent-modal-header">
+      <button class="btn btn-s" onclick="closePatentModal()" style="font-weight:700;flex-shrink:0">← 返回文庫</button>
       <span style="font-size:18px">🧪</span>
       <h3 id="patentModalTitle">專利實施例分析</h3>
-      <button class="btn btn-s" onclick="closePatentModal()">✕ 關閉</button>
     </div>
     <div class="patent-modal-content" id="patentModalContent"></div>
   </div>
@@ -1943,6 +1943,158 @@ function buildReportSummary() {
     <div style="color:var(--accent);font-size:11px;margin-top:8px">💡 分析越多文獻，報告數據越完整。目前已分析 ${analyzed.length} 篇。</div>`;
 }
 
+// ════════════════════════════════════════════════════════════
+// 維度感知 AI 策略解讀（按需觸發，不取代規則引擎報告，附加在其下方）
+// ════════════════════════════════════════════════════════════
+//
+// 設計原則：規則引擎能告訴你「有幾篇、歸哪個路線、IP風險高低」，但回答不了
+// 「這家公司的技術策略是什麼、市場上用什麼原理、我該怎麼迴避」這類需要讀懂
+// 多篇全文脈絡才能下判斷的問題。這裡讓 Claude API 讀取每篇文獻已有的
+// summary/red_flags/design_around_notes/materials 等欄位（不是重新讀取
+// 專利原文，是讀取 papers.json 裡已分析過的內容），做跨文獻的策略性解讀。
+//
+// 維度類型對應的解讀重點：
+// - company: 該公司市場上用的原理、專利布局趨勢、我可以做什麼、該怎麼迴避
+// - indication（適應症/功能目標，如抗結痂/抗菌）: 對應原理機制、要做什麼、要迴避什麼專利
+// - route（技術路線，如UV固化/熱固化）: 別人的策略、我可以做什麼、我該迴避什麼
+// - company_route（公司+路線組合，如 Cook+UV固化）: 該公司在該路線下的具體做法、我能不能用、怎麼迴避
+// - multi_company: 各公司策略差異比較、誰的IP威脅最大、為什麼
+
+function _deBuildAIContext(papers){
+  // 把每篇文獻的關鍵分析欄位整理成精簡文字塊，供 AI 解讀。
+  // 只取 papers.json 裡已存在的內容，不憑空生成。
+  return papers.map(p=>{
+    const full=_deGetFull(p);
+    const parts=[`[${p.id}] ${p.title||''}（${p.doc_type||''}，${p.year||'年份未知'}）`];
+    if(full.summary) parts.push(`摘要：${full.summary.slice(0,300)}`);
+    const mats=full.coating_technology?.materials;
+    if(mats?.length) parts.push(`材料：${mats.slice(0,6).join('、')}`);
+    const claimFocus=full.patent_core?.claim_focus;
+    if(claimFocus) parts.push(`Claim重點：${(Array.isArray(claimFocus)?claimFocus.join('；'):claimFocus).slice(0,200)}`);
+    const designAround=full.patent_core?.design_around_notes;
+    if(designAround?.length) parts.push(`既有迴避建議：${designAround.slice(0,3).join('；').slice(0,250)}`);
+    const redFlags=full.red_flags;
+    if(redFlags?.length) parts.push(`紅旗/限制：${redFlags.slice(0,3).join('；').slice(0,250)}`);
+    if((p.tags||[]).length) parts.push(`標籤：${p.tags.slice(0,10).join('、')}`);
+    return parts.join('\n');
+  }).join('\n---\n');
+}
+
+function _deDimensionPromptSpec(dim){
+  // 依維度類型回傳 {focusTitle, instructions}，組成 system prompt 的核心部分
+  if(dim.type==='company'){
+    return {
+      focusTitle:`競爭對手分析：${dim.company}`,
+      instructions:`請針對「${dim.company}」這家公司在這批文獻中展現的技術布局，回答：
+1. 這家公司市場上主要用什麼原理/技術路線（依文獻歸納，不要臆測未提及的內容）
+2. 從這些文獻看出的專利布局趨勢（時間演進、技術延伸方向、防禦範圍）
+3. 我方可以採用的空白地帶或可迴避方向（引用具體文獻ID佐證）
+4. 我方應避開的核心claim範圍（引用具體文獻ID佐證，說明為什麼有風險）`
+    };
+  }
+  if(dim.type==='indication'){
+    return {
+      focusTitle:`適應症/功能目標分析：${dim.label}`,
+      instructions:`請針對「${dim.label}」這個功能目標，根據這批文獻回答：
+1. 市場上達成「${dim.label}」效果實際採用的技術機制有哪幾種（依文獻歸納，並標明各機制分別來自哪些文獻ID；如果不同文獻的機制描述有衝突或不確定，請標註(*)並說明）
+2. 我方若要做「${dim.label}」應該優先考慮的技術方向，以及理由
+3. 這些技術方向各自對應到哪些既有專利的claim範圍，我方需要迴避什麼
+4. 資料缺口：哪些技術方向目前文獻證據不足，需要補強分析才能下判斷`
+    };
+  }
+  if(dim.type==='route'){
+    return {
+      focusTitle:`技術路線分析：${dim.label}`,
+      instructions:`請針對「${dim.label}」這條技術路線，根據這批文獻回答：
+1. 市場上採用這條路線的公司分別用什麼策略（製程參數、材料選擇、搭配的底塗/面塗設計）
+2. 這條路線上的專利布局密度與風險（哪些是核心地雷、哪些已過期可用）
+3. 我方在這條路線上可以做的具體方向（引用文獻ID佐證）
+4. 我方應該迴避的具體claim範圍（引用文獻ID佐證）`
+    };
+  }
+  if(dim.type==='company_route'){
+    return {
+      focusTitle:`${dim.company} 在「${dim.route}」路線的具體做法`,
+      instructions:`請針對「${dim.company}」這家公司在「${dim.route}」這條技術路線上的具體做法，根據這批文獻回答：
+1. 這家公司在這條路線上的具體配方/製程策略是什麼（引用文獻ID佐證實施例細節）
+2. 哪些做法已過期可以直接參考使用，哪些仍在有效claim範圍內不能照抄
+3. 我方如果也要走這條路線，可以怎麼做出技術差異化（不踩到這家公司的claim）
+4. 我方絕對不能做的事（會直接侵犯這家公司現有claim的具體技術特徵）`
+    };
+  }
+  if(dim.type==='multi_company'){
+    const names=Object.keys(dim.orgGroups).join('、');
+    return {
+      focusTitle:`多公司競品策略比較：${names}`,
+      instructions:`請針對這幾家公司（${names}）在這批文獻中展現的策略差異，回答：
+1. 各家公司的技術策略定位差異是什麼（例如誰主攻低成本量產、誰主攻技術壁壘、誰在做防禦性佈局）
+2. 哪一家公司的IP對我方威脅最大，為什麼（引用文獻ID佐證具體claim內容）
+3. 各家公司之間是否有可乘的空白地帶（例如A家沒做但B家在做的技術組合）
+4. 我方應該優先參考哪家公司的做法、迴避哪家公司的claim`
+    };
+  }
+  return {focusTitle:'技術決策解讀', instructions:'請根據這批文獻歸納關鍵技術趨勢、可行方向與需迴避的風險，引用具體文獻ID佐證。'};
+}
+
+async function generateDimensionalAIReport(){
+  const dim = window._deLastDimension;
+  if(!dim || !dim.papers?.length){ toast('目前篩選結果沒有可解讀的維度資訊，請先套用篩選條件','error'); return; }
+  if(!cfg.proxy){ toast('請先設定 Claude API Proxy URL','error'); return; }
+
+  const spec = _deDimensionPromptSpec(dim);
+  const context = _deBuildAIContext(dim.papers.slice(0,15)); // 上限15篇，避免單次成本過高
+  const btnEl = document.getElementById('deAIReportBtn');
+  const outEl = document.getElementById('deAIReportOutput');
+  if(!outEl) return;
+
+  outEl.style.display='block';
+  outEl.innerHTML = '<div class="cite-loading" style="padding:24px"><span class="spinner"></span> AI 策略解讀中...</div>';
+  if(btnEl) btnEl.disabled = true;
+
+  try{
+    const r = await fetch(cfg.proxy, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6', max_tokens:2500,
+        system:`你是醫療器材親水塗層專利與技術策略顧問。根據提供的文獻分析資料做策略解讀。
+規則：
+1. 繁體中文（台灣用語，勿用簡體字）
+2. 只根據提供的文獻資料做判斷，不要編造文獻中沒有的數據或結論
+3. 每個判斷盡可能引用具體文獻ID如[P01]
+4. 不確定、屬於推論而非文獻明確記載的內容，標註(*)
+5. 若文獻資料不足以回答某個問題，明確說「現有文獻資料不足以判斷」，不要硬掰
+6. 簡潔務實，每點 2-4 句即可，不要學術廢話
+7. 用 ## 標題分隔各點`,
+        messages:[{role:'user',content:`【${spec.focusTitle}】
+
+以下是 ${dim.papers.length>15?'前15篇（共'+dim.papers.length+'篇，已截斷）':dim.papers.length+'篇'}文獻的分析資料：
+
+${context}
+
+${spec.instructions}`}]
+      })
+    });
+    const data = await r.json();
+    if(typeof trackUsage==='function') trackUsage(data);
+    let text = data.content?.[0]?.text || '';
+    if(!text) throw new Error('AI 無回應');
+
+    text = text.replace(/^## (.+)$/gm, '<h4 style="color:var(--accent);margin:16px 0 6px;font-size:14px;border-bottom:1px solid var(--border);padding-bottom:3px">$1</h4>');
+    text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/\[([A-Z]\d+)\]/g, '<span onclick="goToPaper(\'$1\',{focus:true})" style="cursor:pointer;color:var(--accent2);font-weight:600;text-decoration:underline">[$1]</span>');
+    text = text.replace(/\n/g, '<br>');
+
+    outEl.innerHTML = `<div style="background:linear-gradient(135deg,#f5f0ff,#fff);border:2px solid #8e44ad;border-radius:12px;padding:16px">
+      <div style="font-size:12px;color:#8e44ad;font-weight:700;letter-spacing:1px;margin-bottom:8px">🤖 AI 策略解讀 · ${escHtml(spec.focusTitle)}</div>
+      <div style="font-size:13px;line-height:1.8;color:var(--text)">${text}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:12px;padding-top:8px;border-top:1px solid var(--border)">基於 ${dim.papers.length>15?15:dim.papers.length} 篇文獻的已有分析資料生成，非重新讀取專利原文；請自行核對關鍵判斷</div>
+    </div>`;
+  }catch(e){
+    outEl.innerHTML = `<div style="color:var(--warn);padding:16px;text-align:center">AI 解讀失敗：${escHtml(e.message||String(e))}</div>`;
+  }finally{
+    if(btnEl) btnEl.disabled = false;
+  }
+}
+
 async function generateReport() {
   if(!cfg.proxy){toast('請先設定 Claude API Proxy URL','error');return}
 
@@ -2343,6 +2495,14 @@ function startResize(e, idx) {
   document.addEventListener('mousemove', onMove);
   document.addEventListener('mouseup', onUp);
 }
+
+// 「更多篩選」面板：點擊面板外部時自動收起，面板內部點擊（含勾選篩選標籤）不受影響，
+// 讓使用者能一次連續勾選類型/基材/固化等多個項目，選完後點外面才收起，不會選一個就誤關
+document.addEventListener('click', (e) => {
+  const details = document.getElementById('moreFiltersDetails');
+  if(!details || !details.open) return;
+  if(!details.contains(e.target)) details.open = false;
+});
 
 // ══════════════════════════════════════════════
 // INIT
@@ -5939,7 +6099,16 @@ function renderIntegratedReport() {
   try { report = buildDecisionReport(ps) || ''; } catch(e){ console.warn(e); }
 
   if(report) {
-    el.innerHTML = `<div style="max-width:860px;margin:0 auto">${report}</div>`;
+    const dim = window._deLastDimension;
+    const aiSection = dim ? `
+      <div style="max-width:860px;margin:16px auto 0;text-align:center">
+        <button id="deAIReportBtn" class="btn btn-s" style="font-size:12px;color:#8e44ad;border-color:#8e44ad"
+          onclick="if(confirm('這會呼叫 API 進行策略解讀，確定要繼續嗎？（約10篇文獻成本約NT$1.5-2元）')) generateDimensionalAIReport()">
+          🤖 AI 策略解讀（針對「${escHtml(dim.company||dim.label||Object.keys(dim.orgGroups||{}).join('/')||'目前篩選')}」）
+        </button>
+      </div>
+      <div id="deAIReportOutput" style="max-width:860px;margin:12px auto 0;display:none"></div>` : '';
+    el.innerHTML = `<div style="max-width:860px;margin:0 auto">${report}</div>${aiSection}`;
   } else {
     // 若無法生成決策報告（篩選條件不足），顯示文獻摘要表
     const rows = ps.map(p=>`
@@ -6785,14 +6954,39 @@ function buildDecisionReport(papers){
   const top=orgEntries[0];
   const isCompany=top&&top[1].length>=papers.length*0.6&&papers.length<=15&&papers.length>=2;
 
+  // 記錄當前報告的「維度」，供下方 AI 策略解讀按鈕判斷該用哪種 prompt 重點。
+  // 公司+技術路線組合（如 Cook + UV固化）會同時有 isCompany 與 featureLabel，
+  // 這種組合維度的策略意義最明確（「這家公司在這條路線上怎麼做」），優先標記為 company_route。
+  if(isCompany && featureLabel){
+    window._deLastDimension = {type:'company_route', company:top[0], route:featureLabel, papers};
+  } else if(isCompany){
+    window._deLastDimension = {type:'company', company:top[0], papers};
+  } else {
+    window._deLastDimension = null; // 其餘分支在各自回傳前自行設定
+  }
+
   if(isCompany) return buildCompanyReport(papers,top[0]);
 
-  // 多公司比較：篩選池橫跨多家已知公司、無單一公司過半，但至少2家公司各有≥2篇可比較
-  // （例如刻意搜尋多家公司做競品分析），仍應提供比較總覽，而非直接放棄
-  const comparableOrgs=orgEntries.filter(([,ps])=>ps.length>=2);
-  if(comparableOrgs.length>=2) return buildMultiCompanyReport(papers, Object.fromEntries(comparableOrgs));
+  // 主題/路線判斷優先於多公司比較：使用者若明確勾選了主題篩選（tag存在），
+  // 該意圖應該被尊重——即使篩選結果剛好分散在多家公司，也不該被「多公司比較」
+  // 攔截掉使用者真正想看的「抗結痂」「UV固化」這類主題報告。
+  if(featureLabel&&papers.length>=2){
+    // 抗結痂/抗菌等「適應症/功能目標」類維度，跟「UV固化/熱固化」等「製程路線」類維度，
+    // AI 該強調的重點不同（前者是機制原理，後者是製程策略），用 tag 區分
+    const isMechanismDim = ['encrustation','antimicrobial','adhesion','lubricity'].includes(tag);
+    window._deLastDimension = {type:isMechanismDim?'indication':'route', label:featureLabel, tag, papers};
+    return buildFeatureReport(papers,featureLabel,tag);
+  }
 
-  if(featureLabel&&papers.length>=2) return buildFeatureReport(papers,featureLabel,tag);
+  // 多公司比較：只在沒有明確主題標籤、且篩選池橫跨多家已知公司、無單一公司過半時才適用
+  // （例如刻意搜尋多家公司名稱做競品分析），仍應提供比較總覽，而非直接放棄
+  const comparableOrgs=orgEntries.filter(([,ps])=>ps.length>=2);
+  if(comparableOrgs.length>=2){
+    window._deLastDimension = {type:'multi_company', orgGroups:Object.fromEntries(comparableOrgs), papers};
+    return buildMultiCompanyReport(papers, Object.fromEntries(comparableOrgs));
+  }
+
+  window._deLastDimension = null;
   return '';
 }
 
