@@ -5993,6 +5993,45 @@ function _deClassifyRoute(p){
   return '其他';
 }
 
+// 抗結痂機制分類（與 _deClassifyRoute 的「材料路線」分開：
+// 同一個材料路線底下可能混雜不同作用機制，例如 isocyanate 共價塗層
+// 可能是單純潤滑，也可能是加了抗菌劑釋出，兩者對抗結痂的原理完全不同，
+// 不該因為材料字串相同就被當成同一種抗結痂方案比較）
+function _deMechanism(p){
+  const full = _deGetFull(p);
+  const tags = (p.tags||[]).join(' ').toLowerCase();
+  const mats = (full.coating_technology?.materials||[]).join(' ').toLowerCase();
+  const summary = (full.summary||'').toLowerCase();
+  const blob = tags+' '+mats+' '+summary;
+  // 兩性離子 / 非吸附式抗汙（結構性阻止蛋白質與結晶吸附，現代抗結痂主流機制）
+  if(/zwitterion|兩性離子|\bsbma\b|\bmpc\b|sulfobetaine|phosphorylcholine|antifouling|抗汙/.test(blob))
+    return {key:'zwitterion', label:'兩性離子/非吸附抗汙', col:'#2d8c5a', desc:'結構性阻止蛋白質、結晶吸附（現代抗結痂主流機制）'};
+  // 抗菌劑釋出（透過殺菌/抑菌間接減少 biofilm 與結痂核心，非結構性機制）
+  if(/chlorhexidine|triclosan|silver|銀離子|抗菌|antimicrobial|antibiotic|抗生素/.test(blob))
+    return {key:'antimicrobial_release', label:'抗菌劑釋出', col:'#d4a030', desc:'靠殺菌/抑菌間接減少 biofilm，非結構性抗汙，長期釋出量會衰減、可能有抗藥性疑慮'};
+  // 天然高分子/幾丁聚醣（部分有抗菌+部分有抗汙，依文獻而定，需個案確認）
+  if(/chitosan|幾丁聚醣|alginate|heparin|肝素|propolis/.test(blob))
+    return {key:'biopolymer', label:'天然高分子塗層', col:'#8e44ad', desc:'機制因文獻而異，部分偏抗菌、部分偏抗汙，需逐篇確認'};
+  // 純潤滑（降低摩擦力，對抗結痂只是間接幫助，非核心機制）
+  if(/lubricity|潤滑|friction|滑度/.test(blob) && !/encrustation|結痂/.test(blob))
+    return {key:'lubricity_only', label:'純潤滑（非抗結痂機制）', col:'#95a5a6', desc:'僅降低摩擦力，對結晶沉積無結構性阻止作用'};
+  return {key:'unclassified', label:'機制未分類', col:'#95a5a6', desc:'資料不足，無法判斷抗結痂作用機制'};
+}
+
+// 核心關聯度：判斷這篇文獻是否真的針對「抗結痂相關機制」（兩性離子/抗汙、
+// 抗菌、天然高分子）有實質內容，還是只因提到 urinary/stent/catheter 等
+// 部位詞被寬鬆正則撈進候選池、內容其實只談潤滑或附著力。
+function _deCoreRelevance(p){
+  const tags = (p.tags||[]).join(' ').toLowerCase();
+  const full = _deGetFull(p);
+  const blob = tags+' '+(full.summary||'').toLowerCase();
+  // 任一種抗結痂相關機制關鍵字命中即算核心：抗結痂本身、抗汙、抗菌、
+  // 兩性離子、天然高分子（這些都是文獻中用來對抗結痂/biofilm的實際手段）
+  const mechHit = /encrustation|結痂|antifouling|抗汙|antimicrobial|抗菌|zwitterion|兩性離子|sbma|mpc|chitosan|幾丁聚醣|biofilm|生物膜|silver|chlorhexidine|propolis|heparin|肝素/.test(blob);
+  if(mechHit) return {core:true, label:'核心證據'};
+  return {core:false, label:'邊緣關聯（僅部位詞匹配，內容偏潤滑/附著力，非抗結痂機制）'};
+}
+
 // IP 風險
 function _deIpRisk(p){
   const tags=p.tags||[];
@@ -6028,6 +6067,15 @@ function _deDataStrength(p){
   return s;
 }
 
+// 共用：判斷一個字串是否為「無資料」佔位文字（未明示/not stated 等），
+// 避免這類佔位字串被誤判為真實數值並直接顯示給使用者
+function _isNoData(s){
+  if(!s) return true;
+  const t=String(s).trim();
+  if(!t) return true;
+  return /^(未明示|未說明|不明|not\s*st(ated)?|n\/?a|none|null|無|需(依全文)?確認|need[s]?\s*(further\s*)?review|tbd|unknown)/i.test(t);
+}
+
 // 萃取實施例參數
 function _deExtractParams(ex){
   const blob=JSON.stringify(ex);
@@ -6038,11 +6086,11 @@ function _deExtractParams(ex){
   if(m=blob.match(/(\d+)\s*°?\s*F\b/)) p['溫度']=m[1]+'°F';
   else if(m=blob.match(/(\d{2,3})\s*°?\s*C\b/)) p['溫度']=m[1]+'°C';
   if(m=blob.match(/(?:WCA|接觸角|water.contact)[^0-9]{0,15}(\d+(?:\.\d+)?)\s*°/i)) p['WCA']=m[1]+'°';
-  else if(m=blob.match(/"wca"\s*:\s*"([^"]+)"/)) p['WCA']=m[1].slice(0,6);
+  else { m=blob.match(/"wca"\s*:\s*"([^"]+)"/); if(m && /\d/.test(m[1]) && !_isNoData(m[1])) p['WCA']=m[1].slice(0,6); }
   if(m=blob.match(/COF[\s:]*[<≤]?\s*(0\.\d+)/i)) p['COF']=m[1];
-  else if(m=blob.match(/"(?:cof|friction|摩擦)"\s*:\s*"([^"]{1,12})"/i)) p['COF']=m[1].slice(0,8);
+  else { m=blob.match(/"(?:cof|friction|摩擦)"\s*:\s*"([^"]{1,12})"/i); if(m && /\d/.test(m[1]) && !_isNoData(m[1])) p['COF']=m[1].slice(0,8); }
   if(m=blob.match(/[Gg]rade\s*([0-4])/)) p['附著']='Grade'+m[1];
-  else if(m=blob.match(/"adhesion"\s*:\s*"([^"]{1,15})"/)) p['附著']=m[1].slice(0,10);
+  else { m=blob.match(/"adhesion"\s*:\s*"([^"]{1,15})"/); if(m && !_isNoData(m[1]) && m[1].trim().length>1) p['附著']=m[1].slice(0,10); }
   return p;
 }
 
@@ -6116,35 +6164,95 @@ function _buildFreedomBlock(papers){
   return html;
 }
 
+// 機制分組版「專利空間地圖」（用於抗結痂主題）：
+// 依「兩性離子/抗菌釋出/天然高分子/純潤滑/未分類」分組，而非材料字串，
+// 避免把作用原理完全不同的塗層（如抗菌釋出 vs 結構性抗汙）混為一談比較。
+function _buildMechanismFreedomBlock(papers){
+  const mechMap={};
+  papers.forEach(p=>{
+    const m=_deMechanism(p);
+    const cr=_deCoreRelevance(p);
+    const [ipL,ipS]=_deIpRisk(p);
+    const full=_deGetFull(p);
+    const da=(full.patent_core?.design_around_notes||[]);
+    if(!mechMap[m.key]) mechMap[m.key]={m,papers:[],bestDa:[]};
+    mechMap[m.key].papers.push({p,ipL,ipS,cr,da,rf:(full.red_flags||[])});
+    if(da.length>mechMap[m.key].bestDa.length) mechMap[m.key].bestDa=da;
+  });
+
+  const getBestDA=(da)=>{
+    if(!da.length) return null;
+    const actionable=da.find(s=>/改用|取代|替代|以.+代替|使用.+可|採用|PDA|I-2959|SBMA|QCS/i.test(s));
+    return (actionable||da[0]).slice(0,65);
+  };
+
+  const H=(t,col)=>`<div style="font-size:13px;font-weight:800;color:${col};margin-bottom:8px">${t}</div>`;
+  let html=`<div style="margin-bottom:16px">
+    <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:4px">🧬 抗結痂機制分組地圖</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px">依「作用原理」分組，不依材料字串分組——避免抗菌釋出型塗層被誤判為結構性抗汙</div>`;
+
+  Object.values(mechMap).sort((a,b)=>b.papers.length-a.papers.length).forEach(grp=>{
+    const coreN=grp.papers.filter(x=>x.cr.core).length;
+    const edgeN=grp.papers.length-coreN;
+    const minIpS=Math.min(...grp.papers.map(x=>x.ipS));
+    const ipCol=minIpS<=1?'#2d8c5a':minIpS>=3?'#c0392b':'#d4a030';
+    const hint=getBestDA(grp.bestDa)||'';
+    html+=`<div style="margin-bottom:10px;padding:10px 12px;background:var(--card);border-left:4px solid ${grp.m.col};border-radius:0 8px 8px 0">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span style="font-size:14px;font-weight:800;color:var(--text)">${escHtml(grp.m.label)}</span>
+        <span style="font-size:12px;color:${ipCol}">最低IP風險組內 ${minIpS<=1?'🟢':minIpS>=3?'🔴':'🟡'}</span>
+        <span style="font-size:12px;color:var(--muted);margin-left:auto">${coreN} 篇核心${edgeN>0?` + ${edgeN} 篇邊緣關聯`:''}</span>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-top:3px">${escHtml(grp.m.desc)}</div>
+      ${hint?`<div style="font-size:13px;color:#444;margin-top:5px;line-height:1.5">→ ${escHtml(hint)}</div>`:''}
+      <div style="font-size:12px;color:var(--accent);margin-top:5px">
+        ${grp.papers.map(x=>`<span onclick="goToPaper('${x.p.id}',{focus:true})" style="cursor:pointer;text-decoration:underline;margin-right:8px">${x.p.id}${!x.cr.core?'*':''}</span>`).join('')}
+      </div>
+    </div>`;
+  });
+  html+=`<div style="font-size:11px;color:var(--muted);margin-top:2px">* 標記為邊緣關聯（僅因部位詞如 urinary/stent 匹配，非該文獻核心訴求）</div>`;
+  html+=`</div>`;
+  return html;
+}
+
 // ════════════════════════
 // ② 實施例差異比對
 // ════════════════════════
-function _buildExampleDiff(papers){
+function _buildExampleDiff(papers, useMechanism){
   const seen=new Set(); // 去重：同 example name 只取一次
+  const perPaperCount={}; // 每篇文獻最多取2個代表例，避免單篇灌爆列表
   const rows=[];
 
   papers.forEach(p=>{
     const route=_deClassifyRoute(p);
+    const mech=useMechanism?_deMechanism(p):null;
+    const cr=useMechanism?_deCoreRelevance(p):null;
     const [ipL,ipS]=_deIpRisk(p);
     const exs=_deGetFull(p).examples||[];
     exs.forEach(ex=>{
       if(!ex.is_real) return;
       const pa=_deExtractParams(ex);
-      // 只顯示有至少一個有意義數值的實施例
-      const hasData = pa['WCA']||pa['COF']||pa['附著']||pa['UV劑量'];
+      // 只看真正可比較的性能數值（WCA/COF/附著），溫度/UV劑量僅為製程輔助欄，
+      // 單獨出現不構成「有意義數值」，否則大量同質 example（如僅含固化溫度）會灌爆列表
+      const hasData = pa['WCA']||pa['COF']||pa['附著'];
       if(!hasData) return;
+      perPaperCount[p.id]=(perPaperCount[p.id]||0)+1;
+      if(perPaperCount[p.id]>2) return; // 每篇最多2筆代表例
       // 去重：同名稱只取一次
-      const key=(ex.name||'').slice(0,20)+p.id;
       const dedupKey=(ex.name||'').slice(0,20);
       if(seen.has(dedupKey)) return;
       seen.add(dedupKey);
-      const name=(ex.name||'').replace(/^[*\s]+/,'').slice(0,20);
-      rows.push({id:p.id,route,ipL,ipS,pa,name});
+      const name=(ex.name||'').replace(/^[*\s]+/,'').slice(0,40);
+      const dataRichness=[pa['WCA'],pa['COF'],pa['附著']].filter(Boolean).length;
+      rows.push({id:p.id,route,mech,cr,ipL,ipS,pa,name,dataRichness});
     });
   });
 
+  // 資料豐富度高的排前面，確保真正有完整數值的列不會被擠到清單之外
+  rows.sort((a,b)=>b.dataRichness-a.dataRichness);
+
   if(rows.length<2) return `<div style="background:var(--card);border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px;color:var(--muted)">
-    ⚗️ <b>實施例差異比對</b>：篩選結果中真實實施例的數值資料不足（需至少 2 個含 WCA/COF/附著 的實施例）。建議補強文獻全文後再查看。
+    ⚗️ <b>實施例差異比對</b>：篩選結果中真實實施例的可比較數值（WCA/COF/附著）不足（需至少 2 個）。建議補強文獻全文後再查看。
   </div>`;
 
   // 差異洞察
@@ -6165,13 +6273,13 @@ function _buildExampleDiff(papers){
   }
 
   let html=`<div style="margin-bottom:16px">
-    <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:8px">⚗️ 實施例差異比對 <span style="font-size:13px;font-weight:400;color:var(--muted)">（${rows.length} 個有效實施例，僅顯示含數值者）</span></div>
+    <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:8px">⚗️ 實施例差異比對 <span style="font-size:13px;font-weight:400;color:var(--muted)">（${rows.length} 個有效實施例，每篇最多列2例，僅顯示含 WCA/COF/附著 數值者）</span></div>
     <div style="overflow-x:auto">
     <table style="width:100%;border-collapse:collapse;font-size:12px">
       <thead><tr style="background:var(--card)">
         <th style="padding:7px 9px;text-align:left;font-size:12px;color:var(--muted)">ID</th>
-        <th style="padding:6px 8px;text-align:left;color:var(--muted)">路線</th>
-        <th style="padding:6px 8px;text-align:left;color:var(--muted)">實施例</th>
+        <th style="padding:6px 8px;text-align:left;color:var(--muted)">${useMechanism?'機制':'路線'}</th>
+        <th style="padding:6px 8px;text-align:left;color:var(--muted);min-width:160px">實施例</th>
         <th style="padding:6px 8px;text-align:center;color:var(--muted)">UV劑量</th>
         <th style="padding:6px 8px;text-align:center;color:var(--muted)">溫度</th>
         <th style="padding:6px 8px;text-align:center;color:var(--muted)">WCA</th>
@@ -6180,14 +6288,15 @@ function _buildExampleDiff(papers){
         <th style="padding:6px 8px;text-align:left;color:var(--muted)">IP</th>
       </tr></thead><tbody>`;
 
-  rows.slice(0,10).forEach((r,i)=>{
+  rows.slice(0,16).forEach((r,i)=>{
     const bg=i%2===0?'':'background:var(--card)';
     const ipCol=r.ipS<=1?'#2d8c5a':r.ipS>=3?'#c0392b':'#d4a030';
     const hiWCA=r.pa['WCA']&&parseFloat(r.pa['WCA'])<=15?'color:#2d8c5a;font-weight:700':'';
     const hiCOF=r.pa['COF']&&parseFloat(r.pa['COF'])<=0.1?'color:#2d8c5a;font-weight:700':'';
+    const groupLabel = useMechanism ? r.mech.label+(r.cr.core?'':'*') : r.route;
     html+=`<tr style="${bg};cursor:pointer" onclick="goToPaper('${r.id}',{focus:true})">
       <td style="padding:6px 8px;color:var(--accent);font-weight:700">${r.id}</td>
-      <td style="padding:6px 8px;font-size:12px">${escHtml(r.route)}</td>
+      <td style="padding:6px 8px;font-size:12px">${escHtml(groupLabel)}</td>
       <td style="padding:6px 8px;font-size:12px;color:var(--muted)">${escHtml(r.name)}</td>
       <td style="padding:6px 8px;text-align:center">${r.pa['UV劑量']||'—'}</td>
       <td style="padding:6px 8px;text-align:center">${r.pa['溫度']||'—'}</td>
@@ -6198,6 +6307,7 @@ function _buildExampleDiff(papers){
     </tr>`;
   });
   html+=`</tbody></table></div>`;
+  if(useMechanism) html+=`<div style="font-size:11px;color:var(--muted);margin-top:4px">* 邊緣關聯（非該文獻核心訴求）</div>`;
 
   if(insights.length){
     html+=`<div style="margin-top:8px;padding:8px 12px;background:#fffbe6;border-left:3px solid #d4a030;border-radius:0 8px 8px 0">
@@ -6301,13 +6411,14 @@ function _buildRecipeBlock(papers){
       const pr=bestEx.ex.process||{};
       const res=bestEx.ex.results||{};
       const str=v=>typeof v==='string'?v.slice(0,60):typeof v==='object'?JSON.stringify(v).slice(0,60):'';
+      const validRes=(v)=>v && !_isNoData(v);
       html+=`<div style="background:var(--card);border-radius:8px;padding:12px">
         <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px">📋 實施例配方 <span style="color:var(--muted);font-weight:400;font-size:12px">[${bestEx.p.id}]</span></div>
         ${f.primer?`<div style="font-size:13px;margin-bottom:4px"><b>底塗：</b>${escHtml(str(f.primer))}</div>`:''}
         ${f.topcoat?`<div style="font-size:13px;margin-bottom:4px"><b>面塗：</b>${escHtml(str(f.topcoat))}</div>`:''}
         ${pr.curing?`<div style="font-size:13px;margin-bottom:4px"><b>固化：</b>${escHtml(str(pr.curing))}</div>`:''}
-        ${(res.wca||res.friction||res.adhesion)?`<div style="font-size:13px;color:#2d8c5a;margin-top:6px">
-          ${res.wca?`WCA ${escHtml(String(res.wca))} `:''}${res.friction?`COF ${escHtml(String(res.friction))} `:''}${res.adhesion?escHtml(String(res.adhesion)):''}
+        ${(validRes(res.wca)||validRes(res.friction)||validRes(res.adhesion))?`<div style="font-size:13px;color:#2d8c5a;margin-top:6px">
+          ${validRes(res.wca)?`WCA ${escHtml(String(res.wca))} `:''}${validRes(res.friction)?`COF ${escHtml(String(res.friction))} `:''}${validRes(res.adhesion)?escHtml(String(res.adhesion)):''}
         </div>`:''}
       </div>`;
     } else {
@@ -6319,17 +6430,187 @@ function _buildRecipeBlock(papers){
   return html;
 }
 
+// 機制分組版「推薦配方」（用於抗結痂主題）：
+// 評分以機制分組為單位，且排除「邊緣關聯」文獻不參與評分（只因部位詞匹配、
+// 非核心抗結痂訴求的文獻不該拉高某個機制組的分數）。
+// 「純潤滑」與「機制未分類」不參與推薦排名，因為它們不構成抗結痂方案。
+function _buildMechanismRecipeBlock(papers){
+  const mechs={};
+  papers.forEach(p=>{
+    const m=_deMechanism(p);
+    const cr=_deCoreRelevance(p);
+    if(!mechs[m.key]) mechs[m.key]={m,core:[],edge:[]};
+    (cr.core?mechs[m.key].core:mechs[m.key].edge).push(p);
+  });
+
+  const scorable=['zwitterion','antimicrobial_release','biopolymer'];
+  const scoreMech=key=>{
+    const core=mechs[key].core;
+    if(!core.length) return -999; // 沒有核心證據的機制不應被推薦
+    let ipSum=0,procSum=0,dataSum=0;
+    core.forEach(p=>{
+      const [,ipS]=_deIpRisk(p);
+      const [,pcS]=_deProcess(p);
+      ipSum+=ipS; procSum+=pcS; dataSum+=_deDataStrength(p);
+    });
+    const n=core.length;
+    return (3-ipSum/n)*2.5+(3-procSum/n)*1.5+(dataSum/n)+Math.min(n/8,1)*2;
+  };
+
+  const ranked=Object.keys(mechs).filter(k=>scorable.includes(k)&&mechs[k].core.length).sort((a,b)=>scoreMech(b)-scoreMech(a));
+  if(!ranked.length) return `<div style="background:var(--card);border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px;color:var(--muted)">
+    🎯 <b>推薦配方</b>：篩選範圍內沒有以抗結痂為核心訴求（兩性離子/抗菌釋出/天然高分子）的文獻可供評分推薦，僅有邊緣關聯文獻（部位詞匹配但非核心機制）。請參考下方「全部候選證據」清單自行判斷，或擴大篩選範圍。
+  </div>`;
+
+  const priority=['第一優先','第二選擇','備選方案'];
+  const pColor=['var(--accent)','#d4a030','#95a5a6'];
+
+  let html=`<div style="margin-bottom:14px">
+    <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:4px">🎯 推薦配方（依抗結痂機制分組）</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px">僅納入核心關聯文獻評分；邊緣關聯文獻不計分，但仍列於下方候選清單</div>`;
+
+  ranked.slice(0,3).forEach((key,ri)=>{
+    const grp=mechs[key];
+    const core=grp.core;
+    const sc=scoreMech(key);
+    const stars='★'.repeat(Math.max(1,Math.min(5,Math.round(sc/3))));
+    const minIpS=Math.min(...core.map(p=>_deIpRisk(p)[1]));
+    const ipCol=minIpS<=1?'#2d8c5a':minIpS>=3?'#c0392b':'#d4a030';
+    const ipLBest=core.find(p=>_deIpRisk(p)[1]===minIpS);
+    const [ipL]=_deIpRisk(ipLBest);
+
+    html+=`<div style="border:1.5px solid ${pColor[ri]}66;border-left:5px solid ${pColor[ri]};border-radius:10px;padding:14px;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap">
+        <span style="font-size:13px;font-weight:800;color:${pColor[ri]};background:${pColor[ri]}18;padding:3px 10px;border-radius:12px">${priority[ri]}</span>
+        <span style="font-size:16px;font-weight:900;color:var(--text)">${escHtml(grp.m.label)}</span>
+        <span style="font-size:13px;color:${pColor[ri]};margin-left:auto">${stars}</span>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">${escHtml(grp.m.desc)}</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+        <span style="font-size:13px;padding:4px 10px;background:#f5f5f5;border-radius:5px;color:${ipCol}">${escHtml(ipL)}</span>
+        <span style="font-size:13px;padding:4px 10px;background:#f5f5f5;border-radius:5px;color:var(--muted)">${core.length} 篇核心證據</span>
+        ${grp.edge.length?`<span style="font-size:13px;padding:4px 10px;background:#f5f5f5;border-radius:5px;color:var(--muted)">+${grp.edge.length} 篇邊緣關聯（未計分）</span>`:''}
+      </div>
+      <div style="font-size:13px;color:var(--accent);margin-bottom:8px">
+        ${core.map(p=>`<span onclick="goToPaper('${p.id}',{focus:true})" style="cursor:pointer;text-decoration:underline;margin-right:8px">[${p.id}]</span>`).join('')}
+      </div>`;
+
+    // 找最佳 experimental_plan 或實施例
+    let bestEp=null,bestPaper=null;
+    core.forEach(p=>{
+      const ep=_deGetFull(p).experimental_plan||{};
+      if(ep.steps?.length && ep.acceptance_tests?.length){
+        const isChinese=/[\u4e00-\u9fff]/.test(ep.steps[0]||'');
+        if(!bestEp||isChinese){bestEp=ep;bestPaper=p;}
+      }
+    });
+    let bestEx=null;
+    if(!bestEp){
+      core.forEach(p=>{
+        (_deGetFull(p).examples||[]).filter(e=>e.is_real).forEach(ex=>{
+          if(!bestEx) bestEx={ex,p};
+        });
+      });
+    }
+
+    if(bestEp){
+      html+=`<div style="background:var(--card);border-radius:8px;padding:12px">
+        <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px">📋 配方步驟 <span style="color:var(--muted);font-weight:400;font-size:12px">[${bestPaper.id}]</span></div>
+        <ol style="margin:0 0 8px 18px;padding:0;font-size:13px;line-height:1.8;color:var(--text)">
+          ${bestEp.steps.slice(0,5).map(s=>`<li>${escHtml(s)}</li>`).join('')}
+        </ol>`;
+      if(bestEp.acceptance_tests?.length){
+        html+=`<div style="font-size:13px;font-weight:700;color:#2d8c5a;margin-bottom:6px">✅ 驗收標準</div>
+        <ul style="margin:0 0 6px 16px;padding:0;font-size:13px;line-height:1.7;color:var(--text)">
+          ${bestEp.acceptance_tests.slice(0,4).map(t=>`<li>${escHtml(t)}</li>`).join('')}
+        </ul>`;
+      }
+      if(bestEp.materials?.length){
+        html+=`<div style="font-size:13px;color:var(--muted);margin-top:6px">🛒 ${bestEp.materials.slice(0,4).map(m=>escHtml(m)).join('、')}</div>`;
+      }
+      html+=`</div>`;
+    } else if(bestEx){
+      const f=bestEx.ex.formulation||{};
+      const pr=bestEx.ex.process||{};
+      const res=bestEx.ex.results||{};
+      const str=v=>typeof v==='string'?v.slice(0,60):typeof v==='object'?JSON.stringify(v).slice(0,60):'';
+      const validRes=(v)=>v && !_isNoData(v);
+      html+=`<div style="background:var(--card);border-radius:8px;padding:12px">
+        <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px">📋 實施例配方 <span style="color:var(--muted);font-weight:400;font-size:12px">[${bestEx.p.id}]</span></div>
+        ${f.primer?`<div style="font-size:13px;margin-bottom:4px"><b>底塗：</b>${escHtml(str(f.primer))}</div>`:''}
+        ${f.topcoat?`<div style="font-size:13px;margin-bottom:4px"><b>面塗：</b>${escHtml(str(f.topcoat))}</div>`:''}
+        ${pr.curing?`<div style="font-size:13px;margin-bottom:4px"><b>固化：</b>${escHtml(str(pr.curing))}</div>`:''}
+        ${(validRes(res.wca)||validRes(res.friction)||validRes(res.adhesion))?`<div style="font-size:13px;color:#2d8c5a;margin-top:6px">
+          ${validRes(res.wca)?`WCA ${escHtml(String(res.wca))} `:''}${validRes(res.friction)?`COF ${escHtml(String(res.friction))} `:''}${validRes(res.adhesion)?escHtml(String(res.adhesion)):''}
+        </div>`:''}
+      </div>`;
+    } else {
+      html+=`<div style="font-size:13px;color:var(--muted);padding:8px">尚無實施例詳細資料，請補強文獻全文後再查看。</div>`;
+    }
+    html+=`</div>`;
+  });
+  html+=`</div>`;
+  return html;
+}
+
+// ════════════════════════
+// ④ 全部候選證據清單（不隱藏任何一篇，讓使用者自行判斷）
+// ════════════════════════
+function _buildAllCandidatesBlock(papers, useMechanism){
+  let html=`<div style="margin-bottom:16px">
+    <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:4px">📚 全部候選證據（${papers.length} 篇，本報告涵蓋的完整清單）</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px">含未被上方排名選中、或被歸為「其他/邊緣關聯」的文獻，避免重要證據被自動篩選邏輯隱藏</div>
+    <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">
+      <thead><tr style="background:var(--card)">
+        <th style="padding:6px 8px;text-align:left;color:var(--muted)">ID</th>
+        <th style="padding:6px 8px;text-align:left;color:var(--muted)">標題</th>
+        <th style="padding:6px 8px;text-align:left;color:var(--muted)">${useMechanism?'機制':'路線'}</th>
+        ${useMechanism?'<th style="padding:6px 8px;text-align:center;color:var(--muted)">核心/邊緣</th>':''}
+        <th style="padding:6px 8px;text-align:left;color:var(--muted)">IP</th>
+      </tr></thead><tbody>`;
+
+  papers.forEach((p,i)=>{
+    const bg=i%2===0?'':'background:var(--card)';
+    const [ipL,ipS]=_deIpRisk(p);
+    const ipCol=ipS<=1?'#2d8c5a':ipS>=3?'#c0392b':'#d4a030';
+    const groupLabel = useMechanism ? _deMechanism(p).label : _deClassifyRoute(p);
+    const crCell = useMechanism ? (()=>{
+      const cr=_deCoreRelevance(p);
+      return `<td style="padding:6px 8px;text-align:center;font-size:11px;color:${cr.core?'#2d8c5a':'var(--muted)'}">${cr.core?'核心':'邊緣*'}</td>`;
+    })() : '';
+    html+=`<tr style="${bg};cursor:pointer" onclick="goToPaper('${p.id}',{focus:true})">
+      <td style="padding:6px 8px;color:var(--accent);font-weight:700">${p.id}</td>
+      <td style="padding:6px 8px;color:var(--text)">${escHtml((p.title||'').slice(0,46))}</td>
+      <td style="padding:6px 8px;color:var(--text)">${escHtml(groupLabel)}</td>
+      ${crCell}
+      <td style="padding:6px 8px;color:${ipCol}">${escHtml(ipL.replace(/[🟢🔴🟡⚪]/g,'').trim())}</td>
+    </tr>`;
+  });
+  html+=`</tbody></table></div>`;
+  if(useMechanism) html+=`<div style="font-size:11px;color:var(--muted);margin-top:4px">* 邊緣：僅因部位詞（如 urinary/stent/catheter）匹配被納入候選池，非該文獻核心訴求，未參與推薦評分</div>`;
+  html+=`</div>`;
+  return html;
+}
+
 // 主報告
-function buildFeatureReport(papers, featureLabel){
+function buildFeatureReport(papers, featureLabel, tag){
   if(papers.length<2) return '';
+  const useMechanism = (tag==='encrustation'); // 抗結痂主題用機制分組，避免材料字串混淆作用原理
   let html=`<div style="background:linear-gradient(135deg,#fff8f0,#fff);border:2px solid var(--accent);border-radius:12px;padding:14px;margin-bottom:16px">
     <div style="font-size:12px;color:var(--accent);font-weight:700;letter-spacing:1px">📊 技術決策報告</div>
     <div style="font-size:16px;font-weight:900;color:var(--text);margin-top:4px">${escHtml(featureLabel)}</div>
     <div style="font-size:13px;color:var(--muted);margin-top:4px">${papers.length} 篇文獻 · 純規則引擎 · 無 API</div>
   </div>`;
-  html += _buildFreedomBlock(papers);
-  html += _buildExampleDiff(papers);
-  html += _buildRecipeBlock(papers);
+  if(useMechanism){
+    html += _buildMechanismFreedomBlock(papers);
+    html += _buildExampleDiff(papers, true);
+    html += _buildMechanismRecipeBlock(papers);
+  } else {
+    html += _buildFreedomBlock(papers);
+    html += _buildExampleDiff(papers, false);
+    html += _buildRecipeBlock(papers);
+  }
+  html += _buildAllCandidatesBlock(papers, useMechanism);
   return html;
 }
 
@@ -6382,7 +6663,7 @@ function buildCompanyReport(papers, companyLabel){
     </div>`;
   }
 
-  html += _buildExampleDiff(papers);
+  html += _buildExampleDiff(papers, false);
   return html;
 }
 
@@ -6406,7 +6687,7 @@ function buildDecisionReport(papers){
   const isCompany=top&&top[1]>=papers.length*0.6&&papers.length<=15&&papers.length>=2;
 
   if(isCompany) return buildCompanyReport(papers,top[0]);
-  if(featureLabel&&papers.length>=2) return buildFeatureReport(papers,featureLabel);
+  if(featureLabel&&papers.length>=2) return buildFeatureReport(papers,featureLabel,tag);
   return '';
 }
 
