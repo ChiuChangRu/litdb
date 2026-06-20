@@ -4718,7 +4718,7 @@
           "summary": "水溶性光起始劑生醫應用綜述：Type I（I-2959）vs Type II（BP），毒性/溶解度/效率比較",
           "examples": [
             {
-              "name": "水溶性光起始劑比較",
+              "name": "* 水溶性光起始劑比較",
               "is_real": false,
               "credibility": "高",
               "credibility_reason": "系統性綜述",
@@ -4839,7 +4839,7 @@
           "summary": "UV固化在醫療器材的應用綜述：PEG/PVP光固化化學、反應機制、法規考量",
           "examples": [
             {
-              "name": "UV固化醫材塗層系統",
+              "name": "* UV固化醫材塗層系統",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "綜述，無具體實驗數據",
@@ -5278,7 +5278,7 @@
           "summary": "2026親水塗層專利地圖：PVP/PEG/SBMA/MPC各技術路線的專利布局與過期分析",
           "examples": [
             {
-              "name": "親水塗層專利地圖",
+              "name": "* 親水塗層專利地圖",
               "is_real": false,
               "credibility": "高",
               "credibility_reason": "2026最新專利分析",
@@ -6019,7 +6019,7 @@
           "summary": "醫療器材親水塗層摩擦行為系統研究：COF測量方法、影響因子、與結痂相關性",
           "examples": [
             {
-              "name": "親水塗層COF測試",
+              "name": "* 親水塗層COF測試",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "綜述/實驗混合",
@@ -6090,7 +6090,7 @@
           "summary": "醫材親水塗層性能測試全指南：COF、顆粒、附著力、生物相容性標準方法",
           "examples": [
             {
-              "name": "性能測試標準",
+              "name": "* 性能測試標準",
               "is_real": false,
               "credibility": "高",
               "credibility_reason": "標準/指引文件",
@@ -6204,7 +6204,7 @@
           "summary": "Pinch Test白皮書（Biocoat/ViVitro）：非標準摩擦測試方法論，IDTE系統，參數敏感性",
           "examples": [
             {
-              "name": "Pinch Test摩擦測試方法",
+              "name": "* Pinch Test摩擦測試方法",
               "is_real": false,
               "credibility": "高",
               "credibility_reason": "行業標準白皮書",
@@ -6306,7 +6306,7 @@
           "summary": "PVP vs PEG vs兩性離子塗層化學家族比較：結構、性能、法規、成本全面分析",
           "examples": [
             {
-              "name": "三類親水塗層比較",
+              "name": "* 三類親水塗層比較",
               "is_real": false,
               "credibility": "高",
               "credibility_reason": "系統性比較綜述",
@@ -7127,7 +7127,7 @@
           "summary": "Grand View Research市場報告：微創手術驅動需求，低VOC/生物相容趨勢，OEM外包主流",
           "examples": [
             {
-              "name": "醫材親水塗層全球市場（GVR）",
+              "name": "* 醫材親水塗層全球市場（GVR）",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "市場研究報告",
@@ -10689,7 +10689,7 @@
           "summary": "輸尿管支架結痂機制完整綜述：流行病學、pathophysiology、預防策略",
           "examples": [
             {
-              "name": "輸尿管支架結痂臨床研究",
+              "name": "* 輸尿管支架結痂臨床研究",
               "is_real": false,
               "credibility": "高",
               "credibility_reason": "系統性臨床綜述",
@@ -10814,7 +10814,7 @@
           "summary": "新型輸尿管支架技術全覽：材料、塗層、設計創新，含抗結痂技術比較",
           "examples": [
             {
-              "name": "新型支架技術",
+              "name": "* 新型支架技術",
               "is_real": false,
               "credibility": "高",
               "credibility_reason": "系統性技術綜述",
@@ -10937,7 +10937,7 @@
           "summary": "輸尿管支架應用、進展與併發症臨床回顧：結痂、感染、疼痛的發生率與處理",
           "examples": [
             {
-              "name": "支架臨床回顧",
+              "name": "* 支架臨床回顧",
               "is_real": false,
               "credibility": "高",
               "credibility_reason": "臨床數據統計",
@@ -11037,7 +11037,7 @@
           "summary": "天然生物聚合物（chitosan/HA/alginate）輸尿管支架塗層：抗結痂+生物相容+可降解",
           "examples": [
             {
-              "name": "天然生物聚合物塗層",
+              "name": "* 天然生物聚合物塗層",
               "is_real": false,
               "credibility": "中",
               "credibility_reason": "綜述，部分數據",
@@ -11162,7 +11162,7 @@
           "summary": "輸尿管支架結痂預防新進展：材料、塗層、操作策略，2024最新臨床觀點",
           "examples": [
             {
-              "name": "結痂預防策略",
+              "name": "* 結痂預防策略",
               "is_real": false,
               "credibility": "高",
               "credibility_reason": "2024最新臨床綜述",
