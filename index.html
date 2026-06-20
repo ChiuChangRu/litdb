@@ -6088,9 +6088,12 @@ function _deExtractParams(ex){
   if(m=blob.match(/(?:WCA|接觸角|water.contact)[^0-9]{0,15}(\d+(?:\.\d+)?)\s*°/i)) p['WCA']=m[1]+'°';
   else { m=blob.match(/"wca"\s*:\s*"([^"]+)"/); if(m && /\d/.test(m[1]) && !_isNoData(m[1])) p['WCA']=m[1].slice(0,6); }
   if(m=blob.match(/COF[\s:]*[<≤]?\s*(0\.\d+)/i)) p['COF']=m[1];
-  else { m=blob.match(/"(?:cof|friction|摩擦)"\s*:\s*"([^"]{1,12})"/i); if(m && /\d/.test(m[1]) && !_isNoData(m[1])) p['COF']=m[1].slice(0,8); }
+  // 摩擦力降幅百分比（如「94% friction reduction」），是 friction 欄位最常見的真實數據格式，
+  // 跟標準 COF 數值同樣具參考價值，不該因為格式不同就被當成無資料
+  else if(m=blob.match(/(\d+(?:\.\d+)?)\s*%\s*(?:friction\s*reduction|摩擦.{0,4}降)/i)) p['COF']=m[1]+'%↓';
+  else { m=blob.match(/"(?:cof|friction|摩擦)"\s*:\s*"([^"]{1,60})"/i); if(m && /\d/.test(m[1]) && !_isNoData(m[1])) p['COF']=m[1].slice(0,30); }
   if(m=blob.match(/[Gg]rade\s*([0-4])/)) p['附著']='Grade'+m[1];
-  else { m=blob.match(/"adhesion"\s*:\s*"([^"]{1,15})"/); if(m && !_isNoData(m[1]) && m[1].trim().length>1) p['附著']=m[1].slice(0,10); }
+  else { m=blob.match(/"adhesion"\s*:\s*"([^"]{1,60})"/); if(m && !_isNoData(m[1]) && m[1].trim().length>1) p['附著']=m[1].slice(0,30); }
   return p;
 }
 
@@ -6219,8 +6222,8 @@ function _buildMechanismFreedomBlock(papers){
 // ② 實施例差異比對
 // ════════════════════════
 function _buildExampleDiff(papers, useMechanism){
-  const seen=new Set(); // 去重：同 example name 只取一次
-  const perPaperCount={}; // 每篇文獻最多取2個代表例，避免單篇灌爆列表
+  const seen=new Set(); // 去重：同分組內同 example name 只取一次（跨分組不去重，避免 family 文獻共享實施例時某機制完全沒有代表例）
+  const perPaperCount={}; // 每篇文獻最多取4個代表例，避免單篇灌爆列表
   const rows=[];
 
   papers.forEach(p=>{
@@ -6237,9 +6240,11 @@ function _buildExampleDiff(papers, useMechanism){
       const hasData = pa['WCA']||pa['COF']||pa['附著'];
       if(!hasData) return;
       perPaperCount[p.id]=(perPaperCount[p.id]||0)+1;
-      if(perPaperCount[p.id]>2) return; // 每篇最多2筆代表例
-      // 去重：同名稱只取一次
-      const dedupKey=(ex.name||'').slice(0,20);
+      if(perPaperCount[p.id]>4) return; // 每篇最多4筆代表例
+      // 去重 key 含分組（機制或路線），確保同一實施例若同時支持不同機制分組（常見於
+      // 同一 patent family 不同號文獻共享全文），各分組仍能保有自己的代表例
+      const groupKey = useMechanism ? mech.key : route;
+      const dedupKey=groupKey+'::'+(ex.name||'').slice(0,20);
       if(seen.has(dedupKey)) return;
       seen.add(dedupKey);
       const name=(ex.name||'').replace(/^[*\s]+/,'').slice(0,40);
@@ -6273,7 +6278,7 @@ function _buildExampleDiff(papers, useMechanism){
   }
 
   let html=`<div style="margin-bottom:16px">
-    <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:8px">⚗️ 實施例差異比對 <span style="font-size:13px;font-weight:400;color:var(--muted)">（${rows.length} 個有效實施例，每篇最多列2例，僅顯示含 WCA/COF/附著 數值者）</span></div>
+    <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:8px">⚗️ 實施例差異比對 <span style="font-size:13px;font-weight:400;color:var(--muted)">（${rows.length} 個有效實施例，每篇最多列4例，僅顯示含 WCA/COF/附著 數值者）</span></div>
     <div style="overflow-x:auto">
     <table style="width:100%;border-collapse:collapse;font-size:12px">
       <thead><tr style="background:var(--card)">
@@ -6283,12 +6288,12 @@ function _buildExampleDiff(papers, useMechanism){
         <th style="padding:6px 8px;text-align:center;color:var(--muted)">UV劑量</th>
         <th style="padding:6px 8px;text-align:center;color:var(--muted)">溫度</th>
         <th style="padding:6px 8px;text-align:center;color:var(--muted)">WCA</th>
-        <th style="padding:6px 8px;text-align:center;color:var(--muted)">COF</th>
-        <th style="padding:6px 8px;text-align:center;color:var(--muted)">附著</th>
+        <th style="padding:6px 8px;text-align:left;color:var(--muted);min-width:90px">COF</th>
+        <th style="padding:6px 8px;text-align:left;color:var(--muted);min-width:90px">附著</th>
         <th style="padding:6px 8px;text-align:left;color:var(--muted)">IP</th>
       </tr></thead><tbody>`;
 
-  rows.slice(0,16).forEach((r,i)=>{
+  rows.slice(0,24).forEach((r,i)=>{
     const bg=i%2===0?'':'background:var(--card)';
     const ipCol=r.ipS<=1?'#2d8c5a':r.ipS>=3?'#c0392b':'#d4a030';
     const hiWCA=r.pa['WCA']&&parseFloat(r.pa['WCA'])<=15?'color:#2d8c5a;font-weight:700':'';
@@ -6301,8 +6306,8 @@ function _buildExampleDiff(papers, useMechanism){
       <td style="padding:6px 8px;text-align:center">${r.pa['UV劑量']||'—'}</td>
       <td style="padding:6px 8px;text-align:center">${r.pa['溫度']||'—'}</td>
       <td style="padding:6px 8px;text-align:center;${hiWCA}">${r.pa['WCA']||'—'}</td>
-      <td style="padding:6px 8px;text-align:center;${hiCOF}">${r.pa['COF']||'—'}</td>
-      <td style="padding:6px 8px;text-align:center;color:#2d8c5a">${r.pa['附著']||'—'}</td>
+      <td style="padding:6px 8px;text-align:left;${hiCOF}">${r.pa['COF']||'—'}</td>
+      <td style="padding:6px 8px;text-align:left;color:#2d8c5a">${r.pa['附著']||'—'}</td>
       <td style="padding:6px 8px;font-size:12px;color:${ipCol}">${escHtml(r.ipL.replace(/[🟢🔴🟡⚪]/g,'').trim())}</td>
     </tr>`;
   });
