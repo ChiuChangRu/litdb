@@ -412,9 +412,9 @@ async function doLogin(){
 
 <div class="tabs">
   <div class="tab active" onclick="showView('market',this)">🏢<span class="tab-text"> 市場</span></div>
-  <div class="tab" onclick="showView('routes',this)">🛣<span class="tab-text"> 路線</span></div>
-  <div class="tab" onclick="showView('browse',this)">📚<span class="tab-text"> 文庫</span> <span class="badge" id="browseCount">0</span><span class="badge" id="analyzedCount" style="background:var(--accent2)">0</span></div>
+  <div class="tab" onclick="showView('routes',this)">🛣<span class="tab-text"> 開發策略與資料篩選</span></div>
   <div class="tab" onclick="showView('patent-tree',this)">🌳<span class="tab-text"> 專利樹</span></div>
+  <div class="tab" onclick="showView('browse',this)">📚<span class="tab-text"> 文庫</span> <span class="badge" id="browseCount">0</span><span class="badge" id="analyzedCount" style="background:var(--accent2)">0</span></div>
   <div class="tab" onclick="showView('report',this)">📋<span class="tab-text"> 報告</span></div>
   <div class="tab" onclick="showView('manual',this)">📘<span class="tab-text"> 使用說明</span></div>
 </div>
@@ -480,6 +480,9 @@ async function doLogin(){
         <span style="font-size:11px;color:var(--muted)">每個分類獨立切換 <b>OR</b>（任一符合）/ <b>AND</b>（須同時符合）；分類之間固定 AND</span>
       </div>
       <div id="routeFilterBlocks" class="route-filter-blocks"></div>
+      <div style="margin-top:12px;text-align:center;padding-top:12px;border-top:1px solid var(--border)">
+        <button class="btn btn-p" onclick="goToBrowseForConfirm()" style="font-size:13px;padding:8px 20px">📚 進入文庫確認篩選結果，再進行 AI 分析</button>
+      </div>
     </div>
 
     <!-- 路線清單 -->
@@ -494,6 +497,11 @@ async function doLogin(){
 
 <!-- ═══════════════ VIEW: BROWSE ═══════════════ -->
 <div class="view" id="v-browse">
+  <div id="browseConfirmBanner" style="display:none;align-items:center;gap:10px;padding:10px 14px;background:#fff3ed;border-bottom:2px solid var(--accent)">
+    <span style="font-size:12px;color:var(--text)">📋 請確認下方文獻清單是否符合您在「開發策略與資料篩選」頁設定的條件，確認無誤後再進行 AI 分析。</span>
+    <button class="btn btn-p" onclick="openFilteredReport()" style="font-size:12px;padding:5px 14px;white-space:nowrap;margin-left:auto">✅ 確認，進行 AI 分析</button>
+    <button class="btn btn-s" onclick="dismissBrowseConfirmBanner()" style="font-size:12px;padding:5px 10px;white-space:nowrap">✕ 關閉</button>
+  </div>
   <div class="browse-layout" id="browseLayout">
     <!-- 雙欄：文獻列表（含頂部篩選）+ 詳情 -->
     <div class="browse-columns">
@@ -2990,6 +2998,22 @@ function openFilteredReport() {
   renderIntegratedReport();
 }
 
+// 從「路線」頁的篩選結果，先帶使用者到文庫頁確認實際文獻清單，
+// 確認無誤後再由使用者主動點擊「確認，進行 AI 分析」進入報告頁——
+// 避免跳過確認環節直接生成報告，讓使用者有機會先檢視篩選範圍是否符合預期。
+function goToBrowseForConfirm() {
+  showView('browse', getMainTab('browse'));
+  setTimeout(() => {
+    const banner = document.getElementById('browseConfirmBanner');
+    if (banner) banner.style.display = 'flex';
+  }, 80);
+}
+
+function dismissBrowseConfirmBanner() {
+  const banner = document.getElementById('browseConfirmBanner');
+  if (banner) banner.style.display = 'none';
+}
+
 function researchTerms(topic='') {
   const base = topic.toLowerCase();
   const terms = new Set(base.split(/[,;，；\s]+/).map(s=>s.trim()).filter(Boolean));
@@ -3383,7 +3407,7 @@ let currentAnalysisTab = 'graph';
 function goBack() {
   if(!previousView) return;
   const tabs = document.querySelectorAll('.tabs > .tab');
-  const viewMap = {market:0, routes:1, browse:2, 'patent-tree':3, report:4};
+  const viewMap = {market:0, routes:1, 'patent-tree':2, browse:3, report:4};
   const idx = viewMap[previousView];
   if(idx!==undefined && tabs[idx]) {
     showView(previousView, tabs[idx]);
@@ -3402,6 +3426,18 @@ function showView(id,el){
     if(list) savedScrollTop = list.scrollTop;
   }
   if(currentView && currentView!==id && !['graph','gap','tools','compare','chat'].includes(currentView)) previousView = currentView;
+
+  // 「開發策略與資料篩選」(routes) → 文庫(browse) → 報告(report) 是一組完整的篩選/確認/分析流程。
+  // 若使用者中途離開這組流程去其他不相關頁面（市場/專利樹/使用說明等），代表他打斷了原本的篩選意圖；
+  // 此時重置 activeFilters，避免下次回到文庫時殘留一份使用者已不記得、卻仍在生效的篩選條件，
+  // 導致看到的文獻列表跟畫面上的篩選標籤狀態不一致、令人困惑「篩選跑掉了/找不到文獻」。
+  const FILTER_FLOW_VIEWS = new Set(['routes', 'browse', 'report']);
+  if (currentView && !FILTER_FLOW_VIEWS.has(currentView) && !FILTER_FLOW_VIEWS.has(id)) {
+    // 兩端都不在篩選流程內，不需要重置（例如市場→專利樹）
+  } else if (currentView && FILTER_FLOW_VIEWS.has(currentView) && !FILTER_FLOW_VIEWS.has(id)) {
+    resetActiveFilters();
+  }
+
   // 隱藏所有 view
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   // 切離分析時，強制隱藏所有子 view（含 kgraph）
@@ -3429,9 +3465,26 @@ function showView(id,el){
   if(id==='research') renderResearchAgent();
   if(id==='patent-tree') renderPatentTree();
   if(id==='report') { renderIntegratedReport(); }
+  // 離開文庫流程時關閉確認提示條（避免下次回來時殘留顯示一個已經過期的提示）
+  if (!FILTER_FLOW_VIEWS.has(id)) dismissBrowseConfirmBanner();
   // 返回按鈕
   const backBtn = document.getElementById('backBtn');
   if(backBtn) backBtn.style.display = previousView ? 'block' : 'none';
+}
+
+// 重置 8 大分類篩選與其他相關篩選狀態，回到「全部文庫」的初始狀態
+function resetActiveFilters() {
+  Object.values(activeFilters).forEach(group => {
+    if (group instanceof Set) group.clear();
+    else { group.values.clear(); group.mode = 'OR'; }
+  });
+  const kwEl = document.getElementById('fKw');
+  if (kwEl) kwEl.value = '';
+  activeRouteFilter = null;
+  activeLibraryFilter = null;
+  activeTags.clear();
+  if (typeof filterPapers === 'function') filterPapers();
+  if (typeof renderRouteFilterBlocks === 'function') renderRouteFilterBlocks();
 }
 
 function showAnalysisTab(subId, btn) {
