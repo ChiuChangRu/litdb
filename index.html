@@ -533,6 +533,17 @@ async function doLogin(){
               <span id="searchStatus" style="margin-left:auto;color:var(--muted)"></span>
             </div>
             <div id="searchResults"></div>
+            <!-- 快速加入：供「存入 LitDB」書籤小工具使用，或手動貼上單篇標題/連結快速建檔 -->
+            <div id="bmQuickAdd" style="display:none;margin-top:10px;padding:10px;background:var(--card);border:1px solid var(--accent);border-radius:8px">
+              <div style="font-size:11px;font-weight:700;color:var(--accent);margin-bottom:6px">📌 快速加入（來自書籤小工具）</div>
+              <div class="field"><label style="font-size:11px">標題</label><input type="text" id="bmTitle" style="font-size:12px"></div>
+              <div class="field"><label style="font-size:11px">連結</label><input type="text" id="bmLink" style="font-size:12px"></div>
+              <div class="field"><label style="font-size:11px">摘要/備註</label><textarea id="bmAbstract" rows="3" style="font-size:12px"></textarea></div>
+              <div style="display:flex;gap:6px;margin-top:6px">
+                <button class="btn btn-p" onclick="quickAddFromBookmarklet()" style="flex:1">✅ 加入文庫</button>
+                <button class="btn btn-s" onclick="document.getElementById('bmQuickAdd').style.display='none'">取消</button>
+              </div>
+            </div>
           </div>
         </details>
         <!-- 篩選列（只在列表欄上方）-->
@@ -2683,59 +2694,68 @@ function checkBookmarkletParams() {
   const abstract = params.get('abstract');
   if(!title && !url) return;
 
-  // 切到文庫並展開檢索區
+  // 切到文庫並展開檢索區，顯示「快速加入」小區塊（這裡才是使用者畫面上真正會看到的位置；
+  // 舊版誤填到 v-add 這個沒有任何分頁能切換進去的孤兒頁面，使用者永遠看不到結果）
   showView('browse', getMainTab('browse'));
   const libSearch = document.getElementById('librarySearchBox');
   if(libSearch) libSearch.open = true;
+  const quickAdd = document.getElementById('bmQuickAdd');
+  if(quickAdd) quickAdd.style.display = 'block';
 
-  // 組合內容填入 AI 自動填入框
-  let raw = '';
-  if(title) raw += title + '\n\n';
-  if(abstract) raw += abstract + '\n\n';
-  if(url) raw += url;
-  document.getElementById('addRaw').value = raw.trim();
+  // 清理標題（移除網站名稱部分）
+  let cleanTitle = title || '';
+  cleanTitle = cleanTitle.replace(/\s*[-–|].*?(Inc\.|LLC|Ltd|Company|Corporation).*$/i, '').trim();
+  cleanTitle = cleanTitle.replace(/\s*[-–|]\s*[^-–|]+$/, '').trim();
 
-  // 自動填入表單欄位
-  if(title) {
-    // 清理標題（移除網站名稱部分）
-    let cleanTitle = title.replace(/\s*[-–|].*?(Inc\.|LLC|Ltd|Company|Corporation).*$/i, '').trim();
-    cleanTitle = cleanTitle.replace(/\s*[-–|]\s*[^-–|]+$/, '').trim();
-    document.getElementById('addTitle').value = cleanTitle || title;
-  }
-  if(url) document.getElementById('addLink').value = url;
+  if(document.getElementById('bmTitle')) document.getElementById('bmTitle').value = cleanTitle || title || '';
+  if(document.getElementById('bmLink')) document.getElementById('bmLink').value = url || '';
+  if(document.getElementById('bmAbstract')) document.getElementById('bmAbstract').value = abstract || '';
 
-  // 自動偵測文獻類型
-  const urlLow = (url||'').toLowerCase();
-  if(urlLow.includes('patent')) {
-    document.getElementById('addDocType').value = '專利';
-    document.getElementById('addAccess').value = '專利全文';
-  } else if(urlLow.includes('pubmed') || urlLow.includes('doi.org') || urlLow.includes('sciencedirect') || urlLow.includes('springer') || urlLow.includes('mdpi') || urlLow.includes('nature.com')) {
-    document.getElementById('addDocType').value = '期刊論文';
-    document.getElementById('addAccess').value = abstract ? '開放摘要' : '付費';
-  } else if(urlLow.includes('biocoat') || urlLow.includes('hydromer') || urlLow.includes('surmodics') || urlLow.includes('freudenberg') || urlLow.includes('harland')) {
-    document.getElementById('addDocType').value = '商用產品';
-    document.getElementById('addAccess').value = '產品頁';
-  } else {
-    document.getElementById('addDocType').value = '綜述review';
-    document.getElementById('addAccess').value = '開放全文';
-  }
-
-  // 自動產生 ID
-  const docType = document.getElementById('addDocType').value;
-  const prefix = docType==='專利'?'P':docType==='商用產品'?'C':docType==='綜述review'?'R':'A';
-  const maxNum = DB.papers.filter(p=>p.id.startsWith(prefix)).map(p=>parseInt(p.id.slice(1))||0).reduce((a,b)=>Math.max(a,b),0);
-  document.getElementById('addId').value = prefix + String(maxNum+1).padStart(2,'0');
-
-  // 從 URL 提取 DOI
-  const doiMatch = (url||'').match(/10\.\d{4,}\/[^\s&?#]+/);
-  if(doiMatch) {
-    document.getElementById('addRaw').value += '\nDOI: ' + doiMatch[0];
-  }
-
-  // 清除 URL 參數
+  // 清除 URL 參數，避免重新整理後重複觸發
   window.history.replaceState({}, '', window.location.pathname);
 
-  toast('已從書籤匯入並自動填入，確認後加入資料庫', 'success');
+  toast('已從書籤匯入，請確認後按「加入文庫」', 'success');
+  setTimeout(() => { document.getElementById('bmQuickAdd')?.scrollIntoView({behavior:'smooth', block:'center'}); }, 150);
+}
+
+// 把「快速加入」區塊的內容寫成一筆新文獻，邏輯沿用原本 checkBookmarkletParams 裡
+// 自動偵測文獻類型/自動產生ID/提取DOI的判斷，只是現在使用者能在加入前先看到並修改內容。
+function quickAddFromBookmarklet() {
+  const title = safeVal('bmTitle');
+  const url = safeVal('bmLink');
+  const abstract = safeVal('bmAbstract');
+  if(!title) { toast('請至少填寫標題', 'error'); return; }
+
+  const urlLow = (url||'').toLowerCase();
+  let docType, access;
+  if(urlLow.includes('patent')) {
+    docType = '專利'; access = '專利全文';
+  } else if(urlLow.includes('pubmed') || urlLow.includes('doi.org') || urlLow.includes('sciencedirect') || urlLow.includes('springer') || urlLow.includes('mdpi') || urlLow.includes('nature.com')) {
+    docType = '期刊論文'; access = abstract ? '開放摘要' : '付費';
+  } else if(urlLow.includes('biocoat') || urlLow.includes('hydromer') || urlLow.includes('surmodics') || urlLow.includes('freudenberg') || urlLow.includes('harland')) {
+    docType = '商用產品'; access = '產品頁';
+  } else {
+    docType = '綜述review'; access = '開放全文';
+  }
+
+  const prefix = docType==='專利'?'P':docType==='商用產品'?'C':docType==='綜述review'?'R':'A';
+  const id = nextPaperId(prefix);
+
+  const doiMatch = (url||'').match(/10\.\d{4,}\/[^\s&?#]+/);
+
+  const paper = {
+    id, title, authors:'', year:'', venue:'', doi: doiMatch ? doiMatch[0] : null,
+    doc_type: docType, access, tags: [], purpose: '',
+    abstract_note: abstract || '', value_to_project: '',
+    links: url ? { url } : {},
+    _cloudSynced: false,
+  };
+  DB.papers.push(paper);
+  saveDB(); onDBLoaded();
+  toast(`已加入 ${id}（尚未同步至雲端，請於文庫頁按「☁ 同步」）`, 'success');
+
+  document.getElementById('bmQuickAdd').style.display = 'none';
+  ['bmTitle','bmLink','bmAbstract'].forEach(k => { const el = document.getElementById(k); if(el) el.value=''; });
 }
 
 async function loadDB() {
