@@ -4976,14 +4976,21 @@ function showDetail(i) {
   const figEl = document.getElementById('detailFigure_' + i);
   if(figEl) {
     const figUrl = p.figure || '';
+    // 注意：img/ 目錄目前未存放任何本地圖檔（僅有 README.md），因此本地圖 fallback
+    // 暫時停用，避免每篇文獻都觸發必然失敗的 404 請求。若未來補齊 img/{id}.png，
+    // 將 LOCAL_FIGURES_AVAILABLE 改回 true 即可恢復此功能，不需修改其他程式碼。
+    const LOCAL_FIGURES_AVAILABLE = false;
     const localUrl = 'img/' + p.id + '.png';
     if(figUrl) {
-      figEl.innerHTML = `<img src="${figUrl}" class="detail-figure" onclick="window.open('${figUrl}','_blank')" onerror="tryLocalFig(this,'${localUrl}')"><div class="fig-caption">${escHtml(p.figure_caption||'Click to enlarge')}</div>`;
-    } else {
+      const onerrorAttr = LOCAL_FIGURES_AVAILABLE ? ` onerror="tryLocalFig(this,'${localUrl}')"` : ' onerror="this.parentElement.innerHTML=\'\'"';
+      figEl.innerHTML = `<img src="${figUrl}" class="detail-figure" onclick="window.open('${figUrl}','_blank')"${onerrorAttr}><div class="fig-caption">${escHtml(p.figure_caption||'Click to enlarge')}</div>`;
+    } else if (LOCAL_FIGURES_AVAILABLE) {
       const img = new Image();
       img.onload = () => { figEl.innerHTML = `<img src="${localUrl}" class="detail-figure" onclick="window.open('${localUrl}','_blank')"><div class="fig-caption">Click to enlarge</div>`; };
       img.onerror = () => { figEl.innerHTML = ''; };
       img.src = localUrl;
+    } else {
+      figEl.innerHTML = '';
     }
   }
   loadChemStructures(p, i);
@@ -8156,7 +8163,7 @@ async function loadChemStructures(p, i) {
       if(db_entry?.cid) {
         // 優先用 CID → PubChem PNG（最可靠）
         const cid = db_entry.cid;
-        imgUrl = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${cid}/PNG?record_type=2d&image_size=medium`;
+        imgUrl = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${cid}/PNG?record_type=2d&image_size=large`;
         linkUrl = `https://pubchem.ncbi.nlm.nih.gov/compound/${cid}`;
         subtitle = `CAS ${db_entry.cas}`;
       } else if(db_entry?.cas) {
