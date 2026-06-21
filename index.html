@@ -5889,7 +5889,8 @@ function patentPaperForNo(no) {
 function drawPatentTrain() {
   const el = document.getElementById('patentTrain');
   if(!el) return;
-  const companies = Object.values(PATENT_TREE_CONFIG);
+  const companyEntries = Object.entries(PATENT_TREE_CONFIG); // [[key, cfg], ...]，保留 key 供按鈕精確識別公司
+  const companies = companyEntries.map(([,cfg]) => cfg); // 維持原有 nodes 點擊邏輯依賴的純 cfg 陣列
   const statusMeta = {
     known: {text:'已收錄', color:'#2d8c5a', bg:'#eef8f2'},
     missing: {text:'待解析', color:'#c0392b', bg:'#fff3ef'},
@@ -5907,7 +5908,7 @@ function drawPatentTrain() {
     return parts[0] || item.theme || item.meaning || '';
   };
 
-  el.innerHTML = companies.map((cfg, ci) => {
+  el.innerHTML = companyEntries.map(([companyKey, cfg], ci) => {
     const color = cfg.color || '#2d8c5a';
     const nodes = (cfg.evolution || []).map((item, ni) => {
       const paper = item.id ? (DB.papers || []).find(p => p.id === item.id) : patentPaperForNo(item.patent);
@@ -5932,6 +5933,7 @@ function drawPatentTrain() {
         <div style="width:10px;height:10px;border-radius:50%;background:${color}"></div>
         <div style="font-size:13px;font-weight:900;color:var(--text);min-width:150px">${escHtml(cfg.label)}</div>
         <div style="font-size:11px;color:var(--muted)">${(cfg.evolution||[]).length} 個節點</div>
+        <button type="button" class="btn btn-s" style="margin-left:auto;font-size:11px;padding:4px 10px;color:${color};border-color:${color}" onclick="goToPatentTreeCompanyLibrary(${escHtml(JSON.stringify(companyKey))})">📚 查看該公司全部文獻</button>
       </div>
       <div style="display:flex;gap:8px;align-items:stretch;padding:12px;overflow-x:auto">${nodes || '<div style="color:var(--muted);font-size:12px">尚未建立專利路徑</div>'}</div>
     </section>`;
@@ -6625,6 +6627,40 @@ function goToMarketEntity(name) {
     };
     filterPapers();
     if(filtered.length) showDetail(0);
+  }, 100);
+}
+
+// 從「玩家專利分析」火車卡片公司標頭點擊，跳轉到文庫並套用該公司的精確文獻篩選
+// （用 centerIds + evolution[].id 這些已標記過的文獻ID，而非自由文字比對，避免誤判/漏判）
+function goToPatentTreeCompanyLibrary(companyKey) {
+  const cfg = PATENT_TREE_CONFIG[companyKey];
+  if (!cfg) { toast('找不到該公司資料', 'error'); return; }
+
+  const idsFromEvolution = (cfg.evolution || []).map(item => item.id).filter(Boolean);
+  const idsFromCenter = cfg.centerIds || [];
+  const allIds = [...new Set([...idsFromCenter, ...idsFromEvolution])];
+  const matchedIds = DB.papers.filter(p => allIds.includes(p.id) && !p._deleted).map(p => p.id);
+
+  if (!matchedIds.length) {
+    toast(`「${cfg.label}」目前在文庫中沒有已收錄的對應文獻`, 'error');
+    return;
+  }
+
+  showView('browse', getMainTab('browse'));
+  setTimeout(() => {
+    activeRouteFilter = null;
+    activeLibraryFilter = {
+      id: companyKey,
+      label: `玩家專利分析：${cfg.label}`,
+      color: cfg.color || '#2d8c5a',
+      paperIds: matchedIds,
+      note: `來自「玩家專利分析」── 顯示 ${cfg.label} 在文庫中已收錄的 ${matchedIds.length} 篇文獻`
+    };
+    filterPapers();
+    // 顯示確認提示條，沿用篩選→確認→AI分析的既有三步驟流程，讓使用者先看清單再決定要不要分析
+    const banner = document.getElementById('browseConfirmBanner');
+    if (banner) banner.style.display = 'flex';
+    document.getElementById('paperList')?.scrollIntoView({behavior:'smooth', block:'start'});
   }, 100);
 }
 
