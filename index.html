@@ -54,6 +54,8 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 .mf-tab{padding:8px 14px;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
 .mf-tab:hover{color:var(--text)}
 .mf-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.mode-toggle-btn{font-size:9px;font-weight:700;padding:1px 7px;border-radius:10px;border:1px solid var(--accent2);background:var(--surface);color:var(--accent2);cursor:pointer;letter-spacing:0.5px}
+.mode-toggle-btn.mode-and{background:var(--accent2);color:#fff}
 .browse-columns{display:flex;flex:1;overflow:hidden}
 .col-mid{width:50%;flex-shrink:0;overflow-y:auto}
 .col-right{width:50%;flex-shrink:0;overflow-y:auto}
@@ -462,9 +464,18 @@ async function doLogin(){
   <div style="max-width:900px;margin:0 auto;padding:20px 16px">
 
     <!-- 標題 -->
-    <div style="margin-bottom:20px">
+    <div style="margin-bottom:16px">
       <h2 style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px">親水塗層技術路線</h2>
       <p style="font-size:13px;color:var(--muted)">目前資料庫涵蓋 <span id="rte_total" style="font-weight:700;color:var(--accent)">—</span> 篇文獻，歸屬 9 條主流技術路線。點擊路線展開詳情。</p>
+    </div>
+
+    <!-- ═══ 文獻篩選（8大分類，各自可切換 AND/OR）═══ -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:20px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+        <span style="font-size:13px;font-weight:700;color:var(--text)">📚 文獻篩選</span>
+        <span style="font-size:11px;color:var(--muted)">每個分類獨立切換 <b>OR</b>（任一符合）/ <b>AND</b>（須同時符合）；分類之間固定 AND</span>
+      </div>
+      <div id="routeFilterBlocks"></div>
     </div>
 
     <!-- 路線清單 -->
@@ -523,33 +534,8 @@ async function doLogin(){
             <span class="ftag" data-filter="topic" data-value="adhesion" onclick="toggleFilter(this)">🔧 附著</span>
           </span>
           <select id="fSort" onchange="filterPapers()" style="padding:2px 4px;font-size:10px;border-radius:4px;border:1px solid var(--border);vertical-align:middle"><option value="id-desc">最新加入</option><option value="id">ID↑</option><option value="year-desc">年↓</option><option value="year-asc">年↑</option></select>
-          <details id="moreFiltersDetails" style="display:inline-block;vertical-align:middle;margin-left:4px">
-            <summary class="ftag" style="display:inline-block;cursor:pointer;background:var(--accent);color:var(--text);font-weight:700;border-color:var(--accent)">更多篩選</summary>
-            <div id="moreFiltersPanel" style="position:absolute;z-index:20;margin-top:6px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:0;box-shadow:0 4px 16px rgba(0,0,0,.12);width:560px;max-width:90vw">
-              <div style="display:flex;border-bottom:1px solid var(--border);padding:0 8px">
-                <span class="mf-tab active" data-mftab="basic" onclick="switchMoreFiltersTab(this)">基本</span>
-                <span class="mf-tab" data-mftab="company" onclick="switchMoreFiltersTab(this)">廠商</span>
-                <span class="mf-tab" data-mftab="indication" onclick="switchMoreFiltersTab(this)">適應症</span>
-              </div>
-              <div style="padding:10px;line-height:2;max-height:340px;overflow-y:auto">
-                <div data-mfpanel="basic">
-                  <span class="filter-group" id="fTypeGroup"><span class="filter-label">類型</span></span>
-                  <span class="filter-group" id="fSubGroup"><span class="filter-label">基材</span></span>
-                  <span class="filter-group" id="fCureGroup"><span class="filter-label">固化</span></span>
-                  <span class="filter-group" id="fAppGroup"><span class="filter-label">應用</span></span>
-                  <span class="filter-group"><span class="ftag" id="fShowDeleted" data-filter="deleted" data-value="show" onclick="this.classList.toggle('active');filterPapers()" style="background:#fdf0ed;color:var(--danger);border-color:var(--danger)">🗑 已刪除 <span id="deletedCount">0</span></span></span>
-                </div>
-                <div data-mfpanel="company" style="display:none">
-                  <div style="font-size:10px;color:var(--muted);margin-bottom:6px">廠商名稱為自由文字掃描所得（非標準標籤），數字為命中篇數</div>
-                  <span class="filter-group" id="fCompanyGroup" style="display:flex;flex-wrap:wrap;gap:4px"></span>
-                </div>
-                <div data-mfpanel="indication" style="display:none">
-                  <div style="font-size:10px;color:var(--muted);margin-bottom:6px">僅列出實際有文獻命中的適應症（已逐篇查證原文），其餘字典詞目前無對應文獻</div>
-                  <span class="filter-group" id="fIndicationGroup" style="display:flex;flex-wrap:wrap;gap:4px"></span>
-                </div>
-              </div>
-            </div>
-          </details>
+          <span class="ftag" id="fShowDeleted" data-filter="deleted" data-value="show" onclick="this.classList.toggle('active');filterPapers()" style="background:#fdf0ed;color:var(--danger);border-color:var(--danger);margin-left:4px">🗑 已刪除 <span id="deletedCount">0</span></span>
+          <span style="font-size:10px;color:var(--muted);margin-left:6px">💡 完整分類篩選（類型/基材/廠商等）已搬到「路線」頁面頂部</span>
         </div>
         <div class="panel-h">
           <span id="filterCount">0 篇</span>
@@ -1200,79 +1186,116 @@ function getAllPlanNotes() {
 // ══════════════════════════════════════════════
 // FILTER: 頂部標籤篩選
 // ══════════════════════════════════════════════
-let activeFilters = { type:new Set(), sub:new Set(), cure:new Set(), app:new Set(), status:new Set(), topic:new Set(), company:new Set(), indication:new Set() };
+// 8個主篩選區塊（類型/基材/親水高分子/底塗機制/固化/性能/應用/廠商）統一用
+// {values:Set, mode:'OR'|'AND'} 結構，每個區塊可獨立切換 AND/OR：
+//   OR  → 命中任一已勾選的值即算符合（values 中至少一個出現在該文獻）
+//   AND → 必須同時具備所有已勾選的值才算符合
+// status/topic 維持原有簡單 Set 結構（這兩類目前不需要 AND/OR 切換，邏輯不同於 tag 比對）
+function _newFilterGroup() { return { values: new Set(), mode: 'OR' }; }
+let activeFilters = {
+  type:    _newFilterGroup(),
+  sub:     _newFilterGroup(),  // 基材 substrate
+  polymer: _newFilterGroup(),  // 親水高分子 hydrophilic_polymer
+  primer:  _newFilterGroup(),  // 底塗/接枝機制 anchor_primer
+  cure:    _newFilterGroup(),  // 固化機制 cure_method
+  perf:    _newFilterGroup(),  // 性能訴求 performance
+  app:     _newFilterGroup(),  // 應用部位 application
+  company: _newFilterGroup(),  // 廠商（自由文字掃描）
+  indication: new Set(),       // 適應症維持舊結構（資料量小、暫不需要AND/OR，避免不必要的UI複雜度）
+  status: new Set(),
+  topic: new Set(),
+};
 
-function buildFilterTags() {
-  const dict = getTagDictionaryWithObserved();
-  // 文獻類型
-  const types = [...new Set(DB.papers.map(p=>p.doc_type).filter(Boolean))];
-  const typeGroup = document.getElementById('fTypeGroup');
-  if(typeGroup) typeGroup.innerHTML = '<span class="filter-label">類型</span>' + types.map(t=>`<span class="ftag" data-filter="type" data-value="${t}" onclick="toggleFilter(this)">${t}</span>`).join('');
-
-  // 基材
-  const subGroup = document.getElementById('fSubGroup');
-  const subs = (dict.substrate||[]).filter(t=>DB.papers.some(p=>(p.tags||[]).includes(t)));
-  if(subGroup) subGroup.innerHTML = '<span class="filter-label">基材</span>' + subs.map(t=>`<span class="ftag" data-filter="sub" data-value="${t}" onclick="toggleFilter(this)">${t}</span>`).join('');
-
-  // 固化
-  const cureGroup = document.getElementById('fCureGroup');
-  const cures = (dict.cure_method||[]).filter(t=>DB.papers.some(p=>(p.tags||[]).includes(t)));
-  if(cureGroup) cureGroup.innerHTML = '<span class="filter-label">固化</span>' + cures.map(t=>`<span class="ftag" data-filter="cure" data-value="${t}" onclick="toggleFilter(this)">${t}</span>`).join('');
-
-  // 應用
-  const appGroup = document.getElementById('fAppGroup');
-  const apps = (dict.application||[]).filter(t=>DB.papers.some(p=>(p.tags||[]).includes(t)));
-  if(appGroup) appGroup.innerHTML = '<span class="filter-label">應用</span>' + apps.map(t=>`<span class="ftag" data-filter="app" data-value="${t}" onclick="toggleFilter(this)">${t}</span>`).join('');
-
-  // 廠商（依文獻命中數排序，只列實際有命中的廠商）
-  const companyGroup = document.getElementById('fCompanyGroup');
-  if(companyGroup) {
-    const counts = {};
-    DB.papers.forEach(p => (p._companies||[]).forEach(c => { counts[c] = (counts[c]||0) + 1; }));
-    const companies = Object.keys(counts).sort((a,b) => counts[b]-counts[a]);
-    companyGroup.innerHTML = companies.map(c =>
-      `<span class="ftag" data-filter="company" data-value="${c}" onclick="toggleFilter(this)">${c} <span style="opacity:.6">${counts[c]}</span></span>`
-    ).join('') || '<span style="font-size:11px;color:var(--muted)">無資料</span>';
-  }
-
-  // 適應症（indication，依文獻命中數排序，只列實際有命中的詞；目前多數字典詞尚無文獻對應，
-  // 這是真實資料現況，不是程式缺陷——詳見 2026-06-21 逐篇查證紀錄）
-  const indicationGroup = document.getElementById('fIndicationGroup');
-  if(indicationGroup) {
-    const indDict = dict.indication || [];
-    const counts = {};
-    indDict.forEach(t => { counts[t] = DB.papers.filter(p=>(p.tags||[]).includes(t)).length; });
-    const present = indDict.filter(t => counts[t] > 0).sort((a,b) => counts[b]-counts[a]);
-    indicationGroup.innerHTML = present.map(t =>
-      `<span class="ftag" data-filter="indication" data-value="${t}" onclick="toggleFilter(this)">${t} <span style="opacity:.6">${counts[t]}</span></span>`
-    ).join('') || '<span style="font-size:11px;color:var(--muted)">無資料</span>';
-  }
+// 通用比對：依區塊的 mode 決定用 AND 或 OR 邏輯比對 tags 陣列
+function matchFilterGroup(group, tags) {
+  if (!group.values.size) return true; // 沒勾選任何值 = 不篩選，全部通過
+  const vals = [...group.values];
+  return group.mode === 'AND' ? vals.every(v => tags.includes(v)) : vals.some(v => tags.includes(v));
 }
+
+// 8大分類定義：key對應activeFilters的key，dictKey對應tag_dictionary的分類，
+// matchBy決定比對依據（tags=用p.tags比對；doc_type=用p.doc_type比對；company=用p._companies比對）
+const ROUTE_FILTER_BLOCKS = [
+  { key:'type',    label:'類型',         matchBy:'doc_type', icon:'📋' },
+  { key:'sub',     label:'基材',         matchBy:'tags', dictKey:'substrate', icon:'🧱' },
+  { key:'polymer', label:'親水高分子',   matchBy:'tags', dictKey:'hydrophilic_polymer', icon:'💧' },
+  { key:'primer',  label:'底塗/接枝機制', matchBy:'tags', dictKey:'anchor_primer', icon:'🔗' },
+  { key:'cure',    label:'固化機制',     matchBy:'tags', dictKey:'cure_method', icon:'☀️' },
+  { key:'perf',    label:'性能訴求',     matchBy:'tags', dictKey:'performance', icon:'⚙️' },
+  { key:'app',     label:'應用部位',     matchBy:'tags', dictKey:'application', icon:'🩺' },
+  { key:'company', label:'廠商',         matchBy:'company', icon:'🏢' },
+];
+
+function renderRouteFilterBlocks() {
+  const container = document.getElementById('routeFilterBlocks');
+  if (!container) return;
+  const dict = getTagDictionaryWithObserved();
+
+  container.innerHTML = ROUTE_FILTER_BLOCKS.map(block => {
+    const group = activeFilters[block.key];
+    let items; // [{value, count}]
+    if (block.matchBy === 'doc_type') {
+      const counts = {};
+      DB.papers.forEach(p => { if (p.doc_type) counts[p.doc_type] = (counts[p.doc_type]||0)+1; });
+      items = Object.entries(counts).map(([value,count])=>({value,count})).sort((a,b)=>b.count-a.count);
+    } else if (block.matchBy === 'company') {
+      const counts = {};
+      DB.papers.forEach(p => (p._companies||[]).forEach(c => { counts[c]=(counts[c]||0)+1; }));
+      items = Object.entries(counts).map(([value,count])=>({value,count})).sort((a,b)=>b.count-a.count);
+    } else {
+      const dictTags = dict[block.dictKey] || [];
+      const counts = {};
+      dictTags.forEach(t => { counts[t] = DB.papers.filter(p=>(p.tags||[]).includes(t)).length; });
+      items = dictTags.filter(t=>counts[t]>0).map(value=>({value,count:counts[value]})).sort((a,b)=>b.count-a.count);
+    }
+
+    const tagsHtml = items.length
+      ? items.map(({value,count}) => {
+          const isActive = group.values.has(value);
+          return `<span class="ftag${isActive?' active':''}" data-filter="${block.key}" data-value="${escHtml(value)}" onclick="toggleFilter(this)">${escHtml(value)} <span style="opacity:.6">${count}</span></span>`;
+        }).join('')
+      : '<span style="font-size:11px;color:var(--muted)">無資料</span>';
+
+    const andActive = group.mode === 'AND';
+    return `
+      <div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
+          <span style="font-size:12px;font-weight:600;color:var(--text)">${block.icon} ${block.label}</span>
+          <button class="mode-toggle-btn${andActive?' mode-and':''}" onclick="toggleFilterMode('${block.key}',this)" title="點擊切換 OR / AND">${group.mode}</button>
+        </div>
+        <div class="filter-group" style="display:flex;flex-wrap:wrap;gap:4px">${tagsHtml}</div>
+      </div>`;
+  }).join('');
+}
+
+
 
 function toggleFilter(el) {
   const filter = el.dataset.filter;
   const value = el.dataset.value;
-  if(activeFilters[filter].has(value)) {
-    activeFilters[filter].delete(value);
+  const group = activeFilters[filter];
+  // 相容兩種結構：新版 {values,mode} 與舊版直接是 Set 的（indication/status/topic）
+  const set = group instanceof Set ? group : group.values;
+  if(set.has(value)) {
+    set.delete(value);
     el.classList.remove('active');
   } else {
-    activeFilters[filter].add(value);
+    set.add(value);
     el.classList.add('active');
   }
   filterPapers();
 }
 
-// 「更多篩選」面板內的頁籤切換（基本/廠商/適應症），純前端顯示切換，不影響已勾選的篩選條件
-function switchMoreFiltersTab(el) {
-  const panel = document.getElementById('moreFiltersPanel');
-  if(!panel) return;
-  panel.querySelectorAll('.mf-tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  const target = el.dataset.mftab;
-  panel.querySelectorAll('[data-mfpanel]').forEach(p => {
-    p.style.display = (p.dataset.mfpanel === target) ? 'block' : 'none';
-  });
+// 切換指定篩選區塊的 AND/OR 模式（只適用於新版 {values,mode} 結構的8個主區塊）
+function toggleFilterMode(filterKey, btnEl) {
+  const group = activeFilters[filterKey];
+  if (!group || group instanceof Set) return;
+  group.mode = group.mode === 'AND' ? 'OR' : 'AND';
+  btnEl.textContent = group.mode;
+  btnEl.classList.toggle('mode-and', group.mode === 'AND');
+  filterPapers();
 }
+
 
 // ══════════════════════════════════════════════
 // ══════════════════════════════════════════════
@@ -2572,14 +2595,6 @@ function startResize(e, idx) {
   document.addEventListener('mouseup', onUp);
 }
 
-// 「更多篩選」面板：點擊面板外部時自動收起，面板內部點擊（含勾選篩選標籤）不受影響，
-// 讓使用者能一次連續勾選類型/基材/固化等多個項目，選完後點外面才收起，不會選一個就誤關
-document.addEventListener('click', (e) => {
-  const details = document.getElementById('moreFiltersDetails');
-  if(!details || !details.open) return;
-  if(!details.contains(e.target)) details.open = false;
-});
-
 // ══════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════
@@ -2957,8 +2972,11 @@ function getReportScopeLabel() {
   if(kw) parts.push(`關鍵字「${kw}」`);
   if(activeRouteFilter?.label) parts.push(`路線：${activeRouteFilter.label}`);
   if(activeLibraryFilter?.label) parts.push(`文庫焦點：${activeLibraryFilter.label}`);
-  Object.entries(activeFilters || {}).forEach(([k,set])=>{
-    if(set?.size) parts.push(`${k}: ${[...set].join('、')}`);
+  Object.entries(activeFilters || {}).forEach(([k,group])=>{
+    const set = group instanceof Set ? group : group.values;
+    if(!set?.size) return;
+    const modeLabel = (group instanceof Set || group.mode === 'OR') ? '' : '(AND)';
+    parts.push(`${k}${modeLabel}: ${[...set].join('、')}`);
   });
   return parts.length ? parts.join(' · ') : '全部文庫';
 }
@@ -4547,7 +4565,7 @@ function renderCtx() {
 }
 
 function buildFilters() {
-  buildFilterTags();
+  renderRouteFilterBlocks();
 }
 
 function fillSelect(id, opts) {
@@ -4588,19 +4606,19 @@ function filterPapers() {
     // 軟刪除篩選：預設隱藏，點開才顯示（且只顯示已刪除的）
     if(showDeleted) { if(!p._deleted) return false; }
     else { if(p._deleted) return false; }
-    // 類型篩選（多選 OR）
-    if(activeFilters.type.size && !activeFilters.type.has(p.doc_type)) return false;
-    // 標籤篩選（多選 OR：有任一個就顯示）
+    // 類型篩選（支援 AND/OR）
+    if(!matchFilterGroup(activeFilters.type, [p.doc_type])) return false;
+    // 標籤類篩選（基材/親水高分子/底塗機制/固化/性能/應用，各自支援 AND/OR）
     const tags = p.tags || [];
-    if(activeFilters.sub.size && ![...activeFilters.sub].some(t=>tags.includes(t))) return false;
-    if(activeFilters.cure.size && ![...activeFilters.cure].some(t=>tags.includes(t))) return false;
-    if(activeFilters.app.size && ![...activeFilters.app].some(t=>tags.includes(t))) return false;
+    if(!matchFilterGroup(activeFilters.sub, tags)) return false;
+    if(!matchFilterGroup(activeFilters.polymer, tags)) return false;
+    if(!matchFilterGroup(activeFilters.primer, tags)) return false;
+    if(!matchFilterGroup(activeFilters.cure, tags)) return false;
+    if(!matchFilterGroup(activeFilters.perf, tags)) return false;
+    if(!matchFilterGroup(activeFilters.app, tags)) return false;
     if(activeFilters.indication.size && ![...activeFilters.indication].some(t=>tags.includes(t))) return false;
-    // 廠商篩選（多選 OR，比對預計算的 p._companies）
-    if(activeFilters.company.size) {
-      const companies = p._companies || [];
-      if(![...activeFilters.company].some(c=>companies.includes(c))) return false;
-    }
+    // 廠商篩選（支援 AND/OR，比對預計算的 p._companies）
+    if(!matchFilterGroup(activeFilters.company, p._companies || [])) return false;
     // 分析狀態
     if(activeFilters.status.size) {
       const isPatent = p.doc_type === '專利';
@@ -6113,6 +6131,7 @@ const PHASE_DEFS = [
 
 function renderRoutes() {
   if(!DB.papers) return;
+  renderRouteFilterBlocks();
   const papers = DB.papers.filter(p=>!p._deleted);
   document.getElementById('rte_total').textContent = papers.length;
 
