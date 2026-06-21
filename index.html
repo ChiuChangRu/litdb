@@ -745,6 +745,11 @@ async function doLogin(){
       <button class="btn btn-s" onclick="if(confirm('這會呼叫 API，確定要用 AI 深度解讀目前篩選結果嗎？')) generateReport()" style="font-size:12px;color:var(--warn);border-color:var(--warn)">🤖 AI 深度解讀</button>
     </div>
     <div id="rptScopeBar" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;margin-bottom:14px;font-size:12px;color:var(--muted)"></div>
+    <div id="rptOverlapHint" style="font-size:11px;color:var(--muted);margin-bottom:10px"></div>
+    <details style="margin-bottom:14px" ontoggle="if(this.open) renderReportsHistoryPanel('rptHistoryPanel','showSavedReportFromHistory')">
+      <summary style="cursor:pointer;font-size:12px;color:var(--accent2);font-weight:600">📚 歷史報告（雲端儲存，點擊展開）</summary>
+      <div id="rptHistoryPanel" style="margin-top:8px;border:1px solid var(--border);border-radius:8px;overflow:hidden"></div>
+    </details>
     <!-- 報告本體（自動 render）-->
     <div id="rptOutput" style="font-size:13px;line-height:1.8">
       <div style="text-align:center;padding:40px;color:var(--muted)">載入中...</div>
@@ -2086,11 +2091,11 @@ async function generateDimensionalAIReport(){
 1. 繁體中文（台灣用語，勿用簡體字）
 2. 只根據提供的文獻資料做判斷，不要編造文獻中沒有的數據或結論
 3. 每個判斷盡可能引用具體文獻ID如[P01]
-4. 不確定、屬於推論而非文獻明確記載的內容，標註(*)
+4. 不確定、屬於推論而非文獻明確記載的內容，標註(*)。特別注意「動機/意圖類推論」（如「廠商刻意選用某PI是為了迴避競品claim」）——這種推測廠商主觀意圖的句子，文獻本身通常只記載配方差異與時間順序，不會記載廠商的真實動機，務必標註(*)並避免使用「刻意」「為了避免」等斷言語氣，改用「可能反映」「推測與⋯有關」等保留語氣
 5. 若文獻資料不足以回答某個問題，明確說「現有文獻資料不足以判斷」，不要硬掰
 6. 簡潔務實，每點 2-4 句即可，不要學術廢話
 7. 用 ## 標題分隔各點
-8. 比對配方時要具體到數值/條件層級（如「PVP K90 vs K30」「COF 0.16 vs 0.22」），不能只說「材料類似」這種籠統說法；若文獻資料本身只到材料名稱層級沒有數值，就明確說資料只到這個層級，不要硬掰數字`,
+8. 比對配方時要具體到數值/條件層級（如「PVP K90 vs K30」「COF 0.16 vs 0.22」），不能只說「材料類似」這種籠統說法；若文獻資料本身只到材料名稱層級沒有數值，就明確說資料只到這個層級，不要硬掰數字。跨篇比較時若各篇的數據完整度不一致（例如部分文獻只有WCA沒有COF數值，部分文獻兩者都有），要明確點出「此處數據基礎不對等，僅能做方向性比較，無法做精確數值比較」，不要把不同完整度的數據並列呈現卻不說明可比性落差`,
         messages:[{role:'user',content:`【${spec.focusTitle}】
 
 以下是 ${dim.papers.length>10?'前10篇（共'+dim.papers.length+'篇，已截斷）':dim.papers.length+'篇'}文獻的分析資料：
@@ -2105,16 +2110,29 @@ ${spec.instructions}`}]
     let text = data.content?.[0]?.text || '';
     if(!text) throw new Error('AI 無回應');
 
-    text = text.replace(/^## (.+)$/gm, '<h4 style="color:var(--accent);margin:16px 0 6px;font-size:14px;border-bottom:1px solid var(--border);padding-bottom:3px">$1</h4>');
-    text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-    text = text.replace(/\[([A-Z]\d+)\]/g, '<span onclick="goToPaper(\'$1\',{focus:true})" style="cursor:pointer;color:var(--accent2);font-weight:600;text-decoration:underline">[$1]</span>');
-    text = text.replace(/\n/g, '<br>');
+    text = mdToHtml(text);
 
-    outEl.innerHTML = `<div style="background:linear-gradient(135deg,#f5f0ff,#fff);border:2px solid #8e44ad;border-radius:12px;padding:16px">
+    const paperIds = dim.papers.slice(0,10).map(p=>p.id).filter(Boolean);
+    const reportTitle = `策略解讀 · ${spec.focusTitle}`;
+
+    const fullHtml = `<div style="background:linear-gradient(135deg,#f5f0ff,#fff);border:2px solid #8e44ad;border-radius:12px;padding:16px">
       <div style="font-size:12px;color:#8e44ad;font-weight:700;letter-spacing:1px;margin-bottom:8px">🤖 AI 策略解讀 · ${escHtml(spec.focusTitle)}</div>
       <div style="font-size:13px;line-height:1.8;color:var(--text)">${text}</div>
       <div style="font-size:11px;color:var(--muted);margin-top:12px;padding-top:8px;border-top:1px solid var(--border)">基於 ${dim.papers.length>10?10:dim.papers.length} 篇文獻的已有分析資料（含逐篇實施例配方）生成，非重新讀取專利原文；請自行核對關鍵判斷</div>
     </div>`;
+
+    outEl.innerHTML = fullHtml + `
+      <div style="text-align:center;margin-top:10px">
+        <button class="btn btn-s" style="font-size:11px;color:#8e44ad;border-color:#8e44ad" id="deAISaveBtn">☁ 儲存到雲端（供下次瀏覽）</button>
+      </div>`;
+    document.getElementById('deAISaveBtn')?.addEventListener('click', async function(){
+      this.disabled = true; this.textContent = '儲存中...';
+      const ok = await saveReportToCloud({
+        type: 'dimensional', title: reportTitle, scopeLabel: spec.focusTitle,
+        html: fullHtml, analyzedCount: dim.papers.length>10?10:dim.papers.length, paperIds,
+      });
+      this.disabled = false; this.textContent = ok ? '✓ 已儲存' : '☁ 儲存到雲端（供下次瀏覽）';
+    });
   }catch(e){
     outEl.innerHTML = `<div style="color:var(--warn);padding:16px;text-align:center">AI 解讀失敗：${escHtml(e.message||String(e))}</div>`;
   }finally{
@@ -2146,8 +2164,8 @@ async function generateReport() {
 1. 繁體中文（台灣用語，勿用簡體字）
 2. 只根據提供的文獻資料做判斷，不要編造文獻中沒有的數據或結論；若某篇文獻資料有缺漏（如缺摘要或缺實施例），可以指出該篇缺什麼，但不能說「本批次文獻尚待補全」這種籠統說法去掩蓋你沒有使用提供的資料
 3. 每個判斷盡可能引用具體文獻ID如[P01]
-4. 不確定、屬於推論而非文獻明確記載的內容，標註(*)
-5. 比對配方時要具體到數值/條件層級（如「PVP K90 vs K30」「COF 0.16 vs 0.22」），不能只說「材料類似」這種籠統說法
+4. 不確定、屬於推論而非文獻明確記載的內容，標註(*)。特別注意「動機/意圖類推論」（如「廠商刻意選用某PI是為了迴避競品claim」）——這種推測廠商主觀意圖的句子，文獻本身通常只記載配方差異與時間順序，不會記載廠商的真實動機，務必標註(*)並避免使用「刻意」「為了避免」等斷言語氣，改用「可能反映」「推測與⋯有關」等保留語氣
+5. 比對配方時要具體到數值/條件層級（如「PVP K90 vs K30」「COF 0.16 vs 0.22」），不能只說「材料類似」這種籠統說法。跨篇比較時若各篇的數據完整度不一致（例如部分文獻只有WCA沒有COF數值），要明確點出「此處數據基礎不對等，僅能做方向性比較」，不要把不同完整度的數據並列呈現卻不說明可比性落差
 6. 簡潔務實，不要學術廢話
 7. 用 ## 標題分隔各節`,
         messages:[{role:'user',content:`請根據以下文獻分析資料，產生技術情報分析報告。
@@ -2177,12 +2195,8 @@ ${context}
     let text = data.content?.[0]?.text||'';
     if(!text) throw new Error('AI 無回應');
 
-    // Markdown 簡易轉 HTML
-    text = text.replace(/^## (.+)$/gm, '<h3 style="color:var(--accent);margin:20px 0 8px;font-size:15px;border-bottom:2px solid var(--accent);padding-bottom:4px">$1</h3>');
-    text = text.replace(/^### (.+)$/gm, '<h4 style="color:var(--text);margin:12px 0 6px;font-size:13px">$1</h4>');
-    text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-    text = text.replace(/\[([A-Z]\d+)\]/g, '<span onclick="goToPaper(\'$1\',{focus:true})" style="cursor:pointer;color:var(--accent2);font-weight:600;text-decoration:underline">[$1]</span>');
-    text = text.replace(/\n/g, '<br>');
+    // Markdown 轉 HTML（含表格/清單/警示框渲染）
+    text = mdToHtml(text);
 
     const header = `<div style="text-align:center;padding:16px 0;border-bottom:2px solid var(--accent);margin-bottom:16px">
       <div style="font-size:16px;font-weight:700;color:var(--text)">🤖 AI 技術情報分析報告</div>
@@ -2192,9 +2206,13 @@ ${context}
 
     output.innerHTML = header + text;
 
-    // 存到 localStorage
+    const reportPaperIds = analyzed.map(p=>p.id).filter(Boolean);
+    const reportTitle = `技術情報分析 · ${getReportScopeLabel()}`;
+    const fullHtmlForCloud = header + text;
+
+    // 存到 localStorage（裝置內暫存，沿用既有機制）
     const reportData = {
-      html: header + text,
+      html: fullHtmlForCloud,
       date: new Date().toISOString(),
       scope: getReportScopeLabel(),
       analyzedCount: analyzed.length
@@ -2204,8 +2222,17 @@ ${context}
     document.getElementById('rptActions').innerHTML = `
       <button class="btn btn-p" onclick="copyReport()">📋 複製報告</button>
       <button class="btn btn-s" onclick="downloadReport()">⬇ 下載 Markdown</button>
+      <button class="btn btn-s" id="rptCloudSaveBtn" style="color:var(--accent2);border-color:var(--accent2)">☁ 儲存到雲端</button>
       <button class="btn btn-s" onclick="clearSavedReport()" style="color:var(--danger);border-color:var(--danger)">🗑 清除暫存</button>`;
     document.getElementById('rptActions').style.display = 'flex';
+    document.getElementById('rptCloudSaveBtn')?.addEventListener('click', async function(){
+      this.disabled = true; this.textContent = '儲存中...';
+      const ok = await saveReportToCloud({
+        type: 'generateReport', title: reportTitle, scopeLabel: getReportScopeLabel(),
+        html: fullHtmlForCloud, analyzedCount: analyzed.length, paperIds: reportPaperIds,
+      });
+      this.disabled = false; this.textContent = ok ? '✓ 已儲存到雲端' : '☁ 儲存到雲端';
+    });
 
     toast('報告產生完成','success');
   } catch(e) {
@@ -3320,6 +3347,329 @@ function importDB(e){const f=e.target.files[0];if(!f)return;const r=new FileRead
 
 function escHtml(s='') {
   return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+// ══════════════════════════════════════════════
+// AI 報告 Markdown → HTML 轉換（共用函式）
+// 取代原本 generateReport / generateDimensionalAIReport 內各自一份的陽春版（單靠 \n→<br> 硬轉換，無法處理表格）
+// 支援：表格渲染（含斑馬紋）、清單、引用區塊(>)、警示段落(⚠️開頭→醒目色塊)、推論標注(*text*→灰色斜體)、文獻ID連結([P01])
+// ══════════════════════════════════════════════
+function mdToHtml(raw) {
+  if (!raw) return '';
+  let text = String(raw).replace(/\r\n/g, '\n');
+
+  // 先把整段拆成「區塊」：表格區塊 vs 一般文字區塊，分開處理避免互相干擾
+  const lines = text.split('\n');
+  const blocks = []; // {type:'table'|'text', lines:[...]}
+  let cur = null;
+
+  const isTableRow = (l) => /^\s*\|.*\|\s*$/.test(l);
+  const isTableSep = (l) => /^\s*\|?[\s:|-]+\|?\s*$/.test(l) && /-/.test(l) && !/[^\s:|-]/.test(l);
+
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i];
+    if (isTableRow(l)) {
+      if (!cur || cur.type !== 'table') { cur = { type: 'table', lines: [] }; blocks.push(cur); }
+      cur.lines.push(l);
+    } else {
+      if (!cur || cur.type !== 'text') { cur = { type: 'text', lines: [] }; blocks.push(cur); }
+      cur.lines.push(l);
+    }
+  }
+
+  // inline 格式化：粗體、推論斜體(*text*)、文獻ID連結
+  // 注意順序：先處理 **粗體**（雙星號），再處理單星號斜體，避免衝突
+  function inlineFmt(s) {
+    let t = escHtml(s);
+    t = t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    // 單星號斜體：用於標註AI推論內容，如「迴避設計*」或「*urea提升保水*」
+    t = t.replace(/\*([^*\n]+?)\*/g, '<em style="color:var(--muted)">$1</em>');
+    t = t.replace(/\[([A-Z]\d+)\]/g, '<span onclick="goToPaper(\'$1\',{focus:true})" style="cursor:pointer;color:var(--accent2);font-weight:600;text-decoration:underline">[$1]</span>');
+    return t;
+  }
+
+  function renderTable(tableLines) {
+    // 過濾掉分隔線 |---|---|
+    const rows = tableLines.filter(l => !isTableSep(l));
+    if (!rows.length) return '';
+    const parseRow = (l) => l.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map(c => c.trim());
+    const header = parseRow(rows[0]);
+    const bodyRows = rows.slice(1).map(parseRow);
+
+    const thead = `<tr>${header.map(h => `<th style="background:var(--accent);color:#fff;padding:8px 10px;text-align:left;font-size:12px;font-weight:700;border:1px solid var(--accent)">${inlineFmt(h)}</th>`).join('')}</tr>`;
+    const tbody = bodyRows.map((r, idx) => {
+      const bg = idx % 2 === 1 ? 'var(--card)' : 'var(--surface)';
+      const cells = r.map(c => `<td style="padding:7px 10px;font-size:12.5px;border:1px solid var(--border);vertical-align:top;background:${bg}">${inlineFmt(c)}</td>`).join('');
+      return `<tr>${cells}</tr>`;
+    }).join('');
+
+    return `<div style="overflow-x:auto;margin:12px 0">
+      <table style="border-collapse:collapse;width:100%;min-width:480px">
+        <thead>${thead}</thead>
+        <tbody>${tbody}</tbody>
+      </table>
+    </div>`;
+  }
+
+  function renderTextBlock(textLines) {
+    let html = '';
+    let i = 0;
+    let listBuffer = []; // 連續的清單項目暫存
+    let listType = null; // 'ul' | 'ol'
+
+    function flushList() {
+      if (!listBuffer.length) return;
+      const tag = listType === 'ol' ? 'ol' : 'ul';
+      html += `<${tag} style="margin:6px 0 10px;padding-left:22px">${listBuffer.join('')}</${tag}>`;
+      listBuffer = [];
+      listType = null;
+    }
+
+    // 段落緩衝（連續非空、非清單、非標題的行，合併成一個 <p>，行內用 <br> 分隔）
+    let paraBuffer = [];
+    function flushPara() {
+      if (!paraBuffer.length) return;
+      html += `<p style="margin:6px 0 10px;line-height:1.8">${paraBuffer.join('<br>')}</p>`;
+      paraBuffer = [];
+    }
+
+    while (i < textLines.length) {
+      const line = textLines[i];
+      const trimmed = line.trim();
+
+      // 空行：段落與清單的分界
+      if (trimmed === '') { flushPara(); flushList(); i++; continue; }
+
+      // 標題
+      let m;
+      if ((m = trimmed.match(/^####\s+(.+)$/))) {
+        flushPara(); flushList();
+        html += `<h5 style="color:var(--text);margin:10px 0 4px;font-size:12.5px;font-weight:700">${inlineFmt(m[1])}</h5>`;
+        i++; continue;
+      }
+      if ((m = trimmed.match(/^###\s+(.+)$/))) {
+        flushPara(); flushList();
+        html += `<h4 style="color:var(--text);margin:14px 0 6px;font-size:13.5px;font-weight:700">${inlineFmt(m[1])}</h4>`;
+        i++; continue;
+      }
+      if ((m = trimmed.match(/^##\s+(.+)$/))) {
+        flushPara(); flushList();
+        html += `<h3 style="color:var(--accent);margin:22px 0 10px;font-size:15px;font-weight:700;border-bottom:2px solid var(--accent);padding-bottom:5px">${inlineFmt(m[1])}</h3>`;
+        i++; continue;
+      }
+      if ((m = trimmed.match(/^#\s+(.+)$/))) {
+        flushPara(); flushList();
+        html += `<h2 style="color:var(--text);margin:0 0 14px;font-size:18px;font-weight:700">${inlineFmt(m[1])}</h2>`;
+        i++; continue;
+      }
+
+      // 引用區塊：> 開頭的行，轉成左側色條的引用樣式
+      if ((m = trimmed.match(/^>\s*(.+)$/))) {
+        flushPara(); flushList();
+        html += `<div style="border-left:3px solid var(--accent2);background:var(--card);padding:8px 14px;margin:10px 0;font-size:12.5px;color:var(--text)">${inlineFmt(m[1])}</div>`;
+        i++; continue;
+      }
+
+      // 警示段落：以 ⚠ 或 ⚠️ 開頭的單行，整行轉成醒目色塊
+      if ((m = trimmed.match(/^⚠️?\s*(.+)$/))) {
+        flushPara(); flushList();
+        html += `<div style="background:#fff3ed;border:1px solid var(--warn);border-left:4px solid var(--warn);border-radius:6px;padding:10px 14px;margin:10px 0;font-size:12.5px;color:#7a3a1f"><strong style="color:var(--warn)">⚠ </strong>${inlineFmt(m[1])}</div>`;
+        i++; continue;
+      }
+
+      // 無序清單
+      if ((m = trimmed.match(/^[-*]\s+(.+)$/))) {
+        flushPara();
+        if (listType !== 'ul') { flushList(); listType = 'ul'; }
+        listBuffer.push(`<li style="margin:3px 0;line-height:1.7">${inlineFmt(m[1])}</li>`);
+        i++; continue;
+      }
+
+      // 有序清單
+      if ((m = trimmed.match(/^\d+[.)]\s+(.+)$/))) {
+        flushPara();
+        if (listType !== 'ol') { flushList(); listType = 'ol'; }
+        listBuffer.push(`<li style="margin:3px 0;line-height:1.7">${inlineFmt(m[1])}</li>`);
+        i++; continue;
+      }
+
+      // 一般段落行
+      flushList();
+      paraBuffer.push(inlineFmt(trimmed));
+      i++;
+    }
+    flushPara();
+    flushList();
+    return html;
+  }
+
+  return blocks.map(b => b.type === 'table' ? renderTable(b.lines) : renderTextBlock(b.lines)).join('');
+}
+
+// ══════════════════════════════════════════════
+// AI 報告雲端儲存（reports.json，透過 Worker /reports 端點，PAT 不進前端）
+// ══════════════════════════════════════════════
+
+// 整個 session 內快取，避免每次篩選/切頁都重新打 API 讀取歷史報告清單。
+// 第一次呼叫 ensureReportsCache() 時才實際打 API；之後直接用快取。
+let _reportsCache = null; // null=尚未載入；[]=已載入但空；[...]=已載入有資料
+let _reportsCacheLoading = null; // 進行中的 Promise，避免同時觸發多次請求
+
+function getReportsWorkerBase() {
+  if (!cfg.proxy) return null;
+  return cfg.proxy.replace(/\/api$/, '');
+}
+
+// 確保 _reportsCache 有值（若尚未載入，背景觸發一次讀取）。
+// 回傳 Promise<Array>，呼叫端可選擇 await，也可以先用目前快取值（可能是 null）做即時判斷。
+async function ensureReportsCache() {
+  if (_reportsCache !== null) return _reportsCache;
+  if (_reportsCacheLoading) return _reportsCacheLoading;
+  const base = getReportsWorkerBase();
+  if (!base) { _reportsCache = []; return _reportsCache; }
+
+  _reportsCacheLoading = (async () => {
+    try {
+      const r = await fetch(`${base}/reports`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'list' }),
+      });
+      const data = await r.json();
+      _reportsCache = Array.isArray(data.reports) ? data.reports : [];
+    } catch (e) {
+      console.warn('讀取歷史報告清單失敗', e);
+      _reportsCache = []; // 失敗時視為空清單，不阻擋正常使用
+    } finally {
+      _reportsCacheLoading = null;
+    }
+    return _reportsCache;
+  })();
+  return _reportsCacheLoading;
+}
+
+function invalidateReportsCache() { _reportsCache = null; }
+
+// 寬鬆重疊比對：兩批文獻ID的交集 ÷ 較小集合大小 ≥ 0.7 視為「同一批文獻」。
+// 只給資訊，不做決定 —— 呼叫端把結果顯示給使用者，由使用者自行判斷要不要重新生成。
+function findOverlappingReport(paperIds, reports) {
+  if (!paperIds?.length || !reports?.length) return null;
+  const curSet = new Set(paperIds);
+  let best = null, bestScore = 0;
+  for (const rpt of reports) {
+    const ids = rpt.paperIds || [];
+    if (!ids.length) continue;
+    const interSize = ids.filter(id => curSet.has(id)).length;
+    const score = interSize / Math.min(curSet.size, ids.length);
+    if (score >= 0.7 && score > bestScore) { best = rpt; bestScore = score; }
+  }
+  return best;
+}
+
+function formatReportAge(isoDate) {
+  try {
+    const t = new Date(isoDate).getTime();
+    if (Number.isNaN(t)) return '';
+    const diffMs = Date.now() - t;
+    const days = Math.floor(diffMs / 86400000);
+    if (days <= 0) return '今天';
+    if (days === 1) return '昨天';
+    if (days < 30) return `${days} 天前`;
+    return new Date(isoDate).toLocaleDateString('zh-TW');
+  } catch (e) { return ''; }
+}
+
+// 儲存報告到雲端（呼叫 Worker /reports，action=save）。回傳 true/false 供呼叫端判斷成敗。
+async function saveReportToCloud(reportPayload) {
+  const base = getReportsWorkerBase();
+  if (!base) { toast('請先設定 Claude API Proxy URL，才能使用雲端儲存', 'error'); return false; }
+  try {
+    const r = await fetch(`${base}/reports`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'save', report: reportPayload }),
+    });
+    const data = await r.json();
+    if (!data.ok) throw new Error(data.error || '儲存失敗');
+    _reportsCache = data.reports; // 直接用回傳的最新清單更新快取，不必再打一次 list
+    toast('已儲存到雲端，下次瀏覽可直接查看', 'success');
+    return true;
+  } catch (e) {
+    toast(`儲存失敗：${e.message || e}`, 'error');
+    return false;
+  }
+}
+
+async function deleteReportFromCloud(id) {
+  const base = getReportsWorkerBase();
+  if (!base) return false;
+  try {
+    const r = await fetch(`${base}/reports`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'delete', id }),
+    });
+    const data = await r.json();
+    if (!data.ok) throw new Error(data.error || '刪除失敗');
+    _reportsCache = data.reports;
+    toast('已刪除', 'success');
+    return true;
+  } catch (e) {
+    toast(`刪除失敗：${e.message || e}`, 'error');
+    return false;
+  }
+}
+
+// 渲染「歷史報告清單」區塊（用於報告分頁），點擊可直接還原顯示，不必重新呼叫AI。
+// 報告分頁的歷史清單點擊還原（還原到 rptOutput，與 deAIReportOutput 的 showSavedReportInline 分開）
+function showSavedReportFromHistory(id) {
+  ensureReportsCache().then(reports => {
+    const rpt = reports.find(r => r.id === id);
+    if (!rpt) { toast('找不到該份歷史報告', 'error'); return; }
+    const output = document.getElementById('rptOutput');
+    if (!output) return;
+    output.style.display = 'block';
+    output.innerHTML = `<div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px 12px;margin-bottom:12px;font-size:11px;color:var(--muted)">
+      ☁ 雲端歷史報告（${formatReportAge(rpt.createdAt)}產生，基於 ${rpt.analyzedCount||0} 篇分析，非即時重新生成）
+    </div>` + (rpt.html || '');
+    document.getElementById('rptActions').innerHTML = `
+      <button class="btn btn-p" onclick="copyReport()">📋 複製報告</button>
+      <button class="btn btn-s" onclick="downloadReport()">⬇ 下載 Markdown</button>`;
+    document.getElementById('rptActions').style.display = 'flex';
+    output.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
+// 從重疊提示或歷史報告清單點擊後，直接還原顯示已儲存報告（不重新呼叫AI）
+function showSavedReportInline(id) {
+  ensureReportsCache().then(reports => {
+    const rpt = reports.find(r => r.id === id);
+    if (!rpt) { toast('找不到該份歷史報告', 'error'); return; }
+    const outEl = document.getElementById('deAIReportOutput');
+    if (!outEl) return;
+    outEl.style.display = 'block';
+    outEl.innerHTML = `<div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:6px 12px;margin-bottom:8px;font-size:11px;color:var(--muted)">
+      📄 雲端歷史報告（${formatReportAge(rpt.createdAt)}產生，基於 ${rpt.analyzedCount||0} 篇分析，非即時重新生成）
+    </div>` + (rpt.html || '');
+    outEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+}
+
+function renderReportsHistoryPanel(containerId, onSelect) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = '<div style="padding:12px;color:var(--muted);font-size:12px">載入歷史報告中...</div>';
+  ensureReportsCache().then(reports => {
+    if (!reports.length) {
+      el.innerHTML = '<div style="padding:12px;color:var(--muted);font-size:12px">尚無已儲存的歷史報告</div>';
+      return;
+    }
+    el.innerHTML = reports.map(r => `
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--border)">
+        <div style="flex:1;min-width:0;cursor:pointer" onclick='(${onSelect})(${JSON.stringify(r.id)})'>
+          <div style="font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(r.title || r.scopeLabel || '未命名報告')}</div>
+          <div style="font-size:11px;color:var(--muted)">${formatReportAge(r.createdAt)} · 基於 ${r.analyzedCount||0} 篇 · ${escHtml(r.scopeLabel||'')}</div>
+        </div>
+        <button class="btn btn-s" style="font-size:11px;padding:4px 8px;color:var(--danger);border-color:var(--danger)" onclick="if(confirm('刪除這份歷史報告？')){deleteReportFromCloud(${JSON.stringify(r.id)}).then(ok=>{if(ok)renderReportsHistoryPanel(${JSON.stringify(containerId)},${JSON.stringify(onSelect)})})}">🗑</button>
+      </div>`).join('');
+  });
 }
 
 function compactText(s='', max=220) {
@@ -6087,6 +6437,21 @@ function renderIntegratedReport() {
   if(scopeEl) scopeEl.innerHTML =
     `<b>篩選範圍：</b>${escHtml(scopeStr)} &nbsp;·&nbsp; <b>${ps.length} 篇</b> &nbsp;·&nbsp; ${new Date().toLocaleDateString('zh-TW')}`;
 
+  // 異步檢查「AI 深度解讀」是否已對這批文獻做過解讀，只給資訊不打斷流程
+  const overlapHintEl = document.getElementById('rptOverlapHint');
+  if (overlapHintEl) {
+    overlapHintEl.innerHTML = '';
+    const analyzedIds = ps.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0).slice(0,10).map(p=>p.id).filter(Boolean);
+    if (analyzedIds.length) {
+      ensureReportsCache().then(reports => {
+        const match = findOverlappingReport(analyzedIds, reports.filter(r=>r.type!=='dimensional'));
+        if (match) {
+          overlapHintEl.innerHTML = `⚠ 此範圍 ${formatReportAge(match.createdAt)} 已用「AI 深度解讀」分析過（${escHtml(match.title||'')}），<a href="javascript:void(0)" onclick="showSavedReportFromHistory(${JSON.stringify(match.id)})" style="color:var(--accent);text-decoration:underline">點此查看</a>，可自行判斷是否需要重新生成`;
+        }
+      });
+    }
+  }
+
   // 生成決策報告（我的格式）
   let report = '';
   try { report = buildDecisionReport(ps) || ''; } catch(e){ console.warn(e); }
@@ -6099,9 +6464,23 @@ function renderIntegratedReport() {
           onclick="if(confirm('這會呼叫 API 進行策略解讀（含逐篇實施例配方比對），確定要繼續嗎？（約10篇文獻成本約NT$2-2.5元）')) generateDimensionalAIReport()">
           🤖 AI 策略解讀（針對「${escHtml(dim.company||dim.label||Object.keys(dim.orgGroups||{}).join('/')||'目前篩選')}」）
         </button>
+        <div id="deOverlapHint" style="margin-top:6px;font-size:11px;color:var(--muted)"></div>
       </div>
       <div id="deAIReportOutput" style="max-width:860px;margin:12px auto 0;display:none"></div>` : '';
     el.innerHTML = `<div style="max-width:860px;margin:0 auto">${report}</div>${aiSection}`;
+
+    // 異步檢查是否已有重疊報告，只給資訊不打斷流程，使用者自行判斷要不要重新生成
+    if (dim?.papers?.length) {
+      const curIds = dim.papers.slice(0,10).map(p=>p.id).filter(Boolean);
+      ensureReportsCache().then(reports => {
+        const hintEl = document.getElementById('deOverlapHint');
+        if (!hintEl) return; // 使用者已切換頁面，不再更新
+        const match = findOverlappingReport(curIds, reports);
+        if (match) {
+          hintEl.innerHTML = `⚠ 此範圍 ${formatReportAge(match.createdAt)} 已解讀過（${escHtml(match.title||'')}），<a href="javascript:void(0)" onclick="showSavedReportInline(${JSON.stringify(match.id)})" style="color:var(--accent);text-decoration:underline">點此查看</a>，可自行判斷是否需要重新生成`;
+        }
+      });
+    }
   } else {
     // 若無法生成決策報告（篩選條件不足），顯示文獻摘要表
     const rows = ps.map(p=>`
