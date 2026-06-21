@@ -553,7 +553,7 @@ async function doLogin(){
         </div>
         <div class="panel-h">
           <span id="filterCount">0 篇</span>
-          
+          <button id="syncPapersToCloudBtn" class="btn btn-s" style="font-size:11px;padding:3px 10px;color:var(--accent2);border-color:var(--accent2)" onclick="if(confirm('將新增/更新過的文獻寫回 GitHub 的 papers.json，確定要繼續嗎？')) syncUnsyncedPapersToCloud()">☁ 同步</button>
         </div>
         <div class="paper-list" id="paperList"></div>
       </div>
@@ -2736,7 +2736,12 @@ function detectCompanies(p) {
 
 function onDBLoaded() {
   // 預計算每篇文獻所屬廠商，供「更多篩選 → 廠商」頁籤使用
-  DB.papers.forEach(p => { p._companies = detectCompanies(p); });
+  DB.papers.forEach(p => {
+    p._companies = detectCompanies(p);
+    // 從 GitHub 載入的文獻本來就沒有 _cloudSynced 欄位（這是前端內部標記，不存在遠端資料裡），
+    // 視為「已同步」；只有 addPaper/doPatentAnalysis 明確設為 false 的才是真正待同步項目。
+    if (p._cloudSynced === undefined) p._cloudSynced = true;
+  });
   enrichToolTags();
   setTimeout(renderMarket, 50);
   if(document.getElementById('v-report')?.classList.contains('active')) renderIntegratedReport();
@@ -2752,6 +2757,7 @@ function onDBLoaded() {
   filterPapers();
   renderCtx();
   refreshActiveAnalysis();
+  updateSyncButtonLabel();
 }
 
 function saveDB() {
@@ -2885,9 +2891,10 @@ function addPaper(){
   if(link) paper.links.url = link;
   const fig = safeVal('addFigure');
   if(fig) paper.figure = fig;
+  paper._cloudSynced = false; // 標記尚未寫回 papers.json，供「☁ 同步至雲端」批次按鈕使用
   DB.papers.push(paper);
   saveDB(); onDBLoaded();
-  toast(`已加入 ${id}`,'success');
+  toast(`已加入 ${id}（尚未同步至雲端，請於文庫頁按「☁ 同步」）`,'success');
   ['addId','addTitle','addAuthors','addYear','addVenue','addDoi','addPmid','addTags','addPurpose','addAbstract','addValue','addLink','addFigure','addRaw','doiInput'].forEach(k=>{const el=safeEl(k); if(el) el.value='';});
 }
 
@@ -2931,7 +2938,7 @@ function batchAddSelected(){
   checked.forEach(i=>{
     const r = batchSearchResults[i]; if(!r) return;
     if(DB.papers.some(p => String(p.pmid||'') === String(r.pmid))) return;
-    DB.papers.push({id:nextPaperId('P'),title:r.title,authors:r.authors,year:r.year,venue:r.venue,doi:r.doi,pmid:r.pmid,doc_type:'期刊論文',access:'開放摘要',tags:[],purpose:'',abstract_note:'',value_to_project:'',links:{pubmed:`https://pubmed.ncbi.nlm.nih.gov/${r.pmid}/`,...(r.doi?{doi:`https://doi.org/${r.doi}`}:{})}});
+    DB.papers.push({id:nextPaperId('P'),title:r.title,authors:r.authors,year:r.year,venue:r.venue,doi:r.doi,pmid:r.pmid,doc_type:'期刊論文',access:'開放摘要',tags:[],purpose:'',abstract_note:'',value_to_project:'',links:{pubmed:`https://pubmed.ncbi.nlm.nih.gov/${r.pmid}/`,...(r.doi?{doi:`https://doi.org/${r.doi}`}:{})},_cloudSynced:false});
     added++;
   });
   saveDB(); onDBLoaded();
@@ -3712,6 +3719,111 @@ async function deleteReportFromCloud(id) {
     toast(`刪除失敗：${e.message || e}`, 'error');
     return false;
   }
+}
+
+// ══════════════════════════════════════════════
+// 文獻寫入雲端（papers.json，透過 Worker /papers 端點，PAT 不進前端）
+// 用於：新增文獻（addPaper）、AI 深度解析完成（doPatentAnalysis）後，
+// 把該篇完整資料寫回 GitHub，取代過去只能存在 localStorage、靠手動匯出 JSON 的流程。
+// ══════════════════════════════════════════════
+
+// 送出單篇（或多篇）文獻到 /papers，回傳 {ok, added, updated, total} 或 null（失敗時）
+async function savePapersToCloud(papers) {
+  const base = getReportsWorkerBase(); // 與 /reports 共用同一個 Worker base URL
+  if (!base) { toast('請先設定 Claude API Proxy URL，才能寫入文獻庫', 'error'); return null; }
+  const list = Array.isArray(papers) ? papers : [papers];
+  if (!list.length) return null;
+  try {
+    const r = await fetch(`${base}/papers`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'save', papers: list }),
+    });
+    const data = await r.json();
+    if (!data.ok) throw new Error(data.error || '寫入失敗');
+    toast(`已寫入文獻庫（新增 ${data.added}、更新 ${data.updated}）`, 'success');
+    return data;
+  } catch (e) {
+    toast(`寫入文獻庫失敗：${e.message || e}`, 'error');
+    return null;
+  }
+}
+
+// 在指定容器後面插入「☁ 寫入文獻庫」按鈕（若已存在同 id 按鈕則直接重用，不重複插入）。
+// 用於 addPaper / doPatentAnalysis 成功後呼叫，讓使用者自行決定何時寫回雲端，不自動寫入。
+function renderSaveToCloudButton(containerId, getPaper) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const btnId = containerId + '_cloudSaveBtn';
+  let btn = document.getElementById(btnId);
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.id = btnId;
+    btn.className = 'btn btn-s';
+    btn.style.cssText = 'margin-top:8px;color:var(--accent2);border-color:var(--accent2)';
+    container.appendChild(btn);
+  }
+  btn.textContent = '☁ 寫入文獻庫（同步到 papers.json）';
+  btn.disabled = false;
+  btn.onclick = async function() {
+    this.disabled = true; this.textContent = '寫入中...';
+    const paper = getPaper();
+    const result = await savePapersToCloud(paper);
+    this.disabled = false;
+    this.textContent = result ? '✓ 已寫入文獻庫' : '☁ 寫入文獻庫（同步到 papers.json）';
+  };
+}
+
+// 批次同步：掃描所有 _cloudSynced===false 的文獻（新增或剛解析過的），一次性送到 /papers。
+// 單次最多 20 篇（與 Worker 端限制一致），超過則分批送出，全部完成後才標記 synced，
+// 任一批失敗就停止並保留剩餘未同步狀態，避免使用者誤以為已全部同步成功。
+async function getUnsyncedPapers() {
+  // 排除已軟刪除的文獻：刪除狀態是本機標記，不應該把已刪除項目當成新文獻同步上去
+  return DB.papers.filter(p => p._cloudSynced === false && !p._deleted);
+}
+
+async function syncUnsyncedPapersToCloud() {
+  const unsynced = await getUnsyncedPapers();
+  if (!unsynced.length) { toast('沒有待同步的文獻', ''); return; }
+
+  const btn = document.getElementById('syncPapersToCloudBtn');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ 同步中...'; }
+
+  const BATCH_SIZE = 20;
+  let totalAdded = 0, totalUpdated = 0, syncedIds = [];
+  try {
+    for (let i = 0; i < unsynced.length; i += BATCH_SIZE) {
+      const batch = unsynced.slice(i, i + BATCH_SIZE);
+      // 送出前移除前端內部使用的私有欄位（_開頭），避免污染 papers.json 的資料結構
+      const cleaned = batch.map(p => {
+        const copy = {};
+        Object.keys(p).forEach(k => { if (!k.startsWith('_')) copy[k] = p[k]; });
+        return copy;
+      });
+      const result = await savePapersToCloud(cleaned);
+      if (!result) {
+        toast(`同步中斷，已完成 ${syncedIds.length}/${unsynced.length} 篇，請稍後重試剩餘部分`, 'error');
+        break;
+      }
+      totalAdded += result.added; totalUpdated += result.updated;
+      batch.forEach(p => { p._cloudSynced = true; syncedIds.push(p.id); });
+      saveDB();
+    }
+    if (syncedIds.length === unsynced.length) {
+      toast(`✅ 全部同步完成（新增 ${totalAdded}、更新 ${totalUpdated}）`, 'success');
+    }
+  } finally {
+    updateSyncButtonLabel();
+  }
+}
+
+// 更新「☁ 同步」按鈕上顯示的待同步篇數，供 onDBLoaded / saveDB 後呼叫刷新顯示
+function updateSyncButtonLabel() {
+  const btn = document.getElementById('syncPapersToCloudBtn');
+  if (!btn) return;
+  const n = (DB.papers || []).filter(p => p._cloudSynced === false && !p._deleted).length;
+  btn.disabled = false;
+  btn.textContent = n > 0 ? `☁ 同步 ${n} 篇待上傳文獻` : '☁ 已全部同步';
+  btn.style.opacity = n > 0 ? '1' : '0.6';
 }
 
 // 渲染「歷史報告清單」區塊（用於報告分頁），點擊可直接還原顯示，不必重新呼叫AI。
@@ -8503,8 +8615,9 @@ ${relatedPatents||'無'}
     p._patentResults[mode] = analysis;
     p.patentResults[mode] = analysis;
     p._patentAnalysis = analysis;
+    p._cloudSynced = false; // 解析結果已變動，標記尚未同步至 papers.json
     saveDB(); // 自動存檔
-    toast('分析完成','success');
+    toast('分析完成（尚未同步至雲端，請於文庫頁按「☁ 同步」）','success');
   } catch(e) {
     toast('分析失敗：'+e.message,'error');
   }
