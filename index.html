@@ -371,6 +371,10 @@ async function doLogin(){
       }));
       localStorage.removeItem('litdb_auth_fails');
       document.getElementById('loginOverlay').style.display='none';
+      // 登入完成後重新檢查書籤小工具帶來的 URL 參數：原本 checkBookmarkletParams()
+      // 在 window.onload 時就執行過一次，但當時登入遮罩還蓋著畫面，使用者看不到
+      // 已經填好的表單；此處在登入成功、遮罩移除後再呼叫一次，確保使用者真正看得到結果。
+      if (typeof checkBookmarkletParams === 'function') checkBookmarkletParams();
     } else {
       const count = (fails.count || 0) + 1;
       const lockedUntil = count >= AUTH_MAX_FAILS ? Date.now() + AUTH_LOCK_MS : 0;
