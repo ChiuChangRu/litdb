@@ -1448,7 +1448,22 @@ async function searchPatentUnified(query) {
   const resultsEl = document.getElementById('searchResults');
 
   // 專利號格式：直接透過 Worker 抓取
-  const patentMatch = query.match(/(US|EP|WO|CN|JP|KR)[\d\w]+/i);
+  // 支援標準國碼開頭（US/EP/WO/CN/JP/KR/TW）；另外台灣專利常見的本地慣用編號
+  // 不含國碼（如新型專利 M672228、發明專利 I672228），故額外判斷「單字母+6位數字」
+  // 這種台灣專利字軌格式，自動補上 TW 前綴組成 Google Patents 可查詢的完整編號。
+  let patentMatch = query.match(/(US|EP|WO|CN|JP|KR|TW)[\d\w]+/i);
+  if (!patentMatch) {
+    const twLocalMatch = query.trim().match(/^([A-Z])(\d{5,7})([A-Z]?)$/i);
+    if (twLocalMatch) {
+      const letter = twLocalMatch[1].toUpperCase();
+      const digits = twLocalMatch[2];
+      // 字尾對照（已用 Google Patents 實際案例逐一驗證，非猜測）：
+      // I 發明專利 → B（如 TWI489344B）；M 新型專利 → U（如 TWM467186U）；D 設計專利 → S（如 TWD208735S）
+      const SUFFIX_MAP = { I: 'B', M: 'U', D: 'S' };
+      const suffix = twLocalMatch[3] ? twLocalMatch[3].toUpperCase() : (SUFFIX_MAP[letter] || '');
+      patentMatch = [`TW${letter}${digits}${suffix}`];
+    }
+  }
   if(patentMatch) {
     const patentId = patentMatch[0];
     const inDB = DB.papers.some(p=>(p.title||'').includes(patentId));
