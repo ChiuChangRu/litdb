@@ -2258,26 +2258,28 @@ async function generateReport() {
 4. 不確定、屬於推論而非文獻明確記載的內容，標註(*)。特別注意「動機/意圖類推論」（如「廠商刻意選用某PI是為了迴避競品claim」）——這種推測廠商主觀意圖的句子，文獻本身通常只記載配方差異與時間順序，不會記載廠商的真實動機，務必標註(*)並避免使用「刻意」「為了避免」等斷言語氣，改用「可能反映」「推測與⋯有關」等保留語氣
 5. 比對配方時要具體到數值/條件層級（如「PVP K90 vs K30」「COF 0.16 vs 0.22」），不能只說「材料類似」這種籠統說法。跨篇比較時若各篇的數據完整度不一致（例如部分文獻只有WCA沒有COF數值），要明確點出「此處數據基礎不對等，僅能做方向性比較」，不要把不同完整度的數據並列呈現卻不說明可比性落差
 6. 簡潔務實，不要學術廢話
-7. 用 ## 標題分隔各節`,
+7. 用 ## 標題分隔各節
+8. 【最重要】使用者選定的「篩選範圍」就是這份報告該分析的主題本身，不是單純用來描述「這批文獻是怎麼篩出來的」背景資訊。例如篩選範圍是「性能訴求：biocompatibility」，整份報告三節都必須緊扣「這批文獻在生物相容性這個性能訴求上分別講了什麼、有何技術路線、市場上如何競爭、產品開發該怎麼因應」，不能寫成跟篩選主題無關的泛用技術情報報告。若某篇文獻雖然被篩選範圍選中，但其內容主要不是在談篩選主題本身（例如僅在標籤上帶到 biocompatibility，正文卻聚焦在別的性能訴求），要明確指出這個落差，不要假裝每篇都緊密相關`,
         messages:[{role:'user',content:`請根據以下文獻分析資料，產生技術情報分析報告。
 
-目前篩選範圍：${getReportScopeLabel()}
+【本次分析主題（即篩選範圍，三節都必須緊扣此主題，不可寫成與此無關的泛用報告）】${getReportScopeLabel()}
 篩選文獻：${scopePapers.length} 篇，以下提供其中已分析的 ${analyzed.length} 篇完整資料（含逐篇實施例配方光譜）：
 
 ${context}
 
-請產生以下三節內容：
+請產生以下三節內容（每節都要呼應上方「本次分析主題」，不是泛談）：
 ## 1. 技術路線與市場趨勢
-歸納這批文獻的技術路線分布、年份演進、市場信號。
+歸納這批文獻在「本次分析主題」上的技術路線分布、年份演進、市場信號。
 
 ## 2. 專利間比較與配方光譜分析
 這是本報告最重要的部分，務必具體執行：
 - 逐篇列出各篇文獻內部不同實施例的配方差異（底塗/面塗/固化條件/數值結果），不能只看整篇摘要
 - 跨篇比較哪些文獻用了相近材料或製程，差異在哪裡，結果優劣如何（具體數值，不要籠統說「類似」）
 - 指出哪些是同一專利家族的延伸關係
+- 若某篇文獻內容其實沒有真正深入「本次分析主題」（只是標籤帶到），要明確點出這個落差
 
 ## 3. 產品開發啟示與行動建議
-基於以上分析，提出具體可執行的下一步建議，包含優先參考的配方、應迴避的claim範圍、資料缺口提示。
+基於以上分析，針對「本次分析主題」提出具體可執行的下一步建議，包含優先參考的配方、應迴避的claim範圍、資料缺口提示。
 
 每節都要引用具體文獻ID和數據。`}]})
     });
@@ -2984,11 +2986,19 @@ function getReportScopeLabel() {
   if(kw) parts.push(`關鍵字「${kw}」`);
   if(activeRouteFilter?.label) parts.push(`路線：${activeRouteFilter.label}`);
   if(activeLibraryFilter?.label) parts.push(`文庫焦點：${activeLibraryFilter.label}`);
+  // 篩選類別 key → 人類可讀中文名稱對照（key 是程式內部變數名，不能直接塞進 AI prompt，
+  // 否則 AI 無法理解「perf」「sub」這些縮寫實際代表什麼分類，會導致分析方向偏離篩選意圖）
+  const FILTER_KEY_LABELS = {
+    type: '文獻類型', sub: '基材', polymer: '親水高分子', primer: '底塗/接枝機制',
+    cure: '固化機制', perf: '性能訴求', app: '應用部位', company: '廠商',
+    indication: '適應症', status: '分析狀態', topic: '主題',
+  };
   Object.entries(activeFilters || {}).forEach(([k,group])=>{
     const set = group instanceof Set ? group : group.values;
     if(!set?.size) return;
-    const modeLabel = (group instanceof Set || group.mode === 'OR') ? '' : '(AND)';
-    parts.push(`${k}${modeLabel}: ${[...set].join('、')}`);
+    const modeLabel = (group instanceof Set || group.mode === 'OR') ? '' : '(須同時符合)';
+    const label = FILTER_KEY_LABELS[k] || k;
+    parts.push(`${label}${modeLabel}：${[...set].join('、')}`);
   });
   return parts.length ? parts.join(' · ') : '全部文庫';
 }
