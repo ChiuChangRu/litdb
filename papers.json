@@ -152,7 +152,15 @@
       "total": 101,
       "patents": 44,
       "patent_ratio": "44%"
-    }
+    },
+    "commercial_vendor_keywords": [
+      "biocoat",
+      "hydromer",
+      "surmodics",
+      "freudenberg",
+      "harland",
+      "博納百潤"
+    ]
   },
   "papers": [
     {
