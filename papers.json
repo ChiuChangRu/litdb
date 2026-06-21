@@ -4105,7 +4105,8 @@
         "hydrogel",
         "lubricity潤滑",
         "活檢針",
-        "穿刺針"
+        "穿刺針",
+        "腫瘤切片"
       ],
       "purpose": "活檢針親水潤滑+超音波回聲雙功能",
       "abstract_note": "親水潤滑+echogenic回聲雙功能;適biopsy needle/trocar/catheter;先塗親水高分子再覆回聲結構(微氣泡/微粒);針型含骨髓/乳腺/軟組織活檢針16G/18G。",
@@ -5313,7 +5314,8 @@
         "WCA接觸角",
         "lubricity潤滑",
         "活檢針",
-        "穿刺針"
+        "穿刺針",
+        "腫瘤切片"
       ],
       "purpose": "唯一直接對穿刺針親水塗層的開放全文",
       "abstract_note": "建FEM穿刺模型並體外實驗驗證;比較有/無親水超潤滑塗層穿刺力差異;降低針與軟組織摩擦。",
@@ -5380,7 +5382,8 @@
         "WCA接觸角",
         "hydrogel",
         "活檢針",
-        "穿刺針"
+        "穿刺針",
+        "腫瘤切片"
       ],
       "purpose": "活檢針親水基質+起泡劑回聲塗層",
       "abstract_note": "動態塗層:親水高分子基質+起泡劑;用於針精準進入定位與活檢取樣;in vitro成功;潛在用於血管/心血管/骨科。",
@@ -11758,7 +11761,8 @@
         "antimicrobial抗菌",
         "encrustation resistance抗結痂",
         "綜述review",
-        "輸尿管支架"
+        "輸尿管支架",
+        "泌尿道感染"
       ],
       "purpose": "輸尿管支架技術全景：設計、材料、塗層",
       "abstract_note": "本綜述全面回顧輸尿管支架的技術改進方向，涵蓋三個維度：支架結構設計（stent architecture）、生物材料選擇（biomaterials）及表面塗層技術（surface coatings）。針對主要副作用（泌尿道感染、結痂、疼痛及支架移位），本文系統性比較各類塗層材料的臨床表現。研究顯示 TPU 正逐漸取代傳統矽膠與 PVC 成為支架主流基材，原因在於 TPU 提供更好的柔韌性與塗層附著性。可生物降解支架為未來方向，但機械性能成熟度仍需提升。",
@@ -11881,7 +11885,9 @@
         "encrustation",
         "encrustation resistance抗結痂",
         "綜述review",
-        "輸尿管支架"
+        "輸尿管支架",
+        "輸尿管結石",
+        "泌尿道感染"
       ],
       "purpose": "結痂的風險因子與管理策略綜述",
       "abstract_note": "本綜述從臨床角度回顧輸尿管支架的應用現況、技術進展及併發症管理，以三個技術維度為框架：材料科學、器械設計及表面塗層。研究確認留置時間（dwell time）是結痂最關鍵的風險因子，超過四週後結痂率急劇上升。高風險族群包括細菌尿症（bacteriuria）、尿石症（urolithiasis）、糖尿病（DM）、慢性腎病（CKD）及反覆泌尿道感染（recurrent UTI）患者。有效塗層可將安全置留期從四週延長至八至十二週，顯著降低患者複診頻率及醫療成本。",
@@ -12106,7 +12112,8 @@
         "encrustation",
         "encrustation resistance抗結痂",
         "綜述review",
-        "輸尿管支架"
+        "輸尿管支架",
+        "輸尿管結石"
       ],
       "purpose": "結痂預防策略更新（2023最新）",
       "abstract_note": "本綜述深入分析輸尿管支架結痂預防的最新進展，以兩大結痂路徑為核心框架：conditioning film 形成路徑（蛋白質沉積驅動）及 biofilm 形成路徑（細菌驅動）。從泌尿結石形成的病理機制出發，本文比較三種預防策略的臨床效果：支架結構改良、生物材料替換及 bio-coating 表面功能化。SBMA 兩性離子塗層的四週結痂率降至 25%（對照組無塗層為 80%，PVP 塗層為 55%），被確認為目前臨床證據最強的抗結痂塗層方案。利尿劑與塗層協同使用可進一步降低結痂率。",
@@ -12237,7 +12244,8 @@
         "encrustation resistance抗結痂",
         "lubricity潤滑",
         "zwitterionic",
-        "導尿管"
+        "導尿管",
+        "泌尿道感染"
       ],
       "purpose": "四種抗汙染表面比較：superhydrophilic zwitterionic vs liquid-like vs liquid-infused vs superhydrophobic",
       "abstract_note": "Superhydrophilic zwitterionic塗層表現最佳：fibrinogen沉積減72.3%，細菌附著減75%+。COF從0.63降至0.35。但無法殺菌→長期效力受限",
@@ -12308,7 +12316,8 @@
         "lubricity潤滑",
         "silicone",
         "臨床試驗",
-        "輸尿管支架"
+        "輸尿管支架",
+        "泌尿道感染"
       ],
       "purpose": "Coloplast Imajinhydro（hydrocoated silicone）vs Boston Scientific Percuflex Plus臨床比較",
       "abstract_note": "本研究為多中心隨機對照試驗（141 名患者），比較矽膠水化（hydrocoated）支架與 Percuflex 支架在三週留置期間的臨床表現。主要終點為支架表面 biofilm 量化評分：矽膠水化組 0.93 vs. Percuflex 組 1.24（p = 0.0021），差異具統計顯著性，顯示親水塗層可有效減少 biofilm 形成。次要終點包括患者症狀評分（疼痛、頻尿）及泌尿道感染發生率。本研究為目前已發表的輸尿管支架塗層比較試驗中樣本數最大者之一，為臨床選擇塗層支架提供直接依據。",
@@ -12381,7 +12390,8 @@
         "encrustation resistance抗結痂",
         "lubricity潤滑",
         "propolis",
-        "輸尿管支架"
+        "輸尿管支架",
+        "輸尿管結石"
       ],
       "purpose": "蜂膠（propolis）塗層在PU輸尿管支架的抗菌+抗結痂評估（in vivo大鼠Proteus mirabilis模型）",
       "abstract_note": "本研究評估 EEP（propolis 乙醇萃取物）塗層在輸尿管支架上的抗菌及抗結痂效果。體外實驗顯示 EEP 塗層對 biofilm 抑制率超過 90%，且抗菌效果可維持長達三個月。大鼠 in vivo 實驗證實 EEP 塗層組的細菌定植量、結石沉積量及鹽類沉積量均顯著低於對照組。Propolis 含有多種天然抗菌活性成分（如咖啡酸苯乙酯 CAPE），對多種泌尿道病原菌具廣譜抗菌活性。天然來源、低毒性及雙重抗菌/抗結痂功能使 EEP 塗層成為值得關注的新興輸尿管支架塗層材料。",
