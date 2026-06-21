@@ -544,6 +544,18 @@ async function doLogin(){
                 <button class="btn btn-s" onclick="document.getElementById('bmQuickAdd').style.display='none'">取消</button>
               </div>
             </div>
+            <!-- 廠商關鍵字管理：決定書籤小工具/快速加入時，哪些公司名稱會被自動歸類為「商用產品」 -->
+            <details id="vendorKeywordBox" style="margin-top:8px">
+              <summary style="cursor:pointer;font-size:11px;color:var(--accent2);font-weight:600">⚙ 管理廠商關鍵字（決定自動歸類「商用產品」）</summary>
+              <div style="padding:8px 0">
+                <div style="font-size:10px;color:var(--muted);margin-bottom:6px">新增公司中文/英文名稱後，之後用書籤小工具加入該公司網頁時會自動歸類為「商用產品」（同時比對網址與標題）</div>
+                <div id="vendorKeywordList" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px"></div>
+                <div style="display:flex;gap:6px">
+                  <input type="text" id="vendorKeywordInput" placeholder="輸入公司名稱，如：博納百潤 或 hydromer" style="flex:1;font-size:12px" onkeydown="if(event.key==='Enter')addVendorKeyword()">
+                  <button class="btn btn-p" onclick="addVendorKeyword()">新增</button>
+                </div>
+              </div>
+            </details>
           </div>
         </details>
         <!-- 篩選列（只在列表欄上方）-->
@@ -2727,12 +2739,19 @@ function quickAddFromBookmarklet() {
   if(!title) { toast('請至少填寫標題', 'error'); return; }
 
   const urlLow = (url||'').toLowerCase();
+  const titleLow = (title||'').toLowerCase();
+  // 廠商關鍵字清單存在 DB.meta.commercial_vendor_keywords，使用者可在「⚙ 管理廠商關鍵字」
+  // 自行新增/刪除（如中文廠商名「博納百潤」），不需要每次都改程式碼。
+  // 同時比對網址與標題：中文廠商名通常只會出現在網頁標題，不會出現在英文網域名稱裡。
+  const vendorKeywords = (DB.meta?.commercial_vendor_keywords || []).map(k=>k.toLowerCase());
+  const isVendorMatch = vendorKeywords.some(k => urlLow.includes(k) || titleLow.includes(k));
+
   let docType, access;
   if(urlLow.includes('patent')) {
     docType = '專利'; access = '專利全文';
   } else if(urlLow.includes('pubmed') || urlLow.includes('doi.org') || urlLow.includes('sciencedirect') || urlLow.includes('springer') || urlLow.includes('mdpi') || urlLow.includes('nature.com')) {
     docType = '期刊論文'; access = abstract ? '開放摘要' : '付費';
-  } else if(urlLow.includes('biocoat') || urlLow.includes('hydromer') || urlLow.includes('surmodics') || urlLow.includes('freudenberg') || urlLow.includes('harland')) {
+  } else if(isVendorMatch) {
     docType = '商用產品'; access = '產品頁';
   } else {
     docType = '綜述review'; access = '開放全文';
@@ -2756,6 +2775,75 @@ function quickAddFromBookmarklet() {
 
   document.getElementById('bmQuickAdd').style.display = 'none';
   ['bmTitle','bmLink','bmAbstract'].forEach(k => { const el = document.getElementById(k); if(el) el.value=''; });
+}
+
+// ══════════════════════════════════════════════
+// 廠商關鍵字管理：決定「快速加入」自動判斷 doc_type 是否歸類為「商用產品」
+// 存於 DB.meta.commercial_vendor_keywords，使用者可自行新增/刪除，不需改程式碼。
+// 修改後標記所有受影響邏輯都已即時生效（quickAddFromBookmarklet 讀取時是即時取值，
+// 不需要重新整理頁面）；若要永久保存到 papers.json，仍需按「☁ 同步」。
+// ══════════════════════════════════════════════
+function renderVendorKeywordList() {
+  const el = document.getElementById('vendorKeywordList');
+  if (!el) return;
+  if (!DB.meta) DB.meta = {};
+  const keywords = DB.meta.commercial_vendor_keywords || [];
+  el.innerHTML = keywords.length
+    ? keywords.map((k,idx) => `<span class="tag tag-gray" style="cursor:pointer" onclick="removeVendorKeyword(${idx})" title="點擊刪除">${escHtml(k)} ✕</span>`).join('')
+    : '<span style="font-size:11px;color:var(--muted)">尚無廠商關鍵字</span>';
+}
+
+async function addVendorKeyword() {
+  const input = document.getElementById('vendorKeywordInput');
+  const val = (input?.value || '').trim();
+  if (!val) { toast('請輸入廠商名稱', 'error'); return; }
+  if (!DB.meta) DB.meta = {};
+  if (!DB.meta.commercial_vendor_keywords) DB.meta.commercial_vendor_keywords = [];
+  if (DB.meta.commercial_vendor_keywords.some(k => k.toLowerCase() === val.toLowerCase())) {
+    toast('此關鍵字已存在', 'error'); return;
+  }
+  const updated = [...DB.meta.commercial_vendor_keywords, val];
+  const ok = await saveVendorKeywordsToCloud(updated);
+  if (ok) {
+    DB.meta.commercial_vendor_keywords = updated;
+    saveDB();
+    renderVendorKeywordList();
+    input.value = '';
+  }
+}
+
+async function removeVendorKeyword(idx) {
+  if (!DB.meta?.commercial_vendor_keywords) return;
+  const removedName = DB.meta.commercial_vendor_keywords[idx];
+  const updated = DB.meta.commercial_vendor_keywords.filter((_, i) => i !== idx);
+  const ok = await saveVendorKeywordsToCloud(updated);
+  if (ok) {
+    DB.meta.commercial_vendor_keywords = updated;
+    saveDB();
+    renderVendorKeywordList();
+    toast(`已刪除「${removedName}」`, 'success');
+  }
+}
+
+// 廠商關鍵字清單需要即時持久化到雲端（不像文獻走「☁ 同步」按鈕批次處理，因為這份清單
+// 影響的是「之後新加入的文獻怎麼被分類」，延遲生效或忘記同步會造成判斷不一致）。
+// 直接呼叫 Worker 的 /papers update_meta 端點，淺層合併寫回 papers.json。
+async function saveVendorKeywordsToCloud(keywords) {
+  const base = getReportsWorkerBase();
+  if (!base) { toast('請先設定 Claude API Proxy URL，才能儲存廠商關鍵字', 'error'); return false; }
+  try {
+    const r = await fetch(`${base}/papers`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'update_meta', meta: { commercial_vendor_keywords: keywords } }),
+    });
+    const data = await r.json();
+    if (!data.ok) throw new Error(data.error || '儲存失敗');
+    toast('已儲存廠商關鍵字至雲端', 'success');
+    return true;
+  } catch (e) {
+    toast(`儲存失敗：${e.message || e}`, 'error');
+    return false;
+  }
 }
 
 async function loadDB() {
@@ -2862,6 +2950,7 @@ function onDBLoaded() {
   renderCtx();
   refreshActiveAnalysis();
   updateSyncButtonLabel();
+  renderVendorKeywordList();
 }
 
 function saveDB() {
