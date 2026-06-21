@@ -56,6 +56,10 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 .mf-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 .mode-toggle-btn{font-size:9px;font-weight:700;padding:1px 7px;border-radius:10px;border:1px solid var(--accent2);background:var(--surface);color:var(--accent2);cursor:pointer;letter-spacing:0.5px}
 .mode-toggle-btn.mode-and{background:var(--accent2);color:#fff}
+/* 路線頁文獻篩選區塊：字級放大，與 v-browse 原本的精簡風格區隔 */
+.route-filter-blocks .ftag{font-size:13px;padding:4px 10px;border-radius:5px}
+.route-filter-blocks .mode-toggle-btn{font-size:11px;padding:3px 10px}
+.route-filter-blocks .rfb-block-title{font-size:14px}
 .browse-columns{display:flex;flex:1;overflow:hidden}
 .col-mid{width:50%;flex-shrink:0;overflow-y:auto}
 .col-right{width:50%;flex-shrink:0;overflow-y:auto}
@@ -475,7 +479,7 @@ async function doLogin(){
         <span style="font-size:13px;font-weight:700;color:var(--text)">📚 文獻篩選</span>
         <span style="font-size:11px;color:var(--muted)">每個分類獨立切換 <b>OR</b>（任一符合）/ <b>AND</b>（須同時符合）；分類之間固定 AND</span>
       </div>
-      <div id="routeFilterBlocks"></div>
+      <div id="routeFilterBlocks" class="route-filter-blocks"></div>
     </div>
 
     <!-- 路線清單 -->
@@ -1260,7 +1264,7 @@ function renderRouteFilterBlocks() {
     return `
       <div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)">
         <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
-          <span style="font-size:12px;font-weight:600;color:var(--text)">${block.icon} ${block.label}</span>
+          <span class="rfb-block-title" style="font-weight:600;color:var(--text)">${block.icon} ${block.label}</span>
           <button class="mode-toggle-btn${andActive?' mode-and':''}" onclick="toggleFilterMode('${block.key}',this)" title="點擊切換 OR / AND">${group.mode}</button>
         </div>
         <div class="filter-group" style="display:flex;flex-wrap:wrap;gap:4px">${tagsHtml}</div>
