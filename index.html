@@ -4672,6 +4672,7 @@ function renderPapers() {
         ${p._deleted?`<span class="deleted-badge">🗑 已標記刪除</span>`:''}
         ${patentBadge}
         ${orgBadge}
+        ${(p.citation_count!==undefined && p.citation_count!==null)?`<span style="background:#f0ebf7;color:#6b4fa0;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600">🔗 ${p.citation_count}</span>`:''}
       </div>
       <div class="paper-title">${p.title}</div>
       <div style="display:flex;gap:4px;align-items:center;flex-wrap:wrap;margin-top:2px">
@@ -4864,6 +4865,47 @@ function renderLibraryManagementTools(p, i, link) {
   </details>`;
 }
 
+// ══════════════════════════════════════════════
+// 被引用次數（手動輸入，非自動抓取 —— Google Patents 無公開 API，
+// 自動化爬取其頁面涉及 robots.txt 合規問題，故設計為人工查證後填入，
+// 並標註查證日期，避免被誤認為即時/自動更新的數字）
+// ══════════════════════════════════════════════
+function renderCitationCountChip(p, i) {
+  const cc = p.citation_count;
+  if (cc === undefined || cc === null || cc === '') {
+    return `<span class="tag tag-gray" style="cursor:pointer;border:1px dashed var(--border)" onclick="editCitationCount(${i})" title="點擊手動輸入被引用次數">+ 被引用數</span>`;
+  }
+  const asOf = p.citation_count_as_of ? `（${escHtml(p.citation_count_as_of)}查證）` : '';
+  return `<span class="tag tag-gray" style="cursor:pointer" onclick="editCitationCount(${i})" title="點擊修改${asOf}">🔗 被引用 ${cc} 次${asOf}</span>`;
+}
+
+function editCitationCount(i) {
+  const p = filtered[i];
+  if (!p) return;
+  const cur = p.citation_count ?? '';
+  const input = prompt(
+    `輸入「${p.id}」目前的被引用次數（手動查證，例如到 Google Patents 該專利頁面查看 "Cited By" 數量）：\n\n` +
+    `留空並確定可清除此欄位。`,
+    cur
+  );
+  if (input === null) return; // 使用者取消
+  const trimmed = input.trim();
+  if (trimmed === '') {
+    delete p.citation_count;
+    delete p.citation_count_as_of;
+  } else {
+    const n = parseInt(trimmed, 10);
+    if (Number.isNaN(n) || n < 0) { toast('請輸入有效的非負整數', 'error'); return; }
+    p.citation_count = n;
+    p.citation_count_as_of = new Date().toISOString().slice(0, 10);
+    p._cloudSynced = false; // 資料變動，標記待同步至 papers.json
+  }
+  saveDB();
+  showDetail(i);
+  updateSyncButtonLabel();
+}
+
+
 function showDetail(i) {
   const statsEl = document.getElementById('libraryStatsPanel');
   if(statsEl) statsEl.innerHTML = '';
@@ -4879,6 +4921,7 @@ function showDetail(i) {
       ${p.year?`<span class="tag tag-gray">${p.year}</span>`:''}
       ${p.access?`<span class="tag tag-gray">${escHtml(p.access)}</span>`:''}
       ${getPatentBadge(p)}
+      ${renderCitationCountChip(p, i)}
     </div>
     <div class="detail-title">${escHtml(p.title||'')}</div>
     <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:4px 0 8px">
