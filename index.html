@@ -391,7 +391,7 @@ async function doLogin(){
 
 <header>
   <div class="logo" onclick="location.reload()" style="cursor:pointer;color:#fff" title="重新整理">Lit<span style="color:#ffeedd">DB</span></div>
-  <span style="font-size:10px;color:rgba(255,255,255,0.7)">v3.3 · 2026-06-19</span>
+  <span style="font-size:10px;color:rgba(255,255,255,0.7)">v3.4 · 2026-06-21</span>
   <button id="backBtn" class="btn" style="display:none;padding:6px 14px;font-size:13px;font-weight:700;color:var(--accent);border:2px solid var(--accent);background:#fff;border-radius:8px;letter-spacing:0.2px" onclick="goBack()">← 返回</button>
   <span class="mobile-hide" style="font-size:12px;color:rgba(255,255,255,0.85)">親水塗層文獻知識管理</span>
   <div class="header-r" style="gap:8px">
@@ -785,6 +785,42 @@ async function doLogin(){
 <!-- VIEW: MANUAL -->
 <div class="view" id="v-manual">
   <div style="max-width:980px;margin:0 auto;padding:20px 16px">
+    <div class="panel" style="margin-bottom:14px">
+      <div class="panel-h">🆕 v3.4 更新內容（2026-06-21）</div>
+      <div style="padding:16px;font-size:13px;line-height:1.8;color:var(--text)">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px">
+          <div style="border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--card)">
+            <div style="font-weight:800;margin-bottom:4px;color:var(--accent)">📚 文獻篩選大改版</div>
+            <div style="color:var(--muted)">原本「文庫」頁的「更多篩選」下拉已移除，改搬到「<b>開發策略與資料篩選</b>」頁（原「路線」頁）頂部，分成 8 大分類：類型、基材、親水高分子、底塗/接枝機制、固化機制、性能訴求、應用部位、廠商。每個分類可獨立切換 <b>OR</b>（任一符合）/ <b>AND</b>（須同時符合），分類之間固定 AND（交集）。旁邊會即時顯示「符合 X / 總篇數」。</div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--card)">
+            <div style="font-weight:800;margin-bottom:4px;color:var(--accent)">✅ 篩選 → 確認 → AI 分析 三步驟流程</div>
+            <div style="color:var(--muted)">在「開發策略與資料篩選」頁勾好篩選條件後，按「📚 進入文庫確認篩選結果，再進行 AI 分析」按鈕，會帶你到文庫頁並彈出確認提示條；確認文獻清單無誤後按「✅ 確認，進行 AI 分析」才會真正生成報告，避免跳過確認直接生成。若中途離開這個流程去其他頁面，篩選條件會自動重置，避免殘留造成混亂。</div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--card)">
+            <div style="font-weight:800;margin-bottom:4px;color:var(--accent)">☁ 雲端同步</div>
+            <div style="color:var(--muted)">新增文獻、AI 深度解析完成、或填寫被引用次數後，文庫頁會顯示「☁ 同步 X 篇待上傳文獻」按鈕，點擊可批次寫回 GitHub 的 papers.json（透過 Worker 代理，不需手動匯出 JSON 檔請人工貼上）。「報告」頁也新增「☁ 儲存到雲端」與「📚 歷史報告」，AI 報告可永久保存、下次免費查看不必重新呼叫 API。</div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--card)">
+            <div style="font-weight:800;margin-bottom:4px;color:var(--accent)">🔗 被引用次數（手動標註）</div>
+            <div style="color:var(--muted)">文獻詳情頁可手動輸入被引用次數並自動記錄查證日期。因 Google Patents 無公開 API、自動化爬取涉及 robots.txt 合規問題，此欄位設計為人工查證後填入，不會自動抓取或即時更新。</div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--card)">
+            <div style="font-weight:800;margin-bottom:4px;color:var(--accent)">🤖 AI 報告品質強化</div>
+            <div style="color:var(--muted)">修正「AI 深度解讀」報告主題偏離問題：原本篩選範圍會把程式內部代號（如 perf）直接送給 AI，AI 看不懂導致報告跑題；現已轉換成中文名稱（性能訴求等），並明確要求三節內容都要緊扣篩選主題本身，AI 也會主動指出哪些文獻雖被篩選命中、但內容其實沒有真正深入主題。</div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--card)">
+            <div style="font-weight:800;margin-bottom:4px;color:var(--accent)">🌳 專利樹分頁位置調整</div>
+            <div style="color:var(--muted)">分頁順序調整為：市場 → 開發策略與資料篩選 → 專利樹 → 文庫 → 報告 → 使用說明。「專利樹」往前移到「開發策略與資料篩選」之後、「文庫」之前。</div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--card)">
+            <div style="font-weight:800;margin-bottom:4px;color:var(--accent)">🛠 其他修正</div>
+            <div style="color:var(--muted)">修正 Console 中無謂的 404/400 請求（PubChem 化學結構圖 image_size 參數錯誤、本地圖片目錄目前無圖檔造成的必然失敗請求）；修正「更多篩選」標籤點擊後沒有視覺反饋的 CSS 範圍限定問題。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="panel" style="margin-bottom:14px">
       <div class="panel-h">📘 AI Agent 文獻閱讀使用說明書</div>
       <div style="padding:16px;font-size:13px;line-height:1.8;color:var(--text)">
@@ -5367,7 +5403,7 @@ function renderMarket() {
     <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--border);background:var(--surface);flex-wrap:wrap">
       <div>
         <div style="font-size:13px;font-weight:800;color:var(--accent)">Memo｜目前版本與 AI Agent 進度</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px">v3.3 · 2026-06-19 · LitDB 內部工作版</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">v3.4 · 2026-06-21 · LitDB 內部工作版</div>
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap">
         <button class="btn btn-s" style="font-size:11px;padding:4px 10px" onclick="showView('browse',getMainTab('browse'))">文庫篩選</button>
