@@ -417,7 +417,6 @@ async function doLogin(){
 <div class="tabs">
   <div class="tab active" onclick="showView('market',this)">🏢<span class="tab-text"> 市場</span></div>
   <div class="tab" onclick="showView('routes',this)">🛣<span class="tab-text"> 開發策略與資料篩選</span></div>
-  <div class="tab" onclick="showView('patent-tree',this)">🌳<span class="tab-text"> 專利樹</span></div>
   <div class="tab" onclick="showView('browse',this)">📚<span class="tab-text"> 文庫</span> <span class="badge" id="browseCount">0</span><span class="badge" id="analyzedCount" style="background:var(--accent2)">0</span></div>
   <div class="tab" onclick="showView('report',this)">📋<span class="tab-text"> 報告</span></div>
   <div class="tab" onclick="showView('manual',this)">📘<span class="tab-text"> 使用說明</span></div>
@@ -432,8 +431,44 @@ async function doLogin(){
   </div>
 </div>
 
-<div class="view" id="v-patent-tree">
-  <div style="max-width:1200px;margin:0 auto;padding:16px">
+<div class="view" id="v-routes">
+  <div style="max-width:1200px;margin:0 auto;padding:20px 16px">
+
+    <!-- 標題 -->
+    <div style="margin-bottom:20px">
+      <h2 style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px">開發策略與資料篩選</h2>
+      <p style="font-size:13px;color:var(--muted)">目前資料庫涵蓋 <span id="rte_total" style="font-weight:700;color:var(--accent)">—</span> 篇文獻。依序：① 篩選出您要的範圍 → ② 參考技術路線規劃方向 → ③ 查看各廠商專利布局與缺口</p>
+    </div>
+
+    <!-- ══════════════ ① 條件篩選 ══════════════ -->
+    <div style="margin-bottom:10px;display:flex;align-items:center;gap:8px">
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;font-weight:700">1</span>
+      <span style="font-size:16px;font-weight:700;color:var(--text)">條件篩選</span>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:28px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
+        <span style="font-size:13px;font-weight:700;color:var(--text)">📚 文獻篩選 <span id="routeFilterCount" style="font-size:13px;font-weight:700;color:var(--accent)"></span></span>
+        <span style="font-size:11px;color:var(--muted)">每個分類獨立切換 <b>OR</b>（任一符合）/ <b>AND</b>（須同時符合）；分類之間固定 AND</span>
+      </div>
+      <div id="routeFilterBlocks" class="route-filter-blocks"></div>
+      <div style="margin-top:12px;text-align:center;padding-top:12px;border-top:1px solid var(--border)">
+        <button class="btn btn-p" onclick="goToBrowseForConfirm()" style="font-size:13px;padding:8px 20px">📚 進入文庫確認篩選結果，再進行 AI 分析</button>
+      </div>
+    </div>
+
+    <!-- ══════════════ ② 開發策略（技術路線）══════════════ -->
+    <div style="margin-bottom:10px;display:flex;align-items:center;gap:8px">
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;font-weight:700">2</span>
+      <span style="font-size:16px;font-weight:700;color:var(--text)">開發策略（技術路線）</span>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 10px">歸屬 9 條主流技術路線，點擊路線卡片展開詳情：核心材料、代表專利、性能基準</p>
+    <div id="routeList" style="margin-bottom:28px"></div>
+
+    <!-- ══════════════ ③ 玩家專利分析（專利樹）══════════════ -->
+    <div style="margin-bottom:10px;display:flex;align-items:center;gap:8px">
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;font-weight:700">3</span>
+      <span style="font-size:16px;font-weight:700;color:var(--text)">玩家專利分析</span>
+    </div>
 
     <!-- 控制列 -->
     <div class="panel" style="margin-bottom:12px">
@@ -452,7 +487,7 @@ async function doLogin(){
     </div>
 
     <!-- 底部：詳情 + 缺口清單 -->
-    <div style="display:grid;grid-template-columns:1fr 360px;gap:12px">
+    <div style="display:grid;grid-template-columns:1fr 360px;gap:12px;margin-bottom:24px">
       <div class="panel">
         <div class="panel-h">📄 專利內容</div>
         <div id="patentTreeDetail" style="padding:14px;font-size:12px;line-height:1.7;color:var(--muted)">
@@ -465,37 +500,6 @@ async function doLogin(){
       </div>
     </div>
 
-  </div>
-</div>
-
-<div class="view" id="v-routes">
-  <div style="max-width:900px;margin:0 auto;padding:20px 16px">
-
-    <!-- 標題 -->
-    <div style="margin-bottom:16px">
-      <h2 style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px">親水塗層技術路線</h2>
-      <p style="font-size:13px;color:var(--muted)">目前資料庫涵蓋 <span id="rte_total" style="font-weight:700;color:var(--accent)">—</span> 篇文獻，歸屬 9 條主流技術路線。點擊路線展開詳情。</p>
-    </div>
-
-    <!-- ═══ 文獻篩選（8大分類，各自可切換 AND/OR）═══ -->
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:20px">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
-        <span style="font-size:13px;font-weight:700;color:var(--text)">📚 文獻篩選 <span id="routeFilterCount" style="font-size:13px;font-weight:700;color:var(--accent)"></span></span>
-        <span style="font-size:11px;color:var(--muted)">每個分類獨立切換 <b>OR</b>（任一符合）/ <b>AND</b>（須同時符合）；分類之間固定 AND</span>
-      </div>
-      <div id="routeFilterBlocks" class="route-filter-blocks"></div>
-      <div style="margin-top:12px;text-align:center;padding-top:12px;border-top:1px solid var(--border)">
-        <button class="btn btn-p" onclick="goToBrowseForConfirm()" style="font-size:13px;padding:8px 20px">📚 進入文庫確認篩選結果，再進行 AI 分析</button>
-      </div>
-    </div>
-
-    <!-- 路線清單 -->
-    <div id="routeList"></div>
-
-    <!-- 底部導覽提示 -->
-    <div style="margin-top:24px;padding:12px 16px;background:var(--card);border-radius:8px;font-size:12px;color:var(--muted)">
-      💡 點擊路線卡片展開 → 查看核心材料、代表專利、性能基準 → 跳到文庫篩選相關文獻
-    </div>
   </div>
 </div>
 
@@ -3581,7 +3585,7 @@ let currentAnalysisTab = 'graph';
 function goBack() {
   if(!previousView) return;
   const tabs = document.querySelectorAll('.tabs > .tab');
-  const viewMap = {market:0, routes:1, 'patent-tree':2, browse:3, report:4};
+  const viewMap = {market:0, routes:1, browse:2, report:3};
   const idx = viewMap[previousView];
   if(idx!==undefined && tabs[idx]) {
     showView(previousView, tabs[idx]);
@@ -3637,7 +3641,7 @@ function showView(id,el){
   if(id==='gap') buildHeatmaps();
   if(id==='compare') buildCompare();
   if(id==='research') renderResearchAgent();
-  if(id==='patent-tree') renderPatentTree();
+  if(id==='routes') renderRoutes(); // renderRoutes() 內部會同時渲染路線清單與專利樹火車卡片（第③項）
   if(id==='report') { renderIntegratedReport(); }
   // 離開文庫流程時關閉確認提示條（避免下次回來時殘留顯示一個已經過期的提示）
   if (!FILTER_FLOW_VIEWS.has(id)) dismissBrowseConfirmBanner();
@@ -6372,6 +6376,7 @@ const PHASE_DEFS = [
 function renderRoutes() {
   if(!DB.papers) return;
   renderRouteFilterBlocks();
+  if (typeof renderPatentTree === 'function') renderPatentTree(); // 第③項：玩家專利分析
   const papers = DB.papers.filter(p=>!p._deleted);
   document.getElementById('rte_total').textContent = papers.length;
 
