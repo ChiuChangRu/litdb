@@ -475,8 +475,8 @@ async function doLogin(){
 
     <!-- ═══ 文獻篩選（8大分類，各自可切換 AND/OR）═══ -->
     <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:20px">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
-        <span style="font-size:13px;font-weight:700;color:var(--text)">📚 文獻篩選</span>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
+        <span style="font-size:13px;font-weight:700;color:var(--text)">📚 文獻篩選 <span id="routeFilterCount" style="font-size:13px;font-weight:700;color:var(--accent)"></span></span>
         <span style="font-size:11px;color:var(--muted)">每個分類獨立切換 <b>OR</b>（任一符合）/ <b>AND</b>（須同時符合）；分類之間固定 AND</span>
       </div>
       <div id="routeFilterBlocks" class="route-filter-blocks"></div>
@@ -4660,6 +4660,8 @@ function filterPapers() {
   else if(sort==='tags') filtered.sort((a,b)=>(b.tags||[]).length-(a.tags||[]).length);
 
   document.getElementById('filterCount').textContent = `${filtered.length} / ${DB.papers.length} 篇`;
+  const routeCountEl = document.getElementById('routeFilterCount');
+  if (routeCountEl) routeCountEl.textContent = `— 符合 ${filtered.length} / ${DB.papers.length} 篇`;
   renderPapers();
   renderLibraryStats(filtered);
   renderRouteBanner();
