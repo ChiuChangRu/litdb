@@ -391,7 +391,7 @@ async function doLogin(){
 
 <header>
   <div class="logo" onclick="location.reload()" style="cursor:pointer;color:#fff" title="重新整理">Lit<span style="color:#ffeedd">DB</span></div>
-  <span style="font-size:10px;color:rgba(255,255,255,0.7)">v3.4 · 2026-06-21</span>
+  <span style="font-size:10px;color:rgba(255,255,255,0.7)">v3.5 · 2026-06-22</span>
   <button id="backBtn" class="btn" style="display:none;padding:6px 14px;font-size:13px;font-weight:700;color:var(--accent);border:2px solid var(--accent);background:#fff;border-radius:8px;letter-spacing:0.2px" onclick="goBack()">← 返回</button>
   <span class="mobile-hide" style="font-size:12px;color:rgba(255,255,255,0.85)">核心活檢針機構文獻知識管理</span>
   <div class="header-r" style="gap:8px">
@@ -848,6 +848,16 @@ async function doLogin(){
   <div class="modal">
     <button class="x" onclick="closeSettings()">×</button>
     <h3>⚙ 設定</h3>
+    <div style="margin-bottom:16px;padding:12px;background:#f0fff4;border:1px solid #a0d4b0;border-radius:8px">
+      <div style="font-size:12px;font-weight:700;color:#1a6b3a;margin-bottom:8px">🔖 書籤小工具安裝</div>
+      <div style="font-size:11px;color:#444;line-height:1.6;margin-bottom:10px">將下方連結<b>拖曳到瀏覽器書籤列</b>，之後在任何網頁（專利頁、市場報告等）點一下即可把該頁存入此活檢針知識庫。</div>
+      <a href="javascript:(function(){var t=encodeURIComponent(document.title);var u=encodeURIComponent(location.href);window.open('https://chiuchangru.github.io/litdb/biopsy/index.html?title='+t+'&url='+u,'_blank');})();"
+         style="display:inline-block;padding:7px 14px;background:#1a6b3a;color:#fff;border-radius:6px;font-size:12px;font-weight:700;text-decoration:none;cursor:grab"
+         onclick="event.preventDefault();return false;">
+        📌 存入 LitDB（活檢針）
+      </a>
+      <div style="font-size:10px;color:#888;margin-top:6px">⚠️ 直接點沒有效果，必須<b>拖曳到書籤列</b>後，在其他網頁上使用</div>
+    </div>
     <div class="field" style="margin-bottom:12px"><label style="font-size:11px;color:var(--muted);font-weight:600;display:block;margin-bottom:4px">Claude API Proxy URL</label><input type="text" id="cfgProxy" placeholder="https://your-worker.workers.dev/api"><div style="font-size:11px;color:var(--muted);margin-top:4px">同 MedQA 的 Cloudflare Worker。AI 對話和自動填入需要此設定。</div></div>
     <div class="field" style="margin-bottom:12px"><label style="font-size:11px;color:var(--muted);font-weight:600;display:block;margin-bottom:4px">papers.json URL（遠端）</label><input type="text" id="cfgDataUrl" placeholder="留空則讀同目錄 papers.json"></div>
     <button class="btn btn-p" style="width:100%" onclick="saveSettings()">儲存</button>
