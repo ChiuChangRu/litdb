@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "tag_dictionary": {
+      "firing_mechanism": ["雙動作（手動）", "SLC彈簧加載", "馬達驅動", "VABB真空輔助"],
+      "lock_mechanism": ["pawl卡榫式", "cam rail解鎖式", "雙鎖定卡合"],
+      "action_mode": ["單動作", "雙動作", "soft fire漸進式"],
+      "sampling_spec": [],
+      "visibility_tech": ["echogenic tip", "顯影標記"],
+      "application": ["乳房", "前列腺", "肝/腎/肺等軟組織", "骨髓/骨"],
+      "other": []
+    }
+  },
+  "papers": []
+}
