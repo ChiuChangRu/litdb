@@ -6963,11 +6963,7 @@ function renderPatentResult(a, _paper) {
       <a href="${_gpUrl}" target="_blank" style="display:inline-flex;align-items:center;gap:4px;padding:5px 10px;background:#f0f4ff;border:1px solid #c0cce8;border-radius:6px;font-size:11px;font-weight:600;color:#2c4a9e;text-decoration:none">
         🔗 查看專利原圖（Google Patents）
       </a>
-      <button onclick="generateMechanismDiagram(this,'${_paper?.id||''}')" style="display:inline-flex;align-items:center;gap:4px;padding:5px 10px;background:#f0fff4;border:1px solid #a0d4b0;border-radius:6px;font-size:11px;font-weight:600;color:#1a6b3a;cursor:pointer">
-        🔧 生成機構示意圖
-      </button>
-    </div>
-    <div id="mechDiagram_${_paper?.id||''}" style="margin-bottom:10px"></div>`;
+    </div>`;
   }
 
   // 一句話總結
@@ -7097,76 +7093,6 @@ function renderPatentResult(a, _paper) {
   html += '<div style="margin-top:12px;padding:8px 10px;background:var(--card);border-radius:6px;font-size:12px;color:var(--accent2);text-align:center">✅ 分析已自動儲存。點頂部「📊 存到 Sheets」可同步到 Google Drive。</div>';
   html += '</div>';
   return html;
-}
-// ── B: AI 機構示意圖生成 ──
-async function generateMechanismDiagram(btn, paperId) {
-  if(!cfg.proxy) { toast('請先在設定中填入 Claude API Proxy URL','error'); return; }
-  const p = DB.papers.find(x => x.id === paperId);
-  if(!p) return;
-  const el = document.getElementById('mechDiagram_' + paperId);
-  if(!el) return;
-
-  btn.disabled = true;
-  btn.textContent = '⏳ 生成中…';
-  el.innerHTML = '<div style="padding:12px;text-align:center;color:var(--muted);font-size:12px">AI 正在根據專利說明繪製機構剖面示意圖…</div>';
-
-  const full = p?.patentResults?.full || {};
-  const mechSpec = full.mechanism_spec || {};
-  const keyClaims = (full.key_claims || []).join('\n');
-  const summary = full.summary || '';
-  const components = (mechSpec.components || []).join('\n');
-  const assemblyLogic = mechSpec.assembly_logic || '';
-
-  const prompt = `你是醫療器材機構設計專家。請根據以下活檢針專利的機構說明，繪製一個清晰的 SVG 剖面示意圖（橫剖面 cross-section 或縱剖面 longitudinal section，選最能說明此機構的視角）。
-
-專利：${p.title}
-摘要：${summary}
-
-關鍵 Claims：
-${keyClaims}
-
-機構元件：
-${components}
-
-組裝邏輯：${assemblyLogic}
-
-要求：
-1. 輸出純 SVG 代碼，viewBox="0 0 600 320"，不要加任何說明文字或 markdown
-2. 使用顏色區分元件（外管用#4a90d9藍色，內管/探針用#e67e22橙色，彈簧用#2ecc71綠色，組織用#f8c8c8粉色）
-3. 每個元件旁加中文標註箭頭
-4. 如有取樣凹槽，清楚標示幾何形狀（如160~200°弧度用扇形表示）
-5. 如有兩個狀態（預載/擊發後），用左右兩圖對比
-6. 圖底部加一行說明文字（font-size:12px）
-7. 背景用白色，線條清晰，適合在白色或淺灰背景上顯示`;
-
-  try {
-    const r = await fetch(cfg.proxy, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 3000,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-    const data = await r.json();
-    trackUsage && trackUsage(data);
-    let svgText = data.content?.[0]?.text?.trim() || '';
-    // Strip markdown fences if present
-    svgText = svgText.replace(/^```svg\s*/i,'').replace(/^```\s*/,'').replace(/```\s*$/,'').trim();
-    if(svgText.startsWith('<svg')) {
-      el.innerHTML = `<div style="border:1px solid var(--border);border-radius:8px;padding:8px;background:#fff;margin-bottom:4px">
-        ${svgText}
-        <div style="font-size:10px;color:var(--muted);text-align:right;margin-top:4px">AI 生成示意圖，僅供理解機構概念參考，非官方圖面</div>
-      </div>`;
-    } else {
-      el.innerHTML = '<div style="font-size:11px;color:var(--danger);padding:8px">⚠️ 生成失敗，請重試</div>';
-    }
-  } catch(e) {
-    el.innerHTML = '<div style="font-size:11px;color:var(--danger);padding:8px">⚠️ API 錯誤：' + escHtml(String(e)) + '</div>';
-  }
-  btn.disabled = false;
-  btn.textContent = '🔧 重新生成機構圖';
 }
 
 function pinPaper(id){if(pinnedIds.has(id))pinnedIds.delete(id);else pinnedIds.add(id);renderCtx();toast(pinnedIds.has(id)?'已釘選':'已取消','success')}
