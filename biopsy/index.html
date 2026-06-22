@@ -537,7 +537,7 @@ async function doLogin(){
                 <div style="font-size:10px;color:var(--muted);margin-bottom:6px">新增公司中文/英文名稱後，之後用書籤小工具加入該公司網頁時會自動歸類為「商用產品」（同時比對網址與標題）</div>
                 <div id="vendorKeywordList" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px"></div>
                 <div style="display:flex;gap:6px">
-                  <input type="text" id="vendorKeywordInput" placeholder="輸入公司名稱，如：博納百潤 或 hydromer" style="flex:1;font-size:12px" onkeydown="if(event.key==='Enter')addVendorKeyword()">
+                  <input type="text" id="vendorKeywordInput" placeholder="輸入公司名稱，如：博納百潤 或 Cook Medical" style="flex:1;font-size:12px" onkeydown="if(event.key==='Enter')addVendorKeyword()">
                   <button class="btn btn-p" onclick="addVendorKeyword()">新增</button>
                 </div>
               </div>
@@ -2336,24 +2336,16 @@ async function loadDB() {
 
 // ══════════════════════════════════════════════
 // 廠商/玩家（players）偵測 —— 公司名稱不在 tags 字典裡，散落在 title/abstract_note/purpose
-// 自由文字中（如 P31 原文只寫「Cook续案」，沒有獨立的 Cook 標籤），因此用詞邊界字串掃描，
-// 而非單純比對 tags。掃描結果快取在 p._companies，避免每次篩選都重新掃描全文。
+// 自由文字中，因此用詞邊界字串掃描，而非單純比對 tags。掃描結果快取在 p._companies，
+// 避免每次篩選都重新掃描全文。
 // ══════════════════════════════════════════════
 const COMPANY_GROUPS = {
-  "Hydromer": ["Hydromer"],
-  "Harland (Harland Medical Systems)": ["Harland"],
-  "DSM": ["DSM"],
-  "Biocoat": ["Biocoat"],
-  "Surmodics": ["Surmodics"],
-  "Cook Medical": ["Cook"],
-  "Boston Scientific / SciMed": ["Boston Scientific", "Scimed", "SciMed"],
-  "Coloplast": ["Coloplast"],
-  "Covidien / Sherwood": ["Covidien", "Sherwood"],
-  "C.R. Bard": ["Bard"],
-  "Medtronic": ["Medtronic"],
-  "Teleflex": ["Teleflex"],
-  "Argon Medical": ["Argon"],
-  "Merit Medical": ["Merit Medical"],
+  "Cook Medical": ["Cook Medical", "Cook Incorporated", "Quick-Core"],
+  "Argon Medical": ["Argon Medical", "Tru-Core", "SuperCore"],
+  "Merit Medical": ["Merit Medical", "Devicor", "TEMNO", "Achieve"],
+  "BD": ["BD", "Bard", "Becton Dickinson", "Marquee", "Maxcore", "Mission"],
+  "Mermaid Medical": ["Mermaid Medical", "M.Biopsy"],
+  "Medax": ["Medax", "Medone", "Medeasy"],
 };
 
 function _companyWordMatch(term, blob) {
@@ -3733,12 +3725,12 @@ function renderPapers() {
 // 提取機構（公司/大學）
 function extractOrg(p) {
   const a = p.authors || '';
-  // 專利：通常格式 "Dias et al. / DSM"
+  // 專利：通常格式 "Smith et al. / Cook Medical"
   if(a.includes('/')) return a.split('/').pop().trim();
   if(a.includes('·')) return a.split('·').pop().trim();
   // 商用產品：用 venue 或 title 關鍵字
   if(p.doc_type==='商用產品') {
-    const brands = ['Biocoat','Surmodics','Hydromer','Freudenberg','Harland','AST','Covalon','Coloplast','Bard','Teleflex'];
+    const brands = ['Cook Medical','Argon Medical','Merit Medical','Devicor','BD','Bard','Mermaid Medical','Medax'];
     for(const b of brands) { if((p.title+' '+a+' '+(p.venue||'')).includes(b)) return b; }
   }
   return '';
@@ -4977,10 +4969,10 @@ function goToMarketPaper(pid) {
 function goToMarketEntity(name) {
   const needle = String(name || '').toLowerCase();
   const aliases = {
-    'cook medical':['cook medical','houghton pe'],
-    'boston scientific':['boston scientific','scimed','percuflex'],
-    'hydromer':['hydromer'],
-    'vivitro labs':['vivitro','idte']
+    'cook medical':['cook medical','cook incorporated','quick-core'],
+    'argon medical':['argon medical','argon medical devices','tru-core','supercore'],
+    'merit medical':['merit medical','devicor','devicor medical products','temno','achieve'],
+    'bd':['bd','bard','c.r. bard','becton dickinson','marquee','maxcore','mission']
   }[needle] || [needle];
   const matchedIds = (DB.papers || []).filter(p=>{
     const hay = `${p.id||''} ${p.title||''} ${p.authors||''} ${p.venue||''} ${p.purpose||''} ${p.abstract_note||''} ${p.value_to_project||''}`.toLowerCase();
@@ -5142,11 +5134,11 @@ function renderIntegratedReport() {
 
 // 公司正規化（用於決策報告的公司分組判斷，不影響其他頁面既有的 extractOrg 顯示）：
 // extractOrg() 只看 authors 欄位尾段做精確字串分割，但同一家公司在不同文獻的
-// authors 寫法可能不一致（如「Scimed Life Systems Inc」vs「Scimed Life Systems;
-// Boston Scientific Scimed」），導致同公司被拆成不同分組、永遠湊不到判斷門檻。
+// authors 寫法可能不一致（如「Devicor Medical Products Inc」vs「Devicor Medical
+// Products, a GTCR portfolio company」），導致同公司被拆成不同分組、永遠湊不到判斷門檻。
 // 這裡改用 tags 裡的已知公司關鍵字做模糊比對（跟「市場玩家」頁的邏輯一致），
 // 同一家公司不論 authors 怎麼寫，只要 tags 有標準名稱就能正確歸併。
-const _DE_KNOWN_COMPANIES = ['Boston Scientific','Scimed','Cook Medical','Cook','Argon Medical','Argon','C.R. Bard','Bard','BD','Becton Dickinson','Merit Medical','Devicor','Devicor Medical Products','Mermaid Medical','Medax','Teleflex'];
+const _DE_KNOWN_COMPANIES = ['Cook Medical','Cook','Argon Medical','Argon','C.R. Bard','Bard','BD','Becton Dickinson','Merit Medical','Devicor','Devicor Medical Products','Mermaid Medical','Medax'];
 function _deNormalizeCompany(p){
   const tags=(p.tags||[]).join(' ');
   // 較長、較完整的公司名優先比對（避免「Cook」子字串先命中，蓋掉「Cook Medical」的精確比對機會）
