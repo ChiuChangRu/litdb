@@ -1,322 +1,761 @@
 {
   "meta": {
+    "project": "活檢針機構知識庫",
+    "scope": "核心活檢針（Core Needle Biopsy）擊發機構 / 鎖合方式 / 企業技術血統 / FTO分析導向",
+    "focus_note": "以「機構設計」為主：擊發機構（彈簧/馬達/手動）、鎖合方式（pawl/cam/雙鎖定）、取樣幾何結構。排除影像導引、VABB真空輔助及純耗材設計專利。",
+    "last_updated": "2026-06-22",
+    "schema_version": "2.0",
     "tag_dictionary": {
-      "firing_mechanism": ["雙動作（手動）", "SLC彈簧加載", "馬達驅動", "VABB真空輔助"],
-      "lock_mechanism": ["pawl卡榫式", "cam rail解鎖式", "雙鎖定卡合"],
-      "action_mode": ["單動作", "雙動作", "soft fire漸進式"],
-      "sampling_spec": [],
-      "visibility_tech": ["echogenic tip", "顯影標記"],
-      "application": ["乳房", "前列腺", "肝/腎/肺等軟組織", "骨髓/骨"],
-      "other": []
+      "firing_mechanism": [
+        "雙動作（手動）",
+        "SLC彈簧加載",
+        "馬達驅動",
+        "VABB真空輔助"
+      ],
+      "lock_mechanism": [
+        "pawl卡榫式",
+        "cam rail解鎖式",
+        "雙鎖定卡合",
+        "無鎖合（純手動）"
+      ],
+      "action_mode": [
+        "單動作",
+        "雙動作",
+        "soft fire漸進式"
+      ],
+      "sampling_spec": [
+        "標準取樣凹槽（19mm）",
+        "短凹槽（9.5mm）",
+        "半圓柱形內管",
+        "側向缺口"
+      ],
+      "visibility_tech": [
+        "echogenic tip",
+        "顯影標記"
+      ],
+      "application": [
+        "乳房",
+        "前列腺",
+        "肝/腎/肺等軟組織",
+        "骨髓/骨"
+      ],
+      "other": [
+        "人因設計",
+        "歷史源頭",
+        "企業併購",
+        "歷史脈絡"
+      ]
+    },
+    "stats": {
+      "total": 9,
+      "patents": 7,
+      "market_reports": 2,
+      "patent_ratio": "78%"
     }
   },
   "papers": [
     {
       "id": "B01",
-      "doc_type": "專利",
-      "title": "Biopsy instrument (Travenol TRU-CUT)",
-      "year": 1969,
+      "title": "Biopsy instrument — Travenol TRU-CUT (US3477423)",
       "authors": "Griffith, L.K. / Travenol Laboratories, Inc.",
-      "venue": "US3477423",
-      "tags": ["雙動作（手動）", "BD", "歷史源頭"],
-      "abstract_note": "整個核心活檢針技術的最古老源頭。純手動雙動作機構：醫師先手動將探針推入組織，再手動將切割套管推過探針切下樣本。中空管狀切割套管接塑膠握把，同軸實心探針可伸縮套於套管內並連接近端旋鈕。",
-      "purpose": "建立核心活檢針雙動作機構的技術源頭與比較基準",
-      "value_to_project": "理解後續所有自動化機構設計（彈簧/馬達）皆是在此雙動作基礎上疊加自動化的演進起點",
+      "year": 1969,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（已到期）",
+      "tags": [
+        "雙動作（手動）",
+        "無鎖合（純手動）",
+        "雙動作",
+        "歷史源頭",
+        "前列腺",
+        "肝/腎/肺等軟組織"
+      ],
+      "purpose": "確立核心活檢針雙動作機構的技術起點與所有後續自動化設計的比較基準",
+      "abstract_note": "TRU-CUT是整個核心活檢針技術體系的最古老源頭。機構由兩部分組成：（1）外層空心切割套管（hollow tubular cutting cannula），遠端磨尖，近端接塑膠握把；（2）同軸實心探針（coaxial solid stylet），近端接旋鈕（proximal knob），遠端磨尖並設有橫向取樣凹槽（transverse specimen notch）。操作為純手動雙動作：醫師先手推探針進入組織，凹槽中組織脫垂後，再以另一手推套管前進，切割並包夾組織樣本。需要雙手操作，且操作過程中食指須靠近針尖附近固定，臨床操控困難。此設計缺陷成為後續「槍式」自動化機構（彈簧/馬達）的開發動機。",
+      "value_to_project": "理解所有自動化活檢機構（SLC彈簧加載/馬達驅動）皆是在TRU-CUT雙動作基礎上疊加自動化的演進，是FTO脈絡分析的必要起點",
+      "links": {
+        "patents": "https://patents.google.com/patent/US3477423/en",
+        "google_patents": "https://patents.google.com/patent/US3477423/en"
+      },
       "patentResults": {
         "full": {
-          "summary": "1969年Griffith發明，Travenol TRU-CUT活檢針，純手動雙動作機構，是核心活檢針技術的最古老源頭。",
+          "summary": "US3477423（1969年，Travenol Laboratories）是核心活檢針技術的始祖專利。核心結構為外層切割套管＋同軸實心探針，遠端探針設橫向取樣凹槽，靠醫師雙手依序推送完成取樣，無任何彈簧或動力機構。後來文獻（EP0153047B1、US4776346等多件後續專利）均在背景技術段落明確引用本案，確認其技術源頭地位。本專利已於數十年前到期，機構概念完全進入公共領域。",
           "examples": [
             {
-              "name": "TRU-CUT雙動作機構",
+              "name": "TRU-CUT雙動作手動取樣機構",
               "is_real": true,
               "credibility": "高",
-              "credibility_reason": "原始專利文件明確記載機構設計與操作流程",
-              "gauge_length": "未標準化（1969年代產品）",
+              "credibility_reason": "被多件後續專利（EP0153047、US4776346、US9433402、US5775333等）在背景技術段落明確引用並描述機構細節，技術內容有多重交叉驗證",
+              "gauge_length": "未標準化（1969年產品，gauge規格由產品型號決定，非本專利claim範圍）",
               "firing_spec": {
                 "mechanism": "雙動作（手動）",
-                "lock_type": "無鎖合機構（純手動操作）",
-                "action_mode": "雙動作"
+                "lock_type": "無鎖合機構（純手動依序推送，無彈簧或棘輪）",
+                "action_mode": "雙動作（第一動：推探針入組織；第二動：推套管切割）"
               },
               "results": {
-                "sample_notch": "未記載具體數值",
-                "firing_force": "依賴醫師手感，無固定規格",
-                "visibility": "無"
+                "sample_notch": "橫向取樣凹槽（transverse specimen notch），位於探針遠端尖端近側，具體尺寸未記載於專利",
+                "firing_force": "完全依賴醫師手感，無固定規格",
+                "visibility": "無（1969年代無echogenic設計）"
               }
             }
           ],
-          "key_claims": ["中空管狀切割套管設計", "同軸實心探針伸縮機構", "近端旋鈕連接結構"],
-          "actionable_insights": ["理解雙動作機構是後續SLC彈簧/馬達驅動設計的基礎參照點"],
-          "red_flags": ["專利已於數十年前到期，技術可自由參考使用"],
-          "bioteque_relevance": "*作為技術脈絡起點參考，本公司非活檢針整機製造商，此分析聚焦機構設計參考價值而非製造可行性評估"
+          "key_claims": [
+            "中空管狀切割套管（hollow tubular cutting cannula）設計，遠端磨尖",
+            "同軸實心探針（coaxial solid stylet）可於套管內伸縮，近端接旋鈕",
+            "探針遠端設橫向取樣凹槽（transverse specimen notch）以接收脫垂組織",
+            "雙動作操作序列：探針先推入→凹槽接收組織→套管推進切割"
+          ],
+          "actionable_insights": [
+            "TRU-CUT專利早已到期，其機構概念（同軸套管/探針 + 側向取樣凹槽）完全為公共領域，可自由參考",
+            "後續所有SLC彈簧加載（Cook/Argon）設計的本質：在此雙動作序列上加裝彈簧自動化，替代醫師的第二推送動作",
+            "臨床痛點（需雙手、操控難）明確指向自動化機構的設計動機，供理解市場需求脈絡使用"
+          ],
+          "red_flags": [
+            "本專利已過期數十年，無任何FTO風險",
+            "注意：探針側向凹槽（specimen notch）概念已成行業標準，本身不構成任何廠商的獨特專利保護"
+          ],
+          "vs_database": "B01是所有活檢針機構的共同起點。B04（Cook US9101350）與B05（Argon US6106484）均是在B01雙動作序列上加裝彈簧自動化；B06（Merit/Devicor WO2014182488）則進一步用馬達取代彈簧以實現可控速度（soft fire）。B02是B01在特定臨床場景（前列腺）的早期應用延伸。",
+          "bioteque_relevance": "作為技術脈絡起點參考。本案機構概念已完全公共領域化，若本公司設計活檢針配套組件（如導引套管、針座），應以此為基礎理解機構相容性需求，而非FTO風險評估對象。",
+          "evidence_level": "high",
+          "source_quality": "多件後續專利背景技術段落交叉引用 + 法院判決文件（BARD v. M3 SYSTEMS, Fed. Cir. 1998）",
+          "key_findings": [
+            "同軸套管/探針結構 + 側向取樣凹槽是整個核心活檢針技術體系的基礎架構，1969年即已確立",
+            "TRU-CUT操作需雙手且食指須靠近針尖，臨床操控困難是後來彈簧式「槍」設計的直接動機",
+            "Travenol後來被Baxter收購，Baxter Travenol的TRU-CUT持續市售至1980年代作為彈簧槍的配套針組（見BARD v. M3判決）",
+            "1985年Lindgren設計的第二代彈簧槍已無法相容TRU-CUT針組，顯示機構相容性是產品生態的關鍵設計維度"
+          ],
+          "mechanism_spec": {
+            "components": [
+              "外層空心切割套管（hollow tubular cutting cannula）：遠端磨尖，近端塑膠握把",
+              "同軸實心探針（coaxial solid stylet）：遠端磨尖 + 橫向取樣凹槽，近端旋鈕"
+            ],
+            "assembly_logic": "探針同軸置於套管內，可相對套管做軸向滑動。操作時探針先推出（暴露凹槽），組織脫垂入凹槽後，套管推進覆蓋並切割，完成取樣。",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "同軸套管/探針結構 + 橫向取樣凹槽 + 雙動作操作序列",
+            "claim_boundary": "本專利已到期，claim範圍僅供技術史理解，無FTO意義",
+            "fto_risk": "無（已到期）"
+          },
+          "design_space": "本案已公共領域，無需迴避。核心取樣凹槽概念可自由使用；後續廠商的保護集中在自動化機構（彈簧/馬達）及特定幾何改良（如B04的半圓柱形內管）上。",
+          "next_actions": [
+            "以B01為技術史基準，對比B04/B05/B06各廠商在「彈簧加載」與「馬達驅動」的差異化claim邊界"
+          ]
         }
       },
       "citation_count": null
     },
     {
       "id": "B02",
-      "doc_type": "專利",
-      "title": "Surgical biopsy device incorporating prostate biopsy application",
+      "title": "Surgical biopsy device incorporating prostate biopsy application (US4600014)",
+      "authors": "Beraha, D. / Beraha",
       "year": 1986,
-      "authors": "Beraha, D.",
-      "venue": "US4600014",
-      "tags": ["雙動作（手動）", "BD", "前列腺"],
-      "abstract_note": "經直腸前列腺活檢應用，將雙動作機構應用於前列腺活檢臨床場景，是Travenol TRU-CUT技術的臨床應用延伸案例。",
-      "purpose": "確認雙動作機構在特定臨床場景（前列腺）的應用先例",
-      "value_to_project": "提供雙動作機構應用於特定解剖部位的設計參考",
+      "venue": "USPTO / EP0153047B1同族",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（已到期）",
+      "tags": [
+        "雙動作（手動）",
+        "無鎖合（純手動）",
+        "雙動作",
+        "前列腺",
+        "歷史脈絡"
+      ],
+      "purpose": "確認雙動作機構於前列腺經直腸活檢的早期臨床應用先例，及其操作痛點如何推動後續自動化設計",
+      "abstract_note": "本案是TRU-CUT雙動作機構應用於前列腺活檢的早期改良。EP0153047B1（Beraha）背景技術詳述TRU-CUT的臨床痛點：（1）需雙手操作，操作中食指須離開直腸；（2）套管前推過程中探針尖端易向前竄動，穿破膀胱或尿道；（3）樣本量不穩定。本案設計目標是讓醫師單手完成整個取樣動作，探針不會因套管施力而移位。",
+      "value_to_project": "提供雙動作手動機構的臨床失敗模式文獻依據，是理解後續彈簧式自動化必要性的關鍵脈絡文件",
+      "links": {
+        "patents": "https://patents.google.com/patent/EP0153047B1/en",
+        "google_patents": "https://patents.google.com/patent/EP0153047B1/en"
+      },
       "patentResults": {
         "full": {
-          "summary": "1986年Beraha發明，將雙動作活檢機構應用於經直腸前列腺活檢，是早期臨床應用延伸案例。",
+          "summary": "Beraha（1986）針對TRU-CUT經直腸前列腺活檢的臨床痛點提出改良，核心問題是TRU-CUT在推送套管時探針容易竄動，造成膀胱/尿道穿孔風險。EP0153047B1詳述問題並提出固定探針後單手操作方案。本案已過期，技術內容公共領域。",
           "examples": [
             {
-              "name": "經直腸前列腺活檢應用",
+              "name": "改良雙動作機構—前列腺活檢應用",
               "is_real": true,
               "credibility": "中",
-              "credibility_reason": "專利摘要層級記載應用場景，未見完整實施例數值",
-              "gauge_length": "未記載",
+              "credibility_reason": "EP0153047B1背景技術段落有詳細描述，但具體改良結構細節從搜尋結果中僅見部分，完整claim需查原文",
+              "gauge_length": "未記載（配合TRU-CUT型針組）",
               "firing_spec": {
                 "mechanism": "雙動作（手動）",
                 "lock_type": "無鎖合機構",
-                "action_mode": "雙動作"
+                "action_mode": "雙動作（改良為單手操作版本）"
               },
               "results": {
-                "sample_notch": "未記載",
-                "firing_force": "未記載",
+                "sample_notch": "沿用TRU-CUT橫向取樣凹槽設計",
+                "firing_force": "手動，依醫師施力",
                 "visibility": "未記載"
               }
             }
           ],
-          "key_claims": ["雙動作機構應用於經直腸前列腺活檢之臨床流程設計"],
-          "actionable_insights": ["可作為機構設計應用於不同解剖部位的早期參考案例"],
-          "red_flags": ["專利已到期，技術可自由參考使用"],
-          "bioteque_relevance": "*參考價值在於了解機構應用場景的歷史演進，非製造可行性評估"
+          "key_claims": [
+            "改良雙動作機構使醫師可在食指保持直腸定位下完成取樣",
+            "探針固定機制防止套管推進時探針竄動",
+            "整體設計允許單手操作（相對TRU-CUT雙手操作的改善）"
+          ],
+          "actionable_insights": [
+            "本案的臨床失敗模式分析（探針竄動 / 雙手需求）是理解為何彈簧式自動化機構成為市場標準的核心文件",
+            "前列腺活檢的解剖限制（經直腸、手指定位）對機構設計提出明確的空間與操作約束，是應用場景設計的重要參考"
+          ],
+          "red_flags": [
+            "本專利已過期，無FTO風險",
+            "EP0153047B1是較易取得全文的同族版本，建議查此版本確認完整claim"
+          ],
+          "vs_database": "B02是B01在前列腺應用場景的延伸，同屬雙動作手動路線。其記載的臨床痛點直接解釋了B05（Argon彈簧式）和B06（Merit馬達式）自動化設計的市場必要性。",
+          "bioteque_relevance": "臨床痛點文獻，供理解活檢針市場需求脈絡。本案機構已公共領域，無FTO風險。",
+          "evidence_level": "medium",
+          "source_quality": "EP0153047B1背景技術段落（Google Patents可查）",
+          "key_findings": [
+            "TRU-CUT用於前列腺活檢時的核心臨床問題：推套管時探針竄動→膀胱/尿道穿孔風險",
+            "前列腺活檢對單手操作有強烈需求（另一手指須保持直腸內定位）",
+            "Beraha的改良方向（固定探針）與後來彈簧槍的設計方向（同時固定兩者後用彈簧自動釋放）在邏輯上一致"
+          ],
+          "mechanism_spec": {
+            "components": [
+              "改良版雙動作機構（具體元件名稱需查EP0153047B1原文）",
+              "探針固定結構（防止套管推進時竄動）"
+            ],
+            "assembly_logic": "醫師食指置於直腸定位，單手持握把完成雙動作取樣，探針固定後再推套管。",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "單手操作前列腺活檢 + 探針固定防竄動",
+            "claim_boundary": "已過期，無FTO意義",
+            "fto_risk": "無（已到期）"
+          },
+          "design_space": "已公共領域。本案的臨床場景分析（前列腺/經直腸）可作為應用場景設計約束的參考文件。",
+          "next_actions": [
+            "若需深入前列腺應用場景，建議查EP0153047B1完整claim作為更完整的背景文獻"
+          ]
         }
       },
       "citation_count": null
     },
     {
       "id": "B03",
-      "doc_type": "專利",
-      "title": "Ergonomic biopsy instrument",
+      "title": "Ergonomic biopsy instrument (US20120226191A1 / US8657760B2)",
+      "authors": "Neoh, Wenhong / Cook Incorporated → Cook Medical Technologies LLC",
       "year": 2011,
-      "authors": "Neoh, Wenhong / Cook Incorporated",
-      "venue": "US20120226191A1",
-      "tags": ["SLC彈簧加載", "Cook Medical", "人因設計"],
-      "abstract_note": "人因握把設計，解決傳統in-line手把造成手腕不適問題。2011年由Cook Incorporated連同發明人Wenhong Neoh轉讓給Cook Medical Technologies LLC。",
-      "purpose": "查證Cook Medical Quick-Core產品的人因握把專利基礎",
-      "value_to_project": "了解Quick-Core產品線握把設計的專利保護範圍與迴避空間",
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "SLC彈簧加載",
+        "Cook Medical",
+        "人因設計",
+        "單動作"
+      ],
+      "purpose": "查證Cook Medical Quick-Core人因握把的專利保護範圍，評估角度設計的claim邊界",
+      "abstract_note": "本案保護Quick-Core握把的「手槍式人因握把」設計。核心專利點：握把縱軸（handle longitudinal axis）與針筒縱軸（housing longitudinal axis）成「銳角Θ」（acute angle Θ）交叉，使使用者握持時手腕呈自然中立位，消除傳統in-line直柄設計造成的手腕尺偏（ulnar deviation）疲勞。搭配Quick-Core現行彈簧式擊發機構（非本案保護範圍），整體產品即為市售Quick-Core Biopsy Needle。",
+      "value_to_project": "了解Cook Medical Quick-Core握把的人因設計專利邊界；此為外觀/人因層面保護，與擊發機構專利（B04）屬不同保護維度",
+      "links": {
+        "patents": "https://patents.google.com/patent/US20120226191A1/en",
+        "google_patents": "https://patents.google.com/patent/US20120226191A1/en"
+      },
       "patentResults": {
         "full": {
-          "summary": "Cook Medical Technologies LLC受讓的人因握把專利，解決傳統握把造成手腕不適的問題，是Quick-Core產品線的人因延伸設計。",
+          "summary": "Cook Medical Technologies LLC受讓的人因握把設計專利（優先權2011年，對應公告號US8657760B2）。核心claim保護握把縱軸與針筒縱軸呈銳角Θ的幾何配置，解決傳統in-line直柄的手腕尺偏問題。本案不涉及擊發機構本身，是Quick-Core產品的附加人因保護層。",
           "examples": [
             {
-              "name": "人因握把設計",
+              "name": "人因握把—銳角Θ設計",
               "is_real": true,
               "credibility": "高",
-              "credibility_reason": "Google Patents全文確認assignee與技術內容",
-              "gauge_length": "適配Quick-Core產品線規格",
+              "credibility_reason": "Google Patents全文確認claim內容及assignee（Cook Medical Technologies LLC）",
+              "gauge_length": "與Quick-Core產品線現行規格相容（14G–20G多款，本案不限定gauge）",
               "firing_spec": {
-                "mechanism": "SLC彈簧加載",
-                "lock_type": "沿用Quick-Core現行彈簧式擊發機構",
-                "action_mode": "單動作（觸發後完成擊發）"
+                "mechanism": "SLC彈簧加載（搭配Quick-Core現行機構，非本案保護範圍）",
+                "lock_type": "沿用Quick-Core現行機構（見B04）",
+                "action_mode": "單動作（拇指推撥板擊發，搭配現行機構）"
               },
               "results": {
-                "sample_notch": "未記載具體數值",
-                "firing_force": "未記載",
-                "visibility": "未記載"
+                "sample_notch": "沿用Quick-Core標準凹槽（非本案claim範圍）",
+                "firing_force": "未記載於本案",
+                "visibility": "未記載於本案"
               }
             }
           ],
-          "key_claims": ["人因握把外型設計，改善傳統in-line手把的手腕受力角度"],
-          "actionable_insights": ["人因握把設計可作為產品差異化參考方向，非核心擊發機構"],
-          "red_flags": ["需查證此人因設計專利的claim邊界與是否仍在有效期內"],
-          "bioteque_relevance": "*握把人因設計屬於外觀/操作體感範疇，與核心擊發機構專利風險區隔，FTO評估應分開處理"
+          "key_claims": [
+            "握把縱軸（handle longitudinal axis）與針筒縱軸（housing longitudinal axis）呈銳角Θ交叉的幾何配置",
+            "銳角Θ使握把尾端（butt end）朝向針筒前端方向延伸，形成手槍式外型",
+            "此配置使使用者手腕呈中立位（neutral wrist position），消除尺偏疲勞"
+          ],
+          "actionable_insights": [
+            "本案保護的是握把角度幾何，而非擊發機構本身；FTO評估時應與B04（擊發機構）分開處理",
+            "若設計類似握把角度，需確認Θ角範圍是否落入claim保護區間（claim記載「acute angle」，但未必限定具體數值範圍，需查claim全文）",
+            "純直柄in-line設計（Θ=0°）或鈍角握把不落入本案claim範圍"
+          ],
+          "red_flags": [
+            "需查證US8657760B2（對應公告號）的法律狀態與到期日，確認是否仍在有效保護期",
+            "「銳角」claim可能較寬，設計類似人因握把前建議請專利事務所確認claim邊界"
+          ],
+          "vs_database": "B03是B04（Cook擊發機構）的外觀/人因保護層，兩者保護不同維度。Argon（B05）和Merit（B06）的握把設計是否也有類似的人因握把專利，目前資料庫尚未收錄，建議補充。",
+          "bioteque_relevance": "人因握把設計屬產品差異化方向，若公司考慮開發配套握把或針座，需注意此claim的角度邊界。純直柄設計可迴避。",
+          "evidence_level": "high",
+          "source_quality": "Google Patents全文（US20120226191A1）",
+          "key_findings": [
+            "Quick-Core的人因握把是獨立的專利保護層（B03），與擊發機構（B04）分離",
+            "「手槍式握把縱軸與針軸成銳角」這個設計概念受Cook Medical保護，業界競品（Argon SuperCore）的握把設計需另行確認是否有對應迴避",
+            "CIA Medical產品頁說明Quick-Core的操作是「pulling back on the plunger until a firm click」，確認是單動作彈簧預載設計"
+          ],
+          "mechanism_spec": {
+            "components": [
+              "握把（handle）：縱軸與針筒縱軸成銳角Θ，手槍式外型",
+              "針筒（housing）：承載針組（cannula + stylet），縱軸為操作基準軸"
+            ],
+            "assembly_logic": "握把以銳角Θ固定於針筒，使操作者手腕在握持時自然保持中立位（無需尺偏）。擊發機構（彈簧）整合於針筒內。",
+            "test_methods": [
+              "人因評估（wrist angle measurement）"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": "握把縱軸與針筒縱軸呈銳角的幾何配置",
+            "claim_boundary": "保護「銳角」範圍的握把角度配置；直柄（0°）或鈍角設計可迴避",
+            "fto_risk": "中（若設計類似人因握把角度需確認claim邊界）"
+          },
+          "design_space": "直柄（in-line）設計可明確迴避。若需人因握把，可考慮：(1)鈍角設計；(2)不同的角度定義方式（如可調角度）；建議請事務所確認claim中「acute angle」的具體保護數值範圍。",
+          "next_actions": [
+            "查US8657760B2（B03的公告版本）確認claim全文中Θ角是否有具體數值限定",
+            "確認法律狀態（是否仍有效）"
+          ]
         }
       },
       "citation_count": null
     },
     {
       "id": "B04",
+      "title": "Half cannula full core biopsy needle (US9101350B2)",
+      "authors": "Hughes E., Nowicki R., Stanley C., Theobald E.A., Cavett M., Taylor J.A. / Cook Medical Technologies LLC",
+      "year": 2015,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
       "doc_type": "專利",
-      "title": "Half cannula full core biopsy needle",
-      "year": 2012,
-      "authors": "Cook Medical Technologies LLC",
-      "venue": "US9101350B2",
-      "tags": ["SLC彈簧加載", "Cook Medical", "pawl卡榫式"],
-      "abstract_note": "半圓柱形內管滑動於外管內取得完整核心樣本。握把含彈簧式擊發機構，沿用QUICK-CORE現行握把設計（記載於2009年臨時案US61/261,857）。",
-      "purpose": "查證Cook Medical Quick-Core核心擊發機構的專利範圍",
-      "value_to_project": "了解半圓套管取樣機構的設計細節，評估是否有可迴避的設計空間",
+      "access": "專利全文",
+      "tags": [
+        "SLC彈簧加載",
+        "Cook Medical",
+        "pawl卡榫式",
+        "單動作",
+        "肝/腎/肺等軟組織"
+      ],
+      "purpose": "查證Cook Medical Quick-Core半圓套管取樣機構的核心專利claim範圍，作為FTO評估首要對象",
+      "abstract_note": "本案是Quick-Core Biopsy Needle的核心取樣機構專利。創新點在於內管（inner tubular member）的遠端截面為半圓柱形（subtends約160~200°），形成半圓柱取樣腔道（semi-cylindrical channel），而非傳統TRU-CUT的側向凹槽（side notch）。外管（outer tubular member）滑動覆蓋內管時切割並包夾組織。內管遠端腔道設有紋理凸起（raised protrusions）防止樣本滑出，外管對應位置設有無孔實心段。整合彈簧式握把（沿用2009年臨時案US61/261,857設計）實現單動作自動擊發。",
+      "value_to_project": "Cook Medical Quick-Core核心機構的最高風險FTO專利，是設計迴避時的首要審視對象",
+      "links": {
+        "patents": "https://patents.google.com/patent/US9101350B2/en",
+        "google_patents": "https://patents.google.com/patent/US9101350B2/en"
+      },
       "patentResults": {
         "full": {
-          "summary": "Cook Medical Technologies LLC受讓專利，半圓柱形內管滑動取樣機構，搭配彈簧式擊發握把，是Quick-Core產品的核心機構專利。",
+          "summary": "US9101350B2（Cook Medical Technologies LLC，優先權2010-04-29，公告2015-08-11）。核心保護：內管遠端截面為半圓柱形（160~200°弧度），形成半圓柱取樣腔道，配合外管滑動切割取樣，整合彈簧式擊發握把。此設計與傳統TRU-CUT側向凹槽（side notch in solid stylet）有明確幾何差異：TRU-CUT是實心探針上開槽，本案是空心半圓柱形內管。",
           "examples": [
             {
-              "name": "半圓套管完整核心取樣機構",
+              "name": "半圓柱形內管取樣機構",
               "is_real": true,
               "credibility": "高",
-              "credibility_reason": "Google Patents全文確認技術細節與assignee",
-              "gauge_length": "Quick-Core產品線標準規格（多款gauge/長度組合）",
+              "credibility_reason": "USPTO全文claim 1明確記載幾何規格（160~200°），為實際公告文本",
+              "gauge_length": "Quick-Core產品線標準（14G/16G/18G/20G × 10cm/15cm/20cm多款組合，本案不限定gauge，以產品型錄補充）",
               "firing_spec": {
                 "mechanism": "SLC彈簧加載",
-                "lock_type": "彈簧式擊發機構（握把內建）",
-                "action_mode": "單動作"
+                "lock_type": "彈簧預載式（pulling back plunger直到firm click，即彈簧鎖入ready position）",
+                "action_mode": "單動作（拇指完全下壓plunger即觸發套管切割）"
               },
               "results": {
-                "sample_notch": "半圓柱形內管設計，取樣腔室形狀為半圓柱",
-                "firing_force": "未記載具體數值",
-                "visibility": "echogenic tip（外層同軸針）"
+                "sample_notch": "半圓柱形取樣腔道（arc 160~200°），腔道內設紋理凸起（raised protrusions）防止樣本滑出；對應外管設無孔實心段（no opening）",
+                "firing_force": "未記載具體數值於專利；CIA Medical產品說明為「a firm click」表示彈簧已預載",
+                "visibility": "外管同軸設計，本案未明確記載echogenic tip（需查產品型錄）"
               }
             }
           ],
-          "key_claims": ["半圓柱形內管於外管內滑動之取樣機構", "彈簧式擊發握把延續自2009年臨時案設計"],
-          "actionable_insights": ["半圓套管設計是Quick-Core核心機構，若考慮類似設計需評估此claim的具體幾何特徵邊界"],
-          "red_flags": ["此為Quick-Core核心機構專利，是迴避設計時的重點審視對象"],
-          "bioteque_relevance": "*此專利為SLC彈簧加載路線的代表性核心機構，建議優先列入FTO清單"
+          "key_claims": [
+            "【Claim 1核心】內管（inner tubular member）遠端截面為半圓柱形，弧度160~200°，形成半圓柱取樣腔道（semi-cylindrical channel）",
+            "外管（outer tubular member）中央通道（central passage）之近端壁段（proximal of planar end surface）無任何開孔（no opening）",
+            "內管取樣腔道（channel）設有第一紋理段（textured section），含向腔室突出的raised protrusions",
+            "外管對應位置設有第二紋理段（continuous unbroken external surface）",
+            "整體為同軸滑動機構：兩管相對滑動完成取樣"
+          ],
+          "actionable_insights": [
+            "本案的關鍵保護是「內管遠端為半圓柱形（160~200°）」這個幾何特徵；若設計採用傳統實心探針+側向凹槽（TRU-CUT型），不落入本claim",
+            "紋理凸起（raised protrusions）防滑設計是附屬claim，迴避主要claim後此附屬保護自動無效",
+            "彈簧預載擊發機構本身未在此案保護（僅說明「沿用2009年臨時案設計」），擊發機構保護需另查相關專利"
+          ],
+          "red_flags": [
+            "本案是Quick-Core產品的核心機構專利，FTO風險評估應列最高優先",
+            "優先權日2010-04-29，需確認目前法律狀態與預期到期日（通常為優先權日+20年=2030年）",
+            "Cook Medical是活躍的專利訴訟方，歷史上曾多次提起侵權訴訟"
+          ],
+          "vs_database": "B04（Cook半圓柱形內管）vs B05（Argon雙鎖定卡合）：兩者的差異不在取樣凹槽幾何（兩者皆可用標準側向凹槽），而在鎖合機構設計——B04未明確保護鎖合方式，B05明確保護雙鎖定卡合。B06（Merit馬達驅動）在擊發動力來源上完全不同，競爭維度為自動化程度。",
+          "bioteque_relevance": "若本公司設計核心活檢針針組，需確認取樣幾何是否採用半圓柱形內管（弧度160~200°），若是則需仔細評估claim邊界。傳統側向凹槽（實心stylet上開槽）可迴避B04，但需確認此設計不碰觸B05的鎖合機構保護。",
+          "evidence_level": "high",
+          "source_quality": "USPTO全文（image-ppubs.uspto.gov claim 1全文）",
+          "key_findings": [
+            "Claim 1明確限定弧度160~200°，傳統側向凹槽設計（TRU-CUT型，弧度<90°）可迴避",
+            "Quick-Core的操作說明（CIA Medical產品頁）確認：「pulling back until firm click = 彈簧預載；fully depress plunger = 擊發」，符合SLC單動作定義",
+            "本案優先權可追溯至2009年臨時申請案（US61/261,857），顯示Cook早在2009年即有此設計的原型"
+          ],
+          "mechanism_spec": {
+            "components": [
+              "內管（inner tubular member）：遠端半圓柱形截面（160~200°），腔道內有raised protrusions",
+              "外管（outer tubular member）：中央通道，遠端近端壁段無開孔",
+              "彈簧式擊發握把（spring-loaded handle，沿用2009年臨時案設計）"
+            ],
+            "assembly_logic": "內管同軸置於外管內；預載時彈簧壓縮並固定套管縮回位置（暴露內管遠端半圓腔道）；擊發時彈簧釋放推動外管前進覆蓋並切割，組織樣本包夾在半圓腔道內。",
+            "test_methods": [
+              "組織樣本量評估（sample quality）",
+              "保持力測試（raised protrusions vs smooth）"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": "半圓柱形內管（160~200°弧度）取樣腔道結構",
+            "claim_boundary": "保護弧度160~200°的半圓柱形取樣腔道；傳統<90°側向凹槽（TRU-CUT型）可迴避",
+            "fto_risk": "高（現行有效專利，預期2030年到期）"
+          },
+          "design_space": "主要迴避路徑：(1) 採用傳統側向凹槽（solid stylet + side notch，弧度<90°），直接迴避160~200°弧度限定；(2) 採用不同幾何的取樣腔結構（如螺旋形、多段式）；(3) VABB真空輔助路線完全繞開此機構。",
+          "next_actions": [
+            "確認US9101350B2的法律狀態與到期日",
+            "查Cook Medical是否有擊發機構本身（彈簧預載/pawl鎖合）的獨立專利補充保護"
+          ]
         }
       },
       "citation_count": null
     },
     {
       "id": "B05",
-      "doc_type": "專利",
-      "title": "Reusable automated biopsy needle handle",
+      "title": "Reusable automated biopsy needle handle (US6106484A)",
+      "authors": "Terwilliger, Richard A. / Argon Medical Devices, Inc. 等",
       "year": 1998,
-      "authors": "Argon Medical Devices, Inc. (及共同擔保權益相關公司)",
-      "venue": "US6106484A",
-      "tags": ["SLC彈簧加載", "Argon Medical", "雙鎖定卡合"],
-      "abstract_note": "彈簧加載式雙鎖定卡合機構：套管延伸件與探針延伸件各自獨立向後滑動卡入彈簧加載位置，第一鎖定件與套管/探針上的第二鎖定件互相卡合。2018年涉及Promex Technologies LLC、Manan Medical Products Inc、Argon Medical Devices Inc、Medical Device Technologies Inc、Luther Medical Products Inc等多家公司聯合擔保權益解除登記。",
-      "purpose": "查證Argon Medical SuperCore/Tru-Core II產品的核心機構專利",
-      "value_to_project": "了解雙鎖定卡合機構的設計細節，評估與Cook Medical單一彈簧機構的技術差異",
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（法律狀態需確認）",
+      "tags": [
+        "SLC彈簧加載",
+        "Argon Medical",
+        "雙鎖定卡合",
+        "單動作",
+        "肝/腎/肺等軟組織",
+        "乳房"
+      ],
+      "purpose": "查證Argon Medical SuperCore/Tru-Core II雙鎖定卡合彈簧機構的專利範圍，評估與Cook Medical機構的技術差異",
+      "abstract_note": "本案是Argon Medical自動活檢握把的核心機構專利。創新點為「雙鎖定卡合」（dual locking）機構：套管延伸件（cannula extension）與探針延伸件（stylet extension）各自獨立向後滑動，分別卡入彈簧加載位置，各有獨立的第一鎖定件（first locking member）與第二鎖定件（second locking member）互相卡合。與Cook Medical（B04）的機構差異：Cook的彈簧機構細節未在B04中明確保護，Argon的雙鎖定是明確的差異化設計。發明人為Richard A. Terwilliger，2018年涉及Promex Technologies等多家公司的擔保權益解除登記（提示企業結構複雜，最終持有人確認為Argon Medical）。",
+      "value_to_project": "了解SLC彈簧加載路線下「雙鎖定卡合」設計的具體保護範圍，供迴避設計參考",
+      "links": {
+        "patents": "https://patents.google.com/patent/US6106484A/en",
+        "google_patents": "https://patents.google.com/patent/US6106484A/en"
+      },
       "patentResults": {
         "full": {
-          "summary": "可重複使用自動活檢針握把專利，核心為彈簧加載式雙鎖定卡合機構，套管與探針各自獨立卡入鎖定位置。",
+          "summary": "US6106484A（優先權1998年，Argon Medical Devices相關企業受讓）。核心保護：可重複使用自動活檢握把，套管與探針各自獨立滑入彈簧加載位置，各自有獨立鎖定件卡合（雙鎖定）。擊發時拇指推動探針延伸件前進，探針先擊發→組織脫垂入凹槽→套管後續彈出切割（仍為雙動作序列但自動完成）。",
           "examples": [
             {
-              "name": "雙鎖定卡合彈簧機構",
+              "name": "雙鎖定卡合彈簧式自動握把",
               "is_real": true,
               "credibility": "高",
-              "credibility_reason": "Google Patents全文確認技術細節，惟企業擔保關係複雜需另查證",
-              "gauge_length": "SuperCore/Tru-Core II產品線規格（14G/16G/18G/20G等多款）",
+              "credibility_reason": "Google Patents全文確認assignee、claim內容及操作原理描述",
+              "gauge_length": "SuperCore/Tru-Core II產品線標準（14G/16G/18G/20G，取樣凹槽19mm或9.5mm可選，依產品型錄）",
               "firing_spec": {
                 "mechanism": "SLC彈簧加載",
-                "lock_type": "雙鎖定卡合（套管與探針各自獨立鎖定）",
-                "action_mode": "單動作（拇指推動探針延伸件擊發）"
+                "lock_type": "雙鎖定卡合（套管延伸件與探針延伸件各自獨立卡入第一/第二鎖定件）",
+                "action_mode": "單動作（拇指推探針延伸件，依序自動完成探針擊發→套管擊發）"
               },
               "results": {
-                "sample_notch": "可調式採樣凹槽（19mm或9.5mm，依官網產品資料）",
+                "sample_notch": "標準側向取樣凹槽（side notch in stylet），19mm或9.5mm選項（依型錄，非本案claim範圍）",
                 "firing_force": "未記載具體數值",
-                "visibility": "echogenic tip於外套管"
+                "visibility": "Echogenic tip（外管，依產品型錄；非本案claim範圍）"
               }
             }
           ],
-          "key_claims": ["套管延伸件與探針延伸件各自獨立卡入彈簧加載位置之雙鎖定機構", "第一鎖定件與第二鎖定件互相卡合之結構"],
-          "actionable_insights": ["雙鎖定卡合與Cook Medical的單一彈簧機構在鎖合方式上有明確技術差異，可作為設計差異化參考點"],
-          "red_flags": ["*2018年企業擔保關係涉及多家公司，企業關係複雜，建議若考慮商業合作或授權需另行查證最新corporate結構"],
-          "bioteque_relevance": "*此為SLC彈簧加載路線下「雙鎖定卡合」鎖合方式的代表案例，與Cook Medical pawl卡榫式機構形成對照"
+          "key_claims": [
+            "握把殼體（housing）含開口（opening）可插入針組（needle set，含套管+探針的整合單元）",
+            "套管延伸件（cannula extension）與探針延伸件（stylet extension）各自獨立向後滑動卡入彈簧加載位置",
+            "第一鎖定件（first locking member）與套管/探針上之第二鎖定件（second locking member）互相卡合的雙鎖定機構",
+            "拇指推動探針延伸件前進，先觸發探針彈出，隨後套管自動彈出（雙動作序列自動完成）"
+          ],
+          "actionable_insights": [
+            "雙鎖定卡合（套管/探針各自獨立鎖定）是Argon的差異化設計，與Cook的彈簧機構在鎖合方式上有明確技術差異",
+            "本案保護的是「握把機構」（可重複使用的handle assembly），而非針組本身；針組（cannula + stylet）是可替換的一次性耗材",
+            "可重複使用握把＋一次性針組的商業模式是本案的關鍵設計意圖，可作為商業模式參考"
+          ],
+          "red_flags": [
+            "優先權1998年，若以申請日計算20年期限約2018年到期，但需查證實際法律狀態（可能有continuation延續）",
+            "2018年多家公司擔保權益解除登記顯示企業結構複雜，若考慮授權合作需另行確認Argon的現行corporate結構與專利持有狀態",
+            "Terwilliger（本案發明人）也是US5183052（真空輔助活檢機構）的發明人，顯示其技術涉獵廣，相關延伸專利需一併評估"
+          ],
+          "vs_database": "B05（Argon雙鎖定）vs B04（Cook半圓柱內管）：兩者保護維度不同——B04保護取樣幾何（半圓柱形），B05保護鎖合機構（雙鎖定）；兩者的差異化方向各自獨立，不直接衝突。B06（Merit馬達驅動）在擊發動力上與B05完全不同路線。",
+          "bioteque_relevance": "若評估SLC彈簧加載路線的FTO，B05是與B04並列的重點評估對象。雙鎖定卡合機構是Argon的核心保護，設計時若需類似的套管/探針各自獨立預載機構，需確認claim邊界。",
+          "evidence_level": "high",
+          "source_quality": "Google Patents全文（US6106484A）",
+          "key_findings": [
+            "Argon的雙鎖定設計讓套管和探針可「各自獨立」預載，與Cook的機構在預載邏輯上有所不同",
+            "可重複使用握把（handle）＋一次性針組（needle set）的分離式商業模式在此案有明確揭示",
+            "Terwilliger同為US5183052（真空輔助）發明人，顯示Argon早期也探索過VABB路線，後來產品聚焦SLC路線"
+          ],
+          "mechanism_spec": {
+            "components": [
+              "握把殼體（housing）：可重複使用，含彈簧與雙鎖定卡合機構",
+              "套管延伸件（cannula extension）：向後滑入殼體並卡合第二鎖定件",
+              "探針延伸件（stylet extension）：向後滑入殼體並卡合另一第二鎖定件",
+              "第一鎖定件（first locking member）：分別與套管/探針延伸件的第二鎖定件卡合"
+            ],
+            "assembly_logic": "針組插入握把殼體後，套管延伸件與探針延伸件各自向後推至卡入（彈簧預載）。操作時拇指推探針延伸件前進，解除探針鎖定→探針先彈出→組織脫垂→套管鎖定隨後釋放→套管彈出切割。雙動作序列由彈簧自動完成。",
+            "test_methods": [
+              "取樣量評估",
+              "可重複使用次數驗證"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": "雙鎖定卡合彈簧機構（套管/探針各自獨立鎖定）+ 可重複使用握把設計",
+            "claim_boundary": "保護「套管與探針各自獨立滑入彈簧位置並各自有鎖定件卡合」的機構結構；單一共用彈簧機構（non-dual locking）可能可迴避",
+            "fto_risk": "中（需確認法律狀態，若有continuation則可能仍有效）"
+          },
+          "design_space": "主要迴避路徑：(1) 採用單一共用彈簧機構（非雙鎖定）；(2) 馬達驅動路線（B06）完全繞開彈簧式鎖合問題；(3) 採用cam rail解鎖式（非pawl卡榫/鎖定件卡合型）機構。",
+          "next_actions": [
+            "確認US6106484A的實際法律狀態（是否有continuation/CIP仍有效）",
+            "查Argon是否有後續改良的延伸專利補充保護"
+          ]
         }
       },
       "citation_count": null
     },
     {
       "id": "B06",
-      "doc_type": "專利",
-      "title": "Needle firing assembly for biopsy device",
+      "title": "Needle firing assembly for biopsy device (WO2014182488A1 / US9603587B2)",
+      "authors": "Fiebig, Kevin M.; Ehlert, J. Scott / Devicor Medical Products Inc",
       "year": 2013,
-      "authors": "Fiebig, Kevin M. / Ehlert, J. Scott / Devicor Medical Products Inc",
-      "venue": "WO2014182488A1（同源：US9603587、CA2910172A1、EP2994055B1、CN105358067B）",
-      "tags": ["馬達驅動", "Merit Medical", "lead screw"],
-      "abstract_note": "馬達驅動lead screw帶動firing tube，pawl卡榫式機構，coil spring釋放擊發；支援「soft fire」馬達直驅模式（不靠彈簧釋放，馬達直接控制擊發速度）。優先權日2013-05-07，Devicor Medical Products Inc受讓。",
-      "purpose": "查證Merit Medical TEMNO/Achieve產品線核心馬達驅動機構的企業血統與專利範圍",
-      "value_to_project": "了解馬達驅動機構相對於SLC彈簧機構的技術差異，評估FTO風險",
+      "venue": "Google Patents / WIPO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "馬達驅動",
+        "Merit Medical",
+        "pawl卡榫式",
+        "soft fire漸進式",
+        "乳房",
+        "肝/腎/肺等軟組織"
+      ],
+      "purpose": "查證Merit Medical（前Devicor）TEMNO/Achieve馬達驅動機構的核心專利，作為馬達驅動路線FTO首要評估對象",
+      "abstract_note": "本案是Devicor Medical Products（後被Merit Medical收購）的馬達驅動擊發機構核心專利。機構組成：電動馬達（motor）→驅動lead screw旋轉→帶動firing tube（擊發管）軸向移動→firing tube透過pawl卡榫式coupling assembly與套管（cannula）卡合後彈出完成取樣。本案最重要的技術創新：支援「soft fire」模式——馬達不靠彈簧釋放，而是直接控制擊發管的推送速度，實現可控速度的漸進式擊發（相對於彈簧式的瞬間彈出）。優先權日2013-05-07，同族：US9603587（美國）/ EP2994055B1（歐洲）/ CN105358067B（中國）/ CA2910172A1（加拿大）/ JP6088116B2（日本）。",
+      "value_to_project": "馬達驅動路線FTO的最高優先評估對象，soft fire技術是此路線的核心差異化特徵",
+      "links": {
+        "patents": "https://patents.google.com/patent/WO2014182488A1/en",
+        "google_patents": "https://patents.google.com/patent/WO2014182488A1/en"
+      },
       "patentResults": {
         "full": {
-          "summary": "馬達驅動lead screw擊發機構專利，支援soft fire漸進式擊發模式，是TEMNO/Achieve系列的核心機構，原屬Devicor Medical Products Inc（2010年由Ethicon Endo-Surgery轉讓取得），2018年該產品線資產被Merit Medical收購。",
+          "summary": "WO2014182488A1（Devicor Medical Products，優先權2013-05-07）。核心保護：馬達驅動lead screw帶動firing tube的擊發機構，支援soft fire（馬達直驅可控速度）模式。Devicor 2010年從Ethicon Endo-Surgery取得ACHIEVE/TEMNO系列資產後，繼續開發此馬達驅動平台；2018年Merit Medical以1億美元收購此產品線（見B08）。同族專利覆蓋美、歐、中、加、日主要市場。",
           "examples": [
             {
-              "name": "馬達驅動Lead Screw擊發機構",
+              "name": "馬達驅動Lead Screw擊發機構（含Soft Fire模式）",
               "is_real": true,
               "credibility": "高",
-              "credibility_reason": "Google Patents完整全文確認技術細節、assignee與優先權日",
-              "gauge_length": "TEMNO/Achieve產品線規格",
+              "credibility_reason": "Google Patents WO全文確認技術細節、assignee、優先權日；US9603587B2為對應美國公告號",
+              "gauge_length": "TEMNO/Achieve產品線規格（14G/16G/18G，取樣凹槽19mm，本案不限定gauge）",
               "firing_spec": {
                 "mechanism": "馬達驅動",
-                "lock_type": "Pawl卡榫式（firing tube與coupling assembly透過pawl卡合）",
-                "action_mode": "Soft fire漸進式（馬達可控速度，非單純彈簧瞬間釋放）"
+                "lock_type": "Pawl卡榫式（firing tube與coupling assembly透過pawl卡合，馬達驅動lead screw帶動firing tube至卡合點後釋放）",
+                "action_mode": "Soft fire漸進式（馬達直控推送速度，非彈簧瞬間釋放；可程式化速度控制）"
               },
               "results": {
-                "sample_notch": "未記載具體數值",
-                "firing_force": "可由馬達控制，非固定彈簧力道",
-                "visibility": "未記載於此專利"
+                "sample_notch": "標準側向取樣凹槽（side notch in stylet），ACHIEVE產品標稱取樣長度，具體數值見產品型錄",
+                "firing_force": "由馬達輸出扭矩決定，非固定彈簧力，可軟體調控",
+                "visibility": "未記載於本專利（需查ACHIEVE產品型錄）"
               }
             }
           ],
-          "key_claims": ["馬達驅動lead screw帶動firing tube之擊發總成", "Pawl卡榫式coupling assembly與firing tube卡合釋放機構", "Soft fire馬達直驅控速模式"],
-          "actionable_insights": ["馬達驅動機構是目前唯一支援可控速度擊發（soft fire）的設計，若考慮高階全自動產品線需重點評估此專利家族"],
-          "red_flags": ["此為Merit Medical TEMNO/Achieve產品線核心機構專利，企業血統清楚（Ethicon→Devicor 2010→Merit 2018收購），需注意目前仍由Merit Medical實際持有並商業化中"],
-          "bioteque_relevance": "*馬達驅動為高階全自動產品的代表技術路線，FTO風險相對最高，建議列為優先迴避設計評估對象"
+          "key_claims": [
+            "電動馬達（motor）驅動lead screw旋轉，帶動firing tube沿軸向移動",
+            "Firing tube透過pawl卡榫式coupling assembly與cannula卡合，達到指定位置後釋放（傳統spring-release路徑）",
+            "Soft fire模式：馬達繞過彈簧直接控制firing tube推送速度，實現可控速度的漸進式擊發",
+            "兩種擊發模式（spring-release / soft fire）可選，適應不同組織硬度需求"
+          ],
+          "actionable_insights": [
+            "Soft fire（可控速度擊發）是此路線的唯一差異化特徵，任何需要「控速擊發」或「可程式化取樣」功能的設計都需評估本案claim",
+            "馬達驅動路線相對彈簧路線的優勢：可記錄擊發參數、支援多次取樣、可調速以適應不同組織；劣勢：需電池/充電、成本高、需消毒或一次性",
+            "同族覆蓋美/歐/中/加/日，全球FTO評估不可只查美國"
+          ],
+          "red_flags": [
+            "優先權2013-05-07，US9603587預期到期日約2034年，仍處於有效保護期高峰",
+            "Merit Medical是活躍的商業公司，若考慮進入馬達驅動市場需評估授權或挑戰可行性",
+            "同族中CN105358067B（中國）的保護範圍可能與WO有所差異，需另行查閱中國claim"
+          ],
+          "vs_database": "B06（馬達驅動/soft fire）vs B04（Cook彈簧/半圓柱管）vs B05（Argon彈簧/雙鎖定）：三者在擊發動力來源上構成三個技術路線的並列競爭。B06的soft fire是唯一支援可控速度擊發的路線，FTO風險最高但同時也是最難被低成本複製的路線。",
+          "bioteque_relevance": "馬達驅動路線FTO風險最高，若本公司評估開發全自動活檢器材，本案為首要迴避設計評估對象。Soft fire模式（馬達直控速度）是核心保護點，純彈簧機構不落入此claim。",
+          "evidence_level": "high",
+          "source_quality": "Google Patents WO2014182488A1全文 + CA2910172A1同族確認",
+          "key_findings": [
+            "Soft fire模式（馬達直控擊發速度，不靠彈簧）是業界唯一的可控速活檢技術，目前由Merit Medical獨家商業化（ACHIEVE Programmable系列）",
+            "Devicor血統清楚：Ethicon Endo-Surgery → Devicor（2010收購）→ Merit Medical（2018收購產品線，見B08）",
+            "同族專利覆蓋5大市場，顯示Devicor/Merit對此技術的全球保護重視程度",
+            "CA2910172A1顯示本案申請於2014-04-28，比優先權日（2013-05-07）晚約11個月，為正常PCT申請時程"
+          ],
+          "mechanism_spec": {
+            "components": [
+              "電動馬達（motor）：驅動力來源",
+              "Lead screw（導螺桿）：將馬達旋轉轉換為軸向直線運動",
+              "Firing tube（擊發管）：由lead screw帶動，軸向推進",
+              "Pawl卡榫式coupling assembly：firing tube與cannula的卡合釋放機構",
+              "Coil spring（線圈彈簧）：spring-release模式下的能量儲存元件（soft fire模式不依賴此彈簧）"
+            ],
+            "assembly_logic": "馬達轉動lead screw，帶動firing tube軸向移動。Spring-release模式：firing tube帶動壓縮彈簧至指定點，pawl釋放後彈簧彈射cannula。Soft fire模式：馬達直接控制firing tube推速，bypasses彈簧釋放，實現漸進式可控擊發。",
+            "test_methods": [
+              "擊發速度量測",
+              "組織損傷評估（soft fire vs spring-release）",
+              "取樣品質評估"
+            ]
+          },
+          "patent_core": {
+            "claim_focus": "馬達驅動lead screw擊發機構 + soft fire可控速度模式",
+            "claim_boundary": "保護馬達直驅可控速擊發（soft fire）；純彈簧機構（無馬達）不落入此claim",
+            "fto_risk": "高（有效期至約2034年，全球5大市場同族覆蓋）"
+          },
+          "design_space": "純彈簧機構路線（B04/B05）可迴避本案所有claim。若需馬達驅動但不需soft fire，需仔細確認claim邊界（馬達驅動本身是否受保護，或保護僅限於soft fire模式）。",
+          "next_actions": [
+            "查US9603587B2（美國公告版）的完整independent claim，確認保護是否涵蓋「所有馬達驅動機構」或「僅soft fire模式」",
+            "查CN105358067B的中國claim範圍（可能與WO有差異）"
+          ]
         }
       },
       "citation_count": null
     },
     {
       "id": "B07",
-      "doc_type": "專利",
-      "title": "Surgical device for the collection of soft tissue",
-      "year": 2013,
+      "title": "Surgical device for the collection of soft tissue (US9433402B2)",
       "authors": "Devicor Medical Products Inc",
-      "venue": "US9433402B2",
-      "tags": ["馬達驅動", "Merit Medical", "歷史脈絡"],
-      "abstract_note": "引用BIOPTY gun（C.R. Bard彈簧式核心取樣活檢器材始祖）與TRUE CUT針（Travenol製造）作為背景技術，提供核心活檢針技術發展的歷史脈絡佐證。",
-      "purpose": "確認核心活檢針技術發展史的官方文件佐證",
-      "value_to_project": "提供BIOPTY gun（Bard）與TRUE CUT（Travenol）作為早期彈簧式機構源頭的官方文件交叉確認",
+      "year": 2013,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "馬達驅動",
+        "Merit Medical",
+        "VABB真空輔助",
+        "歷史脈絡",
+        "乳房"
+      ],
+      "purpose": "從背景技術段落取得核心活檢針技術發展史的官方文件佐證（TRU-CUT + BIOPTY gun的歷史記載）",
+      "abstract_note": "本案為Devicor Medical Products的乳房活檢系統（MAMMOTOME類型），其背景技術段落是目前找到的最佳「技術史官方佐證文件」。原文明確記載：(1) TRUE CUT（Travenol製造）—「pointed element with side-facing notch + outer sharpened sliding cannula」設計，是單核心手動取樣始祖；(2) MAMMOTOME instrument—VABB真空輔助、馬達旋轉cutter、手動前後移動。兩者明確對比揭示了核心活檢針技術的演進脈絡：純手動→彈簧自動化→馬達旋轉cutter（VABB）。",
+      "value_to_project": "提供技術史官方文件佐證，供ROUTE_DEFS（技術路線定義）的歷史描述引用，無機構設計實質參考價值",
+      "links": {
+        "patents": "https://patents.google.com/patent/US9433402B2/en",
+        "google_patents": "https://patents.google.com/patent/US9433402B2/en"
+      },
       "patentResults": {
         "full": {
-          "summary": "Devicor Medical Products Inc專利，背景技術段落明確記載BIOPTY gun（Bard彈簧式核心取樣始祖）與TRUE CUT針（Travenol製造）的歷史地位，是核心活檢針技術發展史的官方佐證文件。",
+          "summary": "US9433402B2（Devicor Medical Products，優先權2013年）是MAMMOTOME類型真空輔助乳房活檢系統的改良專利。其技術價值對本資料庫在於背景技術段落：明確記載TRUE CUT（Travenol）與MAMMOTOME系統的技術特徵，是核心活檢針技術史的官方文件依據。本案機構本身（VABB/馬達旋轉cutter）不在本資料庫的核心活檢針（非VABB）分析範圍內。",
           "examples": [
             {
-              "name": "軟組織取樣外科器材",
+              "name": "背景技術段落—TRUE CUT與MAMMOTOME技術史描述",
               "is_real": true,
               "credibility": "高",
-              "credibility_reason": "Google Patents全文確認背景技術段落內容",
-              "gauge_length": "未記載",
+              "credibility_reason": "Google Patents原文可查，為Devicor自身的官方專利文件記載，交叉驗證B01（TRU-CUT）的技術描述",
+              "gauge_length": "未記載（本案為MAMMOTOME系統，與core needle biopsy規格不同）",
               "firing_spec": {
-                "mechanism": "馬達驅動",
-                "lock_type": "未記載具體鎖合方式",
-                "action_mode": "未記載"
+                "mechanism": "VABB真空輔助（本案主體機構；非本資料庫核心分析對象）",
+                "lock_type": "馬達旋轉cutter（非活檢針的彈簧/pawl機構）",
+                "action_mode": "馬達連續旋轉cutter（非本資料庫雙動作/單動作分類）"
               },
               "results": {
-                "sample_notch": "未記載",
-                "firing_force": "未記載",
+                "sample_notch": "TRUE CUT技術史描述：side-facing notch in pointed element",
+                "firing_force": "MAMMOTOME：馬達驅動旋轉（非彈簧力道）",
                 "visibility": "未記載"
               }
             }
           ],
-          "key_claims": ["背景技術段落確認BIOPTY gun為彈簧式核心取樣活檢器材始祖", "確認TRUE CUT針由Travenol製造"],
-          "actionable_insights": ["此專利的價值在於背景技術段落的歷史佐證，而非機構本身的claim內容"],
-          "red_flags": ["本篇核心價值為歷史脈絡佐證，非機構設計細節來源"],
-          "bioteque_relevance": "*作為技術史佐證文件使用，非機構設計參考來源"
+          "key_claims": [
+            "【技術史引用】TRUE CUT：pointed element with side-facing notch + outer sharpened sliding cannula（單核心取樣）",
+            "【技術史引用】MAMMOTOME：真空主動抓取組織→馬達旋轉cutter切割→手動前後移動cutter（VABB真空輔助）",
+            "本案自身claim集中在MAMMOTOME系統改良，非本資料庫分析重點"
+          ],
+          "actionable_insights": [
+            "本案背景技術段落可作為技術史佐證的「第一手文獻」引用，比二手文章更有說服力",
+            "MAMMOTOME的技術特徵（VABB + 馬達旋轉 + 手動移動cutter）說明VABB路線的核心差異：組織獲取方式是主動真空而非被動脫垂"
+          ],
+          "red_flags": [
+            "本案機構本身（MAMMOTOME VABB系統）不在本資料庫核心活檢針（SLC/馬達/手動）分析範圍",
+            "注意：Devicor在2014年整體被Leica Biosystems收購（MAMMOTOME乳房活檢事業），但TEMNO/ACHIEVE核心活檢針資產在2018年獨立被Merit收購（見B08/B09），兩條事業線已分離"
+          ],
+          "vs_database": "B07與B06同屬Devicor血統，但B06是核心活檢針馬達驅動機構，B07是VABB乳房活檢系統。兩者代表Devicor的兩條產品線，2014/2018年各自被不同買家收購（B09說明Leica/MAMMOTOME；B08說明Merit/TEMNO-ACHIEVE）。",
+          "bioteque_relevance": "作為技術史佐證文件使用，供ROUTE_DEFS歷史描述引用。本案機構本身（VABB）不在FTO評估範圍。",
+          "evidence_level": "high",
+          "source_quality": "Google Patents原文（背景技術段落）",
+          "key_findings": [
+            "Devicor官方文件確認TRUE CUT（Travenol）為核心取樣活檢針始祖，技術描述與B01交叉驗證一致",
+            "MAMMOTOME是「主動真空（active vacuum）」取樣而非被動脫垂（passive prolapse），這是VABB路線與核心活檢針路線的根本技術分歧",
+            "Devicor被拆分為兩條事業線：MAMMOTOME→Leica Biosystems（2014）；TEMNO/ACHIEVE→Merit Medical（2018）"
+          ],
+          "mechanism_spec": {
+            "components": [
+              "（本案為VABB系統，非核心活檢針範疇）",
+              "背景技術引用：TRUE CUT的pointed element + side-facing notch + outer sliding cannula"
+            ],
+            "assembly_logic": "MAMMOTOME：真空主動將組織吸入側孔→馬達旋轉cutter環切→手動前後推拉cutter取出樣本。與核心活檢針（被動脫垂→彈簧/馬達軸向切割）機制完全不同。",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "VABB真空輔助乳房活檢系統改良（非本資料庫核心分析對象）",
+            "claim_boundary": "VABB路線claim不影響核心活檢針（SLC/馬達軸向切割）設計",
+            "fto_risk": "低（本案機構與核心活檢針設計領域不重疊）"
+          },
+          "design_space": "本案對核心活檢針設計無FTO限制。若考慮進入VABB領域（乳房活檢），則需另建VABB專利資料庫評估。",
+          "next_actions": [
+            "本案FTO價值有限，主要作為技術史文獻保留",
+            "若需VABB路線分析，建議另建biopsy_vabb.json子資料庫"
+          ]
         }
       },
       "citation_count": null
     },
     {
       "id": "B08",
-      "doc_type": "市場報告",
-      "title": "Merit Medical Systems, Inc. Form 8-K — Acquisition of Devicor product lines (Achieve/Temno/Tru-Cut)",
-      "year": 2018,
+      "title": "Merit Medical Systems — Acquisition of Devicor product lines (Achieve/Temno/Tru-Cut)",
       "authors": "Merit Medical Systems, Inc.",
+      "year": 2018,
       "venue": "SEC Form 8-K, 2018-02-15",
-      "tags": ["馬達驅動", "Merit Medical", "企業併購"],
-      "abstract_note": "Merit Medical以1億美元收購原Devicor/嬌生旗下以Achieve™ Programmable Automatic Biopsy System、Temno™ Biopsy System、Tru-Cut™ Biopsy Needles商標銷售的核心活檢針產品線資產。交易預期增加年化營收4200萬至4800萬美元。",
-      "purpose": "確認Merit Medical與Devicor之間的併購關係與交易細節",
-      "value_to_project": "建立TEMNO/Achieve產品線企業血統的官方文件依據，供_deNormalizeCompany()公司歸一化邏輯使用",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "市場報告",
+      "access": "SEC公開文件",
+      "tags": [
+        "馬達驅動",
+        "Merit Medical",
+        "企業併購",
+        "歷史脈絡"
+      ],
+      "purpose": "確認Merit Medical與Devicor之間的併購關係與交易細節，建立TEMNO/Achieve企業血統的官方文件依據",
+      "abstract_note": "Merit Medical Systems以1億美元（USD $100M）現金收購原Devicor/嬌生旗下以Achieve™ Programmable Automatic Biopsy System、Temno™ Biopsy System、Tru-Cut™ Biopsy Needles商標銷售的核心活檢針產品線資產（注意：不含MAMMOTOME，MAMMOTOME於2014年已由Leica Biosystems整體收購Devicor公司取得，見B09）。交易預期增加Merit年化營收4200萬至4800萬美元（USD $42-48M）。完成後Merit成為TEMNO/ACHIEVE系列的唯一持有人，包含相關專利（含B06）。",
+      "value_to_project": "建立TEMNO/Achieve產品線企業血統的官方文件依據，供_deNormalizeCompany()公司歸一化邏輯及PATENT_TREE_CONFIG使用",
+      "links": {
+        "patents": null,
+        "google_patents": null
+      },
       "patentResults": {
         "commercial": {
           "company": "Merit Medical Systems, Inc.",
-          "product": "Achieve™ / Temno™ / Tru-Cut™ Biopsy Needles（收購自Devicor）",
           "hq": "South Jordan, Utah, USA",
-          "mechanism_spec": {
-            "type": "馬達驅動 / SLC彈簧加載（產品線含多款機構）"
+          "product": "Achieve™ Programmable Automatic Biopsy System / Temno™ Biopsy System / Tru-Cut™ Biopsy Needles",
+          "acquisition": {
+            "from": "Devicor Medical Products Inc（前身為Ethicon Endo-Surgery旗下活檢部門，2010年Devicor收購）",
+            "price_usd_m": 100,
+            "date": "2018-02",
+            "expected_revenue_add_usd_m": "42-48（年化）"
           },
+          "mechanism_spec": {
+            "type": "馬達驅動（Achieve Programmable）/ SLC彈簧加載（Temno）/ 雙動作手動（Tru-Cut）",
+            "note": "Merit收購後持有三種技術路線的產品（Achieve馬達/Temno彈簧/Tru-Cut手動），形成從手動到全自動的完整產品矩陣"
+          },
+          "corporate_lineage": "Ethicon Endo-Surgery（嬌生）→ Devicor Medical Products（2010收購）→ Merit Medical Systems（2018收購活檢針產品線）",
           "collaboration_opportunity": null
         }
       },
@@ -324,23 +763,42 @@
     },
     {
       "id": "B09",
-      "doc_type": "市場報告",
-      "title": "Leica Biosystems to Acquire Devicor Medical Products, Inc.",
+      "title": "Leica Biosystems to Acquire Devicor Medical Products, Inc. (MAMMOTOME)",
+      "authors": "Leica Biosystems（新聞稿）/ PRNewswire",
       "year": 2014,
-      "authors": "Leica Biosystems (新聞稿)",
-      "venue": "PRNewswire, 2018-06-30",
-      "tags": ["馬達驅動", "企業併購", "Mammotome"],
-      "abstract_note": "Devicor Medical Products, Inc.整體被Leica Biosystems收購，年營收約1.7億美元，主力為Mammotome乳房活檢系統。此交易與2018年Merit Medical收購的TEMNO/Achieve產品線資產是不同的兩條事業線（Devicor被拆分後，乳房活檢Mammotome歸入Leica，核心活檢針產品線歸入Merit）。",
-      "purpose": "確認Devicor企業血統的完整拆分歷史，避免Mammotome乳房活檢事業與TEMNO/Achieve核心活檢針產品線混淆",
-      "value_to_project": "釐清Devicor被拆分為兩條不同事業線的事實，避免分析時誤判企業關係",
+      "venue": "PRNewswire, 2014",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "市場報告",
+      "access": "公開新聞稿",
+      "tags": [
+        "VABB真空輔助",
+        "企業併購",
+        "歷史脈絡"
+      ],
+      "purpose": "確認Devicor企業血統的完整拆分歷史，避免MAMMOTOME乳房活檢事業與TEMNO/Achieve核心活檢針產品線混淆",
+      "abstract_note": "Leica Biosystems（Danaher旗下）於2014年收購整個Devicor Medical Products公司，年營收約1.7億美元（USD ~$170M），主力為Mammotome™乳房活檢系統（VABB路線）。此交易使Leica取得Devicor公司整體（含MAMMOTOME相關專利）。然而，2018年Merit Medical收購的TEMNO/Achieve資產（B08）是另一條事業線，推測兩者在2014-2018年間已完成內部切割或Merit係從Leica處購得。無論如何，最終結果是：MAMMOTOME→Leica/Danaher；TEMNO/ACHIEVE→Merit Medical。",
+      "value_to_project": "釐清Devicor被拆分為兩條不同事業線的事實，防止分析時誤判Merit和Leica的專利持有範圍",
+      "links": {
+        "patents": null,
+        "google_patents": null
+      },
       "patentResults": {
         "commercial": {
-          "company": "Devicor Medical Products, Inc.（2014年後乳房活檢事業歸入Leica Biosystems）",
-          "product": "Mammotome Breast Biopsy System（與TEMNO/Achieve為不同產品線）",
-          "hq": "Cincinnati, Ohio, USA",
-          "mechanism_spec": {
-            "type": "VABB真空輔助（Mammotome屬此類別，非本次打底核心活檢針機構範疇）"
+          "company": "Devicor Medical Products Inc → Leica Biosystems（MAMMOTOME事業線）",
+          "hq": "Cincinnati, Ohio, USA（Devicor原址）",
+          "product": "Mammotome™ Breast Biopsy System",
+          "acquisition": {
+            "from": "Devicor Medical Products Inc（整體）",
+            "by": "Leica Biosystems（Danaher旗下）",
+            "date": "2014",
+            "revenue_usd_m": "約170（Devicor整體年營收）"
           },
+          "mechanism_spec": {
+            "type": "VABB真空輔助（MAMMOTOME屬此類別，非本資料庫核心活檢針機構範疇）",
+            "note": "MAMMOTOME是影像引導乳房活檢系統，VABB路線，與TEMNO/Achieve的核心活檢針路線為不同產品線"
+          },
+          "corporate_lineage": "Ethicon Endo-Surgery（嬌生）→ Devicor Medical Products（2010）→ Leica Biosystems/Danaher（2014，MAMMOTOME事業線）",
           "collaboration_opportunity": null
         }
       },
