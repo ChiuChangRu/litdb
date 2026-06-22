@@ -4,13 +4,16 @@
     "scope": "核心活檢針（Core Needle Biopsy）擊發機構 / 鎖合方式 / 企業技術血統 / FTO分析導向",
     "focus_note": "以「機構設計」為主：擊發機構（彈簧/馬達/手動）、鎖合方式（pawl/cam/雙鎖定）、取樣幾何結構。排除影像導引、VABB真空輔助及純耗材設計專利。",
     "last_updated": "2026-06-22",
-    "schema_version": "2.0",
+    "schema_version": "2.1",
     "tag_dictionary": {
       "firing_mechanism": [
         "雙動作（手動）",
         "SLC彈簧加載",
         "馬達驅動",
-        "VABB真空輔助"
+        "VABB真空輔助",
+        "撞擊式擊發",
+        "全自動雙彈簧",
+        "旋轉切割"
       ],
       "lock_mechanism": [
         "pawl卡榫式",
@@ -27,11 +30,19 @@
         "標準取樣凹槽（19mm）",
         "短凹槽（9.5mm）",
         "半圓柱形內管",
-        "側向缺口"
+        "側向缺口",
+        "full core全核心",
+        "flush-cut齊平切割",
+        "tissue stop組織擋止",
+        "step-out前端式",
+        "螺旋連續取樣"
       ],
       "visibility_tech": [
         "echogenic tip",
-        "顯影標記"
+        "顯影標記",
+        "噴砂粗化回聲",
+        "氣體夾雜物回聲",
+        "刻度顯影套管"
       ],
       "application": [
         "乳房",
@@ -43,14 +54,18 @@
         "人因設計",
         "歷史源頭",
         "企業併購",
-        "歷史脈絡"
+        "歷史脈絡",
+        "FTO高關聯",
+        "同族專利",
+        "學術機構專利",
+        "設計專利"
       ]
     },
     "stats": {
-      "total": 10,
-      "patents": 7,
+      "total": 43,
+      "patents": 40,
       "market_reports": 3,
-      "patent_ratio": "70%"
+      "patent_ratio": "93%"
     }
   },
   "papers": [
@@ -878,6 +893,1977 @@
             "法規合規負擔（FDA/CE等）"
           ],
           "collaboration_opportunity": null
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B11",
+      "title": "Impact biopsy device and method of use (US10507011B2)",
+      "authors": "Merit Medical Systems 的撞擊式（impact）活檢裝置。以 impact member 傳遞衝量，彈簧推動滑塊撞擊衝擊片（impact plate）驅動取樣，屬半自動擊發。Merit Medical（TEMNO/Achieve 同集團）",
+      "year": 2019,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "撞擊式擊發",
+        "SLC彈簧加載",
+        "雙動作",
+        "乳房",
+        "肝/腎/肺等軟組織",
+        "FTO高關聯"
+      ],
+      "purpose": "撞擊式 impact member 傳力擊發機構",
+      "abstract_note": "Merit Medical Systems 的撞擊式（impact）活檢裝置。以 impact member 傳遞衝量，彈簧推動滑塊撞擊衝擊片（impact plate）驅動取樣，屬半自動擊發。Merit Medical（TEMNO/Achieve 同集團）",
+      "value_to_project": "撞擊傳力是 Merit 在彈簧擊發外的差異化路線，若本公司走標準 SLC 直射彈簧可迴避其撞擊結構獨立項*",
+      "links": {
+        "patents": "https://patents.google.com/patent/US10507011B2/en",
+        "google_patents": "https://patents.google.com/patent/US10507011B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Merit Medical 的撞擊式擊發機構：彈簧驅動 impact member 撞擊衝擊片產生取樣衝量，與傳統直接彈簧射針不同，以撞擊傳力降低反作用力。",
+          "examples": [
+            {
+              "name": "impact member 撞擊式擊發",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "機構描述來自使用者查證之著錄資料，未逐項核對 claim 全文",
+              "gauge_length": "未載",
+              "firing_spec": {
+                "mechanism": "SLC彈簧加載（撞擊傳力）",
+                "lock_type": "待核實*",
+                "action_mode": "半自動"
+              },
+              "results": {
+                "sample_notch": "側向取樣凹槽*",
+                "firing_force": "撞擊衝量，規格未載",
+                "visibility": "未載"
+              }
+            }
+          ],
+          "key_claims": [
+            "impact member 受彈簧驅動撞擊 impact plate 以傳遞取樣衝量",
+            "半自動擊發序列，撞擊式傳力結構"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "Merit 現役專利，撞擊傳力結構為其主張核心，需確認獨立項是否限定『撞擊片』元件"
+          ],
+          "vs_database": "與 B06（Merit/Devicor 馬達驅動 soft fire）同屬 Merit 擊發族，但本案走機械撞擊而非馬達控速。",
+          "bioteque_relevance": "撞擊傳力是 Merit 在彈簧擊發外的差異化路線，若本公司走標準 SLC 直射彈簧可迴避其撞擊結構獨立項*",
+          "evidence_level": "medium",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "撞擊式 impact member 傳力擊發機構",
+            "claim_boundary": "claim 範圍需逐項核實*；本條目為機構摘要層級，尚未做逐項 claim chart",
+            "fto_risk": "中*｜現行有效至 2034/06，Merit 自有撞擊傳力結構若與本公司設計重疊需注意；實際範圍待 claim chart"
+          },
+          "design_space": "",
+          "next_actions": [
+            "如進入實際 FTO，需取得獨立項全文做 claim-by-claim 比對"
+          ]
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B12",
+      "title": "Biopsy probe mechanism having multiple echogenic features (US11553898B2)",
+      "authors": "C.R. Bard（BD 集團）的多迴聲標記探針機構。內針/外針設多重迴聲特徵並以對齊/錯位提升超音波可視性。BD（Bard）echogenic 家族最新成員",
+      "year": 2023,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "echogenic tip",
+        "顯影標記",
+        "側向缺口",
+        "乳房",
+        "FTO高關聯",
+        "同族專利"
+      ],
+      "purpose": "內/外針多重 echogenic 特徵 + 對齊錯位指示",
+      "abstract_note": "C.R. Bard（BD 集團）的多迴聲標記探針機構。內針/外針設多重迴聲特徵並以對齊/錯位提升超音波可視性。BD（Bard）echogenic 家族最新成員",
+      "value_to_project": "本公司 echogenic 設計宜採單一連續粗化或單環標記，避開 BD『內外針多重迴聲特徵對齊/錯位』之組合式主張*",
+      "links": {
+        "patents": "https://patents.google.com/patent/US11553898B2/en",
+        "google_patents": "https://patents.google.com/patent/US11553898B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "C.R. Bard（BD）多迴聲標記機構：內針與外針各設迴聲特徵，藉對齊或錯位增強超音波下的針體與取樣區可視性。為 2009 優先權 echogenic 家族（US8480592→US9456806→US10299761→US11553898）最新成員。",
+          "examples": [
+            {
+              "name": "多重 echogenic 特徵內外針",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "家族關係已由 USPTO 著錄交叉確認；claim 細節未逐項核對",
+              "gauge_length": "未載",
+              "firing_spec": {
+                "mechanism": "共用（可視化導向，非擊發創新）",
+                "lock_type": "—",
+                "action_mode": "—"
+              },
+              "results": {
+                "sample_notch": "側向窗*",
+                "firing_force": "—",
+                "visibility": "多重迴聲特徵，內外針對齊/錯位"
+              }
+            }
+          ],
+          "key_claims": [
+            "內針與外針分別設多重迴聲特徵",
+            "迴聲特徵之對齊/錯位用以區辨取樣窗位置"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "BD echogenic 家族保護網綿密（4 件同族，到點 2029~2032），可視化設計需整族一起迴避"
+          ],
+          "vs_database": "與 B17（US9456806，同族 division）為同一 Bard echogenic 家族，共用 2009-12-23 最早優先權；本案為較晚成員，名目到期較後。",
+          "bioteque_relevance": "本公司 echogenic 設計宜採單一連續粗化或單環標記，避開 BD『內外針多重迴聲特徵對齊/錯位』之組合式主張*",
+          "evidence_level": "medium",
+          "source_quality": "USPTO 家族鏈著錄（已查證 cross-reference）+ 使用者描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "內/外針多重 echogenic 特徵 + 對齊錯位指示",
+            "claim_boundary": "claim 範圍需逐項核實*；本條目為機構摘要層級，尚未做逐項 claim chart",
+            "fto_risk": "中*｜BD 現行有效（推定 2032/03，含 PTA*）；若本公司在針體加多重迴聲標記並用於指示取樣窗，需迴避其『內外針迴聲特徵對齊』主張"
+          },
+          "design_space": "",
+          "next_actions": [
+            "如進入實際 FTO，需取得獨立項全文做 claim-by-claim 比對"
+          ]
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B13",
+      "title": "Methods and devices for maximizing tissue collection in partial-core biopsy needles (US10448930B2)",
+      "authors": "Cook Medical 的部分核心（partial-core）取樣量最佳化設計：tissue stop 組織擋止 + angled distal end 斜向遠端，提升單次取樣組織量。Cook Medical",
+      "year": 2019,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "tissue stop組織擋止",
+        "側向缺口",
+        "標準取樣凹槽（19mm）",
+        "肝/腎/肺等軟組織",
+        "FTO高關聯"
+      ],
+      "purpose": "tissue stop + angled distal end 取樣量最佳化",
+      "abstract_note": "Cook Medical 的部分核心（partial-core）取樣量最佳化設計：tissue stop 組織擋止 + angled distal end 斜向遠端，提升單次取樣組織量。Cook Medical",
+      "value_to_project": "tissue stop 是提升取樣量的常見手法，本公司若採用需確認 Cook 是否限定『擋止+斜遠端』之組合*",
+      "links": {
+        "patents": "https://patents.google.com/patent/US10448930B2/en",
+        "google_patents": "https://patents.google.com/patent/US10448930B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Cook Medical 的部分核心針取樣量最佳化：於凹槽近端設 tissue stop（組織擋止）並配合 angled distal end（斜向遠端），使脫垂入槽的組織量最大化、定位更穩。",
+          "examples": [
+            {
+              "name": "tissue stop + 斜遠端",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "機構描述來自使用者查證；claim 未逐項核對",
+              "gauge_length": "未載",
+              "firing_spec": {
+                "mechanism": "共用",
+                "lock_type": "—",
+                "action_mode": "—"
+              },
+              "results": {
+                "sample_notch": "含 tissue stop 之側向凹槽",
+                "firing_force": "—",
+                "visibility": "—"
+              }
+            }
+          ],
+          "key_claims": [
+            "凹槽內設 tissue stop 限制組織後移以增加保留量",
+            "斜向遠端（angled distal end）導引組織入槽"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "Cook 現役；組織擋止為取樣幾何核心改良，須注意組合式 claim"
+          ],
+          "vs_database": "與 B14（US20130102925A1）為同案族（同一發明，B14 為較早公開案）。",
+          "bioteque_relevance": "tissue stop 是提升取樣量的常見手法，本公司若採用需確認 Cook 是否限定『擋止+斜遠端』之組合*",
+          "evidence_level": "medium",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "tissue stop + angled distal end 取樣量最佳化",
+            "claim_boundary": "claim 範圍需逐項核實*；本條目為機構摘要層級，尚未做逐項 claim chart",
+            "fto_risk": "中*｜Cook 現行有效至 2033/03；若本公司在取樣凹槽加組織擋止結構需比對其獨立項"
+          },
+          "design_space": "",
+          "next_actions": [
+            "如進入實際 FTO，需取得獨立項全文做 claim-by-claim 比對"
+          ]
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B14",
+      "title": "Methods and devices for maximizing tissue collection in partial-core biopsy needles (US20130102925A1)",
+      "authors": "Cook Medical 同一 partial-core 取樣量最佳化發明之較早公開申請案（B13 US10448930B2 之同族前案）。Cook Medical",
+      "year": 2013,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "tissue stop組織擋止",
+        "側向缺口",
+        "同族專利",
+        "肝/腎/肺等軟組織"
+      ],
+      "purpose": "同 B13（公開案）",
+      "abstract_note": "Cook Medical 同一 partial-core 取樣量最佳化發明之較早公開申請案（B13 US10448930B2 之同族前案）。Cook Medical",
+      "value_to_project": "同族，分析併入 B13；保留條目以維持家族完整性",
+      "links": {
+        "patents": "https://patents.google.com/patent/US20130102925A1/en",
+        "google_patents": "https://patents.google.com/patent/US20130102925A1/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Cook Medical partial-core 取樣量最佳化發明的公開申請案，為 B13（US10448930B2）之同族前案，揭露相同 tissue stop + 斜遠端概念。",
+          "examples": [],
+          "key_claims": [
+            "同 B13：tissue stop + angled distal end"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "同族重複案，勿重複計入 FTO 風險數"
+          ],
+          "vs_database": "B13 之同族前案。",
+          "bioteque_relevance": "同族，分析併入 B13；保留條目以維持家族完整性",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "同 B13（公開案）",
+            "claim_boundary": "claim 範圍需逐項核實*；本條目為機構摘要層級，尚未做逐項 claim chart",
+            "fto_risk": "低（重複）*｜與 B13 同族，FTO 評估以 B13 已核准之 claim 為準"
+          },
+          "design_space": "",
+          "next_actions": [
+            "如進入實際 FTO，需取得獨立項全文做 claim-by-claim 比對"
+          ]
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B15",
+      "title": "Flush cut biopsy needle assembly and method of use (US10568611B2)",
+      "authors": "Merit Medical 的齊平切割（flush-cut）活檢針組：可縮回式切割件（retractable cutting member），切割後與針面齊平。Merit Medical",
+      "year": 2020,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "flush-cut齊平切割",
+        "側向缺口",
+        "乳房",
+        "FTO高關聯"
+      ],
+      "purpose": "可縮回切割件 + flush-cut 齊平幾何",
+      "abstract_note": "Merit Medical 的齊平切割（flush-cut）活檢針組：可縮回式切割件（retractable cutting member），切割後與針面齊平。Merit Medical",
+      "value_to_project": "若本公司切割件採固定式套管前進，與 Merit『可縮回齊平』結構不同，可資區別*",
+      "links": {
+        "patents": "https://patents.google.com/patent/US10568611B2/en",
+        "google_patents": "https://patents.google.com/patent/US10568611B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Merit Medical 的 flush-cut 設計：採可縮回切割件，取樣後切割緣與針外徑齊平，降低取樣窗殘留與組織拖曳。",
+          "examples": [],
+          "key_claims": [
+            "可縮回切割件（retractable cutting member）",
+            "切割後與針面齊平之 flush-cut 幾何"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "Merit 現役；可縮回齊平為其結構主張"
+          ],
+          "vs_database": "Merit 取樣幾何族；與 B11/B19/B22（Merit 群）同屬 Merit 專利網。",
+          "bioteque_relevance": "若本公司切割件採固定式套管前進，與 Merit『可縮回齊平』結構不同，可資區別*",
+          "evidence_level": "medium",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "可縮回切割件 + flush-cut 齊平幾何",
+            "claim_boundary": "claim 範圍需逐項核實*；本條目為機構摘要層級，尚未做逐項 claim chart",
+            "fto_risk": "中*｜Merit 現行有效至 2035/05；flush-cut 可縮切割若與本公司設計重疊需比對"
+          },
+          "design_space": "",
+          "next_actions": [
+            "如進入實際 FTO，需取得獨立項全文做 claim-by-claim 比對"
+          ]
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B16",
+      "title": "Full core biopsy device (US9237883B2)",
+      "authors": "KOHALA Inc 的全核心（full core）活檢裝置：外針設 countersink（沉孔）保留區以容納完整核心樣本。KOHALA（Promex Technologies 相關*）",
+      "year": 2016,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "full core全核心",
+        "半圓柱形內管",
+        "側向缺口",
+        "肝/腎/肺等軟組織",
+        "同族專利"
+      ],
+      "purpose": "外針 countersink 保留區 + full core 取樣",
+      "abstract_note": "KOHALA Inc 的全核心（full core）活檢裝置：外針設 countersink（沉孔）保留區以容納完整核心樣本。KOHALA（Promex Technologies 相關*）",
+      "value_to_project": "full core 是相對 partial-core 的差異化路線；本公司若做 full core 需整族（3 件）一併迴避*",
+      "links": {
+        "patents": "https://patents.google.com/patent/US9237883B2/en",
+        "google_patents": "https://patents.google.com/patent/US9237883B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "KOHALA Inc 的 full core 取樣設計：外針內設 countersink 沉孔保留區，使核心樣本完整保留而非部分核心；為三件同族（US9237883/US9332970/US9463002）之首件。",
+          "examples": [],
+          "key_claims": [
+            "外針內 countersink 沉孔形成樣本保留區",
+            "full core（完整核心）取樣幾何"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "KOHALA 以三件同族構成 full core 保護網，需整族評估"
+          ],
+          "vs_database": "與 B17/B18（US9332970/US9463002）同族；對照 B13 Cook 之 partial-core 路線。",
+          "bioteque_relevance": "full core 是相對 partial-core 的差異化路線；本公司若做 full core 需整族（3 件）一併迴避*",
+          "evidence_level": "medium",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "外針 countersink 保留區 + full core 取樣",
+            "claim_boundary": "claim 範圍需逐項核實*；本條目為機構摘要層級，尚未做逐項 claim chart",
+            "fto_risk": "中*｜現行有效至 2033/09；full core 沉孔保留結構若採用需比對 KOHALA 三同族"
+          },
+          "design_space": "",
+          "next_actions": [
+            "如進入實際 FTO，需取得獨立項全文做 claim-by-claim 比對"
+          ]
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B17",
+      "title": "Full core biopsy device (US9332970B2)",
+      "authors": "KOHALA Inc full core 同族第二件（B16 US9237883B2 同族）。KOHALA",
+      "year": 2016,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "full core全核心",
+        "同族專利",
+        "側向缺口"
+      ],
+      "purpose": "同 B16 同族",
+      "abstract_note": "KOHALA Inc full core 同族第二件（B16 US9237883B2 同族）。KOHALA",
+      "value_to_project": "同族，分析併入 B16",
+      "links": {
+        "patents": "https://patents.google.com/patent/US9332970B2/en",
+        "google_patents": "https://patents.google.com/patent/US9332970B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "KOHALA full core 三同族之一，揭露同 countersink 保留區概念。",
+          "examples": [],
+          "key_claims": [
+            "同 B16"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "同族，勿重複計風險"
+          ],
+          "vs_database": "B16 同族。",
+          "bioteque_relevance": "同族，分析併入 B16",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "同 B16 同族",
+            "claim_boundary": "claim 範圍需逐項核實*；本條目為機構摘要層級，尚未做逐項 claim chart",
+            "fto_risk": "低（同族）*｜FTO 以 B16 族為一體評估"
+          },
+          "design_space": "",
+          "next_actions": [
+            "如進入實際 FTO，需取得獨立項全文做 claim-by-claim 比對"
+          ]
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B18",
+      "title": "Full core biopsy device (US9463002B2)",
+      "authors": "KOHALA Inc full core 同族第三件（B16 US9237883B2 同族）。KOHALA",
+      "year": 2016,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "full core全核心",
+        "同族專利",
+        "側向缺口"
+      ],
+      "purpose": "同 B16 同族",
+      "abstract_note": "KOHALA Inc full core 同族第三件（B16 US9237883B2 同族）。KOHALA",
+      "value_to_project": "同族，分析併入 B16",
+      "links": {
+        "patents": "https://patents.google.com/patent/US9463002B2/en",
+        "google_patents": "https://patents.google.com/patent/US9463002B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "KOHALA full core 三同族之一。",
+          "examples": [],
+          "key_claims": [
+            "同 B16"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "同族，勿重複計風險"
+          ],
+          "vs_database": "B16 同族。",
+          "bioteque_relevance": "同族，分析併入 B16",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "同 B16 同族",
+            "claim_boundary": "claim 範圍需逐項核實*；本條目為機構摘要層級，尚未做逐項 claim chart",
+            "fto_risk": "低（同族）*｜FTO 以 B16 族為一體評估"
+          },
+          "design_space": "",
+          "next_actions": [
+            "如進入實際 FTO，需取得獨立項全文做 claim-by-claim 比對"
+          ]
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B19",
+      "title": "Biopsy needle devices and methods of use (US11793498B2)",
+      "authors": "Merit Medical 的三層同軸結構活檢針：外 cannula + 中段 hollow trocar + 內 stylet，半自動擊發。Merit Medical",
+      "year": 2023,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "全自動雙彈簧",
+        "半圓柱形內管",
+        "側向缺口",
+        "乳房",
+        "FTO高關聯"
+      ],
+      "purpose": "外cannula+中hollow trocar+內stylet 三層同軸結構",
+      "abstract_note": "Merit Medical 的三層同軸結構活檢針：外 cannula + 中段 hollow trocar + 內 stylet，半自動擊發。Merit Medical",
+      "value_to_project": "Merit 此案壽命最長（2038），是 Merit 取樣針的長期保護核心；本公司若採二層（套管+針芯）標準結構可與三層區別*",
+      "links": {
+        "patents": "https://patents.google.com/patent/US11793498B2/en",
+        "google_patents": "https://patents.google.com/patent/US11793498B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Merit Medical 的三層同軸針結構：外切割套管（cannula）+ 中空套針（hollow trocar）+ 內針芯（stylet），半自動擊發；三層結構分離穿刺與切割功能。",
+          "examples": [
+            {
+              "name": "三層同軸針結構",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "結構描述來自使用者查證；claim 未逐項核對",
+              "gauge_length": "未載",
+              "firing_spec": {
+                "mechanism": "半自動",
+                "lock_type": "待核實*",
+                "action_mode": "半自動"
+              },
+              "results": {
+                "sample_notch": "側向凹槽（內 stylet）*",
+                "firing_force": "未載",
+                "visibility": "未載"
+              }
+            }
+          ],
+          "key_claims": [
+            "三層同軸：外 cannula / 中 hollow trocar / 內 stylet",
+            "半自動擊發序列搭配三層分工"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "Merit 現役且到期最晚（2038/07），長期 FTO 重點"
+          ],
+          "vs_database": "Merit 群最新案；對照 B01 TRU-CUT 之二層同軸基礎，本案疊加中段 trocar。",
+          "bioteque_relevance": "Merit 此案壽命最長（2038），是 Merit 取樣針的長期保護核心；本公司若採二層（套管+針芯）標準結構可與三層區別*",
+          "evidence_level": "medium",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "外cannula+中hollow trocar+內stylet 三層同軸結構",
+            "claim_boundary": "claim 範圍需逐項核實*；本條目為機構摘要層級，尚未做逐項 claim chart",
+            "fto_risk": "中*｜Merit 最新案，有效至 2038/07（本批最長壽）；三層同軸若與本公司設計重疊須注意"
+          },
+          "design_space": "",
+          "next_actions": [
+            "如進入實際 FTO，需取得獨立項全文做 claim-by-claim 比對"
+          ]
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B20",
+      "title": "Core needle biopsy device (US11013499B2)",
+      "authors": "C.R. Bard（BD 集團）全自動核心針：selector 提供多模式/行程切換（不同穿刺深度或取樣模式）。BD（Bard）",
+      "year": 2021,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "全自動雙彈簧",
+        "pawl卡榫式",
+        "標準取樣凹槽（19mm）",
+        "短凹槽（9.5mm）",
+        "乳房",
+        "FTO高關聯",
+        "同族專利"
+      ],
+      "purpose": "selector 多模式/行程切換 + 全自動擊發",
+      "abstract_note": "C.R. Bard（BD 集團）全自動核心針：selector 提供多模式/行程切換（不同穿刺深度或取樣模式）。BD（Bard）",
+      "value_to_project": "行程/模式可切換是 Bard 高階槍的賣點；本公司若做固定行程單模式裝置與其 selector 主張不同*",
+      "links": {
+        "patents": "https://patents.google.com/patent/US11013499B2/en",
+        "google_patents": "https://patents.google.com/patent/US11013499B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "C.R. Bard（BD）全自動核心針：以 selector（選擇器）切換多種擊發模式或行程長度，使單一裝置可調整穿刺深度／取樣量。對照 Bard MAX-CORE/Marquee 產品線。",
+          "examples": [
+            {
+              "name": "selector 多模式核心針",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "機構描述來自使用者查證；claim 未逐項核對",
+              "gauge_length": "19G/9.5mm/19mm 凹槽*",
+              "firing_spec": {
+                "mechanism": "全自動雙彈簧",
+                "lock_type": "pawl卡榫式*",
+                "action_mode": "單動作（一鍵擊發）*"
+              },
+              "results": {
+                "sample_notch": "可選 9.5/19mm*",
+                "firing_force": "未載",
+                "visibility": "未載"
+              }
+            }
+          ],
+          "key_claims": [
+            "selector 切換多擊發模式／行程長度",
+            "全自動彈簧擊發 + 行程可選"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "BD 現役；selector 行程切換為其差異化 claim"
+          ],
+          "vs_database": "與 B21（US11793497B2）同族；屬 BD 全自動擊發族，對照 Argon B22 之雙扳機路線。",
+          "bioteque_relevance": "行程/模式可切換是 Bard 高階槍的賣點；本公司若做固定行程單模式裝置與其 selector 主張不同*",
+          "evidence_level": "medium",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "selector 多模式/行程切換 + 全自動擊發",
+            "claim_boundary": "claim 範圍需逐項核實*；本條目為機構摘要層級，尚未做逐項 claim chart",
+            "fto_risk": "中*｜BD 現行有效至 2035/04；多模式行程切換 selector 若與本公司設計重疊須比對"
+          },
+          "design_space": "",
+          "next_actions": [
+            "如進入實際 FTO，需取得獨立項全文做 claim-by-claim 比對"
+          ]
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B21",
+      "title": "Core needle biopsy device (US11793497B2)",
+      "authors": "C.R. Bard（BD 集團）全自動核心針同族（B20 US11013499B2 同族）。BD（Bard）",
+      "year": 2023,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "全自動雙彈簧",
+        "同族專利",
+        "標準取樣凹槽（19mm）"
+      ],
+      "purpose": "同 B20 同族",
+      "abstract_note": "C.R. Bard（BD 集團）全自動核心針同族（B20 US11013499B2 同族）。BD（Bard）",
+      "value_to_project": "同族，分析併入 B20",
+      "links": {
+        "patents": "https://patents.google.com/patent/US11793497B2/en",
+        "google_patents": "https://patents.google.com/patent/US11793497B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "BD 全自動核心針 B20 之同族，揭露相同 selector 多模式概念。",
+          "examples": [],
+          "key_claims": [
+            "同 B20"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "同族，勿重複計風險"
+          ],
+          "vs_database": "B20 同族。",
+          "bioteque_relevance": "同族，分析併入 B20",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "同 B20 同族",
+            "claim_boundary": "claim 範圍需逐項核實*；本條目為機構摘要層級，尚未做逐項 claim chart",
+            "fto_risk": "低（同族）*｜FTO 以 B20 族為一體評估"
+          },
+          "design_space": "",
+          "next_actions": [
+            "如進入實際 FTO，需取得獨立項全文做 claim-by-claim 比對"
+          ]
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B22",
+      "title": "Biopsy device handle (US10709429B2)",
+      "authors": "Argon Medical 的活檢裝置握把：側扳機 + 後扳機雙扳機設計，配 flexible abutment（彈性止擋）。Argon Medical（Tru-Core/SuperCore 同廠）",
+      "year": 2020,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "全自動雙彈簧",
+        "人因設計",
+        "乳房",
+        "肝/腎/肺等軟組織",
+        "FTO高關聯"
+      ],
+      "purpose": "側/後雙扳機 + flexible abutment 握把",
+      "abstract_note": "Argon Medical 的活檢裝置握把：側扳機 + 後扳機雙扳機設計，配 flexible abutment（彈性止擋）。Argon Medical（Tru-Core/SuperCore 同廠）",
+      "value_to_project": "雙扳機是握把人因主張；本公司若採單扳機握把與 Argon 設計不同，可資區別*",
+      "links": {
+        "patents": "https://patents.google.com/patent/US10709429B2/en",
+        "google_patents": "https://patents.google.com/patent/US10709429B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Argon Medical 的握把人因設計：側向扳機與後向扳機並存（雙扳機），搭配 flexible abutment 彈性止擋緩衝擊發。提升單手不同握姿操作便利。",
+          "examples": [
+            {
+              "name": "雙扳機握把",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "機構描述來自使用者查證；claim 未逐項核對",
+              "gauge_length": "—",
+              "firing_spec": {
+                "mechanism": "全自動雙彈簧",
+                "lock_type": "待核實*",
+                "action_mode": "單動作*"
+              },
+              "results": {
+                "sample_notch": "—",
+                "firing_force": "flexible abutment 緩衝",
+                "visibility": "—"
+              }
+            }
+          ],
+          "key_claims": [
+            "側扳機 + 後扳機雙扳機佈局",
+            "flexible abutment 彈性止擋緩衝"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "Argon 現役且到期晚（2037/11）；屬握把人因，非取樣幾何，迴避相對單純"
+          ],
+          "vs_database": "Argon 自動握把族（對照 B05 Argon US6106484 可重複使用握把）；人因導向，與 BD B20 之 selector 機構訴求不同。",
+          "bioteque_relevance": "雙扳機是握把人因主張；本公司若採單扳機握把與 Argon 設計不同，可資區別*",
+          "evidence_level": "medium",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "側/後雙扳機 + flexible abutment 握把",
+            "claim_boundary": "claim 範圍需逐項核實*；本條目為機構摘要層級，尚未做逐項 claim chart",
+            "fto_risk": "中*｜Argon 現行有效至 2037/11（壽命次長）；雙扳機握把若與本公司人因設計重疊須注意"
+          },
+          "design_space": "",
+          "next_actions": [
+            "如進入實際 FTO，需取得獨立項全文做 claim-by-claim 比對"
+          ]
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B23",
+      "title": "Tissue removal device and method of use (US11311278B2)",
+      "authors": "Merit Medical 的旋轉式組織移除裝置：可旋轉外針 + trocar + 取樣指示器。Merit Medical",
+      "year": 2022,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "旋轉切割",
+        "螺旋連續取樣",
+        "側向缺口",
+        "肝/腎/肺等軟組織",
+        "FTO高關聯"
+      ],
+      "purpose": "可旋轉外針 + trocar + 取樣指示器",
+      "abstract_note": "Merit Medical 的旋轉式組織移除裝置：可旋轉外針 + trocar + 取樣指示器。Merit Medical",
+      "value_to_project": "旋轉切割是有別於彈簧擊發的取樣典範；若本公司不涉旋轉移除則關聯低*",
+      "links": {
+        "patents": "https://patents.google.com/patent/US11311278B2/en",
+        "google_patents": "https://patents.google.com/patent/US11311278B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Merit Medical 的旋轉式取樣：外針可旋轉配合 trocar 切割組織，並設取樣指示器（indicator）回饋取樣狀態；屬旋轉切割而非彈簧射擊路線。",
+          "examples": [],
+          "key_claims": [
+            "可旋轉外針 + trocar 旋轉切割",
+            "取樣狀態指示器"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "Merit 現役；旋轉切割族需與 B24/B25 一併看"
+          ],
+          "vs_database": "與 B24（BD 螺旋輸送）、B25（Merit partoff tab）同屬旋轉/連續取樣典範，異於 B01~B22 之凹槽射擊路線。",
+          "bioteque_relevance": "旋轉切割是有別於彈簧擊發的取樣典範；若本公司不涉旋轉移除則關聯低*",
+          "evidence_level": "medium",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "可旋轉外針 + trocar + 取樣指示器",
+            "claim_boundary": "claim 範圍需逐項核實*；本條目為機構摘要層級，尚未做逐項 claim chart",
+            "fto_risk": "中*｜Merit 現行有效至 2037/06；旋轉切割 + 指示器若與本公司設計重疊須比對"
+          },
+          "design_space": "",
+          "next_actions": [
+            "如進入實際 FTO，需取得獨立項全文做 claim-by-claim 比對"
+          ]
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B24",
+      "title": "Tissue removal device and method of use (US10278678B2)",
+      "authors": "BD（Becton Dickinson）的螺旋輸送器旋轉取樣裝置：以 auger/螺旋連續輸送組織達成連續取樣。BD",
+      "year": 2019,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "旋轉切割",
+        "螺旋連續取樣",
+        "側向缺口",
+        "FTO高關聯"
+      ],
+      "purpose": "螺旋輸送器旋轉連續取樣",
+      "abstract_note": "BD（Becton Dickinson）的螺旋輸送器旋轉取樣裝置：以 auger/螺旋連續輸送組織達成連續取樣。BD",
+      "value_to_project": "螺旋連續輸送與標準側向凹槽單發取樣機制不同；若本公司不採螺旋輸送則關聯低*",
+      "links": {
+        "patents": "https://patents.google.com/patent/US10278678B2/en",
+        "google_patents": "https://patents.google.com/patent/US10278678B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "BD（Becton Dickinson）的旋轉連續取樣：以螺旋輸送器（auger-like conveyor）連續切割並向近端輸送組織，免反覆抽插。",
+          "examples": [],
+          "key_claims": [
+            "螺旋輸送器連續切割與輸送組織",
+            "旋轉式連續取樣（非單發凹槽）"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "BD 現役；旋轉/螺旋族"
+          ],
+          "vs_database": "旋轉/連續取樣族（B23/B24/B25）；BD 走螺旋輸送，Merit B23 走旋轉外針+指示器、B25 走 partoff 切斷。",
+          "bioteque_relevance": "螺旋連續輸送與標準側向凹槽單發取樣機制不同；若本公司不採螺旋輸送則關聯低*",
+          "evidence_level": "medium",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "螺旋輸送器旋轉連續取樣",
+            "claim_boundary": "claim 範圍需逐項核實*；本條目為機構摘要層級，尚未做逐項 claim chart",
+            "fto_risk": "中*｜BD 現行有效至 2031/11；螺旋連續取樣若與本公司設計重疊須比對"
+          },
+          "design_space": "",
+          "next_actions": [
+            "如進入實際 FTO，需取得獨立項全文做 claim-by-claim 比對"
+          ]
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B25",
+      "title": "Tissue removal device and method of use (US9763648B2)",
+      "authors": "Merit Medical 的旋轉組織移除裝置：partoff tab 切斷機構，於連續取樣後切斷組織條。Merit Medical",
+      "year": 2017,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "旋轉切割",
+        "螺旋連續取樣",
+        "側向缺口",
+        "FTO高關聯"
+      ],
+      "purpose": "partoff tab 組織切斷機構",
+      "abstract_note": "Merit Medical 的旋轉組織移除裝置：partoff tab 切斷機構，於連續取樣後切斷組織條。Merit Medical",
+      "value_to_project": "partoff 切斷是連續取樣下游的分離手法；若本公司不做連續取樣則關聯低*",
+      "links": {
+        "patents": "https://patents.google.com/patent/US9763648B2/en",
+        "google_patents": "https://patents.google.com/patent/US9763648B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Merit Medical 旋轉取樣的 partoff tab 切斷機構：連續取樣後以 partoff tab 將組織條切斷分離。",
+          "examples": [],
+          "key_claims": [
+            "partoff tab 組織切斷機構",
+            "搭配旋轉/連續取樣使用"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "Merit 現役；旋轉/連續取樣族"
+          ],
+          "vs_database": "旋轉/連續取樣族（B23/B24/B25）之 Merit 成員，偏向下游切斷。",
+          "bioteque_relevance": "partoff 切斷是連續取樣下游的分離手法；若本公司不做連續取樣則關聯低*",
+          "evidence_level": "medium",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "partoff tab 組織切斷機構",
+            "claim_boundary": "claim 範圍需逐項核實*；本條目為機構摘要層級，尚未做逐項 claim chart",
+            "fto_risk": "中*｜Merit 現行有效至 2034/08；partoff 切斷若與本公司設計重疊須比對"
+          },
+          "design_space": "",
+          "next_actions": [
+            "如進入實際 FTO，需取得獨立項全文做 claim-by-claim 比對"
+          ]
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B26",
+      "title": "Microbiopsy device (US10898170B2)",
+      "authors": "University of Massachusetts Chan Medical School（麻州大學醫學院，學術機構，非競品廠商）的前端式微取樣針：Franseen 三尖切割 + step-out 內徑差（遠端小ID／近端大ID2）+ 倒鉤，22G~27G 連續微取樣，用於 EUS/EBUS。發明人 Andrew H. Fischer",
+      "year": 2021,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "step-out前端式",
+        "echogenic tip",
+        "學術機構專利",
+        "肝/腎/肺等軟組織"
+      ],
+      "purpose": "Franseen 三尖 + step-out 內徑差 + 倒鉤（前端微取樣）",
+      "abstract_note": "University of Massachusetts Chan Medical School（麻州大學醫學院，學術機構，非競品廠商）的前端式微取樣針：Franseen 三尖切割 + step-out 內徑差（遠端小ID／近端大ID2）+ 倒鉤，22G~27G 連續微取樣，用於 EUS/EBUS。發明人 Andrew H. Fischer",
+      "value_to_project": "scope 邊緣條目：屬前端微取樣 FNA 幾何，與本 KB 側取樣核心針主軸不同；保留作技術視野（前端 vs 側取樣對照）",
+      "links": {
+        "patents": "https://patents.google.com/patent/US10898170B2/en",
+        "google_patents": "https://patents.google.com/patent/US10898170B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "麻州大學（學術機構）的前端式微取樣針：採 Franseen 三尖切割尖 + 「step-out」內徑差（遠端收集段小、近端收集段大）+ back-facing barb 倒鉤，於 22G~27G 小口徑下連續取得多段完整微組織。屬前端 FNA 取樣幾何，非側取樣核心針、非擊發機構。",
+          "examples": [
+            {
+              "name": "Franseen step-out 前端微取樣",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "已逐項核對 Google Patents 全文：受讓人 UMass、優先權 2014-01-31、claim 含 step-out 與三尖",
+              "gauge_length": "22G~27G",
+              "firing_spec": {
+                "mechanism": "手動前端（無擊發槍）",
+                "lock_type": "無",
+                "action_mode": "連續抽插微取樣"
+              },
+              "results": {
+                "sample_notch": "前端三尖開口（非側向凹槽）",
+                "firing_force": "手動",
+                "visibility": "小口徑，未強調 echogenic"
+              }
+            }
+          ],
+          "key_claims": [
+            "Franseen 三尖前端切割尖",
+            "step-out：近端內徑大於遠端，使組織連續流入近端收集腔",
+            "back-facing barb 倒鉤輔助保留組織"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "scope 邊緣（前端 FNA，非側取樣核心針）",
+            "學術機構持有，授權態度與競品不同*"
+          ],
+          "vs_database": "與既有側取樣族（B01~B25）取樣典範不同：本案為前端切割收集，無側向凹槽、無擊發槍。",
+          "bioteque_relevance": "scope 邊緣條目：屬前端微取樣 FNA 幾何，與本 KB 側取樣核心針主軸不同；保留作技術視野（前端 vs 側取樣對照）",
+          "evidence_level": "high",
+          "source_quality": "Google Patents 全文已查證（受讓人/優先權/技術內容均核對）",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "Franseen 三尖 + step-out 內徑差 + 倒鉤（前端微取樣）",
+            "claim_boundary": "claim 範圍需逐項核實*；本條目為機構摘要層級，尚未做逐項 claim chart",
+            "fto_risk": "低*｜學術機構持有（非競品），利基於 EUS/EBUS 細針；推定有效至 ~2035。對 Bioteque 核心活檢針線（側取樣）FTO 關聯低"
+          },
+          "design_space": "",
+          "next_actions": [
+            "如進入實際 FTO，需取得獨立項全文做 claim-by-claim 比對"
+          ]
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B27",
+      "title": "Biopsy probe mechanism having multiple echogenic features (US9456806B2)",
+      "authors": "C.R. Bard（BD 集團）多迴聲標記探針機構，為 2009 優先權 echogenic 家族中間案（US8480592 母案 → 本案 division → US10299761 → US11553898）。BD（Bard）",
+      "year": 2016,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "echogenic tip",
+        "顯影標記",
+        "側向缺口",
+        "同族專利",
+        "FTO高關聯"
+      ],
+      "purpose": "多重 echogenic 特徵（2009 家族 division 案）",
+      "abstract_note": "C.R. Bard（BD 集團）多迴聲標記探針機構，為 2009 優先權 echogenic 家族中間案（US8480592 母案 → 本案 division → US10299761 → US11553898）。BD（Bard）",
+      "value_to_project": "與 B12 同族；Bard echogenic 保護網整體到點 2029~2032，可視化設計需整族迴避",
+      "links": {
+        "patents": "https://patents.google.com/patent/US9456806B2/en",
+        "google_patents": "https://patents.google.com/patent/US9456806B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "C.R. Bard（BD）echogenic 家族之 division 案。因 continuation/division 之專利權期限自最早母案（US8480592，2009-12-23 申請）起算 20 年，名目到期約 2029-12（非其自身 2013 申請日起算的 2033）。使用者文件之「2030/12」即此家族到期年；現仍在權利期內。",
+          "examples": [],
+          "key_claims": [
+            "多重 echogenic 特徵（與 B12 同族主題）",
+            "division 案，claim 範圍受家族 terminal disclaimer 牽動*"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "到期估算依家族優先權鏈推定，PTA/terminal disclaimer 可能微調*",
+            "年費實繳狀態未核實*"
+          ],
+          "vs_database": "B12（US11553898）之同族母系；同一 Bard echogenic 2009 家族。",
+          "bioteque_relevance": "與 B12 同族；Bard echogenic 保護網整體到點 2029~2032，可視化設計需整族迴避",
+          "evidence_level": "medium",
+          "source_quality": "USPTO 家族鏈著錄已查證（cross-reference 確認 2009 母案）",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "多重 echogenic 特徵（2009 家族 division 案）",
+            "claim_boundary": "claim 範圍需逐項核實*；本條目為機構摘要層級，尚未做逐項 claim chart",
+            "fto_risk": "中*｜名目到期 ~2029-2030（家族 2009 優先權鏈）；現仍有效。年費是否實際繳清未經 USPTO 法律狀態原始資料核實*"
+          },
+          "design_space": "",
+          "next_actions": [
+            "如進入實際 FTO，需取得獨立項全文做 claim-by-claim 比對"
+          ]
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B28",
+      "title": "Echogenically enhanced surgical instrument (US4869259A)",
+      "authors": "Cook Medical（前身 Cook Urological Inc）的回聲增強器械：以噴砂（sandblast）製程粗化針面提升超音波回聲。Cook Medical",
+      "year": 1989,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（已到期，公共領域）",
+      "tags": [
+        "噴砂粗化回聲",
+        "echogenic tip",
+        "顯影標記"
+      ],
+      "purpose": "噴砂粗化針面增強回聲",
+      "abstract_note": "Cook Medical（前身 Cook Urological Inc）的回聲增強器械：以噴砂（sandblast）製程粗化針面提升超音波回聲。Cook Medical",
+      "value_to_project": "回聲粗化製程已公共領域，本公司可自由參考噴砂粗化做可視化設計",
+      "links": {
+        "patents": "https://patents.google.com/patent/US4869259A/en",
+        "google_patents": "https://patents.google.com/patent/US4869259A/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Cook（Cook Urological，現 Cook Medical）以噴砂粗化針表面增強超音波回聲之早期專利，現已到期、製程進入公共領域。",
+          "examples": [],
+          "key_claims": [
+            "噴砂粗化針面增強回聲"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "已到期，無 FTO 風險"
+          ],
+          "vs_database": "echogenic 可視化技術源頭之一（粗化路線），對照 BD B12/B27 之多重迴聲特徵結構路線。",
+          "bioteque_relevance": "回聲粗化製程已公共領域，本公司可自由參考噴砂粗化做可視化設計",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "噴砂粗化針面增強回聲",
+            "claim_boundary": "已到期，claim 僅供技術史理解，無 FTO 意義",
+            "fto_risk": "無（已到期，公共領域）"
+          },
+          "design_space": "",
+          "next_actions": []
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B29",
+      "title": "Reflection enhancement of a biopsy needle (US4401124A)",
+      "authors": "Technicare Corp（已不存續）的針體反射增強設計。Technicare",
+      "year": 1983,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（已到期，公共領域）",
+      "tags": [
+        "echogenic tip",
+        "顯影標記"
+      ],
+      "purpose": "針體反射面增強超音波回聲",
+      "abstract_note": "Technicare Corp（已不存續）的針體反射增強設計。Technicare",
+      "value_to_project": "回聲增強最早期專利之一，純技術史參考",
+      "links": {
+        "patents": "https://patents.google.com/patent/US4401124A/en",
+        "google_patents": "https://patents.google.com/patent/US4401124A/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Technicare 的活檢針反射增強早期專利，已到期。",
+          "examples": [],
+          "key_claims": [
+            "針體反射面增強超音波回聲"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "已到期，無 FTO 風險"
+          ],
+          "vs_database": "",
+          "bioteque_relevance": "回聲增強最早期專利之一，純技術史參考",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "針體反射面增強超音波回聲",
+            "claim_boundary": "已到期，claim 僅供技術史理解，無 FTO 意義",
+            "fto_risk": "無（已到期，公共領域）"
+          },
+          "design_space": "",
+          "next_actions": []
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B30",
+      "title": "Needle with ultrasonically reflective displacement scale (US4582061A)",
+      "authors": "Indianapolis Center for Advanced Research 的超音波反射位移刻度針：以氣體夾雜物（gas inclusion）結構形成可視刻度。Indianapolis Center",
+      "year": 1986,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（已到期，公共領域）",
+      "tags": [
+        "氣體夾雜物回聲",
+        "刻度顯影套管",
+        "echogenic tip"
+      ],
+      "purpose": "氣體夾雜物形成回聲刻度",
+      "abstract_note": "Indianapolis Center for Advanced Research 的超音波反射位移刻度針：以氣體夾雜物（gas inclusion）結構形成可視刻度。Indianapolis Center",
+      "value_to_project": "氣體夾雜物回聲刻度概念之公共領域前案",
+      "links": {
+        "patents": "https://patents.google.com/patent/US4582061A/en",
+        "google_patents": "https://patents.google.com/patent/US4582061A/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "以針體內氣體夾雜物結構形成超音波可視位移刻度之早期專利，已到期。",
+          "examples": [],
+          "key_claims": [
+            "氣體夾雜物形成回聲刻度"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "已到期，無 FTO 風險"
+          ],
+          "vs_database": "",
+          "bioteque_relevance": "氣體夾雜物回聲刻度概念之公共領域前案",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "氣體夾雜物形成回聲刻度",
+            "claim_boundary": "已到期，claim 僅供技術史理解，無 FTO 意義",
+            "fto_risk": "無（已到期，公共領域）"
+          },
+          "design_space": "",
+          "next_actions": []
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B31",
+      "title": "Cannula having band markings (USD496728S1)",
+      "authors": "Avent Inc 的套管帶狀刻度外觀設計專利（design patent，僅保護外觀）。Avent",
+      "year": 2004,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（已到期，公共領域）",
+      "tags": [
+        "刻度顯影套管",
+        "設計專利"
+      ],
+      "purpose": "套管帶狀刻度外觀（設計專利）",
+      "abstract_note": "Avent Inc 的套管帶狀刻度外觀設計專利（design patent，僅保護外觀）。Avent",
+      "value_to_project": "設計專利，僅外觀，已到期；對功能性設計無 FTO 意義",
+      "links": {
+        "patents": "https://patents.google.com/patent/USD496728S1/en",
+        "google_patents": "https://patents.google.com/patent/USD496728S1/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Avent 的具帶狀刻度金屬套管外觀設計專利，已到期；設計專利僅保護外觀，不及功能。",
+          "examples": [],
+          "key_claims": [
+            "套管帶狀刻度外觀（設計專利）"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "已到期，無 FTO 風險"
+          ],
+          "vs_database": "",
+          "bioteque_relevance": "設計專利，僅外觀，已到期；對功能性設計無 FTO 意義",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "套管帶狀刻度外觀（設計專利）",
+            "claim_boundary": "已到期，claim 僅供技術史理解，無 FTO 意義",
+            "fto_risk": "無（已到期，公共領域）"
+          },
+          "design_space": "",
+          "next_actions": []
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B32",
+      "title": "Automated biopsy instruments (US5779647A)",
+      "authors": "CareFusion 2200 Inc（前身 Bard/SDI 相關*）的自動活檢器械：單/雙彈簧 force generator 擊發。CareFusion",
+      "year": 1998,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（已到期，公共領域）",
+      "tags": [
+        "SLC彈簧加載",
+        "全自動雙彈簧",
+        "雙鎖定卡合"
+      ],
+      "purpose": "單/雙彈簧 force generator 擊發",
+      "abstract_note": "CareFusion 2200 Inc（前身 Bard/SDI 相關*）的自動活檢器械：單/雙彈簧 force generator 擊發。CareFusion",
+      "value_to_project": "雙彈簧擊發力產生器之公共領域前案，現代全自動槍的彈簧配置可自由參考",
+      "links": {
+        "patents": "https://patents.google.com/patent/US5779647A/en",
+        "google_patents": "https://patents.google.com/patent/US5779647A/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "CareFusion 2200 的自動活檢槍：以單彈簧或雙彈簧 force generator 提供擊發力，已到期。",
+          "examples": [],
+          "key_claims": [
+            "單/雙彈簧 force generator 擊發"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "已到期，無 FTO 風險"
+          ],
+          "vs_database": "雙彈簧擊發之歷史前案，對照現役 B20 BD / B22 Argon 之全自動彈簧族。",
+          "bioteque_relevance": "雙彈簧擊發力產生器之公共領域前案，現代全自動槍的彈簧配置可自由參考",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "單/雙彈簧 force generator 擊發",
+            "claim_boundary": "已到期，claim 僅供技術史理解，無 FTO 意義",
+            "fto_risk": "無（已到期，公共領域）"
+          },
+          "design_space": "",
+          "next_actions": []
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B33",
+      "title": "Surgical instrument for biopsies (US3989033A)",
+      "authors": "個人發明（Individual）的彈簧式活檢器械，屬彈簧擊發源頭專利之一。Individual inventor",
+      "year": 1976,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（已到期，公共領域）",
+      "tags": [
+        "SLC彈簧加載",
+        "歷史源頭",
+        "無鎖合（純手動）"
+      ],
+      "purpose": "彈簧驅動取樣（源頭）",
+      "abstract_note": "個人發明（Individual）的彈簧式活檢器械，屬彈簧擊發源頭專利之一。Individual inventor",
+      "value_to_project": "彈簧擊發機構技術史源頭，純公共領域參考",
+      "links": {
+        "patents": "https://patents.google.com/patent/US3989033A/en",
+        "google_patents": "https://patents.google.com/patent/US3989033A/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "早期含彈簧之活檢器械，彈簧擊發概念源頭之一，已到期數十年。",
+          "examples": [],
+          "key_claims": [
+            "彈簧驅動取樣（源頭）"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "已到期，無 FTO 風險"
+          ],
+          "vs_database": "與 B01 TRU-CUT 並列為機構源頭；本案引入彈簧自動化雛形。",
+          "bioteque_relevance": "彈簧擊發機構技術史源頭，純公共領域參考",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "彈簧驅動取樣（源頭）",
+            "claim_boundary": "已到期，claim 僅供技術史理解，無 FTO 意義",
+            "fto_risk": "無（已到期，公共領域）"
+          },
+          "design_space": "",
+          "next_actions": []
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B34",
+      "title": "Tissue needle (US4733671A)",
+      "authors": "Creative Research and Manufacturing Inc 的組織取樣針，源頭期專利。Creative Research and Manufacturing",
+      "year": 1988,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（已到期，公共領域）",
+      "tags": [
+        "歷史源頭",
+        "側向缺口"
+      ],
+      "purpose": "側向取樣針（源頭期）",
+      "abstract_note": "Creative Research and Manufacturing Inc 的組織取樣針，源頭期專利。Creative Research and Manufacturing",
+      "value_to_project": "取樣針幾何技術史參考",
+      "links": {
+        "patents": "https://patents.google.com/patent/US4733671A/en",
+        "google_patents": "https://patents.google.com/patent/US4733671A/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "早期組織取樣針專利，已到期。",
+          "examples": [],
+          "key_claims": [
+            "側向取樣針（源頭期）"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "已到期，無 FTO 風險"
+          ],
+          "vs_database": "",
+          "bioteque_relevance": "取樣針幾何技術史參考",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "側向取樣針（源頭期）",
+            "claim_boundary": "已到期，claim 僅供技術史理解，無 FTO 意義",
+            "fto_risk": "無（已到期，公共領域）"
+          },
+          "design_space": "",
+          "next_actions": []
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B35",
+      "title": "Actuating mechanism for biopsy needle (US4924878A)",
+      "authors": "個人發明（Nottke）的活檢針致動機構，源頭期擊發機構專利。Individual（Nottke）",
+      "year": 1990,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（已到期，公共領域）",
+      "tags": [
+        "SLC彈簧加載",
+        "歷史源頭"
+      ],
+      "purpose": "活檢針致動/擊發機構（源頭）",
+      "abstract_note": "個人發明（Nottke）的活檢針致動機構，源頭期擊發機構專利。Individual（Nottke）",
+      "value_to_project": "擊發致動機構技術史參考",
+      "links": {
+        "patents": "https://patents.google.com/patent/US4924878A/en",
+        "google_patents": "https://patents.google.com/patent/US4924878A/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "早期活檢針致動（擊發）機構專利，已到期。",
+          "examples": [],
+          "key_claims": [
+            "活檢針致動/擊發機構（源頭）"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "已到期，無 FTO 風險"
+          ],
+          "vs_database": "",
+          "bioteque_relevance": "擊發致動機構技術史參考",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "活檢針致動/擊發機構（源頭）",
+            "claim_boundary": "已到期，claim 僅供技術史理解，無 FTO 意義",
+            "fto_risk": "無（已到期，公共領域）"
+          },
+          "design_space": "",
+          "next_actions": []
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B36",
+      "title": "Biopsy needle instrument (US4958625A)",
+      "authors": "Boston Scientific Corp 的活檢針器械，源頭期專利。Boston Scientific",
+      "year": 1990,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（已到期，公共領域）",
+      "tags": [
+        "SLC彈簧加載",
+        "歷史源頭"
+      ],
+      "purpose": "活檢針器械（源頭）",
+      "abstract_note": "Boston Scientific Corp 的活檢針器械，源頭期專利。Boston Scientific",
+      "value_to_project": "Boston Scientific 早期取樣槍技術史參考",
+      "links": {
+        "patents": "https://patents.google.com/patent/US4958625A/en",
+        "google_patents": "https://patents.google.com/patent/US4958625A/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Boston Scientific 早期活檢針器械專利，已到期。",
+          "examples": [],
+          "key_claims": [
+            "活檢針器械（源頭）"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "已到期，無 FTO 風險"
+          ],
+          "vs_database": "",
+          "bioteque_relevance": "Boston Scientific 早期取樣槍技術史參考",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "活檢針器械（源頭）",
+            "claim_boundary": "已到期，claim 僅供技術史理解，無 FTO 意義",
+            "fto_risk": "無（已到期，公共領域）"
+          },
+          "design_space": "",
+          "next_actions": []
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B37",
+      "title": "Instrument for tissue sampling (US5121751A)",
+      "authors": "Boston Scientific Scimed Inc 的組織取樣器械，源頭期專利。Boston Scientific Scimed",
+      "year": 1992,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（已到期，公共領域）",
+      "tags": [
+        "SLC彈簧加載",
+        "歷史源頭",
+        "側向缺口"
+      ],
+      "purpose": "組織取樣器械（源頭）",
+      "abstract_note": "Boston Scientific Scimed Inc 的組織取樣器械，源頭期專利。Boston Scientific Scimed",
+      "value_to_project": "取樣機構技術史參考",
+      "links": {
+        "patents": "https://patents.google.com/patent/US5121751A/en",
+        "google_patents": "https://patents.google.com/patent/US5121751A/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Boston Scientific Scimed 早期組織取樣器械，已到期。",
+          "examples": [],
+          "key_claims": [
+            "組織取樣器械（源頭）"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "已到期，無 FTO 風險"
+          ],
+          "vs_database": "",
+          "bioteque_relevance": "取樣機構技術史參考",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "組織取樣器械（源頭）",
+            "claim_boundary": "已到期，claim 僅供技術史理解，無 FTO 意義",
+            "fto_risk": "無（已到期，公共領域）"
+          },
+          "design_space": "",
+          "next_actions": []
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B38",
+      "title": "Automated biopsy device (US4461305A)",
+      "authors": "個人發明（Cibley）的自動活檢裝置，自動化擊發源頭專利。Individual（Cibley）",
+      "year": 1984,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（已到期，公共領域）",
+      "tags": [
+        "全自動雙彈簧",
+        "SLC彈簧加載",
+        "歷史源頭"
+      ],
+      "purpose": "自動化彈簧擊發（源頭）",
+      "abstract_note": "個人發明（Cibley）的自動活檢裝置，自動化擊發源頭專利。Individual（Cibley）",
+      "value_to_project": "自動槍擊發機構技術史源頭之一",
+      "links": {
+        "patents": "https://patents.google.com/patent/US4461305A/en",
+        "google_patents": "https://patents.google.com/patent/US4461305A/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "早期自動活檢裝置（自動擊發）專利，已到期。",
+          "examples": [],
+          "key_claims": [
+            "自動化彈簧擊發（源頭）"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "已到期，無 FTO 風險"
+          ],
+          "vs_database": "",
+          "bioteque_relevance": "自動槍擊發機構技術史源頭之一",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "自動化彈簧擊發（源頭）",
+            "claim_boundary": "已到期，claim 僅供技術史理解，無 FTO 意義",
+            "fto_risk": "無（已到期，公共領域）"
+          },
+          "design_space": "",
+          "next_actions": []
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B39",
+      "title": "Diagnostic needle (US1585934A)",
+      "authors": "RADIU EMANATION Corp 的診斷針，極早期（1926 公告）源頭專利。RADIU EMANATION",
+      "year": 1926,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（已到期，公共領域）",
+      "tags": [
+        "歷史源頭"
+      ],
+      "purpose": "早期診斷針（極早源頭）",
+      "abstract_note": "RADIU EMANATION Corp 的診斷針，極早期（1926 公告）源頭專利。RADIU EMANATION",
+      "value_to_project": "活檢針歷史最早源頭脈絡",
+      "links": {
+        "patents": "https://patents.google.com/patent/US1585934A/en",
+        "google_patents": "https://patents.google.com/patent/US1585934A/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "1920 年代診斷針專利，活檢針最古早源頭之一，早已公共領域。",
+          "examples": [],
+          "key_claims": [
+            "早期診斷針（極早源頭）"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "已到期，無 FTO 風險"
+          ],
+          "vs_database": "",
+          "bioteque_relevance": "活檢針歷史最早源頭脈絡",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "早期診斷針（極早源頭）",
+            "claim_boundary": "已到期，claim 僅供技術史理解，無 FTO 意義",
+            "fto_risk": "無（已到期，公共領域）"
+          },
+          "design_space": "",
+          "next_actions": []
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B40",
+      "title": "Device for obtaining biopsy specimens (US1867624A)",
+      "authors": "Memorial Sloan Kettering（紀念斯隆凱特琳癌症中心）的取樣裝置，1932 公告源頭專利。Memorial Sloan Kettering",
+      "year": 1932,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（已到期，公共領域）",
+      "tags": [
+        "歷史源頭"
+      ],
+      "purpose": "早期活檢取樣裝置（源頭）",
+      "abstract_note": "Memorial Sloan Kettering（紀念斯隆凱特琳癌症中心）的取樣裝置，1932 公告源頭專利。Memorial Sloan Kettering",
+      "value_to_project": "活檢取樣歷史源頭；機構名稱具史料意義",
+      "links": {
+        "patents": "https://patents.google.com/patent/US1867624A/en",
+        "google_patents": "https://patents.google.com/patent/US1867624A/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "1930 年代取樣裝置專利，活檢取樣源頭，早已公共領域。",
+          "examples": [],
+          "key_claims": [
+            "早期活檢取樣裝置（源頭）"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "已到期，無 FTO 風險"
+          ],
+          "vs_database": "",
+          "bioteque_relevance": "活檢取樣歷史源頭；機構名稱具史料意義",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "早期活檢取樣裝置（源頭）",
+            "claim_boundary": "已到期，claim 僅供技術史理解，無 FTO 意義",
+            "fto_risk": "無（已到期，公共領域）"
+          },
+          "design_space": "",
+          "next_actions": []
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B41",
+      "title": "Biopsy needle (US2198319A)",
+      "authors": "個人發明（Silverman）的活檢針——即著名 Silverman needle 源頭。Individual（Silverman）",
+      "year": 1940,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（已到期，公共領域）",
+      "tags": [
+        "歷史源頭",
+        "側向缺口"
+      ],
+      "purpose": "Silverman needle（側取樣源頭）",
+      "abstract_note": "個人發明（Silverman）的活檢針——即著名 Silverman needle 源頭。Individual（Silverman）",
+      "value_to_project": "側取樣核心針的歷史經典原型，與 TRU-CUT 並列源頭",
+      "links": {
+        "patents": "https://patents.google.com/patent/US2198319A/en",
+        "google_patents": "https://patents.google.com/patent/US2198319A/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Silverman needle 源頭專利（1940），側取樣針臨床經典原型，早已公共領域。",
+          "examples": [],
+          "key_claims": [
+            "Silverman needle（側取樣源頭）"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "已到期，無 FTO 風險"
+          ],
+          "vs_database": "與 B01 TRU-CUT 同為側取樣源頭；Silverman 為分瓣式取樣針原型。",
+          "bioteque_relevance": "側取樣核心針的歷史經典原型，與 TRU-CUT 並列源頭",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "Silverman needle（側取樣源頭）",
+            "claim_boundary": "已到期，claim 僅供技術史理解，無 FTO 意義",
+            "fto_risk": "無（已到期，公共領域）"
+          },
+          "design_space": "",
+          "next_actions": []
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B42",
+      "title": "Trocar for biopsia (US2541542A)",
+      "authors": "個人發明（Individual）的活檢套管針（trocar）源頭專利。Individual inventor",
+      "year": 1951,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（已到期，公共領域）",
+      "tags": [
+        "歷史源頭"
+      ],
+      "purpose": "活檢 trocar 套管針（源頭）",
+      "abstract_note": "個人發明（Individual）的活檢套管針（trocar）源頭專利。Individual inventor",
+      "value_to_project": "同軸套管針技術史源頭",
+      "links": {
+        "patents": "https://patents.google.com/patent/US2541542A/en",
+        "google_patents": "https://patents.google.com/patent/US2541542A/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "早期活檢 trocar 套管針專利，已到期。",
+          "examples": [],
+          "key_claims": [
+            "活檢 trocar 套管針（源頭）"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "已到期，無 FTO 風險"
+          ],
+          "vs_database": "",
+          "bioteque_relevance": "同軸套管針技術史源頭",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "活檢 trocar 套管針（源頭）",
+            "claim_boundary": "已到期，claim 僅供技術史理解，無 FTO 意義",
+            "fto_risk": "無（已到期，公共領域）"
+          },
+          "design_space": "",
+          "next_actions": []
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B43",
+      "title": "Biopsy device (US2850007A)",
+      "authors": "Wyeth Holdings LLC（前 American Cyanamid 相關*）的活檢裝置源頭專利。Wyeth Holdings",
+      "year": 1958,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（已到期，公共領域）",
+      "tags": [
+        "歷史源頭"
+      ],
+      "purpose": "早期活檢裝置（源頭）",
+      "abstract_note": "Wyeth Holdings LLC（前 American Cyanamid 相關*）的活檢裝置源頭專利。Wyeth Holdings",
+      "value_to_project": "活檢裝置歷史源頭；企業沿革具史料意義",
+      "links": {
+        "patents": "https://patents.google.com/patent/US2850007A/en",
+        "google_patents": "https://patents.google.com/patent/US2850007A/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "1950 年代活檢裝置專利，已到期。",
+          "examples": [],
+          "key_claims": [
+            "早期活檢裝置（源頭）"
+          ],
+          "actionable_insights": [],
+          "red_flags": [
+            "已到期，無 FTO 風險"
+          ],
+          "vs_database": "",
+          "bioteque_relevance": "活檢裝置歷史源頭；企業沿革具史料意義",
+          "evidence_level": "low",
+          "source_quality": "USPTO/Google Patents 著錄項目 + 使用者查證之機構描述",
+          "key_findings": [],
+          "mechanism_spec": {
+            "components": [],
+            "assembly_logic": "",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "早期活檢裝置（源頭）",
+            "claim_boundary": "已到期，claim 僅供技術史理解，無 FTO 意義",
+            "fto_risk": "無（已到期，公共領域）"
+          },
+          "design_space": "",
+          "next_actions": []
         }
       },
       "citation_count": null
