@@ -2343,6 +2343,7 @@ async function loadDB() {
   if(!DB.papers) DB.papers = [];
   if(!DB.meta) DB.meta = {};
   saveDB(); // 合併後存回 localStorage
+  window._litdbLoaded = true; // 標記載入流程已跑完（無論結果是否為空），供 renderMarket() 等判斷用
   onDBLoaded();
 }
 
@@ -4115,8 +4116,15 @@ function showNewPapersBanner(newPapers) {
 function renderMarket() {
   const el = document.getElementById('marketContent');
   if(!el) return;
-  if(!DB.papers || !DB.papers.length) {
+  if(!window._litdbLoaded) {
+    // 載入流程尚未跑完（loadDB 還在等待 fetch 回應），顯示載入中是合理的
     el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">📡 資料載入中，請稍候…<br><button class="btn btn-s" onclick="renderMarket()" style="margin-top:12px">重試</button></div>';
+    return;
+  }
+  if(!DB.papers || !DB.papers.length) {
+    // 載入已完成，文庫本身確實是空的（例如新知識庫剛建立、尚未收錄任何文獻），
+    // 不該顯示「載入中」誤導使用者去點重試，應明確告知目前沒有資料
+    el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">目前文庫尚無文獻。請先到「文庫」頁新增文獻，市場玩家資訊會依文庫內容自動歸類顯示。</div>';
     return;
   }
   try {
