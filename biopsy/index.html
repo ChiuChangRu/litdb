@@ -635,7 +635,7 @@ async function doLogin(){
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px">
           <div style="border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--card)">
             <div style="font-weight:800;margin-bottom:4px;color:var(--accent)">📚 文獻篩選大改版</div>
-            <div style="color:var(--muted)">原本「文庫」頁的「更多篩選」下拉已移除，改搬到「<b>開發策略與資料篩選</b>」頁（原「路線」頁）頂部，分成 8 大分類：類型、基材、親水高分子、底塗/接枝機制、固化機制、性能訴求、應用部位、廠商。每個分類可獨立切換 <b>OR</b>（任一符合）/ <b>AND</b>（須同時符合），分類之間固定 AND（交集）。旁邊會即時顯示「符合 X / 總篇數」。</div>
+            <div style="color:var(--muted)">原本「文庫」頁的「更多篩選」下拉已移除，改搬到「<b>開發策略與資料篩選</b>」頁（原「路線」頁）頂部，分成 8 大分類：類型、擊發機構、鎖合/釋放方式、動作模式、採樣規格訴求、可視化技術、應用部位、廠商。每個分類可獨立切換 <b>OR</b>（任一符合）/ <b>AND</b>（須同時符合），分類之間固定 AND（交集）。旁邊會即時顯示「符合 X / 總篇數」。</div>
           </div>
           <div style="border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--card)">
             <div style="font-weight:800;margin-bottom:4px;color:var(--accent)">✅ 篩選 → 確認 → AI 分析 三步驟流程</div>
@@ -700,7 +700,7 @@ async function doLogin(){
           <li>確認文獻類型：專利、論文、綜述、市場報告、商用品、設備或測試方法。</li>
           <li>若是專利，先找 <b>Examples / Embodiments / Comparative Examples / Tables / Claims</b>。</li>
           <li>若只有 1 個實施例，通常視為疑慮，需回查全文；但中華民國或中國專利可先保守排除。</li>
-          <li>若沒有實施例但 claims 或 description 有明確配方範圍，標為 <code>claim-derived embodiment</code>。</li>
+          <li>若沒有實施例但 claims 或 description 有明確機構範圍，標為 <code>claim-derived embodiment</code>。</li>
           <li>若全文內容與資料庫標題不符，標示 <code>reclassification_needed</code>，避免誤導報告。</li>
           <li>最後輸出固定欄位，讓前台可一致呈現，不為單篇文獻寫特殊版型。</li>
         </ol>
@@ -1680,36 +1680,6 @@ function summarizePatentExamples(p, getter, max=4) {
   return unique.length > max ? `${summary} | +${unique.length - max} more` : summary;
 }
 
-function buildReportSummary() {
-  const el = document.getElementById('rptDataSummary');
-  if(!el) return;
-  const analyzed = DB.papers.filter(p=>!p._deleted && p.patentResults && Object.keys(p.patentResults).length>0);
-  const patents = DB.papers.filter(p=>!p._deleted && p.doc_type==='專利');
-  const analyzedPatents = patents.filter(p=>!p._deleted && p.patentResults && Object.keys(p.patentResults).length>0);
-
-  // 收集所有性能數據
-  const frictions = [], adhesions = [], wcas = [];
-  analyzed.forEach(p=>{
-    patentExamples(p).forEach(ex=>{
-      const r = ex.results || {};
-      if(r.friction) frictions.push(`${p.id}: ${r.friction}`);
-      if(r.adhesion) adhesions.push(`${p.id}: ${r.adhesion}`);
-      if(r.wca) wcas.push(`${p.id}: ${r.wca}`);
-    });
-  });
-
-  el.innerHTML = `
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:10px">
-      <div style="text-align:center;padding:10px;background:var(--bg);border-radius:6px"><div style="font-size:22px;font-weight:700;color:var(--accent)">${DB.papers.length}</div><div style="font-size:10px;color:var(--muted)">文獻總數</div></div>
-      <div style="text-align:center;padding:10px;background:var(--bg);border-radius:6px"><div style="font-size:22px;font-weight:700;color:var(--accent2)">${analyzed.length}</div><div style="font-size:10px;color:var(--muted)">已分析</div></div>
-      <div style="text-align:center;padding:10px;background:var(--bg);border-radius:6px"><div style="font-size:22px;font-weight:700;color:var(--warn)">${analyzedPatents.length}/${patents.length}</div><div style="font-size:10px;color:var(--muted)">專利已分析/總數</div></div>
-    </div>
-    <div style="margin-bottom:6px"><strong>摩擦數據：</strong>${frictions.join('、')||'（尚無）'}</div>
-    <div style="margin-bottom:6px"><strong>附著力數據：</strong>${adhesions.join('、')||'（尚無）'}</div>
-    <div style="margin-bottom:6px"><strong>接觸角數據：</strong>${wcas.join('、')||'（尚無）'}</div>
-    <div style="color:var(--accent);font-size:11px;margin-top:8px">💡 分析越多文獻，報告數據越完整。目前已分析 ${analyzed.length} 篇。</div>`;
-}
-
 // ════════════════════════════════════════════════════════════
 // 維度感知 AI 策略解讀（按需觸發，不取代規則引擎報告，附加在其下方）
 // ════════════════════════════════════════════════════════════
@@ -1768,12 +1738,12 @@ function _deBuildAIContext(papers){
 
 function _deDimensionPromptSpec(dim){
   // 依維度類型回傳 {focusTitle, instructions}，組成 system prompt 的核心部分。
-  // 每個維度都額外要求「配方光譜比對」：同一篇文獻內若有多個實施例，要比較彼此差異；
-  // 跨篇文獻之間也要比較配方/製程/數據異同，不能只看整篇摘要做籠統歸納。
+  // 每個維度都額外要求「機構規格比對」：同一篇文獻內若有多個實施例，要比較彼此差異；
+  // 跨篇文獻之間也要比較機構/規格/數據異同，不能只看整篇摘要做籠統歸納。
   const SPEC_NOTE = `
-配方比對要求（務必執行，不可省略）：
-- 若同一篇文獻有多個實施例，請指出該篇內各實施例的配方/製程差異，以及這些差異如何影響結果（WCA/COF/附著等）
-- 跨文獻比較時，請具體點出哪些文獻用了相同/相近的材料或製程，差異在哪裡，結果優劣如何
+機構比對要求（務必執行，不可省略）：
+- 若同一篇文獻有多個實施例，請指出該篇內各實施例的機構/規格差異，以及這些差異如何影響結果（採樣凹槽/擊發力道/可視化等）
+- 跨文獻比較時，請具體點出哪些文獻用了相同/相近的擊發機構或鎖合方式，差異在哪裡，結果優劣如何
 - 引用實施例時請標明文獻ID（如[P30]），若該實施例是推論性質（非原文明確記載），引用時要註明「推論」二字`;
 
   if(dim.type==='company'){
@@ -1813,7 +1783,7 @@ ${SPEC_NOTE}`
     return {
       focusTitle:`${dim.company} 在「${dim.route}」路線的具體做法`,
       instructions:`請針對「${dim.company}」這家公司在「${dim.route}」這條技術路線上的具體做法，根據這批文獻回答：
-1. 這家公司在這條路線上的具體配方/製程策略是什麼（引用文獻ID佐證實施例細節）
+1. 這家公司在這條路線上的具體機構/規格策略是什麼（引用文獻ID佐證實施例細節）
 2. 哪些做法已過期可以直接參考使用，哪些仍在有效claim範圍內不能照抄
 3. 我方如果也要走這條路線，可以怎麼做出技術差異化（不踩到這家公司的claim）
 4. 我方絕對不能做的事（會直接侵犯這家公司現有claim的具體技術特徵）
@@ -1859,11 +1829,11 @@ async function generateDimensionalAIReport(){
 1. 繁體中文（台灣用語，勿用簡體字）
 2. 只根據提供的文獻資料做判斷，不要編造文獻中沒有的數據或結論
 3. 每個判斷盡可能引用具體文獻ID如[P01]
-4. 不確定、屬於推論而非文獻明確記載的內容，標註(*)。特別注意「動機/意圖類推論」（如「廠商刻意選用某PI是為了迴避競品claim」）——這種推測廠商主觀意圖的句子，文獻本身通常只記載配方差異與時間順序，不會記載廠商的真實動機，務必標註(*)並避免使用「刻意」「為了避免」等斷言語氣，改用「可能反映」「推測與⋯有關」等保留語氣
+4. 不確定、屬於推論而非文獻明確記載的內容，標註(*)。特別注意「動機/意圖類推論」（如「廠商刻意選用某機構是為了迴避競品claim」）——這種推測廠商主觀意圖的句子，文獻本身通常只記載機構差異與時間順序，不會記載廠商的真實動機，務必標註(*)並避免使用「刻意」「為了避免」等斷言語氣，改用「可能反映」「推測與⋯有關」等保留語氣
 5. 若文獻資料不足以回答某個問題，明確說「現有文獻資料不足以判斷」，不要硬掰
 6. 簡潔務實，每點 2-4 句即可，不要學術廢話
 7. 用 ## 標題分隔各點
-8. 比對配方時要具體到數值/條件層級（如「PVP K90 vs K30」「COF 0.16 vs 0.22」），不能只說「材料類似」這種籠統說法；若文獻資料本身只到材料名稱層級沒有數值，就明確說資料只到這個層級，不要硬掰數字。跨篇比較時若各篇的數據完整度不一致（例如部分文獻只有WCA沒有COF數值，部分文獻兩者都有），要明確點出「此處數據基礎不對等，僅能做方向性比較，無法做精確數值比較」，不要把不同完整度的數據並列呈現卻不說明可比性落差`,
+8. 比對機構規格時要具體到數值/條件層級（如「Pawl卡榫式 vs Cam rail式」「採樣凹槽19mm vs 9.5mm」），不能只說「機構類似」這種籠統說法；若文獻資料本身只到機構名稱層級沒有數值，就明確說資料只到這個層級，不要硬掰數字。跨篇比較時若各篇的數據完整度不一致（例如部分文獻只有採樣凹槽沒有擊發力道數值，部分文獻兩者都有），要明確點出「此處數據基礎不對等，僅能做方向性比較，無法做精確數值比較」，不要把不同完整度的數據並列呈現卻不說明可比性落差`,
         messages:[{role:'user',content:`【${spec.focusTitle}】
 
 以下是 ${dim.papers.length>10?'前10篇（共'+dim.papers.length+'篇，已截斷）':dim.papers.length+'篇'}文獻的分析資料：
@@ -1886,7 +1856,7 @@ ${spec.instructions}`}]
     const fullHtml = `<div style="background:linear-gradient(135deg,#f5f0ff,#fff);border:2px solid #8e44ad;border-radius:12px;padding:16px">
       <div style="font-size:12px;color:#8e44ad;font-weight:700;letter-spacing:1px;margin-bottom:8px">🤖 AI 策略解讀 · ${escHtml(spec.focusTitle)}</div>
       <div style="font-size:13px;line-height:1.8;color:var(--text)">${text}</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:12px;padding-top:8px;border-top:1px solid var(--border)">基於 ${dim.papers.length>10?10:dim.papers.length} 篇文獻的已有分析資料（含逐篇實施例配方）生成，非重新讀取專利原文；請自行核對關鍵判斷</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:12px;padding-top:8px;border-top:1px solid var(--border)">基於 ${dim.papers.length>10?10:dim.papers.length} 篇文獻的已有分析資料（含逐篇實施例機構規格）生成，非重新讀取專利原文；請自行核對關鍵判斷</div>
     </div>`;
 
     outEl.innerHTML = fullHtml + `
@@ -1932,15 +1902,15 @@ async function generateReport() {
 1. 繁體中文（台灣用語，勿用簡體字）
 2. 只根據提供的文獻資料做判斷，不要編造文獻中沒有的數據或結論；若某篇文獻資料有缺漏（如缺摘要或缺實施例），可以指出該篇缺什麼，但不能說「本批次文獻尚待補全」這種籠統說法去掩蓋你沒有使用提供的資料
 3. 每個判斷盡可能引用具體文獻ID如[P01]
-4. 不確定、屬於推論而非文獻明確記載的內容，標註(*)。特別注意「動機/意圖類推論」（如「廠商刻意選用某PI是為了迴避競品claim」）——這種推測廠商主觀意圖的句子，文獻本身通常只記載配方差異與時間順序，不會記載廠商的真實動機，務必標註(*)並避免使用「刻意」「為了避免」等斷言語氣，改用「可能反映」「推測與⋯有關」等保留語氣
-5. 比對配方時要具體到數值/條件層級（如「PVP K90 vs K30」「COF 0.16 vs 0.22」），不能只說「材料類似」這種籠統說法。跨篇比較時若各篇的數據完整度不一致（例如部分文獻只有WCA沒有COF數值），要明確點出「此處數據基礎不對等，僅能做方向性比較」，不要把不同完整度的數據並列呈現卻不說明可比性落差
+4. 不確定、屬於推論而非文獻明確記載的內容，標註(*)。特別注意「動機/意圖類推論」（如「廠商刻意選用某機構是為了迴避競品claim」）——這種推測廠商主觀意圖的句子，文獻本身通常只記載機構差異與時間順序，不會記載廠商的真實動機，務必標註(*)並避免使用「刻意」「為了避免」等斷言語氣，改用「可能反映」「推測與⋯有關」等保留語氣
+5. 比對機構規格時要具體到數值/條件層級（如「Pawl卡榫式 vs Cam rail式」「採樣凹槽19mm vs 9.5mm」），不能只說「機構類似」這種籠統說法。跨篇比較時若各篇的數據完整度不一致（例如部分文獻只有採樣凹槽沒有擊發力道數值），要明確點出「此處數據基礎不對等，僅能做方向性比較」，不要把不同完整度的數據並列呈現卻不說明可比性落差
 6. 簡潔務實，不要學術廢話
 7. 用 ## 標題分隔各節
 8. 【最重要】使用者選定的「篩選範圍」就是這份報告該分析的主題本身，不是單純用來描述「這批文獻是怎麼篩出來的」背景資訊。例如篩選範圍是「性能訴求：biocompatibility」，整份報告三節都必須緊扣「這批文獻在生物相容性這個性能訴求上分別講了什麼、有何技術路線、市場上如何競爭、產品開發該怎麼因應」，不能寫成跟篩選主題無關的泛用技術情報報告。若某篇文獻雖然被篩選範圍選中，但其內容主要不是在談篩選主題本身（例如僅在標籤上帶到 biocompatibility，正文卻聚焦在別的性能訴求），要明確指出這個落差，不要假裝每篇都緊密相關`,
         messages:[{role:'user',content:`請根據以下文獻分析資料，產生技術情報分析報告。
 
 【本次分析主題（即篩選範圍，三節都必須緊扣此主題，不可寫成與此無關的泛用報告）】${getReportScopeLabel()}
-篩選文獻：${scopePapers.length} 篇，以下提供其中已分析的 ${analyzed.length} 篇完整資料（含逐篇實施例配方光譜）：
+篩選文獻：${scopePapers.length} 篇，以下提供其中已分析的 ${analyzed.length} 篇完整資料（含逐篇實施例機構規格）：
 
 ${context}
 
@@ -1948,15 +1918,15 @@ ${context}
 ## 1. 技術路線與市場趨勢
 歸納這批文獻在「本次分析主題」上的技術路線分布、年份演進、市場信號。
 
-## 2. 專利間比較與配方光譜分析
+## 2. 專利間比較與機構規格分析
 這是本報告最重要的部分，務必具體執行：
 - 逐篇列出各篇文獻內部不同實施例的機構差異（擊發機構/鎖合方式/規格/數值結果），不能只看整篇摘要
-- 跨篇比較哪些文獻用了相近材料或製程，差異在哪裡，結果優劣如何（具體數值，不要籠統說「類似」）
+- 跨篇比較哪些文獻用了相近機構或規格，差異在哪裡，結果優劣如何（具體數值，不要籠統說「類似」）
 - 指出哪些是同一專利家族的延伸關係
 - 若某篇文獻內容其實沒有真正深入「本次分析主題」（只是標籤帶到），要明確點出這個落差
 
 ## 3. 產品開發啟示與行動建議
-基於以上分析，針對「本次分析主題」提出具體可執行的下一步建議，包含優先參考的配方、應迴避的claim範圍、資料缺口提示。
+基於以上分析，針對「本次分析主題」提出具體可執行的下一步建議，包含優先參考的機構設計、應迴避的claim範圍、資料缺口提示。
 
 每節都要引用具體文獻ID和數據。`}]})
     });
@@ -3340,7 +3310,7 @@ function paperProjectMeaning(p) {
   if(role.includes('專利')) return '可作為 FTO/迴避設計清單的一筆前案，需再確認權利狀態與 claim 邊界。';
   if(role.includes('測試')) return '可轉成內部驗證 SOP 或規格門檻，讓報告從文獻整理走向可執行測試。';
   if(role.includes('市場')) return '可用來判斷外購、合作或競品對標價值。';
-  return '可作為配方、材料或製程比較的一個候選基準。';
+  return '可作為機構、規格或鎖合方式比較的一個候選基準。';
 }
 
 function roleSummary(ps) {
@@ -3844,7 +3814,7 @@ function renderLibraryQualityNotice(p) {
   const st = libraryAnalysisStats(p);
   if(st.noConcreteExamples) {
     return `<div style="margin:8px 0;padding:9px 10px;background:#fff5f3;border:1px solid #e7a39a;border-radius:6px;font-size:12px;line-height:1.55;color:#9c2f24">
-      <b>資料定位：</b>此筆目前沒有可用的 coating / working examples，適合做 claim 或背景參考，不適合直接拿來當配方或實驗範本。
+      <b>資料定位：</b>此筆目前沒有可用的 mechanism / working examples，適合做 claim 或背景參考，不適合直接拿來當機構或實驗範本。
     </div>`;
   }
   if(st.familyRepresentative) {
@@ -3854,7 +3824,7 @@ function renderLibraryQualityNotice(p) {
   }
   if(st.inferredOnly) {
     return `<div style="margin:8px 0;padding:9px 10px;background:#fffaf0;border:1px solid #ead49b;border-radius:6px;font-size:12px;line-height:1.55;color:#8a6400">
-      <b>資料定位：</b>目前只有推論式實施例，尚未真正解析全文。請先補全文再用於配方、實驗或 FTO 判斷。
+      <b>資料定位：</b>目前只有推論式實施例，尚未真正解析全文。請先補全文再用於機構、實驗或 FTO 判斷。
     </div>`;
   }
   return '';
@@ -4149,52 +4119,38 @@ function renderMarket() {
   const papers = DB.papers.filter(p=>!p._deleted);
   const commercials = papers.filter(p=>p.doc_type==='商用產品' && p.patentResults?.commercial);
 
-  // Logo 直接 URL（Google Favicon API + Wikimedia）
-  const LOGO_MAP = {
-    'C01':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://biocoat.com&size=128',
-    'C02':'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 rx=%2216%22 fill=%22%23f5efe8%22/%3E%3Ctext x=%2250%22 y=%2260%22 text-anchor=%22middle%22 font-family=%22Arial,sans-serif%22 font-size=%2230%22 font-weight=%22700%22 fill=%22%23e86c3a%22%3EFM%3C/text%3E%3C/svg%3E',
-    'C03':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://surmodics.com&size=128',
-    'C04':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://hydromer.com&size=128',
-    'C06':'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/DSM-Firmenich_Logo_2023.svg/320px-DSM-Firmenich_Logo_2023.svg.png',
-    'C07':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://harlandmedical.com&size=128',
-    'C08':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://astproducts.com&size=128',
-    'C09':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://surmodics.com&size=128',
-    'C10':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://argonmedical.com&size=128',
-  };
-  const ABBR_MAP = {
-    'C01':'BC','C02':'FM','C03':'SR','C04':'HY','C06':'DSM',
-    'C07':'HM','C08':'AST','C09':'SR','C10':'AM',
+  // 廠商官網 favicon（活檢針 4 家已確認廠商）
+  const ENTITY_LOGOS = {
+    'Cook Medical':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.cookmedical.com&size=128',
+    'Argon Medical':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.argonmedical.com&size=128',
+    'Merit Medical':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.merit.com&size=128',
+    'BD':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.bd.com&size=128',
+    'Mermaid Medical':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.mermaidmedical.com&size=128',
+    'Medax':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.medax.it&size=128',
   };
 
-  // 路線歸屬映射
-  const ROUTE_MAP = {
-    'C06': ['UV-BP Route'],
-    'C01': ['UV-BP Route','UV Type I Route'],
-    'C02': ['UV Type I Route'],
-    'C04': ['UV Type I Route'],
-    'C08': ['UV Type I Route'],
-    'C03': ['Zwitterionic Route'],
-    'C09': ['Zwitterionic Route'],
-    'C10': ['Isocyanate Route'],
-    'C07': ['設備商（全路線）'],
+  // 機構歸屬映射（依本次打底確認的擊發機構分類）
+  const MECH_MAP = {
+    'Cook Medical': ['SLC彈簧加載 Route'],
+    'Argon Medical': ['SLC彈簧加載 Route'],
+    'Merit Medical': ['馬達驅動 Route'],
+    'BD': ['雙動作（手動）Route','VABB真空輔助 Route'],
   };
 
   const PHASE_MAP = {
-    'UV-BP Route': {phase:'Phase 2', color:'#2980b9'},
-    'UV Type I Route': {phase:'Phase 2', color:'#2980b9'},
-    'Zwitterionic Route': {phase:'Phase 3', color:'#2d8c5a'},
-    'Isocyanate Route': {phase:'Phase 1', color:'#d4a030'},
-    'PDA Route': {phase:'Phase 1', color:'#d4a030'},
-    '設備商（全路線）': {phase:'設備', color:'#8a7e72'},
+    'SLC彈簧加載 Route': {phase:'主流半自動', color:'#d4a030'},
+    '馬達驅動 Route': {phase:'高階全自動', color:'#8e44ad'},
+    '雙動作（手動）Route': {phase:'歷史基礎', color:'#7f8c8d'},
+    'VABB真空輔助 Route': {phase:'獨立支線', color:'#2980b9'},
   };
 
   const MARKET_SEGMENTS = [
-    {id:'supplier', icon:'🧪', title:'原料 / 塗層供應商', color:'#2d8c5a', note:'可買、可合作、可授權或需迴避的 coating chemistry 來源',
-      names:['Hydromer','AST','Biocoat','Surmodics','Freudenberg','DSM','dsm-firmenich']},
-    {id:'competitor', icon:'⚔️', title:'產品競爭者 / 品牌端', color:'#c0392b', note:'導管、支架、guidewire 或成品端的直接/間接競爭與對標',
-      names:['Argon','Cook','Boston','Coloplast','Bard','BD','Teleflex']},
-    {id:'equipment', icon:'⚙️', title:'設備 / 製程夥伴', color:'#8a7e72', note:'塗覆、UV/熱固化、摩擦測試與量產驗證能力',
-      names:['Harland','ViVitro','equipment','coater','FTS','testing']}
+    {id:'supplier', icon:'🔩', title:'零組件 / 機構供應商', color:'#2d8c5a', note:'彈簧、卡榫、馬達模組等可採購或需迴避的機構零件來源',
+      names:[]},
+    {id:'competitor', icon:'⚔️', title:'產品競爭者 / 品牌端', color:'#c0392b', note:'活檢針成品端的直接/間接競爭與對標',
+      names:['Cook Medical','Argon Medical','Merit Medical','Devicor','BD','Bard','Mermaid Medical','Medax']},
+    {id:'equipment', icon:'⚙️', title:'設備 / 測試夥伴', color:'#8a7e72', note:'擊發力道測試、耐久循環測試與量產驗證能力',
+      names:['force gauge','durability test','量產驗證']}
   ];
 
   const hayOf = p => `${p.id||''} ${p.title||''} ${p.authors||''} ${p.venue||''} ${p.purpose||''} ${p.abstract_note||''} ${p.value_to_project||''} ${p.patentResults?.commercial?.company||''} ${p.patentResults?.commercial?.product||''}`.toLowerCase();
@@ -4219,17 +4175,17 @@ function renderMarket() {
     if(n && (v.role==='equipment' || !hasCommercial)) segmentMap[v.role].push({...v, type:'entity', relatedCount:n});
   });
 
-  // 市場數字
+  // 市場數字：目前打底資料尚不足以提供市場規模/成長率等具體數字，誠實標示待補，不編造
   const mkData = [
-    {n:'$1.8B',label:'市場規模（2022）',sub:'MarketsandMarkets'},
-    {n:'9%+',label:'泌尿科 CAGR',sub:'成長最快終端'},
-    {n:'65%+',label:'OEM 外包佔比',sub:'自製比例下降中'},
-    {n:commercials.length+'家',label:'商用產品/玩家',sub:'文庫動態統計'},
+    {n:'待補', label:'市場規模', sub:'尚未查證'},
+    {n:'待補', label:'年成長率', sub:'尚未查證'},
+    {n:'4家', label:'已確認廠商', sub:'Cook/Argon/Merit/BD'},
+    {n:commercials.length+'篇', label:'商用產品/玩家', sub:'文庫動態統計'},
   ];
 
-  // 矩陣資料
-  const matrixRoutes = ['UV-BP','UV Type I','Zwitterionic','Isocyanate','設備/測試'];
-  const routeShort = r => r.includes('UV-BP')?'UV-BP':r.includes('UV Type I')?'UV Type I':r.includes('Zwitterionic')?'Zwitterionic':r.includes('Isocyanate')?'Isocyanate':r.includes('設備')?'設備/測試':'';
+  // 矩陣資料（依擊發機構分類）
+  const matrixRoutes = ['雙動作','SLC彈簧加載','馬達驅動','VABB真空輔助'];
+  const routeShort = r => r.includes('雙動作')?'雙動作':r.includes('SLC彈簧加載')?'SLC彈簧加載':r.includes('馬達驅動')?'馬達驅動':r.includes('VABB')?'VABB真空輔助':'';
   const routeStrength = routes => matrixRoutes.map(col=>{
     const n = routes.filter(r=>routeShort(r)===col).length;
     return Math.min(3, n ? Math.max(1,n) : 0);
@@ -4239,17 +4195,15 @@ function renderMarket() {
     return {
       name:(c.company||p.title||p.id).replace(/\s*\（.*?\）/g,'').slice(0,28),
       role:MARKET_SEGMENTS.find(s=>s.id===findSegment(p))?.title.split(' ')[0]||'',
-      strength:routeStrength(ROUTE_MAP[p.id]||[])
+      strength:routeStrength(MECH_MAP[p.id]||[])
     };
   });
 
   const threatColor = {
-    '高（直接競品，特別是輸尿管支架市場）':'#e74c3c',
-    '高（若 本專案 進歐洲市場）':'#e74c3c',
+    '高（直接競品）':'#e74c3c',
     '高（技術標桿，需迴避其核心IP）':'#e74c3c',
-    '中（若 本專案 進歐洲市場）':'#e67e22',
     '中（間接競品）':'#e67e22',
-    '低（非台灣市場主力）':'#2d8c5a',
+    '低（非主力市場）':'#2d8c5a',
     '低':'#2d8c5a',
     '無（設備商，潛在供應商）':'#8a7e72',
   };
@@ -4257,12 +4211,6 @@ function renderMarket() {
   const marketCard = (item, seg) => {
     if(item.type === 'entity') {
       const abbr = item.company.split(/\s+/).map(x=>x[0]).join('').slice(0,3).toUpperCase();
-      const ENTITY_LOGOS = {
-        'Cook Medical':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.cookmedical.com&size=128',
-        'Boston Scientific':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.bostonscientific.com&size=128',
-        'Hydromer':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.hydromer.com&size=128',
-        'ViVitro Labs':'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://vivitrolabs.com&size=128'
-      };
       const logo = ENTITY_LOGOS[item.company] || '';
       return `<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer" onclick="goToMarketEntity('${item.company.replace(/'/g,"\\'")}')">
         <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border)">
@@ -4283,20 +4231,21 @@ function renderMarket() {
 
     const p = item.paper;
     const c = p.patentResults.commercial;
-    const ABBR = ABBR_MAP[p.id]||c.company?.slice(0,3)||'?';
-    const routes = ROUTE_MAP[p.id]||[];
+    const abbr = c.company?.slice(0,3) || '?';
+    const routes = MECH_MAP[p.id]||[];
     const tech = c.mechanism_spec||{};
     const claims = Object.entries(tech.performance_claims||{}).slice(0,3);
     const relatedCount = countRelated([c.company||'', c.product||'', p.title||''].filter(Boolean));
+    const logo = ENTITY_LOGOS[c.company] || '';
     return `
       <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer" onclick="goToMarketPaper('${p.id}')">
         <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border)">
           <div style="width:42px;height:42px;border-radius:8px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden">
-            <img src="${LOGO_MAP[p.id]||''}"
+            <img src="${logo}"
               style="width:34px;height:34px;object-fit:contain;border-radius:4px"
               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
               alt="${c.company} logo">
-            <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--accent);background:var(--card)">${ABBR}</div>
+            <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--accent);background:var(--card)">${abbr}</div>
           </div>
           <div style="flex:1;min-width:0">
             <div style="font-size:14px;font-weight:800;color:var(--text)">${c.company}</div>
@@ -4335,78 +4284,15 @@ function renderMarket() {
     </section>`;
   };
 
-  const renderCookPatentPath = () => {
-    const findPatent = token => papers.find(p => {
-      const txt = `${p.id||''} ${p.title||''} ${p.abstract_note||''} ${p.patent_notes||''} ${(p.related_patents||[]).join(' ')}`.toLowerCase();
-      return txt.includes(token.toLowerCase());
-    });
-    const p30 = DB.papers.find(p=>p.id==='P30') || findPatent('US7141246');
-    const p31 = DB.papers.find(p=>p.id==='P31') || findPatent('US7402620');
-    const missing = [
-      {patent_no:'US6645483', role:'祖案 / family root', reason:'出現在 P30/P31 related_patents，但目前沒有獨立 paper.json 條目；需要載入全文與 claim。'}
-    ].filter(x => !findPatent(x.patent_no));
-    const overlap = (a,b) => {
-      const A = new Set(a?.tags || []);
-      const B = new Set(b?.tags || []);
-      const common = [...A].filter(x=>B.has(x)).length;
-      const total = new Set([...A, ...B]).size || 1;
-      return Math.round(common / total * 100);
-    };
-    const similarScore = p30 && p31 ? overlap(p30, p31) : 0;
-    const analyzedBadge = p => p?.patentResults?.agent_reading?.schema_version
-      ? '<span class="tag tag-green">Agent v1 已讀</span>'
-      : '<span class="tag tag-gray">待深度解析</span>';
-    const node = (p, role, note, color) => {
-      const link = p ? `<button class="btn btn-s" style="font-size:10px;padding:3px 8px;margin-top:6px" onclick="goToMarketPaper('${p.id}')">查看 ${p.id}</button>` : '';
-      return `<div style="min-width:230px;flex:1;background:#fff;border:1px solid var(--border);border-top:4px solid ${color};border-radius:8px;padding:11px 12px">
-        <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start">
-          <div style="font-size:11px;font-weight:800;color:${color}">${role}</div>
-          ${p ? analyzedBadge(p) : '<span class="tag tag-gray">未載入</span>'}
-        </div>
-        <div style="font-size:13px;font-weight:800;color:var(--text);margin-top:6px">${escHtml(p?.title || note)}</div>
-        <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-top:6px">${escHtml(note)}</div>
-        ${p?.patentResults?.agent_reading?.design_examples?.length ? `<div style="font-size:11px;color:var(--accent2);margin-top:6px">設計案例 ${p.patentResults.agent_reading.design_examples.length}；FTO 風險 ${p.patentResults.agent_reading.fto_risks?.length || 0}</div>` : ''}
-        ${link}
-      </div>`;
-    };
-    const missingList = missing.map(m=>`<li><b>${m.patent_no}</b>｜${m.role}：${m.reason}</li>`).join('');
-    return `<section style="margin:4px 0 24px">
-      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-end;margin-bottom:10px;flex-wrap:wrap">
-        <div>
-          <div style="font-size:14px;font-weight:800;color:#c0392b">Cook Medical 玩家專利路徑 MVP</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">PVP-PU-isocyanate 潤滑塗層家族：從平台塗層到抗菌釋放續案</div>
-        </div>
-        <button class="btn btn-s" style="font-size:11px;padding:4px 10px" onclick="goToMarketEntity('Cook Medical')">篩選 Cook 相關文庫</button>
-      </div>
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px">
-        <div style="display:flex;align-items:stretch;gap:8px;flex-wrap:wrap">
-          ${node(null, '1. 祖案缺口', 'US6645483：目前只在 related_patents 出現，尚未載入 paper.json。這是次要深度解析清單的第一順位。', '#8a7e72')}
-          <div style="align-self:center;color:var(--muted);font-size:18px;font-weight:800">→</div>
-          ${node(p30, '2. 母案 / 平台', 'US7141246 / P30：PVP + PU interpolymer + isocyanate 熱固化潤滑骨架，可加入抗菌劑。', '#d4a030')}
-          <div style="align-self:center;color:var(--muted);font-size:18px;font-weight:800">→</div>
-          ${node(p31, '3. 續案 / 功能延伸', 'US7402620 / P31：延伸為 CHX / triclosan / silver sustained release，加入保存穩定概念。', '#c0392b')}
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;margin-top:12px">
-          <div style="background:#fff8e6;border:1px solid #f0c040;border-radius:8px;padding:10px;font-size:12px;line-height:1.7">
-            <b style="color:#b8860b">問題專利提醒</b><br>
-            P30 與 P31 標籤相似度約 ${similarScore}%。P31 是續案/延伸案，不能把它當作完全獨立的新技術；分析時應以 patent family 看待，避免重複計算創新。
-          </div>
-          <div style="background:#fdf0ed;border:1px solid #e7a39a;border-radius:8px;padding:10px;font-size:12px;line-height:1.7">
-            <b style="color:#c0392b">次要深度解析清單</b>
-            <ul style="margin:6px 0 0 18px;padding:0">${missingList || '<li>目前沒有缺口。</li>'}</ul>
-          </div>
-          <div style="background:#eaf5ef;border:1px solid #82d4a8;border-radius:8px;padding:10px;font-size:12px;line-height:1.7">
-            <b style="color:#1a6040">商業分析意義</b><br>
-            這條路徑顯示 Cook 先建立潤滑/附著平台，再把抗菌釋放作為功能延伸。未來可接 510(k) 產品對照，建立「產品 → 專利族 → claim 風險」地圖。
-          </div>
-        </div>
-      </div>
-    </section>`;
-  };
-  const cookPatentPathHtml = renderCookPatentPath();
-
   el.innerHTML = `
   <div style="max-width:980px;margin:0 auto;padding:4px 0 18px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px">
+      ${mkData.map(m=>`<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center">
+        <div style="font-size:20px;font-weight:800;color:var(--accent)">${m.n}</div>
+        <div style="font-size:11px;color:var(--text);margin-top:2px">${m.label}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">${m.sub}</div>
+      </div>`).join('')}
+    </div>
     ${MARKET_SEGMENTS.map(segmentSection).join('')}
   </div>`;
     } catch(err) {
@@ -4668,7 +4554,7 @@ function drawPatentTrain() {
         <div style="font-size:11px;font-weight:900;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(item.patent || paper?.id || '')}</div>
         <div style="font-size:12px;font-weight:900;color:var(--text);margin-top:4px;line-height:1.25">${escHtml(item.stage || '節點')}</div>
         <div style="font-size:10px;color:var(--muted);margin-top:5px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escHtml(title)}</div>
-        ${formula ? `<div style="font-size:10px;color:${realStatus==='known'?'var(--accent2)':'#b85c2a'};margin-top:5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">配方：${escHtml(formula)}</div>` : ''}
+        ${formula ? `<div style="font-size:10px;color:${realStatus==='known'?'var(--accent2)':'#b85c2a'};margin-top:5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">機構：${escHtml(formula)}</div>` : ''}
       </button>`;
     }).join('<div style="align-self:center;color:#bcae9f;font-weight:900;font-size:18px;flex:0 0 auto">→</div>');
 
@@ -5203,7 +5089,7 @@ function renderIntegratedReport() {
     const aiSection = dim ? `
       <div style="max-width:860px;margin:16px auto 0;text-align:center">
         <button id="deAIReportBtn" class="btn btn-s" style="font-size:12px;color:#8e44ad;border-color:#8e44ad"
-          onclick="if(confirm('這會呼叫 API 進行策略解讀（含逐篇實施例配方比對），確定要繼續嗎？（約10篇文獻成本約NT$2-2.5元）')) generateDimensionalAIReport()">
+          onclick="if(confirm('這會呼叫 API 進行策略解讀（含逐篇實施例機構規格比對），確定要繼續嗎？（約10篇文獻成本約NT$2-2.5元）')) generateDimensionalAIReport()">
           🤖 AI 策略解讀（針對「${escHtml(dim.company||dim.label||Object.keys(dim.orgGroups||{}).join('/')||'目前篩選')}」）
         </button>
         <div id="deOverlapHint" style="margin-top:6px;font-size:11px;color:var(--muted)"></div>
@@ -5384,8 +5270,8 @@ function _deDataStrength(p){
   const txt=JSON.stringify(p);
   let s=0;
   if(/grade\s*0/i.test(txt)) s+=2;
-  if(/COF[\s:]*[<≤]?\s*0\.[01]/i.test(txt)) s+=1;
-  if(/[<≤]\s*(20|10)\s*°/.test(txt)) s+=1;
+  if(/firing.force[\s:]*\d/i.test(txt)) s+=1;
+  if(/sample.notch[\s:]*\d|\d+\s*mm.*notch/i.test(txt)) s+=1;
   if(_deGetFull(p).evidence_level==='high') s+=1;
   return s;
 }
@@ -5400,25 +5286,7 @@ function _isNoData(s){
 }
 
 // 萃取實施例參數
-function _deExtractParams(ex){
-  const blob=JSON.stringify(ex);
-  const p={};
-  let m;
-  if(m=blob.match(/(\d+(?:\.\d+)?)\s*(?:J\/cm2|J\/cm²)/)) p['UV劑量']=m[1]+'J';
-  else if(m=blob.match(/(\d+(?:\.\d+)?)\s*(?:mW\/cm2|mW\/cm²)/)) p['UV劑量']=m[1]+'mW';
-  if(m=blob.match(/(\d+)\s*°?\s*F\b/)) p['溫度']=m[1]+'°F';
-  else if(m=blob.match(/(\d{2,3})\s*°?\s*C\b/)) p['溫度']=m[1]+'°C';
-  if(m=blob.match(/(?:WCA|接觸角|water.contact)[^0-9]{0,15}(\d+(?:\.\d+)?)\s*°/i)) p['WCA']=m[1]+'°';
-  else { m=blob.match(/"wca"\s*:\s*"([^"]+)"/); if(m && /\d/.test(m[1]) && !_isNoData(m[1])) p['WCA']=m[1].slice(0,6); }
-  if(m=blob.match(/COF[\s:]*[<≤]?\s*(0\.\d+)/i)) p['COF']=m[1];
-  // 摩擦力降幅百分比（如「94% friction reduction」），是 friction 欄位最常見的真實數據格式，
-  // 跟標準 COF 數值同樣具參考價值，不該因為格式不同就被當成無資料
-  else if(m=blob.match(/(\d+(?:\.\d+)?)\s*%\s*(?:friction\s*reduction|摩擦.{0,4}降)/i)) p['COF']=m[1]+'%↓';
-  else { m=blob.match(/"(?:cof|friction|摩擦)"\s*:\s*"([^"]{1,60})"/i); if(m && /\d/.test(m[1]) && !_isNoData(m[1])) p['COF']=m[1].slice(0,30); }
-  if(m=blob.match(/[Gg]rade\s*([0-4])/)) p['附著']='Grade'+m[1];
-  else { m=blob.match(/"adhesion"\s*:\s*"([^"]{1,60})"/); if(m && !_isNoData(m[1]) && m[1].trim().length>1) p['附著']=m[1].slice(0,30); }
-  return p;
-}
+
 
 // ════════════════════════
 // ① 自由空間 vs 地雷
@@ -5544,110 +5412,7 @@ function _buildMechanismFreedomBlock(papers){
 // ════════════════════════
 // ② 實施例差異比對
 // ════════════════════════
-function _buildExampleDiff(papers, useMechanism){
-  const seen=new Set(); // 去重：同分組內同 example name 只取一次（跨分組不去重，避免 family 文獻共享實施例時某機制完全沒有代表例）
-  const perPaperCount={}; // 每篇文獻最多取4個代表例，避免單篇灌爆列表
-  const rows=[];
 
-  papers.forEach(p=>{
-    const route=_deClassifyRoute(p);
-    const mech=useMechanism?_deMechanism(p):null;
-    const cr=useMechanism?_deCoreRelevance(p):null;
-    const [ipL,ipS]=_deIpRisk(p);
-    const exs=_deGetFull(p).examples||[];
-    exs.forEach(ex=>{
-      if(!ex.is_real) return;
-      const pa=_deExtractParams(ex);
-      // 只看真正可比較的性能數值（WCA/COF/附著），溫度/UV劑量僅為製程輔助欄，
-      // 單獨出現不構成「有意義數值」，否則大量同質 example（如僅含固化溫度）會灌爆列表
-      const hasData = pa['WCA']||pa['COF']||pa['附著'];
-      if(!hasData) return;
-      perPaperCount[p.id]=(perPaperCount[p.id]||0)+1;
-      if(perPaperCount[p.id]>4) return; // 每篇最多4筆代表例
-      // 去重 key 含分組（機制或路線），確保同一實施例若同時支持不同機制分組（常見於
-      // 同一 patent family 不同號文獻共享全文），各分組仍能保有自己的代表例
-      const groupKey = useMechanism ? mech.key : route;
-      const dedupKey=groupKey+'::'+(ex.name||'').slice(0,20);
-      if(seen.has(dedupKey)) return;
-      seen.add(dedupKey);
-      const name=(ex.name||'').replace(/^[*\s]+/,'').slice(0,40);
-      const dataRichness=[pa['WCA'],pa['COF'],pa['附著']].filter(Boolean).length;
-      rows.push({id:p.id,route,mech,cr,ipL,ipS,pa,name,dataRichness});
-    });
-  });
-
-  // 資料豐富度高的排前面，確保真正有完整數值的列不會被擠到清單之外
-  rows.sort((a,b)=>b.dataRichness-a.dataRichness);
-
-  if(rows.length<2) return `<div style="background:var(--card);border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px;color:var(--muted)">
-    ⚗️ <b>實施例差異比對</b>：篩選結果中真實實施例的可比較數值（WCA/COF/附著）不足（需至少 2 個）。建議補強文獻全文後再查看。
-  </div>`;
-
-  // 差異洞察
-  const insights=[];
-  const uvRows=rows.filter(r=>r.pa['UV劑量']);
-  const thermalRows=rows.filter(r=>r.pa['溫度']);
-  if(uvRows.length&&thermalRows.length)
-    insights.push(`UV 固化 ${uvRows.length} 例 vs 熱固化 ${thermalRows.length} 例 — 同主題兩條製程路線`);
-  const wcas=rows.map(r=>parseFloat(r.pa['WCA'])).filter(v=>!isNaN(v));
-  if(wcas.length>=2){
-    const mn=Math.min(...wcas),mx=Math.max(...wcas);
-    if(mx-mn>5) insights.push(`WCA 最低 ${mn}° 最高 ${mx}° — 差 ${(mx-mn).toFixed(1)}°，底塗或前處理條件是關鍵`);
-  }
-  const cofs=rows.map(r=>parseFloat(r.pa['COF'])).filter(v=>!isNaN(v));
-  if(cofs.length>=2){
-    const mn=Math.min(...cofs),mx=Math.max(...cofs);
-    if(mx-mn>0.04) insights.push(`COF ${mn} ~ ${mx} — 固化條件影響潤滑性`);
-  }
-
-  let html=`<div style="margin-bottom:16px">
-    <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:8px">⚗️ 實施例差異比對 <span style="font-size:13px;font-weight:400;color:var(--muted)">（${rows.length} 個有效實施例，每篇最多列4例，僅顯示含 WCA/COF/附著 數值者）</span></div>
-    <div style="overflow-x:auto">
-    <table style="width:100%;border-collapse:collapse;font-size:12px">
-      <thead><tr style="background:var(--card)">
-        <th style="padding:7px 9px;text-align:left;font-size:12px;color:var(--muted)">ID</th>
-        <th style="padding:6px 8px;text-align:left;color:var(--muted)">${useMechanism?'機制':'路線'}</th>
-        <th style="padding:6px 8px;text-align:left;color:var(--muted);min-width:160px">實施例</th>
-        <th style="padding:6px 8px;text-align:center;color:var(--muted)">UV劑量</th>
-        <th style="padding:6px 8px;text-align:center;color:var(--muted)">溫度</th>
-        <th style="padding:6px 8px;text-align:center;color:var(--muted)">WCA</th>
-        <th style="padding:6px 8px;text-align:left;color:var(--muted);min-width:90px">COF</th>
-        <th style="padding:6px 8px;text-align:left;color:var(--muted);min-width:90px">附著</th>
-        <th style="padding:6px 8px;text-align:left;color:var(--muted)">IP</th>
-      </tr></thead><tbody>`;
-
-  rows.slice(0,24).forEach((r,i)=>{
-    const bg=i%2===0?'':'background:var(--card)';
-    const ipCol=r.ipS<=1?'#2d8c5a':r.ipS>=3?'#c0392b':'#d4a030';
-    const hiWCA=r.pa['WCA']&&parseFloat(r.pa['WCA'])<=15?'color:#2d8c5a;font-weight:700':'';
-    const hiCOF=r.pa['COF']&&parseFloat(r.pa['COF'])<=0.1?'color:#2d8c5a;font-weight:700':'';
-    const groupLabel = useMechanism ? r.mech.label+(r.cr.core?'':'*') : r.route;
-    html+=`<tr style="${bg};cursor:pointer" onclick="goToPaper('${r.id}',{focus:true})">
-      <td style="padding:6px 8px;color:var(--accent);font-weight:700">${r.id}</td>
-      <td style="padding:6px 8px;font-size:12px">${escHtml(groupLabel)}</td>
-      <td style="padding:6px 8px;font-size:12px;color:var(--muted)">${escHtml(r.name)}</td>
-      <td style="padding:6px 8px;text-align:center">${r.pa['UV劑量']||'—'}</td>
-      <td style="padding:6px 8px;text-align:center">${r.pa['溫度']||'—'}</td>
-      <td style="padding:6px 8px;text-align:center;${hiWCA}">${r.pa['WCA']||'—'}</td>
-      <td style="padding:6px 8px;text-align:left;${hiCOF}">${r.pa['COF']||'—'}</td>
-      <td style="padding:6px 8px;text-align:left;color:#2d8c5a">${r.pa['附著']||'—'}</td>
-      <td style="padding:6px 8px;font-size:12px;color:${ipCol}">${escHtml(r.ipL.replace(/[🟢🔴🟡⚪]/g,'').trim())}</td>
-    </tr>`;
-  });
-  html+=`</tbody></table></div>`;
-  if(useMechanism) html+=`<div style="font-size:11px;color:var(--muted);margin-top:4px">* 邊緣關聯（非該文獻核心訴求）</div>`;
-
-  if(insights.length){
-    html+=`<div style="margin-top:8px;padding:8px 12px;background:#fffbe6;border-left:3px solid #d4a030;border-radius:0 8px 8px 0">
-      <div style="font-size:13px;font-weight:700;color:#b85c00;margin-bottom:3px">💡 差異洞察</div>`;
-    insights.forEach(s=>{
-      html+=`<div style="font-size:13px;color:#7a4800;line-height:1.6">• ${escHtml(s)}</div>`;
-    });
-    html+=`</div>`;
-  }
-  html+=`</div>`;
-  return html;
-}
 
 // ════════════════════════
 // ③ 推薦配方
@@ -6033,16 +5798,16 @@ function renderLibraryStats(papers) {
 
   // ── 性能指標覆蓋 ──
   const PERF_DISPLAY = [
-    {tag:'lubricity潤滑',       label:'潤滑 (COF)'},
-    {tag:'COF<0.1',             label:'COF < 0.1'},
-    {tag:'WCA接觸角',           label:'WCA 接觸角'},
-    {tag:'WCA<20°',             label:'WCA < 20°'},
-    {tag:'adhesion附著力',      label:'附著力'},
-    {tag:'antifouling抗汙',     label:'抗汙/抗結痂'},
-    {tag:'antimicrobial抗菌',   label:'抗菌'},
-    {tag:'encrustation resistance抗結痂', label:'encrustation 抗結痂'},
+    {tag:'spring-loaded彈簧',   label:'彈簧加載'},
+    {tag:'motor-driven馬達驅動', label:'馬達驅動'},
+    {tag:'pawl卡榫',            label:'Pawl卡榫'},
+    {tag:'cam-rail解鎖',        label:'Cam rail解鎖'},
+    {tag:'dual-lock雙鎖定',     label:'雙鎖定卡合'},
+    {tag:'echogenic顯影',       label:'Echogenic顯影'},
+    {tag:'sample-notch採樣凹槽', label:'採樣凹槽'},
+    {tag:'vacuum-assist真空輔助', label:'真空輔助 VABB'},
     {tag:'biocompatibility',    label:'生物相容性'},
-    {tag:'hemocompatibility血液相容', label:'血液相容'},
+    {tag:'double-action雙動作', label:'雙動作機構'},
   ];
   const perfCoverage = PERF_DISPLAY.map(({tag,label})=>({tag, label, n:ps.filter(p=>(p.tags||[]).includes(tag)).length}));
 
@@ -6224,10 +5989,10 @@ function renderReviewResult(r) {
       <div style="overflow-x:auto">
         <table style="width:100%;border-collapse:collapse;font-size:11px">
           <thead><tr style="background:var(--card)">
-            <th style="padding:5px 8px;border:1px solid var(--border);text-align:left">材料</th>
+            <th style="padding:5px 8px;border:1px solid var(--border);text-align:left">機構</th>
             <th style="padding:5px 8px;border:1px solid var(--border);text-align:center">篇數</th>
-            ${r.technologies_compared[0]?.cof_range?'<th style="padding:5px 8px;border:1px solid var(--border);text-align:center">COF 範圍</th>':''}
-            ${r.technologies_compared[0]?.wca_range?'<th style="padding:5px 8px;border:1px solid var(--border);text-align:center">WCA</th>':''}
+            ${r.technologies_compared[0]?.firing_force_range?'<th style="padding:5px 8px;border:1px solid var(--border);text-align:center">擊發力道範圍</th>':''}
+            ${r.technologies_compared[0]?.sample_notch_range?'<th style="padding:5px 8px;border:1px solid var(--border);text-align:center">採樣凹槽</th>':''}
             <th style="padding:5px 8px;border:1px solid var(--border);text-align:left">結論</th>
           </tr></thead>
           <tbody>
@@ -6235,8 +6000,8 @@ function renderReviewResult(r) {
             <tr>
               <td style="padding:5px 8px;border:1px solid var(--border);font-weight:600;color:var(--accent);white-space:nowrap">${t.material}</td>
               <td style="padding:5px 8px;border:1px solid var(--border);text-align:center;color:var(--muted)">${t.n_studies||'—'}</td>
-              ${r.technologies_compared[0]?.cof_range?`<td style="padding:5px 8px;border:1px solid var(--border);text-align:center;font-family:monospace">${t.cof_range||'—'}</td>`:''}
-              ${r.technologies_compared[0]?.wca_range?`<td style="padding:5px 8px;border:1px solid var(--border);text-align:center">${t.wca_range||'—'}</td>`:''}
+              ${r.technologies_compared[0]?.firing_force_range?`<td style="padding:5px 8px;border:1px solid var(--border);text-align:center;font-family:monospace">${t.firing_force_range||'—'}</td>`:''}
+              ${r.technologies_compared[0]?.sample_notch_range?`<td style="padding:5px 8px;border:1px solid var(--border);text-align:center">${t.sample_notch_range||'—'}</td>`:''}
               <td style="padding:5px 8px;border:1px solid var(--border);font-size:10px">${t.verdict||'—'}</td>
             </tr>`).join('')}
           </tbody>
@@ -6545,10 +6310,10 @@ const PATENT_MODES = {
     icon: '🚧'
   },
   formulation: {
-    label: '③ 配方萃取',
-    desc: '聚焦 Examples：具體配方、製程參數、測試數據',
+    label: '③ 機構萃取',
+    desc: '聚焦 Examples：具體機構、規格參數、測試數據',
     cost: 'NT$0.15',
-    icon: '🧪'
+    icon: '🔩'
   },
   feasibility: {
     label: '④ 可行性評估',
@@ -6656,7 +6421,7 @@ function showPaperAnalysis(i) {
   mc.innerHTML = `
     ${prevHtml}
     <div style="font-size:13px;color:var(--muted);margin-bottom:12px">
-      AI 技術分析：提取配方、製程、性能數據、可信度評估、與 本專案 的關聯
+      AI 技術分析：提取機構、規格、性能數據、可信度評估、與 本專案 的關聯
     </div>
     <div style="margin-bottom:12px">
       <label style="font-size:12px;font-weight:600;color:var(--muted)">分析資料來源</label>
@@ -7055,10 +6820,10 @@ function renderAgentReadingResult(r) {
       {key:'mechanism', label:'機制'},
       {key:'why_it_matters', label:'重要性'}
     ], r.design_examples), 'var(--accent)') : ''}
-    ${r.formulation_details ? block('配方細節', table([
-      {key:'component', label:'成分'},
+    ${r.formulation_details ? block('機構細節', table([
+      {key:'component', label:'元件'},
       {key:'role', label:'功能'},
-      {key:'range_or_amount', label:'比例/範圍'},
+      {key:'range_or_amount', label:'規格/範圍'},
       {key:'notes', label:'備註'}
     ], r.formulation_details), 'var(--accent2)') : ''}
     ${r.process_details ? block('製程細節', table([
@@ -7181,7 +6946,7 @@ function renderPatentResult(a) {
   const examples = a.examples || [];
   const showAllExamples = shouldShowAllPatentExamples(examples);
   if(patentExamplesNeedFulltextParse(examples)) {
-    html += `<div class="patent-example-hint" style="border-color:var(--danger);color:var(--danger);background:#fff5f3">⚠️ 目前只有推論式實施例，尚未真正解析全文 examples；這篇需要重跑全文解析後再用於 FTO 或配方判斷。</div>`;
+    html += `<div class="patent-example-hint" style="border-color:var(--danger);color:var(--danger);background:#fff5f3">⚠️ 目前只有推論式實施例，尚未真正解析全文 examples；這篇需要重跑全文解析後再用於 FTO 或機構判斷。</div>`;
   }
   if(examples.length > 1) {
     html += `<div class="patent-example-hint">${showAllExamples ? '\u5df2\u5c55\u958b\u5168\u90e8\u5168\u6587\u5be6\u65bd\u4f8b\uff1b\u53ef\u9ede\u300c\u6536\u5408\u5be6\u65bd\u4f8b\u300d\u7c21\u5316\u756b\u9762\u3002' : '\u53f3\u9375\u4efb\u4e00\u5be6\u65bd\u4f8b\u5361\u7247\uff0c\u6216\u9ede\u300c\u5168\u90e8\u5be6\u65bd\u4f8b\u300d\uff0c\u53ef\u5c55\u958b\u540c\u4e00\u7bc7\u5c08\u5229\u7684\u4e0d\u540c embodiment\u3002'}</div>`;
