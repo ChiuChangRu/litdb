@@ -10,5 +10,341 @@
       "other": []
     }
   },
-  "papers": []
+  "papers": [
+    {
+      "id": "B01",
+      "doc_type": "專利",
+      "title": "Biopsy instrument (Travenol TRU-CUT)",
+      "year": 1969,
+      "authors": "Griffith, L.K. / Travenol Laboratories, Inc.",
+      "venue": "US3477423",
+      "tags": ["雙動作（手動）", "BD", "歷史源頭"],
+      "abstract_note": "整個核心活檢針技術的最古老源頭。純手動雙動作機構：醫師先手動將探針推入組織，再手動將切割套管推過探針切下樣本。中空管狀切割套管接塑膠握把，同軸實心探針可伸縮套於套管內並連接近端旋鈕。",
+      "purpose": "建立核心活檢針雙動作機構的技術源頭與比較基準",
+      "value_to_project": "理解後續所有自動化機構設計（彈簧/馬達）皆是在此雙動作基礎上疊加自動化的演進起點",
+      "patentResults": {
+        "full": {
+          "summary": "1969年Griffith發明，Travenol TRU-CUT活檢針，純手動雙動作機構，是核心活檢針技術的最古老源頭。",
+          "examples": [
+            {
+              "name": "TRU-CUT雙動作機構",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "原始專利文件明確記載機構設計與操作流程",
+              "gauge_length": "未標準化（1969年代產品）",
+              "firing_spec": {
+                "mechanism": "雙動作（手動）",
+                "lock_type": "無鎖合機構（純手動操作）",
+                "action_mode": "雙動作"
+              },
+              "results": {
+                "sample_notch": "未記載具體數值",
+                "firing_force": "依賴醫師手感，無固定規格",
+                "visibility": "無"
+              }
+            }
+          ],
+          "key_claims": ["中空管狀切割套管設計", "同軸實心探針伸縮機構", "近端旋鈕連接結構"],
+          "actionable_insights": ["理解雙動作機構是後續SLC彈簧/馬達驅動設計的基礎參照點"],
+          "red_flags": ["專利已於數十年前到期，技術可自由參考使用"],
+          "bioteque_relevance": "*作為技術脈絡起點參考，本公司非活檢針整機製造商，此分析聚焦機構設計參考價值而非製造可行性評估"
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B02",
+      "doc_type": "專利",
+      "title": "Surgical biopsy device incorporating prostate biopsy application",
+      "year": 1986,
+      "authors": "Beraha, D.",
+      "venue": "US4600014",
+      "tags": ["雙動作（手動）", "BD", "前列腺"],
+      "abstract_note": "經直腸前列腺活檢應用，將雙動作機構應用於前列腺活檢臨床場景，是Travenol TRU-CUT技術的臨床應用延伸案例。",
+      "purpose": "確認雙動作機構在特定臨床場景（前列腺）的應用先例",
+      "value_to_project": "提供雙動作機構應用於特定解剖部位的設計參考",
+      "patentResults": {
+        "full": {
+          "summary": "1986年Beraha發明，將雙動作活檢機構應用於經直腸前列腺活檢，是早期臨床應用延伸案例。",
+          "examples": [
+            {
+              "name": "經直腸前列腺活檢應用",
+              "is_real": true,
+              "credibility": "中",
+              "credibility_reason": "專利摘要層級記載應用場景，未見完整實施例數值",
+              "gauge_length": "未記載",
+              "firing_spec": {
+                "mechanism": "雙動作（手動）",
+                "lock_type": "無鎖合機構",
+                "action_mode": "雙動作"
+              },
+              "results": {
+                "sample_notch": "未記載",
+                "firing_force": "未記載",
+                "visibility": "未記載"
+              }
+            }
+          ],
+          "key_claims": ["雙動作機構應用於經直腸前列腺活檢之臨床流程設計"],
+          "actionable_insights": ["可作為機構設計應用於不同解剖部位的早期參考案例"],
+          "red_flags": ["專利已到期，技術可自由參考使用"],
+          "bioteque_relevance": "*參考價值在於了解機構應用場景的歷史演進，非製造可行性評估"
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B03",
+      "doc_type": "專利",
+      "title": "Ergonomic biopsy instrument",
+      "year": 2011,
+      "authors": "Neoh, Wenhong / Cook Incorporated",
+      "venue": "US20120226191A1",
+      "tags": ["SLC彈簧加載", "Cook Medical", "人因設計"],
+      "abstract_note": "人因握把設計，解決傳統in-line手把造成手腕不適問題。2011年由Cook Incorporated連同發明人Wenhong Neoh轉讓給Cook Medical Technologies LLC。",
+      "purpose": "查證Cook Medical Quick-Core產品的人因握把專利基礎",
+      "value_to_project": "了解Quick-Core產品線握把設計的專利保護範圍與迴避空間",
+      "patentResults": {
+        "full": {
+          "summary": "Cook Medical Technologies LLC受讓的人因握把專利，解決傳統握把造成手腕不適的問題，是Quick-Core產品線的人因延伸設計。",
+          "examples": [
+            {
+              "name": "人因握把設計",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents全文確認assignee與技術內容",
+              "gauge_length": "適配Quick-Core產品線規格",
+              "firing_spec": {
+                "mechanism": "SLC彈簧加載",
+                "lock_type": "沿用Quick-Core現行彈簧式擊發機構",
+                "action_mode": "單動作（觸發後完成擊發）"
+              },
+              "results": {
+                "sample_notch": "未記載具體數值",
+                "firing_force": "未記載",
+                "visibility": "未記載"
+              }
+            }
+          ],
+          "key_claims": ["人因握把外型設計，改善傳統in-line手把的手腕受力角度"],
+          "actionable_insights": ["人因握把設計可作為產品差異化參考方向，非核心擊發機構"],
+          "red_flags": ["需查證此人因設計專利的claim邊界與是否仍在有效期內"],
+          "bioteque_relevance": "*握把人因設計屬於外觀/操作體感範疇，與核心擊發機構專利風險區隔，FTO評估應分開處理"
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B04",
+      "doc_type": "專利",
+      "title": "Half cannula full core biopsy needle",
+      "year": 2012,
+      "authors": "Cook Medical Technologies LLC",
+      "venue": "US9101350B2",
+      "tags": ["SLC彈簧加載", "Cook Medical", "pawl卡榫式"],
+      "abstract_note": "半圓柱形內管滑動於外管內取得完整核心樣本。握把含彈簧式擊發機構，沿用QUICK-CORE現行握把設計（記載於2009年臨時案US61/261,857）。",
+      "purpose": "查證Cook Medical Quick-Core核心擊發機構的專利範圍",
+      "value_to_project": "了解半圓套管取樣機構的設計細節，評估是否有可迴避的設計空間",
+      "patentResults": {
+        "full": {
+          "summary": "Cook Medical Technologies LLC受讓專利，半圓柱形內管滑動取樣機構，搭配彈簧式擊發握把，是Quick-Core產品的核心機構專利。",
+          "examples": [
+            {
+              "name": "半圓套管完整核心取樣機構",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents全文確認技術細節與assignee",
+              "gauge_length": "Quick-Core產品線標準規格（多款gauge/長度組合）",
+              "firing_spec": {
+                "mechanism": "SLC彈簧加載",
+                "lock_type": "彈簧式擊發機構（握把內建）",
+                "action_mode": "單動作"
+              },
+              "results": {
+                "sample_notch": "半圓柱形內管設計，取樣腔室形狀為半圓柱",
+                "firing_force": "未記載具體數值",
+                "visibility": "echogenic tip（外層同軸針）"
+              }
+            }
+          ],
+          "key_claims": ["半圓柱形內管於外管內滑動之取樣機構", "彈簧式擊發握把延續自2009年臨時案設計"],
+          "actionable_insights": ["半圓套管設計是Quick-Core核心機構，若考慮類似設計需評估此claim的具體幾何特徵邊界"],
+          "red_flags": ["此為Quick-Core核心機構專利，是迴避設計時的重點審視對象"],
+          "bioteque_relevance": "*此專利為SLC彈簧加載路線的代表性核心機構，建議優先列入FTO清單"
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B05",
+      "doc_type": "專利",
+      "title": "Reusable automated biopsy needle handle",
+      "year": 1998,
+      "authors": "Argon Medical Devices, Inc. (及共同擔保權益相關公司)",
+      "venue": "US6106484A",
+      "tags": ["SLC彈簧加載", "Argon Medical", "雙鎖定卡合"],
+      "abstract_note": "彈簧加載式雙鎖定卡合機構：套管延伸件與探針延伸件各自獨立向後滑動卡入彈簧加載位置，第一鎖定件與套管/探針上的第二鎖定件互相卡合。2018年涉及Promex Technologies LLC、Manan Medical Products Inc、Argon Medical Devices Inc、Medical Device Technologies Inc、Luther Medical Products Inc等多家公司聯合擔保權益解除登記。",
+      "purpose": "查證Argon Medical SuperCore/Tru-Core II產品的核心機構專利",
+      "value_to_project": "了解雙鎖定卡合機構的設計細節，評估與Cook Medical單一彈簧機構的技術差異",
+      "patentResults": {
+        "full": {
+          "summary": "可重複使用自動活檢針握把專利，核心為彈簧加載式雙鎖定卡合機構，套管與探針各自獨立卡入鎖定位置。",
+          "examples": [
+            {
+              "name": "雙鎖定卡合彈簧機構",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents全文確認技術細節，惟企業擔保關係複雜需另查證",
+              "gauge_length": "SuperCore/Tru-Core II產品線規格（14G/16G/18G/20G等多款）",
+              "firing_spec": {
+                "mechanism": "SLC彈簧加載",
+                "lock_type": "雙鎖定卡合（套管與探針各自獨立鎖定）",
+                "action_mode": "單動作（拇指推動探針延伸件擊發）"
+              },
+              "results": {
+                "sample_notch": "可調式採樣凹槽（19mm或9.5mm，依官網產品資料）",
+                "firing_force": "未記載具體數值",
+                "visibility": "echogenic tip於外套管"
+              }
+            }
+          ],
+          "key_claims": ["套管延伸件與探針延伸件各自獨立卡入彈簧加載位置之雙鎖定機構", "第一鎖定件與第二鎖定件互相卡合之結構"],
+          "actionable_insights": ["雙鎖定卡合與Cook Medical的單一彈簧機構在鎖合方式上有明確技術差異，可作為設計差異化參考點"],
+          "red_flags": ["*2018年企業擔保關係涉及多家公司，企業關係複雜，建議若考慮商業合作或授權需另行查證最新corporate結構"],
+          "bioteque_relevance": "*此為SLC彈簧加載路線下「雙鎖定卡合」鎖合方式的代表案例，與Cook Medical pawl卡榫式機構形成對照"
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B06",
+      "doc_type": "專利",
+      "title": "Needle firing assembly for biopsy device",
+      "year": 2013,
+      "authors": "Fiebig, Kevin M. / Ehlert, J. Scott / Devicor Medical Products Inc",
+      "venue": "WO2014182488A1（同源：US9603587、CA2910172A1、EP2994055B1、CN105358067B）",
+      "tags": ["馬達驅動", "Merit Medical", "lead screw"],
+      "abstract_note": "馬達驅動lead screw帶動firing tube，pawl卡榫式機構，coil spring釋放擊發；支援「soft fire」馬達直驅模式（不靠彈簧釋放，馬達直接控制擊發速度）。優先權日2013-05-07，Devicor Medical Products Inc受讓。",
+      "purpose": "查證Merit Medical TEMNO/Achieve產品線核心馬達驅動機構的企業血統與專利範圍",
+      "value_to_project": "了解馬達驅動機構相對於SLC彈簧機構的技術差異，評估FTO風險",
+      "patentResults": {
+        "full": {
+          "summary": "馬達驅動lead screw擊發機構專利，支援soft fire漸進式擊發模式，是TEMNO/Achieve系列的核心機構，原屬Devicor Medical Products Inc（2010年由Ethicon Endo-Surgery轉讓取得），2018年該產品線資產被Merit Medical收購。",
+          "examples": [
+            {
+              "name": "馬達驅動Lead Screw擊發機構",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents完整全文確認技術細節、assignee與優先權日",
+              "gauge_length": "TEMNO/Achieve產品線規格",
+              "firing_spec": {
+                "mechanism": "馬達驅動",
+                "lock_type": "Pawl卡榫式（firing tube與coupling assembly透過pawl卡合）",
+                "action_mode": "Soft fire漸進式（馬達可控速度，非單純彈簧瞬間釋放）"
+              },
+              "results": {
+                "sample_notch": "未記載具體數值",
+                "firing_force": "可由馬達控制，非固定彈簧力道",
+                "visibility": "未記載於此專利"
+              }
+            }
+          ],
+          "key_claims": ["馬達驅動lead screw帶動firing tube之擊發總成", "Pawl卡榫式coupling assembly與firing tube卡合釋放機構", "Soft fire馬達直驅控速模式"],
+          "actionable_insights": ["馬達驅動機構是目前唯一支援可控速度擊發（soft fire）的設計，若考慮高階全自動產品線需重點評估此專利家族"],
+          "red_flags": ["此為Merit Medical TEMNO/Achieve產品線核心機構專利，企業血統清楚（Ethicon→Devicor 2010→Merit 2018收購），需注意目前仍由Merit Medical實際持有並商業化中"],
+          "bioteque_relevance": "*馬達驅動為高階全自動產品的代表技術路線，FTO風險相對最高，建議列為優先迴避設計評估對象"
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B07",
+      "doc_type": "專利",
+      "title": "Surgical device for the collection of soft tissue",
+      "year": 2013,
+      "authors": "Devicor Medical Products Inc",
+      "venue": "US9433402B2",
+      "tags": ["馬達驅動", "Merit Medical", "歷史脈絡"],
+      "abstract_note": "引用BIOPTY gun（C.R. Bard彈簧式核心取樣活檢器材始祖）與TRUE CUT針（Travenol製造）作為背景技術，提供核心活檢針技術發展的歷史脈絡佐證。",
+      "purpose": "確認核心活檢針技術發展史的官方文件佐證",
+      "value_to_project": "提供BIOPTY gun（Bard）與TRUE CUT（Travenol）作為早期彈簧式機構源頭的官方文件交叉確認",
+      "patentResults": {
+        "full": {
+          "summary": "Devicor Medical Products Inc專利，背景技術段落明確記載BIOPTY gun（Bard彈簧式核心取樣始祖）與TRUE CUT針（Travenol製造）的歷史地位，是核心活檢針技術發展史的官方佐證文件。",
+          "examples": [
+            {
+              "name": "軟組織取樣外科器材",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "Google Patents全文確認背景技術段落內容",
+              "gauge_length": "未記載",
+              "firing_spec": {
+                "mechanism": "馬達驅動",
+                "lock_type": "未記載具體鎖合方式",
+                "action_mode": "未記載"
+              },
+              "results": {
+                "sample_notch": "未記載",
+                "firing_force": "未記載",
+                "visibility": "未記載"
+              }
+            }
+          ],
+          "key_claims": ["背景技術段落確認BIOPTY gun為彈簧式核心取樣活檢器材始祖", "確認TRUE CUT針由Travenol製造"],
+          "actionable_insights": ["此專利的價值在於背景技術段落的歷史佐證，而非機構本身的claim內容"],
+          "red_flags": ["本篇核心價值為歷史脈絡佐證，非機構設計細節來源"],
+          "bioteque_relevance": "*作為技術史佐證文件使用，非機構設計參考來源"
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B08",
+      "doc_type": "市場報告",
+      "title": "Merit Medical Systems, Inc. Form 8-K — Acquisition of Devicor product lines (Achieve/Temno/Tru-Cut)",
+      "year": 2018,
+      "authors": "Merit Medical Systems, Inc.",
+      "venue": "SEC Form 8-K, 2018-02-15",
+      "tags": ["馬達驅動", "Merit Medical", "企業併購"],
+      "abstract_note": "Merit Medical以1億美元收購原Devicor/嬌生旗下以Achieve™ Programmable Automatic Biopsy System、Temno™ Biopsy System、Tru-Cut™ Biopsy Needles商標銷售的核心活檢針產品線資產。交易預期增加年化營收4200萬至4800萬美元。",
+      "purpose": "確認Merit Medical與Devicor之間的併購關係與交易細節",
+      "value_to_project": "建立TEMNO/Achieve產品線企業血統的官方文件依據，供_deNormalizeCompany()公司歸一化邏輯使用",
+      "patentResults": {
+        "commercial": {
+          "company": "Merit Medical Systems, Inc.",
+          "product": "Achieve™ / Temno™ / Tru-Cut™ Biopsy Needles（收購自Devicor）",
+          "hq": "South Jordan, Utah, USA",
+          "mechanism_spec": {
+            "type": "馬達驅動 / SLC彈簧加載（產品線含多款機構）"
+          },
+          "collaboration_opportunity": null
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B09",
+      "doc_type": "市場報告",
+      "title": "Leica Biosystems to Acquire Devicor Medical Products, Inc.",
+      "year": 2014,
+      "authors": "Leica Biosystems (新聞稿)",
+      "venue": "PRNewswire, 2018-06-30",
+      "tags": ["馬達驅動", "企業併購", "Mammotome"],
+      "abstract_note": "Devicor Medical Products, Inc.整體被Leica Biosystems收購，年營收約1.7億美元，主力為Mammotome乳房活檢系統。此交易與2018年Merit Medical收購的TEMNO/Achieve產品線資產是不同的兩條事業線（Devicor被拆分後，乳房活檢Mammotome歸入Leica，核心活檢針產品線歸入Merit）。",
+      "purpose": "確認Devicor企業血統的完整拆分歷史，避免Mammotome乳房活檢事業與TEMNO/Achieve核心活檢針產品線混淆",
+      "value_to_project": "釐清Devicor被拆分為兩條不同事業線的事實，避免分析時誤判企業關係",
+      "patentResults": {
+        "commercial": {
+          "company": "Devicor Medical Products, Inc.（2014年後乳房活檢事業歸入Leica Biosystems）",
+          "product": "Mammotome Breast Biopsy System（與TEMNO/Achieve為不同產品線）",
+          "hq": "Cincinnati, Ohio, USA",
+          "mechanism_spec": {
+            "type": "VABB真空輔助（Mammotome屬此類別，非本次打底核心活檢針機構範疇）"
+          },
+          "collaboration_opportunity": null
+        }
+      },
+      "citation_count": null
+    }
+  ]
 }
