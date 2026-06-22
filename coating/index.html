@@ -892,6 +892,16 @@ let activeLibraryFilter = null; // {id, label, color, paperIds, note}
 let pinnedIds = new Set();
 let chatHistory = [];
 let activeTags = new Set();
+// 知識庫命名空間：localStorage 是依「網域」共用，不分路徑，coating/ 與 biopsy/
+// 等不同知識庫共用同一個 chiuchangru.github.io 網域，若 key 不加區別會互相污染
+// 資料（例如切到另一個知識庫卻讀到舊知識庫快取的文獻）。
+// 取路徑中去掉檔名後的最後一段資料夾名當命名空間（如 'biopsy'、'coating'）。
+// 注意：GitHub Pages 專案頁網址為 username.github.io/repo名/子目錄/index.html，
+// 不能直接取 split('/')[0]（會永遠抓到 repo 名稱本身，無法區分子知識庫）。
+const LITDB_NS = (() => {
+  const parts = location.pathname.split('/').filter(Boolean).filter(p => !p.includes('.'));
+  return parts[parts.length - 1] || 'root';
+})();
 const CFG_KEY = 'litdb_cfg';
 let cfg = JSON.parse(localStorage.getItem(CFG_KEY)||'{}');
 const COST_KEY = 'litdb_cost';
@@ -956,10 +966,10 @@ function restorePaper(paperId) {
 // NOTES: 筆記系統
 // ══════════════════════════════════════════════
 function getNotes() {
-  try { return JSON.parse(localStorage.getItem('litdb_notes')||'{}'); } catch(e) { return {}; }
+  try { return JSON.parse(localStorage.getItem('litdb_notes_' + LITDB_NS)||'{}'); } catch(e) { return {}; }
 }
 function saveNotes(notes) {
-  localStorage.setItem('litdb_notes', JSON.stringify(notes));
+  localStorage.setItem('litdb_notes_' + LITDB_NS, JSON.stringify(notes));
 }
 function addNote(paperId) {
   const text = prompt('📝 寫下你的筆記（可包含想加入計畫書的觀點）：');
@@ -2146,7 +2156,7 @@ ${context}
       scope: getReportScopeLabel(),
       analyzedCount: analyzed.length
     };
-    localStorage.setItem('litdb_report_saved', JSON.stringify(reportData));
+    localStorage.setItem('litdb_report_saved_' + LITDB_NS, JSON.stringify(reportData));
 
     document.getElementById('rptActions').innerHTML = `
       <button class="btn btn-p" onclick="copyReport()">📋 複製報告</button>
@@ -2192,7 +2202,7 @@ function downloadReport() {
 
 function loadSavedReport() {
   try {
-    const saved = localStorage.getItem('litdb_report_saved');
+    const saved = localStorage.getItem('litdb_report_saved_' + LITDB_NS);
     if(!saved) return;
     const data = JSON.parse(saved);
     const output = document.getElementById('rptOutput');
@@ -2210,7 +2220,7 @@ function loadSavedReport() {
 }
 
 function clearSavedReport() {
-  localStorage.removeItem('litdb_report_saved');
+  localStorage.removeItem('litdb_report_saved_' + LITDB_NS);
   document.getElementById('rptOutput').style.display = 'none';
   document.getElementById('rptOutput').innerHTML = '';
   document.getElementById('rptActions').innerHTML = '';
@@ -2508,7 +2518,7 @@ async function saveVendorKeywordsToCloud(keywords) {
 
 async function loadDB() {
   // Try localStorage first, then remote, then same-dir
-  const saved = localStorage.getItem('litdb_data');
+  const saved = localStorage.getItem('litdb_data_' + LITDB_NS);
   if(saved) { try { DB = JSON.parse(saved); } catch(e){} }
 
   // 無論是否有 local，都嘗試從遠端載入，合併 patentResults
@@ -2613,7 +2623,7 @@ function onDBLoaded() {
 }
 
 function saveDB() {
-  localStorage.setItem('litdb_data', JSON.stringify(DB));
+  localStorage.setItem('litdb_data_' + LITDB_NS, JSON.stringify(DB));
   const active = DB.papers.filter(p=>!p._deleted);
   const deleted = DB.papers.length - active.length;
   document.getElementById('dbStats').textContent = `${active.length} 篇文獻${deleted?` (${deleted} 已刪除)`:''}`;
