@@ -4197,10 +4197,11 @@ function renderMarket() {
     if(n && (v.role==='equipment' || !hasCommercial)) segmentMap[v.role].push({...v, type:'entity', relatedCount:n});
   });
 
-  // 市場數字：目前打底資料尚不足以提供市場規模/成長率等具體數字，誠實標示待補，不編造
+  // 市場數字來源：Research Nester《Biopsy Needle Market》2025報告試閱頁（B10）
+  // 方法論未完整揭露，屬試閱摘要數字，建議交叉驗證
   const mkData = [
-    {n:'待補', label:'市場規模', sub:'尚未查證'},
-    {n:'待補', label:'年成長率', sub:'尚未查證'},
+    {n:'$13.4億', label:'2025市場規模', sub:'↗ 2035預估$25.6億（美元）'},
+    {n:'6.7%', label:'CAGR', sub:'2026–2035・北美佔41.2%'},
     {n:'4家', label:'已確認廠商', sub:'Cook/Argon/Merit/BD'},
     {n:commercials.length+'篇', label:'商用產品/玩家', sub:'文庫動態統計'},
   ];
