@@ -2329,7 +2329,7 @@ async function loadDB() {
   if(saved) { try { DB = JSON.parse(saved); } catch(e){} }
 
   // 無論是否有 local，都嘗試從遠端載入，合併 patentResults
-  const url = cfg.dataUrl || 'papers.json';
+  const url = cfg.dataUrl || 'biopsy_patents.json';
   try {
     const r = await fetch(url + '?t=' + Date.now());
     if(r.ok) {
@@ -4067,7 +4067,7 @@ async function syncFromGitHub() {
   const btn = document.getElementById('syncBtn');
   if(btn) { btn.textContent='⏳'; btn.disabled=true; }
 
-  const url = cfg.dataUrl || 'papers.json';
+  const url = cfg.dataUrl || 'biopsy_patents.json';
   try {
     const r = await fetch(url + '?t=' + Date.now());
     if(!r.ok) throw new Error('HTTP ' + r.status);
