@@ -65,10 +65,6 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 .col-right{width:50%;flex-shrink:0;overflow-y:auto}
 .col-resize{width:5px;cursor:col-resize;background:var(--border);flex-shrink:0;transition:background 0.15s}
 .col-resize:hover,.col-resize.dragging{background:var(--accent);opacity:0.6}
-.analysis-sub{background:var(--bg);border:1px solid var(--border);color:var(--muted);font-size:12px;padding:6px 14px;cursor:pointer}
-.analysis-sub.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.analysis-subview{display:none}
-.analysis-subview.active{display:block}
 .filter-panel .field{margin-bottom:10px}
 .filter-panel label{font-size:11px;color:var(--muted);font-weight:600;display:block;margin-bottom:4px}
 .tag-cloud{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
@@ -588,183 +584,20 @@ async function doLogin(){
 </div>
 
 <!-- ═══════════════ VIEW: GRAPH ═══════════════ -->
-<div class="view" id="v-graph" style="display:none">
-  <div class="graph-container" style="display:flex;gap:0">
-    <div style="flex:1;min-width:0">
-      <div class="graph-controls">
-        <label style="font-size:11px;color:var(--muted)">標籤類別</label>
-        <select id="graphTagCat" onchange="buildGraph()" style="width:auto;padding:4px 8px;font-size:12px">
-          <option value="">全部標籤</option>
-          <option value="substrate">基材</option>
-          <option value="hydrophilic_polymer">親水高分子</option>
-          <option value="cure_method">固化方式</option>
-          <option value="anchor_primer">錨固劑</option>
-          <option value="application">應用</option>
-          <option value="indication">適應症</option>
-          <option value="performance">性能指標</option>
-          <option value="method_tool">工具/測試方法</option>
-        </select>
-        <label style="font-size:11px;color:var(--muted);margin-left:12px">最少連結</label>
-        <input type="range" id="graphThreshold" min="1" max="10" value="1" oninput="buildGraph()" style="width:80px">
-        <span id="graphThreshVal" style="font-size:11px;color:var(--muted)">1</span>
-        <span id="graphInfo" style="font-size:11px;color:var(--muted);margin-left:auto"></span>
-      </div>
-      <canvas id="graphCanvas" width="1200" height="550" onclick="onGraphClick(event)"></canvas>
-      <div class="graph-legend" id="graphLegend"></div>
-    </div>
-    <div id="graphDetailPanel" style="width:320px;flex-shrink:0;border-left:1px solid var(--border);overflow-y:auto;max-height:600px;padding:12px">
-      <div id="graphDetailContent" style="font-size:12px;line-height:1.6">
-        <div style="text-align:center;padding:30px 10px;color:var(--muted)">← 點擊泡泡圖中的節點<br>查看文獻內容或標籤關聯</div>
-      </div>
-    </div>
-  </div>
-  <div id="graphDetail" style="display:none"></div>
-</div>
+
 
 <!-- ═══════════════ VIEW: GAP ═══════════════ -->
-<div class="view" id="v-gap" style="display:none">
-  <div style="padding:12px;max-width:1100px;margin:0 auto">
-    <div class="panel">
-      <div class="panel-h">① 基材 × 固化方式</div>
-      <div class="heatmap-wrap" id="heatmapWrap"></div>
-    </div>
-    <div class="panel" style="margin-top:12px">
-      <div class="panel-h">② 應用 × 親水高分子</div>
-      <div class="heatmap-wrap" id="heatmapWrap2"></div>
-    </div>
-    <div class="panel" style="margin-top:12px">
-      <div class="panel-h">③ 基材 × 親水高分子</div>
-      <div class="heatmap-wrap" id="heatmapWrap3"></div>
-    </div>
-    <div class="panel" style="margin-top:12px">
-      <div class="panel-h">④ 應用 × 固化方式</div>
-      <div class="heatmap-wrap" id="heatmapWrap4"></div>
-    </div>
-    <div class="panel" style="margin-top:12px">
-      <div class="panel-h">⑤ 基材 × 錨固劑/底塗</div>
-      <div class="heatmap-wrap" id="heatmapWrap5"></div>
-    </div>
-    <div class="panel" style="margin-top:12px">
-      <div class="panel-h">⑥ 親水高分子 × 錨固劑/底塗</div>
-      <div class="heatmap-wrap" id="heatmapWrap6"></div>
-    </div>
-    <div class="panel" style="margin-top:12px;border:2px solid var(--accent)">
-      <div class="panel-h" style="color:var(--accent)">⑦ 應用 × 功能目標（潤滑/抗結痂/抗菌/附著）</div>
-      <div style="font-size:11px;color:var(--muted);padding:4px 12px">找出哪些應用還缺抗結痂或抗菌方案 — 空白格 = 開發機會</div>
-      <div class="heatmap-wrap" id="heatmapWrap7"></div>
-    </div>
-    <div class="panel" style="margin-top:12px;border:2px solid var(--accent)">
-      <div class="panel-h" style="color:var(--accent)">⑧ 基材 × 功能目標</div>
-      <div style="font-size:11px;color:var(--muted);padding:4px 12px">找出哪些基材還沒有抗結痂/抗菌驗證</div>
-      <div class="heatmap-wrap" id="heatmapWrap8"></div>
-    </div>
-    <!-- 點格子後顯示文獻清單 -->
-    <div id="gapDetail" style="display:none;margin-top:12px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px"></div>
-  </div>
-</div>
+
 
 <!-- ═══════════════ VIEW: COMPARE ═══════════════ -->
-<div class="view" id="v-compare" style="display:none">
-  <div style="padding:12px">
-    <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px;flex-wrap:wrap">
-      <label style="font-size:13px;font-weight:600">分群維度</label>
-      <select id="compareGroupBy" onchange="buildCompare()" style="padding:8px 12px;font-size:13px;min-width:200px">
-        <option value="cure_method">固化方式</option>
-        <option value="substrate">基材</option>
-        <option value="anchor_primer">底塗/錨固</option>
-        <option value="hydrophilic_polymer">親水高分子</option>
-        <option value="application">應用/適應症</option>
-        <option value="func_goal">⭐ 功能目標（潤滑/抗結痂/抗菌/附著）</option>
-        <option value="org">公司/機構</option>
-        <option value="patent_status">專利狀態</option>
-        <option value="year_range">年份區間</option>
-        <option value="performance">性能指標</option>
-        <option value="method_tool">工具/測試方法</option>
-        <option value="doc_type">文獻類型</option>
-        <option value="analysis_status">分析狀態</option>
-      </select>
-      <span id="compareStats" style="font-size:12px;color:var(--muted)"></span>
-    </div>
-    <div id="compareResults"></div>
-  </div>
-</div>
 
-<div class="view" id="v-tools" style="display:none">
-  <div style="padding:12px;max-width:1180px;margin:0 auto">
-    <div class="panel">
-      <div class="panel-h">🧰 工具地圖</div>
-      <div id="toolMapSummary" style="padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px;color:var(--muted)"></div>
-      <div id="toolMapBody" style="padding:12px"></div>
-    </div>
-  </div>
-</div>
 
-<div class="view" id="v-kgraph" style="display:none">
-  <div style="height:calc(100vh - 140px);display:flex;flex-direction:column">
-    <!-- 問題導引列 -->
-    <div style="padding:8px 12px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0">
-      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:6px">
-        <span style="font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap">快速問題：</span>
-        <button class="btn btn-s kg-mode-btn" id="kgMode_a" onclick="kgSetMode('routes')" style="font-size:11px;padding:4px 10px">🗺 有哪些技術路線？</button>
-        <button class="btn btn-s kg-mode-btn" id="kgMode_b" onclick="kgSetMode('materials')" style="font-size:11px;padding:4px 10px">⚗️ 路線用了哪些材料？</button>
-        <button class="btn btn-s kg-mode-btn" id="kgMode_c" onclick="kgSetMode('patents')" style="font-size:11px;padding:4px 10px">📄 路線對應哪些專利？</button>
-        <button class="btn btn-s kg-mode-btn" id="kgMode_d" onclick="kgSetMode('risk')" style="font-size:11px;padding:4px 10px">⚖️ 專利風險比較</button>
-        <button class="btn btn-s" onclick="kgSetMode('all')" style="font-size:11px;padding:4px 10px">🔍 全圖</button>
-        <button class="btn btn-s" onclick="kgResetZoom()" style="margin-left:auto;font-size:11px">↙ 重置</button>
-      </div>
-      <div id="kgModeHint" style="font-size:11px;color:var(--accent2);min-height:16px">
-        點選上方問題切換視圖　·　點擊節點查看詳情並高亮連線　·　Hover 顯示完整名稱
-      </div>
-      <!-- 隱藏 checkbox（程式控制） -->
-      <div style="display:none">
-        <input type="checkbox" id="kg_route" checked><input type="checkbox" id="kg_tech" checked>
-        <input type="checkbox" id="kg_mech"><input type="checkbox" id="kg_mat" checked>
-        <input type="checkbox" id="kg_proc"><input type="checkbox" id="kg_pat" checked>
-        <input type="checkbox" id="kg_co" checked><input type="checkbox" id="kg_perf" checked>
-        <input type="checkbox" id="kg_app">
-      </div>
-    </div>
-    <!-- 圖例 -->
-    <div style="padding:6px 12px;display:flex;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--border);flex-shrink:0;font-size:10px">
-      <span>🟠 技術路線</span><span>🔵 技術</span><span>🟣 機制</span><span>🟢 材料</span>
-      <span>⬛ 製程</span><span>🔴 專利</span><span>🏢 公司</span><span>⚡ 性能</span><span>📍 應用</span>
-    </div>
-    <!-- 畫布 -->
-    <div style="flex:1;position:relative;overflow:hidden">
-      <svg id="kgSvg" style="width:100%;height:100%"></svg>
-      <!-- Hover Tooltip -->
-      <div id="kgTooltip" style="display:none;position:absolute;background:var(--card);border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:12px;pointer-events:none;max-width:200px;box-shadow:0 2px 10px rgba(0,0,0,0.12);z-index:10"></div>
-      <!-- 節點詳情面板 -->
-      <div id="kgDetail" style="display:none;position:absolute;top:10px;right:10px;width:260px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:11px;max-height:70vh;overflow-y:auto;box-shadow:0 4px 16px rgba(0,0,0,0.12)">
-        <button onclick="document.getElementById('kgDetail').style.display='none'" style="float:right;background:none;border:none;cursor:pointer;font-size:14px;color:var(--muted)">✕</button>
-        <div id="kgDetailContent"></div>
-      </div>
-    </div>
-  </div>
-</div>
+
+
+
 
 <!-- ═══════════════ VIEW: RESEARCH AGENT ═══════════════ -->
-<div class="view" id="v-research">
-  <div style="max-width:1100px;margin:0 auto;padding:16px">
-    <div class="panel">
-      <div class="panel-h">🧭 Research Agent 任務包</div>
-      <div style="padding:14px">
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
-          <input id="researchTopic" value="抗結痂 親水塗層 ureteral stent encrustation SBMA" placeholder="輸入研究任務，例如：抗結痂 親水塗層 專利 五年策略 實驗規劃" style="flex:1;min-width:260px;padding:9px 10px;font-size:13px">
-          <button class="btn btn-p" onclick="renderResearchAgent()">產生任務包</button>
-          <button class="btn btn-s" onclick="researchApplyToLibrary()">套用到文庫篩選</button>
-          <button class="btn btn-s" onclick="researchOpenReport()">產生篩選報告</button>
-          <button class="btn btn-s" onclick="aiReadResearchBatch(5)" style="color:var(--warn);border-color:var(--warn)">AI 閱讀前 5 篇</button>
-          <span id="researchReadStatus" style="font-size:12px;color:var(--muted)"></span>
-        </div>
-        <div style="font-size:12px;color:var(--muted);line-height:1.6">
-          這版先不自動上網，而是根據目前 <code>papers.json</code> 產生可執行研究計畫。之後可升級成：逐篇上網讀專利/全文 → 萃取核心 claim、配方、製程、風險 → 回寫 JSON。
-        </div>
-      </div>
-    </div>
-    <div id="researchOutput" style="margin-top:12px"></div>
-  </div>
-</div>
+
 
 <!-- ═══════════════ VIEW: REPORT ═══════════════ -->
 <div class="view" id="v-report">
@@ -1017,72 +850,7 @@ async function doLogin(){
 </div>
 
 <!-- ═══════════════ VIEW: ADD ═══════════════ -->
-<div class="view" id="v-add">
-  <div class="add-layout">
-    <!-- Left: Batch PubMed Search -->
-    <div class="panel">
-      <div class="panel-h">🔎 PubMed 批次搜尋（免費）</div>
-      <div style="padding:14px">
-        <div class="field"><label>搜尋關鍵字</label>
-          <div style="display:flex;gap:6px">
-            <input type="text" id="batchQuery" placeholder="hydrophilic coating TPU catheter" onkeydown="if(event.key==='Enter')batchSearch()">
-            <button class="btn btn-p" onclick="batchSearch()" style="white-space:nowrap">搜尋</button>
-          </div>
-        </div>
-        <div class="field">
-          <div style="display:flex;gap:6px">
-            <div style="flex:1"><label>年份起</label><input type="number" id="batchYearFrom" placeholder="2020"></div>
-            <div style="flex:1"><label>年份迄</label><input type="number" id="batchYearTo" placeholder="2026"></div>
-            <div style="flex:1"><label>筆數</label><select id="batchMax"><option>10</option><option selected>20</option><option>50</option></select></div>
-          </div>
-        </div>
-        <div id="batchStatus" style="font-size:12px;color:var(--muted);margin-bottom:6px"></div>
-        <div style="display:flex;gap:6px;margin-bottom:8px">
-          <button class="btn btn-s" onclick="batchSelectAll()">全選</button>
-          <button class="btn btn-g" onclick="batchAddSelected()">✅ 加入勾選</button>
-          <button class="btn btn-s" onclick="batchAIEnrich()">🤖 AI 補標籤（勾選）</button>
-        </div>
-        <div class="batch-results" id="batchResults">
-          <div style="text-align:center;padding:30px;color:var(--muted);font-size:13px">輸入關鍵字後搜尋 PubMed<br>結果會顯示在此，勾選後加入文庫</div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Right: Manual / AI single add -->
-    <div class="panel add-form">
-      <div class="panel-h">✏️ 單篇新增（DOI 匯入 / AI 自動填 / 手動）</div>
-      <div style="padding:14px">
-        <div class="field" style="background:var(--card);padding:12px;border-radius:8px;border:1px solid var(--border)">
-          <label style="font-size:12px;font-weight:700;color:var(--accent)">🔗 DOI 匯入（免費，零 AI 費用）</label>
-          <div style="display:flex;gap:6px;margin-top:6px">
-            <input type="text" id="doiInput" placeholder="10.1016/j.biomaterials.2024... 或完整 DOI URL" onkeydown="if(event.key==='Enter')importDOI()">
-            <button class="btn btn-p" onclick="importDOI()" style="white-space:nowrap">匯入</button>
-          </div>
-          <div id="doiStatus" style="font-size:11px;color:var(--muted);margin-top:4px"></div>
-        </div>
-        <hr style="border:none;border-top:1px solid var(--border);margin:12px 0">
-        <div class="field"><label>AI 自動填入：貼上標題/摘要</label>
-          <textarea id="addRaw" rows="5" placeholder="貼上論文標題、摘要、DOI...任何內容，AI 會幫你解析"></textarea>
-          <button class="btn btn-g" style="margin-top:6px;width:100%" onclick="aiParseAdd()">🤖 AI 自動填入</button>
-        </div>
-        <hr style="border:none;border-top:1px solid var(--border);margin:14px 0">
-        <div class="field"><label>ID（例：P30, A5）</label><input type="text" id="addId" placeholder="自動產生或手動輸入"></div>
-        <div class="field"><label>標題</label><input type="text" id="addTitle"></div>
-        <div class="field"><label>作者</label><input type="text" id="addAuthors"></div>
-        <div class="field"><label>年份</label><input type="text" id="addYear" style="width:100px"></div>
-        <div class="field"><label>文獻類型</label><select id="addDocType"><option>專利</option><option>期刊論文</option><option>綜述review</option><option>商用產品</option><option>會議論文</option></select></div>
-        <div class="field"><label>存取</label><select id="addAccess"><option>專利全文</option><option>開放全文</option><option>開放摘要</option><option>付費</option><option>產品頁</option></select></div>
-        <div class="field"><label>標籤（逗號分隔）</label><input type="text" id="addTags" placeholder="PVP, TPU, UV光固化..."></div>
-        <div class="field"><label>收錄目的</label><input type="text" id="addPurpose"></div>
-        <div class="field"><label>精華摘要</label><textarea id="addAbstract" rows="3"></textarea></div>
-        <div class="field"><label>對專案的價值</label><textarea id="addValue" rows="2"></textarea></div>
-        <div class="field"><label>連結</label><input type="text" id="addLink" placeholder="https://..."></div>
-        <div class="field"><label>簡圖 URL（選填）</label><input type="text" id="addFigure" placeholder="https://... 或留空，之後上傳 img/ID.png"></div>
-        <button class="btn btn-p" style="width:100%" onclick="addPaper()">✅ 加入資料庫</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 </div><!-- end main -->
 
@@ -2457,105 +2225,7 @@ const origShowView = window.showView;
 // COMPARE: 自動分群比較
 // ══════════════════════════════════════════════
 // ══════════════════════════════════════════════
-function buildCompare() {
-  const groupBy = document.getElementById('compareGroupBy').value;
-  const dict = getTagDictionaryWithObserved();
-  const container = document.getElementById('compareResults');
 
-  // 比較用所有文獻（不只已分析的），但標示哪些有分析
-  const allPapers = activePapersForAnalysis();
-
-  if(!allPapers.length) {
-    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">資料庫為空</div>';
-    return;
-  }
-
-  let groups = {};
-
-  // 特殊維度處理
-  if(groupBy === 'doc_type') {
-    allPapers.forEach(p => {
-      const key = p.doc_type || '其他';
-      if(!groups[key]) groups[key] = [];
-      groups[key].push(p);
-    });
-  } else if(groupBy === 'org') {
-    // 按公司/機構分群
-    allPapers.forEach(p => {
-      const org = extractOrg(p) || '未標示';
-      if(!groups[org]) groups[org] = [];
-      groups[org].push(p);
-    });
-  } else if(groupBy === 'patent_status') {
-    allPapers.forEach(p => {
-      let key;
-      if(p.doc_type !== '專利') { key = '非專利'; }
-      else {
-        const m = (p.title||'').match(/(US\d+B\d?|EP\d+B\d?)/i);
-        const yr = p.year || 0;
-        if(m && yr && (yr+20) > new Date().getFullYear()) key = '🔒 有效專利';
-        else if(m && yr && (yr+20) <= new Date().getFullYear()) key = '✓ 已過期專利';
-        else key = '📋 申請中/公開';
-      }
-      if(!groups[key]) groups[key] = [];
-      groups[key].push(p);
-    });
-  } else if(groupBy === 'year_range') {
-    allPapers.forEach(p => {
-      const yr = p.year || 0;
-      let key;
-      if(yr >= 2020) key = '2020-2026（近期）';
-      else if(yr >= 2010) key = '2010-2019';
-      else if(yr >= 2000) key = '2000-2009';
-      else if(yr > 0) key = '2000 以前';
-      else key = '年份不明';
-      if(!groups[key]) groups[key] = [];
-      groups[key].push(p);
-    });
-  } else if(groupBy === 'analysis_status') {
-    allPapers.forEach(p => {
-      const has = p.patentResults && Object.keys(p.patentResults).length > 0;
-      const key = has ? '✅ 已分析' : '🔴 未分析';
-      if(!groups[key]) groups[key] = [];
-      groups[key].push(p);
-    });
-  } else if(groupBy === 'func_goal') {
-    // 功能目標分群（一篇可同時屬於多個功能）
-    allPapers.forEach(p => {
-      const goals = paperFunctionGoals(p);
-      if(!goals.length) {
-        if(!groups['（無明確功能標示）']) groups['（無明確功能標示）'] = [];
-        groups['（無明確功能標示）'].push(p);
-      } else {
-        goals.forEach(g => {
-          const key = {'潤滑':'✨ 潤滑','抗結痂':'💧 抗結痂','抗菌':'🦠 抗菌','附著':'🔧 附著'}[g]||g;
-          if(!groups[key]) groups[key] = [];
-          groups[key].push(p);
-        });
-      }
-    });
-  } else {
-    // 標籤維度（substrate, cure_method, anchor_primer, hydrophilic_polymer, application, performance）
-    const dimValues = dict[groupBy] || [];
-    allPapers.forEach(p => {
-      const tags = p.tags || [];
-      let matched = false;
-      dimValues.forEach(v => {
-        if(tags.includes(v)) {
-          if(!groups[v]) groups[v] = [];
-          groups[v].push(p);
-          matched = true;
-        }
-      });
-      if(!matched) {
-        if(!groups['其他']) groups['其他'] = [];
-        groups['其他'].push(p);
-      }
-    });
-  }
-
-  renderCompareGroups(groups, container, allPapers);
-}
 
 function renderCompareGroups(groups, container, allPapers) {
   const analyzedCount = allPapers.filter(p=>p.patentResults && Object.keys(p.patentResults).length>0).length;
@@ -2938,7 +2608,6 @@ function onDBLoaded() {
   buildFilters();
   filterPapers();
   renderCtx();
-  refreshActiveAnalysis();
   updateSyncButtonLabel();
   renderVendorKeywordList();
 }
@@ -3178,162 +2847,21 @@ function dismissBrowseConfirmBanner() {
   if (banner) banner.style.display = 'none';
 }
 
-function researchTerms(topic='') {
-  const base = topic.toLowerCase();
-  const terms = new Set(base.split(/[,;，；\s]+/).map(s=>s.trim()).filter(Boolean));
-  const bundles = [
-    ['抗結痂','encrustation','anti-encrustation','ureteral stent','urinary catheter','biofilm','conditioning film'],
-    ['親水塗層','hydrophilic coating','lubricious coating','zwitterionic coating','medical device coating'],
-    ['SBMA','MPC','sulfobetaine','phosphorylcholine','zwitterionic','PEG','PVP','chitosan','propolis'],
-    ['專利','patent','claim','assignee','FTO','freedom to operate','USPTO','EPO','Google Patents'],
-    ['實驗','COF','WCA','contact angle','artificial urine','Proteus mirabilis','crystal violet','SEM','FTIR','XPS']
-  ];
-  bundles.forEach(group=>{
-    if(group.some(t=>base.includes(t.toLowerCase()))) group.forEach(t=>terms.add(t));
-  });
-  if(!terms.size) bundles.flat().forEach(t=>terms.add(t));
-  return [...terms];
-}
 
-function researchCandidateScore(p, terms) {
-  const hay = `${p.id||''} ${p.title||''} ${p.authors||''} ${p.venue||''} ${p.doc_type||''} ${(p.tags||[]).join(' ')} ${p.purpose||''} ${p.abstract_note||''} ${p.value_to_project||''} ${paperAnalysisText(p)}`.toLowerCase();
-  let score = 0;
-  terms.forEach(t=>{ if(t && hay.includes(t.toLowerCase())) score += t.length > 4 ? 2 : 1; });
-  if((p.tags||[]).some(t=>/encrustation|抗結痂|SBMA|MPC|antifouling|抗汙/i.test(t))) score += 8;
-  if(p.doc_type === '專利') score += 3;
-  if(/U\d+/.test(p.id||'')) score += 4;
-  if(p.patentResults && Object.keys(p.patentResults).length) score += 2;
-  if(getFulltext(p)) score += 3;
-  if(isSourceWeak(p)) score -= 4;
-  return score;
-}
 
-function getResearchCandidates(topic) {
-  const terms = researchTerms(topic);
-  return activePapersForAnalysis()
-    .map(p=>({p, score:researchCandidateScore(p, terms)}))
-    .filter(x=>x.score > 0)
-    .sort((a,b)=>b.score-a.score)
-    .map(x=>x.p);
-}
 
-function researchQualityBadge(p) {
-  if(getFulltext(p)) return '<span class="tag tag-green">全文</span>';
-  if(isSourceWeak(p)) return '<span class="tag tag-orange">待查證</span>';
-  if(p.pmid || p.doi || Object.values(p.links||{}).length) return '<span class="tag tag-blue">有來源</span>';
-  return '<span class="tag tag-gray">摘要/筆記</span>';
-}
 
-function researchSearchQueries(topic) {
-  const t = topic || 'anti-encrustation hydrophilic coating ureteral stent';
-  return [
-    `${t} PubMed review`,
-    `("ureteral stent" encrustation zwitterionic SBMA coating)`,
-    `("hydrophilic coating" catheter encrustation patent)`,
-    `assignee Surmodics SBMA ureteral stent coating patent`,
-    `assignee Cook Medical hydrophilic coating antimicrobial catheter patent`,
-    `assignee Boston Scientific hydrophilic catheter coating patent`,
-    `site:patents.google.com ureteral stent anti encrustation coating`,
-    `site:pmc.ncbi.nlm.nih.gov ureteral stent encrustation coating`
-  ];
-}
 
-function renderResearchAgent() {
-  const out = document.getElementById('researchOutput');
-  if(!out || !DB.papers?.length) return;
-  const topic = document.getElementById('researchTopic')?.value?.trim() || '抗結痂 親水塗層';
-  const candidates = getResearchCandidates(topic);
-  const core = candidates.slice(0, 18);
-  const patents = candidates.filter(p=>p.doc_type==='專利').slice(0, 12);
-  const weak = core.filter(isSourceWeak);
-  const full = core.filter(p=>getFulltext(p));
-  const queries = researchSearchQueries(topic);
-  const rows = core.map(p=>`
-    <tr>
-      <td style="padding:7px 8px;border:1px solid var(--border);white-space:nowrap"><b>${p.id}</b><br>${researchQualityBadge(p)}</td>
-      <td style="padding:7px 8px;border:1px solid var(--border)"><div style="font-weight:700">${escHtml(p.title||'')}</div><div style="font-size:12px;color:var(--muted);margin-top:3px">${escHtml(paperKeyPoint(p))}</div></td>
-      <td style="padding:7px 8px;border:1px solid var(--border);font-size:12px">${escHtml(paperRoleLabel(p))}</td>
-      <td style="padding:7px 8px;border:1px solid var(--border);font-size:12px">${escHtml(paperProjectMeaning(p))}</td>
-      <td style="padding:7px 8px;border:1px solid var(--border);font-size:12px;white-space:nowrap">${hasAgentReading(p) ? '<span class="tag tag-green">AI 已讀</span>' : `<button class="btn btn-s" style="font-size:11px;padding:4px 8px" onclick="aiReadPaperById('${p.id}')">AI 閱讀</button>`}</td>
-    </tr>`).join('');
-  const patentRows = patents.map(p=>`
-    <tr>
-      <td style="padding:6px 8px;border:1px solid var(--border);white-space:nowrap"><b>${p.id}</b></td>
-      <td style="padding:6px 8px;border:1px solid var(--border)">${escHtml(p.title||'')}</td>
-      <td style="padding:6px 8px;border:1px solid var(--border);font-size:12px">${escHtml((p.patent_notes || p.value_to_project || p.abstract_note || '').slice(0,160))}</td>
-      <td style="padding:6px 8px;border:1px solid var(--border);font-size:12px">${isSourceWeak(p)?'先補來源/全文':'可進入 claim/配方萃取'}</td>
-    </tr>`).join('');
-  out.innerHTML = `
-    <div class="panel">
-      <div class="panel-h">任務摘要</div>
-      <div style="padding:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px">
-        ${[
-          ['候選文獻', candidates.length],
-          ['核心閱讀', core.length],
-          ['專利優先', patents.length],
-          ['已有全文', full.length],
-          ['待查證', weak.length]
-        ].map(([k,v])=>`<div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-size:22px;font-weight:700;color:var(--accent)">${v}</div><div style="font-size:11px;color:var(--muted)">${k}</div></div>`).join('')}
-      </div>
-    </div>
 
-    <div class="panel" style="margin-top:12px">
-      <div class="panel-h">核心閱讀清單</div>
-      <div style="padding:12px;overflow:auto">
-        <table style="width:100%;border-collapse:collapse">
-          <thead><tr><th style="padding:7px 8px;border:1px solid var(--border);background:var(--card);text-align:left">ID</th><th style="padding:7px 8px;border:1px solid var(--border);background:var(--card);text-align:left">重點</th><th style="padding:7px 8px;border:1px solid var(--border);background:var(--card);text-align:left">角色</th><th style="padding:7px 8px;border:1px solid var(--border);background:var(--card);text-align:left">專案意義</th><th style="padding:7px 8px;border:1px solid var(--border);background:var(--card);text-align:left">AI</th></tr></thead>
-          <tbody>${rows || '<tr><td colspan="5" style="padding:20px;text-align:center;color:var(--muted)">沒有符合資料</td></tr>'}</tbody>
-        </table>
-      </div>
-    </div>
 
-    <div class="panel" style="margin-top:12px">
-      <div class="panel-h">專利核心閱讀佇列</div>
-      <div style="padding:12px">
-        <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Agent 後續應逐篇萃取：claim 限定、材料、底塗/面塗、固化條件、測試方法、可迴避空間、是否過期。</div>
-        <table style="width:100%;border-collapse:collapse">
-          <thead><tr><th style="padding:6px 8px;border:1px solid var(--border);background:var(--card);text-align:left">ID</th><th style="padding:6px 8px;border:1px solid var(--border);background:var(--card);text-align:left">專利</th><th style="padding:6px 8px;border:1px solid var(--border);background:var(--card);text-align:left">已知訊息</th><th style="padding:6px 8px;border:1px solid var(--border);background:var(--card);text-align:left">下一步</th></tr></thead>
-          <tbody>${patentRows || '<tr><td colspan="4" style="padding:20px;text-align:center;color:var(--muted)">目前沒有專利候選</td></tr>'}</tbody>
-        </table>
-      </div>
-    </div>
 
-    <div class="panel" style="margin-top:12px">
-      <div class="panel-h">上網檢索任務</div>
-      <div style="padding:12px">
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px">
-          ${queries.map(q=>`<div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:12px;line-height:1.5"><div>${escHtml(q)}</div><a class="detail-link" target="_blank" href="https://www.google.com/search?q=${encodeURIComponent(q)}">🔎 Google</a> <a class="detail-link" target="_blank" href="https://patents.google.com/?q=${encodeURIComponent(q)}">📋 Patents</a></div>`).join('')}
-        </div>
-      </div>
-    </div>
 
-    <div class="panel" style="margin-top:12px">
-      <div class="panel-h">五年策略與實驗規劃骨架</div>
-      <div style="padding:12px;font-size:13px;line-height:1.8">
-        <b>Year 1：</b>建立 PVP/PEGDA 或 PDA 底塗基準配方；完成 COF、WCA、附著、50 次往返磨耗。<br>
-        <b>Year 2：</b>導入人工尿液與 Proteus mirabilis biofilm/encrustation 體外模型；比較 PVP、PEG、chitosan、SBMA/MPC。<br>
-        <b>Year 3：</b>選 1–2 條候選路線放大製程；補 FTO，確認 Surmodics/Cook/Boston/Coloplast 專利風險。<br>
-        <b>Year 4：</b>做長期留置模擬與滅菌後性能；建立供應商備援清單。<br>
-        <b>Year 5：</b>產品化規格、法規測試包、臨床/動物試驗設計。<br><br>
-        <b>材料候選：</b>SBMA、MPC、PVP K90、PEGDA Mn250–700、PDA/dopamine、chitosan/QCS、propolis、Zn/Cu 抗菌組件。<br>
-        <b>供應商初稿：</b>Sigma/Merck（研究級單體）、TCI/Alfa（小量試劑）、Surmodics/Biocoat/Hydromer（OEM/技術對標）、Harland/ViVitro（測試/塗覆設備）。
-      </div>
-    </div>`;
-}
 
-function researchApplyToLibrary() {
-  const topic = document.getElementById('researchTopic')?.value?.trim() || '';
-  const docs = getResearchCandidates(topic).slice(0, 80);
-  activeRouteFilter = null;
-  activeLibraryFilter = {id:'research', label:`研究任務：${topic||'全部'}`, color:'#2980b9', paperIds:docs.map(p=>p.id), note:'Research Agent 候選文獻'};
-  showView('browse', getMainTab('browse'));
-  filterPapers();
-}
 
-function researchOpenReport() {
-  researchApplyToLibrary();
-  setTimeout(()=>openFilteredReport(), 80);
-}
+
+
+
+
 
 function agentReadingSourceText(p) {
   const pr = p.patentResults || {};
@@ -3352,24 +2880,11 @@ function agentReadingSourceText(p) {
   return parts.join('\n\n').replace(/\s+/g, ' ').trim();
 }
 
-function hasAgentReading(p) {
-  return !!(p?.patentResults?.agent_reading);
-}
 
-function setResearchReadStatus(msg, isError=false) {
-  const el = document.getElementById('researchReadStatus');
-  if(el) {
-    el.textContent = msg || '';
-    el.style.color = isError ? 'var(--danger)' : 'var(--muted)';
-  }
-}
 
-function agentReadingQueue(topic, limit=5) {
-  return getResearchCandidates(topic)
-    .filter(p => !hasAgentReading(p))
-    .filter(p => agentReadingSourceText(p).length > 80)
-    .slice(0, limit);
-}
+
+
+
 
 function parseJsonObject(raw) {
   let txt = String(raw || '').replace(/```json|```/g, '').trim();
@@ -3379,170 +2894,11 @@ function parseJsonObject(raw) {
   return JSON.parse(txt);
 }
 
-async function aiReadPaperById(pid) {
-  const p = DB.papers.find(x => x.id === pid);
-  if(!p) { toast('找不到文獻', 'error'); return; }
-  await aiReadPaper(p, true);
-}
+async 
 
-async function aiReadPaper(p, refresh=true) {
-  if(!cfg.proxy) { toast('請先設定 Claude API Proxy URL', 'error'); return null; }
-  const text = agentReadingSourceText(p);
-  if(!text || text.length < 80) { toast('此篇資料太少，請先補全文或摘要', 'error'); return null; }
-  setResearchReadStatus(`AI 閱讀中：${p.id}`);
-  const related = getResearchCandidates(`${p.title || ''} ${(p.tags || []).join(' ')}`)
-    .filter(x => x.id !== p.id)
-    .slice(0, 6)
-    .map(x => `[${x.id}] ${x.title}: ${compactText(x.abstract_note || x.purpose || x.value_to_project || '', 180)}`)
-    .join('\n');
-  const prompt = `請閱讀這筆 LitDB 文獻/專利資料，並只輸出 JSON，不要 markdown。
+async 
 
-目標：補強文獻整理內涵，尤其要找出專利核心內容、材料/製程/測試方法、對 本專案 的研發與商業意義。若資料不足，請明確標示 evidence_level 與 citations_needed，不要編造。
-
-文獻：
-[${p.id}] ${p.title || ''}
-type: ${p.doc_type || ''}
-year: ${p.year || ''}
-tags: ${(p.tags || []).join(', ')}
-
-相關文庫脈絡：
-${related || '無'}
-
-可用文本：
-${text.slice(0, 18000)}
-
-JSON schema:
-{
-  "summary": "150字內精華摘要",
-  "schema_version": "agent_reading_v1",
-  "evidence_level": "high|medium|low",
-  "source_quality": "fulltext|abstract|metadata|weak",
-  "key_findings": ["最多6點"],
-  "claims": [{
-    "claim_no": "claim number or unknown",
-    "claim_type": "independent|dependent|unknown",
-    "plain_language": "用白話說明 claim 保護什麼",
-    "protected_elements": ["材料/結構/製程/用途元素"],
-    "bioteque_risk": "high|medium|low|unknown"
-  }],
-  "design_examples": [{
-    "name": "專利或論文揭露的具體設計",
-    "substrate": "基材/器械",
-    "primer": "底塗/anchor",
-    "topcoat": "主塗層",
-    "active_agent": "藥物/抗菌/抗結痂成分",
-    "mechanism": "潤滑/抗菌/抗結痂/抗沾附機制",
-    "why_it_matters": "對研發或迴避設計的重要性"
-  }],
-  "formulation_details": [{
-    "component": "成分",
-    "role": "功能",
-    "range_or_amount": "比例/濃度/範圍；不明寫 unknown",
-    "notes": "限制或推論"
-  }],
-  "process_details": [{
-    "step": "步驟",
-    "conditions": "溫度/時間/UV/乾燥/固化等條件",
-    "equipment": "設備；不明寫 unknown",
-    "risk_or_note": "製程風險或可迴避點"
-  }],
-  "performance_tests": [{
-    "test": "測試名稱",
-    "metric": "指標",
-    "reported_result": "文中結果；不明寫 not reported",
-    "bioteque_target": "可轉成 本專案 驗收標準的建議"
-  }],
-  "coating_technology": {
-    "materials": ["材料/單體/聚合物"],
-    "surface_prep": ["表面處理"],
-    "curing_or_process": ["固化/接枝/塗佈條件"],
-    "test_methods": ["摩擦/接觸角/磨耗/結痂/抗菌等"]
-  },
-  "patent_core": {
-    "claim_focus": ["若非專利可留空"],
-    "design_around_notes": ["可迴避或需注意處"]
-  },
-  "experimental_plan": {
-    "materials": ["建議材料"],
-    "suppliers": ["供應商或供應來源；不確定請寫需查證"],
-    "steps": ["可執行實驗步驟"],
-    "acceptance_tests": ["驗收測試"]
-  },
-  "design_around": [{
-    "risk_element": "可能踩到的 claim 元素",
-    "avoidance_strategy": "替代材料/製程/機制",
-    "confidence": "high|medium|low",
-    "verification_needed": "需要查證項目"
-  }],
-  "innovation_ideas": [{
-    "idea": "可借鏡的新設計想法",
-    "source_logic": "從文獻哪個設計推導",
-    "fit_to_bioteque": "high|medium|low",
-    "experiment_hint": "如何用小實驗驗證"
-  }],
-  "fto_risks": [{
-    "risk": "FTO 風險",
-    "severity": "high|medium|low|unknown",
-    "reason": "原因",
-    "next_check": "下一步查證"
-  }],
-  "bioteque_relevance": "對 本專案 的意義",
-  "next_actions": ["下一步任務"],
-  "red_flags": ["風險或資料缺口"],
-  "citations_needed": ["需補查的引用或全文"]
-}`;
-  try {
-    const r = await fetch(cfg.proxy, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 3500,
-        system: '你是醫材親水塗層與專利情報分析員。必須根據使用者提供的文本回答，不可編造。輸出必須是合法 JSON。',
-        messages: [{role: 'user', content: prompt}]
-      })
-    });
-    const data = await r.json();
-    trackUsage(data);
-    const raw = data.content?.[0]?.text || '';
-    const analysis = parseJsonObject(raw);
-    analysis.read_at = new Date().toISOString();
-    analysis.source_chars = text.length;
-    if(!p.patentResults) p.patentResults = {};
-    if(!p._patentResults) p._patentResults = {};
-    p.patentResults.agent_reading = analysis;
-    p._patentResults.agent_reading = analysis;
-    saveDB();
-    setResearchReadStatus(`完成：${p.id}`);
-    toast(`AI 已閱讀 ${p.id}`, 'success');
-    if(refresh) {
-      renderResearchAgent();
-      const idx = filtered.findIndex(x => x.id === p.id);
-      if(idx >= 0) showDetail(idx);
-    }
-    return analysis;
-  } catch(e) {
-    setResearchReadStatus(`AI 閱讀失敗：${e.message}`, true);
-    toast(`AI 閱讀失敗：${e.message}`, 'error');
-    return null;
-  }
-}
-
-async function aiReadResearchBatch(limit=5) {
-  const topic = document.getElementById('researchTopic')?.value?.trim() || '';
-  const queue = agentReadingQueue(topic, limit);
-  if(!queue.length) { toast('目前沒有可閱讀的候選文獻，或都已讀過', 'success'); return; }
-  if(!cfg.proxy) { toast('請先設定 Claude API Proxy URL', 'error'); return; }
-  if(!confirm(`將用 AI 閱讀 ${queue.length} 篇候選文獻，會消耗 API。是否繼續？`)) return;
-  for(let i=0; i<queue.length; i++) {
-    setResearchReadStatus(`AI 閱讀 ${i+1}/${queue.length}：${queue[i].id}`);
-    await aiReadPaper(queue[i], false);
-    await new Promise(resolve => setTimeout(resolve, 500));
-  }
-  setResearchReadStatus(`完成 ${queue.length} 篇 AI 閱讀`);
-  renderResearchAgent();
-  filterPapers();
-}
+async 
 
 async function sendChat(){
   const input = safeEl('chatInput');
@@ -3567,7 +2923,6 @@ async function sendChat(){
 function clearChat(){ setSafeHTML('chatMessages','<div class="msg msg-ai">已清空。請輸入新的問題。</div>'); }
 let previousView = null;
 let savedScrollTop = 0;
-let currentAnalysisTab = 'graph';
 function goBack() {
   if(!previousView) return;
   const tabs = document.querySelectorAll('.tabs > .tab');
@@ -3589,7 +2944,7 @@ function showView(id,el){
     const list = document.getElementById('paperList');
     if(list) savedScrollTop = list.scrollTop;
   }
-  if(currentView && currentView!==id && !['graph','gap','tools','compare','chat'].includes(currentView)) previousView = currentView;
+  if(currentView && currentView!==id && currentView!=='chat') previousView = currentView;
 
   // 「開發策略與資料篩選」(routes) → 文庫(browse) → 報告(report) 是一組完整的篩選/確認/分析流程。
   // 若使用者中途離開這組流程去其他不相關頁面（市場/專利樹/使用說明等），代表他打斷了原本的篩選意圖；
@@ -3604,12 +2959,10 @@ function showView(id,el){
 
   // 隱藏所有 view
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  // 切離分析時，強制隱藏所有子 view（含 kgraph）
+  // 切離 chat 時隱藏
   if(id!=='analysis') {
-    ['graph','gap','tools','compare','chat','kgraph'].forEach(sid=>{
-      const el=document.getElementById('v-'+sid);
-      if(el) el.style.display='none';
-    });
+    const el=document.getElementById('v-chat');
+    if(el) el.style.display='none';
     // 停止知識圖譜 simulation 並清除浮動元素
     if(typeof kgSim!=='undefined' && kgSim) kgSim.stop();
     ['kgDetail','kgTooltip'].forEach(did=>{
@@ -3623,10 +2976,6 @@ function showView(id,el){
   document.querySelectorAll('.tabs > .tab').forEach(t=>t.classList.remove('active'));
   if(el) el.classList.add('active');
   // 觸發各 view 的初始化
-  if(id==='graph') buildGraph();
-  if(id==='gap') buildHeatmaps();
-  if(id==='compare') buildCompare();
-  if(id==='research') renderResearchAgent();
   if(id==='routes') renderRoutes(); // renderRoutes() 內部會同時渲染路線清單與專利樹火車卡片（第③項）
   if(id==='report') { renderIntegratedReport(); }
   // 離開文庫流程時關閉確認提示條（避免下次回來時殘留顯示一個已經過期的提示）
@@ -3651,37 +3000,7 @@ function resetActiveFilters() {
   if (typeof renderRouteFilterBlocks === 'function') renderRouteFilterBlocks();
 }
 
-function showAnalysisTab(subId, btn) {
-  const validTabs = new Set(['graph','gap','tools','compare','chat','kgraph']);
-  if(!validTabs.has(subId)) subId = 'graph';
-  currentAnalysisTab = subId;
-  // 隱藏所有分析子 view（含 kgraph）
-  ['graph','gap','tools','compare','chat','kgraph'].forEach(id=>{
-    const el = document.getElementById('v-'+id);
-    if(el) { el.classList.remove('active'); el.style.display = 'none'; }
-  });
-  // 離開 kgraph 時停止 simulation
-  if(subId !== 'kgraph' && kgSim) { kgSim.stop(); }
-  if(subId !== 'gap' && typeof gapGraphSim !== 'undefined' && gapGraphSim) { gapGraphSim.stop(); }
-  // 隱藏 kgraph 浮動元素
-  const kgd = document.getElementById('kgDetail');
-  const kgt = document.getElementById('kgTooltip');
-  if(kgd) kgd.style.display='none';
-  if(kgt) kgt.style.display='none';
-  // 顯示目標子 view
-  const target = document.getElementById('v-'+subId);
-  if(target) { target.style.display = 'block'; }
-  // 更新子分頁按鈕高亮
-  document.querySelectorAll('.analysis-sub').forEach(b=>b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  else document.querySelectorAll('.analysis-sub').forEach(b=>{ if(b.textContent.includes(subId==='graph'?'關聯圖':subId==='gap'?'缺口':subId==='tools'?'工具':subId==='compare'?'比較':'AI'))b.classList.add('active'); });
-  // 觸發初始化
-  if(subId==='graph') buildGraph();
-  if(subId==='kgraph') initKGraph();
-  if(subId==='gap') buildHeatmaps();
-  if(subId==='tools') buildToolMap();
-  if(subId==='compare') buildCompare();
-}
+
 function openSettings(){document.getElementById('settingsModal').classList.add('show')}
 function closeSettings(){document.getElementById('settingsModal').classList.remove('show')}
 function saveSettings(){cfg.proxy=document.getElementById('cfgProxy').value.trim();cfg.dataUrl=document.getElementById('cfgDataUrl').value.trim();localStorage.setItem(CFG_KEY,JSON.stringify(cfg));closeSettings();toast('已儲存','success')}
@@ -4501,11 +3820,7 @@ function getTagCategoryMap() {
   return tagCat;
 }
 
-function refreshActiveAnalysis() {
-  const analysisActive = document.getElementById('v-analysis')?.classList.contains('active');
-  if(!analysisActive) return;
-  setTimeout(()=>showAnalysisTab(currentAnalysisTab), 50);
-}
+
 
 // ══════════════════════════════════════════════
 // BROWSE: Filters
@@ -4592,26 +3907,7 @@ function buildFunctionHeatmap(wrapperId, rows, goals, rowLabel, colLabel) {
   wrap.innerHTML = html;
 }
 
-function buildHeatmaps() {
-  const sub = getUsedTagsByCategory('substrate');
-  const poly = getUsedTagsByCategory('hydrophilic_polymer');
-  const cure = getUsedTagsByCategory('cure_method');
-  const anchor = getUsedTagsByCategory('anchor_primer');
-  const app = [...getUsedTagsByCategory('application'), ...getUsedTagsByCategory('indication')]
-    .filter((v,i,a)=>a.indexOf(v)===i);
 
-  buildOneHeatmap('heatmapWrap',  sub,    cure,   '基材','固化方式');
-  buildOneHeatmap('heatmapWrap2', app,    poly,   '應用','親水高分子');
-  buildOneHeatmap('heatmapWrap3', sub,    poly,   '基材','親水高分子');
-  buildOneHeatmap('heatmapWrap4', app,    cure,   '應用','固化方式');
-  buildOneHeatmap('heatmapWrap5', sub,    anchor, '基材','錨固劑');
-  buildOneHeatmap('heatmapWrap6', poly,   anchor, '親水高分子','錨固劑');
-
-  // ⑦⑧ 功能目標維度（抗結痂/抗菌/潤滑/附著）— 用關鍵字動態判定
-  const funcGoals = ['潤滑','抗結痂','抗菌','附著'];
-  buildFunctionHeatmap('heatmapWrap7', app, funcGoals, '應用','功能目標');
-  buildFunctionHeatmap('heatmapWrap8', sub, funcGoals, '基材','功能目標');
-}
 
 function toolMetricFromTags(tags) {
   if(tags.includes('COF-test')) return 'COF / 摩擦力';
@@ -4670,97 +3966,7 @@ function goToToolEquipment(eq) {
   filterPapers();
 }
 
-function buildToolMap() {
-  const summary = document.getElementById('toolMapSummary');
-  const body = document.getElementById('toolMapBody');
-  if(!summary || !body) return;
 
-  const toolPapers = activePapersForAnalysis().filter(p => {
-    const tags = p.tags || [];
-    return tags.includes('tooling') || tags.includes('test-method');
-  });
-
-  const methodTags = getUsedTagsByCategory('method_tool');
-  const byMetric = {};
-  methodTags.forEach(t => byMetric[t] = []);
-  toolPapers.forEach(p => {
-    (p.tags || []).filter(t => methodTags.includes(t)).forEach(t => byMetric[t].push(p));
-  });
-
-  const equipment = {};
-  toolPapers.forEach(p => {
-    const text = paperToolText(p);
-    const eqs = toolEquipmentFromText(text);
-    (eqs.length ? eqs : ['未明確標示設備']).forEach(eq => {
-      if(!equipment[eq]) equipment[eq] = [];
-      equipment[eq].push(p);
-    });
-  });
-
-  summary.innerHTML = `${toolPapers.length} 篇工具/測試方法文獻 · ${methodTags.filter(t=>byMetric[t]?.length).length} 種方法標籤 · ${Object.keys(equipment).length} 類設備/測試場景`;
-
-  const tagLabels = {
-    tooling:'工具文獻',
-    'test-method':'測試方法',
-    'COF-test':'COF / 摩擦力',
-    'abrasion-test':'磨耗 / 耐久',
-    'contact-angle-test':'接觸角 / WCA',
-    'particulate-test':'顆粒 / 脫落',
-    'encrustation-test':'結痂 / 人工尿液'
-  };
-
-  const methodHtml = methodTags
-    .filter(t => byMetric[t]?.length)
-    .map(t => {
-      const docs = byMetric[t];
-      return `<button class="btn btn-s" onclick="goToToolDocs('${t}','${tagLabels[t]||t}')" style="margin:0 6px 6px 0">
-        ${tagLabels[t]||t} <span style="opacity:.7">${docs.length}</span>
-      </button>`;
-    }).join('');
-
-  const equipmentHtml = Object.entries(equipment)
-    .sort((a,b)=>b[1].length-a[1].length)
-    .map(([eq,docs]) => `
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px">
-        <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:6px">
-          <strong style="font-size:13px;color:var(--text)">${escHtml(eq)}</strong>
-          <button class="btn btn-s" onclick="goToToolEquipment(decodeURIComponent('${encodeURIComponent(eq)}'))" style="font-size:11px;padding:3px 8px">看文獻</button>
-        </div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">${docs.length} 篇</div>
-        ${docs.slice(0,4).map(p=>`
-          <div onclick="goToPaper('${p.id}')" style="font-size:12px;line-height:1.45;padding:4px 0;border-top:1px solid var(--border);cursor:pointer">
-            <span class="tag tag-gray">${p.id}</span> ${escHtml(p.title||'')}
-          </div>`).join('')}
-      </div>`).join('');
-
-  const paperHtml = toolPapers
-    .sort((a,b)=>(b.year||0)-(a.year||0))
-    .map(p => {
-      const tags = p.tags || [];
-      return `<div style="border-bottom:1px solid var(--border);padding:8px 0;cursor:pointer" onclick="goToPaper('${p.id}')">
-        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-          <span class="tag tag-gray">${p.id}</span>
-          <strong style="font-size:13px">${escHtml(p.title||'')}</strong>
-          <span style="font-size:11px;color:var(--muted)">${p.year||''}</span>
-        </div>
-        <div style="margin-top:4px">${tags.filter(t=>methodTags.includes(t)).map(t=>`<span class="tag tag-blue">${tagLabels[t]||t}</span>`).join('')}</div>
-        <div style="font-size:12px;color:var(--muted);line-height:1.45;margin-top:4px">${escHtml(toolEvidenceSnippet(p))}</div>
-      </div>`;
-    }).join('');
-
-  body.innerHTML = `
-    <div style="margin-bottom:12px">
-      <div style="font-size:12px;font-weight:700;margin-bottom:6px;color:var(--text)">方法標籤</div>
-      ${methodHtml || '<span style="font-size:12px;color:var(--muted)">目前沒有工具方法標籤</span>'}
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:14px">
-      ${equipmentHtml || '<div style="font-size:12px;color:var(--muted)">目前沒有辨識到設備/測試場景</div>'}
-    </div>
-    <div>
-      <div style="font-size:12px;font-weight:700;margin-bottom:6px;color:var(--text)">工具相關文獻</div>
-      ${paperHtml || '<div style="font-size:12px;color:var(--muted);padding:20px;text-align:center">沒有符合工具/測試方法的文獻</div>'}
-    </div>`;
-}
 
 function showGapDetail(r, c) {
   const tags = activePapersForAnalysis().filter(p=>(p.tags||[]).includes(r)&&(p.tags||[]).includes(c));
@@ -5501,51 +4707,6 @@ function renderMarket() {
     </section>`;
   };
 
-  const aiReadPapers = papers.filter(hasAgentReading);
-  const fulltextPapers = papers.filter(p=>getFulltext(p));
-  const latestRead = aiReadPapers
-    .map(p=>p.patentResults?.agent_reading?.read_at)
-    .filter(Boolean)
-    .sort()
-    .pop();
-  const latestReadText = latestRead ? new Date(latestRead).toLocaleString('zh-TW', {hour12:false}) : '尚未執行';
-  const researchQueueCount = agentReadingQueue('ureteral stent encrustation hydrophilic coating', 999).length;
-  const sourceQuality = aiReadPapers.reduce((acc,p)=>{
-    const q = p.patentResults?.agent_reading?.source_quality || 'unknown';
-    acc[q] = (acc[q] || 0) + 1;
-    return acc;
-  }, {});
-  const sourceQualityText = Object.entries(sourceQuality).map(([k,v])=>`${k}: ${v}`).join(' / ') || '尚無';
-  const memoHtml = `
-  <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;margin:14px 0 20px;overflow:hidden">
-    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--border);background:var(--surface);flex-wrap:wrap">
-      <div>
-        <div style="font-size:13px;font-weight:800;color:var(--accent)">Memo｜目前版本與 AI Agent 進度</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px">v3.4 · 2026-06-21 · LitDB 內部工作版</div>
-      </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button class="btn btn-s" style="font-size:11px;padding:4px 10px" onclick="showView('browse',getMainTab('browse'))">文庫篩選</button>
-        
-      </div>
-    </div>
-    <div style="padding:12px 14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px">
-      ${[
-        ['收錄文獻', papers.length],
-        ['全文快取', fulltextPapers.length],
-        ['AI 已閱讀', aiReadPapers.length],
-        ['待閱讀候選', researchQueueCount]
-      ].map(([k,v])=>`<div style="border:1px solid var(--border);border-radius:8px;padding:9px 10px;background:#fff">
-        <div style="font-size:20px;font-weight:800;color:var(--accent2)">${v}</div>
-        <div style="font-size:11px;color:var(--muted)">${k}</div>
-      </div>`).join('')}
-    </div>
-    <div style="padding:0 14px 12px;font-size:12px;line-height:1.7;color:var(--text)">
-      <div><b>AI agent 自動閱讀進度：</b>目前以站內已收載資料為主，優先讀全文快取；沒有全文時退回摘要、目的、專案價值與既有分析。最近閱讀時間：${latestReadText}。</div>
-      <div><b>來源品質摘要：</b>${sourceQualityText}。若顯示 metadata/weak，代表需要補全文或原始專利頁面後再重跑。</div>
-      <div><b>本版更新概要：</b>新增研究頁批次 AI 閱讀、文庫單篇 AI 深讀、結果回寫 <code>patentResults.agent_reading</code>，並讓篩選報告與首頁摘要可連動讀取。</div>
-    </div>
-  </div>`;
-
   const renderCookPatentPath = () => {
     const findPatent = token => papers.find(p => {
       const txt = `${p.id||''} ${p.title||''} ${p.abstract_note||''} ${p.patent_notes||''} ${(p.related_patents||[]).join(' ')}`.toLowerCase();
@@ -6017,226 +5178,7 @@ function renderPatentTreeDetail(d) {
 }
 
 
-function drawPatentFamilyTree() {
-  const svgEl = document.getElementById('patentTreeSvg');
-  if(!svgEl || typeof d3 === 'undefined') return;
 
-  const companies = Object.values(PATENT_TREE_CONFIG);
-
-  // ── IP 分級顏色 ──
-  const IP_COLOR = {
-    landmine: '#c0392b',   // 🔴 核心地雷
-    avoidable:'#d4a030',   // 🟡 可迴避
-    expired:  '#2d8c5a',   // 🟢 已過期可用
-    gap:      '#95a5a6',   // ⬜ 缺口未收錄
-    known:    '#2d8c5a'    // 預設已收錄
-  };
-  const IP_LABEL = {
-    landmine: '🔴 核心地雷',
-    avoidable:'🟡 可迴避',
-    expired:  '🟢 已過期',
-    gap:      '⬜ 缺口'
-  };
-
-  // ── 尺寸 ──
-  const LABEL_W=130, LANE_H=150, PAD_T=44, PAD_B=44, PAD_R=40, NODE_W=92, NODE_H=72, STAGGER=NODE_H+12;
-  const containerW = svgEl.parentElement?.clientWidth||900;
-  const CONTENT_W = Math.max(containerW-LABEL_W-PAD_R, 500);
-  const totalW = LABEL_W+CONTENT_W+PAD_R;
-  const totalH = PAD_T + companies.length*LANE_H + PAD_B;
-
-  const allYears = companies.flatMap(c=>(c.evolution||[]).map(e=>Number(e.year)));
-  const yMin=Math.min(...allYears), yMax=Math.max(...allYears);
-  const yPad=(yMax-yMin)*0.06;
-  const xScale = yr => LABEL_W+((yr-(yMin-yPad))/((yMax+yPad)-(yMin-yPad)))*CONTENT_W;
-
-  const svg = d3.select(svgEl).attr('width',totalW).attr('height',totalH)
-    .attr('style',`display:block;width:${totalW}px;height:${totalH}px`);
-  svg.selectAll('*').remove();
-  const defs = svg.append('defs');
-
-  // ── 年份格線 ──
-  const yearTicks = d3.range(Math.ceil(yMin/5)*5, yMax+1, 5);
-  const gridG = svg.append('g');
-  yearTicks.forEach(yr=>{
-    const x = xScale(yr);
-    gridG.append('line').attr('x1',x).attr('y1',PAD_T-8).attr('x2',x).attr('y2',totalH-PAD_B)
-      .attr('stroke','#ece8e2').attr('stroke-width',1);
-    gridG.append('text').attr('x',x).attr('y',PAD_T-12).attr('text-anchor','middle')
-      .attr('font-size',10).attr('fill','#bbb').attr('font-weight',600).text(yr);
-  });
-  svg.append('line').attr('x1',LABEL_W).attr('y1',PAD_T-2).attr('x2',totalW-PAD_R).attr('y2',PAD_T-2)
-    .attr('stroke','#ddd').attr('stroke-width',1.5);
-
-  // ── 圖例（底部）──
-  const legItems = [
-    ['🔴 核心地雷（需迴避）','#c0392b'],
-    ['🟡 可迴避（設計繞路）','#d4a030'],
-    ['🟢 已過期（可自由用）','#2d8c5a'],
-    ['⬜ 缺口（待 FTO 分析）','#95a5a6']
-  ];
-  const legG = svg.append('g').attr('transform',`translate(${LABEL_W},${totalH-PAD_B+10})`);
-  legItems.forEach(([lb,col],i)=>{
-    legG.append('text').attr('x',i*190).attr('y',12)
-      .attr('font-size',9).attr('fill',col).attr('font-weight',700).text(lb);
-  });
-
-  // ── 每家公司泳道 ──
-  companies.forEach((cfg,ci)=>{
-    const laneY = PAD_T + ci*LANE_H;
-    const midY  = laneY + LANE_H/2;
-    const col   = cfg.color||'#888';
-    const evo   = cfg.evolution||[];
-
-    // 泳道背景
-    svg.append('rect').attr('x',0).attr('y',laneY).attr('width',totalW).attr('height',LANE_H)
-      .attr('fill', ci%2===0 ? '#fafaf8' : '#f5f3ef').attr('opacity',0.65);
-    svg.append('line').attr('x1',0).attr('y1',laneY).attr('x2',totalW).attr('y2',laneY)
-      .attr('stroke','#e8e2db').attr('stroke-width',1);
-
-    // 公司標籤（左）
-    const labG = svg.append('g').attr('transform',`translate(6,${laneY+22})`);
-    labG.append('rect').attr('x',0).attr('y',-14).attr('width',118).attr('height',26).attr('rx',5)
-      .attr('fill',col+'22').attr('stroke',col+'55').attr('stroke-width',1);
-    labG.append('text').attr('x',59).attr('y',6).attr('text-anchor','middle')
-      .attr('font-size',11).attr('font-weight',800).attr('fill',col)
-      .text(cfg.label.length>14 ? cfg.label.slice(0,13)+'…' : cfg.label);
-
-    // 技術主軸（左側第二行）
-    if(cfg.axis){
-      const words = cfg.axis.split('');
-      const maxLen = 16;
-      let line1 = '', line2 = '';
-      for(const ch of cfg.axis){
-        if(line1.length < maxLen) line1 += ch;
-        else line2 += ch;
-      }
-      labG.append('text').attr('x',0).attr('y',20).attr('font-size',8).attr('fill',col+'99')
-        .text(line1.slice(0,maxLen));
-      if(line2) labG.append('text').attr('x',0).attr('y',30).attr('font-size',8).attr('fill',col+'99')
-        .text(line2.slice(0,maxLen)+'…');
-    }
-
-    // 中心軸線
-    svg.append('line').attr('x1',LABEL_W).attr('y1',midY).attr('x2',totalW-PAD_R).attr('y2',midY)
-      .attr('stroke',col+'33').attr('stroke-width',2).attr('stroke-dasharray','4,4');
-
-    // Arrow marker
-    defs.append('marker').attr('id',`arr-${ci}`)
-      .attr('markerWidth',7).attr('markerHeight',5)
-      .attr('refX',6).attr('refY',2.5).attr('orient','auto')
-      .append('path').attr('d','M0,0 L0,5 L7,2.5 z').attr('fill',col+'88');
-
-    // Stagger 計算
-    const nodes = evo.map(item=>({...item, cx:xScale(Number(item.year)), stagger:0}));
-    nodes.sort((a,b)=>a.cx-b.cx);
-    nodes.forEach((node,i)=>{
-      const prev = nodes.slice(0,i).filter(n=>Math.abs(n.cx-node.cx)<NODE_W+6);
-      if(!prev.length){ node.stagger=0; return; }
-      const used = prev.map(n=>n.stagger);
-      node.stagger = used.includes(0) ? (used.includes(-1)?1:-1) : 0;
-    });
-    nodes.forEach(n=>{ n.cardY = midY + n.stagger*STAGGER - NODE_H/2; });
-
-    // 連線
-    for(let i=0;i<nodes.length-1;i++){
-      const s=nodes[i], t=nodes[i+1];
-      const sy=s.cardY+NODE_H/2, ty=t.cardY+NODE_H/2;
-      const sx=s.cx+NODE_W/2, tx=t.cx-NODE_W/2;
-      svg.append('path')
-        .attr('d',`M${sx},${sy} C${(sx+tx)/2},${sy} ${(sx+tx)/2},${ty} ${tx},${ty}`)
-        .attr('fill','none')
-        .attr('stroke', s.ipLevel==='gap' ? '#ccc' : col+'88')
-        .attr('stroke-width',2)
-        .attr('stroke-dasharray', s.ipLevel==='gap'?'5,3':'none')
-        .attr('marker-end',`url(#arr-${ci})`);
-    }
-
-    // Stagger 垂直連結
-    nodes.filter(n=>n.stagger!==0).forEach(n=>{
-      svg.append('line')
-        .attr('x1',n.cx+NODE_W/2).attr('y1',midY)
-        .attr('x2',n.cx+NODE_W/2).attr('y2',n.cardY+(n.stagger>0?0:NODE_H))
-        .attr('stroke',col+'44').attr('stroke-width',1.5).attr('stroke-dasharray','3,2');
-    });
-
-    // ── 節點卡片 ──
-    const nodeG = svg.selectAll(`.node-${ci}`).data(nodes).join('g')
-      .attr('class',`node-${ci}`)
-      .attr('transform',d=>`translate(${d.cx-NODE_W/2},${d.cardY})`)
-      .attr('cursor','pointer')
-      .on('click',(e,d)=>{
-        svg.selectAll('.pt-card-bg').attr('stroke-width',1.8);
-        d3.select(e.currentTarget).select('.pt-card-bg').attr('stroke-width',4);
-        renderPatentTreeDetail({
-          patent:d.patent, year:d.year, stage:d.stage, theme:d.theme,
-          meaning:d.meaning, status:d.status, paperId:d.id,
-          color: IP_COLOR[d.ipLevel]||col, ipLevel:d.ipLevel
-        });
-        document.getElementById('patentTreeDetail')?.scrollIntoView({behavior:'smooth',block:'nearest'});
-      })
-      .on('mouseover',(e,d)=>{
-        const tip=document.getElementById('patentTreeTip'); if(!tip) return;
-        const ipCol = IP_COLOR[d.ipLevel]||col;
-        tip.style.display='block';
-        tip.style.left=(e.clientX+14)+'px';
-        tip.style.top=(e.clientY-10)+'px';
-        tip.innerHTML=`<b style="color:${ipCol}">${d.patent||''}</b>
-          <span style="display:inline-block;background:${ipCol}22;color:${ipCol};font-size:9px;padding:1px 5px;border-radius:4px;margin-left:4px">${IP_LABEL[d.ipLevel]||''}</span>
-          <br><b style="font-size:11px;color:var(--text)">${d.stage||''}</b>
-          <br><span style="font-size:10px;color:#777">${(d.theme||'').slice(0,55)}</span>
-          <br><span style="font-size:10px;color:#aaa;line-height:1.5">${(d.meaning||'').slice(0,80)}</span>`;
-      })
-      .on('mouseout',()=>{ const t=document.getElementById('patentTreeTip'); if(t) t.style.display='none'; });
-
-    // 卡片底色
-    const ipCol = d => IP_COLOR[d.ipLevel] || (d.status==='missing' ? '#95a5a6' : col);
-
-    nodeG.append('rect').attr('class','pt-card-bg')
-      .attr('width',NODE_W).attr('height',NODE_H).attr('rx',8)
-      .attr('fill','var(--card)')
-      .attr('stroke',ipCol).attr('stroke-width',2)
-      .attr('filter','drop-shadow(0 1px 5px rgba(0,0,0,0.10))');
-
-    // 頂色條（IP分級顏色）
-    nodeG.append('rect').attr('width',NODE_W).attr('height',5).attr('rx',8).attr('fill',ipCol);
-
-    // IP 徽章
-    nodeG.append('text').attr('x',NODE_W-6).attr('y',17)
-      .attr('text-anchor','end').attr('font-size',9)
-      .attr('fill',ipCol)
-      .text(d => d.ipLevel==='landmine'?'🔴':d.ipLevel==='avoidable'?'🟡':d.ipLevel==='expired'?'🟢':'⬜');
-
-    // 年份
-    nodeG.append('text').attr('x',7).attr('y',18)
-      .attr('font-size',11).attr('font-weight',900).attr('fill',ipCol)
-      .text(d=>d.year);
-
-    // 專利號
-    nodeG.append('text').attr('x',7).attr('y',30)
-      .attr('font-size',8).attr('font-weight',700).attr('fill','var(--accent)')
-      .text(d=>(d.patent||'').slice(0,14));
-
-    // 角色
-    nodeG.append('text').attr('x',7).attr('y',43)
-      .attr('font-size',10).attr('font-weight',800).attr('fill','var(--text)')
-      .text(d=>(d.stage||'').slice(0,14));
-
-    // 技術主題（兩行）
-    nodeG.each(function(d){
-      const el2=d3.select(this);
-      const words=(d.theme||'').split(/\s*[+\/]\s*|\s+/);
-      let line='',lineY=56,ln=0;
-      words.forEach(w=>{
-        if(ln>=2) return;
-        const t=line?line+' '+w:w;
-        if(t.length>16){el2.append('text').attr('x',7).attr('y',lineY).attr('font-size',8).attr('fill','#888').text(line);line=w;lineY+=11;ln++;}
-        else line=t;
-      });
-      if(line&&ln<2) el2.append('text').attr('x',7).attr('y',lineY).attr('font-size',8).attr('fill','#888').text(line.slice(0,18));
-    });
-  });
-}
 
 
 
@@ -6667,30 +5609,7 @@ const KG_SIZES = {
   process:12, patent:11, company:14, performance:12, application:12
 };
 
-async function initKGraph() {
-  if(!KG) {
-    const sources = [
-      'graph.json?v=' + Date.now(),
-      'https://chiuchangru.github.io/litdb/graph.json?v=' + Date.now()
-    ];
-    for(const src of sources) {
-      try {
-        const r = await fetch(src);
-        if(!r.ok) throw new Error('HTTP ' + r.status);
-        KG = await r.json();
-        break;
-      } catch(e) {
-        console.warn('graph.json 載入失敗:', src, e);
-      }
-    }
-    if(!KG) {
-      const svg = document.getElementById('kgSvg');
-      if(svg) svg.innerHTML = `<text x="50%" y="50%" text-anchor="middle" fill="#888" font-size="14">graph.json 載入失敗</text>`;
-      return;
-    }
-  }
-  renderKGraph();
-}
+async 
 
 function renderKGraph() {
   if(!KG||!window.d3) return;
@@ -9454,111 +8373,7 @@ function drawGraph(ctx, W, H, highlightId) {
   }
 }
 
-function buildGraph() {
-  const catFilter = document.getElementById('graphTagCat').value;
-  const threshold = parseInt(document.getElementById('graphThreshold').value);
-  document.getElementById('graphThreshVal').textContent = threshold;
-  const canvas = document.getElementById('graphCanvas');
-  const ctx = canvas.getContext('2d');
-  const dpr = window.devicePixelRatio||1;
-  canvas.width = canvas.offsetWidth * dpr;
-  canvas.height = 550 * dpr;
-  ctx.scale(dpr, dpr);
-  const W = canvas.offsetWidth, H = 550;
 
-  const dict = getTagDictionaryWithObserved();
-  const catColors = {substrate:'#e86c3a',hydrophilic_polymer:'#2d8c5a',cure_method:'#d4a030',anchor_primer:'#c0392b',application:'#8e44ad',indication:'#16a085',performance:'#2980b9',method_tool:'#1f77b4',market_trend:'#7f8c8d',doc_type:'#8a7e72',access:'#8a7e72',other:'#8a7e72'};
-  const tagCat = getTagCategoryMap();
-
-  // 建立有效標籤集（依篩選）
-  let validTags = new Set();
-  if(catFilter) {
-    (dict[catFilter]||[]).forEach(t=>validTags.add(t));
-  } else {
-    Object.values(dict).flat().forEach(t=>validTags.add(t));
-  }
-
-  // 建立 Paper ↔ Tag 邊
-  const edges = [];
-  const tagCount = {};
-  const paperTagCount = {};
-  // 使用篩選後的文獻（若有），否則全部
-  const graphPapers = (filtered && filtered.length) ? filtered.filter(p=>!p._deleted) : activePapersForAnalysis();
-
-  graphPapers.forEach(p => {
-    const tags = (p.tags||[]).filter(t=>validTags.has(t));
-    paperTagCount[p.id] = tags.length;
-    tags.forEach(t => {
-      tagCount[t] = (tagCount[t]||0) + 1;
-      edges.push({paper: p.id, tag: t});
-    });
-  });
-
-  // 過濾：標籤至少出現 threshold 次
-  const activeTags = new Set(Object.entries(tagCount).filter(([,c])=>c>=threshold).map(([t])=>t));
-  const filteredEdges = edges.filter(e=>activeTags.has(e.tag));
-
-  // 涉及的 papers
-  const activePapers = new Set(filteredEdges.map(e=>e.paper));
-
-  // 建立節點
-  const nodes = [];
-  const nodeMap = {};
-
-  // Tag 節點
-  [...activeTags].forEach(t => {
-    const n = {id:t, type:'tag', cat:tagCat[t]||'', count:tagCount[t], x:W*0.3+Math.random()*W*0.4, y:Math.random()*H, vx:0, vy:0, highlight:false};
-    nodes.push(n); nodeMap[t]=n;
-  });
-
-  // Paper 節點
-  [...activePapers].forEach(pid => {
-    const p = graphPapers.find(x=>x.id===pid);
-    const n = {id:pid, type:'paper', docType:p?.doc_type||'', count:paperTagCount[pid]||1, x:Math.random()*W, y:Math.random()*H, vx:0, vy:0, highlight:false, title:(p?.title||'').slice(0,30)};
-    nodes.push(n); nodeMap[pid]=n;
-  });
-
-  const catLabels = {'':'全部標籤',substrate:'基材',hydrophilic_polymer:'親水高分子',cure_method:'固化方式',anchor_primer:'錨固劑',application:'應用',indication:'適應症',performance:'性能指標',method_tool:'工具/測試方法',other:'其他標籤'};
-  document.getElementById('graphInfo').innerHTML = `<select onchange="document.getElementById('graphTagCat').value=this.value;buildGraph()" style="background:var(--accent);color:#fff;border:none;padding:3px 8px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer">${Object.entries(catLabels).map(([k,v])=>`<option value="${k}" ${k===catFilter?'selected':''}>${v}</option>`).join('')}</select> ${activePapers.size} 篇 · ${activeTags.size} 標籤 · ${filteredEdges.length} 連結${graphPapers.length!==DB.papers.length?' （篩選後）':''}`;
-
-  // Force simulation
-  for(let iter=0;iter<300;iter++){
-    for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++){
-      let dx=nodes[j].x-nodes[i].x, dy=nodes[j].y-nodes[i].y;
-      const dist=Math.max(Math.sqrt(dx*dx+dy*dy),1);
-      const repel = nodes[i].type===nodes[j].type ? 1200 : 600;
-      const f=repel/(dist*dist);
-      nodes[i].vx-=f*dx/dist; nodes[i].vy-=f*dy/dist;
-      nodes[j].vx+=f*dx/dist; nodes[j].vy+=f*dy/dist;
-    }
-    filteredEdges.forEach(e=>{
-      const a=nodeMap[e.paper],b=nodeMap[e.tag];if(!a||!b)return;
-      let dx=b.x-a.x,dy=b.y-a.y;
-      const dist=Math.max(Math.sqrt(dx*dx+dy*dy),1);
-      const f=dist*0.004;
-      a.vx+=f*dx/dist; a.vy+=f*dy/dist;
-      b.vx-=f*dx/dist; b.vy-=f*dy/dist;
-    });
-    nodes.forEach(n=>{
-      n.vx+=(W/2-n.x)*0.0008; n.vy+=(H/2-n.y)*0.0008;
-      n.x+=n.vx*0.25; n.y+=n.vy*0.25;
-      n.vx*=0.82; n.vy*=0.82;
-      n.x=Math.max(50,Math.min(W-50,n.x));
-      n.y=Math.max(30,Math.min(H-30,n.y));
-    });
-  }
-
-  graphNodes = nodes;
-  graphEdges = filteredEdges;
-  drawGraph(ctx, W, H, null);
-
-  // Legend
-  const legend = document.getElementById('graphLegend');
-  legend.innerHTML = `<span>◼ 文獻（方形）</span>` +
-    Object.entries(catColors).filter(([cat])=>!catFilter||cat===catFilter).map(([cat,col])=>
-      `<span><span class="legend-dot" style="background:${col}"></span>${cat}</span>`
-    ).join('');
-}
 
 function onGraphClick(event) {
   const canvas = document.getElementById('graphCanvas');
