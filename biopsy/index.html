@@ -3966,6 +3966,32 @@ function editCitationCount(i) {
 }
 
 
+// ── 專利圖紙 + 元件符號渲染（多張圖紙切換；向後相容單一 p.figure）──
+function renderLibraryFigures(p, i) {
+  const figs = Array.isArray(p.figures) ? p.figures : (p.figure ? [p.figure] : []);
+  if(!figs.length) return '';
+  const tabs = figs.length > 1
+    ? `<div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap">` +
+      figs.map((u,idx)=>`<button class="btn btn-s" onclick="swapFig(${i},'${escHtml(u)}')" style="font-size:10px;padding:2px 8px">${idx+1}</button>`).join('') +
+      `</div>`
+    : '';
+  const ref = (p.ref_numerals && typeof p.ref_numerals === 'object') ? p.ref_numerals : null;
+  const rows = ref ? Object.entries(ref).map(([n,v])=>
+    `<tr><td style="font-family:monospace;color:var(--accent);font-weight:700;text-align:center;padding:3px 8px;white-space:nowrap;border-bottom:1px solid var(--border)">${escHtml(n)}</td><td style="padding:3px 8px;border-bottom:1px solid var(--border)">${escHtml(String(v))}</td></tr>`
+  ).join('') : '';
+  return `<section class="detail-section">
+    <div class="detail-section-title">專利圖（原始圖紙）</div>
+    ${tabs}
+    <img id="libFig_${i}" src="${escHtml(figs[0])}" class="detail-figure" onclick="window.open(this.src,'_blank')" onerror="this.style.display='none'">
+    <div class="fig-caption">${escHtml(p.figure_caption || '點圖放大 · 來源：專利原始圖紙')}</div>
+    ${rows ? `<div style="margin-top:8px"><div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:3px">元件符號</div><table style="width:100%;border-collapse:collapse;font-size:12px"><tbody>${rows}</tbody></table></div>` : ''}
+  </section>`;
+}
+function swapFig(i, url) {
+  const img = document.getElementById('libFig_' + i);
+  if(img) { img.src = url; img.style.display = ''; }
+}
+
 function showDetail(i) {
   const statsEl = document.getElementById('libraryStatsPanel');
   if(statsEl) statsEl.innerHTML = '';
@@ -4011,6 +4037,9 @@ function showDetail(i) {
 
   const figEl = document.getElementById('detailFigure_' + i);
   if(figEl) {
+    if(Array.isArray(p.figures) && p.figures.length) {
+      figEl.innerHTML = renderLibraryFigures(p, i);
+    } else {
     const figUrl = p.figure || '';
     // 注意：img/ 目錄目前未存放任何本地圖檔（僅有 README.md），因此本地圖 fallback
     // 暫時停用，避免每篇文獻都觸發必然失敗的 404 請求。若未來補齊 img/{id}.png，
@@ -4027,6 +4056,7 @@ function showDetail(i) {
       img.src = localUrl;
     } else {
       figEl.innerHTML = '';
+    }
     }
   }
   loadChemStructures(p, i);

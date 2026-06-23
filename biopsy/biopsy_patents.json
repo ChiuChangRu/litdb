@@ -3,7 +3,7 @@
     "project": "活檢針機構知識庫",
     "scope": "核心活檢針（Core Needle Biopsy）擊發機構 / 鎖合方式 / 企業技術血統 / FTO分析導向",
     "focus_note": "以「機構設計」為主：擊發機構（彈簧/馬達/手動）、鎖合方式（pawl/cam/雙鎖定）、取樣幾何結構。排除影像導引、VABB真空輔助及純耗材設計專利。",
-    "last_updated": "2026-06-22",
+    "last_updated": "2026-06-23",
     "schema_version": "2.1",
     "tag_dictionary": {
       "firing_mechanism": [
@@ -62,8 +62,8 @@
       ]
     },
     "stats": {
-      "total": 43,
-      "patents": 40,
+      "total": 44,
+      "patents": 41,
       "market_reports": 3,
       "patent_ratio": "93%"
     }
@@ -1948,7 +1948,7 @@
           "patent_core": {
             "claim_focus": "Franseen 三尖 + step-out 內徑差 + 倒鉤（前端微取樣）",
             "claim_boundary": "claim 範圍需逐項核實*；本條目為機構摘要層級，尚未做逐項 claim chart",
-            "fto_risk": "低*｜學術機構持有（非競品），利基於 EUS/EBUS 細針；推定有效至 ~2035。對 Bioteque 核心活檢針線（側取樣）FTO 關聯低"
+            "fto_risk": "低*｜學術機構持有（非競品），利基於 EUS/EBUS 細針；推定有效至 ~2035。對本公司核心活檢針線（側取樣）FTO 關聯低"
           },
           "design_space": "",
           "next_actions": [
@@ -2864,6 +2864,102 @@
           },
           "design_space": "",
           "next_actions": []
+        }
+      },
+      "citation_count": null
+    },
+    {
+      "id": "B44",
+      "title": "Needle core biopsy instrument (US5511556)",
+      "authors": "DeSantis, S.A. / Devicor Medical Products（讓與歷程：→Ethicon Endo-Surgery→Devicor）",
+      "year": 1996,
+      "venue": "Google Patents / USPTO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文（已到期 2014）",
+      "tags": [
+        "SLC彈簧加載",
+        "cam rail解鎖式",
+        "半圓柱形內管",
+        "肝/腎/肺等軟組織"
+      ],
+      "purpose": "示範以『專利原始圖紙＋元件符號表』呈現機構設計的條目格式；同時補入 Devicor 技術血統中真空抽吸＋彈簧凸輪切割之一例",
+      "abstract_note": "手持式、真空輔助核心活檢取樣器。內針(12)遠端具斜面尖端(44)與半圓形取樣槽(46)；外針(14)同軸套於內針外，遠端錐台狀(48)且邊緣(48a)銳化。彈簧(20)抵於兩肩部(16/18)間持續推進外針，凸輪桿以第一凸輪槽／第二抵接面控制外針三段軸向位置。內針管腔(13)經接頭(76)連注射器(22)產生真空抽吸組織。",
+      "value_to_project": "示範條目格式（專利原圖＋元件符號＋機構步驟）。本案機構屬 Devicor 技術血統，已到期可自由參考，無 FTO 風險；對本公司理解『真空抽吸＋彈簧凸輪切割』組合具參考價值。",
+      "links": {
+        "patents": "https://patents.google.com/patent/US5511556/en",
+        "google_patents": "https://patents.google.com/patent/US5511556/en"
+      },
+      "figure": "https://patentimages.storage.googleapis.com/3c/79/36/c68b4b3758d467/US5511556-drawings-page-2.png",
+      "figure_caption": "US5511556 原始圖紙（共4張，可切換）· 點圖放大",
+      "figures": [
+        "https://patentimages.storage.googleapis.com/3c/79/36/c68b4b3758d467/US5511556-drawings-page-2.png",
+        "https://patentimages.storage.googleapis.com/84/f6/7c/36f0d0047834e6/US5511556-drawings-page-3.png",
+        "https://patentimages.storage.googleapis.com/30/bd/f2/bc34371b30dc18/US5511556-drawings-page-4.png",
+        "https://patentimages.storage.googleapis.com/59/40/12/82035726199bf0/US5511556-drawings-page-5.png"
+      ],
+      "ref_numerals": {
+        "10": "取樣器本體",
+        "12": "第一活檢套管(內針)",
+        "13": "內針管腔/通道",
+        "14": "第二切割套管(外針)",
+        "16": "第一肩部",
+        "18": "第二肩部",
+        "20": "偏壓彈簧",
+        "22": "注射器",
+        "26": "導入器/握把",
+        "44": "斜面切割尖端",
+        "46": "取樣槽",
+        "48": "外針錐台狀遠端(48a 銳化邊緣)",
+        "50": "保護筒身段",
+        "76": "接頭"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "US5511556（1996, DeSantis）為手持式、真空輔助核心活檢取樣器。內針遠端具斜面尖端與半圓形取樣槽；外針同軸套於內針外、遠端錐台狀且邊緣銳化。彈簧抵於兩肩部間持續推進外針，凸輪桿控制外針三段軸向位置；內針管腔經接頭連注射器以產生真空抽吸組織。",
+          "examples": [],
+          "key_claims": [
+            "同軸內針(取樣槽)/外針(切割)結構 + 注射器真空抽吸",
+            "彈簧偏壓 + 凸輪桿(cam bar)釋放以驅動外針切割",
+            "內針可獨立抽離、外針留置作為多次取樣通道"
+          ],
+          "key_findings": [
+            "以注射器真空把組織吸入取樣槽，再由彈簧驅動外針銳化邊緣切斷並包覆檢體",
+            "凸輪桿以第一凸輪槽／第二抵接面控制外針三段軸向位置（中間/近端/遠端）",
+            "可只抽出內針、外針留置作為通道，重複多次取樣免重複穿刺",
+            "讓與歷程 DeSantis→Ethicon Endo-Surgery→Devicor Medical，屬 Devicor 技術血統"
+          ],
+          "actionable_insights": [
+            "『真空抽吸（吸住組織）＋彈簧凸輪（切斷）』為一種與純彈簧擊發不同的取樣路徑，可作機構比較",
+            "凸輪桿三段位置控制是人因/單手操作的設計重點"
+          ],
+          "red_flags": [
+            "本專利已到期（2014），無 FTO 風險",
+            "*本案以真空抽吸為核心，與本知識庫 focus_note 排除之 VABB 真空輔助有部分重疊；是否完全符合『機構為主』收錄範圍，建議由使用者裁定*"
+          ],
+          "mechanism_spec": {
+            "components": [
+              "第一活檢套管(內針12)：遠端斜面尖端(44) + 半圓形取樣槽(46)，管腔(13)經接頭(76)接注射器(22)",
+              "第二切割套管(外針14)：錐台狀遠端(48) + 銳化邊緣(48a) + 保護筒身段(50)",
+              "偏壓彈簧(20)：抵於第一肩部(16)與第二肩部(18)間，持續推進外針",
+              "導入器/握把(26) + 凸輪桿(cam bar)：控制外針軸向位置與釋放時機"
+            ],
+            "assembly_logic": "外針先停中間位（蓋住取樣槽、露出尖端）→ 刺入 → 後拉退至近端露出取樣槽 → 拉注射器活塞產生真空吸入組織 → 釋放凸輪，彈簧瞬間推外針，銳化邊緣掃過取樣槽切斷並包覆檢體。",
+            "test_methods": []
+          },
+          "patent_core": {
+            "claim_focus": "真空抽吸 + 彈簧/凸輪驅動切割 + 內針可抽離留置外針作多次取樣",
+            "claim_boundary": "已到期（2014），claim 範圍僅供技術理解，無 FTO 意義",
+            "fto_risk": "無（已到期）"
+          },
+          "vs_database": "與 B01（TRU-CUT 雙動作起點）相比，本案以注射器真空＋彈簧凸輪取代純手動第二動作；屬 Devicor 技術血統，可與其他 Devicor/Merit 條目對照。",
+          "evidence_level": "high",
+          "source_quality": "Google Patents 全文＋原始圖紙（4 張圖紙頁）直接擷取",
+          "design_space": "已到期，無需迴避。真空抽吸＋彈簧凸輪切割之組合可自由參考。",
+          "next_actions": [
+            "如要正式納入，請使用者確認本案（真空導向）是否符合本知識庫『機構為主、排除 VABB』之收錄範圍"
+          ]
         }
       },
       "citation_count": null
