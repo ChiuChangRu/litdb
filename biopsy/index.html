@@ -7186,6 +7186,21 @@ function renderPatentResult(a, _paper) {
   return html;
 }
 
+function renderCtx() {
+  // biopsy 版無 AI 對話功能，僅更新釘選數
+  const el = document.getElementById('pinnedCount');
+  if(el) el.textContent = pinnedIds.size + ' 已釘選';
+  const ctxEl = document.getElementById('ctxList');
+  if(!ctxEl) return;
+  const papers = activePapersForAnalysis();
+  const kw = (document.getElementById('ctxSearch')?.value || '').toLowerCase();
+  ctxEl.innerHTML = papers
+    .filter(p => !kw || (p.title||'').toLowerCase().includes(kw) || p.id.toLowerCase().includes(kw))
+    .slice(0, 30)
+    .map(p => `<div class="ctx-item${pinnedIds.has(p.id)?' pinned':''}" onclick="pinPaper('${p.id}')">
+      <span style="font-weight:600;color:var(--accent)">${p.id}</span> ${escHtml((p.title||'').slice(0,40))}
+    </div>`).join('');
+}
 function pinPaper(id){if(pinnedIds.has(id))pinnedIds.delete(id);else pinnedIds.add(id);renderCtx();toast(pinnedIds.has(id)?'已釘選':'已取消','success')}
 
 // ══════════════════════════════════════════════
