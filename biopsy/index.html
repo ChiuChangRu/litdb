@@ -3979,11 +3979,16 @@ function renderLibraryFigures(p, i) {
   const rows = ref ? Object.entries(ref).map(([n,v])=>
     `<tr><td style="font-family:monospace;color:var(--accent);font-weight:700;text-align:center;padding:3px 8px;white-space:nowrap;border-bottom:1px solid var(--border)">${escHtml(n)}</td><td style="padding:3px 8px;border-bottom:1px solid var(--border)">${escHtml(String(v))}</td></tr>`
   ).join('') : '';
+  const patentsUrl = p.links?.google_patents || p.links?.patents || '';
+  const viewerBtn = patentsUrl
+    ? `<a href="${escHtml(patentsUrl)}" target="_blank" class="btn btn-s" style="font-size:11px;margin-top:6px;display:inline-flex;align-items:center;gap:4px">🔍 查看原始圖紙（高解析度）</a>`
+    : '';
   return `<section class="detail-section">
     <div class="detail-section-title">專利圖（原始圖紙）</div>
     ${tabs}
     <img id="libFig_${i}" src="${escHtml(figs[0])}" class="detail-figure" onclick="window.open(this.src,'_blank')" onerror="this.style.display='none'">
     <div class="fig-caption">${escHtml(p.figure_caption || '點圖放大 · 來源：專利原始圖紙')}</div>
+    ${viewerBtn}
     ${rows ? `<div style="margin-top:8px"><div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:3px">元件符號</div><table style="width:100%;border-collapse:collapse;font-size:12px"><tbody>${rows}</tbody></table></div>` : ''}
   </section>`;
 }
