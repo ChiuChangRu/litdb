@@ -899,6 +899,12 @@ const LITDB_NS = (() => {
   const parts = location.pathname.split('/').filter(Boolean).filter(p => !p.includes('.'));
   return parts[parts.length - 1] || 'root';
 })();
+// 此知識庫在 ChiuChangRu/litdb repo 內的資料檔路徑。Worker 的 /papers、/reports 端點
+// 預設寫 root 的 papers.json / reports.json；此處明確帶上自己的檔名，避免讀 biopsy_patents.json
+// 卻把同步結果寫到 root（污染 coating 知識庫）。
+// ⚠️ 複製此 index.html 開新知識庫時，這兩個常數必須跟 LITDB_NS 一起改（列入 onboarding checklist）。
+const KB_PAPERS_PATH  = 'biopsy_patents.json';
+const KB_REPORTS_PATH = 'biopsy_reports.json';
 const CFG_KEY = 'litdb_cfg';
 let cfg = JSON.parse(localStorage.getItem(CFG_KEY)||'{}');
 const COST_KEY = 'litdb_cost';
@@ -2301,7 +2307,7 @@ async function saveVendorKeywordsToCloud(keywords) {
   try {
     const r = await fetch(`${base}/papers`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'update_meta', meta: { commercial_vendor_keywords: keywords } }),
+      body: JSON.stringify({ action: 'update_meta', repoPath: KB_PAPERS_PATH, meta: { commercial_vendor_keywords: keywords } }),
     });
     const data = await r.json();
     if (!data.ok) throw new Error(data.error || '儲存失敗');
@@ -2985,7 +2991,7 @@ async function ensureReportsCache() {
     try {
       const r = await fetch(`${base}/reports`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'list' }),
+        body: JSON.stringify({ action: 'list', reportsPath: KB_REPORTS_PATH }),
       });
       const data = await r.json();
       _reportsCache = Array.isArray(data.reports) ? data.reports : [];
@@ -3038,7 +3044,7 @@ async function saveReportToCloud(reportPayload) {
   try {
     const r = await fetch(`${base}/reports`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'save', report: reportPayload }),
+      body: JSON.stringify({ action: 'save', reportsPath: KB_REPORTS_PATH, report: reportPayload }),
     });
     const data = await r.json();
     if (!data.ok) throw new Error(data.error || '儲存失敗');
@@ -3057,7 +3063,7 @@ async function deleteReportFromCloud(id) {
   try {
     const r = await fetch(`${base}/reports`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'delete', id }),
+      body: JSON.stringify({ action: 'delete', reportsPath: KB_REPORTS_PATH, id }),
     });
     const data = await r.json();
     if (!data.ok) throw new Error(data.error || '刪除失敗');
@@ -3085,7 +3091,7 @@ async function savePapersToCloud(papers) {
   try {
     const r = await fetch(`${base}/papers`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'save', papers: list }),
+      body: JSON.stringify({ action: 'save', repoPath: KB_PAPERS_PATH, papers: list }),
     });
     const data = await r.json();
     if (!data.ok) throw new Error(data.error || '寫入失敗');
@@ -3975,7 +3981,7 @@ function renderLibraryFigures(p, i) {
   ).join('') : '';
 
   // 有無圖片都顯示區塊，讓使用者可以觸發自動抓取
-  const patentId = (p.title||'').match(/(US\d+)/)?.[1] || '';
+  const patentId = extractPatentId(p.title);
   const hasProxy = !!cfg.proxy;
   const autoFetchBtn = patentId && hasProxy
     ? `<button class="btn btn-s" id="fetchFigBtn_${i}" onclick="fetchPatentImages(${i})" style="font-size:11px;color:var(--accent2);border-color:var(--accent2)">🖼 自動抓取高解析圖片</button>`
@@ -4017,7 +4023,7 @@ async function fetchPatentImages(i) {
   const p = filtered[i];
   if(!p || !cfg.proxy) return;
 
-  const patentId = (p.title||'').match(/(US\d+)/)?.[1] || '';
+  const patentId = extractPatentId(p.title);
   if(!patentId) { toast('無法從標題取得專利號', 'error'); return; }
 
   const btn = document.getElementById('fetchFigBtn_' + i);
@@ -6661,8 +6667,19 @@ async function runPatentAnalysis(i) {
 }
 
 function extractPatentId(text) {
-  const m = text.match(/US\d{6,}B?\d?|US\d{4}\/\d+|EP\d+|WO\d+/i);
-  return m ? m[0] : '';
+  // 圖床檔名一定帶 kind code（US9101350B2-drawings-page-1.png），但 title 不一定有
+  // （舊號 US3477423 常無 kind code）。因此 kind code 設為「可選」，一次涵蓋三種格式：
+  //   授權號 US9101350B2、公開號 US20120226191A1 / US6106484A、純數字舊號 US3477423。
+  const t = String(text || '');
+  let m = t.match(/USD\d+[A-Z]?\d?/i);           // 設計專利 USD496728S1（D 開頭，須先試）
+  if (m) return m[0].toUpperCase();
+  m = t.match(/US\d{4}\/\d+/i);                  // 斜線公開號 US2012/0226191（須先試，否則被下一條截成 US2012）
+  if (m) return m[0].toUpperCase();
+  m = t.match(/US\d{4,}[A-Z]?\d?/i);             // US 主體 + 可選 kind code
+  if (m) return m[0].toUpperCase();
+  m = t.match(/(?:EP|WO)\d+[A-Z]?\d?/i);         // 次選 EP / WO
+  if (m) return m[0].toUpperCase();
+  return '';
 }
 
 async function autoFetchPatent(i, patentId) {
