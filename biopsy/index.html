@@ -3969,32 +3969,88 @@ function editCitationCount(i) {
 // ── 專利圖紙 + 元件符號渲染（多張圖紙切換；向後相容單一 p.figure）──
 function renderLibraryFigures(p, i) {
   const figs = Array.isArray(p.figures) ? p.figures : (p.figure ? [p.figure] : []);
-  if(!figs.length) return '';
-  const tabs = figs.length > 1
-    ? `<div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap">` +
-      figs.map((u,idx)=>`<button class="btn btn-s" onclick="swapFig(${i},'${escHtml(u)}')" style="font-size:10px;padding:2px 8px">${idx+1}</button>`).join('') +
-      `</div>`
-    : '';
   const ref = (p.ref_numerals && typeof p.ref_numerals === 'object') ? p.ref_numerals : null;
   const rows = ref ? Object.entries(ref).map(([n,v])=>
     `<tr><td style="font-family:monospace;color:var(--accent);font-weight:700;text-align:center;padding:3px 8px;white-space:nowrap;border-bottom:1px solid var(--border)">${escHtml(n)}</td><td style="padding:3px 8px;border-bottom:1px solid var(--border)">${escHtml(String(v))}</td></tr>`
   ).join('') : '';
-  const patentsUrl = p.links?.google_patents || p.links?.patents || '';
-  const viewerBtn = patentsUrl
-    ? `<a href="${escHtml(patentsUrl)}" target="_blank" class="btn btn-s" style="font-size:11px;margin-top:6px;display:inline-flex;align-items:center;gap:4px">🔍 查看原始圖紙（高解析度）</a>`
+
+  // 有無圖片都顯示區塊，讓使用者可以觸發自動抓取
+  const patentId = (p.title||'').match(/(US\d+)/)?.[1] || '';
+  const hasProxy = !!cfg.proxy;
+  const autoFetchBtn = patentId && hasProxy
+    ? `<button class="btn btn-s" id="fetchFigBtn_${i}" onclick="fetchPatentImages(${i})" style="font-size:11px;color:var(--accent2);border-color:var(--accent2)">🖼 自動抓取高解析圖片</button>`
     : '';
+
+  if(!figs.length) {
+    return `<section class="detail-section">
+      <div class="detail-section-title">專利圖（原始圖紙）</div>
+      <div style="padding:12px;background:var(--card);border-radius:6px;font-size:12px;color:var(--muted);margin-bottom:8px">尚無圖片</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">${autoFetchBtn}</div>
+      <div id="fetchFigStatus_${i}" style="font-size:11px;color:var(--muted);margin-top:6px"></div>
+    </section>`;
+  }
+
+  const tabs = figs.length > 1
+    ? `<div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap">` +
+      figs.map((u,idx)=>`<button class="btn btn-s" onclick="swapFig(${i},'${escHtml(u)}')" style="font-size:10px;padding:2px 8px">圖 ${idx+1}</button>`).join('') +
+      `</div>`
+    : '';
+
   return `<section class="detail-section">
     <div class="detail-section-title">專利圖（原始圖紙）</div>
     ${tabs}
     <img id="libFig_${i}" src="${escHtml(figs[0])}" class="detail-figure" onclick="window.open(this.src,'_blank')" onerror="this.style.display='none'">
     <div class="fig-caption">${escHtml(p.figure_caption || '點圖放大 · 來源：專利原始圖紙')}</div>
-    ${viewerBtn}
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${autoFetchBtn}</div>
+    <div id="fetchFigStatus_${i}" style="font-size:11px;color:var(--muted);margin-top:6px"></div>
     ${rows ? `<div style="margin-top:8px"><div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:3px">元件符號</div><table style="width:100%;border-collapse:collapse;font-size:12px"><tbody>${rows}</tbody></table></div>` : ''}
   </section>`;
 }
+
 function swapFig(i, url) {
   const img = document.getElementById('libFig_' + i);
   if(img) { img.src = url; img.style.display = ''; }
+}
+
+// 透過 Worker 代理抓取 Google Patents 圖片 URL（Worker 端需有 /patent-images 端點）
+async function fetchPatentImages(i) {
+  const p = filtered[i];
+  if(!p || !cfg.proxy) return;
+
+  const patentId = (p.title||'').match(/(US\d+)/)?.[1] || '';
+  if(!patentId) { toast('無法從標題取得專利號', 'error'); return; }
+
+  const btn = document.getElementById('fetchFigBtn_' + i);
+  const statusEl = document.getElementById('fetchFigStatus_' + i);
+  if(btn) { btn.disabled = true; btn.textContent = '⏳ 抓取中...'; }
+  if(statusEl) statusEl.textContent = '';
+
+  try {
+    const base = cfg.proxy.replace(/\/api$/, '');
+    const r = await fetch(`${base}/patent-images?id=${encodeURIComponent(patentId)}`);
+    if(!r.ok) throw new Error(`Worker 回應 HTTP ${r.status}`);
+    const data = await r.json();
+    const urls = data.figures || [];
+    if(!urls.length) throw new Error('找不到圖片，請確認 Worker 端點已部署');
+
+    // 更新資料
+    p.figures = urls;
+    p.figure  = urls[0];
+    p.figure_caption = `${patentId} 圖紙（共 ${urls.length} 張）· 點圖放大`;
+    p._cloudSynced = false;
+    saveDB();
+    updateSyncButtonLabel();
+
+    // 重新渲染圖片區
+    const figEl = document.getElementById('detailFigure_' + i);
+    if(figEl) figEl.innerHTML = renderLibraryFigures(p, i);
+
+    toast(`✅ 已抓到 ${urls.length} 張圖片，請按「☁ 同步」存回雲端`, 'success');
+  } catch(e) {
+    if(statusEl) statusEl.textContent = `❌ ${e.message}`;
+    if(btn) { btn.disabled = false; btn.textContent = '🖼 自動抓取高解析圖片'; }
+    toast('抓取失敗：' + e.message, 'error');
+  }
 }
 
 function showDetail(i) {
