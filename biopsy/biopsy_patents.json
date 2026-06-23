@@ -2891,13 +2891,13 @@
         "patents": "https://patents.google.com/patent/US5511556/en",
         "google_patents": "https://patents.google.com/patent/US5511556/en"
       },
-      "figure": "https://patentimages.storage.googleapis.com/3c/79/36/c68b4b3758d467/US5511556-drawings-page-2.png",
-      "figure_caption": "US5511556 原始圖紙（共4張，可切換）· 點圖放大",
+      "figure": "https://patentimages.storage.googleapis.com/3c/79/36/c68b4b3758d467/US5511556-drawings-page-1.png",
+      "figure_caption": "US5511556 圖紙 Page 1（共4張）· 點圖放大至原始解析度",
       "figures": [
+        "https://patentimages.storage.googleapis.com/3c/79/36/c68b4b3758d467/US5511556-drawings-page-1.png",
         "https://patentimages.storage.googleapis.com/3c/79/36/c68b4b3758d467/US5511556-drawings-page-2.png",
-        "https://patentimages.storage.googleapis.com/84/f6/7c/36f0d0047834e6/US5511556-drawings-page-3.png",
-        "https://patentimages.storage.googleapis.com/30/bd/f2/bc34371b30dc18/US5511556-drawings-page-4.png",
-        "https://patentimages.storage.googleapis.com/59/40/12/82035726199bf0/US5511556-drawings-page-5.png"
+        "https://patentimages.storage.googleapis.com/3c/79/36/c68b4b3758d467/US5511556-drawings-page-3.png",
+        "https://patentimages.storage.googleapis.com/3c/79/36/c68b4b3758d467/US5511556-drawings-page-4.png"
       ],
       "ref_numerals": {
         "10": "取樣器本體",
