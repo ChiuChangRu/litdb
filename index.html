@@ -3,68 +3,633 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LitDB — 文獻知識庫入口</title>
+<title>網頁工具總覽 · Project Bench</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#faf6f0;--surface:#ffffff;--card:#f5efe8;--border:#e0d5c8;--accent:#e86c3a;--accent2:#2d8c5a;--text:#2a2420;--muted:#8a7e72;--font-mono:'JetBrains Mono','Fira Mono',monospace;--font-body:'Inter','Noto Sans TC',system-ui,sans-serif;--radius:8px;--tr:0.18s ease}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:14px;line-height:1.6;min-height:100vh}
-header{background:var(--accent);padding:18px 24px;display:flex;align-items:center;gap:16px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-.logo{font-family:var(--font-mono);font-size:20px;font-weight:700;color:#fff;letter-spacing:-0.5px}
-.logo span{color:#2a4a3a}
-.header-sub{font-size:12px;color:rgba(255,255,255,0.85)}
-.main{max-width:1000px;margin:0 auto;padding:48px 24px}
-.intro{margin-bottom:32px}
-.intro h1{font-size:22px;font-weight:700;margin-bottom:8px}
-.intro p{color:var(--muted);font-size:13px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;text-decoration:none;color:var(--text);transition:var(--tr);display:flex;flex-direction:column;gap:10px;cursor:pointer}
-.card:hover{border-color:var(--accent);box-shadow:0 4px 16px rgba(0,0,0,0.08);transform:translateY(-2px)}
-.card-icon{font-size:28px;margin-bottom:4px}
-.card-title{font-size:16px;font-weight:700}
-.card-desc{font-size:12px;color:var(--muted);line-height:1.6}
-.card-meta{display:flex;gap:8px;margin-top:auto;padding-top:8px}
-.tag{font-size:11px;padding:2px 8px;border-radius:20px;font-family:var(--font-mono);background:var(--card);color:var(--muted);border:1px solid var(--border)}
-.tag-active{background:#eaf5ef;color:var(--accent2);border-color:var(--accent2)}
-.tag-empty{background:var(--card);color:var(--muted)}
-.footer-note{margin-top:40px;font-size:11px;color:var(--muted);text-align:center}
+:root{
+  --paper:#F4F6F8;--surface:#fff;--ink:#16202E;--ink-soft:#5C6776;--ink-faint:#8B96A4;
+  --line:#E4E8ED;--line-strong:#D2D8E0;
+  --teal:#0E7C86;--teal-deep:#0A5A62;--teal-soft:#E2F1F2;
+  --amber:#CF6326;--amber-soft:#FBE9DD;
+  --green:#2F8F5B;--green-soft:#E2F2E8;
+  --blue:#3667C2;--blue-soft:#E5ECF9;
+  --slate:#6B7686;--slate-soft:#EBEEF2;
+  --shadow:0 1px 2px rgba(22,32,46,.04),0 6px 20px rgba(22,32,46,.06);
+  --radius:14px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Noto Sans TC","Space Grotesk",system-ui,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* ── Header ── */
+header.top{border-bottom:1px solid var(--line);background:linear-gradient(180deg,#fff 0%,#fbfcfd 100%)}
+.top-inner{padding:28px 0 24px;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column;gap:5px}
+.eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);font-weight:600}
+h1{margin:0;font-family:"Space Grotesk","Noto Sans TC",sans-serif;font-weight:700;font-size:clamp(24px,4vw,34px);letter-spacing:-.01em;line-height:1.1}
+.version-chip{display:inline-flex;align-items:center;gap:8px;margin-top:3px;font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--ink-soft)}
+.dot-live{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap}
+button{font-family:inherit;cursor:pointer;border:none}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 15px;border-radius:10px;font-size:13.5px;font-weight:500;
+  transition:transform .12s,background .15s;background:var(--surface);color:var(--ink);border:1px solid var(--line-strong)}
+.btn:hover{transform:translateY(-1px)}.btn:active{transform:none}
+.btn svg{width:15px;height:15px;stroke-width:1.9}
+.btn-primary{background:var(--teal);color:#fff;border-color:var(--teal)}.btn-primary:hover{background:var(--teal-deep)}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--ink-soft)}.btn-ghost:hover{background:var(--slate-soft);color:var(--ink)}
+
+/* ── Column headers ── */
+main{padding:28px 0 0}
+.col-headers{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:10px}
+.col-head{display:flex;align-items:baseline;gap:10px}
+.col-head h2{margin:0;font-family:"Space Grotesk","Noto Sans TC",sans-serif;font-size:15px;font-weight:600;letter-spacing:-.01em}
+.col-head .count{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--ink-faint)}
+.col-head .rule{flex:1;height:1px;background:var(--line)}
+
+/* ── Row = one project ── */
+.rows{display:flex;flex-direction:column;gap:14px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}
+
+/* ── Case card (left) ── */
+.case{position:relative;display:flex;gap:14px;align-items:flex-start;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--radius);padding:16px 16px 14px 18px;
+  box-shadow:var(--shadow);overflow:hidden;cursor:pointer;
+  transition:transform .12s,box-shadow .15s,border-color .15s;height:100%}
+.case::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--tc,var(--teal))}
+.case:hover{transform:translateY(-2px);box-shadow:0 3px 6px rgba(22,32,46,.06),0 14px 32px rgba(22,32,46,.10)}
+.case:hover .open-ind{opacity:1;transform:translate(0,0)}
+.mono-tile{flex:none;width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:600;
+  color:var(--tc,var(--teal));background:color-mix(in srgb,var(--tc,var(--teal)) 13%,#fff)}
+.case-body{flex:1;min-width:0}
+.case .code{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint)}
+.case h3{margin:1px 0 0;font-family:"Space Grotesk","Noto Sans TC",sans-serif;font-size:16px;font-weight:600;letter-spacing:-.01em;line-height:1.25}
+.case .desc{color:var(--ink-soft);font-size:13px;margin:5px 0 0;line-height:1.5}
+.case-foot{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px}
+.status-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:3px 8px;border-radius:20px}
+.status-pill .led{width:6px;height:6px;border-radius:50%}
+.ver{font-family:"JetBrains Mono",monospace;font-size:10.5px;font-weight:500;background:var(--slate-soft);color:var(--ink);padding:3px 7px;border-radius:6px}
+.open-ind{position:absolute;top:12px;right:12px;color:var(--tc,var(--teal));
+  opacity:0;transform:translate(-3px,3px);transition:opacity .15s,transform .15s}
+.open-ind svg{width:16px;height:16px;stroke-width:2}
+.edit-mini{position:absolute;bottom:10px;right:10px;width:22px;height:22px;border-radius:6px;display:none;
+  align-items:center;justify-content:center;background:var(--surface);border:1px solid var(--line);color:var(--ink-faint)}
+.case:hover .edit-mini{display:inline-flex}
+.edit-mini:hover{color:var(--ink)}
+.edit-mini svg{width:12px;height:12px;stroke-width:1.9}
+
+/* ── Note panel (right) ── */
+.notepanel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;height:100%}
+.np-head{padding:13px 16px 11px;border-bottom:1px solid var(--line);position:relative;flex:none}
+.np-head::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--tc,var(--teal))}
+.np-title-row{display:flex;align-items:center;gap:8px}
+.np-name{font-family:"Space Grotesk","Noto Sans TC",sans-serif;font-size:14px;font-weight:600;
+  color:var(--tc,var(--ink));letter-spacing:-.01em;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.np-open{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--tc,var(--teal));text-decoration:none;flex:none;
+  display:inline-flex;align-items:center;gap:3px;padding:3px 7px;border-radius:6px;
+  border:1px solid color-mix(in srgb,var(--tc,var(--teal)) 30%,var(--line))}
+.np-open:hover{background:color-mix(in srgb,var(--tc,var(--teal)) 10%,#fff)}
+.np-open svg{width:11px;height:11px;stroke-width:2}
+.np-meta{font-size:11px;color:var(--ink-faint);margin-top:4px}
+
+.np-body{flex:1;padding:8px 16px 4px;overflow-y:auto;min-height:60px}
+.note{display:flex;align-items:flex-start;gap:9px;padding:6px 0;font-size:13.5px;line-height:1.5;border-bottom:1px solid var(--paper)}
+.note:last-child{border-bottom:none}
+.note .chk{flex:none;margin-top:2px;width:16px;height:16px;border-radius:5px;border:1.6px solid var(--line-strong);
+  background:var(--surface);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s}
+.note .chk svg{width:10px;height:10px;stroke:#fff;stroke-width:3;opacity:0}
+.note.done .chk{background:var(--green);border-color:var(--green)}.note.done .chk svg{opacity:1}
+.note.done .ntext{color:var(--ink-faint);text-decoration:line-through}
+.note .ntext{flex:1;cursor:text;word-break:break-word;font-size:13px}
+.note .ndel{flex:none;opacity:0;color:var(--ink-faint);background:none;font-size:15px;line-height:1;padding:2px 4px;border-radius:5px;transition:opacity .15s,color .15s}
+.note:hover .ndel{opacity:1}.note .ndel:hover{color:var(--amber)}
+.np-empty-small{padding:14px 4px;text-align:center;color:var(--ink-faint);font-size:12.5px}
+
+.np-add{display:flex;gap:7px;padding:9px 14px 12px;border-top:1px solid var(--line);background:#FCFDFE;flex:none}
+.np-add input{flex:1;font-family:inherit;font-size:13px;padding:7px 10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface);color:var(--ink)}
+.np-add input:focus{outline:none;border-color:var(--tc,var(--teal));box-shadow:0 0 0 3px color-mix(in srgb,var(--tc,var(--teal)) 18%,transparent)}
+.np-add button{padding:7px 12px;border-radius:8px;background:var(--tc,var(--teal));color:#fff;font-size:13px;font-weight:500;white-space:nowrap}
+.np-add button:hover{filter:brightness(.92)}
+
+/* add-project row */
+.add-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.add-case{display:flex;align-items:center;justify-content:center;gap:8px;border:1.5px dashed var(--line-strong);
+  background:transparent;border-radius:var(--radius);padding:14px;color:var(--ink-soft);font-size:14px;cursor:pointer;
+  transition:border-color .15s,color .15s,background .15s}
+.add-case:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-soft)}
+.add-case svg{width:17px;height:17px;stroke-width:1.8}
+
+/* ── AI Tools footer ── */
+.ai-section{margin-top:40px;padding-top:26px;border-top:1px solid var(--line)}
+.section-head{display:flex;align-items:baseline;gap:10px;margin-bottom:16px}
+.section-head h2{margin:0;font-family:"Space Grotesk","Noto Sans TC",sans-serif;font-size:15px;font-weight:600}
+.section-head .rule{flex:1;height:1px;background:var(--line)}
+
+.ai-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-bottom:28px}
+.ai-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+  box-shadow:var(--shadow);transition:transform .12s,box-shadow .15s}
+.ai-card:hover{transform:translateY(-2px);box-shadow:0 4px 8px rgba(22,32,46,.07),0 16px 36px rgba(22,32,46,.10)}
+.ai-card-top{display:flex;align-items:center;gap:10px;padding:13px 13px 10px}
+.ai-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:19px;flex:none}
+.ai-name{font-family:"Space Grotesk",sans-serif;font-size:14.5px;font-weight:600;letter-spacing:-.01em}
+.ai-sub{font-size:11px;color:var(--ink-faint);margin-top:1px}
+.ai-links{display:flex;flex-wrap:wrap;gap:5px;padding:0 13px 13px}
+.ai-link{font-family:"JetBrains Mono",monospace;font-size:11px;text-decoration:none;padding:3px 8px;
+  border-radius:6px;border:1px solid var(--line);color:var(--ink-soft);background:var(--paper);
+  display:inline-flex;align-items:center;gap:3px;transition:border-color .15s,color .15s,background .15s}
+.ai-link:hover{border-color:var(--ai-c,var(--teal));color:var(--ai-c,var(--teal));background:color-mix(in srgb,var(--ai-c,var(--teal)) 8%,#fff)}
+.ai-link svg{width:10px;height:10px;stroke-width:2}
+
+/* Settings accordion */
+.settings-wrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px;margin-bottom:44px}
+.setting-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.setting-head{display:flex;align-items:center;gap:10px;padding:13px 15px;cursor:pointer;user-select:none;transition:background .15s}
+.setting-head:hover{background:var(--paper)}
+.setting-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;flex:none}
+.setting-title{font-size:13.5px;font-weight:600;flex:1}
+.setting-badge{font-family:"JetBrains Mono",monospace;font-size:10px;background:var(--amber-soft);color:var(--amber);padding:2px 6px;border-radius:10px;font-weight:600}
+.chevron{width:15px;height:15px;stroke:var(--ink-faint);stroke-width:2;transition:transform .2s;flex:none}
+.setting-body{padding:0 15px 15px;font-size:13px;color:var(--ink-soft);line-height:1.7;display:none}
+.setting-body.open{display:block}
+.setting-body code{font-family:"JetBrains Mono",monospace;font-size:11.5px;background:var(--paper);padding:1px 5px;border-radius:4px;color:var(--ink)}
+.setting-body a{color:var(--teal);text-decoration:none}.setting-body a:hover{text-decoration:underline}
+.setting-body ul{margin:6px 0 0;padding-left:18px}.setting-body li{margin-bottom:3px}
+.step{display:flex;gap:9px;margin-bottom:7px;align-items:flex-start}
+.step-n{flex:none;width:20px;height:20px;border-radius:50%;background:var(--teal-soft);color:var(--teal);
+  font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.setting-body hr{border:none;border-top:1px solid var(--line);margin:10px 0}
+
+/* Modal */
+.overlay{position:fixed;inset:0;background:rgba(22,32,46,.42);backdrop-filter:blur(2px);display:none;
+  align-items:flex-start;justify-content:center;padding:40px 20px;z-index:50;overflow:auto}
+.overlay.show{display:flex}
+.modal{background:var(--surface);border-radius:18px;width:100%;max-width:520px;
+  box-shadow:0 20px 60px rgba(22,32,46,.28);overflow:hidden;animation:pop .18s ease}
+@keyframes pop{from{transform:translateY(8px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+.modal-head{padding:20px 24px 0;display:flex;justify-content:space-between;align-items:center}
+.modal-head h3{margin:0;font-family:"Space Grotesk","Noto Sans TC",sans-serif;font-size:18px;font-weight:600}
+.modal-body{padding:18px 24px 24px;display:grid;gap:14px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:12.5px;color:var(--ink-soft);font-weight:500}
+.field input,.field select,.field textarea{font-family:inherit;font-size:14px;padding:9px 11px;
+  border:1px solid var(--line-strong);border-radius:9px;background:var(--paper);color:var(--ink);width:100%}
+.field textarea{resize:vertical;min-height:56px}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 3px var(--teal-soft)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.swatches{display:flex;gap:7px;flex-wrap:wrap}
+.sw{width:24px;height:24px;border-radius:7px;cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 1px var(--line-strong)}
+.sw:hover{transform:scale(1.1)}
+.modal-foot{display:flex;justify-content:space-between;gap:10px;padding:0 24px 22px;align-items:center}
+
+.hint{font-size:12px;color:var(--ink-faint);text-align:center;padding:20px 0 36px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;
+  padding:11px 18px;border-radius:11px;font-size:13.5px;box-shadow:0 10px 30px rgba(0,0,0,.25);
+  opacity:0;pointer-events:none;transition:.25s;z-index:80}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:780px){
+  .col-headers,.row,.add-row{grid-template-columns:1fr}
+  .col-headers .col-head:last-child{display:none}
+}
+@media(max-width:560px){.wrap{padding:0 14px}.row2{grid-template-columns:1fr}.ai-grid{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">Lit<span>DB</span></div>
-  <div class="header-sub">文獻 / 專利知識庫入口</div>
+<header class="top">
+  <div class="wrap top-inner">
+    <div class="brand">
+      <span class="eyebrow">Web Tooling · chiuchangru.github.io</span>
+      <h1>網頁工具總覽</h1>
+      <span class="version-chip"><span class="dot-live"></span>目前版本&nbsp;&nbsp;<b id="snapTag">—</b></span>
+    </div>
+    <div class="toolbar">
+      <button class="btn btn-ghost" id="importBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>匯入
+      </button>
+      <button class="btn" id="exportJsonBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>下載目前版本
+      </button>
+      <button class="btn btn-primary" id="addBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>新增工具
+      </button>
+    </div>
+  </div>
 </header>
 
-<div class="main">
-  <div class="intro">
-    <h1>選擇文獻知識庫</h1>
-    <p>每個知識庫對應一個獨立技術領域，資料、分類規則、AI 分析皆各自獨立維護。</p>
+<main class="wrap">
+  <div class="col-headers">
+    <div class="col-head"><h2>案件</h2><span class="count" id="caseCount"></span><span class="rule"></span></div>
+    <div class="col-head"><h2>Note</h2><span class="count" id="noteCount"></span><span class="rule"></span></div>
+  </div>
+  <div class="rows" id="rows"></div>
+  <div class="add-row" id="addRow">
+    <button class="add-case" id="addCaseBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>新增工具
+    </button>
+    <div></div>
   </div>
 
-  <div class="grid">
-    <a class="card" href="coating/index.html">
-      <div class="card-icon">🧪</div>
-      <div class="card-title">親水塗層</div>
-      <div class="card-desc">醫療器材親水塗層文獻與專利資料庫，含技術路線分類、專利空間地圖、實施例比對等決策報告功能。</div>
-      <div class="card-meta">
-        <span class="tag tag-active">運作中</span>
-        <span class="tag">102 篇文獻</span>
+  <!-- AI Tools -->
+  <div class="ai-section">
+    <div class="section-head"><h2>常用 AI 工具</h2><span class="rule"></span></div>
+    <div class="ai-grid">
+      <div class="ai-card" style="--ai-c:#D97757">
+        <div class="ai-card-top">
+          <div class="ai-icon" style="background:#FBE9DD">🤖</div>
+          <div><div class="ai-name">Claude</div><div class="ai-sub">Anthropic · Sonnet / Opus</div></div>
+        </div>
+        <div class="ai-links">
+          <a class="ai-link" href="https://claude.ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Chat</a>
+          <a class="ai-link" href="https://console.anthropic.com" target="_blank" rel="noopener">Console</a>
+          <a class="ai-link" href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">API Key</a>
+        </div>
       </div>
-    </a>
+      <div class="ai-card" style="--ai-c:#10a37f">
+        <div class="ai-card-top">
+          <div class="ai-icon" style="background:#E6F7F3">✨</div>
+          <div><div class="ai-name">ChatGPT</div><div class="ai-sub">OpenAI · GPT-4o</div></div>
+        </div>
+        <div class="ai-links">
+          <a class="ai-link" href="https://chatgpt.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Chat</a>
+          <a class="ai-link" href="https://platform.openai.com" target="_blank" rel="noopener">Platform</a>
+          <a class="ai-link" href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">API Key</a>
+        </div>
+      </div>
+      <div class="ai-card" style="--ai-c:#7C3AED">
+        <div class="ai-card-top">
+          <div class="ai-icon" style="background:#EDE9FE">🔮</div>
+          <div><div class="ai-name">Perplexity</div><div class="ai-sub">搜尋增強 AI</div></div>
+        </div>
+        <div class="ai-links">
+          <a class="ai-link" href="https://www.perplexity.ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Search</a>
+          <a class="ai-link" href="https://www.perplexity.ai/settings/api" target="_blank" rel="noopener">API Key</a>
+        </div>
+      </div>
+      <div class="ai-card" style="--ai-c:#EA7540">
+        <div class="ai-card-top">
+          <div class="ai-icon" style="background:#FDE8D8">🌪️</div>
+          <div><div class="ai-name">Mistral</div><div class="ai-sub">Mistral AI · Le Chat</div></div>
+        </div>
+        <div class="ai-links">
+          <a class="ai-link" href="https://chat.mistral.ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Chat</a>
+          <a class="ai-link" href="https://console.mistral.ai" target="_blank" rel="noopener">Console</a>
+          <a class="ai-link" href="https://console.mistral.ai/api-keys" target="_blank" rel="noopener">API Key</a>
+        </div>
+      </div>
+    </div>
 
-    <a class="card" href="biopsy/index.html">
-      <div class="card-icon">🩺</div>
-      <div class="card-title">核心活檢針</div>
-      <div class="card-desc">Core Biopsy Needle（FDA Product Code: KNW）機械結構技術專利資料庫，涵蓋彈簧擊發、雙動作、馬達驅動等機構分類。</div>
-      <div class="card-meta">
-        <span class="tag tag-empty">建置中</span>
+    <div class="section-head" style="margin-top:4px"><h2>常忘記的設定</h2><span class="rule"></span></div>
+    <div class="settings-wrap">
+      <div class="setting-card">
+        <div class="setting-head" onclick="toggleSetting(this)">
+          <div class="setting-icon" style="background:#FBE9DD">🔑</div>
+          <span class="setting-title">API Key 放在哪？怎麼用？</span>
+          <span class="setting-badge">常忘</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="setting-body">
+          <b>Anthropic（Claude）</b>
+          <div class="step"><span class="step-n">1</span><span><a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com/settings/keys</a> → Create Key</span></div>
+          <div class="step"><span class="step-n">2</span><span>Key 只顯示一次，立刻複製存好</span></div>
+          <div class="step"><span class="step-n">3</span><span>Cloudflare Worker：Settings → Variables → 加 <code>ANTHROPIC_API_KEY</code></span></div>
+          <div class="step"><span class="step-n">4</span><span>本地：<code>export ANTHROPIC_API_KEY=sk-ant-...</code></span></div>
+          <hr>
+          <b>OpenAI（ChatGPT）</b>
+          <div class="step"><span class="step-n">1</span><span><a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com/api-keys</a> → Create new secret key</span></div>
+          <div class="step"><span class="step-n">2</span><span>注意 Project vs Organization key 差異</span></div>
+        </div>
       </div>
-    </a>
+      <div class="setting-card">
+        <div class="setting-head" onclick="toggleSetting(this)">
+          <div class="setting-icon" style="background:#E8F0FE">☁️</div>
+          <span class="setting-title">Cloudflare Worker 設定流程</span>
+          <span class="setting-badge">常忘</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="setting-body">
+          <div class="step"><span class="step-n">1</span><span><a href="https://dash.cloudflare.com" target="_blank">dash.cloudflare.com</a> → Workers & Pages → Create</span></div>
+          <div class="step"><span class="step-n">2</span><span>Edit Code → 貼上 proxy script → Deploy</span></div>
+          <div class="step"><span class="step-n">3</span><span>Settings → Variables → 加 <code>ANTHROPIC_API_KEY</code>（Encrypt ✓）</span></div>
+          <div class="step"><span class="step-n">4</span><span>Worker：<code>fda510k-proxy</code>（帳號：gogoyankee）</span></div>
+          <div class="step"><span class="step-n">5</span><span>CORS 記得加 <code>Access-Control-Allow-Origin: *</code></span></div>
+          <div class="step"><span class="step-n">6</span><span>改完要重新 Deploy 才生效</span></div>
+        </div>
+      </div>
+      <div class="setting-card">
+        <div class="setting-head" onclick="toggleSetting(this)">
+          <div class="setting-icon" style="background:#E8F5E9">🚀</div>
+          <span class="setting-title">GitHub Pages 部署流程</span>
+          <span class="setting-badge">常忘</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="setting-body">
+          <div class="step"><span class="step-n">1</span><span>Repo → Settings → Pages → Source：Deploy from a branch</span></div>
+          <div class="step"><span class="step-n">2</span><span>Branch <code>main</code>，資料夾 <code>/ (root)</code> → Save</span></div>
+          <div class="step"><span class="step-n">3</span><span>網址：<code>chiuchangru.github.io/[repo]/</code></span></div>
+          <div class="step"><span class="step-n">4</span><span>Push 後約 1–2 分鐘生效，Actions tab 看進度</span></div>
+          <b style="display:block;margin-top:8px">常用 Repo</b>
+          <ul>
+            <li><a href="https://github.com/ChiuChangRu/litdb" target="_blank">ChiuChangRu/litdb</a></li>
+            <li><a href="https://github.com/ChiuChangRu/510K" target="_blank">ChiuChangRu/510K</a></li>
+            <li><a href="https://github.com/ChiuChangRu/center" target="_blank">ChiuChangRu/center</a>（首頁）</li>
+          </ul>
+        </div>
+      </div>
+      <div class="setting-card">
+        <div class="setting-head" onclick="toggleSetting(this)">
+          <div class="setting-icon" style="background:#F3E8FF">🔒</div>
+          <span class="setting-title">SHA-256 密碼保護怎麼加</span>
+          <span class="setting-badge">常忘</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="setting-body">
+          <div class="step"><span class="step-n">1</span><span>產生 hash：<code>crypto.subtle.digest('SHA-256', encoder.encode(pwd))</code></span></div>
+          <div class="step"><span class="step-n">2</span><span>把目標 hash 硬編碼在頁面（不是明文密碼）</span></div>
+          <div class="step"><span class="step-n">3</span><span>登入後 token 存 <code>sessionStorage</code>，重整自動清除</span></div>
+          <div class="step"><span class="step-n">4</span><span>510K Explorer 已實作此模式可直接參考</span></div>
+        </div>
+      </div>
+      <div class="setting-card">
+        <div class="setting-head" onclick="toggleSetting(this)">
+          <div class="setting-icon" style="background:#FFF3E0">📦</div>
+          <span class="setting-title">GitHub Contents API 推檔</span>
+          <span class="setting-badge">常忘</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="setting-body">
+          <div class="step"><span class="step-n">1</span><span>先 GET 取得 SHA：<code>GET /repos/:owner/:repo/contents/:path</code></span></div>
+          <div class="step"><span class="step-n">2</span><span>PUT 帶入 <code>sha</code>、<code>message</code>、<code>content</code>（base64）</span></div>
+          <div class="step"><span class="step-n">3</span><span>Token 需要 <code>repo</code> scope，存在 Cloudflare Worker 環境變數</span></div>
+          <div class="step"><span class="step-n">4</span><span>漏掉 sha → 409；content 忘記 btoa → 422</span></div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="footer-note">LitDB 內部工作版 · 各知識庫資料與分析結果僅供內部研發參考</div>
+  <div class="hint" id="storeHint"></div>
+</main>
+
+<!-- Modal -->
+<div class="overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head">
+      <h3 id="modalTitle">新增工具</h3>
+      <button class="btn-ghost" id="modalClose" aria-label="關閉" style="padding:4px;border-radius:8px">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="field"><label>工具名稱</label><input id="f_name" placeholder="例：LitDB"></div>
+      <div class="row2">
+        <div class="field"><label>代碼</label><input id="f_code" class="mono" placeholder="litdb"></div>
+        <div class="field"><label>版本</label><input id="f_ver" class="mono" placeholder="v1.0"></div>
+      </div>
+      <div class="field"><label>網站連結（點卡片開啟）</label><input id="f_url" class="mono" placeholder="https://chiuchangru.github.io/litdb/"></div>
+      <div class="row2">
+        <div class="field"><label>狀態</label>
+          <select id="f_status"><option>規劃中</option><option>開發中</option><option>進行中</option><option>維護中</option><option>已完成</option></select>
+        </div>
+        <div class="field"><label>Repo（選填）</label><input id="f_repo" class="mono" placeholder="ChiuChangRu/litdb"></div>
+      </div>
+      <div class="field"><label>主題色</label>
+        <div style="display:flex;align-items:center;gap:12px">
+          <input type="color" id="f_theme" value="#0E7C86" style="width:46px;height:36px;padding:3px;cursor:pointer">
+          <div class="swatches" id="swatches"></div>
+        </div>
+      </div>
+      <div class="field"><label>描述</label><textarea id="f_desc" placeholder="一句話說明這個工具"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" id="deleteBtn" style="color:var(--amber)">刪除工具</button>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-ghost" id="cancelBtn">取消</button>
+        <button class="btn btn-primary" id="saveBtn">儲存</button>
+      </div>
+    </div>
+  </div>
 </div>
 
+<input type="file" id="fileInput" accept="application/json" style="display:none">
+<div class="toast" id="toast"></div>
+
+<script id="seed-data" type="application/json">
+{"projects":[
+{"id":"p1","code":"litdb","name":"LitDB","ver":"v1.0","status":"維護中","theme":"#E0791F","url":"https://chiuchangru.github.io/litdb/","repo":"ChiuChangRu/litdb","desc":"親水塗層與切片專利／文獻資料庫，含專利泳道圖、IP 風險分類與決策報告引擎。","notes":[
+  {"id":"n1","text":"papers.json 由 Codex 共同維護，注意同步衝突","done":false},
+  {"id":"n2","text":"報告持久化 / 軟刪除已完成","done":true},
+  {"id":"n3","text":"書籤工具（bookmarklet）存專利","done":true}
+]},
+{"id":"p2","code":"510k","name":"510(K) Explorer","ver":"v1.0","status":"開發中","theme":"#D8531F","url":"https://chiuchangru.github.io/510K/","repo":"ChiuChangRu/510K","desc":"FDA 510(k) 競品分析管線：產品代碼 → 510(k) 清單 → AI 萃取性能測試 → 相似度搜尋。","notes":[
+  {"id":"n4","text":"localStorage 快取 + SHA-256 密碼保護已完成","done":true},
+  {"id":"n5","text":"公司／類別／文件類型篩選器","done":true},
+  {"id":"n6","text":"邏輯抽出 shared.js 與其他工具共用","done":false}
+]},
+{"id":"p3","code":"medqa","name":"MedQA","ver":"v0.x","status":"開發中","theme":"#2E8B7A","url":"https://chiuchangru.github.io/MedQA/","repo":"","desc":"醫材問答工具，GitHub Pages 工具組成員之一。","notes":[
+  {"id":"n7","text":"與其他工具抽出共用 shared.js","done":false}
+]},
+{"id":"p4","code":"ct-explorer","name":"CT Explorer","ver":"v0.x","status":"開發中","theme":"#3F6BC4","url":"https://chiuchangru.github.io/CT/","repo":"","desc":"臨床試驗探索工具，GitHub Pages 工具組成員之一。","notes":[]}
+]}
+</script>
+
+<script>
+(function(){
+"use strict";
+const STORE_KEY="web_tools_hub_v4";
+const STATUS={"規劃中":{c:"var(--slate)",bg:"var(--slate-soft)"},"開發中":{c:"var(--blue)",bg:"var(--blue-soft)"},
+  "進行中":{c:"var(--teal)",bg:"var(--teal-soft)"},"維護中":{c:"var(--amber)",bg:"var(--amber-soft)"},"已完成":{c:"var(--green)",bg:"var(--green-soft)"}};
+const SWATCHES=["#E0791F","#D8531F","#2E8B7A","#3F6BC4","#0E7C86","#8E44AD","#C0392B","#16202E"];
+
+let state=load(), editingId=null;
+
+function seed(){try{return JSON.parse(document.getElementById("seed-data").textContent)}catch(e){return{projects:[]}}}
+function load(){try{const r=localStorage.getItem(STORE_KEY);if(r)return JSON.parse(r)}catch(e){}return seed();}
+let storeOk=(function(){try{localStorage.setItem("_t","1");localStorage.removeItem("_t");return true}catch(e){return false}})();
+function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify(state))}catch(e){}markSnap();}
+
+const uid=()=>"x"+Math.random().toString(36).slice(2,9);
+const esc=s=>(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=id=>document.getElementById(id);
+const monogram=p=>((p.code||p.name||"").replace(/[^a-z0-9]/gi,"").slice(0,3)||"?").toUpperCase();
+
+function markSnap(){
+  const d=new Date(),pad=n=>String(n).padStart(2,"0");
+  $("snapTag").textContent=`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())} · ${state.projects.length} 個工具`;
+}
+
+function render(){
+  renderRows(); markSnap();
+  $("caseCount").textContent=state.projects.length;
+  const totalOpen=state.projects.reduce((s,p)=>s+(p.notes||[]).filter(n=>!n.done).length,0);
+  $("noteCount").textContent=totalOpen?`${totalOpen} 待辦`:"";
+  $("storeHint").textContent=storeOk
+    ?"資料自動存於這台裝置的瀏覽器。換電腦或留版本時，用「下載目前版本」匯出 JSON；對「下載」按右鍵可匯出含資料的 HTML。"
+    :"此預覽環境無法自動儲存 — 請「下載目前版本」匯出，下次用「匯入」載回。";
+}
+
+function renderRows(){
+  const root=$("rows"); root.innerHTML="";
+  state.projects.forEach(p=>{
+    const row=document.createElement("div");
+    row.className="row";
+    row.appendChild(caseEl(p));
+    row.appendChild(notePanelEl(p));
+    root.appendChild(row);
+  });
+}
+
+function caseEl(p){
+  const st=STATUS[p.status]||STATUS["規劃中"];
+  const el=document.createElement("article");
+  el.className="case";
+  el.style.setProperty("--tc",p.theme||"var(--teal)");
+  el.innerHTML=`
+    <div class="mono-tile">${esc(monogram(p))}</div>
+    <div class="case-body">
+      ${p.code?`<div class="code">${esc(p.code)}</div>`:""}
+      <h3>${esc(p.name)}</h3>
+      ${p.desc?`<p class="desc">${esc(p.desc)}</p>`:""}
+      <div class="case-foot">
+        <span class="status-pill" style="color:${st.c};background:${st.bg}"><span class="led" style="background:${st.c}"></span>${esc(p.status)}</span>
+        ${p.ver?`<span class="ver">${esc(p.ver)}</span>`:""}
+      </div>
+    </div>
+    <span class="open-ind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span>
+    <button class="edit-mini" title="編輯"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/></svg></button>`;
+  el.addEventListener("click",()=>{
+    if(p.url) window.open(p.url,"_blank","noopener");
+    else toast("尚未設定網站連結");
+  });
+  el.querySelector(".edit-mini").addEventListener("click",e=>{ e.stopPropagation(); openModal(p.id); });
+  return el;
+}
+
+function notePanelEl(p){
+  const notes=p.notes||[];
+  const open=notes.filter(n=>!n.done).length;
+  const wrap=document.createElement("div");
+  wrap.className="notepanel";
+  wrap.style.setProperty("--tc",p.theme||"var(--teal)");
+
+  const headDiv=document.createElement("div");
+  headDiv.className="np-head";
+  headDiv.innerHTML=`
+    <div class="np-title-row">
+      <span class="np-name">${esc(p.name)}</span>
+      ${p.url?`<a class="np-open" href="${esc(p.url)}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>開啟</a>`:""}
+    </div>
+    <div class="np-meta">${notes.length} 則筆記${open?` · ${open} 未完成`:" · 全部完成"}</div>`;
+  wrap.appendChild(headDiv);
+
+  const body=document.createElement("div");
+  body.className="np-body";
+  if(!notes.length){
+    body.innerHTML=`<div class="np-empty-small">尚無筆記</div>`;
+  } else {
+    notes.forEach(n=>body.appendChild(noteEl(p,n,wrap)));
+  }
+  wrap.appendChild(body);
+
+  const addDiv=document.createElement("div");
+  addDiv.className="np-add";
+  const inp=document.createElement("input");
+  inp.type="text"; inp.placeholder="新增改進事項…";
+  const btn=document.createElement("button");
+  btn.textContent="加入";
+  addDiv.appendChild(inp); addDiv.appendChild(btn);
+  wrap.appendChild(addDiv);
+
+  const doAdd=()=>{
+    const t=inp.value.trim(); if(!t)return;
+    p.notes=p.notes||[]; p.notes.push({id:uid(),text:t,done:false}); inp.value="";
+    save(); render();
+  };
+  btn.onclick=doAdd;
+  inp.addEventListener("keydown",e=>{ if(e.key==="Enter") doAdd(); });
+  return wrap;
+}
+
+function noteEl(p,n){
+  const row=document.createElement("div");
+  row.className="note"+(n.done?" done":"");
+  row.innerHTML=`<button class="chk" aria-label="完成切換"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></button>
+    <span class="ntext" contenteditable="true" spellcheck="false">${esc(n.text)}</span>
+    <button class="ndel" aria-label="刪除">×</button>`;
+  row.querySelector(".chk").onclick=()=>{ n.done=!n.done; save(); render(); };
+  const txt=row.querySelector(".ntext");
+  txt.addEventListener("blur",()=>{ n.text=txt.textContent.trim()||n.text; txt.textContent=n.text; save(); });
+  txt.addEventListener("keydown",e=>{ if(e.key==="Enter"){e.preventDefault();txt.blur();} });
+  row.querySelector(".ndel").onclick=()=>{ p.notes=p.notes.filter(x=>x.id!==n.id); save(); render(); };
+  return row;
+}
+
+/* Modal */
+const overlay=$("overlay");
+function buildSwatches(){ const w=$("swatches"); w.innerHTML="";
+  SWATCHES.forEach(c=>{ const b=document.createElement("button"); b.className="sw"; b.style.background=c;
+    b.onclick=()=>{ $("f_theme").value=c; }; w.appendChild(b); }); }
+function openModal(id){
+  editingId=id; const p=id?state.projects.find(x=>x.id===id):null;
+  $("modalTitle").textContent=p?"編輯工具":"新增工具";
+  $("f_name").value=p?p.name:""; $("f_code").value=p?p.code||"":""; $("f_ver").value=p?p.ver||"":"";
+  $("f_url").value=p?p.url||"":""; $("f_repo").value=p?p.repo||"":"";
+  $("f_status").value=p?p.status:"開發中"; $("f_theme").value=p&&p.theme?p.theme:"#0E7C86";
+  $("f_desc").value=p?p.desc||"":"";
+  $("deleteBtn").style.display=p?"inline-flex":"none";
+  overlay.classList.add("show"); setTimeout(()=>$("f_name").focus(),50);
+}
+function closeModal(){ overlay.classList.remove("show"); editingId=null; }
+$("saveBtn").onclick=()=>{
+  const name=$("f_name").value.trim(); if(!name){$("f_name").focus();return;}
+  const data={name,code:$("f_code").value.trim(),ver:$("f_ver").value.trim(),status:$("f_status").value,
+    url:$("f_url").value.trim(),repo:$("f_repo").value.trim(),theme:$("f_theme").value,desc:$("f_desc").value.trim()};
+  if(editingId){ Object.assign(state.projects.find(x=>x.id===editingId),data); }
+  else{ state.projects.push(Object.assign({id:uid(),notes:[]},data)); }
+  save(); render(); closeModal(); toast(editingId?"已更新":"已新增工具");
+};
+$("deleteBtn").onclick=()=>{ if(!editingId)return;
+  if(!confirm("確定刪除這個工具？"))return;
+  state.projects=state.projects.filter(x=>x.id!==editingId); save(); render(); closeModal(); toast("已刪除"); };
+$("addBtn").onclick=()=>openModal(null);
+$("addCaseBtn").onclick=()=>openModal(null);
+$("cancelBtn").onclick=closeModal; $("modalClose").onclick=closeModal;
+overlay.addEventListener("click",e=>{ if(e.target===overlay) closeModal(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&overlay.classList.contains("show")) closeModal(); });
+
+/* Export / Import */
+function stamp(){ const d=new Date(),pad=n=>String(n).padStart(2,"0");
+  return `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}`; }
+function dl(fn,c,t){ const b=new Blob([c],{type:t}),u=URL.createObjectURL(b),a=document.createElement("a");
+  a.href=u;a.download=fn;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000); }
+$("exportJsonBtn").onclick=()=>{ dl(`網頁工具總覽_${stamp()}.json`,JSON.stringify(state,null,2),"application/json"); toast("已下載 JSON"); };
+$("exportJsonBtn").addEventListener("contextmenu",e=>{ e.preventDefault();
+  const clone=document.documentElement.cloneNode(true);
+  const s=clone.querySelector("#seed-data");if(s)s.textContent=JSON.stringify(state);
+  dl(`網頁工具總覽_${stamp()}.html`,"<!DOCTYPE html>\n"+clone.outerHTML,"text/html"); toast("已下載含資料 HTML"); });
+$("importBtn").onclick=()=>$("fileInput").click();
+$("fileInput").addEventListener("change",e=>{ const f=e.target.files[0];if(!f)return; const r=new FileReader();
+  r.onload=()=>{ try{ const d=JSON.parse(r.result);if(!d||!Array.isArray(d.projects))throw 0;
+      state=d; save(); render(); toast("已匯入並還原");
+    }catch(err){ toast("檔案格式不正確"); } e.target.value=""; }; r.readAsText(f); });
+
+let tt; function toast(m){ const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),2200); }
+
+buildSwatches(); render();
+})();
+
+function toggleSetting(head){
+  const body=head.nextElementSibling, ch=head.querySelector(".chevron"), open=body.classList.contains("open");
+  body.classList.toggle("open",!open); ch.classList.toggle("open",!open);
+}
+</script>
 </body>
 </html>
