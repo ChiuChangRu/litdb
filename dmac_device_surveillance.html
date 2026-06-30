@@ -376,6 +376,43 @@ tr:last-child td{border-bottom:0}
   color:#9d6317;
   font-weight:800;
 }
+.candidate-box{
+  display:grid;
+  gap:8px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:9px;
+  background:#fff;
+}
+.candidate-box.hidden{
+  display:none;
+}
+.candidate-title{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:800;
+}
+.candidate-list{
+  display:grid;
+  gap:7px;
+}
+.candidate-option{
+  width:100%;
+  border:1px solid #b8d8c8;
+  border-radius:7px;
+  background:#f4fbf7;
+  color:var(--ink);
+  padding:8px 9px;
+  text-align:left;
+  cursor:pointer;
+}
+.candidate-option strong{
+  color:var(--green);
+}
+.candidate-option.active{
+  border-color:var(--green);
+  background:#dff3ea;
+}
 .worker-url{
   flex:1;
   min-width:260px;
@@ -452,9 +489,15 @@ tr:last-child td{border-bottom:0}
         <option value="注射針 / hypodermic needle">
         <option value="注射筒 / syringe">
         <option value="導管 / catheter">
+        <option value="透析導管 / dialysis catheter">
+        <option value="血液透析導管 / hemodialysis catheter">
         <option value="活檢針 / biopsy needle">
         <option value="輸液套 / infusion set">
       </datalist>
+      <div id="deviceCandidateBox" class="candidate-box hidden">
+        <div class="candidate-title">請先確認要分析的醫療器材</div>
+        <div id="deviceCandidateList" class="candidate-list"></div>
+      </div>
     </div>
     <div class="control">
       <label for="productCodeInput">FDA product code</label>
@@ -837,6 +880,8 @@ suggestedMakers.forEach(([key,label,query])=>{
 const makerSelect = document.getElementById("makerSelect");
 const deviceInput = document.getElementById("deviceInput");
 const productCodeInput = document.getElementById("productCodeInput");
+const deviceCandidateBox = document.getElementById("deviceCandidateBox");
+const deviceCandidateList = document.getElementById("deviceCandidateList");
 const applySearchBtn = document.getElementById("applySearchBtn");
 const draftHint = document.getElementById("draftHint");
 const problemSearch = document.getElementById("problemSearch");
@@ -872,13 +917,37 @@ const workerCompanyKeywords = {
 };
 let appliedCriteria = null;
 let criteriaDirty = true;
+let selectedDeviceCandidate = null;
 const devicePresets = [
-  {match:["檢體針","採血","blood collection","vacutainer"], code:"JKA", label:"檢體針 / 採血器材"},
-  {match:["注射針","hypodermic needle"], code:"FMI", label:"注射針"},
-  {match:["注射筒","syringe"], code:"FMF", label:"注射筒"},
-  {match:["導管","catheter"], code:"FOZ", label:"導管"},
-  {match:["活檢針","biopsy needle"], code:"KNW", label:"活檢針"},
-  {match:["輸液","infusion set"], code:"FPA", label:"輸液套"}
+  {match:["檢體針","採血","blood collection","vacutainer"], candidates:[
+    {code:"JKA", label:"Blood collection tubes / systems", zh:"檢體針 / 採血器材"}
+  ]},
+  {match:["透析導管","血液透析","dialysis catheter","hemodialysis"], candidates:[
+    {code:"MSD", label:"Catheter, Hemodialysis, Implanted", zh:"植入式血液透析導管"},
+    {code:"NIE", label:"Short-term dialysis / trialysis catheter", zh:"短期透析 / trialysis 導管"},
+    {code:"NIF", label:"Triple lumen implanted hemodialysis catheter", zh:"三腔植入式血液透析導管"},
+    {code:"NYU", label:"Coated implanted hemodialysis catheter", zh:"塗層植入式血液透析導管"},
+    {code:"PKI", label:"Fully subcutaneous implanted hemodialysis catheter", zh:"全皮下植入式血液透析導管"},
+    {code:"NQJ", label:"Non-implanted ultrafiltration hemodialysis catheter", zh:"非植入式周邊超過濾血液透析導管"}
+  ]},
+  {match:["腹膜透析","peritoneal dialysis"], candidates:[
+    {code:"OAG", label:"Peritoneal dialysis catheter storage garment", zh:"腹膜透析導管收納固定衣"}
+  ]},
+  {match:["注射針","hypodermic needle"], candidates:[
+    {code:"FMI", label:"Hypodermic single lumen needle", zh:"注射針"}
+  ]},
+  {match:["注射筒","syringe"], candidates:[
+    {code:"FMF", label:"Piston syringe", zh:"注射筒"}
+  ]},
+  {match:["導管","catheter"], candidates:[
+    {code:"FOZ", label:"General intravascular catheter", zh:"一般血管內導管"}
+  ]},
+  {match:["活檢針","biopsy needle"], candidates:[
+    {code:"KNW", label:"Biopsy needle", zh:"活檢針"}
+  ]},
+  {match:["輸液","infusion set"], candidates:[
+    {code:"FPA", label:"Infusion set", zh:"輸液套"}
+  ]}
 ];
 
 function normalizeDeviceText(){
@@ -886,14 +955,16 @@ function normalizeDeviceText(){
 }
 
 function currentProductCode(){
-  return (productCodeInput.value || "JKA").trim().toUpperCase();
+  return (productCodeInput.value || "").trim().toUpperCase();
 }
 
 function readDraftCriteria(){
   return {
     makerKey: makerSelect.value || "all",
     productCode: currentProductCode(),
-    deviceText: normalizeDeviceText() || "medical device"
+    deviceText: selectedDeviceCandidate?.zh || normalizeDeviceText() || "medical device",
+    deviceLabel: selectedDeviceCandidate?.label || "",
+    needsDeviceConfirmation: Boolean(deviceCandidateList.children.length && !selectedDeviceCandidate)
   };
 }
 
@@ -917,13 +988,45 @@ function markCriteriaDirty(){
   workerStatus.textContent = "條件已修改但尚未確認；右側圖表與即時結果仍顯示上次確認的檢索條件。";
 }
 
-function inferProductCode(){
+function findDeviceCandidates(){
   const text = normalizeDeviceText().toLowerCase();
+  if(!text) return [];
   const preset = devicePresets.find(item => item.match.some(word => text.includes(word.toLowerCase())));
-  if(preset){
-    productCodeInput.value = preset.code;
+  return preset ? preset.candidates : [];
+}
+
+function renderDeviceCandidates(candidates){
+  selectedDeviceCandidate = null;
+  deviceCandidateList.innerHTML = "";
+  if(!candidates.length){
+    deviceCandidateBox.classList.add("hidden");
+    return;
   }
+  productCodeInput.value = "";
+  deviceCandidateBox.classList.remove("hidden");
+  deviceCandidateList.innerHTML = candidates.map((item, index) => `
+    <button class="candidate-option" type="button" data-index="${index}">
+      <strong>${item.code}</strong> ${item.zh}<br>
+      <small>${item.label}</small>
+    </button>
+  `).join("");
+}
+
+function selectDeviceCandidate(candidate, button){
+  selectedDeviceCandidate = candidate;
+  productCodeInput.value = candidate.code;
+  Array.from(deviceCandidateList.querySelectorAll(".candidate-option")).forEach(item => item.classList.remove("active"));
+  button.classList.add("active");
   markCriteriaDirty();
+  draftHint.textContent = `已選擇 ${candidate.zh} / ${candidate.code}，請按「確定並檢索」更新右側分析。`;
+}
+
+function inferProductCode(){
+  renderDeviceCandidates(findDeviceCandidates());
+  markCriteriaDirty();
+  if(deviceCandidateList.children.length){
+    draftHint.textContent = "請先在候選醫療器材中選定 FDA product code，再按「確定並檢索」。";
+  }
 }
 
 suggestedMakers.forEach(([key,label])=>{
@@ -936,6 +1039,36 @@ suggestedMakers.forEach(([key,label])=>{
 function fmt(n){return new Intl.NumberFormat("zh-TW").format(n)}
 function cleanDate(s){return s || "-"}
 function riskClass(v){return v === "高" ? "risk-high" : v === "中" ? "risk-mid" : "risk-low"}
+
+function shouldUseDemoData(criteria){
+  const text = (criteria.deviceText || "").toLowerCase();
+  return criteria.productCode === "JKA" && (text.includes("採血") || text.includes("檢體") || text.includes("blood collection"));
+}
+
+function makeLiveQueryData(base, criteria){
+  const name = base?.name || "全部公司";
+  const productCode = criteria.productCode || "未選擇";
+  return {
+    name,
+    candidate:true,
+    complaints:0,
+    recalls:0,
+    clearances:[],
+    years:{2016:0,2017:0,2018:0,2019:0,2020:0,2021:0,2022:0,2023:0,2024:0,2025:0,2026:0},
+    complaintProblems:[
+      {label:"Awaiting live openFDA search", count:1, zh:"等待即時檢索結果"}
+    ],
+    recallProblems:[
+      {label:"Awaiting live recall search", count:1, zh:"等待即時回收檢索"}
+    ],
+    problems:[
+      {risk:"低", problem:"尚未完成即時檢索", models:[criteria.deviceText || "待確認醫療器材"], ids:[productCode], notes:"請確認候選醫療器材與 FDA product code 後按「確定並檢索」。右側結果會以 openFDA 即時資料更新，不沿用採血示範資料。"}
+    ],
+    events:[
+      ["待檢索","openFDA","尚未完成即時檢索；請先確認醫療器材與 product code。","https://open.fda.gov/apis/device/"]
+    ]
+  };
+}
 
 function drawPie(items){
   const canvas = document.getElementById("pie");
@@ -1129,10 +1262,63 @@ async function fetchOpenFda510k(productCode, keyword){
   return data;
 }
 
+function summarizeYearsFromResults(results){
+  const years = {2016:0,2017:0,2018:0,2019:0,2020:0,2021:0,2022:0,2023:0,2024:0,2025:0,2026:0};
+  (results || []).forEach(item => {
+    const date = item.date_received || item.recall_initiation_date || item.decision_date || "";
+    const year = String(date).slice(0,4);
+    if(Object.prototype.hasOwnProperty.call(years, year)){
+      years[year] += 1;
+    }
+  });
+  return years;
+}
+
+function liveProblemRows(maude){
+  const rows = (maude?.results || []).slice(0,10).map(item => {
+    const device = Array.isArray(item.device) ? item.device[0] || {} : {};
+    const model = device.brand_name || device.generic_name || device.device_report_product_code || "openFDA MAUDE device";
+    const problem = item.event_type || item.type_of_report?.join(", ") || "MAUDE event";
+    const report = item.report_number || item.mdr_report_key || "MAUDE record";
+    const date = item.date_received || "date unavailable";
+    const maker = item.manufacturer_d_name || item.manufacturer_name || "";
+    return {
+      risk:"中",
+      problem,
+      models:[model],
+      ids:[report],
+      notes:[date, maker].filter(Boolean).join(" / ")
+    };
+  });
+  return rows.length ? rows : [
+    {risk:"低", problem:"目前 MAUDE 樣本未回傳問題點", models:["openFDA result"], ids:[maude?.product_code || "product code"], notes:"可調整 product code、公司或提高 Worker limit 後再查。"}
+  ];
+}
+
+function updateLiveSections(maude, recall, clearance, criteria){
+  const maudeCount = resultCount(maude);
+  const recallCount = resultCount(recall);
+  const clearanceCount = resultCount(clearance);
+  const items = [
+    {label:"MAUDE events", zh:"MAUDE 客訴/事件", count:Math.max(maudeCount,0)},
+    {label:"Recall records", zh:"Recall 回收", count:Math.max(recallCount,0)},
+    {label:"510(k) clearances", zh:"510(k) 證號", count:Math.max(clearanceCount,0)}
+  ].filter(item => item.count > 0);
+  const safeItems = items.length ? items : [{label:"No live records", zh:"未查到即時結果", count:1}];
+  document.getElementById("pieTitle").textContent = "即時檢索結果比例";
+  drawPie(safeItems);
+  renderLegend(safeItems);
+  renderBars(summarizeYearsFromResults(maude?.results || []));
+  renderProblems({problems:liveProblemRows(maude)});
+  document.getElementById("riskLevel").textContent = maudeCount || recallCount ? "待判讀" : "低";
+  document.getElementById("riskSub").textContent = `${criteria.productCode} 即時資料，需依問題點人工判讀`;
+}
+
 async function fetchWorkerData(){
   const criteria = getActiveCriteria();
   const key = criteria.makerKey || "all";
-  const data = dashboardData[key];
+  const baseData = dashboardData[key];
+  const data = shouldUseDemoData(criteria) ? baseData : makeLiveQueryData(baseData, criteria);
   const keyword = workerCompanyKeywords[key] || "";
   const productCode = criteria.productCode;
   const deviceText = criteria.deviceText || "醫療器材";
@@ -1172,6 +1358,9 @@ async function fetchWorkerData(){
         keyword ? `Product code 總量 ${fmt(kTotalCount)}；公司篩選 ${fmt(kFilteredCount)}` : `Product code 總量 ${fmt(kTotalCount)}`
       )
     ].join("");
+    if(!shouldUseDemoData(criteria)){
+      updateLiveSections(maude, recall, kFiltered, criteria);
+    }
   }catch(error){
     workerStatus.textContent = `即時查詢失敗：${error.message}`;
   }finally{
@@ -1181,7 +1370,20 @@ async function fetchWorkerData(){
 }
 
 function applyCriteriaAndFetch(){
-  appliedCriteria = readDraftCriteria();
+  const draft = readDraftCriteria();
+  if(draft.needsDeviceConfirmation){
+    setDraftState(true);
+    draftHint.textContent = "請先選擇一個候選醫療器材 / FDA product code，再進行檢索。";
+    workerStatus.textContent = "尚未確認醫療器材類別，未更新右側分析。";
+    return;
+  }
+  if(!draft.productCode){
+    setDraftState(true);
+    draftHint.textContent = "請選擇候選醫療器材，或手動輸入 FDA product code。";
+    workerStatus.textContent = "缺少 FDA product code，未更新右側分析。";
+    return;
+  }
+  appliedCriteria = draft;
   setDraftState(false);
   render({resetWorker:true});
   fetchWorkerData();
@@ -1229,8 +1431,22 @@ function render(options = {}){
 makerSelect.addEventListener("change", markCriteriaDirty);
 deviceInput.addEventListener("change", inferProductCode);
 deviceInput.addEventListener("input", inferProductCode);
-productCodeInput.addEventListener("input", markCriteriaDirty);
+productCodeInput.addEventListener("input", ()=>{
+  selectedDeviceCandidate = null;
+  deviceCandidateBox.classList.add("hidden");
+  deviceCandidateList.innerHTML = "";
+  markCriteriaDirty();
+});
 problemSearch.addEventListener("input", render);
+deviceCandidateList.addEventListener("click", event => {
+  const button = event.target.closest(".candidate-option");
+  if(!button) return;
+  const candidates = findDeviceCandidates();
+  const candidate = candidates[Number(button.dataset.index)];
+  if(candidate){
+    selectDeviceCandidate(candidate, button);
+  }
+});
 applySearchBtn.addEventListener("click", applyCriteriaAndFetch);
 fetchWorkerBtn.addEventListener("click", fetchWorkerData);
 complaintMode.addEventListener("click", ()=>{
