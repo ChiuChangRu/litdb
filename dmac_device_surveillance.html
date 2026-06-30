@@ -797,7 +797,7 @@ const suggestedMakers = [
   ["baxter","Baxter","Baxter blood collection needle"],
   ["cook","Cook Medical","Cook Medical blood collection needle"],
   ["teleflex","Teleflex","Teleflex blood collection needle"],
-  ["argon","Argon Medical","Argon Medical biopsy needle blood collection needle"],
+  ["argon","Argon Medical","Argon Medical blood collection needle"],
   ["manual","手動輸入...","blood collection needle"]
 ];
 
@@ -1081,15 +1081,19 @@ function resultSubtitle(item){
   return parts.join(" · ");
 }
 
-function renderWorkerCard(label, data){
+function resultCount(data){
+  return data?.meta?.results?.total ?? data?.filtered_count ?? data?.raw_count ?? (data?.results || []).length ?? 0;
+}
+
+function renderWorkerCard(label, data, detail){
   const results = data?.results || [];
   const samples = results.slice(0,3).map(item => `
     <div><strong>${resultTitle(item)}</strong><br>${resultSubtitle(item)}</div>
   `).join("");
   return `<div class="worker-result">
     <span>${label}</span>
-    <strong>${fmt(data?.filtered_count ?? results.length ?? 0)}</strong>
-    <span>raw ${fmt(data?.raw_count ?? results.length ?? 0)}</span>
+    <strong>${fmt(resultCount(data))}</strong>
+    <span>${detail || `raw ${fmt(data?.raw_count ?? results.length ?? 0)}`}</span>
     <div class="mini-list mt8">${samples || "<div>沒有符合公司關鍵字的結果</div>"}</div>
   </div>`;
 }
@@ -1101,6 +1105,27 @@ async function fetchJson(endpoint, query){
   if(!res.ok && data?.error){
     return {raw_count:0, filtered_count:0, results:[], error:data.error.message || "openFDA 查無資料"};
   }
+  return data;
+}
+
+async function fetchOpenFda510k(productCode, keyword){
+  const terms = [`product_code:${productCode}`];
+  if(keyword){
+    terms.push(`applicant:${keyword}`);
+  }
+  const search = terms.join(" AND ");
+  const url = `https://api.fda.gov/device/510k.json?search=${encodeURIComponent(search)}&limit=5`;
+  const res = await fetch(url);
+  if(res.status === 404){
+    return {meta:{results:{total:0}}, results:[], raw_count:0, filtered_count:0, url};
+  }
+  const data = await res.json();
+  if(!res.ok){
+    throw new Error(data?.error?.message || "openFDA 510(k) query failed");
+  }
+  data.url = url;
+  data.raw_count = data.results?.length || 0;
+  data.filtered_count = data.meta?.results?.total ?? data.raw_count;
   return data;
 }
 
@@ -1120,20 +1145,35 @@ async function fetchWorkerData(){
   workerResults.innerHTML = "";
   workerStatus.textContent = `正在透過 Worker 查詢 ${data.name} / ${deviceText} / ${productCode}...`;
   try{
-    const [maude, recall, clearance] = await Promise.all([
+    const [maude, recall, kTotal, kFiltered] = await Promise.all([
       fetchJson("/api/maude", query),
       fetchJson("/api/recall", query),
-      fetchJson("/api/510k", query)
+      fetchOpenFda510k(productCode, ""),
+      keyword ? fetchOpenFda510k(productCode, keyword) : fetchOpenFda510k(productCode, "")
     ]);
-    workerStatus.textContent = `即時結果已更新：公司關鍵字「${keyword || "全部"}」，資料來源 openFDA via Cloudflare Worker。`;
+    const kTotalCount = resultCount(kTotal);
+    const kFilteredCount = resultCount(kFiltered);
+    document.getElementById("complaintCount").textContent = fmt(resultCount(maude));
+    document.getElementById("recallCount").textContent = fmt(resultCount(recall));
+    document.getElementById("clearanceCount").textContent = fmt(kFilteredCount);
+    document.getElementById("complaintSub").textContent = "openFDA 即時結果";
+    document.getElementById("recallSub").textContent = "openFDA 即時結果";
+    document.getElementById("clearanceSub").textContent = keyword
+      ? `K 證總量 ${fmt(kTotalCount)}；公司篩選 ${fmt(kFilteredCount)}`
+      : `K 證總量 ${fmt(kTotalCount)}；未套用公司篩選`;
+    workerStatus.textContent = `即時結果已更新：公司關鍵字「${keyword || "全部"}」。MAUDE/Recall 經 Worker；510(k) 先查 product code 總量再做公司篩選。`;
     workerResults.classList.remove("hidden");
     workerResults.innerHTML = [
       renderWorkerCard("MAUDE 客訴/事件", maude),
       renderWorkerCard("Recall 回收", recall),
-      renderWorkerCard("510(k) 證號", clearance)
+      renderWorkerCard(
+        "510(k) 證號",
+        kFiltered,
+        keyword ? `Product code 總量 ${fmt(kTotalCount)}；公司篩選 ${fmt(kFilteredCount)}` : `Product code 總量 ${fmt(kTotalCount)}`
+      )
     ].join("");
   }catch(error){
-    workerStatus.textContent = `Worker 查詢失敗：${error.message}`;
+    workerStatus.textContent = `即時查詢失敗：${error.message}`;
   }finally{
     fetchWorkerBtn.disabled = false;
     applySearchBtn.disabled = false;
