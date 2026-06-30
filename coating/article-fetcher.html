@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArticleFetcher v2 — 文獻實驗組自動解析</title>
+<style>
+:root{--bg:#f8f5f0;--surface:#fff;--card:#f2ede6;--border:#ddd5c8;--accent:#e86c3a;--green:#2d8c5a;--blue:#1a6fa0;--warn:#c8860a;--danger:#c0392b;--text:#2a2420;--muted:#7a6e64;--mono:'JetBrains Mono','Fira Mono',monospace;--body:'Inter','Noto Sans TC',system-ui,sans-serif;--r:8px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:14px;line-height:1.6;min-height:100vh}
+header{background:var(--accent);color:#fff;padding:10px 24px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+header h1{font-size:16px;font-weight:700;font-family:var(--mono)}
+.header-r{margin-left:auto;display:flex;gap:8px;align-items:center}
+.main{max-width:1280px;margin:0 auto;padding:16px 24px}
+.config-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px;margin-bottom:12px;display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.config-bar label{font-size:10px;font-weight:700;color:var(--muted);display:block;margin-bottom:3px;text-transform:uppercase}
+.config-bar input[type=text]{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12px;color:var(--text);width:360px}
+.config-bar input[type=file]{font-size:11px}
+.config-bar input:focus{outline:none;border-color:var(--accent)}
+.stats-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:8px 16px;margin-bottom:12px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.stat .n{font-size:20px;font-weight:800;font-family:var(--mono);color:var(--accent);line-height:1}
+.stat .l{font-size:10px;color:var(--muted);font-weight:600}
+.stat.g .n{color:var(--green)}.stat.b .n{color:var(--blue)}.stat.w .n{color:var(--warn)}.stat.d .n{color:var(--danger)}
+.action-bar{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:.15s;white-space:nowrap}
+.btn-p{background:var(--accent);color:#fff}.btn-p:hover{background:#cc5a2e}.btn-p:disabled{opacity:.45;cursor:not-allowed}
+.btn-s{background:var(--card);color:var(--text);border:1px solid var(--border)}.btn-s:hover{border-color:var(--accent);color:var(--accent)}
+.btn-g{background:var(--green);color:#fff}.btn-g:hover{background:#236b45}.btn-g:disabled{opacity:.45;cursor:not-allowed}
+.btn-b{background:var(--blue);color:#fff}.btn-b:hover{background:#145a85}
+.num-input{width:50px;padding:4px 6px;font-size:12px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text)}
+.progress-wrap{background:var(--border);border-radius:4px;height:5px;width:160px;overflow:hidden}
+.progress-bar{background:var(--green);height:100%;transition:width .3s;border-radius:4px}
+.log-panel{background:#1a1612;color:#c8bfb0;font-family:var(--mono);font-size:11px;border-radius:var(--r);padding:10px 14px;max-height:160px;overflow-y:auto;margin-bottom:12px;display:none}
+.log-panel.show{display:block}
+.log-ok{color:#5dbd85}.log-err{color:#e87070}.log-info{color:#81b4d8}.log-warn{color:#e8c87a}
+/* Article list */
+.article-list{display:flex;flex-direction:column;gap:6px}
+.acard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color .15s}
+.acard:hover{border-color:var(--accent)}
+.acard-head{display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:pointer;user-select:none}
+.aid{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--accent);min-width:34px}
+.dtype{font-size:10px;padding:1px 6px;border-radius:8px;font-weight:700;background:var(--card);color:var(--muted);border:1px solid var(--border);white-space:nowrap}
+.atitle{flex:1;font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ayear{font-size:11px;color:var(--muted);white-space:nowrap}
+.sbadge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;font-family:var(--mono);white-space:nowrap}
+.sp{background:#f5f0e8;color:var(--muted);border:1px solid var(--border)}
+.sf{background:#fff3e0;color:var(--warn);border:1px solid var(--warn)}
+.sa{background:#e8f0ff;color:var(--blue);border:1px solid var(--blue)}
+.sd{background:#eaf5ef;color:var(--green);border:1px solid var(--green)}
+.se{background:#fdecea;color:var(--danger);border:1px solid var(--danger)}
+.sk{background:var(--card);color:var(--muted);border:1px solid var(--border)}
+.card-btns{display:flex;gap:4px;margin-left:auto}
+.cb{font-size:10px;padding:2px 8px;border-radius:4px;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);transition:.1s}
+.cb:hover{border-color:var(--accent);color:var(--accent)}
+/* Card body */
+.acard-body{border-top:1px solid var(--border);padding:12px;display:none}
+.acard-body.open{display:block}
+.acard-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:12px}
+@media(max-width:800px){.acard-grid{grid-template-columns:1fr}}
+.fl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.raw-box{font-size:11px;line-height:1.7;color:var(--text);background:var(--card);border-radius:5px;padding:8px 10px;max-height:180px;overflow-y:auto;white-space:pre-wrap;word-break:break-all}
+/* Experiments table */
+.exp-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:5px}
+.exp-table th{background:var(--accent);color:#fff;padding:5px 7px;text-align:left;border:1px solid var(--accent)}
+.exp-table td{padding:5px 7px;border:1px solid var(--border);vertical-align:top;line-height:1.45}
+.exp-table tr:nth-child(even) td{background:var(--card)}
+.val{font-weight:700;color:var(--green)}
+.val-cof{font-weight:700;color:var(--accent)}
+/* Tech map table */
+.tm-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:5px}
+.tm-table th{background:var(--blue);color:#fff;padding:5px 7px;text-align:left;border:1px solid var(--blue)}
+.tm-table td{padding:5px 7px;border:1px solid var(--border);vertical-align:top;line-height:1.5}
+.tm-table tr:nth-child(even) td{background:#f0f5fa}
+.no-data{color:var(--muted);font-size:11px;font-style:italic}
+/* toast */
+#toast{position:fixed;bottom:18px;right:18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:9px 14px;font-size:12px;opacity:0;transform:translateY(5px);transition:.2s;pointer-events:none;z-index:999}
+#toast.show{opacity:1;transform:translateY(0)}
+#toast.ok{border-color:var(--green)}#toast.err{border-color:var(--danger)}
+.spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<header>
+  <h1>ArticleFetcher v2</h1>
+  <span style="font-size:11px;opacity:.8">文獻實驗組 + Review技術路線 自動解析 → article.json</span>
+  <div class="header-r">
+    <span id="costDisplay" style="font-size:11px;background:rgba(0,0,0,.2);padding:2px 8px;border-radius:4px">費用：$0.0000</span>
+  </div>
+</header>
+<div class="main">
+
+<!-- Config -->
+<div class="config-bar">
+  <div>
+    <label>Claude Proxy URL</label>
+    <input type="text" id="proxyUrl" placeholder="https://your-worker.workers.dev/proxy">
+  </div>
+  <div>
+    <label>papers.json</label>
+    <input type="file" id="papersFile" accept=".json">
+  </div>
+  <div>
+    <label>article.json（選填，繼續上次）</label>
+    <input type="file" id="articleFile" accept=".json">
+  </div>
+  <button class="btn btn-s" onclick="initData()">▶ 載入</button>
+</div>
+
+<!-- Stats -->
+<div class="stats-bar" id="statsBar">
+  <div class="stat"><div class="n" id="sTotal">—</div><div class="l">總文獻</div></div>
+  <div class="stat g"><div class="n" id="sDone">—</div><div class="l">完成</div></div>
+  <div class="stat b"><div class="n" id="sParsed">—</div><div class="l">已解析組數</div></div>
+  <div class="stat w"><div class="n" id="sPending">—</div><div class="l">待處理</div></div>
+  <div class="stat d"><div class="n" id="sFailed">—</div><div class="l">失敗</div></div>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+    <span id="progressText" style="font-size:11px;color:var(--muted);min-width:50px">0 / 0</span>
+  </div>
+</div>
+
+<!-- Actions -->
+<div class="action-bar">
+  <button class="btn btn-p" id="btnRunPending" onclick="runPending()" disabled>▶ 執行待處理</button>
+  <button class="btn btn-s" id="btnRunAll" onclick="runAll()" disabled>⚡ 全部重跑</button>
+  <button class="btn btn-s" id="btnRunFailed" onclick="runFailed()" disabled>↺ 重跑失敗</button>
+  <button class="btn btn-s" onclick="toggleLog()">📋 Log</button>
+  <button class="btn btn-g" id="btnDownload" onclick="downloadJson()" disabled>⬇ 下載 article.json</button>
+  <button class="btn btn-s" onclick="copyJson()">📋 複製 JSON</button>
+  <div style="display:flex;align-items:center;gap:4px;margin-left:8px;font-size:11px;color:var(--muted)">
+    並行<input type="number" class="num-input" id="concurrency" value="2" min="1" max="5">
+    延遲ms<input type="number" class="num-input" id="delayMs" value="1500" min="500" max="8000">
+  </div>
+</div>
+
+<div class="log-panel" id="logPanel"></div>
+<div class="article-list" id="articleList"></div>
+</div>
+<div id="toast"></div>
+
+<script>
+// ── State ─────────────────────────────────────────────────────────
+let DB = { articles: [] };
+let papersMap = {};
+let isRunning = false;
+let totalCost = 0;
+
+// ── System Prompts ─────────────────────────────────────────────────
+const PROMPT_EXPERIMENTAL = `你是醫療塗層技術的文獻解析專家。
+任務：閱讀實驗型論文的摘要或全文，將實驗內容拆解為結構化陣列。
+
+拆解原則：
+1. 每個獨立實驗條件（不同材料組合、濃度、製程、對照組）= 一個 experiment
+2. 對照組必須列出（is_control: true）
+3. 數值要具體：「COF 0.16」不是「低摩擦」；「WCA 7.4°」不是「親水性佳」
+4. 若數值因條件不同而有範圍（如 COF 0.12–0.22 依分子量），寫範圍 + notes 說明
+5. 若測試多種基材，每種基材分開列
+6. 沒有的欄位填 null
+
+只輸出 JSON（不要 markdown 或說明）：
+{
+  "paper_type": "experimental",
+  "main_finding": "最重要發現（中文，60字內）",
+  "experiments": [
+    {
+      "name": "實驗組名稱（材料+基材，如：PDA/PVP K90+PEG4000，UV，TPU）",
+      "is_control": false,
+      "substrate": "TPU/PU/PVC/silicone/PTFE/Nitinol/PP/導管/針/支架/通用",
+      "primer": "底塗（成分+wt%或製程），null if none",
+      "topcoat": "面塗（成分+wt%），null if none",
+      "crosslinker": "交聯劑，null if none",
+      "photoinitiator": "光起始劑，null if none",
+      "curing": "固化條件，null if none",
+      "wca": "WCA 數值（如 7.4°），null if none",
+      "cof": "COF 數值（如 0.16，或 0.4→0.16），null if none",
+      "adhesion": "附著力結果（如 Grade 0，3B），null if none",
+      "durability": "耐磨/耐久（如 往返100次 COF<0.10），null if none",
+      "antibacterial": "抗菌結果（如 E.coli 抑制 98%），null if none",
+      "antifouling": "抗蛋白/抗結痂結果（如 fibrinogen 降72%），null if none",
+      "other_results": "其他關鍵結果，null if none",
+      "notes": "補充（差異說明、限制、推論），null if none"
+    }
+  ]
+}`;
+
+const PROMPT_REVIEW = `你是醫療塗層技術的文獻解析專家。
+任務：閱讀 review/綜述 文章，整理出文章中涵蓋的所有技術路線與配方。
+
+重點：review 彙整多篇研究，每條技術路線可能有多個配方變體。
+把每條路線/方法整理成獨立條目，包含代表性配方、性能數值、優缺點。
+
+只輸出 JSON（不要 markdown 或說明）：
+{
+  "paper_type": "review",
+  "main_finding": "此綜述最重要的結論（中文，60字內）",
+  "review_scope": "此綜述涵蓋的技術/應用範圍（中文，80字內）",
+  "technology_map": [
+    {
+      "route": "技術路線名稱（如：PDA錨固+PVP UV固化，或：SBMA zwitterionic光接枝）",
+      "materials": ["主要材料1", "材料2"],
+      "mechanism": "作用機制（中文，如：兩性離子靜電水合層阻擋蛋白吸附），null if unknown",
+      "substrate": "適用基材（如：TPU/PU/多種），null if not specified",
+      "representative_formula": "代表性配方（成分+wt%，如文中有），null if not specified",
+      "wca": "代表性 WCA 數值（如 <20°，或 7.4°），null if not reported",
+      "cof": "代表性 COF 數值，null if not reported",
+      "antibacterial": "抗菌效果（如 E.coli 降98%，或僅定性），null if not reported",
+      "antifouling": "抗汙/抗結痂效果（如 fibrinogen 降72%），null if not reported",
+      "durability": "耐久性描述（如 4週PBS浸泡穩定），null if not reported",
+      "advantages": "優點（中文，簡潔條列），null if not stated",
+      "limitations": "缺點/限制（中文），null if not stated",
+      "refs_in_paper": "此路線在原文的代表文獻（作者或DOI），null if not extractable",
+      "notes": "補充說明，null if none"
+    }
+  ]
+}`;
+
+const PROMPT_MARKET = `你是醫療器材產業分析專家。
+任務：閱讀市場報告或產業分析，整理關鍵市場數據和技術趨勢。
+
+只輸出 JSON：
+{
+  "paper_type": "market",
+  "main_finding": "最重要市場結論（中文，60字內）",
+  "review_scope": "此報告涵蓋的市場/技術範圍",
+  "technology_map": [
+    {
+      "route": "技術類別或市場區隔",
+      "materials": [],
+      "mechanism": null,
+      "substrate": null,
+      "representative_formula": null,
+      "wca": null,
+      "cof": null,
+      "antibacterial": null,
+      "antifouling": null,
+      "durability": null,
+      "advantages": "市場優勢或應用場景",
+      "limitations": "市場挑戰",
+      "refs_in_paper": null,
+      "notes": "市場規模、成長率、主要廠商等關鍵數據"
+    }
+  ]
+}`;
+
+// ── Fetch Functions ────────────────────────────────────────────────
+async function fetchContent(article) {
+  const url = article.fetch_url;
+  const ftype = article.fetch_type;
+  if (!url) return '';
+
+  // PMC → NCBI efetch
+  if (url.includes('ncbi.nlm.nih.gov/pmc') || ftype === 'pmc') {
+    const pmcid = url.match(/PMC(\d+)/)?.[1];
+    if (pmcid) {
+      const r = await fetchUrl(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=${pmcid}&rettype=abstract&retmode=text`);
+      if (r && r.length > 80) return r.slice(0, 5000);
+    }
+  }
+
+  // PubMed → NCBI efetch
+  if (url.includes('pubmed.ncbi.nlm.nih.gov') || ftype === 'pubmed' || ftype === 'pubmed_direct') {
+    const pmid = url.match(/(\d{5,})/)?.[1];
+    if (pmid) {
+      const r = await fetchUrl(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=${pmid}&rettype=abstract&retmode=text`);
+      if (r && r.length > 80) return r.slice(0, 5000);
+    }
+  }
+
+  // DOI → CrossRef
+  if (url.includes('doi.org') || ftype === 'doi' || ftype === 'doi_direct') {
+    const doi = url.replace(/^https?:\/\/doi\.org\//, '');
+    if (doi) {
+      const raw = await fetchUrl(`https://api.crossref.org/works/${encodeURIComponent(doi)}`);
+      if (raw) {
+        try {
+          const d = JSON.parse(raw);
+          const msg = d.message || {};
+          let ab = (msg.abstract || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+          const title = (msg.title || [])[0] || '';
+          if (ab || title) return [title ? `Title: ${title}` : '', ab ? `Abstract: ${ab}` : ''].filter(Boolean).join('\n\n').slice(0, 5000);
+        } catch(e) {}
+      }
+    }
+  }
+
+  // ScienceDirect abs → CrossRef by PII
+  if (url.includes('sciencedirect.com/science/article/abs/pii/') || ftype === 'page') {
+    const pii = url.match(/pii\/([A-Z0-9]+)/)?.[1];
+    if (pii) {
+      const raw = await fetchUrl(`https://api.crossref.org/works?query.bibliographic=${pii}&rows=1`);
+      if (raw) {
+        try {
+          const d = JSON.parse(raw);
+          const item = (d.message?.items || [])[0];
+          if (item?.abstract) {
+            const ab = item.abstract.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+            return `Abstract: ${ab}`.slice(0, 5000);
+          }
+        } catch(e) {}
+      }
+    }
+  }
+
+  // MDPI fulltext / open pages
+  if (url.includes('mdpi.com') || url.includes('ncbi.nlm.nih.gov/pmc')) {
+    const html = await fetchUrl(url);
+    if (html) return extractAbstract(html);
+  }
+
+  // Fallback: fetch 頁面並抽 abstract
+  try {
+    const html = await fetchUrl(url);
+    if (html && html.length > 100) return extractAbstract(html);
+  } catch(e) {}
+
+  return '';
+}
+
+async function fetchUrl(url) {
+  try {
+    const r = await fetch(url, { signal: AbortSignal.timeout(14000) });
+    if (!r.ok) return '';
+    return await r.text();
+  } catch(e) { return ''; }
+}
+
+function extractAbstract(html) {
+  // 去 script/style
+  let text = html
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
+    .replace(/\s+/g, ' ').trim();
+
+  // 找 abstract 段
+  const idx = text.toLowerCase().indexOf('abstract');
+  if (idx >= 0) {
+    const chunk = text.slice(idx, idx + 4000);
+    const end = chunk.slice(100).search(/\b(introduction|keywords|1\.|background|methods)\b/i);
+    return end > 0 ? chunk.slice(0, end + 100) : chunk;
+  }
+  return text.slice(0, 4000);
+}
+
+// ── AI Parse ──────────────────────────────────────────────────────
+function chooseSystemPrompt(docType) {
+  if (docType === '市場報告') return PROMPT_MARKET;
+  if (docType === '綜述review') return PROMPT_REVIEW;
+  return PROMPT_EXPERIMENTAL;
+}
+
+async function callClaude(system, userContent) {
+  const proxy = document.getElementById('proxyUrl').value.trim();
+  const r = await fetch(proxy, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 3500,
+      system,
+      messages: [{ role: 'user', content: userContent }]
+    })
+  });
+  const data = await r.json();
+  const inp = data.usage?.input_tokens || 0;
+  const out = data.usage?.output_tokens || 0;
+  totalCost += inp * 3e-6 + out * 15e-6;
+  document.getElementById('costDisplay').textContent = `費用：$${totalCost.toFixed(4)}`;
+  return data.content?.[0]?.text || '';
+}
+
+async function parseWithAI(article) {
+  const paper = papersMap[article.id] || {};
+  const note = paper.abstract_note || '';
+  const raw = article.raw_abstract || '';
+
+  const userContent = `請解析以下文獻，依格式輸出 JSON：
+
+ID: ${article.id}
+標題: ${article.title}
+類型: ${article.doc_type}
+年份: ${article.year || ''}
+${note ? `\n摘要筆記（可能含關鍵數值）:\n${note}` : ''}
+${raw ? `\n原文摘要/全文片段:\n${raw.slice(0, 5000)}` : ''}`;
+
+  const system = chooseSystemPrompt(article.doc_type);
+  let text = await callClaude(system, userContent);
+
+  // 清理 JSON fence
+  text = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
+  return JSON.parse(text);
+}
+
+// ── Process Pipeline ──────────────────────────────────────────────
+async function processOne(article) {
+  const id = article.id;
+  setStatus(article, 'fetching');
+  refreshCard(id);
+
+  try {
+    // Step 1: Fetch
+    log(`[${id}] Fetching (${article.fetch_type}) ${article.fetch_url?.slice(0,55)}…`, 'info');
+    let raw = '';
+    if (article.fetch_url) raw = await fetchContent(article);
+
+    // fallback: abstract_note
+    if (!raw) {
+      raw = papersMap[id]?.abstract_note || '';
+      if (raw) log(`[${id}] fallback → abstract_note`, 'warn');
+    }
+    article.raw_abstract = raw.slice(0, 5000);
+    log(`[${id}] fetch ✓ ${raw.length} chars`, raw.length > 50 ? 'ok' : 'warn');
+
+    // Step 2: AI
+    setStatus(article, 'parsing');
+    refreshCard(id);
+    log(`[${id}] AI 解析中…`, 'info');
+
+    const parsed = await parseWithAI(article);
+    article.paper_type  = parsed.paper_type  || '';
+    article.main_finding = parsed.main_finding || '';
+
+    if (['review','market'].includes(parsed.paper_type)) {
+      article.review_scope   = parsed.review_scope   || '';
+      article.technology_map = parsed.technology_map || [];
+      article.experiments    = [];
+      log(`[${id}] ✓ review → ${article.technology_map.length} 技術路線`, 'ok');
+    } else {
+      article.experiments    = parsed.experiments || [];
+      article.technology_map = [];
+      article.review_scope   = '';
+      log(`[${id}] ✓ experimental → ${article.experiments.length} 實驗組`, 'ok');
+    }
+
+    setStatus(article, 'done');
+    article.fetched_at = new Date().toISOString();
+    delete article.error;
+  } catch(e) {
+    setStatus(article, 'failed');
+    article.error = e.message;
+    log(`[${id}] ✗ ${e.message}`, 'err');
+  }
+
+  refreshCard(id);
+  updateStats();
+}
+
+function setStatus(a, s) { a.fetch_status = s; }
+
+async function runBatch(targets) {
+  if (!targets.length) { toast('沒有待處理的文獻', 'err'); return; }
+  if (!document.getElementById('proxyUrl').value.trim()) { toast('請先設定 Proxy URL', 'err'); return; }
+  isRunning = true;
+  ['btnRunPending','btnRunAll','btnRunFailed'].forEach(id => { const el=document.getElementById(id); if(el) el.disabled=true; });
+  document.getElementById('logPanel').classList.add('show');
+
+  const conc = parseInt(document.getElementById('concurrency').value) || 2;
+  const delay = parseInt(document.getElementById('delayMs').value) || 1500;
+  log(`開始：${targets.length} 篇，並行=${conc}，延遲=${delay}ms`, 'info');
+
+  for (let i = 0; i < targets.length; i += conc) {
+    const batch = targets.slice(i, i + conc);
+    await Promise.all(batch.map(a => processOne(a)));
+    autoSave();
+    if (i + conc < targets.length) await sleep(delay);
+  }
+
+  isRunning = false;
+  ['btnRunPending','btnRunAll','btnRunFailed'].forEach(id => { const el=document.getElementById(id); if(el) el.disabled=false; });
+  log(`完成！done=${countStatus('done')} failed=${countStatus('failed')}`, 'ok');
+  toast('批次完成', 'ok');
+}
+
+async function runPending() { await runBatch(DB.articles.filter(a => a.fetch_status === 'pending')); }
+async function runAll()     { await runBatch(DB.articles.filter(a => a.fetch_status !== 'skipped')); }
+async function runFailed()  { await runBatch(DB.articles.filter(a => a.fetch_status === 'failed')); }
+async function runOne(id)   { const a = DB.articles.find(x => x.id === id); if (a) { await processOne(a); autoSave(); } }
+
+function resetOne(id) {
+  const a = DB.articles.find(x => x.id === id);
+  if (!a) return;
+  a.fetch_status = a.fetch_url ? 'pending' : 'skipped';
+  a.raw_abstract = ''; a.experiments = []; a.technology_map = [];
+  a.main_finding = ''; a.paper_type = ''; a.review_scope = '';
+  delete a.error;
+  refreshCard(id); updateStats();
+}
+
+// ── Init / Data ──────────────────────────────────────────────────
+function initData() {
+  const pf = document.getElementById('papersFile').files[0];
+  const af = document.getElementById('articleFile').files[0];
+  if (!pf) { toast('請選擇 papers.json', 'err'); return; }
+
+  const reads = [];
+  reads.push(new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = e => {
+      try {
+        const d = JSON.parse(e.target.result);
+        (d.papers || d).forEach(p => { papersMap[p.id] = p; });
+        res();
+      } catch(err) { rej(err); }
+    };
+    r.readAsText(pf);
+  }));
+
+  if (af) {
+    reads.push(new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = e => {
+        try { DB = JSON.parse(e.target.result); res(); } catch(err) { rej(err); }
+      };
+      r.readAsText(af);
+    }));
+  }
+
+  Promise.all(reads).then(() => {
+    if (!DB.articles?.length) buildSkeleton();
+    else syncNewEntries();
+    renderList();
+    updateStats();
+    ['btnRunPending','btnRunAll','btnRunFailed','btnDownload'].forEach(id => {
+      const el = document.getElementById(id); if(el) el.disabled = false;
+    });
+    toast('載入完成', 'ok');
+    log(`載入完成：${DB.articles.length} 篇`, 'ok');
+  }).catch(e => { toast('載入失敗', 'err'); log(e.message, 'err'); });
+}
+
+function buildSkeleton() {
+  const lits = Object.values(papersMap).filter(p => !['專利','商用產品'].includes(p.doc_type));
+  DB = {
+    meta: { version: '2.0', created: new Date().toISOString().slice(0,10) },
+    articles: lits.map(makeEntry)
+  };
+}
+
+function makeEntry(p) {
+  const links = p.links || {};
+  let url = '', ftype = 'none';
+  for (const k of ['fulltext','pmc','pubmed','doi','page','article','pdf','blog','ref','scholar']) {
+    if (links[k]) { url = links[k]; ftype = k; break; }
+  }
+  if (!url && p.doi) { url = `https://doi.org/${p.doi}`; ftype = 'doi_direct'; }
+  if (!url && p.pmid) { url = `https://pubmed.ncbi.nlm.nih.gov/${p.pmid}/`; ftype = 'pubmed_direct'; }
+  return {
+    id: p.id, doc_type: p.doc_type || '', title: p.title || '', year: p.year || '',
+    fetch_url: url, fetch_type: ftype,
+    fetch_status: url ? 'pending' : 'skipped',
+    fetched_at: '', raw_abstract: '',
+    paper_type: '', main_finding: '',
+    review_scope: '',        // review 專用
+    technology_map: [],      // review 專用：技術路線列表
+    experiments: []          // experimental 專用
+  };
+}
+
+function syncNewEntries() {
+  const exist = new Set(DB.articles.map(a => a.id));
+  const lits = Object.values(papersMap).filter(p => !['專利','商用產品'].includes(p.doc_type));
+  lits.forEach(p => {
+    if (!exist.has(p.id)) {
+      DB.articles.push(makeEntry(p));
+      log(`新增 ${p.id}`, 'info');
+    }
+  });
+  // 確保每篇都有新欄位
+  DB.articles.forEach(a => {
+    a.review_scope    = a.review_scope    ?? '';
+    a.technology_map  = a.technology_map  ?? [];
+    a.paper_type      = a.paper_type      ?? '';
+    a.main_finding    = a.main_finding    ?? '';
+  });
+}
+
+// ── Render ────────────────────────────────────────────────────────
+function renderList() {
+  document.getElementById('articleList').innerHTML = DB.articles.map(a => renderCard(a)).join('');
+}
+
+function refreshCard(id) {
+  const a = DB.articles.find(x => x.id === id);
+  const el = document.getElementById('c-' + id);
+  if (!a || !el) return;
+  const open = el.querySelector('.acard-body')?.classList.contains('open');
+  el.outerHTML = renderCard(a);
+  if (open) document.getElementById('body-' + id)?.classList.add('open');
+}
+
+function renderCard(a) {
+  const sc = {pending:'sp',fetching:'sf',parsing:'sa',done:'sd',failed:'se',skipped:'sk'}[a.fetch_status]||'sp';
+  const slabel = {
+    pending:'待處理', fetching:'抓取中…', parsing:'AI解析中…',
+    done: a.paper_type === 'review' || a.paper_type === 'market'
+      ? `✓ ${a.technology_map?.length||0}路線`
+      : `✓ ${a.experiments?.length||0}組`,
+    failed:'失敗', skipped:'跳過'
+  }[a.fetch_status]||a.fetch_status;
+
+  const tc = {'期刊論文':'#2d8c5a','綜述review':'#1a6fa0','會議論文':'#7b5ea7','市場報告':'#c8860a'}[a.doc_type]||'#7a6e64';
+
+  return `<div class="acard" id="c-${a.id}">
+    <div class="acard-head" onclick="toggleBody('${a.id}')">
+      <span class="aid">${a.id}</span>
+      <span class="dtype" style="color:${tc};border-color:${tc}">${a.doc_type}</span>
+      <span class="atitle" title="${esc(a.title)}">${esc(a.title.slice(0,72))}${a.title.length>72?'…':''}</span>
+      <span class="ayear">${a.year||''}</span>
+      <span class="sbadge ${sc}">${slabel}</span>
+      <div class="card-btns" onclick="event.stopPropagation()">
+        <button class="cb" onclick="runOne('${a.id}')">▶</button>
+        <button class="cb" onclick="resetOne('${a.id}')">↺</button>
+      </div>
+    </div>
+    <div class="acard-body" id="body-${a.id}">
+      ${renderBody(a)}
+    </div>
+  </div>`;
+}
+
+function renderBody(a) {
+  const isReview = (a.paper_type === 'review' || a.paper_type === 'market') || (!a.paper_type && a.doc_type === '綜述review');
+
+  const leftCol = `
+    <div class="fl">Fetch URL（${a.fetch_type}）</div>
+    <div style="font-size:11px;font-family:var(--mono);word-break:break-all;margin-bottom:8px">
+      ${a.fetch_url ? `<a href="${esc(a.fetch_url)}" target="_blank" style="color:var(--accent)">${esc(a.fetch_url.slice(0,70))}…</a>` : '無來源'}
+    </div>
+    ${a.main_finding ? `<div class="fl">核心發現</div><div style="font-size:12px;color:var(--green);font-weight:600;margin-bottom:8px">${esc(a.main_finding)}</div>` : ''}
+    ${a.review_scope ? `<div class="fl">涵蓋範圍</div><div style="font-size:11px;color:var(--muted);margin-bottom:8px">${esc(a.review_scope)}</div>` : ''}
+    <div class="fl">原文摘要 / 抓取內容</div>
+    <div class="raw-box">${esc(a.raw_abstract||'')}</div>
+    ${a.error ? `<div style="margin-top:6px;font-size:11px;color:var(--danger)">⚠ ${esc(a.error)}</div>` : ''}`;
+
+  let rightCol = '';
+  if (isReview && a.technology_map?.length) {
+    rightCol = `<div class="fl">技術路線（${a.technology_map.length} 條）</div>
+    <div style="overflow-x:auto">
+    <table class="tm-table">
+      <thead><tr>
+        <th>路線</th><th>材料</th><th>機制</th><th>WCA</th><th>COF</th>
+        <th>抗菌</th><th>抗結痂</th><th>優點</th><th>限制</th><th>Notes</th>
+      </tr></thead>
+      <tbody>${a.technology_map.map(t=>`<tr>
+        <td><strong>${esc(t.route||'')}</strong>${t.substrate?`<br><span style="color:var(--muted);font-size:10px">${esc(t.substrate)}</span>`:''}</td>
+        <td>${(t.materials||[]).map(m=>`<span style="background:var(--card);padding:1px 5px;border-radius:3px;display:inline-block;margin:1px;font-size:10px">${esc(m)}</span>`).join('')}</td>
+        <td style="color:var(--muted)">${esc(t.mechanism||'—').slice(0,60)}</td>
+        <td class="val">${esc(t.wca||'—')}</td>
+        <td class="val-cof">${esc(t.cof||'—')}</td>
+        <td>${esc((t.antibacterial||'—').slice(0,40))}</td>
+        <td>${esc((t.antifouling||'—').slice(0,40))}</td>
+        <td style="color:var(--green);font-size:10px">${esc((t.advantages||'—').slice(0,60))}</td>
+        <td style="color:var(--danger);font-size:10px">${esc((t.limitations||'—').slice(0,60))}</td>
+        <td style="color:var(--muted);font-size:10px">${esc((t.notes||'').slice(0,60))}</td>
+      </tr>`).join('')}</tbody>
+    </table></div>`;
+  } else if (!isReview && a.experiments?.length) {
+    rightCol = `<div class="fl">實驗組（${a.experiments.length} 組）</div>
+    <div style="overflow-x:auto">
+    <table class="exp-table">
+      <thead><tr>
+        <th>實驗組</th><th>底塗</th><th>面塗</th><th>PI</th><th>固化</th>
+        <th>WCA</th><th>COF</th><th>附著</th><th>抗菌</th><th>抗結痂</th><th>Notes</th>
+      </tr></thead>
+      <tbody>${a.experiments.map(ex=>`<tr>
+        <td>${esc(ex.name||'')}${ex.is_control?'<br><em style="color:var(--muted);font-size:10px">對照</em>':''}</td>
+        <td>${esc(ex.primer||'—')}</td>
+        <td>${esc(ex.topcoat||'—')}</td>
+        <td style="font-size:10px">${esc(ex.photoinitiator||ex.crosslinker||'—')}</td>
+        <td style="font-size:10px">${esc(ex.curing||'—')}</td>
+        <td class="val">${esc(ex.wca||'—')}</td>
+        <td class="val-cof">${esc(ex.cof||'—')}</td>
+        <td>${esc(ex.adhesion||'—')}</td>
+        <td style="font-size:10px">${esc((ex.antibacterial||'—').slice(0,40))}</td>
+        <td style="font-size:10px">${esc((ex.antifouling||'—').slice(0,40))}</td>
+        <td style="color:var(--muted);font-size:10px">${esc((ex.notes||'').slice(0,50))}</td>
+      </tr>`).join('')}</tbody>
+    </table></div>`;
+  } else {
+    rightCol = `<div class="no-data">尚無解析資料</div>`;
+  }
+
+  return `<div class="acard-grid"><div>${leftCol}</div><div>${rightCol}</div></div>`;
+}
+
+// ── Utils ─────────────────────────────────────────────────────────
+function toggleBody(id) {
+  document.getElementById('body-' + id)?.classList.toggle('open');
+}
+
+function updateStats() {
+  const arts = DB.articles;
+  document.getElementById('sTotal').textContent   = arts.length;
+  document.getElementById('sDone').textContent    = countStatus('done');
+  document.getElementById('sPending').textContent = countStatus('pending');
+  document.getElementById('sFailed').textContent  = countStatus('failed');
+
+  const parsed = arts.reduce((s, a) => s + (a.experiments?.length||0) + (a.technology_map?.length||0), 0);
+  document.getElementById('sParsed').textContent = parsed;
+
+  const done = countStatus('done');
+  const total = arts.filter(a => a.fetch_status !== 'skipped').length;
+  document.getElementById('progressBar').style.width = total ? `${(done/total)*100}%` : '0%';
+  document.getElementById('progressText').textContent = `${done} / ${total}`;
+}
+
+function countStatus(s) { return DB.articles.filter(a => a.fetch_status === s).length; }
+
+function autoSave() {
+  try {
+    localStorage.setItem('articlefetcher_db', JSON.stringify(DB));
+  } catch(e) {}
+}
+
+function downloadJson() {
+  const blob = new Blob([JSON.stringify(DB, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `article_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+function copyJson() {
+  navigator.clipboard.writeText(JSON.stringify(DB, null, 2))
+    .then(() => toast('已複製', 'ok'))
+    .catch(() => toast('複製失敗', 'err'));
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+let logVisible = false;
+function toggleLog() {
+  logVisible = !logVisible;
+  document.getElementById('logPanel').classList.toggle('show', logVisible);
+}
+
+function log(msg, type = 'info') {
+  const p = document.getElementById('logPanel');
+  const d = document.createElement('div');
+  d.className = `log-${type}`;
+  d.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+  p.appendChild(d);
+  p.scrollTop = p.scrollHeight;
+}
+
+function toast(msg, type = 'ok') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `show ${type}`;
+  setTimeout(() => { el.className = ''; }, 2800);
+}
+
+// 頁面載入時嘗試恢復 localStorage 暫存
+window.addEventListener('load', () => {
+  try {
+    const saved = localStorage.getItem('articlefetcher_db');
+    if (saved) {
+      const d = JSON.parse(saved);
+      if (d.articles?.length) {
+        DB = d;
+        log(`恢復上次暫存：${DB.articles.length} 篇，done=${countStatus('done')}`, 'info');
+        renderList(); updateStats();
+        ['btnRunPending','btnRunAll','btnRunFailed','btnDownload'].forEach(id => {
+          const el = document.getElementById(id); if(el) el.disabled = false;
+        });
+      }
+    }
+  } catch(e) {}
+});
+</script>
+</body>
+</html>
