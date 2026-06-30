@@ -413,6 +413,34 @@ tr:last-child td{border-bottom:0}
   border-color:var(--green);
   background:#dff3ea;
 }
+.product-identity{
+  display:grid;
+  gap:10px;
+}
+.identity-row{
+  display:grid;
+  grid-template-columns:150px 1fr;
+  gap:10px;
+  align-items:start;
+}
+.identity-row strong{
+  color:var(--muted);
+  font-size:12px;
+}
+.identity-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+}
+.identity-tag{
+  display:inline-flex;
+  align-items:center;
+  border:1px solid #b8d8c8;
+  background:#eef9f4;
+  border-radius:7px;
+  padding:6px 8px;
+  font-size:13px;
+}
 .worker-url{
   flex:1;
   min-width:260px;
@@ -541,6 +569,13 @@ tr:last-child td{border-bottom:0}
     </section>
 
     <section class="grid">
+      <div class="card span-12">
+        <h3>檢索產品確認</h3>
+        <div id="productIdentity" class="product-identity">
+          <div class="empty">尚未檢索。請先輸入中文或英文醫療器材、確認候選產品，再按「確定並檢索」。</div>
+        </div>
+      </div>
+
       <div class="card metric span-3">
         <div class="metric-label">MAUDE 客訴/產品問題</div>
         <div class="metric-value" id="complaintCount">0</div>
@@ -891,6 +926,7 @@ const fetchWorkerBtn = document.getElementById("fetchWorkerBtn");
 const workerStatus = document.getElementById("workerStatus");
 const workerResults = document.getElementById("workerResults");
 const workerUrl = document.getElementById("workerUrl");
+const productIdentity = document.getElementById("productIdentity");
 let mode = "complaints";
 const workerBaseUrl = "https://dmac-fda-proxy.gogoyankee.workers.dev";
 const workerCompanyKeywords = {
@@ -986,6 +1022,7 @@ function markCriteriaDirty(){
   setDraftState(true);
   workerStatus.classList.remove("hidden");
   workerStatus.textContent = "條件已修改但尚未確認；右側圖表與即時結果仍顯示上次確認的檢索條件。";
+  productIdentity.innerHTML = `<div class="empty">條件已修改。請先確認候選產品並重新檢索，產品名稱會在分析前顯示。</div>`;
 }
 
 function findDeviceCandidates(){
@@ -1039,6 +1076,19 @@ suggestedMakers.forEach(([key,label])=>{
 function fmt(n){return new Intl.NumberFormat("zh-TW").format(n)}
 function cleanDate(s){return s || "-"}
 function riskClass(v){return v === "高" ? "risk-high" : v === "中" ? "risk-mid" : "risk-low"}
+function escapeHtml(value){
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[char]));
+}
+
+function uniqueValues(values, limit = 8){
+  return [...new Set(values.filter(Boolean).map(value => String(value).trim()).filter(Boolean))].slice(0, limit);
+}
 
 function shouldUseDemoData(criteria){
   const text = (criteria.deviceText || "").toLowerCase();
@@ -1262,6 +1312,20 @@ async function fetchOpenFda510k(productCode, keyword){
   return data;
 }
 
+async function fetchOpenFdaClassification(productCode){
+  const url = `https://api.fda.gov/device/classification.json?search=${encodeURIComponent(`product_code:${productCode}`)}&limit=5`;
+  const res = await fetch(url);
+  if(res.status === 404){
+    return {meta:{results:{total:0}}, results:[], url};
+  }
+  const data = await res.json();
+  if(!res.ok){
+    throw new Error(data?.error?.message || "openFDA classification query failed");
+  }
+  data.url = url;
+  return data;
+}
+
 function summarizeYearsFromResults(results){
   const years = {2016:0,2017:0,2018:0,2019:0,2020:0,2021:0,2022:0,2023:0,2024:0,2025:0,2026:0};
   (results || []).forEach(item => {
@@ -1314,6 +1378,54 @@ function updateLiveSections(maude, recall, clearance, criteria){
   document.getElementById("riskSub").textContent = `${criteria.productCode} 即時資料，需依問題點人工判讀`;
 }
 
+function renderTags(values){
+  return values.length
+    ? `<div class="identity-tags">${values.map(value => `<span class="identity-tag">${escapeHtml(value)}</span>`).join("")}</div>`
+    : `<span class="muted">未回傳</span>`;
+}
+
+function renderProductIdentity(criteria, classification, kTotal, kFiltered, maude){
+  const classRows = classification?.results || [];
+  const kRows = [...(kFiltered?.results || []), ...(kTotal?.results || [])];
+  const maudeDevices = (maude?.results || []).flatMap(item => Array.isArray(item.device) ? item.device : []);
+  const officialNames = uniqueValues([
+    ...classRows.map(item => item.device_name),
+    ...kRows.map(item => item.openfda?.device_name),
+    ...maudeDevices.map(item => item.generic_name)
+  ]);
+  const sampleProducts = uniqueValues([
+    ...kRows.map(item => item.device_name),
+    ...maudeDevices.map(item => item.brand_name)
+  ], 10);
+  const applicants = uniqueValues([
+    ...kRows.map(item => item.applicant),
+    ...maudeDevices.map(item => item.manufacturer_d_name)
+  ], 8);
+  const classInfo = classRows[0];
+  productIdentity.innerHTML = `
+    <div class="identity-row">
+      <strong>使用者輸入</strong>
+      <div>${escapeHtml(normalizeDeviceText() || criteria.deviceText || "medical device")}</div>
+    </div>
+    <div class="identity-row">
+      <strong>FDA product code</strong>
+      <div><span class="identity-tag">${escapeHtml(criteria.productCode)}</span>${classInfo?.regulation_number ? ` <span class="identity-tag">Regulation ${escapeHtml(classInfo.regulation_number)}</span>` : ""}</div>
+    </div>
+    <div class="identity-row">
+      <strong>官方產品名稱</strong>
+      ${renderTags(officialNames)}
+    </div>
+    <div class="identity-row">
+      <strong>510(k) 樣本產品</strong>
+      ${renderTags(sampleProducts)}
+    </div>
+    <div class="identity-row">
+      <strong>申請廠商樣本</strong>
+      ${renderTags(applicants)}
+    </div>
+  `;
+}
+
 async function fetchWorkerData(){
   const criteria = getActiveCriteria();
   const key = criteria.makerKey || "all";
@@ -1329,13 +1441,15 @@ async function fetchWorkerData(){
   workerStatus.classList.remove("hidden");
   workerResults.classList.add("hidden");
   workerResults.innerHTML = "";
+  productIdentity.innerHTML = `<div class="empty">正在確認 ${escapeHtml(productCode)} 的官方產品名稱與 510(k) 樣本...</div>`;
   workerStatus.textContent = `正在透過 Worker 查詢 ${data.name} / ${deviceText} / ${productCode}...`;
   try{
-    const [maude, recall, kTotal, kFiltered] = await Promise.all([
+    const [maude, recall, kTotal, kFiltered, classification] = await Promise.all([
       fetchJson("/api/maude", query),
       fetchJson("/api/recall", query),
       fetchOpenFda510k(productCode, ""),
-      keyword ? fetchOpenFda510k(productCode, keyword) : fetchOpenFda510k(productCode, "")
+      keyword ? fetchOpenFda510k(productCode, keyword) : fetchOpenFda510k(productCode, ""),
+      fetchOpenFdaClassification(productCode)
     ]);
     const kTotalCount = resultCount(kTotal);
     const kFilteredCount = resultCount(kFiltered);
@@ -1347,6 +1461,7 @@ async function fetchWorkerData(){
     document.getElementById("clearanceSub").textContent = keyword
       ? `K 證總量 ${fmt(kTotalCount)}；公司篩選 ${fmt(kFilteredCount)}`
       : `K 證總量 ${fmt(kTotalCount)}；未套用公司篩選`;
+    renderProductIdentity(criteria, classification, kTotal, kFiltered, maude);
     workerStatus.textContent = `即時結果已更新：公司關鍵字「${keyword || "全部"}」。MAUDE/Recall 經 Worker；510(k) 先查 product code 總量再做公司篩選。`;
     workerResults.classList.remove("hidden");
     workerResults.innerHTML = [
@@ -1421,6 +1536,7 @@ function render(options = {}){
   const query = keyword ? `company=${encodeURIComponent(keyword)}&product_code=${encodeURIComponent(productCode)}&limit=100` : `product_code=${encodeURIComponent(productCode)}&limit=100`;
   workerUrl.textContent = `${workerBaseUrl}/api/maude?${query}`;
   if(resetWorker){
+    productIdentity.innerHTML = `<div class="empty">已套用 ${escapeHtml(productCode)}，正在查詢官方產品名稱與樣本產品...</div>`;
     workerResults.classList.add("hidden");
     workerResults.innerHTML = "";
     workerStatus.classList.remove("hidden");
