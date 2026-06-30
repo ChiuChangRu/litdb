@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>活檢針競品技術版圖 — Cook / Argon / Merit / BD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F4EE;
+    --ink:#20251F;
+    --ink-soft:#52584F;
+    --line:#DAD6C8;
+    --card:#FFFFFF;
+    --cook:#B5532C;
+    --cook-bg:#F4E5DB;
+    --argon:#1F6E63;
+    --argon-bg:#DCEDE8;
+    --merit:#3D4A8A;
+    --merit-bg:#E2E5F4;
+    --bd:#8A2A3B;
+    --bd-bg:#F2DDE1;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:64px 40px 100px;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin:0 0 18px;
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:46px;
+    line-height:1.12;
+    margin:0 0 14px;
+    letter-spacing:-.01em;
+  }
+  .subhead{
+    font-size:17px;
+    color:var(--ink-soft);
+    max-width:620px;
+    line-height:1.6;
+    margin:0 0 44px;
+  }
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin-bottom:56px;
+  }
+  .stat{background:var(--card);padding:20px 22px;}
+  .stat .n{font-family:'Fraunces',serif;font-size:30px;font-weight:500;}
+  .stat .l{font-size:12.5px;color:var(--ink-soft);margin-top:4px;}
+
+  .section-title{
+    font-family:'Fraunces',serif;
+    font-size:22px;
+    font-weight:500;
+    margin:0 0 6px;
+  }
+  .section-note{font-size:14px;color:var(--ink-soft);margin:0 0 26px;max-width:640px;line-height:1.6;}
+
+  /* lane map */
+  .lanemap{border:1px solid var(--line);background:var(--card);margin-bottom:64px;}
+  .lane{display:grid;grid-template-columns:150px 1fr;border-top:1px solid var(--line);}
+  .lane:first-child{border-top:none;}
+  .lane-label{
+    padding:18px 18px;
+    font-size:13px;
+    font-weight:500;
+    color:var(--ink-soft);
+    border-right:1px solid var(--line);
+    display:flex;align-items:center;
+  }
+  .lane-row{padding:14px 18px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+  .chip{
+    font-size:12.5px;
+    font-weight:500;
+    padding:5px 11px 6px;
+    border-radius:20px;
+    white-space:nowrap;
+  }
+  .chip.cook{background:var(--cook-bg);color:var(--cook);}
+  .chip.argon{background:var(--argon-bg);color:var(--argon);}
+  .chip.merit{background:var(--merit-bg);color:var(--merit);}
+  .chip.bd{background:var(--bd-bg);color:var(--bd);}
+
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin:18px 0 64px;font-size:13px;color:var(--ink-soft);}
+  .legend span{display:inline-flex;align-items:center;gap:7px;}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
+
+  .company{
+    border:1px solid var(--line);
+    background:var(--card);
+    margin-bottom:28px;
+    overflow:hidden;
+  }
+  .company-head{
+    padding:22px 26px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:16px;
+  }
+  .company-head .name{font-family:'Fraunces',serif;font-size:24px;font-weight:500;}
+  .company-head .product{font-size:13px;color:var(--ink-soft);margin-top:3px;}
+  .company-head .badge{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    padding:4px 10px;
+    border-radius:4px;
+    white-space:nowrap;
+  }
+  .company.cook .badge{background:var(--cook-bg);color:var(--cook);}
+  .company.argon .badge{background:var(--argon-bg);color:var(--argon);}
+  .company.merit .badge{background:var(--merit-bg);color:var(--merit);}
+  .company.bd .badge{background:var(--bd-bg);color:var(--bd);}
+  .company.cook .name{color:var(--cook);}
+  .company.argon .name{color:var(--argon);}
+  .company.merit .name{color:var(--merit);}
+  .company.bd .name{color:var(--bd);}
+
+  .company-body{padding:24px 26px 26px;display:grid;grid-template-columns:1.1fr 1fr;gap:32px;}
+  .body-block .h{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);margin:0 0 10px;}
+  .body-block p{font-size:14.5px;line-height:1.7;margin:0 0 10px;color:var(--ink);}
+  .patent-list{list-style:none;margin:0;padding:0;}
+  .patent-list li{
+    font-size:13.5px;
+    line-height:1.6;
+    padding:9px 0;
+    border-top:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+  }
+  .patent-list li:first-child{border-top:none;padding-top:0;}
+  .patent-list .pno{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);display:block;margin-bottom:2px;}
+  .patent-list .ptxt{flex:1;}
+  .pat-btn{
+    flex-shrink:0;
+    font-size:11px;
+    font-family:'JetBrains Mono',monospace;
+    padding:3px 8px;
+    border:1px solid var(--line);
+    border-radius:4px;
+    background:#fff;
+    color:var(--ink-soft);
+    cursor:pointer;
+    text-decoration:none;
+    white-space:nowrap;
+    margin-top:1px;
+  }
+  .pat-btn:hover{border-color:var(--ink);color:var(--ink);}
+
+  .takeaway{
+    border-left:3px solid var(--ink);
+    padding:18px 22px;
+    margin-top:6px;
+    background:var(--card);
+  }
+  .takeaway .h{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);margin:0 0 8px;}
+  .takeaway p{font-size:14.5px;line-height:1.7;margin:0;}
+
+  .product-shots{
+    grid-column:1/-1;
+    order:-1;
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+    padding-bottom:20px;
+    border-bottom:1px solid var(--line);
+  }
+  .product-shot{width:128px;flex-shrink:0;}
+  .product-shot.featured{width:172px;}
+  .product-shot .frame{
+    width:100%;
+    height:96px;
+    background:#FFFFFF;
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:8px;
+    box-sizing:border-box;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .product-shot.featured .frame{
+    height:130px;
+    border:2px solid var(--merit);
+  }
+  .product-shot img{max-width:100%;max-height:100%;object-fit:contain;}
+  .product-shot .cap{font-size:11.5px;color:var(--ink-soft);text-align:center;margin-top:6px;line-height:1.4;}
+  .product-shot .cap b{color:var(--ink);font-weight:500;}
+  .focus-badge{
+    display:inline-block;
+    font-family:'JetBrains Mono',monospace;
+    font-size:10.5px;
+    background:var(--merit);
+    color:#fff;
+    padding:2px 7px;
+    border-radius:3px;
+    margin-bottom:6px;
+  }
+
+  .closing{margin-top:60px;padding-top:36px;border-top:1px solid var(--line);}
+  .closing h2{font-family:'Fraunces',serif;font-size:24px;font-weight:500;margin:0 0 16px;}
+  .closing p{font-size:15px;line-height:1.75;color:var(--ink);max-width:760px;margin:0 0 14px;}
+  .footnote{font-size:12px;color:var(--ink-soft);margin-top:48px;line-height:1.6;}
+
+  @media(max-width:720px){
+    .stats{grid-template-columns:repeat(2,1fr);}
+    .company-body{grid-template-columns:1fr;}
+    .lane{grid-template-columns:1fr;}
+    .lane-label{border-right:none;border-bottom:1px solid var(--line);}
+  }
+
+  .pat-title{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px;margin-top:2px;}
+  .pat-desc{font-size:12.5px;line-height:1.7;color:var(--ink-soft);margin:0 0 4px;}
+  .pat-fto{font-size:11.5px;line-height:1.6;color:#7a4f00;background:#fff8e1;border-left:3px solid #e6a817;padding:4px 8px;margin:4px 0 0;border-radius:0 3px 3px 0;}
+
+  /* ── Patent li 可點擊 ── */
+  .patent-list li{cursor:pointer;transition:background .12s;}
+  .patent-list li:hover{background:#f8f6f0;}
+  .patent-list li.pat-active{background:#EEF2FB;border-left:3px solid #2A5BA0;padding-left:13px;}
+  .pat-btn{display:none;}
+
+  /* ── Right Drawer ── */
+  .drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .25s;z-index:99;}
+  .drawer-overlay.open{opacity:1;pointer-events:all;}
+  .drawer{position:fixed;top:0;right:0;bottom:0;width:min(600px,90vw);background:var(--card);box-shadow:-4px 0 32px rgba(0,0,0,.15);transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);z-index:100;display:flex;flex-direction:column;overflow:hidden;}
+  .drawer.open{transform:translateX(0);}
+  .drawer-hdr{padding:20px 24px 16px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:14px;flex-shrink:0;}
+  .drawer-close{margin-left:auto;flex-shrink:0;background:none;border:none;cursor:pointer;font-size:22px;color:var(--ink-soft);line-height:1;padding:0 4px;}
+  .drawer-close:hover{color:var(--ink);}
+  .drawer-body{flex:1;overflow-y:auto;padding:22px 26px 40px;}
+  .d-co{font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:.06em;padding:3px 9px;border-radius:20px;display:inline-block;margin-bottom:10px;}
+  .d-co.cook{background:var(--cook-bg);color:var(--cook);}
+  .d-co.argon{background:var(--argon-bg);color:var(--argon);}
+  .d-co.merit{background:var(--merit-bg);color:var(--merit);}
+  .d-co.bd{background:var(--bd-bg);color:var(--bd);}
+  .d-pno{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);margin-bottom:6px;}
+  .d-title{font-family:'Fraunces',serif;font-size:22px;font-weight:500;line-height:1.25;margin-bottom:14px;}
+  .d-desc{font-size:14px;line-height:1.8;color:var(--ink);margin-bottom:16px;}
+  .d-fto{font-size:12.5px;line-height:1.6;color:#7a4f00;background:#fff8e1;border-left:3px solid #e6a817;padding:8px 12px;border-radius:0 4px 4px 0;margin-bottom:22px;}
+  .d-imgs-label{font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+  .d-imgs-label span{flex:1;height:1px;background:var(--line);}
+  .d-ai-status{font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:8px;margin-bottom:12px;min-height:24px;}
+  .spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--line);border-top-color:#2A5BA0;border-radius:50%;animation:spin .8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .d-imgs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:20px;}
+  .d-img-frame{background:#f8f8f8;border:1px solid var(--line);border-radius:5px;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  .d-img-frame img{max-width:100%;max-height:100%;object-fit:contain;padding:6px;}
+  .d-img-err{font-size:11px;color:var(--ink-soft);text-align:center;padding:8px;}
+  .d-ext{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#2A5BA0;text-decoration:none;border:1px solid currentColor;border-radius:4px;padding:6px 12px;}
+  .d-ext:hover{background:#2A5BA0;color:#fff;}
+  .key-bar{display:flex;gap:8px;align-items:center;background:#f8f8f8;border:1px solid var(--line);border-radius:6px;padding:8px 12px;margin-bottom:16px;font-size:12px;}
+  .key-bar input{flex:1;border:none;background:none;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink);outline:none;}
+  .key-bar label{color:var(--ink-soft);white-space:nowrap;}
+  .key-bar .key-save{background:#2A5BA0;color:#fff;border:none;border-radius:4px;padding:4px 10px;cursor:pointer;font-size:11.5px;white-space:nowrap;}
+  .key-bar .key-save:hover{background:#1e4a8a;}
+  .key-ok{font-size:11px;color:#1F6E63;}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">LitDB · 活檢針知識庫 — 競品技術分析</p>
+  <h1>核心活檢針<br>四大廠技術版圖</h1>
+  <p class="subhead">Cook Medical、Argon Medical、Merit Medical、BD（Bard）在擊發機構、鎖合方式、取樣幾何上的技術路線比較，作為市場溝通與產品定位參考。</p>
+
+  <div class="stats">
+    <div class="stat"><div class="n">44</div><div class="l">LitDB 活檢針文獻總數</div></div>
+    <div class="stat"><div class="n">21</div><div class="l">四大廠核心專利條目</div></div>
+    <div class="stat"><div class="n">4</div><div class="l">主要技術路線</div></div>
+    <div class="stat"><div class="n">1977–2026</div><div class="l">技術源流年代涵蓋</div></div>
+  </div>
+
+  <p class="section-title">技術路線地圖</p>
+  <p class="section-note">以擊發機構分類，呈現各廠在不同技術路線上的布局。同一廠可能跨多個路線（如 Merit 同時經營馬達驅動與彈簧加載兩條產品線）。</p>
+
+  <div class="lanemap">
+    <div class="lane">
+      <div class="lane-label">SLC 彈簧加載</div>
+      <div class="lane-row">
+        <span class="chip cook">Cook · Quick-Core（半圓柱內管）</span>
+        <span class="chip argon">Argon · SuperCore / Tru-Core II（雙鎖定卡合）</span>
+        <span class="chip merit">Merit · Temno（撞擊式 / flush-cut）</span>
+      </div>
+    </div>
+    <div class="lane">
+      <div class="lane-label">馬達驅動</div>
+      <div class="lane-row">
+        <span class="chip merit">Merit · Achieve（Soft Fire 可控速度）</span>
+      </div>
+    </div>
+    <div class="lane">
+      <div class="lane-label">全自動雙彈簧</div>
+      <div class="lane-row">
+        <span class="chip bd">BD · MAX-CORE / Marquee（selector 多模式切換）</span>
+      </div>
+    </div>
+    <div class="lane">
+      <div class="lane-label">旋轉 / 連續取樣</div>
+      <div class="lane-row">
+        <span class="chip merit">Merit · 旋轉外針 + partoff 切斷</span>
+        <span class="chip bd">BD · 螺旋輸送器連續取樣</span>
+      </div>
+    </div>
+    <div class="lane">
+      <div class="lane-label">可視化 / echogenic</div>
+      <div class="lane-row">
+        <span class="chip bd">BD（Bard）· 多重 echogenic 特徵家族（2009 優先權，~2029 到期）</span>
+        <span class="chip cook">Cook · 噴砂粗化（已到期，公共領域）</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span><i class="dot" style="background:var(--cook)"></i>Cook Medical</span>
+    <span><i class="dot" style="background:var(--argon)"></i>Argon Medical</span>
+    <span><i class="dot" style="background:var(--merit)"></i>Merit Medical</span>
+    <span><i class="dot" style="background:var(--bd)"></i>BD（Bard）</span>
+  </div>
+
+  <!-- COOK -->
+  <div class="company cook">
+    <div class="company-head">
+      <div>
+        <div class="name">Cook Medical</div>
+        <div class="product">產品線：Quick-Core</div>
+      </div>
+      <div class="badge">5 件核心專利</div>
+    </div>
+    <div class="company-body">
+      <div class="product-shots">
+        <div class="product-shot">
+          <div class="frame"><img src="https://images.squarespace-cdn.com/content/v1/5cba31329b8fe86db05fc0eb/e4e50193-e88a-484d-ab85-fcdfc458363b/G18705_162_Quick-Core.Biopsy+no+cook.png" alt="Quick-Core"></div>
+          <div class="cap"><b>Quick-Core</b><br>輕量緊湊單手操作</div>
+        </div>
+      </div>
+      <div class="body-block">
+        <p class="h">技術特色</p>
+        <p>機構主軸為 SLC 彈簧加載、單動作、pawl 卡榫鎖合。核心差異化在內管截面設計：採半圓柱形（160–200° 弧度）取樣腔道，與傳統 TRU-CUT 在實心探針上開側向凹槽的作法在幾何上明確不同。另以 tissue stop（組織擋止）搭配斜向遠端，提升單次取樣組織保留量；人因握把以握把軸與針筒軸呈銳角的設計取得專利保護。</p>
+      </div>
+      <div class="body-block">
+        <p class="h">關鍵專利</p>
+        <ul class="patent-list">
+          <li onclick="openDrawer('US9101350B2','cook','Cook Medical')">
+          <div class="ptxt">
+            <span class="pno">US9101350B2</span>
+            <b class="pat-title">半圓柱全芯取樣機構</b>
+            <p class="pat-desc">傳統側凹槽取樣腔道為開放式，組織容易脫落。本案將內管遠端截面設計為半圓柱（弧度 160–200°），使取樣腔道完整環繞組織核心，外管推進後形成密閉保護。搭配紋理互扣（interlocking texture）防止組織在退針過程中滑落，是 Quick-Core 系列的核心差異化。</p>
+            <p class="pat-fto">⚠ FTO 重點：凡採半圓柱截面內管設計皆落入 claim 範圍，到期約 2031 年。</p>
+          </div>
+          <a class="pat-btn" href="https://patents.google.com/patent/US9101350B2/en#figures" target="_blank" rel="noopener">📐 圖面</a>
+        </li>
+          <li onclick="openDrawer('US8657760B2','cook','Cook Medical')">
+          <div class="ptxt">
+            <span class="pno">US8657760B2</span>
+            <b class="pat-title">銳角人因握把</b>
+            <p class="pat-desc">傳統直線型握把迫使術者手腕背屈，長時間操作易疲勞。本案將握把縱軸與針筒縱軸設計成銳角交叉，手腕可保持自然中立位，單手拇指即可觸及扳機，另一手自由持超音波探頭。</p>
+            
+          </div>
+          <a class="pat-btn" href="https://patents.google.com/patent/US8657760B2/en#figures" target="_blank" rel="noopener">📐 圖面</a>
+        </li>
+          <li onclick="openDrawer('US10448930B2','cook','Cook Medical')">
+          <div class="ptxt">
+            <span class="pno">US10448930B2</span>
+            <b class="pat-title">Tissue Stop + 斜遠端取樣最佳化</b>
+            <p class="pat-desc">在取樣凹槽近端設置組織擋止環（tissue stop），阻止穿刺時組織沿針軸提前位移，確保凹槽完全展開後才觸碰目標組織。配合斜向遠端設計，外管推進切割角度更小、創傷更低，每次芯樣長度與完整性均提升。</p>
+            
+          </div>
+          <a class="pat-btn" href="https://patents.google.com/patent/US10448930B2/en#figures" target="_blank" rel="noopener">📐 圖面</a>
+        </li>
+          <li onclick="openDrawer('US4869259A','cook','Cook Medical')">
+          <div class="ptxt">
+            <span class="pno">US4869259A</span>
+            <b class="pat-title">噴砂粗化增強超音波可視性（已到期）</b>
+            <p class="pat-desc">在金屬針表面以噴砂方式製造微觀不規則粗糙面，增大超音波聲束散射截面積，使針身在超音波影像中呈現更明顯的亮點（hyperechoic），協助術者即時定位。此專利已到期，技術已進入公共領域，任何廠商均可自由使用。</p>
+            
+          </div>
+          <a class="pat-btn" href="https://patents.google.com/patent/US4869259A/en#figures" target="_blank" rel="noopener">📐 圖面</a>
+        </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARGON -->
+  <div class="company argon">
+    <div class="company-head">
+      <div>
+        <div class="name">Argon Medical</div>
+        <div class="product">產品線：SuperCore / Tru-Core II</div>
+      </div>
+      <div class="badge">2 件核心專利</div>
+    </div>
+    <div class="company-body">
+      <div class="product-shots">
+        <div class="product-shot">
+          <div class="frame"><img src="https://www.argonmedical.com/wp-content/uploads/2023/11/SuperCore-Advantage.png" alt="SuperCore"></div>
+          <div class="cap"><b>SuperCore</b><br>半動作彈簧式</div>
+        </div>
+        <div class="product-shot">
+          <div class="frame"><img src="https://www.argonmedical.com/wp-content/uploads/2023/11/tru-core-ii-automatic-biopsy-instrument-2.png" alt="Tru-Core II"></div>
+          <div class="cap"><b>Tru-Core II</b><br>全自動雙鎖定</div>
+        </div>
+      </div>
+      <div class="body-block">
+        <p class="h">技術特色</p>
+        <p>同屬 SLC 彈簧加載陣營，但鎖合方式走「雙鎖定卡合」：套管延伸件與探針延伸件各自獨立卡入第一、第二鎖定件，仍為雙動作序列但由彈簧自動完成。握把人因採側扳機與後扳機並存的雙扳機佈局，搭配 flexible abutment 彈性止擋緩衝擊發力道，鎖定範圍涵蓋 14G–20G、19mm／9.5mm 凹槽可選的產品配置。</p>
+      </div>
+      <div class="body-block">
+        <p class="h">關鍵專利</p>
+        <ul class="patent-list">
+          <li onclick="openDrawer('US6106484A','argon','Argon Medical')">
+          <div class="ptxt">
+            <span class="pno">US6106484A</span>
+            <b class="pat-title">雙鎖定卡合全自動握把</b>
+            <p class="pat-desc">傳統自動活檢槍探針與套管共用單一鎖定機構，序列難以精確控制。本案設計獨立的第一鎖定件（鎖探針）與第二鎖定件（鎖套管），扳機釋放後先解鎖探針展開凹槽，組織進入後自動觸發套管推進切割，序列完全由機構幾何保證，不依賴術者手感。</p>
+            
+          </div>
+          <a class="pat-btn" href="https://patents.google.com/patent/US6106484A/en#figures" target="_blank" rel="noopener">📐 圖面</a>
+        </li>
+          <li onclick="openDrawer('US10709429B2','argon','Argon Medical')">
+          <div class="ptxt">
+            <span class="pno">US10709429B2</span>
+            <b class="pat-title">側/後雙扳機 + Flexible Abutment 握把</b>
+            <p class="pat-desc">握把側面與後端各設一個扳機，以連桿機構連通，術者可依習慣任選觸發。彈性止擋件（flexible abutment）吸收擊發瞬間的反作用力衝擊，降低因震動導致的針尖位移。Argon SuperCore 系列核心人因設計，適配 14G–20G 全規格。</p>
+            
+          </div>
+          <a class="pat-btn" href="https://patents.google.com/patent/US10709429B2/en#figures" target="_blank" rel="noopener">📐 圖面</a>
+        </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- MERIT -->
+  <div class="company merit">
+    <div class="company-head">
+      <div>
+        <div class="name">Merit Medical</div>
+        <div class="product">產品線：Achieve / Temno / Tru-Cut（2018 收購自 Devicor，1 億美元）</div>
+      </div>
+      <div class="badge">9 件核心專利</div>
+    </div>
+    <div class="company-body">
+      <div class="product-shots">
+        <div class="product-shot featured">
+          <div class="focus-badge">本次報告重點</div>
+          <div class="frame"><img src="https://www.merit.com/wp-content/uploads/2020/10/TemnoELITE-Hero-1500x1015-1-1030x697.png" alt="TEMNO Elite"></div>
+          <div class="cap"><b>TEMNO Elite</b><br>樣本量 +72%、Sample Assist 一鍵取樣</div>
+        </div>
+        <div class="product-shot">
+          <div class="frame"><img src="https://www.merit.com/wp-content/uploads/2017/12/Temno_original-1030x464.png" alt="Original TEMNO"></div>
+          <div class="cap"><b>Temno</b><br>20mm 凹槽半自動基礎款</div>
+        </div>
+        <div class="product-shot">
+          <div class="frame"><img src="https://www.merit.com/wp-content/uploads/2017/12/Acheive-1030x464.png" alt="Achieve"></div>
+          <div class="cap"><b>Achieve</b><br>馬達驅動三段模式</div>
+        </div>
+        <div class="product-shot">
+          <div class="frame"><img src="https://www.merit.com/wp-content/uploads/2021/09/Tru-Cut-Hero.png" alt="Tru-Cut"></div>
+          <div class="cap"><b>Tru-Cut</b><br>純手動經濟款</div>
+        </div>
+      </div>
+      <div class="body-block">
+        <p class="h">技術特色</p>
+        <p>四廠中技術路線最分散：馬達驅動（Achieve，lead screw + soft fire 可控擊發速度）、SLC 彈簧加載（Temno）、撞擊式擊發（impact member 撞擊衝擊片傳力，降低反作用力）、可縮回式 flush-cut 切割件，以及旋轉連續取樣（partoff tab 切斷組織條）。多技術路線並存的格局源自 2018 年整併 Devicor 旗下 Achieve/Temno/Tru-Cut 資產。Temno 產品線本身也有世代區隔：<b>原版 Temno</b> 是長年市占的半自動基礎款，20mm 固定凹槽、價格較親民；<b>TEMNO Elite</b> 則是 2022 年推出的最新一代，主打 Total Core 技術使樣本量比同類側凹槽半自動產品大 72%，搭配 Sample Assist 一鍵取樣與可調 10/20mm 拋射長度，是 Merit 近期市場溝通的主力產品。</p>
+      </div>
+      <div class="body-block">
+        <p class="h">關鍵專利</p>
+        <ul class="patent-list">
+          <li onclick="openDrawer('WO2014182488A1','merit','Merit Medical')">
+          <div class="ptxt">
+            <span class="pno">WO2014182488A1</span>
+            <b class="pat-title">馬達驅動 + Soft Fire 可控擊發速度</b>
+            <p class="pat-desc">彈簧加載速度不可調，對不同硬度病灶難以兼顧穿透力與樣本品質。本案以馬達驅動導螺桿（lead screw）推進套管，搭配「Soft Fire」演算法控制電流，實現三段可程式模式：全自動（快速）、延遲確認（先探針後確認再套管）、Zero-Throw（僅探針不拋射）。術者可依病灶硬度選擇模式，是 Achieve 電動化的核心路線。</p>
+            <p class="pat-fto">⚠ FTO 重點：馬達驅動 + 可程式速度組合保護，設計電動活檢槍須留意。</p>
+          </div>
+          <a class="pat-btn" href="https://patents.google.com/patent/WO2014182488A1/en#figures" target="_blank" rel="noopener">📐 圖面</a>
+        </li>
+          <li onclick="openDrawer('US10507011B2','merit','Merit Medical')">
+          <div class="ptxt">
+            <span class="pno">US10507011B2</span>
+            <b class="pat-title">Impact Member 撞擊式動能擊發</b>
+            <p class="pat-desc">彈簧直驅有反作用力震動問題，影響針尖定位精度。本案在彈簧與針筒之間插入「impact member」中間撞擊件：彈簧先加速撞擊件，撞擊件再以動能撞擊針筒傳力，能量傳遞短促、反作用力持續時間縮短，針尖位移大幅減小。設計概念類似氣槍原理，對小病灶（&lt;1cm）命中率有明顯提升。</p>
+            
+          </div>
+          <a class="pat-btn" href="https://patents.google.com/patent/US10507011B2/en#figures" target="_blank" rel="noopener">📐 圖面</a>
+        </li>
+          <li onclick="openDrawer('US10568611B2','merit','Merit Medical')">
+          <div class="ptxt">
+            <span class="pno">US10568611B2</span>
+            <b class="pat-title">可縮回切割件 + Flush-Cut 齊平幾何</b>
+            <p class="pat-desc">傳統套管推進後組織端面不整齊（撕裂感）。本案設計可縮回式切割件，套管推進完畢後由遠端向近端滑動，對取樣腔道末端進行「齊平切割」（flush-cut），芯樣兩端截面整齊，降低對周圍組織的牽扯，適合血管旁或神經旁的高風險部位穿刺。</p>
+            
+          </div>
+          <a class="pat-btn" href="https://patents.google.com/patent/US10568611B2/en#figures" target="_blank" rel="noopener">📐 圖面</a>
+        </li>
+          <li onclick="openDrawer('US11311278B2','merit','Merit Medical')">
+          <div class="ptxt">
+            <span class="pno">US11311278B2</span>
+            <b class="pat-title">旋轉外針 + Trocar 連續組織移除</b>
+            <p class="pat-desc">傳統多次取樣需反覆進退針增加創傷。本案外針在保持位置的同時可旋轉，以旋切方式連續切取組織條；搭配 trocar 在近端形成組織條排出通道，使多條樣本在同一穿刺路徑中連續取出，無需退針重置，主要應用在需大量取樣的前列腺及肝臟。</p>
+            
+          </div>
+          <a class="pat-btn" href="https://patents.google.com/patent/US11311278B2/en#figures" target="_blank" rel="noopener">📐 圖面</a>
+        </li>
+          <li onclick="openDrawer('US9763648B2','merit','Merit Medical')">
+          <div class="ptxt">
+            <span class="pno">US9763648B2</span>
+            <b class="pat-title">Partoff Tab 連續取樣切斷機構</b>
+            <p class="pat-desc">連續取樣的難點在於如何在不退針情況下將每條組織樣本從活體分離。本案在探針遠端設計「partoff tab」小突片，每次取樣循環末端，套管推進時突片以剪切方式將組織條從活體分離並保留在套管內腔，實現真正不退針多次取樣。</p>
+            
+          </div>
+          <a class="pat-btn" href="https://patents.google.com/patent/US9763648B2/en#figures" target="_blank" rel="noopener">📐 圖面</a>
+        </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- BD -->
+  <div class="company bd">
+    <div class="company-head">
+      <div>
+        <div class="name">BD（Becton Dickinson / Bard）</div>
+        <div class="product">產品線：MAX-CORE / Marquee</div>
+      </div>
+      <div class="badge">5 件核心專利</div>
+    </div>
+    <div class="company-body">
+      <div class="product-shots">
+        <div class="product-shot">
+          <div class="frame"><img src="https://www.bd.com/content/dam/bd-assets/bd-com/en-us/images/product-family/peripheral-intervention/max-core-disposable-core-biopsy-instrument/max-core-banner.jpg" alt="MAX-CORE"></div>
+          <div class="cap"><b>MAX-CORE</b><br>全自動雙彈簧基礎款</div>
+        </div>
+        <div class="product-shot">
+          <div class="frame"><img src="https://www.bd.com/content/dam/bd-assets/bd-com/en-us/images/product-family/peripheral-intervention/marquee-disposable-core-biopsy-instrument/BD-95409v2_spotlight-herov2.png" alt="Marquee"></div>
+          <div class="cap"><b>Marquee</b><br>雙模式 + 可調深度旗艦款</div>
+        </div>
+      </div>
+      <div class="body-block">
+        <p class="h">技術特色</p>
+        <p>全自動雙彈簧為主軸，高階產品以 selector（選擇器）切換多種擊發模式或行程長度，單一裝置可調整穿刺深度與取樣量，為其高階槍的核心賣點。另以螺旋輸送器（auger）達成連續切割輸送，免反覆抽插。可視化技術布局最完整：多重 echogenic 特徵家族（內外針對齊／錯位設計）自 2009 年優先權起連續四代同族專利，整體保護期估計至 2029 年底。</p>
+      </div>
+      <div class="body-block">
+        <p class="h">關鍵專利</p>
+        <ul class="patent-list">
+          <li onclick="openDrawer('US11013499B2','bd','BD（Bard）')">
+          <div class="ptxt">
+            <span class="pno">US11013499B2</span>
+            <b class="pat-title">Selector 雙模式 + 雙行程切換（Marquee 核心）</b>
+            <p class="pat-desc">外殼側面的 Selector 滑鍵同時控制兩個維度：（1）擊發模式，在全自動（探針+套管同步）與半自動（先擊發探針確認凹槽、再觸發套管）間切換；（2）穿刺行程深度，在 18mm 與 25mm 之間選擇。兩維度獨立，BD 在單一產品實現四種組合，是市場上罕見的「一槍四模式」設計。</p>
+            <p class="pat-fto">⚠ FTO 重點：Selector 橫跨擊發模式與行程深度兩維度的組合保護，保護範圍廣，到期約 2038 年。</p>
+          </div>
+          <a class="pat-btn" href="https://patents.google.com/patent/US11013499B2/en#figures" target="_blank" rel="noopener">📐 圖面</a>
+        </li>
+          <li onclick="openDrawer('US10278678B2','bd','BD（Bard）')">
+          <div class="ptxt">
+            <span class="pno">US10278678B2</span>
+            <b class="pat-title">螺旋輸送器（Auger）連續取樣</b>
+            <p class="pat-desc">傳統多次取樣依賴真空抽吸或手動退針。本案以螺旋輸送器（auger）為傳遞元件：旋轉外針切取組織後，螺旋齒將組織條從遠端向近端輸送至近端收集腔自動排出，理論上可實現無限次連續取樣，主要應用在前列腺等需 10–12 條核樣的場景。</p>
+            
+          </div>
+          <a class="pat-btn" href="https://patents.google.com/patent/US10278678B2/en#figures" target="_blank" rel="noopener">📐 圖面</a>
+        </li>
+          <li onclick="openDrawer('US11553898B2','bd','BD（Bard）')">
+          <div class="ptxt">
+            <span class="pno">US11553898B2</span>
+            <b class="pat-title">多重 Echogenic 特徵家族最新案</b>
+            <p class="pat-desc">傳統噴砂粗化只能使針身可見，無法辨別凹槽是否完全張開。本案在內外管遠端設計多組對齊/錯位排列的幾何特徵（槽、凸起、錐面），在超音波聲束反射時產生不同強度的 hyperechoic 信號，術者可據此即時辨別「探針凹槽是否完全張開」的狀態。此為 2009 年優先權同族的最新一案，保護至約 2029 年底。</p>
+            <p class="pat-fto">⚠ FTO 重點：任何採幾何特徵增強超音波可視性的針設計，均需與此同族比對。</p>
+          </div>
+          <a class="pat-btn" href="https://patents.google.com/patent/US11553898B2/en#figures" target="_blank" rel="noopener">📐 圖面</a>
+        </li>
+          <li onclick="openDrawer('US9456806B2','bd','BD（Bard）')">
+          <div class="ptxt">
+            <span class="pno">US9456806B2</span>
+            <b class="pat-title">Echogenic 同族早期案（2009 優先權基礎）</b>
+            <p class="pat-desc">本案是 BD echogenic 家族的早期 division 案，確立了 2009 年的優先權基礎，為後續同族各案提供最早的 filing date 保護。保護範圍集中在內外管對齊幾何特徵的基本概念。</p>
+            
+          </div>
+          <a class="pat-btn" href="https://patents.google.com/patent/US9456806B2/en#figures" target="_blank" rel="noopener">📐 圖面</a>
+        </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="closing">
+    <h2>給營業單位的重點</h2>
+    <p>四大廠在「擊發機構」上已分頭走出明確路線：Cook 守住彈簧加載 + 半圓柱內管的工程精度故事；Argon 以雙鎖定卡合的可靠性為訴求；Merit 因收購整合而同時持有彈簧、馬達、撞擊、連續取樣四條線，產品組合最廣但故事較分散；BD 則靠 selector 多模式切換主打「一槍多用」的高階定位，並在超音波可視化（echogenic）上建立起最完整、保護期最長的專利網。</p>
+    <p>對業務溝通而言，可視化（echogenic）與「多模式切換」是目前市場上最具產品差異化敘事力的兩個技術主張，值得在客戶端對話中留意這兩個方向上競品的訴求方式。</p>
+  </div>
+
+  <p class="footnote">資料來源：LitDB 活檢針知識庫（biopsy_patents.json，schema v2.1，最後更新 2026-06-23）。專利範圍與到期年僅供市場溝通參考，正式 FTO 判斷需另行逐項核對 claim 全文。內部使用，請勿外流。</p>
+
+</div>
+
+<!-- ══ DRAWER ══ -->
+<div class="drawer-overlay" id="dOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-hdr">
+    <div>
+      <div id="dCo"></div>
+      <div class="d-pno" id="dPno"></div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body">
+    <div class="key-bar" id="keyBar">
+      <label>API Key</label>
+      <input type="password" id="apiKeyInput" placeholder="sk-ant-…（本機使用需填入）" autocomplete="off">
+      <button class="key-save" onclick="saveKey()">儲存</button>
+    </div>
+    <div class="d-title" id="dTitle"></div>
+    <div class="d-desc" id="dDesc"></div>
+    <div class="d-fto" id="dFto" style="display:none"></div>
+    <div class="d-imgs-label">專利圖面 <span></span></div>
+    <div class="d-ai-status" id="dStatus"></div>
+    <div class="d-imgs-grid" id="dImgs"></div>
+    <a class="d-ext" id="dLink" href="#" target="_blank" rel="noopener">↗ Google Patents 查看完整圖面</a>
+  </div>
+</div>
+
+<script>
+const PDATA = {
+  'US9101350B2':{t:'半圓柱全芯取樣機構',d:'傳統側凹槽取樣腔道為開放式，組織容易脫落。本案將內管遠端截面設計為半圓柱（弧度 160–200°），使取樣腔道完整環繞組織核心，外管推進後形成密閉保護。搭配紋理互扣（interlocking texture）防止組織在退針過程中滑落，是 Quick-Core 系列的核心差異化。',f:'⚠ FTO 重點：凡採半圓柱截面內管設計皆落入 claim 範圍，到期約 2031 年。'},
+  'US8657760B2':{t:'銳角人因握把',d:'傳統直線型握把迫使術者手腕背屈，長時間操作易疲勞。本案將握把縱軸與針筒縱軸設計成銳角交叉，手腕可保持自然中立位，單手拇指即可觸及扳機，另一手自由持超音波探頭。',f:null},
+  'US10448930B2':{t:'Tissue Stop + 斜遠端取樣最佳化',d:'在取樣凹槽近端設置組織擋止環（tissue stop），阻止穿刺時組織沿針軸提前位移，確保凹槽完全展開後才觸碰目標組織。配合斜向遠端設計，外管推進切割角度更小、創傷更低，每次芯樣長度與完整性均提升。',f:null},
+  'US4869259A':{t:'噴砂粗化增強超音波可視性（已到期）',d:'在金屬針表面以噴砂方式製造微觀不規則粗糙面，增大超音波聲束散射截面積，使針身在超音波影像中呈現更明顯的亮點（hyperechoic），協助術者即時定位。此專利已到期，技術已進入公共領域，任何廠商均可自由使用。',f:null},
+  'US6106484A':{t:'雙鎖定卡合全自動握把',d:'傳統自動活檢槍探針與套管共用單一鎖定機構，序列難以精確控制。本案設計獨立的第一鎖定件（鎖探針）與第二鎖定件（鎖套管），扳機釋放後先解鎖探針展開凹槽，組織進入後自動觸發套管推進切割，序列完全由機構幾何保證，不依賴術者手感。',f:null},
+  'US10709429B2':{t:'側/後雙扳機 + Flexible Abutment 握把',d:'握把側面與後端各設一個扳機，以連桿機構連通，術者可依習慣任選觸發。彈性止擋件（flexible abutment）吸收擊發瞬間的反作用力衝擊，降低因震動導致的針尖位移。Argon SuperCore 系列核心人因設計，適配 14G–20G 全規格。',f:null},
+  'WO2014182488A1':{t:'馬達驅動 + Soft Fire 可控擊發速度',d:'彈簧加載速度不可調，對不同硬度病灶難以兼顧穿透力與樣本品質。本案以馬達驅動導螺桿（lead screw）推進套管，搭配「Soft Fire」演算法控制電流，實現三段可程式模式：全自動（快速）、延遲確認（先探針後確認再套管）、Zero-Throw（僅探針不拋射）。術者可依病灶硬度選擇模式，是 Achieve 電動化的核心路線。',f:'⚠ FTO 重點：馬達驅動 + 可程式速度組合保護，設計電動活檢槍須留意。'},
+  'US10507011B2':{t:'Impact Member 撞擊式動能擊發',d:'彈簧直驅有反作用力震動問題，影響針尖定位精度。本案在彈簧與針筒之間插入「impact member」中間撞擊件：彈簧先加速撞擊件，撞擊件再以動能撞擊針筒傳力，能量傳遞短促、反作用力持續時間縮短，針尖位移大幅減小。設計概念類似氣槍原理，對小病灶（<1cm）命中率有明顯提升。',f:null},
+  'US10568611B2':{t:'可縮回切割件 + Flush-Cut 齊平幾何',d:'傳統套管推進後組織端面不整齊（撕裂感）。本案設計可縮回式切割件，套管推進完畢後由遠端向近端滑動，對取樣腔道末端進行「齊平切割」（flush-cut），芯樣兩端截面整齊，降低對周圍組織的牽扯，適合血管旁或神經旁的高風險部位穿刺。',f:null},
+  'US11311278B2':{t:'旋轉外針 + Trocar 連續組織移除',d:'傳統多次取樣需反覆進退針增加創傷。本案外針在保持位置的同時可旋轉，以旋切方式連續切取組織條；搭配 trocar 在近端形成組織條排出通道，使多條樣本在同一穿刺路徑中連續取出，無需退針重置，主要應用在需大量取樣的前列腺及肝臟。',f:null},
+  'US9763648B2':{t:'Partoff Tab 連續取樣切斷機構',d:'連續取樣的難點在於如何在不退針情況下將每條組織樣本從活體分離。本案在探針遠端設計「partoff tab」小突片，每次取樣循環末端，套管推進時突片以剪切方式將組織條從活體分離並保留在套管內腔，實現真正不退針多次取樣。',f:null},
+  'US11013499B2':{t:'Selector 雙模式 + 雙行程切換（Marquee 核心）',d:'外殼側面的 Selector 滑鍵同時控制兩個維度：（1）擊發模式，在全自動（探針+套管同步）與半自動（先擊發探針確認凹槽、再觸發套管）間切換；（2）穿刺行程深度，在 18mm 與 25mm 之間選擇。兩維度獨立，BD 在單一產品實現四種組合，是市場上罕見的「一槍四模式」設計。',f:'⚠ FTO 重點：Selector 橫跨擊發模式與行程深度兩維度的組合保護，到期約 2038 年。'},
+  'US10278678B2':{t:'螺旋輸送器（Auger）連續取樣',d:'傳統多次取樣依賴真空抽吸或手動退針。本案以螺旋輸送器（auger）為傳遞元件：旋轉外針切取組織後，螺旋齒將組織條從遠端向近端輸送至近端收集腔自動排出，理論上可實現無限次連續取樣，主要應用在前列腺等需 10–12 條核樣的場景。',f:null},
+  'US11553898B2':{t:'多重 Echogenic 特徵家族最新案',d:'傳統噴砂粗化只能使針身可見，無法辨別凹槽是否完全張開。本案在內外管遠端設計多組對齊/錯位排列的幾何特徵（槽、凸起、錐面），在超音波聲束反射時產生不同強度的 hyperechoic 信號，術者可據此即時辨別「探針凹槽是否完全張開」的狀態。此為 2009 年優先權同族的最新一案，保護至約 2029 年底。',f:'⚠ FTO 重點：任何採幾何特徵增強超音波可視性的針設計，均需與此同族比對。'},
+  'US9456806B2':{t:'Echogenic 同族早期案（2009 優先權基礎）',d:'本案是 BD echogenic 家族的早期 division 案，確立了 2009 年的優先權基礎，為後續同族各案提供最早的 filing date 保護。保護範圍集中在內外管對齊幾何特徵的基本概念。',f:null},
+};
+
+const imgCache = {};
+
+
+function saveKey(){
+  const v=document.getElementById('apiKeyInput').value.trim();
+  if(v){sessionStorage.setItem('antKey',v);document.getElementById('keyBar').innerHTML='<span class="key-ok">✓ API Key 已儲存（本次工作階段有效）</span>';}
+}
+function getKey(){return sessionStorage.getItem('antKey')||'';}
+
+function openDrawer(pno, co, coName) {
+  document.querySelectorAll('.patent-list li').forEach(l=>l.classList.remove('pat-active'));
+  document.querySelectorAll('.patent-list li').forEach(l=>{
+    const sp = l.querySelector('.pno');
+    if(sp && sp.textContent.trim()===pno) l.classList.add('pat-active');
+  });
+
+  const p = PDATA[pno]||{t:pno,d:'',f:null};
+  document.getElementById('dCo').innerHTML = `<div class="d-co ${co}">${coName}</div>`;
+  document.getElementById('dPno').textContent = pno;
+  document.getElementById('dTitle').textContent = p.t;
+  document.getElementById('dDesc').textContent = p.d;
+  const ftoEl = document.getElementById('dFto');
+  if(p.f){ftoEl.textContent=p.f;ftoEl.style.display='block';}
+  else{ftoEl.style.display='none';}
+  document.getElementById('dLink').href = `https://patents.google.com/patent/${pno}/en#figures`;
+
+  const kb=document.getElementById('keyBar');
+  if(getKey()&&kb.querySelector('input')) kb.innerHTML='<span class="key-ok">✓ API Key 已儲存（本次工作階段有效）</span>';
+  document.getElementById('dOverlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+  document.body.style.overflow='hidden';
+
+  if(imgCache[pno]){
+    renderImgs(imgCache[pno]);
+    document.getElementById('dStatus').innerHTML='✓ 圖面已載入';
+    return;
+  }
+
+  document.getElementById('dImgs').innerHTML='';
+  document.getElementById('dStatus').innerHTML='<div class="spinner"></div> AI 正在擷取 '+pno+' 圖面…';
+  fetchPatentImages(pno).then(urls=>{
+    imgCache[pno]=urls;
+    renderImgs(urls);
+    document.getElementById('dStatus').innerHTML = urls.length>0
+      ? '✓ 取得 '+urls.length+' 張圖面'
+      : '— 未取得圖面，請點擊下方連結至 Google Patents 查看';
+  }).catch(e=>{
+    document.getElementById('dStatus').innerHTML='⚠ 擷取失敗，請使用下方連結';
+  });
+}
+
+function renderImgs(urls){
+  const g=document.getElementById('dImgs');
+  if(!urls||!urls.length){
+    g.innerHTML='<p class="d-img-err">無可直接顯示的圖面，請點擊下方連結</p>';return;
+  }
+  g.innerHTML=urls.map(u=>`<div class="d-img-frame"><img src="${u}" alt="Patent figure" onerror="this.parentElement.innerHTML='<p class=d-img-err>載入失敗</p>'" loading="lazy"></div>`).join('');
+}
+
+function closeDrawer(){
+  document.getElementById('dOverlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
+
+async function fetchPatentImages(pno){
+  const prompt = `請用 web_search 工具搜尋專利 ${pno} 在 Google Patents 頁面上的圖面圖片 URL。
+
+搜尋關鍵字：site:patents.google.com ${pno}
+
+從搜尋結果中找出 patentimages.storage.googleapis.com 上的圖片 URL（.png 格式）。
+
+只回傳 JSON 陣列，不含任何其他文字或 markdown，例如：
+["https://patentimages.storage.googleapis.com/.../D00001.png","https://patentimages.storage.googleapis.com/.../D00002.png"]
+
+若找不到則回傳：[]`;
+
+  const key=getKey();
+  const headers={'Content-Type':'application/json'};
+  if(key) headers['x-api-key']=key;
+  const r = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers,
+    body:JSON.stringify({
+      model:'claude-sonnet-4-6',max_tokens:600,
+      tools:[{type:'web_search_20250305',name:'web_search'}],
+      messages:[{role:'user',content:prompt}]
+    })
+  });
+  if(!r.ok) throw new Error('API '+r.status);
+  const data=await r.json();
+  const text=data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+  const m=text.match(/\[[\s\S]*?\]/);
+  if(m){try{const a=JSON.parse(m[0]);if(Array.isArray(a))return a.filter(u=>typeof u==='string'&&u.startsWith('http'));}catch(e){}}
+  const found=[...text.matchAll(/https:\/\/patentimages\.storage\.googleapis\.com\/[^\s"'<>]+\.png/g)].map(x=>x[0]);
+  return [...new Set(found)].slice(0,4);
+}
+</script>
+</body>
+</html>
