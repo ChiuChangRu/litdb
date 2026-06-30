@@ -327,6 +327,71 @@ tr:last-child td{border-bottom:0}
   font-weight:800;
   text-decoration:none;
 }
+.worker-panel{
+  display:grid;
+  gap:12px;
+}
+.worker-toolbar{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px;
+}
+.worker-toolbar button{
+  border:0;
+  background:var(--green);
+  color:#fff;
+  padding:9px 13px;
+  border-radius:7px;
+  font-weight:800;
+  cursor:pointer;
+}
+.worker-toolbar button:disabled{
+  opacity:.55;
+  cursor:wait;
+}
+.worker-url{
+  flex:1;
+  min-width:260px;
+  border:1px solid var(--line);
+  border-radius:7px;
+  padding:8px 10px;
+  background:#fff;
+  color:var(--muted);
+  font-size:12px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.worker-results{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.worker-result{
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:11px;
+  background:#fff;
+}
+.worker-result strong{
+  display:block;
+  font-size:20px;
+}
+.worker-result span{
+  color:var(--muted);
+  font-size:12px;
+}
+.mini-list{
+  display:grid;
+  gap:6px;
+  font-size:12px;
+  color:var(--muted);
+}
+.mini-list div{
+  border-top:1px dashed var(--line);
+  padding-top:6px;
+}
 .empty{
   border:1px dashed var(--line);
   border-radius:8px;
@@ -342,6 +407,7 @@ tr:last-child td{border-bottom:0}
   .span-3,.span-4,.span-5,.span-7,.span-8,.span-12{grid-column:span 12}
   .chart-wrap{grid-template-columns:1fr}
   canvas{margin:auto}
+  .worker-results{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -443,7 +509,15 @@ tr:last-child td{border-bottom:0}
 
       <div class="card span-12">
         <h3>外部檢索入口</h3>
-        <div id="searchLinks" class="action-links"></div>
+        <div class="worker-panel">
+          <div class="worker-toolbar">
+            <button id="fetchWorkerBtn" type="button">即時抓取 openFDA</button>
+            <div id="workerUrl" class="worker-url">Worker proxy 尚未查詢</div>
+          </div>
+          <div id="workerStatus" class="empty">選擇公司後，可直接透過 Cloudflare Worker 抓取 openFDA 的 MAUDE、Recall、510(k) 即時結果。</div>
+          <div id="workerResults" class="worker-results hidden"></div>
+        </div>
+        <div id="searchLinks" class="action-links mt16"></div>
         <div class="note">
           NyquistAI 在 Codex 內是 MCP 工具，可由本對話代查 FDA device / MAUDE / recall 結構化資料；GitHub Pages 的純 HTML 不能直接呼叫 MCP，若要在網頁內一鍵跑 NyquistAI，需要另接後端 API 或 Worker proxy。
         </div>
@@ -724,7 +798,34 @@ const makerSelect = document.getElementById("makerSelect");
 const problemSearch = document.getElementById("problemSearch");
 const complaintMode = document.getElementById("complaintMode");
 const recallMode = document.getElementById("recallMode");
+const fetchWorkerBtn = document.getElementById("fetchWorkerBtn");
+const workerStatus = document.getElementById("workerStatus");
+const workerResults = document.getElementById("workerResults");
+const workerUrl = document.getElementById("workerUrl");
 let mode = "complaints";
+const workerBaseUrl = "https://dmac-fda-proxy.gogoyankee.workers.dev";
+const workerCompanyKeywords = {
+  all:"",
+  boston:"boston",
+  medtronic:"medtronic",
+  jnj:"johnson",
+  abbott:"abbott",
+  siemens:"siemens",
+  philips:"philips",
+  bd:"becton",
+  stryker:"stryker",
+  zimmer:"zimmer",
+  edwards:"edwards",
+  baxter:"baxter",
+  cook:"cook",
+  teleflex:"teleflex",
+  argon:"argon",
+  greiner:"greiner",
+  sol:"sol",
+  terumo:"terumo",
+  magnolia:"magnolia",
+  manual:""
+};
 
 suggestedMakers.forEach(([key,label])=>{
   const option = document.createElement("option");
@@ -841,11 +942,20 @@ function renderClearances(data){
 
 function renderSearchLinks(data){
   const q = encodeURIComponent(data.searchQuery || `${data.name} blood collection needle`);
-  const maker = encodeURIComponent(data.name.replace("--","").trim());
+  const key = makerSelect.value || "all";
+  const keyword = workerCompanyKeywords[key] || "";
+  const maker = encodeURIComponent(keyword || data.name.replace("--","").trim());
+  const workerQuery = keyword ? `company=${encodeURIComponent(keyword)}&product_code=JKA&limit=100` : "product_code=JKA&limit=100";
+  const workerMaude = `${workerBaseUrl}/api/maude?${workerQuery}`;
+  const workerRecall = `${workerBaseUrl}/api/recall?${workerQuery}`;
+  const worker510k = `${workerBaseUrl}/api/510k?${workerQuery}`;
   const openFdaEvent = `https://api.fda.gov/device/event.json?search=date_received:[20160630+TO+20260630]+AND+device.device_report_product_code:JKA+AND+manufacturer_d_name:${maker}&limit=10`;
   const openFdaRecall = `https://api.fda.gov/device/recall.json?search=product_code:JKA+AND+recalling_firm:${maker}&limit=10`;
   const openFda510k = `https://api.fda.gov/device/510k.json?search=product_code:JKA+AND+applicant:${maker}&limit=10`;
   document.getElementById("searchLinks").innerHTML = `
+    <a href="${workerMaude}" target="_blank" rel="noreferrer">Worker MAUDE</a>
+    <a href="${workerRecall}" target="_blank" rel="noreferrer">Worker Recall</a>
+    <a href="${worker510k}" target="_blank" rel="noreferrer">Worker 510(k)</a>
     <a href="https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfMAUDE/search.CFM" target="_blank" rel="noreferrer">FDA MAUDE 查詢頁</a>
     <a href="https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfRES/res.cfm" target="_blank" rel="noreferrer">FDA Recall 查詢頁</a>
     <a href="https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfpmn/pmn.cfm" target="_blank" rel="noreferrer">FDA 510(k) 查詢頁</a>
@@ -854,6 +964,73 @@ function renderSearchLinks(data){
     <a href="${openFda510k}" target="_blank" rel="noreferrer">openFDA 510(k) JSON</a>
     <a href="https://www.google.com/search?q=${q}+MAUDE+recall+510(k)" target="_blank" rel="noreferrer">Google 檢索</a>
   `;
+}
+
+function resultTitle(item){
+  if(!item) return "無資料";
+  return item.report_number || item.recall_number || item.k_number || item.id || item.device_name || item.recall_title || "未命名紀錄";
+}
+
+function resultSubtitle(item){
+  if(!item) return "";
+  const parts = [
+    item.date_received || item.recall_initiation_date || item.decision_date || item.date_initiated,
+    item.manufacturer_d_name || item.recalling_firm || item.applicant || item.device_name
+  ].filter(Boolean);
+  return parts.join(" · ");
+}
+
+function renderWorkerCard(label, data){
+  const results = data?.results || [];
+  const samples = results.slice(0,3).map(item => `
+    <div><strong>${resultTitle(item)}</strong><br>${resultSubtitle(item)}</div>
+  `).join("");
+  return `<div class="worker-result">
+    <span>${label}</span>
+    <strong>${fmt(data?.filtered_count ?? results.length ?? 0)}</strong>
+    <span>raw ${fmt(data?.raw_count ?? results.length ?? 0)}</span>
+    <div class="mini-list mt8">${samples || "<div>沒有符合公司關鍵字的結果</div>"}</div>
+  </div>`;
+}
+
+async function fetchJson(endpoint, query){
+  const url = `${workerBaseUrl}${endpoint}?${query}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  if(!res.ok && data?.error){
+    return {raw_count:0, filtered_count:0, results:[], error:data.error.message || "openFDA 查無資料"};
+  }
+  return data;
+}
+
+async function fetchWorkerData(){
+  const key = makerSelect.value || "all";
+  const data = dashboardData[key];
+  const keyword = workerCompanyKeywords[key] || "";
+  const query = keyword ? `company=${encodeURIComponent(keyword)}&product_code=JKA&limit=100` : "product_code=JKA&limit=100";
+  workerUrl.textContent = `${workerBaseUrl}/api/maude?${query}`;
+  fetchWorkerBtn.disabled = true;
+  workerStatus.classList.remove("hidden");
+  workerResults.classList.add("hidden");
+  workerStatus.textContent = `正在透過 Worker 查詢 ${data.name} / JKA...`;
+  try{
+    const [maude, recall, clearance] = await Promise.all([
+      fetchJson("/api/maude", query),
+      fetchJson("/api/recall", query),
+      fetchJson("/api/510k", query)
+    ]);
+    workerStatus.textContent = `即時結果已更新：公司關鍵字「${keyword || "全部"}」，資料來源 openFDA via Cloudflare Worker。`;
+    workerResults.classList.remove("hidden");
+    workerResults.innerHTML = [
+      renderWorkerCard("MAUDE 客訴/事件", maude),
+      renderWorkerCard("Recall 回收", recall),
+      renderWorkerCard("510(k) 證號", clearance)
+    ].join("");
+  }catch(error){
+    workerStatus.textContent = `Worker 查詢失敗：${error.message}`;
+  }finally{
+    fetchWorkerBtn.disabled = false;
+  }
 }
 
 function render(){
@@ -878,10 +1055,17 @@ function render(){
   renderEvents(data);
   renderClearances(data);
   renderSearchLinks(data);
+  workerResults.classList.add("hidden");
+  workerStatus.classList.remove("hidden");
+  workerStatus.textContent = "選擇公司後，可直接透過 Cloudflare Worker 抓取 openFDA 的 MAUDE、Recall、510(k) 即時結果。";
+  const keyword = workerCompanyKeywords[key] || "";
+  const query = keyword ? `company=${encodeURIComponent(keyword)}&product_code=JKA&limit=100` : "product_code=JKA&limit=100";
+  workerUrl.textContent = `${workerBaseUrl}/api/maude?${query}`;
 }
 
 makerSelect.addEventListener("change", render);
 problemSearch.addEventListener("input", render);
+fetchWorkerBtn.addEventListener("click", fetchWorkerData);
 complaintMode.addEventListener("click", ()=>{
   mode = "complaints";
   complaintMode.classList.add("active");
