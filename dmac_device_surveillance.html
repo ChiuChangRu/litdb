@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DMAC 醫療器材收巡 - 檢體針模擬</title>
+<style>
+:root{
+  --page:#f5f4ef;
+  --panel:#ffffff;
+  --ink:#272823;
+  --muted:#6f716b;
+  --line:#d7d5ca;
+  --green:#16745b;
+  --green-soft:#e2f3ec;
+  --blue:#265f92;
+  --blue-soft:#e8f1f8;
+  --amber:#9d6317;
+  --amber-soft:#f8ecd8;
+  --red:#a33333;
+  --red-soft:#fae7e6;
+  --violet:#5850a4;
+  --violet-soft:#eeecfb;
+  --shadow:0 10px 28px rgba(43,42,35,.08);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:"Microsoft JhengHei",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--page);
+  color:var(--ink);
+  line-height:1.55;
+}
+button,select,input{font:inherit}
+.app{
+  display:grid;
+  grid-template-columns:280px 1fr;
+  min-height:100vh;
+}
+.rail{
+  background:#fbfaf7;
+  border-right:1px solid var(--line);
+  padding:22px 18px;
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:auto;
+}
+.brand{
+  border-bottom:1px solid var(--line);
+  padding-bottom:18px;
+  margin-bottom:18px;
+}
+.brand h1{
+  font-size:20px;
+  line-height:1.25;
+  margin:0 0 8px;
+}
+.brand span{
+  display:inline-flex;
+  padding:3px 8px;
+  border-radius:999px;
+  background:var(--green-soft);
+  color:var(--green);
+  font-size:12px;
+  font-weight:700;
+}
+.control{
+  margin-bottom:16px;
+}
+.control label{
+  display:block;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:6px;
+}
+select,.search{
+  width:100%;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:7px;
+  padding:9px 10px;
+  color:var(--ink);
+}
+.mode{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  border:1px solid var(--line);
+  border-radius:8px;
+  overflow:hidden;
+}
+.mode button{
+  border:0;
+  border-right:1px solid var(--line);
+  background:#fff;
+  padding:9px 6px;
+  cursor:pointer;
+  color:var(--muted);
+  font-weight:700;
+}
+.mode button:last-child{border-right:0}
+.mode button.active{
+  background:var(--green);
+  color:#fff;
+}
+.note{
+  margin-top:18px;
+  padding:11px 12px;
+  border:1px solid var(--amber);
+  background:var(--amber-soft);
+  color:#6f430d;
+  border-radius:8px;
+  font-size:12px;
+}
+.main{
+  padding:24px 28px 50px;
+}
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  align-items:flex-start;
+  margin-bottom:18px;
+}
+.title h2{
+  font-size:24px;
+  margin:0 0 4px;
+}
+.title p{
+  margin:0;
+  color:var(--muted);
+  font-size:14px;
+}
+.status{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  background:#fff;
+}
+.pill.green{background:var(--green-soft);border-color:#9bcfbc;color:var(--green)}
+.pill.blue{background:var(--blue-soft);border-color:#afd0e9;color:var(--blue)}
+.pill.amber{background:var(--amber-soft);border-color:#e4c089;color:var(--amber)}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  gap:14px;
+}
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:8px;
+  box-shadow:var(--shadow);
+  padding:16px;
+}
+.span-3{grid-column:span 3}
+.span-4{grid-column:span 4}
+.span-5{grid-column:span 5}
+.span-7{grid-column:span 7}
+.span-8{grid-column:span 8}
+.span-12{grid-column:span 12}
+.metric{
+  min-height:118px;
+}
+.metric-label{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:700;
+}
+.metric-value{
+  font-size:32px;
+  font-weight:750;
+  margin:8px 0 2px;
+}
+.metric-sub{
+  color:var(--muted);
+  font-size:13px;
+}
+.card h3{
+  margin:0 0 12px;
+  font-size:16px;
+}
+.chart-wrap{
+  display:grid;
+  grid-template-columns:220px 1fr;
+  gap:14px;
+  align-items:center;
+}
+canvas{
+  display:block;
+  width:100%;
+  max-width:260px;
+  aspect-ratio:1;
+}
+.legend{
+  display:grid;
+  gap:8px;
+}
+.legend-row{
+  display:grid;
+  grid-template-columns:14px 1fr auto;
+  gap:8px;
+  align-items:center;
+  font-size:13px;
+}
+.swatch{
+  width:12px;
+  height:12px;
+  border-radius:3px;
+}
+.bars{
+  display:grid;
+  grid-template-columns:repeat(11,1fr);
+  gap:7px;
+  align-items:end;
+  min-height:210px;
+  padding-top:8px;
+}
+.bar{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+}
+.bar-fill{
+  width:100%;
+  min-height:4px;
+  border-radius:5px 5px 2px 2px;
+  background:var(--blue);
+}
+.bar small{
+  writing-mode:vertical-rl;
+  transform:rotate(180deg);
+  color:var(--muted);
+  font-size:11px;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+th,td{
+  border-bottom:1px solid var(--line);
+  padding:10px 8px;
+  vertical-align:top;
+  text-align:left;
+}
+th{
+  color:var(--muted);
+  font-size:12px;
+  background:#faf9f4;
+}
+tr:last-child td{border-bottom:0}
+.risk-high{color:var(--red);font-weight:800}
+.risk-mid{color:var(--amber);font-weight:800}
+.risk-low{color:var(--green);font-weight:800}
+.model-chip{
+  display:inline-flex;
+  padding:2px 7px;
+  border-radius:999px;
+  margin:0 4px 4px 0;
+  background:var(--blue-soft);
+  color:var(--blue);
+  font-size:12px;
+  font-weight:700;
+}
+.timeline{
+  display:grid;
+  gap:10px;
+}
+.event{
+  border:1px solid var(--line);
+  border-radius:7px;
+  padding:11px;
+  background:#fff;
+}
+.event-head{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  font-size:13px;
+  font-weight:750;
+}
+.event p{
+  margin:6px 0 0;
+  color:var(--muted);
+  font-size:13px;
+}
+.event a{
+  color:var(--blue);
+  font-weight:700;
+  text-decoration:none;
+}
+.source-list{
+  display:grid;
+  gap:8px;
+  font-size:13px;
+}
+.source-list a{color:var(--blue);text-decoration:none;font-weight:700}
+.empty{
+  border:1px dashed var(--line);
+  border-radius:8px;
+  padding:18px;
+  color:var(--muted);
+  background:#fff;
+}
+@media(max-width:960px){
+  .app{grid-template-columns:1fr}
+  .rail{position:relative;height:auto}
+  .topbar{display:block}
+  .status{justify-content:flex-start;margin-top:12px}
+  .span-3,.span-4,.span-5,.span-7,.span-8,.span-12{grid-column:span 12}
+  .chart-wrap{grid-template-columns:1fr}
+  canvas{margin:auto}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <div class="brand">
+      <h1>DMAC 醫療器材<br>收巡工作台</h1>
+      <span>Specimen needle demo</span>
+    </div>
+    <div class="control">
+      <label for="deviceSelect">醫療器材類別</label>
+      <select id="deviceSelect">
+        <option value="jka">檢體針 / 採血器材 JKA</option>
+      </select>
+    </div>
+    <div class="control">
+      <label for="makerSelect">大廠 / 申請廠商</label>
+      <select id="makerSelect"></select>
+    </div>
+    <div class="control">
+      <label>圓餅圖資料</label>
+      <div class="mode">
+        <button id="complaintMode" class="active" type="button">客訴</button>
+        <button id="recallMode" type="button">回收</button>
+      </div>
+    </div>
+    <div class="control">
+      <label for="problemSearch">問題點搜尋</label>
+      <input id="problemSearch" class="search" type="search" placeholder="例如 leak, needle stick, short fill">
+    </div>
+    <div class="note">
+      公開資料來源以 FDA MAUDE、Recall、510(k) 為主。此頁把 MAUDE 當作公開可追溯的客訴/產品問題 proxy，不等於廠內完整客訴量。
+    </div>
+  </aside>
+
+  <main class="main">
+    <section class="topbar">
+      <div class="title">
+        <h2 id="pageTitle">檢體針收巡概覽</h2>
+        <p id="pageSub">近十年公開訊號：2016-06-30 至 2026-06-30</p>
+      </div>
+      <div class="status">
+        <span class="pill green">FDA Product Code JKA</span>
+        <span class="pill blue">510(k) 證號追溯</span>
+        <span class="pill amber">模擬資料集 v1</span>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card metric span-3">
+        <div class="metric-label">MAUDE 客訴/產品問題</div>
+        <div class="metric-value" id="complaintCount">0</div>
+        <div class="metric-sub" id="complaintSub">公開通報筆數</div>
+      </div>
+      <div class="card metric span-3">
+        <div class="metric-label">回收 / Correction</div>
+        <div class="metric-value" id="recallCount">0</div>
+        <div class="metric-sub" id="recallSub">近十年 FDA recall</div>
+      </div>
+      <div class="card metric span-3">
+        <div class="metric-label">證號 / 申請案</div>
+        <div class="metric-value" id="clearanceCount">0</div>
+        <div class="metric-sub" id="clearanceSub">510(k) 或 BK 編號</div>
+      </div>
+      <div class="card metric span-3">
+        <div class="metric-label">收巡等級</div>
+        <div class="metric-value" id="riskLevel">-</div>
+        <div class="metric-sub" id="riskSub">依公開訊號模擬</div>
+      </div>
+
+      <div class="card span-7">
+        <h3 id="pieTitle">客訴問題點比例</h3>
+        <div class="chart-wrap">
+          <canvas id="pie" width="260" height="260" aria-label="pie chart"></canvas>
+          <div class="legend" id="legend"></div>
+        </div>
+      </div>
+
+      <div class="card span-5">
+        <h3>年度趨勢</h3>
+        <div class="bars" id="bars"></div>
+      </div>
+
+      <div class="card span-12">
+        <h3>問題點、對應型號與證號</h3>
+        <div id="problemTable"></div>
+      </div>
+
+      <div class="card span-7">
+        <h3>回收 / 客訴事件摘要</h3>
+        <div class="timeline" id="events"></div>
+      </div>
+
+      <div class="card span-5">
+        <h3>證號清單</h3>
+        <div id="clearances"></div>
+      </div>
+
+      <div class="card span-12">
+        <h3>資料來源與查詢假設</h3>
+        <div class="source-list">
+          <div>NyquistAI / FDA device search: product code <strong>JKA</strong>, query <strong>blood collection needle</strong>，確認主要 510(k) 證號與廠商。</div>
+          <div>NyquistAI / FDA MAUDE search: query <strong>BD Vacutainer blood collection needle</strong>, <strong>VACUETTE blood collection needle</strong>, <strong>Sol-Millennium blood collection needle</strong>，期間 2016-06-30 至 2026-06-30。</div>
+          <div>NyquistAI / FDA recall search: query <strong>blood collection needle</strong>, product code <strong>JKA</strong>，期間 2016-06-30 至 2026-06-30。</div>
+          <div>設計參考：工作區 <strong>DMAC2</strong> 的左側流程、卡片式 CAPA/收巡資料結構。</div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const colors = ["#265f92","#16745b","#9d6317","#a33333","#5850a4","#647067","#c26f42","#2f8f9d"];
+
+const dashboardData = {
+  all:{
+    name:"全部大廠合併",
+    complaints:5239,
+    recalls:8,
+    clearances:[
+      ["K243207","BD Vacutainer Eclipse Blood Collection Needle","BD", "2025-07-03"],
+      ["K233979","VACUETTE QUICKSHIELD Complete (Plus)","Greiner Bio-One","2024-07-19"],
+      ["K250907","Sol-Guard XtraThin Safety Pull-Button Blood Collection Set","Sol-Millennium","2025-04-30"],
+      ["K041358","Venoject Luer Adapter","Terumo","2004-05-28"],
+      ["K192247","Steripath Gen2 Blood Collection System","Magnolia Medical","2020-02-28"]
+    ],
+    years:{2016:19,2017:393,2018:620,2019:699,2020:505,2021:507,2022:447,2023:612,2024:343,2025:630,2026:463},
+    complaintProblems:[
+      {label:"Leak / Splash / Fluid Leak", count:1825, zh:"漏液、噴濺、血液外漏"},
+      {label:"Product Quality / Defective Component", count:617, zh:"產品品質或零件缺陷"},
+      {label:"Safety Activation / Retraction", count:604, zh:"安全機構啟動或回縮問題"},
+      {label:"Short Fill / Volume Accuracy", count:401, zh:"採血不足、容量誤差"},
+      {label:"Difficult to Insert / Pain", count:340, zh:"穿刺困難、疼痛"},
+      {label:"Separation / Detachment / Break", count:270, zh:"分離、脫落、斷裂"},
+      {label:"Other", count:1182, zh:"其他公開通報"}
+    ],
+    recallProblems:[
+      {label:"Safety mechanism separation", count:2, zh:"安全回縮機構分離"},
+      {label:"Vacuum loss / short fill", count:1, zh:"真空流失、採血不足"},
+      {label:"Stopper pullout", count:1, zh:"塞子拉出"},
+      {label:"Needle dislodgement / leak", count:1, zh:"針具脫落、漏血"},
+      {label:"Premature needle retraction", count:1, zh:"針具過早回縮"},
+      {label:"Sterile barrier breach", count:1, zh:"無菌屏障破損"},
+      {label:"Luer break / port obstruction", count:1, zh:"Luer 斷裂、接口阻塞"}
+    ],
+    problems:[
+      {risk:"高", problem:"漏液 / 噴濺 / 血液外漏", models:["BD Vacutainer Eclipse","Sol-Care Safety Blood Collection Needle","VACUETTE Blood Transfer Unit"], ids:["K243207","K163073","JKA recall Z-2116-2020"], notes:"可能造成採血中斷、重採、血液暴露；需追蹤批號、接頭、管路與使用情境。"},
+      {risk:"高", problem:"安全機構啟動失敗 / 回縮異常", models:["BD Vacutainer Safety-Lok","BD Vacutainer Push Button","VACUETTE EVOPROTECT","Sol-Guard"], ids:["K980414","K030573","K173757","K213718"], notes:"與 needlestick / exposure 訊號直接相關，適合作為收巡優先項。"},
+      {risk:"中", problem:"採血不足 / 真空流失 / 容量誤差", models:["BD Vacutainer Eclipse","VACUETTE Sodium Citrate / Heparin Tubes"], ids:["K243207","K971221","K960857"], notes:"常導致 specimen rejection、重採與檢驗延遲；需區分針具、管具與採血流程。"},
+      {risk:"中", problem:"分離 / 脫落 / 斷裂", models:["BD One Use Holder","BD Push Button","Sol-Care with holder"], ids:["K242320","K030573","K163073"], notes:"對應 holder、barrel、luer、needle hub 連接可靠度。"},
+      {risk:"中", problem:"穿刺困難 / 鈍針 / 疼痛", models:["Sol-Care 21G/23G/25G","Henry Schein private label"], ids:["K163073"], notes:"公開客訴包含 dull/blunt、pain、neonatal/pediatric bruising 敘述。"}
+    ],
+    events:[
+      ["2021-11-02","Recall Z-0318-2022","Magnolia Steripath Gen2 因 premature needle retraction complaints 啟動 Class II recall。","https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfRES/res.cfm?id=190017"],
+      ["2020-04-03","Recall Z-2116-2020","VACUETTE Blood Transfer Unit 針具可能脫落並留在 stopper，造成 needle stick 或 blood leakage。","https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfRES/res.cfm?id=180771"],
+      ["2019-11-25","Recall Z-0818-2020","VACUETTE tube cap sealing area 受損，可能造成 vacuum loss 與 short fill。","https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfRES/res.cfm?id=178545"],
+      ["2016-08-08","Recall Z-0745-2017 / Z-2710-2016","BD Vacutainer Push Button 特定批號安全機構啟動時 front/rear barrel separation。","https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfRES/res.cfm?id=149793"]
+    ]
+  },
+  bd:{
+    name:"Becton, Dickinson and Company (BD)",
+    complaints:5112,
+    recalls:4,
+    clearances:[
+      ["K243207","BD Vacutainer Eclipse Blood Collection Needle","2025-07-03"],
+      ["K242320","BD Vacutainer One Use Holder","2024-11-01"],
+      ["K220212","BD Vacutainer Push Button Blood Collection Set","2023-03-24"],
+      ["K212724","BD Vacutainer UltraTouch Push Button Blood Collection Set","2022-02-04"],
+      ["K030573","BD Vacutainer Push Button Blood Collection Set models 367338 etc.","2003-05-08"],
+      ["K980414","BD Vacutainer Safety-Lok Blood Collection Set","legacy / MAUDE referenced"]
+    ],
+    years:{2016:19,2017:393,2018:619,2019:697,2020:477,2021:492,2022:440,2023:603,2024:315,2025:597,2026:460},
+    complaintProblems:[
+      {label:"Leak / Splash", count:1218, zh:"漏液 / 噴濺"},
+      {label:"Product Quality", count:606, zh:"產品品質"},
+      {label:"Fluid Leak", count:597, zh:"血液或液體外漏"},
+      {label:"Difficult or Delayed Activation", count:493, zh:"安全機構啟動困難/延遲"},
+      {label:"Short Fill", count:378, zh:"採血不足"},
+      {label:"Difficult to Insert", count:335, zh:"穿刺或插入困難"},
+      {label:"Other", count:1485, zh:"其他"}
+    ],
+    recallProblems:[
+      {label:"Barrel separation on activation", count:2, zh:"啟動安全回縮時 barrel 分離"},
+      {label:"Stopper pullout", count:1, zh:"採血後移除針具時 stopper pullout"},
+      {label:"Luer break / leak", count:1, zh:"Luer 斷裂、漏液或接口不可用"}
+    ],
+    problems:[
+      {risk:"高", problem:"安全機構啟動困難 / 延遲 / 回縮異常", models:["BD Vacutainer Safety-Lok","BD Vacutainer Push Button","BD Vacutainer Eclipse"], ids:["K980414","K030573","K220212"], notes:"MAUDE 含 needlestick / exposure；2016-2017 push button recall 指向 safety feature activation separation。"},
+      {risk:"高", problem:"漏液 / 噴濺", models:["BD Vacutainer Eclipse Blood Collection Needle","BD Blood Collection Assembly with Male Luer Lock"], ids:["K243207","K972404"], notes:"Eclipse 多筆 fluid leak；2019 recall 指向 luer break、leak 或 port obstruction。"},
+      {risk:"中", problem:"採血不足 / slow flow / volume accuracy", models:["BD Vacutainer Eclipse","BD Vacutainer Eclipse Signal"], ids:["K243207","K982541"], notes:"公開敘述包含 air bubbles、foaming、slow flow、insufficient blood flow。"},
+      {risk:"中", problem:"needle / holder 分離", models:["BD Vacutainer One Use Holder","BD Vacutainer Safety-Lok"], ids:["K242320","K980414"], notes:"對應 needle and holder unscrewed/separated、device component detachment。"}
+    ],
+    events:[
+      ["2026-05-28","MAUDE 1024879-2026-00890","BD Vacutainer Eclipse: non-patient end blood leak, 3-5 devices reported in sampled records。","https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfMAUDE/detail.cfm?mdrfoi__id=25321875"],
+      ["2026-05-26","MAUDE 2243072-2026-00399","BD One Use Holder: needle and holder unscrewed or separated with three devices。","https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfMAUDE/detail.cfm?mdrfoi__id=25288815"],
+      ["2019-03-07","Recall Z-1122-2019","BD Blood Collection Assembly with Male Luer Lock: luer could break and leak or obstruct port。","https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfRES/res.cfm?id=171342"],
+      ["2016-08-08","Recall Z-0745-2017","BD Vacutainer Push Button 23G x .75 in with 12 in tubing: separation on safety activation。","https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfRES/res.cfm?id=149793"]
+    ]
+  },
+  greiner:{
+    name:"GREINER BIO-ONE / VACUETTE",
+    complaints:94,
+    recalls:2,
+    clearances:[
+      ["K233979","VACUETTE QUICKSHIELD Complete (Plus)","2024-07-19"],
+      ["K173757","VACUETTE EVOPROTECT Safety Blood Collection / Infusion Set","MAUDE referenced"],
+      ["K122687","Blood Culture Holder","2013-01-10"],
+      ["K971221","Greiner VACUETTE Blood Collection Tube","legacy / MAUDE referenced"],
+      ["K983952","Greiner VACUETTE Blood Collection Tube","legacy / recall referenced"]
+    ],
+    years:{2016:0,2017:0,2018:1,2019:2,2020:28,2021:15,2022:6,2023:9,2024:28,2025:5,2026:0},
+    complaintProblems:[
+      {label:"Short Fill", count:23, zh:"採血不足"},
+      {label:"Filling Problem", count:10, zh:"填充問題"},
+      {label:"Volume Accuracy", count:8, zh:"容量準確性"},
+      {label:"Failure to Obtain Sample", count:6, zh:"無法取得檢體"},
+      {label:"Result / Output Problem", count:12, zh:"檢驗結果或輸出異常"},
+      {label:"Leak / Detachment / Break", count:8, zh:"漏液、脫落、斷裂"},
+      {label:"Other", count:27, zh:"其他"}
+    ],
+    recallProblems:[
+      {label:"Needle dislodged / leakage", count:1, zh:"轉移血液時針具脫落、漏血"},
+      {label:"Cap seal damage / vacuum loss", count:1, zh:"cap sealing area 受損、真空流失"}
+    ],
+    problems:[
+      {risk:"高", problem:"真空流失 / 採血不足 / short fill", models:["VACUETTE Sodium Citrate Tube","VACUETTE Heparin Separator Tube","VACUETTE K2EDTA Tube"], ids:["K971221","K960857","K971236"], notes:"多筆通報描述 specimen rejection、underfill、slow fill；recall Z-0818-2020 指向 cap seal damage。"},
+      {risk:"高", problem:"針具脫落 / blood leakage", models:["VACUETTE Blood Transfer Unit","VACUETTE QUICKSHIELD Complete"], ids:["Recall Z-2116-2020","K233979"], notes:"Recall 描述 transfer blood 時 needle may dislodge and remain in tube stopper。"},
+      {risk:"中", problem:"安全機構未完全回縮", models:["VACUETTE EVOPROTECT Safety Blood Collection Set"], ids:["K173757"], notes:"MAUDE sampled record: protective sheath left portion of needle exposed and needlestick injury。"},
+      {risk:"中", problem:"檢驗結果 / hemolysis / clotting 訊號", models:["VACUETTE EDTA / SST / CAT tubes"], ids:["K971236","K983952"], notes:"與檢體品質、添加劑、管體相容性或 pre-analytical process 相關。"}
+    ],
+    events:[
+      ["2025-12-23","MAUDE 3007817041-2025-00003","VACUETTE EVOPROTECT: safety button engaged but needle not fully retracted, needlestick injury reported。","https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfMAUDE/detail.cfm?mdrfoi__id=23878316"],
+      ["2024-11-18","MAUDE 1125230-2024-00139","VACUETTE LH tube: low vacuum / popping off from needle; one batch duplicated underfill in customer samples。","https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfMAUDE/detail.cfm?mdrfoi__id=20712082"],
+      ["2020-04-03","Recall Z-2116-2020","VACUETTE Blood Transfer Unit: needle may dislodge and remain in stopper, possible needle stick or leakage。","https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfRES/res.cfm?id=180771"],
+      ["2019-11-25","Recall Z-0818-2020","VACUETTE Tube cap seal damage could lead to vacuum loss and improper fill volume。","https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfRES/res.cfm?id=178545"]
+    ]
+  },
+  sol:{
+    name:"Sol-Millennium Medical",
+    complaints:33,
+    recalls:0,
+    clearances:[
+      ["K250907","Sol-Guard XtraThin Safety Pull-Button Blood Collection Set","2025-04-30"],
+      ["K213718","SOL-GUARD Safety Pull Button Collection Set","2022-08-30"],
+      ["K163073","Sol-Care Safety Blood Collection Needle with/without Holder","2017-05-19"],
+      ["K162030","Sol-Care Retractable Safety Syringe with Fixed Needle","MAUDE referenced"]
+    ],
+    years:{2016:0,2017:0,2018:0,2019:1,2020:0,2021:0,2022:1,2023:0,2024:0,2025:28,2026:3},
+    complaintProblems:[
+      {label:"Defective Component", count:8, zh:"零件缺陷"},
+      {label:"Leak / Splash / Fluid Leak", count:8, zh:"漏液、噴濺"},
+      {label:"Complete Blockage", count:4, zh:"完全阻塞"},
+      {label:"Dull / Blunt", count:3, zh:"鈍針 / 疼痛"},
+      {label:"Decoupling / Retraction", count:4, zh:"脫離 / 回縮異常"},
+      {label:"Other", count:6, zh:"其他"}
+    ],
+    recallProblems:[
+      {label:"No FDA recall found in queried period", count:1, zh:"查詢期間未找到 JKA 回收"}
+    ],
+    problems:[
+      {risk:"高", problem:"管路或接頭漏液", models:["Sol-Care Safety Blood Collection Needle 23G*3/4*7 inch","Sol-Care blue / green wing models"], ids:["K163073"], notes:"多筆 2025-2026 MAUDE 描述 tubing connection leak、vacuum loss、repeat puncture。"},
+      {risk:"高", problem:"安全機構或針具偏出造成 needlestick", models:["Fisher Brand Safety Blood Collection Needle","Henry Schein / Sol-Millennium safety needle"], ids:["K163073","K162030"], notes:"公開敘述包含 needle came out side of safety device, staff exposure。"},
+      {risk:"中", problem:"鈍針 / 疼痛 / 兒科瘀青", models:["Sol-Care 21G / 23G / 25G"], ids:["K163073"], notes:"客訴描述 dull/blunt、pain、pediatric/neonate bleeding and bruising。"},
+      {risk:"中", problem:"阻塞 / 無法回血 / pre-attached holder 易脫離", models:["Sol-Care with pre-attached holder"], ids:["K163073"], notes:"事件敘述含 no reflux、tube holder disconnected、blood collection impossible。"}
+    ],
+    events:[
+      ["2026-03-23","MAUDE 3014312726-2026-00028","Sol-Care 23G: drops of blood leaking from tubing connection; patient required re-puncture。","https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfMAUDE/detail.cfm?mdrfoi__id=24661669"],
+      ["2026-01-09","MAUDE 3014312726-2026-00002","Sol-Guard: premature retraction, blood splash during activation, venous return barely visible。","https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfMAUDE/detail.cfm?mdrfoi__id=24018776"],
+      ["2025-06-19","MAUDE 3014312726-2025-00072","Fisher Brand / Sol-Millennium: safety device issue with needlestick exposure。","https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfMAUDE/detail.cfm?mdrfoi__id=22291348"]
+    ]
+  },
+  terumo:{
+    name:"Terumo Corporation / Venoject",
+    complaints:0,
+    recalls:0,
+    clearances:[
+      ["K041358","Venoject Luer Adapter","2004-05-28"],
+      ["K983490","Terumo Venoject Luer Adapter","1998-11-30"]
+    ],
+    years:{2016:0,2017:0,2018:0,2019:0,2020:0,2021:0,2022:0,2023:0,2024:0,2025:0,2026:0},
+    complaintProblems:[
+      {label:"Low direct JKA signal", count:1, zh:"本次 JKA 檢體針查詢直接訊號低"}
+    ],
+    recallProblems:[
+      {label:"No FDA recall found in queried period", count:1, zh:"查詢期間未找到 JKA 回收"}
+    ],
+    problems:[
+      {risk:"低", problem:"JKA 檢體針直接公開客訴訊號低", models:["Venoject Luer Adapter"], ids:["K041358","K983490"], notes:"Terumo 廣義 needle/collection 查詢會命中其他器材如 Trima 或 SurGuard3，但不屬本頁 JKA 檢體針主軸。"},
+      {risk:"中", problem:"若納入一般安全針，需另立產品族", models:["SurGuard3 Safety Hypodermic Needle"], ids:["K122249","K113422"], notes:"非 JKA 檢體針；可作為下一個器材族擴充。"}
+    ],
+    events:[
+      ["2004-05-28","510(k) K041358","Venoject Luer Adapter, product code JKA, cleared device record。","https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfpmn/pmn.cfm?ID=K041358"]
+    ]
+  },
+  magnolia:{
+    name:"Magnolia Medical Technologies",
+    complaints:0,
+    recalls:1,
+    clearances:[
+      ["K192247","Steripath Gen2 Blood Collection System","2020-02-28"]
+    ],
+    years:{2016:0,2017:0,2018:0,2019:0,2020:0,2021:0,2022:0,2023:0,2024:0,2025:0,2026:0},
+    complaintProblems:[
+      {label:"Recall-driven signal", count:1, zh:"以回收訊號為主"}
+    ],
+    recallProblems:[
+      {label:"Premature needle retraction", count:1, zh:"針具過早回縮"}
+    ],
+    problems:[
+      {risk:"高", problem:"Premature needle retraction", models:["Steripath Gen2 Blood Collection System"], ids:["K192247","Recall Z-0318-2022"], notes:"FDA recall reason 明確提到 complaints associated with premature needle retraction。"}
+    ],
+    events:[
+      ["2021-11-02","Recall Z-0318-2022","Steripath Gen2 Blood Collection System: uptick of complaints associated with premature needle retraction。","https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfRES/res.cfm?id=190017"]
+    ]
+  }
+};
+
+const makerSelect = document.getElementById("makerSelect");
+const problemSearch = document.getElementById("problemSearch");
+const complaintMode = document.getElementById("complaintMode");
+const recallMode = document.getElementById("recallMode");
+let mode = "complaints";
+
+Object.entries(dashboardData).forEach(([key,value])=>{
+  const option = document.createElement("option");
+  option.value = key;
+  option.textContent = value.name;
+  makerSelect.appendChild(option);
+});
+
+function fmt(n){return new Intl.NumberFormat("zh-TW").format(n)}
+function cleanDate(s){return s || "-"}
+function riskClass(v){return v === "高" ? "risk-high" : v === "中" ? "risk-mid" : "risk-low"}
+
+function drawPie(items){
+  const canvas = document.getElementById("pie");
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width;
+  const h = canvas.height;
+  const cx = w/2;
+  const cy = h/2;
+  const radius = 104;
+  ctx.clearRect(0,0,w,h);
+  const total = items.reduce((sum,i)=>sum+i.count,0) || 1;
+  let angle = -Math.PI/2;
+  items.forEach((item,idx)=>{
+    const next = angle + (item.count/total)*Math.PI*2;
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,radius,angle,next);
+    ctx.closePath();
+    ctx.fillStyle = colors[idx % colors.length];
+    ctx.fill();
+    angle = next;
+  });
+  ctx.beginPath();
+  ctx.arc(cx,cy,55,0,Math.PI*2);
+  ctx.fillStyle = "#fff";
+  ctx.fill();
+  ctx.fillStyle = "#272823";
+  ctx.font = "700 22px system-ui";
+  ctx.textAlign = "center";
+  ctx.fillText(fmt(total),cx,cy+2);
+  ctx.fillStyle = "#6f716b";
+  ctx.font = "12px system-ui";
+  ctx.fillText(mode === "complaints" ? "records" : "recalls",cx,cy+22);
+}
+
+function renderLegend(items){
+  const total = items.reduce((sum,i)=>sum+i.count,0) || 1;
+  document.getElementById("legend").innerHTML = items.map((item,idx)=>{
+    const pct = Math.round(item.count/total*100);
+    return `<div class="legend-row">
+      <span class="swatch" style="background:${colors[idx % colors.length]}"></span>
+      <span>${item.zh}<br><small>${item.label}</small></span>
+      <strong>${fmt(item.count)} (${pct}%)</strong>
+    </div>`;
+  }).join("");
+}
+
+function renderBars(years){
+  const max = Math.max(...Object.values(years),1);
+  document.getElementById("bars").innerHTML = Object.entries(years).map(([year,count])=>{
+    const height = Math.max(4, Math.round(count/max*160));
+    return `<div class="bar" title="${year}: ${fmt(count)}">
+      <div class="bar-fill" style="height:${height}px"></div>
+      <strong>${fmt(count)}</strong>
+      <small>${year}</small>
+    </div>`;
+  }).join("");
+}
+
+function renderProblems(data){
+  const q = problemSearch.value.trim().toLowerCase();
+  const rows = data.problems.filter(row=>{
+    const hay = [row.problem,row.notes,...row.models,...row.ids].join(" ").toLowerCase();
+    return !q || hay.includes(q);
+  });
+  if(!rows.length){
+    document.getElementById("problemTable").innerHTML = `<div class="empty">沒有符合搜尋條件的問題點。</div>`;
+    return;
+  }
+  document.getElementById("problemTable").innerHTML = `<table>
+    <thead><tr><th>風險</th><th>問題點</th><th>對應型號</th><th>證號 / 追溯 ID</th><th>收巡重點</th></tr></thead>
+    <tbody>${rows.map(row=>`<tr>
+      <td class="${riskClass(row.risk)}">${row.risk}</td>
+      <td><strong>${row.problem}</strong></td>
+      <td>${row.models.map(m=>`<span class="model-chip">${m}</span>`).join("")}</td>
+      <td>${row.ids.map(m=>`<span class="model-chip">${m}</span>`).join("")}</td>
+      <td>${row.notes}</td>
+    </tr>`).join("")}</tbody>
+  </table>`;
+}
+
+function renderEvents(data){
+  document.getElementById("events").innerHTML = data.events.map(evt=>`<div class="event">
+    <div class="event-head"><span>${cleanDate(evt[0])} · ${evt[1]}</span><a href="${evt[3]}" target="_blank" rel="noreferrer">FDA</a></div>
+    <p>${evt[2]}</p>
+  </div>`).join("");
+}
+
+function renderClearances(data){
+  document.getElementById("clearances").innerHTML = `<table>
+    <thead><tr><th>證號</th><th>器材 / 型號</th><th>日期 / 備註</th></tr></thead>
+    <tbody>${data.clearances.map(row=>`<tr>
+      <td><strong>${row[0]}</strong></td>
+      <td>${row[1]}${row[2] && row.length === 4 ? `<br><small>${row[2]}</small>` : ""}</td>
+      <td>${row[row.length-1]}</td>
+    </tr>`).join("")}</tbody>
+  </table>`;
+}
+
+function render(){
+  const key = makerSelect.value || "all";
+  const data = dashboardData[key];
+  document.getElementById("pageTitle").textContent = `${data.name} - 檢體針收巡概覽`;
+  document.getElementById("complaintCount").textContent = fmt(data.complaints);
+  document.getElementById("recallCount").textContent = fmt(data.recalls);
+  document.getElementById("clearanceCount").textContent = fmt(data.clearances.length);
+  document.getElementById("complaintSub").textContent = data.complaints ? "FDA MAUDE query total / sampled aggregation" : "本次 JKA 查詢低訊號";
+  document.getElementById("recallSub").textContent = data.recalls ? "FDA recall records" : "本次查詢未見 JKA recall";
+  document.getElementById("clearanceSub").textContent = "含 legacy / sampled MAUDE referenced IDs";
+  const highCount = data.problems.filter(p=>p.risk==="高").length;
+  document.getElementById("riskLevel").textContent = highCount >= 2 || data.recalls >= 2 ? "高" : highCount === 1 ? "中高" : "低";
+  document.getElementById("riskSub").textContent = `${data.problems.length} 個問題點，${highCount} 個高風險`;
+  const items = mode === "complaints" ? data.complaintProblems : data.recallProblems;
+  document.getElementById("pieTitle").textContent = mode === "complaints" ? "客訴問題點比例" : "回收原因比例";
+  drawPie(items);
+  renderLegend(items);
+  renderBars(data.years);
+  renderProblems(data);
+  renderEvents(data);
+  renderClearances(data);
+}
+
+makerSelect.addEventListener("change", render);
+problemSearch.addEventListener("input", render);
+complaintMode.addEventListener("click", ()=>{
+  mode = "complaints";
+  complaintMode.classList.add("active");
+  recallMode.classList.remove("active");
+  render();
+});
+recallMode.addEventListener("click", ()=>{
+  mode = "recalls";
+  recallMode.classList.add("active");
+  complaintMode.classList.remove("active");
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
