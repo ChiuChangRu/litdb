@@ -419,10 +419,20 @@ tr:last-child td{border-bottom:0}
       <span>Specimen needle demo</span>
     </div>
     <div class="control">
-      <label for="deviceSelect">醫療器材類別</label>
-      <select id="deviceSelect">
-        <option value="jka">檢體針 / 採血器材 JKA</option>
-      </select>
+      <label for="deviceInput">醫療器材類別</label>
+      <input id="deviceInput" class="search" list="deviceSuggestions" type="text" value="檢體針 / 採血器材 / blood collection needle" placeholder="輸入中文或英文，例如：檢體針、導管、syringe">
+      <datalist id="deviceSuggestions">
+        <option value="檢體針 / 採血器材 / blood collection needle">
+        <option value="注射針 / hypodermic needle">
+        <option value="注射筒 / syringe">
+        <option value="導管 / catheter">
+        <option value="活檢針 / biopsy needle">
+        <option value="輸液套 / infusion set">
+      </datalist>
+    </div>
+    <div class="control">
+      <label for="productCodeInput">FDA product code</label>
+      <input id="productCodeInput" class="search" type="text" value="JKA" placeholder="例如 JKA、FMI、FMF">
     </div>
     <div class="control">
       <label for="makerSelect">大廠 / 申請廠商</label>
@@ -451,7 +461,7 @@ tr:last-child td{border-bottom:0}
         <p id="pageSub">近十年公開訊號：2016-06-30 至 2026-06-30</p>
       </div>
       <div class="status">
-        <span class="pill green">FDA Product Code JKA</span>
+        <span class="pill green" id="productCodePill">FDA Product Code JKA</span>
         <span class="pill blue">510(k) 證號追溯</span>
         <span class="pill amber">模擬資料集 v1</span>
       </div>
@@ -795,6 +805,8 @@ suggestedMakers.forEach(([key,label,query])=>{
 });
 
 const makerSelect = document.getElementById("makerSelect");
+const deviceInput = document.getElementById("deviceInput");
+const productCodeInput = document.getElementById("productCodeInput");
 const problemSearch = document.getElementById("problemSearch");
 const complaintMode = document.getElementById("complaintMode");
 const recallMode = document.getElementById("recallMode");
@@ -826,6 +838,31 @@ const workerCompanyKeywords = {
   magnolia:"magnolia",
   manual:""
 };
+const devicePresets = [
+  {match:["檢體針","採血","blood collection","vacutainer"], code:"JKA", label:"檢體針 / 採血器材"},
+  {match:["注射針","hypodermic needle"], code:"FMI", label:"注射針"},
+  {match:["注射筒","syringe"], code:"FMF", label:"注射筒"},
+  {match:["導管","catheter"], code:"FOZ", label:"導管"},
+  {match:["活檢針","biopsy needle"], code:"KNW", label:"活檢針"},
+  {match:["輸液","infusion set"], code:"FPA", label:"輸液套"}
+];
+
+function normalizeDeviceText(){
+  return (deviceInput.value || "").trim();
+}
+
+function currentProductCode(){
+  return (productCodeInput.value || "JKA").trim().toUpperCase();
+}
+
+function inferProductCode(){
+  const text = normalizeDeviceText().toLowerCase();
+  const preset = devicePresets.find(item => item.match.some(word => text.includes(word.toLowerCase())));
+  if(preset){
+    productCodeInput.value = preset.code;
+  }
+  render();
+}
 
 suggestedMakers.forEach(([key,label])=>{
   const option = document.createElement("option");
@@ -941,17 +978,19 @@ function renderClearances(data){
 }
 
 function renderSearchLinks(data){
-  const q = encodeURIComponent(data.searchQuery || `${data.name} blood collection needle`);
+  const productCode = currentProductCode();
+  const deviceText = normalizeDeviceText();
+  const q = encodeURIComponent(`${data.name} ${deviceText || data.searchQuery || "medical device"} ${productCode}`);
   const key = makerSelect.value || "all";
   const keyword = workerCompanyKeywords[key] || "";
   const maker = encodeURIComponent(keyword || data.name.replace("--","").trim());
-  const workerQuery = keyword ? `company=${encodeURIComponent(keyword)}&product_code=JKA&limit=100` : "product_code=JKA&limit=100";
+  const workerQuery = keyword ? `company=${encodeURIComponent(keyword)}&product_code=${encodeURIComponent(productCode)}&limit=100` : `product_code=${encodeURIComponent(productCode)}&limit=100`;
   const workerMaude = `${workerBaseUrl}/api/maude?${workerQuery}`;
   const workerRecall = `${workerBaseUrl}/api/recall?${workerQuery}`;
   const worker510k = `${workerBaseUrl}/api/510k?${workerQuery}`;
-  const openFdaEvent = `https://api.fda.gov/device/event.json?search=date_received:[20160630+TO+20260630]+AND+device.device_report_product_code:JKA+AND+manufacturer_d_name:${maker}&limit=10`;
-  const openFdaRecall = `https://api.fda.gov/device/recall.json?search=product_code:JKA+AND+recalling_firm:${maker}&limit=10`;
-  const openFda510k = `https://api.fda.gov/device/510k.json?search=product_code:JKA+AND+applicant:${maker}&limit=10`;
+  const openFdaEvent = `https://api.fda.gov/device/event.json?search=date_received:[20160630+TO+20260630]+AND+device.device_report_product_code:${encodeURIComponent(productCode)}+AND+manufacturer_d_name:${maker}&limit=10`;
+  const openFdaRecall = `https://api.fda.gov/device/recall.json?search=product_code:${encodeURIComponent(productCode)}+AND+recalling_firm:${maker}&limit=10`;
+  const openFda510k = `https://api.fda.gov/device/510k.json?search=product_code:${encodeURIComponent(productCode)}+AND+applicant:${maker}&limit=10`;
   document.getElementById("searchLinks").innerHTML = `
     <a href="${workerMaude}" target="_blank" rel="noreferrer">Worker MAUDE</a>
     <a href="${workerRecall}" target="_blank" rel="noreferrer">Worker Recall</a>
@@ -1007,12 +1046,14 @@ async function fetchWorkerData(){
   const key = makerSelect.value || "all";
   const data = dashboardData[key];
   const keyword = workerCompanyKeywords[key] || "";
-  const query = keyword ? `company=${encodeURIComponent(keyword)}&product_code=JKA&limit=100` : "product_code=JKA&limit=100";
+  const productCode = currentProductCode();
+  const deviceText = normalizeDeviceText() || "醫療器材";
+  const query = keyword ? `company=${encodeURIComponent(keyword)}&product_code=${encodeURIComponent(productCode)}&limit=100` : `product_code=${encodeURIComponent(productCode)}&limit=100`;
   workerUrl.textContent = `${workerBaseUrl}/api/maude?${query}`;
   fetchWorkerBtn.disabled = true;
   workerStatus.classList.remove("hidden");
   workerResults.classList.add("hidden");
-  workerStatus.textContent = `正在透過 Worker 查詢 ${data.name} / JKA...`;
+  workerStatus.textContent = `正在透過 Worker 查詢 ${data.name} / ${deviceText} / ${productCode}...`;
   try{
     const [maude, recall, clearance] = await Promise.all([
       fetchJson("/api/maude", query),
@@ -1036,7 +1077,11 @@ async function fetchWorkerData(){
 function render(){
   const key = makerSelect.value || "all";
   const data = dashboardData[key];
-  document.getElementById("pageTitle").textContent = `${data.name} - 檢體針收巡概覽`;
+  const productCode = currentProductCode();
+  const deviceText = normalizeDeviceText() || "醫療器材";
+  document.getElementById("pageTitle").textContent = `${data.name} - ${deviceText} 收巡概覽`;
+  document.getElementById("pageSub").textContent = `近十年公開訊號：2016-06-30 至 2026-06-30 / Product code ${productCode}`;
+  document.getElementById("productCodePill").textContent = `FDA Product Code ${productCode}`;
   document.getElementById("complaintCount").textContent = fmt(data.complaints);
   document.getElementById("recallCount").textContent = fmt(data.recalls);
   document.getElementById("clearanceCount").textContent = fmt(data.clearances.length);
@@ -1057,13 +1102,16 @@ function render(){
   renderSearchLinks(data);
   workerResults.classList.add("hidden");
   workerStatus.classList.remove("hidden");
-  workerStatus.textContent = "選擇公司後，可直接透過 Cloudflare Worker 抓取 openFDA 的 MAUDE、Recall、510(k) 即時結果。";
+  workerStatus.textContent = "上方圖表為目前匯入的示範資料；選擇或輸入器材後，可透過 Cloudflare Worker 抓取 openFDA 的 MAUDE、Recall、510(k) 即時結果。";
   const keyword = workerCompanyKeywords[key] || "";
-  const query = keyword ? `company=${encodeURIComponent(keyword)}&product_code=JKA&limit=100` : "product_code=JKA&limit=100";
+  const query = keyword ? `company=${encodeURIComponent(keyword)}&product_code=${encodeURIComponent(productCode)}&limit=100` : `product_code=${encodeURIComponent(productCode)}&limit=100`;
   workerUrl.textContent = `${workerBaseUrl}/api/maude?${query}`;
 }
 
 makerSelect.addEventListener("change", render);
+deviceInput.addEventListener("change", inferProductCode);
+deviceInput.addEventListener("input", inferProductCode);
+productCodeInput.addEventListener("input", render);
 problemSearch.addEventListener("input", render);
 fetchWorkerBtn.addEventListener("click", fetchWorkerData);
 complaintMode.addEventListener("click", ()=>{
