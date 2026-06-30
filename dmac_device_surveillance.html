@@ -350,6 +350,32 @@ tr:last-child td{border-bottom:0}
   opacity:.55;
   cursor:wait;
 }
+.control-actions{
+  display:grid;
+  gap:8px;
+}
+.primary-action{
+  width:100%;
+  border:0;
+  background:var(--green);
+  color:#fff;
+  min-height:42px;
+  border-radius:7px;
+  font-weight:900;
+  cursor:pointer;
+}
+.primary-action.dirty{
+  background:#b86f00;
+}
+.draft-hint{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.45;
+}
+.draft-hint.dirty{
+  color:#9d6317;
+  font-weight:800;
+}
 .worker-url{
   flex:1;
   min-width:260px;
@@ -437,6 +463,10 @@ tr:last-child td{border-bottom:0}
     <div class="control">
       <label for="makerSelect">大廠 / 申請廠商</label>
       <select id="makerSelect"></select>
+    </div>
+    <div class="control control-actions">
+      <button id="applySearchBtn" class="primary-action" type="button">確定並檢索</button>
+      <div id="draftHint" class="draft-hint">目前條件尚未檢索，請按「確定並檢索」更新右側結果。</div>
     </div>
     <div class="control">
       <label>圓餅圖資料</label>
@@ -807,6 +837,8 @@ suggestedMakers.forEach(([key,label,query])=>{
 const makerSelect = document.getElementById("makerSelect");
 const deviceInput = document.getElementById("deviceInput");
 const productCodeInput = document.getElementById("productCodeInput");
+const applySearchBtn = document.getElementById("applySearchBtn");
+const draftHint = document.getElementById("draftHint");
 const problemSearch = document.getElementById("problemSearch");
 const complaintMode = document.getElementById("complaintMode");
 const recallMode = document.getElementById("recallMode");
@@ -838,6 +870,8 @@ const workerCompanyKeywords = {
   magnolia:"magnolia",
   manual:""
 };
+let appliedCriteria = null;
+let criteriaDirty = true;
 const devicePresets = [
   {match:["檢體針","採血","blood collection","vacutainer"], code:"JKA", label:"檢體針 / 採血器材"},
   {match:["注射針","hypodermic needle"], code:"FMI", label:"注射針"},
@@ -855,13 +889,41 @@ function currentProductCode(){
   return (productCodeInput.value || "JKA").trim().toUpperCase();
 }
 
+function readDraftCriteria(){
+  return {
+    makerKey: makerSelect.value || "all",
+    productCode: currentProductCode(),
+    deviceText: normalizeDeviceText() || "medical device"
+  };
+}
+
+function getActiveCriteria(){
+  return appliedCriteria || readDraftCriteria();
+}
+
+function setDraftState(isDirty){
+  criteriaDirty = isDirty;
+  applySearchBtn.classList.toggle("dirty", criteriaDirty);
+  applySearchBtn.textContent = criteriaDirty ? "確定並檢索" : "已確認，可重新檢索";
+  draftHint.classList.toggle("dirty", criteriaDirty);
+  draftHint.textContent = criteriaDirty
+    ? "條件已修改，右側仍是上次確認結果；請按「確定並檢索」。"
+    : "右側資料已套用目前條件。";
+}
+
+function markCriteriaDirty(){
+  setDraftState(true);
+  workerStatus.classList.remove("hidden");
+  workerStatus.textContent = "條件已修改但尚未確認；右側圖表與即時結果仍顯示上次確認的檢索條件。";
+}
+
 function inferProductCode(){
   const text = normalizeDeviceText().toLowerCase();
   const preset = devicePresets.find(item => item.match.some(word => text.includes(word.toLowerCase())));
   if(preset){
     productCodeInput.value = preset.code;
   }
-  render();
+  markCriteriaDirty();
 }
 
 suggestedMakers.forEach(([key,label])=>{
@@ -977,11 +1039,11 @@ function renderClearances(data){
   </table>`;
 }
 
-function renderSearchLinks(data){
-  const productCode = currentProductCode();
-  const deviceText = normalizeDeviceText();
+function renderSearchLinks(data, criteria){
+  const productCode = criteria.productCode;
+  const deviceText = criteria.deviceText;
   const q = encodeURIComponent(`${data.name} ${deviceText || data.searchQuery || "medical device"} ${productCode}`);
-  const key = makerSelect.value || "all";
+  const key = criteria.makerKey || "all";
   const keyword = workerCompanyKeywords[key] || "";
   const maker = encodeURIComponent(keyword || data.name.replace("--","").trim());
   const workerQuery = keyword ? `company=${encodeURIComponent(keyword)}&product_code=${encodeURIComponent(productCode)}&limit=100` : `product_code=${encodeURIComponent(productCode)}&limit=100`;
@@ -1043,16 +1105,19 @@ async function fetchJson(endpoint, query){
 }
 
 async function fetchWorkerData(){
-  const key = makerSelect.value || "all";
+  const criteria = getActiveCriteria();
+  const key = criteria.makerKey || "all";
   const data = dashboardData[key];
   const keyword = workerCompanyKeywords[key] || "";
-  const productCode = currentProductCode();
-  const deviceText = normalizeDeviceText() || "醫療器材";
+  const productCode = criteria.productCode;
+  const deviceText = criteria.deviceText || "醫療器材";
   const query = keyword ? `company=${encodeURIComponent(keyword)}&product_code=${encodeURIComponent(productCode)}&limit=100` : `product_code=${encodeURIComponent(productCode)}&limit=100`;
   workerUrl.textContent = `${workerBaseUrl}/api/maude?${query}`;
   fetchWorkerBtn.disabled = true;
+  applySearchBtn.disabled = true;
   workerStatus.classList.remove("hidden");
   workerResults.classList.add("hidden");
+  workerResults.innerHTML = "";
   workerStatus.textContent = `正在透過 Worker 查詢 ${data.name} / ${deviceText} / ${productCode}...`;
   try{
     const [maude, recall, clearance] = await Promise.all([
@@ -1071,14 +1136,24 @@ async function fetchWorkerData(){
     workerStatus.textContent = `Worker 查詢失敗：${error.message}`;
   }finally{
     fetchWorkerBtn.disabled = false;
+    applySearchBtn.disabled = false;
   }
 }
 
-function render(){
-  const key = makerSelect.value || "all";
+function applyCriteriaAndFetch(){
+  appliedCriteria = readDraftCriteria();
+  setDraftState(false);
+  render({resetWorker:true});
+  fetchWorkerData();
+}
+
+function render(options = {}){
+  const {resetWorker = false} = options;
+  const criteria = getActiveCriteria();
+  const key = criteria.makerKey || "all";
   const data = dashboardData[key];
-  const productCode = currentProductCode();
-  const deviceText = normalizeDeviceText() || "醫療器材";
+  const productCode = criteria.productCode;
+  const deviceText = criteria.deviceText || "醫療器材";
   document.getElementById("pageTitle").textContent = `${data.name} - ${deviceText} 收巡概覽`;
   document.getElementById("pageSub").textContent = `近十年公開訊號：2016-06-30 至 2026-06-30 / Product code ${productCode}`;
   document.getElementById("productCodePill").textContent = `FDA Product Code ${productCode}`;
@@ -1099,20 +1174,24 @@ function render(){
   renderProblems(data);
   renderEvents(data);
   renderClearances(data);
-  renderSearchLinks(data);
-  workerResults.classList.add("hidden");
-  workerStatus.classList.remove("hidden");
-  workerStatus.textContent = "上方圖表為目前匯入的示範資料；選擇或輸入器材後，可透過 Cloudflare Worker 抓取 openFDA 的 MAUDE、Recall、510(k) 即時結果。";
+  renderSearchLinks(data, criteria);
   const keyword = workerCompanyKeywords[key] || "";
   const query = keyword ? `company=${encodeURIComponent(keyword)}&product_code=${encodeURIComponent(productCode)}&limit=100` : `product_code=${encodeURIComponent(productCode)}&limit=100`;
   workerUrl.textContent = `${workerBaseUrl}/api/maude?${query}`;
+  if(resetWorker){
+    workerResults.classList.add("hidden");
+    workerResults.innerHTML = "";
+    workerStatus.classList.remove("hidden");
+    workerStatus.textContent = "已套用條件，正在準備重新檢索 openFDA 即時資料。";
+  }
 }
 
-makerSelect.addEventListener("change", render);
+makerSelect.addEventListener("change", markCriteriaDirty);
 deviceInput.addEventListener("change", inferProductCode);
 deviceInput.addEventListener("input", inferProductCode);
-productCodeInput.addEventListener("input", render);
+productCodeInput.addEventListener("input", markCriteriaDirty);
 problemSearch.addEventListener("input", render);
+applySearchBtn.addEventListener("click", applyCriteriaAndFetch);
 fetchWorkerBtn.addEventListener("click", fetchWorkerData);
 complaintMode.addEventListener("click", ()=>{
   mode = "complaints";
@@ -1127,6 +1206,8 @@ recallMode.addEventListener("click", ()=>{
   render();
 });
 
+appliedCriteria = readDraftCriteria();
+setDraftState(false);
 render();
 </script>
 </body>
