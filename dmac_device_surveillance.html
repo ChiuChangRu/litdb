@@ -309,6 +309,24 @@ tr:last-child td{border-bottom:0}
   font-size:13px;
 }
 .source-list a{color:var(--blue);text-decoration:none;font-weight:700}
+.action-links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.action-links a{
+  display:inline-flex;
+  align-items:center;
+  min-height:34px;
+  padding:7px 10px;
+  border-radius:7px;
+  border:1px solid #afd0e9;
+  background:var(--blue-soft);
+  color:var(--blue);
+  font-size:13px;
+  font-weight:800;
+  text-decoration:none;
+}
 .empty{
   border:1px dashed var(--line);
   border-radius:8px;
@@ -421,6 +439,14 @@ tr:last-child td{border-bottom:0}
       <div class="card span-5">
         <h3>證號清單</h3>
         <div id="clearances"></div>
+      </div>
+
+      <div class="card span-12">
+        <h3>外部檢索入口</h3>
+        <div id="searchLinks" class="action-links"></div>
+        <div class="note">
+          NyquistAI 在 Codex 內是 MCP 工具，可由本對話代查 FDA device / MAUDE / recall 結構化資料；GitHub Pages 的純 HTML 不能直接呼叫 MCP，若要在網頁內一鍵跑 NyquistAI，需要另接後端 API 或 Worker proxy。
+        </div>
       </div>
 
       <div class="card span-12">
@@ -642,16 +668,68 @@ const dashboardData = {
   }
 };
 
+const suggestedMakers = [
+  ["all","-- 全部公司 --","blood collection needle"],
+  ["boston","Boston Scientific","Boston Scientific blood collection needle"],
+  ["medtronic","Medtronic","Medtronic blood collection needle"],
+  ["jnj","Johnson & Johnson","Johnson & Johnson blood collection needle"],
+  ["abbott","Abbott","Abbott blood collection needle"],
+  ["siemens","Siemens Healthineers","Siemens Healthineers blood collection needle"],
+  ["philips","Philips","Philips blood collection needle"],
+  ["bd","Becton Dickinson","BD Vacutainer blood collection needle"],
+  ["stryker","Stryker","Stryker blood collection needle"],
+  ["zimmer","Zimmer Biomet","Zimmer Biomet blood collection needle"],
+  ["edwards","Edwards Lifesciences","Edwards Lifesciences blood collection needle"],
+  ["baxter","Baxter","Baxter blood collection needle"],
+  ["cook","Cook Medical","Cook Medical blood collection needle"],
+  ["teleflex","Teleflex","Teleflex blood collection needle"],
+  ["argon","Argon Medical","Argon Medical biopsy needle blood collection needle"],
+  ["manual","手動輸入...","blood collection needle"]
+];
+
+function makeCandidateMaker(name, query){
+  return {
+    name,
+    searchQuery: query,
+    candidate: true,
+    complaints:0,
+    recalls:0,
+    clearances:[],
+    years:{2016:0,2017:0,2018:0,2019:0,2020:0,2021:0,2022:0,2023:0,2024:0,2025:0,2026:0},
+    complaintProblems:[
+      {label:"Pending NyquistAI / FDA search", count:1, zh:"待檢索公開客訴訊號"}
+    ],
+    recallProblems:[
+      {label:"Pending recall search", count:1, zh:"待檢索 FDA 回收訊號"}
+    ],
+    problems:[
+      {risk:"低", problem:"本次檢體針 JKA 模擬尚未建立公司專屬資料", models:["待 NyquistAI / FDA 檢索"], ids:["JKA / company keyword"], notes:"此公司在附圖大廠清單中；選定後可用下方檢索入口查 MAUDE、Recall 與 510(k)。若查到 product code 或型號，可再匯入本頁資料集。"}
+    ],
+    events:[
+      ["待查","候選廠商","尚未匯入該公司檢體針客訴/回收資料；請使用下方 FDA 或 Codex/NyquistAI 檢索入口。","https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfMAUDE/search.CFM"]
+    ]
+  };
+}
+
+suggestedMakers.forEach(([key,label,query])=>{
+  if(!dashboardData[key]){
+    dashboardData[key] = makeCandidateMaker(label, query);
+  } else {
+    dashboardData[key].name = label === "-- 全部公司 --" ? "全部公司" : label;
+    dashboardData[key].searchQuery = query;
+  }
+});
+
 const makerSelect = document.getElementById("makerSelect");
 const problemSearch = document.getElementById("problemSearch");
 const complaintMode = document.getElementById("complaintMode");
 const recallMode = document.getElementById("recallMode");
 let mode = "complaints";
 
-Object.entries(dashboardData).forEach(([key,value])=>{
+suggestedMakers.forEach(([key,label])=>{
   const option = document.createElement("option");
   option.value = key;
-  option.textContent = value.name;
+  option.textContent = label;
   makerSelect.appendChild(option);
 });
 
@@ -747,6 +825,10 @@ function renderEvents(data){
 }
 
 function renderClearances(data){
+  if(!data.clearances.length){
+    document.getElementById("clearances").innerHTML = `<div class="empty">此候選公司尚未匯入檢體針相關 510(k) / BK 證號。可由下方檢索入口查詢後補入。</div>`;
+    return;
+  }
   document.getElementById("clearances").innerHTML = `<table>
     <thead><tr><th>證號</th><th>器材 / 型號</th><th>日期 / 備註</th></tr></thead>
     <tbody>${data.clearances.map(row=>`<tr>
@@ -757,6 +839,23 @@ function renderClearances(data){
   </table>`;
 }
 
+function renderSearchLinks(data){
+  const q = encodeURIComponent(data.searchQuery || `${data.name} blood collection needle`);
+  const maker = encodeURIComponent(data.name.replace("--","").trim());
+  const openFdaEvent = `https://api.fda.gov/device/event.json?search=date_received:[20160630+TO+20260630]+AND+device.device_report_product_code:JKA+AND+manufacturer_d_name:${maker}&limit=10`;
+  const openFdaRecall = `https://api.fda.gov/device/recall.json?search=product_code:JKA+AND+recalling_firm:${maker}&limit=10`;
+  const openFda510k = `https://api.fda.gov/device/510k.json?search=product_code:JKA+AND+applicant:${maker}&limit=10`;
+  document.getElementById("searchLinks").innerHTML = `
+    <a href="https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfMAUDE/search.CFM" target="_blank" rel="noreferrer">FDA MAUDE 查詢頁</a>
+    <a href="https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfRES/res.cfm" target="_blank" rel="noreferrer">FDA Recall 查詢頁</a>
+    <a href="https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfpmn/pmn.cfm" target="_blank" rel="noreferrer">FDA 510(k) 查詢頁</a>
+    <a href="${openFdaEvent}" target="_blank" rel="noreferrer">openFDA MAUDE JSON</a>
+    <a href="${openFdaRecall}" target="_blank" rel="noreferrer">openFDA Recall JSON</a>
+    <a href="${openFda510k}" target="_blank" rel="noreferrer">openFDA 510(k) JSON</a>
+    <a href="https://www.google.com/search?q=${q}+MAUDE+recall+510(k)" target="_blank" rel="noreferrer">Google 檢索</a>
+  `;
+}
+
 function render(){
   const key = makerSelect.value || "all";
   const data = dashboardData[key];
@@ -764,9 +863,9 @@ function render(){
   document.getElementById("complaintCount").textContent = fmt(data.complaints);
   document.getElementById("recallCount").textContent = fmt(data.recalls);
   document.getElementById("clearanceCount").textContent = fmt(data.clearances.length);
-  document.getElementById("complaintSub").textContent = data.complaints ? "FDA MAUDE query total / sampled aggregation" : "本次 JKA 查詢低訊號";
-  document.getElementById("recallSub").textContent = data.recalls ? "FDA recall records" : "本次查詢未見 JKA recall";
-  document.getElementById("clearanceSub").textContent = "含 legacy / sampled MAUDE referenced IDs";
+  document.getElementById("complaintSub").textContent = data.candidate ? "候選公司，尚待 NyquistAI 檢索" : "FDA MAUDE query total / sampled aggregation";
+  document.getElementById("recallSub").textContent = data.candidate ? "候選公司，尚待 recall 查詢" : (data.recalls ? "FDA recall records" : "本次查詢未見 JKA recall");
+  document.getElementById("clearanceSub").textContent = data.candidate ? "尚未匯入公司專屬證號" : "含 legacy / sampled MAUDE referenced IDs";
   const highCount = data.problems.filter(p=>p.risk==="高").length;
   document.getElementById("riskLevel").textContent = highCount >= 2 || data.recalls >= 2 ? "高" : highCount === 1 ? "中高" : "低";
   document.getElementById("riskSub").textContent = `${data.problems.length} 個問題點，${highCount} 個高風險`;
@@ -778,6 +877,7 @@ function render(){
   renderProblems(data);
   renderEvents(data);
   renderClearances(data);
+  renderSearchLinks(data);
 }
 
 makerSelect.addEventListener("change", render);
