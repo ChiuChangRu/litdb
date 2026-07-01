@@ -1,0 +1,368 @@
+{
+  "meta": {
+    "project": "醫療器材包裝／捲盤固定技術資料庫",
+    "scope": "導管、導絲等長條狀醫材之捲繞收納與固定工法：熱熔焊接、UV膠點黏、共擠出自黏、機械式夾具/卡槽等。以「包裝結構與固定機構」為主，排除單純無菌屏障材質（Tyvek/鋁箔）本身的化學/材料學文獻。",
+    "focus_note": "核心關注 CleanCut Technologies / Oliver Healthcare Packaging 之捲管熱熔專利家族，並擴及同技術領域的規避設計（design-around）專利，用於FTO風險評估與工法選型參考。",
+    "last_updated": "2026-07-01",
+    "schema_version": "1.0",
+    "tag_dictionary": {
+      "material": [
+        "PE",
+        "PP",
+        "PVC",
+        "TPU",
+        "common-plastic-material"
+      ],
+      "bonding_method": [
+        "thermal-weld",
+        "hot-air",
+        "heating-probe",
+        "laser-thermal",
+        "UV-adhesive-discrete",
+        "coextrusion-tacky-bond",
+        "mechanical-clip",
+        "bridge-bond",
+        "tubular-holder-channel",
+        "turntable-process"
+      ],
+      "structure": [
+        "coiled-tube",
+        "backing-card",
+        "retention-accessory",
+        "pouch",
+        "spiral-single-plane",
+        "stacked-coil",
+        "dual-hoop",
+        "clipless-dispenser"
+      ],
+      "application": [
+        "catheter",
+        "guidewire",
+        "醫療器材包裝",
+        "導尿管",
+        "活檢針",
+        "sterile-barrier-package"
+      ],
+      "performance": [
+        "non-peelable不可剝離",
+        "lumen-not-occluded管腔不阻塞",
+        "cost-reduction",
+        "waste-reduction",
+        "clip-free"
+      ],
+      "legal_status": [
+        "active",
+        "expired",
+        "revoked",
+        "abandoned",
+        "division",
+        "continuation"
+      ],
+      "doc_type": [
+        "專利",
+        "商用產品",
+        "市場報告"
+      ],
+      "access": [
+        "專利全文",
+        "產品頁"
+      ]
+    },
+    "stats": {
+      "total": 6,
+      "patents": 6,
+      "patent_ratio": "100%"
+    },
+    "commercial_vendor_keywords": [
+      "CleanCut Technologies",
+      "Oliver Healthcare Packaging",
+      "Codan US Corporation",
+      "Argos Corporation"
+    ]
+  },
+  "papers": [
+    {
+      "id": "PK01",
+      "title": "Apparatus and method for packaging elongate surgical devices (US7234597B2)",
+      "authors": "Rowe, Bell, Bonzomet, Patton / CleanCut Technologies LLC（現屬 Oliver Healthcare Packaging）",
+      "year": 2007,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "PE",
+        "PP",
+        "PVC",
+        "thermal-weld",
+        "hot-air",
+        "heating-probe",
+        "laser-thermal",
+        "turntable-process",
+        "coiled-tube",
+        "backing-card",
+        "retention-accessory",
+        "non-peelable不可剝離",
+        "lumen-not-occluded管腔不阻塞",
+        "catheter",
+        "guidewire"
+      ],
+      "purpose": "捲管熱熔固定技術的核心母案，claim範圍界定了整個技術領域的排他邊界，FTO分析必查基準專利",
+      "abstract_note": "揭示以「熱熔焊（thermal weld）」取代傳統射出成型夾具（clip），將捲繞成盤狀的導管/導絲軟管相鄰圈段直接熔接固定。熱源可為熱風、加熱探頭/加熱板、或雷射（三者於說明書中並列，claim未限定熱源種類）。關鍵限定：焊接後形成「fixed, non-peelable relationship」且「without additional adhesive materials」；方法claim另限定「不可阻塞管腔（without occluding the tube）」。搭配轉盤式治具（turntable + heating station）可實現捲繞與熔接一體化連續製程，並可延伸熔接至背板卡（backing card）與固定配件（retaining accessory）。",
+      "value_to_project": "貴司若考慮用雷射熔接固定PP/PE捲管形狀，此案是最需要比對的claim；目前已確認狀態為Expired（2024-03-13到期），FTO風險大幅降低，但仍建議以USPTO Patent Center覆核",
+      "links": {
+        "patents": "https://patents.google.com/patent/US7234597B2/en",
+        "google_patents": "https://patents.google.com/patent/US7234597B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "母案，優先權日2002-09-03，申請日2003-07-03，公告2007-06-26。原始受讓人CleanCut Technologies LLC，2020-02-04併購轉讓予Oliver Products Company（後更名Oliver Healthcare Packaging Company）。法律狀態：Expired - Lifetime，調整後到期日2024-03-13。有一件Division子案（US7549270B2）及PCT/EP/AU國際家族，其中EP1551715B1已被撤銷（Revoked）、AU2003251784A1已放棄（Abandoned），代表此技術的專利保護實質僅存在於美國且現已過期。",
+          "examples": [
+            {
+              "name": "Claim 1（裝置claim，弧形熱焊 + 不用膠 + 不可剝離）",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "直接取自公告claim全文",
+              "mechanism": "elongate tube捲成coil，第一/第二coiled portion皆為plastic material，以curved thermal weld在fixed non-peelable relationship下結合，且without additional adhesive materials",
+              "claim_scope": "結構claim，未限定熱源種類（雷射/熱風/加熱板皆可能落入），但明確排除黏著劑輔助方案",
+              "result": "後續附屬項延伸至：連續焊縫整疊固定、搭配backing card、搭配pouch形成滅菌密封、搭配retaining accessory"
+            },
+            {
+              "name": "方法claim9（轉盤+加熱站 連續製程）",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "直接取自公告claim全文",
+              "mechanism": "tube一端固定於具at least one heating station及rotatable turntable的治具，轉盤旋轉使tube形成coil並在經過heating station時逐步完成熔接",
+              "claim_scope": "製程claim，若改用移動式雷射頭搭配靜止工件（不用轉盤+固定加熱站佈局），有機會規避此獨立項",
+              "result": "說明書明確列出雷射為可用熱源之一（'a laser 63 might be used to form the thermal bonds'），故雷射熔接技術路線仍可能落入本claim字面範圍"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "PK02",
+      "title": "Method for packaging elongated surgical device (US7549270B2)",
+      "authors": "Rowe, Bell, Bonzoumet, Patton / CleanCut Technologies LLC（現屬 Oliver Healthcare Packaging）",
+      "year": 2009,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "thermal-weld",
+        "turntable-process",
+        "heating-probe",
+        "laser-thermal",
+        "coiled-tube",
+        "lumen-not-occluded管腔不阻塞",
+        "catheter",
+        "guidewire",
+        "division"
+      ],
+      "purpose": "PK01母案的Division（分割案），方法claim版本，與PK01共享優先權日與技術揭露",
+      "abstract_note": "與US7234597B2屬同一專利家族的Division關係（非獨立技術延伸），claim聚焦於製程本身：提供內徑大於待包裝器材外徑的軟管、捲繞使相鄰段接觸、將管一端固定於具加熱元件的治具、使管與加熱元件產生相對運動、在不阻塞管腔前提下完成熔接以維持捲盤形狀。獨立項9另限定「轉盤+固定加熱站」的產線佈局。",
+      "value_to_project": "與PK01幾乎同一份揭露內容拆分出的方法claim，FTO評估應與PK01一併檢視，不需重複分析技術內容，但到期日需個別向USPTO確認（申請日雖為2006-07-06，但因屬分割案，專利年限通常回溯母案申請日計算）",
+      "links": {
+        "patents": "https://patents.google.com/patent/US7549270B2/en",
+        "google_patents": "https://patents.google.com/patent/US7549270B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "Division of US7234597B2，申請日2006-07-06，公告2009-06-23。與母案同一優先權日（2002-09-03）、同一組發明人、同一受讓人沿革（CleanCut → Oliver Products Company → Oliver Healthcare Packaging）。",
+          "examples": [
+            {
+              "name": "Claim 1（製程claim，加熱元件+相對運動+不阻塞管腔）",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "直接取自公告claim全文",
+              "mechanism": "coiling tube使第一/第二段鄰接，將管一端固定於具heating element的治具，使管與加熱元件相對運動，在不occluding管腔前提下bonding tube walls",
+              "claim_scope": "製程claim未限定熱源種類，thermal bonding的定義涵蓋各種加熱方式",
+              "result": "附屬項2明確：'bonding step includes thermally bonding the tube portions to form at least one weld'"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "PK03",
+      "title": "Coiled tube packaging patent — EP counterpart, REVOKED (EP1551715B1)",
+      "authors": "CleanCut Technologies LLC（歐洲同族案）",
+      "year": 2009,
+      "venue": "Google Patents / EPO",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "thermal-weld",
+        "revoked",
+        "catheter",
+        "guidewire"
+      ],
+      "purpose": "PK01/PK02同優先權家族的歐洲同族案，用於記錄該技術在歐洲的專利保護已失效，供歐洲市場FTO參考",
+      "abstract_note": "PK01（US7234597B2）技術內容經PCT（WO2004022433A2）進入歐洲國家階段後取得EP1551715B1，但Google Patents Legal Status顯示已被撤銷（Revoked），代表歐洲曾有第三方提出異議（opposition）並成功推翻此歐洲專利權。同一PCT申請進入澳洲階段的AU2003251784A1則已放棄（Abandoned），未取得澳洲專利。",
+      "value_to_project": "若貴司或客戶在歐洲市場銷售相關醫材包裝，此技術在歐洲已無專利保護障礙；但仍建議查證撤銷的具體理由（新穎性/進步性/揭露不足等），以確認是否有其他潛在風險",
+      "links": {
+        "patents": "https://patents.google.com/patent/EP1551715B1/en",
+        "google_patents": "https://patents.google.com/patent/EP1551715B1/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "與PK01/PK02同一優先權（2002-09-03）與PCT申請（WO2004022433A2）之歐洲同族案，公告後於異議程序中被撤銷。家族內另一同源澳洲申請AU2003251784A1未獲准（放棄）。整體顯示此技術家族的專利保護僅美國本案曾經有效，且現已過期。",
+          "examples": []
+        }
+      }
+    },
+    {
+      "id": "PK04",
+      "title": "Medical coiled tubing — UV膠點黏規避設計 (US12318568B2 / US11779748B2)",
+      "authors": "Codan US Corporation",
+      "year": 2025,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "UV-adhesive-discrete",
+        "coiled-tube",
+        "catheter",
+        "active"
+      ],
+      "purpose": "PK01專利claim的規避設計實例：改用UV膠離散點黏取代熱熔焊，繞開'without additional adhesive materials'的限定",
+      "abstract_note": "將醫療軟管以螺旋方式繞在心軸（mandrel）上，在相鄰圈段的接觸點（tubing contact points）塗覆UV膠，多點離散黏著（而非連續焊縫）固定捲盤形狀，黏著後可將軟管自心軸取下並進行滅菌包裝。技術特徵與PK01/PK02的「thermal weld」「不使用額外黏著劑」限定明確區隔，是典型的design-around策略。",
+      "value_to_project": "此為現行有效（active）專利，若貴司未來考慮採用「UV膠點黏」路線取代雷射熔接，仍需將此案納入FTO清單；同時證明UV膠點黏是業界認可可行且已商品化的規避熱熔claim路線",
+      "links": {
+        "patents": "https://patents.google.com/patent/US12318568B2/en",
+        "google_patents": "https://patents.google.com/patent/US12318568B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "優先權2020-09-29（母案US17/037,387），US12318568B2公告於2025-06-03，屬其CIP接續案；姊妹案US11779748B2（2023-10-10公告）為同家族基礎案。核心方法：將醫療軟管以螺旋方式helically wound於心軸（mandrel）上，使相鄰圈（adjacent turns）在多個「管材接觸點（tubing contact points）」相互接觸，於這些接觸點之間塗覆UV膠並以UV光固化，形成點狀黏著而非連續焊縫；固化完成後將軟管自心軸取下，再進行後續器材裝載與滅菌包裝步驟。",
+          "examples": [
+            {
+              "name": "Claim1（螺旋繞管+接觸點UV膠固化）",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "取自USPTO公開claim全文（PDF 12318568），非僅搜尋摘要片段",
+              "mechanism": "elongate tube helically wound on mandrel形成adjacent turns於tubing contact points接觸，於接觸點間施加UV adhesive並UV固化黏合",
+              "claim_scope": "結構上直接對應且完全避開PK01/PK02的'curved thermal weld...without additional adhesive materials'限定——本案「使用UV膠」且「非連續焊縫而是離散接觸點固化」，兩項核心限定要件皆被反向設計掉",
+              "result": "已延伸出完整專利家族（母案+CIP接續案），顯示Codan對此規避路線做了完整的專利佈局，非單一實驗性申請"
+            },
+            {
+              "name": "附屬項（多點UV膠塗覆 + 心軸移除 + 後續滅菌）",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "取自USPTO公開claim全文",
+              "mechanism": "UV膠施加於'multiple points between each pair of adjacent turns'（每對相鄰圈之間施加多點），完成後removing the medical tubing from the mandrel，再equipping and packaging並sterilizing整組裝置",
+              "claim_scope": "製程claim涵蓋從固化到滅菌的完整流程，若貴司僅採用其中「UV膠點黏」單一步驟而製程其餘部分不同，仍需個案評估是否落入整體claim組合",
+              "result": "說明UV膠點黏路線的完整量產可行性，含心軸脫模與後製程整合"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "PK05",
+      "title": "System and method for packaging an elongate medical device — 共擠出自黏規避設計 (US10864349B2)",
+      "authors": "Argos Corporation",
+      "year": 2020,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "coextrusion-tacky-bond",
+        "coiled-tube",
+        "catheter",
+        "active"
+      ],
+      "purpose": "PK01專利claim的另一規避設計實例：管材共擠出雙層結構，外層具黏性（tacky），冷卻前直接讓相鄰圈段自黏，完全不需另外的熱熔或膠合步驟",
+      "abstract_note": "軟管以共擠出（coextrusion）製成內外雙層結構，外層材質具tacky（微黏性）特性；管材成型後在完全冷卻前，直接將第一圈與第二圈的外層表面接觸，利用材料本身尚未固化的黏性完成自黏固定，可與擠出製程整合為單一連續產線（inline process）。",
+      "value_to_project": "此路線完全跳脫「熱熔」與「額外黏著劑」兩大claim限定要件，是規避PK01/PK02claim最徹底的技術方向，但需評估貴司現有擠管設備是否支援雙層共擠出製程，屬於較大幅度的製程改造",
+      "links": {
+        "patents": "https://patents.google.com/patent/US10864349B2/en",
+        "google_patents": "https://patents.google.com/patent/US10864349B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "優先權2017-02-02，2020-12-15公告，受讓人Argos Corporation。核心方法：以共擠出（coextrusion）製程形成內外雙層管，內層為結構層、外層（Thermoplastic Polyurethane, TPU）具tacky（微黏）特性；管材自擠出設備收線捲繞時，在外層完全冷卻前即讓相鄰圈的外層表面直接接觸黏合，捲繞與固定可整合為單一inline連續製程，無需另外的熱熔或膠合站。",
+          "examples": [
+            {
+              "name": "Claim1（TPU共擠出+未完全冷卻前離散點自黏）",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "取自USPTO公開claim全文（PDF 10864349），非僅搜尋摘要片段",
+              "mechanism": "TPU外層exterior surface於first turn與second turn僅在discrete points離散接觸點自黏，非管材全長連續黏合；黏合前先extruding形成inner layer + outer layer雙層結構",
+              "claim_scope": "與PK01的thermal weld、PK04的UV adhesive兩者技術特徵皆互斥——本案既非熱熔也非額外塗膠，而是材料自身尚未固化前的黏性，是三種規避路線中技術特徵區隔最徹底的一種",
+              "result": "claim進一步限定可整合進coextrusion inline process，即擠出、捲繞、固定三步驟合一，理論上具生產效率優勢"
+            },
+            {
+              "name": "附屬項（冷卻後才接觸 vs 未完全冷卻前接觸 兩種製程分支）",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "取自USPTO公開claim全文",
+              "mechanism": "claim另分出'cooling the tube後才接觸'與'未fully cooled前即接觸'兩種變體，後者黏著強度較高但製程時序要求更嚴格",
+              "claim_scope": "若貴司要規避此案，需注意製程本身即使改用其他材料，只要落入'管材未完全冷卻前使相鄰圈外層直接接觸自黏'的操作邏輯仍可能構成侵權，而非僅材料選擇問題",
+              "result": "材料限定為TPU，貴司現有PP管材若改走此路線，需先確認PP是否具備類似的擠出後暫時黏性窗口，或需改用雙層共擠TPU外層方案"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "PK06",
+      "title": "Medical device packaging system, package and method — 機械式管夾槽規避設計 (US8960432B2)",
+      "authors": "受讓人未於公開搜尋中確認；claim使用'wire guide'（非'guidewire'）術語風格，與Cook Medical慣用命名高度相似（PK01家族中亦有Cook Medical Technologies LLC的關聯案例），列為待查證的合理推測",
+      "year": 2015,
+      "venue": "Google Patents",
+      "doi": null,
+      "pmid": null,
+      "doc_type": "專利",
+      "access": "專利全文",
+      "tags": [
+        "mechanical-clip",
+        "tubular-holder-channel",
+        "coiled-tube",
+        "catheter",
+        "active"
+      ],
+      "purpose": "PK01專利claim的第三種規避設計實例：完全不使用熱能或膠合，改用機械式管夾/卡槽結構固定捲盤形狀",
+      "abstract_note": "以內部偏壓（internal bias）方式捲繞醫材，在捲繞過程中將軟管穿入第一與第二管狀夾持件（tubular holder），形成對抗軟管回彈力的總成；兩個夾持件再分別定位於連接件（elongate connector）兩側的通道（channel）中，形成橋接兩夾持件的固定結構。全程無熱熔、無膠合，屬純機械式固定路線。",
+      "value_to_project": "與PK04、PK05相比，此案是最保守、最不需要改變管材/製程的規避設計（沿用你先前討論過的束帶/夾具類固定邏輯），但因需額外零件（管狀夾持件、連接件）而在包裝體積與組裝工時上可能不如熱熔/共擠方案精簡",
+      "links": {
+        "patents": "https://patents.google.com/patent/US8960432B2/en",
+        "google_patents": "https://patents.google.com/patent/US8960432B2/en"
+      },
+      "patentResults": {
+        "full": {
+          "summary": "公告於2015年（US8960432B2）。方法claim核心為：coiling elongate medical device against internal bias（利用管材自身回彈張力捲繞）、以第一與第二tubular holder於捲繞過程中穿套定位、再將兩holder分別interference fit進elongate connector兩側channel，形成橋接固定總成。裝置claim另界定connector上緣具plurality of channels（分兩側各一組，形狀互為鏡像），channel間設有break line（材料厚度不均或有void形成的預折斷線），便於使用時分離。",
+          "examples": [
+            {
+              "name": "方法Claim17（機械夾持+橋接連接件）",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "取自USPTO公開claim全文（PDF 8960432），非僅搜尋摘要片段",
+              "mechanism": "純機械interference fit定位，無thermal weld、無adhesive、無coextrusion；medical device靠internal bias（自身彈性回彈力）撐開對抗holder，形成穩定張力結構",
+              "claim_scope": "與PK01/PK02/PK04/PK05技術特徵皆互斥；但claim本身對「connector橋接兩holder + channel鏡像配對」的結構限定較具體，若貴司設計不採用此種橋接連接件結構，規避空間更大",
+              "result": "裝置claim另揭露wire guide應用場景：'a wire guide having a proximal wire end protruding from the first holder, and a distal end wire protruding from the second holder'，並可搭配sterile pouch包裹整組connector+holder+device"
+            },
+            {
+              "name": "裝置Claim（channel鏡像配對 + break line預折斷設計）",
+              "is_real": true,
+              "credibility": "高",
+              "credibility_reason": "取自USPTO公開claim全文",
+              "mechanism": "elongate connector上緣兩側channel分別呈鏡像弧形（arcuate channel shape開口朝向中心線），holder可任意組合插入不同位置的channel，提供裝配彈性",
+              "claim_scope": "此為較細節的結構限定，非本案最廣的獨立項，規避難度相對較低",
+              "result": "break line設計讓使用者可徒手分離connector兩端，屬於使用端的便利性設計"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
