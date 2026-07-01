@@ -490,6 +490,48 @@ tr:last-child td{border-bottom:0}
   color:var(--muted);
   background:#fff;
 }
+.loading-overlay{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:grid;
+  place-items:center;
+  background:rgba(20,22,18,.38);
+  backdrop-filter:blur(2px);
+}
+.loading-overlay.hidden{
+  display:none;
+}
+.loading-dialog{
+  width:min(360px, calc(100vw - 32px));
+  border-radius:8px;
+  border:1px solid var(--line);
+  background:#fff;
+  padding:22px;
+  box-shadow:0 16px 42px rgba(0,0,0,.18);
+  text-align:center;
+}
+.loading-dialog strong{
+  display:block;
+  font-size:24px;
+  margin-bottom:8px;
+}
+.loading-dialog span{
+  color:var(--muted);
+  font-size:13px;
+}
+.loading-spinner{
+  width:38px;
+  height:38px;
+  border:4px solid #dbeee6;
+  border-top-color:var(--green);
+  border-radius:50%;
+  margin:0 auto 14px;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
 @media(max-width:960px){
   .app{grid-template-columns:1fr}
   .rail{position:relative;height:auto}
@@ -503,6 +545,13 @@ tr:last-child td{border-bottom:0}
 </style>
 </head>
 <body>
+<div id="loadingOverlay" class="loading-overlay hidden" role="status" aria-live="polite" aria-modal="true">
+  <div class="loading-dialog">
+    <div class="loading-spinner" aria-hidden="true"></div>
+    <strong>執行中!</strong>
+    <span id="loadingMessage">正在查詢 openFDA 資料，請稍候。</span>
+  </div>
+</div>
 <div class="app">
   <aside class="rail">
     <div class="brand">
@@ -927,6 +976,8 @@ const workerStatus = document.getElementById("workerStatus");
 const workerResults = document.getElementById("workerResults");
 const workerUrl = document.getElementById("workerUrl");
 const productIdentity = document.getElementById("productIdentity");
+const loadingOverlay = document.getElementById("loadingOverlay");
+const loadingMessage = document.getElementById("loadingMessage");
 let mode = "complaints";
 const workerBaseUrl = "https://dmac-fda-proxy.gogoyankee.workers.dev";
 const workerCompanyKeywords = {
@@ -1018,6 +1069,22 @@ function setDraftState(isDirty){
     : "右側資料已套用目前條件。";
 }
 
+function showLoading(message){
+  loadingMessage.textContent = message || "正在查詢 openFDA 資料，請稍候。";
+  loadingOverlay.classList.remove("hidden");
+}
+
+function hideLoading(){
+  loadingOverlay.classList.add("hidden");
+}
+
+function resetDraftDeviceState(){
+  selectedDeviceCandidate = null;
+  productCodeInput.value = "";
+  deviceCandidateList.innerHTML = "";
+  deviceCandidateBox.classList.add("hidden");
+}
+
 function markCriteriaDirty(){
   setDraftState(true);
   workerStatus.classList.remove("hidden");
@@ -1035,11 +1102,11 @@ function findDeviceCandidates(){
 function renderDeviceCandidates(candidates){
   selectedDeviceCandidate = null;
   deviceCandidateList.innerHTML = "";
+  productCodeInput.value = "";
   if(!candidates.length){
     deviceCandidateBox.classList.add("hidden");
     return;
   }
-  productCodeInput.value = "";
   deviceCandidateBox.classList.remove("hidden");
   deviceCandidateList.innerHTML = candidates.map((item, index) => `
     <button class="candidate-option" type="button" data-index="${index}">
@@ -1434,8 +1501,14 @@ async function fetchWorkerData(){
   const keyword = workerCompanyKeywords[key] || "";
   const productCode = criteria.productCode;
   const deviceText = criteria.deviceText || "醫療器材";
+  if(!productCode){
+    workerStatus.classList.remove("hidden");
+    workerStatus.textContent = "缺少 FDA product code，請先選擇候選產品或手動輸入 product code。";
+    return;
+  }
   const query = keyword ? `company=${encodeURIComponent(keyword)}&product_code=${encodeURIComponent(productCode)}&limit=100` : `product_code=${encodeURIComponent(productCode)}&limit=100`;
   workerUrl.textContent = `${workerBaseUrl}/api/maude?${query}`;
+  showLoading(`正在檢索 ${productCode} / ${deviceText}...`);
   fetchWorkerBtn.disabled = true;
   applySearchBtn.disabled = true;
   workerStatus.classList.remove("hidden");
@@ -1481,6 +1554,7 @@ async function fetchWorkerData(){
   }finally{
     fetchWorkerBtn.disabled = false;
     applySearchBtn.disabled = false;
+    hideLoading();
   }
 }
 
