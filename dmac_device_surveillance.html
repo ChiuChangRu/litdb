@@ -585,7 +585,7 @@ tr:last-child td{border-bottom:0}
     </div>
     <div class="control">
       <label for="deviceInput">醫療器材類別</label>
-      <input id="deviceInput" class="search" list="deviceSuggestions" type="text" value="檢體針 / 採血器材 / blood collection needle" placeholder="輸入中文或英文，例如：檢體針、導管、syringe">
+      <input id="deviceInput" class="search" list="deviceSuggestions" type="text" value="" placeholder="輸入中文或英文，例如：檢體針、導管、syringe">
       <datalist id="deviceSuggestions">
         <option value="檢體針 / 採血器材 / blood collection needle">
         <option value="注射針 / hypodermic needle">
@@ -603,7 +603,7 @@ tr:last-child td{border-bottom:0}
     </div>
     <div class="control">
       <label for="productCodeInput">FDA product code</label>
-      <input id="productCodeInput" class="search" type="text" value="JKA" placeholder="例如 JKA、FMI、FMF">
+      <input id="productCodeInput" class="search" type="text" value="" placeholder="例如 JKA、FMI、FMF">
     </div>
     <div class="control">
       <label for="makerSelect">大廠 / 申請廠商</label>
@@ -637,7 +637,7 @@ tr:last-child td{border-bottom:0}
         <p id="pageSub">先確認證號與產品，再檢視客訴、回收與 FDA 對應法條</p>
       </div>
       <div class="status">
-        <span class="pill green" id="productCodePill">FDA Product Code JKA</span>
+        <span class="pill green" id="productCodePill">FDA Product Code 待確認</span>
         <span class="pill blue">510(k) 證號追溯</span>
         <span class="pill amber">模擬資料集 v1</span>
       </div>
@@ -678,11 +678,19 @@ tr:last-child td{border-bottom:0}
         <div class="metric-sub" id="riskSub">依公開訊號模擬</div>
       </div>
 
-      <div class="card span-7">
-        <h3 id="pieTitle">客訴問題點比例</h3>
+      <div class="card span-6">
+        <h3 id="complaintPieTitle">客訴問題點比例</h3>
         <div class="chart-wrap">
-          <canvas id="pie" width="260" height="260" aria-label="pie chart"></canvas>
-          <div class="legend" id="legend"></div>
+          <canvas id="complaintPie" width="260" height="260" aria-label="complaint pie chart"></canvas>
+          <div class="legend" id="complaintLegend"></div>
+        </div>
+      </div>
+
+      <div class="card span-6">
+        <h3 id="recallPieTitle">回收原因比例</h3>
+        <div class="chart-wrap">
+          <canvas id="recallPie" width="260" height="260" aria-label="recall pie chart"></canvas>
+          <div class="legend" id="recallLegend"></div>
         </div>
       </div>
 
@@ -1094,10 +1102,26 @@ function currentProductCode(){
   return (productCodeInput.value || "").trim().toUpperCase();
 }
 
+function normalizeCompanyKeyword(value){
+  const raw = (value || "").trim();
+  if(!raw) return "";
+  const lower = raw.toLowerCase();
+  if(raw.includes("邦特") || lower.includes("bangte")){
+    return "Bioteque";
+  }
+  return raw;
+}
+
+function openFdaTerm(field, value){
+  const clean = normalizeCompanyKeyword(value);
+  if(!clean) return "";
+  return /\s/.test(clean) ? `${field}:"${clean}"` : `${field}:${clean}`;
+}
+
 function currentCompanyKeyword(){
   const key = makerSelect.value || "all";
   if(key === "manual"){
-    return (manualCompanyInput.value || "").trim();
+    return normalizeCompanyKeyword(manualCompanyInput.value);
   }
   return workerCompanyKeywords[key] || "";
 }
@@ -1119,7 +1143,8 @@ function setupTabs(){
     "complaintCount",
     "recallCount",
     "riskLevel",
-    "pie",
+    "complaintPie",
+    "recallPie",
     "bars",
     "problemTable",
     "events",
@@ -1295,8 +1320,9 @@ function makeLiveQueryData(base, criteria){
   };
 }
 
-function drawPie(items){
-  const canvas = document.getElementById("pie");
+function drawPie(items, canvasId = "complaintPie", unitLabel = "records"){
+  const canvas = document.getElementById(canvasId);
+  if(!canvas) return;
   const ctx = canvas.getContext("2d");
   const w = canvas.width;
   const h = canvas.height;
@@ -1326,12 +1352,14 @@ function drawPie(items){
   ctx.fillText(fmt(total),cx,cy+2);
   ctx.fillStyle = "#6f716b";
   ctx.font = "12px system-ui";
-  ctx.fillText(mode === "complaints" ? "records" : "recalls",cx,cy+22);
+  ctx.fillText(unitLabel, cx, cy+22);
 }
 
-function renderLegend(items){
+function renderLegend(items, legendId = "complaintLegend"){
   const total = items.reduce((sum,i)=>sum+i.count,0) || 1;
-  document.getElementById("legend").innerHTML = items.map((item,idx)=>{
+  const legend = document.getElementById(legendId);
+  if(!legend) return;
+  legend.innerHTML = items.map((item,idx)=>{
     const pct = Math.round(item.count/total*100);
     return `<div class="legend-row">
       <span class="swatch" style="background:${colors[idx % colors.length]}"></span>
@@ -1393,6 +1421,23 @@ function renderClearances(data){
       <td><strong>${row[0]}</strong></td>
       <td>${row[1]}${row[2] && row.length === 4 ? `<br><small>${row[2]}</small>` : ""}</td>
       <td>${row[row.length-1]}</td>
+    </tr>`).join("")}</tbody>
+  </table>`;
+}
+
+function renderLiveClearances(kData){
+  const rows = kData?.results || [];
+  if(!rows.length){
+    document.getElementById("clearances").innerHTML = `<div class="empty">目前查詢條件未回傳 510(k) 證號。可放寬公司名稱或先移除 product code 後再查。</div>`;
+    return;
+  }
+  document.getElementById("clearances").innerHTML = `<table>
+    <thead><tr><th>K number</th><th>產品名稱</th><th>Product code</th><th>申請廠商 / 日期</th></tr></thead>
+    <tbody>${rows.map(row=>`<tr>
+      <td><strong>${escapeHtml(row.k_number || "-")}</strong></td>
+      <td>${escapeHtml(row.device_name || row.openfda?.device_name || "-")}</td>
+      <td>${escapeHtml(row.product_code || row.openfda?.product_code || "-")}</td>
+      <td>${escapeHtml(row.applicant || "-")}<br><small>${escapeHtml(row.decision_date || "")}</small></td>
     </tr>`).join("")}</tbody>
   </table>`;
 }
@@ -1467,9 +1512,15 @@ async function fetchJson(endpoint, query){
 }
 
 async function fetchOpenFda510k(productCode, keyword){
-  const terms = [`product_code:${productCode}`];
+  const terms = [];
+  if(productCode){
+    terms.push(`product_code:${productCode}`);
+  }
   if(keyword){
-    terms.push(`applicant:${keyword}`);
+    terms.push(openFdaTerm("applicant", keyword));
+  }
+  if(!terms.length){
+    return {meta:{results:{total:0}}, results:[], raw_count:0, filtered_count:0, url:""};
   }
   const search = terms.join(" AND ");
   const url = `https://api.fda.gov/device/510k.json?search=${encodeURIComponent(search)}&limit=5`;
@@ -1488,6 +1539,9 @@ async function fetchOpenFda510k(productCode, keyword){
 }
 
 async function fetchOpenFdaClassification(productCode){
+  if(!productCode){
+    return {meta:{results:{total:0}}, results:[], url:""};
+  }
   const url = `https://api.fda.gov/device/classification.json?search=${encodeURIComponent(`product_code:${productCode}`)}&limit=5`;
   const res = await fetch(url);
   if(res.status === 404){
@@ -1515,6 +1569,9 @@ async function fetchOpenFdaTotal(endpoint, search){
 }
 
 async function fetchOpenFdaYearCounts(productCode, keyword){
+  if(!productCode){
+    return {2016:0,2017:0,2018:0,2019:0,2020:0,2021:0,2022:0,2023:0,2024:0,2025:0,2026:0};
+  }
   const years = Array.from({length:11}, (_, idx) => 2016 + idx);
   const entries = await Promise.all(years.map(async year => {
     const start = year === 2016 ? "20160630" : `${year}0101`;
@@ -1528,8 +1585,8 @@ async function fetchOpenFdaYearCounts(productCode, keyword){
       `recall_initiation_date:[${start} TO ${end}]`
     ];
     if(keyword){
-      eventTerms.push(`manufacturer_d_name:${keyword}`);
-      recallTerms.push(`recalling_firm:${keyword}`);
+      eventTerms.push(openFdaTerm("manufacturer_d_name", keyword));
+      recallTerms.push(openFdaTerm("recalling_firm", keyword));
     }
     const [maudeCount, recallCount] = await Promise.all([
       fetchOpenFdaTotal("event", eventTerms.join(" AND ")),
@@ -1573,17 +1630,43 @@ function liveProblemRows(maude){
   ];
 }
 
+function groupCounts(items, labelGetter, emptyZh, emptyLabel){
+  const counts = new Map();
+  (items || []).forEach(item => {
+    const label = labelGetter(item) || emptyLabel;
+    counts.set(label, (counts.get(label) || 0) + 1);
+  });
+  const rows = [...counts.entries()].map(([label, count]) => ({label, zh:label, count}));
+  return rows.length ? rows.slice(0,8) : [{label:emptyLabel, zh:emptyZh, count:1}];
+}
+
+function liveComplaintPieItems(maude){
+  return groupCounts(
+    maude?.results || [],
+    item => item.event_type || item.type_of_report?.join(", ") || "MAUDE event",
+    "未查到 MAUDE 客訴",
+    "No MAUDE event"
+  );
+}
+
+function liveRecallPieItems(recall){
+  return groupCounts(
+    recall?.results || [],
+    item => item.reason_for_recall || item.status || item.classification || "Recall record",
+    "未查到 Recall 回收",
+    "No recall record"
+  );
+}
+
 function updateLiveSections(maude, recall, yearCounts, criteria){
   const maudeCount = resultCount(maude);
   const recallCount = resultCount(recall);
-  const items = [
-    {label:"MAUDE events", zh:"MAUDE 客訴/事件", count:Math.max(maudeCount,0)},
-    {label:"Recall records", zh:"Recall 回收", count:Math.max(recallCount,0)}
-  ].filter(item => item.count > 0);
-  const safeItems = items.length ? items : [{label:"No live records", zh:"未查到即時結果", count:1}];
-  document.getElementById("pieTitle").textContent = "客訴與回收比例";
-  drawPie(safeItems);
-  renderLegend(safeItems);
+  document.getElementById("complaintPieTitle").textContent = "客訴問題點比例";
+  document.getElementById("recallPieTitle").textContent = "回收原因比例";
+  drawPie(liveComplaintPieItems(maude), "complaintPie", "complaints");
+  renderLegend(liveComplaintPieItems(maude), "complaintLegend");
+  drawPie(liveRecallPieItems(recall), "recallPie", "recalls");
+  renderLegend(liveRecallPieItems(recall), "recallLegend");
   renderBars(yearCounts || summarizeYearsFromResults(maude?.results || []));
   renderProblems({problems:liveProblemRows(maude)});
   document.getElementById("riskLevel").textContent = maudeCount || recallCount ? "待判讀" : "低";
@@ -1621,7 +1704,7 @@ function renderProductIdentity(criteria, classification, kTotal, kFiltered, maud
     </div>
     <div class="identity-row">
       <strong>FDA product code</strong>
-      <div><span class="identity-tag">${escapeHtml(criteria.productCode)}</span>${classInfo?.regulation_number ? ` <span class="identity-tag">Regulation ${escapeHtml(classInfo.regulation_number)}</span>` : ""}</div>
+      <div><span class="identity-tag">${escapeHtml(criteria.productCode || "未套用")}</span>${classInfo?.regulation_number ? ` <span class="identity-tag">Regulation ${escapeHtml(classInfo.regulation_number)}</span>` : ""}</div>
     </div>
     <div class="identity-row">
       <strong>官方產品名稱</strong>
@@ -1680,27 +1763,33 @@ async function fetchWorkerData(){
   const keyword = criteria.companyKeyword || "";
   const productCode = criteria.productCode;
   const deviceText = criteria.deviceText || "醫療器材";
-  if(!productCode){
+  if(!productCode && !keyword){
     workerStatus.classList.remove("hidden");
-    workerStatus.textContent = "缺少 FDA product code，請先選擇候選產品或手動輸入 product code。";
+    workerStatus.textContent = "請先輸入 FDA product code，或選擇手動輸入並填寫公司/申請廠商。";
     return;
   }
-  const query = keyword ? `company=${encodeURIComponent(keyword)}&product_code=${encodeURIComponent(productCode)}&limit=100` : `product_code=${encodeURIComponent(productCode)}&limit=100`;
-  workerUrl.textContent = `${workerBaseUrl}/api/maude?${query}`;
-  showLoading(`正在檢索 ${productCode} / ${deviceText}...`);
+  const query = productCode
+    ? (keyword ? `company=${encodeURIComponent(keyword)}&product_code=${encodeURIComponent(productCode)}&limit=100` : `product_code=${encodeURIComponent(productCode)}&limit=100`)
+    : "";
+  workerUrl.textContent = query ? `${workerBaseUrl}/api/maude?${query}` : "公司-only 查詢：先檢索 510(k) applicant，不套用 product code";
+  showLoading(`正在檢索 ${productCode || keyword} / ${deviceText}...`);
   fetchWorkerBtn.disabled = true;
   applySearchBtn.disabled = true;
   workerStatus.classList.remove("hidden");
   workerResults.classList.add("hidden");
   workerResults.innerHTML = "";
-  productIdentity.innerHTML = `<div class="empty">正在確認 ${escapeHtml(productCode)} 的官方產品名稱與 510(k) 樣本...</div>`;
-  regulationInfo.innerHTML = `<div class="empty">正在查詢 ${escapeHtml(productCode)} 的 FDA classification 與 regulation number...</div>`;
-  workerStatus.textContent = `正在透過 Worker 查詢 ${data.name} / ${deviceText} / ${productCode}...`;
+  productIdentity.innerHTML = `<div class="empty">正在確認 ${escapeHtml(productCode || keyword)} 的官方產品名稱與 510(k) 樣本...</div>`;
+  regulationInfo.innerHTML = productCode
+    ? `<div class="empty">正在查詢 ${escapeHtml(productCode)} 的 FDA classification 與 regulation number...</div>`
+    : `<div class="empty">公司-only 查詢未套用 product code；請從證號清單確認產品後再查 FDA 法條。</div>`;
+  workerStatus.textContent = productCode
+    ? `正在透過 Worker 查詢 ${data.name} / ${deviceText} / ${productCode}...`
+    : `正在查詢 ${keyword} 的 510(k) 證號；客訴與回收需先確認 product code。`;
   try{
     const [maude, recall, kTotal, kFiltered, classification, yearCounts] = await Promise.all([
-      fetchJson("/api/maude", query),
-      fetchJson("/api/recall", query),
-      fetchOpenFda510k(productCode, ""),
+      productCode ? fetchJson("/api/maude", query) : Promise.resolve({meta:{results:{total:0}}, results:[], raw_count:0, filtered_count:0}),
+      productCode ? fetchJson("/api/recall", query) : Promise.resolve({meta:{results:{total:0}}, results:[], raw_count:0, filtered_count:0}),
+      productCode ? fetchOpenFda510k(productCode, "") : fetchOpenFda510k("", keyword),
       keyword ? fetchOpenFda510k(productCode, keyword) : fetchOpenFda510k(productCode, ""),
       fetchOpenFdaClassification(productCode),
       fetchOpenFdaYearCounts(productCode, keyword)
@@ -1716,6 +1805,7 @@ async function fetchWorkerData(){
       ? `K 證總量 ${fmt(kTotalCount)}；公司篩選 ${fmt(kFilteredCount)}`
       : `K 證總量 ${fmt(kTotalCount)}；未套用公司篩選`;
     renderProductIdentity(criteria, classification, kTotal, kFiltered, maude);
+    renderLiveClearances(kFiltered);
     renderRegulationInfo(criteria, classification);
     workerStatus.textContent = `即時結果已更新：公司關鍵字「${keyword || "全部"}」。MAUDE/Recall 經 Worker；510(k) 先查 product code 總量再做公司篩選。`;
     workerResults.classList.remove("hidden");
@@ -1748,17 +1838,17 @@ function applyCriteriaAndFetch(){
     workerStatus.textContent = "尚未確認醫療器材類別，未更新右側分析。";
     return;
   }
-  if(!draft.productCode){
-    setDraftState(true);
-    draftHint.textContent = "請選擇候選醫療器材，或手動輸入 FDA product code。";
-    workerStatus.textContent = "缺少 FDA product code，未更新右側分析。";
-    return;
-  }
   if(draft.makerKey === "manual" && !draft.companyKeyword){
     setDraftState(true);
     draftHint.textContent = "請先輸入公司或申請廠商名稱，再進行檢索。";
     workerStatus.textContent = "手動公司欄位尚未填寫，未更新右側分析。";
     manualCompanyInput.focus();
+    return;
+  }
+  if(!draft.productCode && !draft.companyKeyword){
+    setDraftState(true);
+    draftHint.textContent = "請選擇候選醫療器材、手動輸入 FDA product code，或輸入公司/申請廠商。";
+    workerStatus.textContent = "缺少 product code 或公司條件，未更新右側分析。";
     return;
   }
   appliedCriteria = draft;
@@ -1777,7 +1867,7 @@ function render(options = {}){
   const deviceText = criteria.deviceText || "醫療器材";
   document.getElementById("pageTitle").textContent = `MedSearch - ${data.name} / ${deviceText}`;
   document.getElementById("pageSub").textContent = `證號、客訴回收與 FDA 法條檢索 / Product code ${productCode || "待確認"}`;
-  document.getElementById("productCodePill").textContent = `FDA Product Code ${productCode}`;
+  document.getElementById("productCodePill").textContent = `FDA Product Code ${productCode || "待確認"}`;
   document.getElementById("complaintCount").textContent = fmt(data.complaints);
   document.getElementById("recallCount").textContent = fmt(data.recalls);
   document.getElementById("clearanceCount").textContent = fmt(data.clearances.length);
@@ -1787,10 +1877,12 @@ function render(options = {}){
   const highCount = data.problems.filter(p=>p.risk==="高").length;
   document.getElementById("riskLevel").textContent = highCount >= 2 || data.recalls >= 2 ? "高" : highCount === 1 ? "中高" : "低";
   document.getElementById("riskSub").textContent = `${data.problems.length} 個問題點，${highCount} 個高風險`;
-  const items = mode === "complaints" ? data.complaintProblems : data.recallProblems;
-  document.getElementById("pieTitle").textContent = mode === "complaints" ? "客訴問題點比例" : "回收原因比例";
-  drawPie(items);
-  renderLegend(items);
+  document.getElementById("complaintPieTitle").textContent = "客訴問題點比例";
+  document.getElementById("recallPieTitle").textContent = "回收原因比例";
+  drawPie(data.complaintProblems, "complaintPie", "complaints");
+  renderLegend(data.complaintProblems, "complaintLegend");
+  drawPie(data.recallProblems, "recallPie", "recalls");
+  renderLegend(data.recallProblems, "recallLegend");
   renderBars(data.years);
   renderProblems(data);
   renderEvents(data);
