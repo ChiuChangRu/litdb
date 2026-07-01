@@ -1501,6 +1501,45 @@ async function fetchOpenFdaClassification(productCode){
   return data;
 }
 
+async function fetchOpenFdaTotal(endpoint, search){
+  const url = `https://api.fda.gov/device/${endpoint}.json?search=${encodeURIComponent(search)}&limit=1`;
+  const res = await fetch(url);
+  if(res.status === 404){
+    return 0;
+  }
+  const data = await res.json();
+  if(!res.ok){
+    return 0;
+  }
+  return data?.meta?.results?.total || 0;
+}
+
+async function fetchOpenFdaYearCounts(productCode, keyword){
+  const years = Array.from({length:11}, (_, idx) => 2016 + idx);
+  const entries = await Promise.all(years.map(async year => {
+    const start = year === 2016 ? "20160630" : `${year}0101`;
+    const end = year === 2026 ? "20260630" : `${year}1231`;
+    const eventTerms = [
+      `device.device_report_product_code:${productCode}`,
+      `date_received:[${start} TO ${end}]`
+    ];
+    const recallTerms = [
+      `product_code:${productCode}`,
+      `recall_initiation_date:[${start} TO ${end}]`
+    ];
+    if(keyword){
+      eventTerms.push(`manufacturer_d_name:${keyword}`);
+      recallTerms.push(`recalling_firm:${keyword}`);
+    }
+    const [maudeCount, recallCount] = await Promise.all([
+      fetchOpenFdaTotal("event", eventTerms.join(" AND ")),
+      fetchOpenFdaTotal("recall", recallTerms.join(" AND "))
+    ]);
+    return [year, maudeCount + recallCount];
+  }));
+  return Object.fromEntries(entries);
+}
+
 function summarizeYearsFromResults(results){
   const years = {2016:0,2017:0,2018:0,2019:0,2020:0,2021:0,2022:0,2023:0,2024:0,2025:0,2026:0};
   (results || []).forEach(item => {
@@ -1534,23 +1573,21 @@ function liveProblemRows(maude){
   ];
 }
 
-function updateLiveSections(maude, recall, clearance, criteria){
+function updateLiveSections(maude, recall, yearCounts, criteria){
   const maudeCount = resultCount(maude);
   const recallCount = resultCount(recall);
-  const clearanceCount = resultCount(clearance);
   const items = [
     {label:"MAUDE events", zh:"MAUDE 客訴/事件", count:Math.max(maudeCount,0)},
-    {label:"Recall records", zh:"Recall 回收", count:Math.max(recallCount,0)},
-    {label:"510(k) clearances", zh:"510(k) 證號", count:Math.max(clearanceCount,0)}
+    {label:"Recall records", zh:"Recall 回收", count:Math.max(recallCount,0)}
   ].filter(item => item.count > 0);
   const safeItems = items.length ? items : [{label:"No live records", zh:"未查到即時結果", count:1}];
-  document.getElementById("pieTitle").textContent = "即時檢索結果比例";
+  document.getElementById("pieTitle").textContent = "客訴與回收比例";
   drawPie(safeItems);
   renderLegend(safeItems);
-  renderBars(summarizeYearsFromResults(maude?.results || []));
+  renderBars(yearCounts || summarizeYearsFromResults(maude?.results || []));
   renderProblems({problems:liveProblemRows(maude)});
   document.getElementById("riskLevel").textContent = maudeCount || recallCount ? "待判讀" : "低";
-  document.getElementById("riskSub").textContent = `${criteria.productCode} 即時資料，需依問題點人工判讀`;
+  document.getElementById("riskSub").textContent = `${criteria.productCode} 客訴/回收即時資料，需依問題點人工判讀`;
 }
 
 function renderTags(values){
@@ -1660,12 +1697,13 @@ async function fetchWorkerData(){
   regulationInfo.innerHTML = `<div class="empty">正在查詢 ${escapeHtml(productCode)} 的 FDA classification 與 regulation number...</div>`;
   workerStatus.textContent = `正在透過 Worker 查詢 ${data.name} / ${deviceText} / ${productCode}...`;
   try{
-    const [maude, recall, kTotal, kFiltered, classification] = await Promise.all([
+    const [maude, recall, kTotal, kFiltered, classification, yearCounts] = await Promise.all([
       fetchJson("/api/maude", query),
       fetchJson("/api/recall", query),
       fetchOpenFda510k(productCode, ""),
       keyword ? fetchOpenFda510k(productCode, keyword) : fetchOpenFda510k(productCode, ""),
-      fetchOpenFdaClassification(productCode)
+      fetchOpenFdaClassification(productCode),
+      fetchOpenFdaYearCounts(productCode, keyword)
     ]);
     const kTotalCount = resultCount(kTotal);
     const kFilteredCount = resultCount(kFiltered);
@@ -1691,7 +1729,7 @@ async function fetchWorkerData(){
       )
     ].join("");
     if(!shouldUseDemoData(criteria)){
-      updateLiveSections(maude, recall, kFiltered, criteria);
+      updateLiveSections(maude, recall, yearCounts, criteria);
     }
   }catch(error){
     workerStatus.textContent = `即時查詢失敗：${error.message}`;
