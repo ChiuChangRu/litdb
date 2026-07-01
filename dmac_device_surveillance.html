@@ -32,6 +32,7 @@ body{
   line-height:1.55;
 }
 button,select,input{font:inherit}
+.hidden{display:none !important}
 .app{
   display:grid;
   grid-template-columns:280px 1fr;
@@ -607,6 +608,7 @@ tr:last-child td{border-bottom:0}
     <div class="control">
       <label for="makerSelect">大廠 / 申請廠商</label>
       <select id="makerSelect"></select>
+      <input id="manualCompanyInput" class="search hidden" type="text" placeholder="輸入公司或申請廠商，例如 Argon、Medcomp、Bard">
     </div>
     <div class="control control-actions">
       <button id="applySearchBtn" class="primary-action" type="button">確定並檢索</button>
@@ -1001,6 +1003,7 @@ suggestedMakers.forEach(([key,label,query])=>{
 });
 
 const makerSelect = document.getElementById("makerSelect");
+const manualCompanyInput = document.getElementById("manualCompanyInput");
 const deviceInput = document.getElementById("deviceInput");
 const productCodeInput = document.getElementById("productCodeInput");
 const deviceCandidateBox = document.getElementById("deviceCandidateBox");
@@ -1091,6 +1094,22 @@ function currentProductCode(){
   return (productCodeInput.value || "").trim().toUpperCase();
 }
 
+function currentCompanyKeyword(){
+  const key = makerSelect.value || "all";
+  if(key === "manual"){
+    return (manualCompanyInput.value || "").trim();
+  }
+  return workerCompanyKeywords[key] || "";
+}
+
+function currentMakerName(){
+  const key = makerSelect.value || "all";
+  if(key === "manual"){
+    return (manualCompanyInput.value || "").trim() || "手動輸入廠商";
+  }
+  return dashboardData[key]?.name || "全部公司";
+}
+
 function cardFor(id){
   return document.getElementById(id)?.closest(".card");
 }
@@ -1121,9 +1140,21 @@ function showTab(tabName){
   });
 }
 
+function updateManualCompanyInput(){
+  const isManual = makerSelect.value === "manual";
+  manualCompanyInput.classList.toggle("hidden", !isManual);
+  if(isManual){
+    manualCompanyInput.focus();
+  } else {
+    manualCompanyInput.value = "";
+  }
+}
+
 function readDraftCriteria(){
   return {
     makerKey: makerSelect.value || "all",
+    companyKeyword: currentCompanyKeyword(),
+    makerName: currentMakerName(),
     productCode: currentProductCode(),
     deviceText: selectedDeviceCandidate?.zh || normalizeDeviceText() || "medical device",
     deviceLabel: selectedDeviceCandidate?.label || "",
@@ -1369,9 +1400,9 @@ function renderClearances(data){
 function renderSearchLinks(data, criteria){
   const productCode = criteria.productCode;
   const deviceText = criteria.deviceText;
-  const q = encodeURIComponent(`${data.name} ${deviceText || data.searchQuery || "medical device"} ${productCode}`);
+  const q = encodeURIComponent(`${criteria.makerName || data.name} ${deviceText || data.searchQuery || "medical device"} ${productCode}`);
   const key = criteria.makerKey || "all";
-  const keyword = workerCompanyKeywords[key] || "";
+  const keyword = criteria.companyKeyword || "";
   const maker = encodeURIComponent(keyword || data.name.replace("--","").trim());
   const workerQuery = keyword ? `company=${encodeURIComponent(keyword)}&product_code=${encodeURIComponent(productCode)}&limit=100` : `product_code=${encodeURIComponent(productCode)}&limit=100`;
   const workerMaude = `${workerBaseUrl}/api/maude?${workerQuery}`;
@@ -1609,7 +1640,7 @@ async function fetchWorkerData(){
   const key = criteria.makerKey || "all";
   const baseData = dashboardData[key];
   const data = shouldUseDemoData(criteria) ? baseData : makeLiveQueryData(baseData, criteria);
-  const keyword = workerCompanyKeywords[key] || "";
+  const keyword = criteria.companyKeyword || "";
   const productCode = criteria.productCode;
   const deviceText = criteria.deviceText || "醫療器材";
   if(!productCode){
@@ -1685,6 +1716,13 @@ function applyCriteriaAndFetch(){
     workerStatus.textContent = "缺少 FDA product code，未更新右側分析。";
     return;
   }
+  if(draft.makerKey === "manual" && !draft.companyKeyword){
+    setDraftState(true);
+    draftHint.textContent = "請先輸入公司或申請廠商名稱，再進行檢索。";
+    workerStatus.textContent = "手動公司欄位尚未填寫，未更新右側分析。";
+    manualCompanyInput.focus();
+    return;
+  }
   appliedCriteria = draft;
   setDraftState(false);
   render({resetWorker:true});
@@ -1720,7 +1758,7 @@ function render(options = {}){
   renderEvents(data);
   renderClearances(data);
   renderSearchLinks(data, criteria);
-  const keyword = workerCompanyKeywords[key] || "";
+  const keyword = criteria.companyKeyword || "";
   const query = keyword ? `company=${encodeURIComponent(keyword)}&product_code=${encodeURIComponent(productCode)}&limit=100` : `product_code=${encodeURIComponent(productCode)}&limit=100`;
   workerUrl.textContent = `${workerBaseUrl}/api/maude?${query}`;
   if(resetWorker){
@@ -1733,7 +1771,11 @@ function render(options = {}){
   }
 }
 
-makerSelect.addEventListener("change", markCriteriaDirty);
+makerSelect.addEventListener("change", ()=>{
+  updateManualCompanyInput();
+  markCriteriaDirty();
+});
+manualCompanyInput.addEventListener("input", markCriteriaDirty);
 deviceInput.addEventListener("change", inferProductCode);
 deviceInput.addEventListener("input", inferProductCode);
 productCodeInput.addEventListener("input", ()=>{
@@ -1774,6 +1816,7 @@ appliedCriteria = readDraftCriteria();
 setDraftState(false);
 setupTabs();
 showTab("clearance");
+updateManualCompanyInput();
 render();
 </script>
 </body>
