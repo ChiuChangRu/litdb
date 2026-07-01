@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DMAC 醫療器材收巡 - 檢體針模擬</title>
+<title>MedSearch 醫療器材法規檢索</title>
 <style>
 :root{
   --page:#f5f4ef;
@@ -152,6 +152,30 @@ select,.search{
 .pill.green{background:var(--green-soft);border-color:#9bcfbc;color:var(--green)}
 .pill.blue{background:var(--blue-soft);border-color:#afd0e9;color:var(--blue)}
 .pill.amber{background:var(--amber-soft);border-color:#e4c089;color:var(--amber)}
+.tabs{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:0 0 14px;
+}
+.tab-button{
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--ink);
+  min-height:40px;
+  padding:8px 12px;
+  border-radius:7px;
+  font-weight:800;
+  cursor:pointer;
+}
+.tab-button.active{
+  border-color:var(--green);
+  background:var(--green);
+  color:#fff;
+}
+.tab-panel.hidden{
+  display:none;
+}
 .grid{
   display:grid;
   grid-template-columns:repeat(12,1fr);
@@ -555,8 +579,8 @@ tr:last-child td{border-bottom:0}
 <div class="app">
   <aside class="rail">
     <div class="brand">
-      <h1>DMAC 醫療器材<br>收巡工作台</h1>
-      <span>Specimen needle demo</span>
+      <h1>MedSearch<br>醫療器材檢索</h1>
+      <span>Regulatory intelligence</span>
     </div>
     <div class="control">
       <label for="deviceInput">醫療器材類別</label>
@@ -607,8 +631,8 @@ tr:last-child td{border-bottom:0}
   <main class="main">
     <section class="topbar">
       <div class="title">
-        <h2 id="pageTitle">檢體針收巡概覽</h2>
-        <p id="pageSub">近十年公開訊號：2016-06-30 至 2026-06-30</p>
+        <h2 id="pageTitle">MedSearch 醫療器材法規檢索</h2>
+        <p id="pageSub">先確認證號與產品，再檢視客訴、回收與 FDA 對應法條</p>
       </div>
       <div class="status">
         <span class="pill green" id="productCodePill">FDA Product Code JKA</span>
@@ -617,7 +641,13 @@ tr:last-child td{border-bottom:0}
       </div>
     </section>
 
-    <section class="grid">
+    <nav class="tabs" aria-label="MedSearch sections">
+      <button class="tab-button active" type="button" data-tab="clearance">1. 證號與產品</button>
+      <button class="tab-button" type="button" data-tab="surveillance">2. 客訴與回收</button>
+      <button class="tab-button" type="button" data-tab="regulation">3. FDA 法條</button>
+    </nav>
+
+    <section id="tab-clearance" class="grid tab-panel">
       <div class="card span-12">
         <h3>檢索產品確認</h3>
         <div id="productIdentity" class="product-identity">
@@ -697,6 +727,15 @@ tr:last-child td{border-bottom:0}
           <div>NyquistAI / FDA MAUDE search: query <strong>BD Vacutainer blood collection needle</strong>, <strong>VACUETTE blood collection needle</strong>, <strong>Sol-Millennium blood collection needle</strong>，期間 2016-06-30 至 2026-06-30。</div>
           <div>NyquistAI / FDA recall search: query <strong>blood collection needle</strong>, product code <strong>JKA</strong>，期間 2016-06-30 至 2026-06-30。</div>
           <div>設計參考：工作區 <strong>DMAC2</strong> 的左側流程、卡片式 CAPA/收巡資料結構。</div>
+        </div>
+      </div>
+    </section>
+    <section id="tab-surveillance" class="grid tab-panel hidden"></section>
+    <section id="tab-regulation" class="grid tab-panel hidden">
+      <div class="card span-12">
+        <h3>FDA 對應法條 / Classification</h3>
+        <div id="regulationInfo" class="product-identity">
+          <div class="empty">尚未檢索。完成產品查詢後，這裡會顯示 FDA classification、regulation number、device class 與定義。</div>
         </div>
       </div>
     </section>
@@ -976,6 +1015,13 @@ const workerStatus = document.getElementById("workerStatus");
 const workerResults = document.getElementById("workerResults");
 const workerUrl = document.getElementById("workerUrl");
 const productIdentity = document.getElementById("productIdentity");
+const regulationInfo = document.getElementById("regulationInfo");
+const tabButtons = Array.from(document.querySelectorAll(".tab-button"));
+const tabPanels = {
+  clearance: document.getElementById("tab-clearance"),
+  surveillance: document.getElementById("tab-surveillance"),
+  regulation: document.getElementById("tab-regulation")
+};
 const loadingOverlay = document.getElementById("loadingOverlay");
 const loadingMessage = document.getElementById("loadingMessage");
 let mode = "complaints";
@@ -1045,6 +1091,36 @@ function currentProductCode(){
   return (productCodeInput.value || "").trim().toUpperCase();
 }
 
+function cardFor(id){
+  return document.getElementById(id)?.closest(".card");
+}
+
+function setupTabs(){
+  [
+    "complaintCount",
+    "recallCount",
+    "riskLevel",
+    "pie",
+    "bars",
+    "problemTable",
+    "events",
+    "workerStatus"
+  ].map(cardFor).filter(Boolean).forEach(card => tabPanels.surveillance.appendChild(card));
+  const sourceCard = document.querySelector(".source-list")?.closest(".card");
+  if(sourceCard){
+    tabPanels.regulation.appendChild(sourceCard);
+  }
+}
+
+function showTab(tabName){
+  Object.entries(tabPanels).forEach(([name, panel]) => {
+    panel.classList.toggle("hidden", name !== tabName);
+  });
+  tabButtons.forEach(button => {
+    button.classList.toggle("active", button.dataset.tab === tabName);
+  });
+}
+
 function readDraftCriteria(){
   return {
     makerKey: makerSelect.value || "all",
@@ -1090,6 +1166,7 @@ function markCriteriaDirty(){
   workerStatus.classList.remove("hidden");
   workerStatus.textContent = "條件已修改但尚未確認；右側圖表與即時結果仍顯示上次確認的檢索條件。";
   productIdentity.innerHTML = `<div class="empty">條件已修改。請先確認候選產品並重新檢索，產品名稱會在分析前顯示。</div>`;
+  regulationInfo.innerHTML = `<div class="empty">條件已修改。重新檢索後會更新 FDA 對應法條。</div>`;
 }
 
 function findDeviceCandidates(){
@@ -1493,6 +1570,40 @@ function renderProductIdentity(criteria, classification, kTotal, kFiltered, maud
   `;
 }
 
+function renderRegulationInfo(criteria, classification){
+  const rows = classification?.results || [];
+  if(!rows.length){
+    regulationInfo.innerHTML = `<div class="empty">目前 openFDA classification 未回傳 ${escapeHtml(criteria.productCode)} 的法規分類資料。</div>`;
+    return;
+  }
+  regulationInfo.innerHTML = rows.map(item => `
+    <div class="identity-row">
+      <strong>Product code</strong>
+      <div><span class="identity-tag">${escapeHtml(item.product_code || criteria.productCode)}</span></div>
+    </div>
+    <div class="identity-row">
+      <strong>產品分類名稱</strong>
+      <div>${escapeHtml(item.device_name || "未回傳")}</div>
+    </div>
+    <div class="identity-row">
+      <strong>對應法條</strong>
+      <div>${item.regulation_number ? `<span class="identity-tag">21 CFR ${escapeHtml(item.regulation_number)}</span>` : "未回傳 regulation number"}</div>
+    </div>
+    <div class="identity-row">
+      <strong>器材等級 / Panel</strong>
+      <div>
+        ${item.device_class ? `<span class="identity-tag">Class ${escapeHtml(item.device_class)}</span>` : ""}
+        ${item.medical_specialty_description ? `<span class="identity-tag">${escapeHtml(item.medical_specialty_description)}</span>` : ""}
+        ${item.review_panel ? `<span class="identity-tag">Panel ${escapeHtml(item.review_panel)}</span>` : ""}
+      </div>
+    </div>
+    <div class="identity-row">
+      <strong>FDA 定義</strong>
+      <div>${escapeHtml(item.definition || "未回傳 definition")}</div>
+    </div>
+  `).join("");
+}
+
 async function fetchWorkerData(){
   const criteria = getActiveCriteria();
   const key = criteria.makerKey || "all";
@@ -1515,6 +1626,7 @@ async function fetchWorkerData(){
   workerResults.classList.add("hidden");
   workerResults.innerHTML = "";
   productIdentity.innerHTML = `<div class="empty">正在確認 ${escapeHtml(productCode)} 的官方產品名稱與 510(k) 樣本...</div>`;
+  regulationInfo.innerHTML = `<div class="empty">正在查詢 ${escapeHtml(productCode)} 的 FDA classification 與 regulation number...</div>`;
   workerStatus.textContent = `正在透過 Worker 查詢 ${data.name} / ${deviceText} / ${productCode}...`;
   try{
     const [maude, recall, kTotal, kFiltered, classification] = await Promise.all([
@@ -1535,6 +1647,7 @@ async function fetchWorkerData(){
       ? `K 證總量 ${fmt(kTotalCount)}；公司篩選 ${fmt(kFilteredCount)}`
       : `K 證總量 ${fmt(kTotalCount)}；未套用公司篩選`;
     renderProductIdentity(criteria, classification, kTotal, kFiltered, maude);
+    renderRegulationInfo(criteria, classification);
     workerStatus.textContent = `即時結果已更新：公司關鍵字「${keyword || "全部"}」。MAUDE/Recall 經 Worker；510(k) 先查 product code 總量再做公司篩選。`;
     workerResults.classList.remove("hidden");
     workerResults.innerHTML = [
@@ -1575,6 +1688,7 @@ function applyCriteriaAndFetch(){
   appliedCriteria = draft;
   setDraftState(false);
   render({resetWorker:true});
+  showTab("clearance");
   fetchWorkerData();
 }
 
@@ -1585,8 +1699,8 @@ function render(options = {}){
   const data = dashboardData[key];
   const productCode = criteria.productCode;
   const deviceText = criteria.deviceText || "醫療器材";
-  document.getElementById("pageTitle").textContent = `${data.name} - ${deviceText} 收巡概覽`;
-  document.getElementById("pageSub").textContent = `近十年公開訊號：2016-06-30 至 2026-06-30 / Product code ${productCode}`;
+  document.getElementById("pageTitle").textContent = `MedSearch - ${data.name} / ${deviceText}`;
+  document.getElementById("pageSub").textContent = `證號、客訴回收與 FDA 法條檢索 / Product code ${productCode || "待確認"}`;
   document.getElementById("productCodePill").textContent = `FDA Product Code ${productCode}`;
   document.getElementById("complaintCount").textContent = fmt(data.complaints);
   document.getElementById("recallCount").textContent = fmt(data.recalls);
@@ -1611,6 +1725,7 @@ function render(options = {}){
   workerUrl.textContent = `${workerBaseUrl}/api/maude?${query}`;
   if(resetWorker){
     productIdentity.innerHTML = `<div class="empty">已套用 ${escapeHtml(productCode)}，正在查詢官方產品名稱與樣本產品...</div>`;
+    regulationInfo.innerHTML = `<div class="empty">已套用 ${escapeHtml(productCode)}，正在查詢 FDA 對應法條...</div>`;
     workerResults.classList.add("hidden");
     workerResults.innerHTML = "";
     workerStatus.classList.remove("hidden");
@@ -1637,6 +1752,9 @@ deviceCandidateList.addEventListener("click", event => {
     selectDeviceCandidate(candidate, button);
   }
 });
+tabButtons.forEach(button => {
+  button.addEventListener("click", () => showTab(button.dataset.tab));
+});
 applySearchBtn.addEventListener("click", applyCriteriaAndFetch);
 fetchWorkerBtn.addEventListener("click", fetchWorkerData);
 complaintMode.addEventListener("click", ()=>{
@@ -1654,6 +1772,8 @@ recallMode.addEventListener("click", ()=>{
 
 appliedCriteria = readDraftCriteria();
 setDraftState(false);
+setupTabs();
+showTab("clearance");
 render();
 </script>
 </body>
