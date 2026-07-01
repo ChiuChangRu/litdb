@@ -301,6 +301,19 @@ tr:last-child td{border-bottom:0}
   font-size:12px;
   font-weight:700;
 }
+.code-filter-btn{
+  border:1px solid #afd0e9;
+  border-radius:999px;
+  background:var(--blue-soft);
+  color:var(--blue);
+  padding:4px 8px;
+  font-size:12px;
+  font-weight:800;
+  cursor:pointer;
+}
+.code-filter-btn:hover{
+  border-color:var(--blue);
+}
 .timeline{
   display:grid;
   gap:10px;
@@ -1436,7 +1449,7 @@ function renderLiveClearances(kData){
     <tbody>${rows.map(row=>`<tr>
       <td><strong>${escapeHtml(row.k_number || "-")}</strong></td>
       <td>${escapeHtml(row.device_name || row.openfda?.device_name || "-")}</td>
-      <td>${escapeHtml(row.product_code || row.openfda?.product_code || "-")}</td>
+      <td>${row.product_code ? `<button class="code-filter-btn" type="button" data-product-code="${escapeHtml(row.product_code)}" title="查詢 ${escapeHtml(row.product_code)} 的全部產品">${escapeHtml(row.product_code)}</button>` : escapeHtml(row.openfda?.product_code || "-")}</td>
       <td>${escapeHtml(row.applicant || "-")}<br><small>${escapeHtml(row.decision_date || "")}</small></td>
     </tr>`).join("")}</tbody>
   </table>`;
@@ -1858,6 +1871,22 @@ function applyCriteriaAndFetch(){
   fetchWorkerData();
 }
 
+function searchByProductCode(productCode){
+  if(!productCode) return;
+  productCodeInput.value = productCode.toUpperCase();
+  makerSelect.value = "all";
+  updateManualCompanyInput();
+  manualCompanyInput.value = "";
+  selectedDeviceCandidate = null;
+  deviceCandidateBox.classList.add("hidden");
+  deviceCandidateList.innerHTML = "";
+  appliedCriteria = readDraftCriteria();
+  setDraftState(false);
+  render({resetWorker:true});
+  showTab("clearance");
+  fetchWorkerData();
+}
+
 function render(options = {}){
   const {resetWorker = false} = options;
   const criteria = getActiveCriteria();
@@ -1915,6 +1944,11 @@ productCodeInput.addEventListener("input", ()=>{
   markCriteriaDirty();
 });
 problemSearch.addEventListener("input", render);
+document.getElementById("clearances").addEventListener("click", event => {
+  const button = event.target.closest(".code-filter-btn");
+  if(!button) return;
+  searchByProductCode(button.dataset.productCode);
+});
 deviceCandidateList.addEventListener("click", event => {
   const button = event.target.closest(".candidate-option");
   if(!button) return;
