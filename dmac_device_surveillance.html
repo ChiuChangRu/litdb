@@ -722,7 +722,7 @@ tr:last-child td{border-bottom:0}
         <div class="timeline" id="events"></div>
       </div>
 
-      <div class="card span-5">
+      <div class="card span-12">
         <h3>證號清單</h3>
         <div id="clearances"></div>
       </div>
@@ -1536,7 +1536,7 @@ async function fetchOpenFda510k(productCode, keyword){
     return {meta:{results:{total:0}}, results:[], raw_count:0, filtered_count:0, url:""};
   }
   const search = terms.join(" AND ");
-  const url = `https://api.fda.gov/device/510k.json?search=${encodeURIComponent(search)}&limit=5`;
+  const url = `https://api.fda.gov/device/510k.json?search=${encodeURIComponent(search)}&limit=100`;
   const res = await fetch(url);
   if(res.status === 404){
     return {meta:{results:{total:0}}, results:[], raw_count:0, filtered_count:0, url};
