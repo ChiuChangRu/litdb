@@ -270,12 +270,19 @@
   .d-img-err{font-size:11px;color:var(--ink-soft);text-align:center;padding:8px;}
   .d-ext{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#2A5BA0;text-decoration:none;border:1px solid currentColor;border-radius:4px;padding:6px 12px;}
   .d-ext:hover{background:#2A5BA0;color:#fff;}
-  .key-bar{display:flex;gap:8px;align-items:center;background:#f8f8f8;border:1px solid var(--line);border-radius:6px;padding:8px 12px;margin-bottom:16px;font-size:12px;}
-  .key-bar input{flex:1;border:none;background:none;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink);outline:none;}
-  .key-bar label{color:var(--ink-soft);white-space:nowrap;}
-  .key-bar .key-save{background:#2A5BA0;color:#fff;border:none;border-radius:4px;padding:4px 10px;cursor:pointer;font-size:11.5px;white-space:nowrap;}
-  .key-bar .key-save:hover{background:#1e4a8a;}
-  .key-ok{font-size:11px;color:#1F6E63;}
+
+  .d-fig-note{
+    font-size:12.5px;
+    line-height:1.7;
+    color:var(--ink-soft);
+    background:#f8f8f8;
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:12px 14px;
+    margin-bottom:14px;
+  }
+  .d-action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;margin-bottom:18px;}
+  .d-action-row .d-ext{margin-right:0;}
 
 </style>
 </head>
@@ -614,7 +621,7 @@
     <p>對業務溝通而言，可視化（echogenic）與「多模式切換」是目前市場上最具產品差異化敘事力的兩個技術主張，值得在客戶端對話中留意這兩個方向上競品的訴求方式。</p>
   </div>
 
-  <p class="footnote">資料來源：LitDB 活檢針知識庫（biopsy_patents.json，schema v2.1，最後更新 2026-06-23）。專利範圍與到期年僅供市場溝通參考，正式 FTO 判斷需另行逐項核對 claim 全文。內部使用，請勿外流。</p>
+  <p class="footnote">資料來源：LitDB 活檢針知識庫（biopsy_patents.json，schema v2.1，最後更新 2026-06-23）。專利範圍與到期年僅供市場溝通參考，正式 FTO 判斷需另行逐項核對 claim 全文。若作為公開頁面發布，請先確認不含機密、未授權或不適合公開的商業資訊。</p>
 
 </div>
 
@@ -629,18 +636,17 @@
     <button class="drawer-close" onclick="closeDrawer()">✕</button>
   </div>
   <div class="drawer-body">
-    <div class="key-bar" id="keyBar">
-      <label>API Key</label>
-      <input type="password" id="apiKeyInput" placeholder="sk-ant-…（本機使用需填入）" autocomplete="off">
-      <button class="key-save" onclick="saveKey()">儲存</button>
-    </div>
     <div class="d-title" id="dTitle"></div>
     <div class="d-desc" id="dDesc"></div>
     <div class="d-fto" id="dFto" style="display:none"></div>
-    <div class="d-imgs-label">專利圖面 <span></span></div>
+    <div class="d-imgs-label">專利圖面入口 <span></span></div>
     <div class="d-ai-status" id="dStatus"></div>
+    <div class="d-fig-note" id="dFigNote"></div>
     <div class="d-imgs-grid" id="dImgs"></div>
-    <a class="d-ext" id="dLink" href="#" target="_blank" rel="noopener">↗ Google Patents 查看完整圖面</a>
+    <div class="d-action-row">
+      <a class="d-ext" id="dLink" href="#" target="_blank" rel="noopener">↗ Google Patents 查看圖面</a>
+      <a class="d-ext" id="dPdfLink" href="#" target="_blank" rel="noopener">↗ Google Patents 下載 PDF</a>
+    </div>
   </div>
 </div>
 
@@ -663,14 +669,7 @@ const PDATA = {
   'US9456806B2':{t:'Echogenic 同族早期案（2009 優先權基礎）',d:'本案是 BD echogenic 家族的早期 division 案，確立了 2009 年的優先權基礎，為後續同族各案提供最早的 filing date 保護。保護範圍集中在內外管對齊幾何特徵的基本概念。',f:null},
 };
 
-const imgCache = {};
-
-
-function saveKey(){
-  const v=document.getElementById('apiKeyInput').value.trim();
-  if(v){sessionStorage.setItem('antKey',v);document.getElementById('keyBar').innerHTML='<span class="key-ok">✓ API Key 已儲存（本次工作階段有效）</span>';}
-}
-function getKey(){return sessionStorage.getItem('antKey')||'';}
+const imgCache = {}; // 保留變數是為了避免舊邏輯殘留錯誤；本版不呼叫任何 AI/API。
 
 function openDrawer(pno, co, coName) {
   document.querySelectorAll('.patent-list li').forEach(l=>l.classList.remove('pat-active'));
@@ -687,31 +686,18 @@ function openDrawer(pno, co, coName) {
   const ftoEl = document.getElementById('dFto');
   if(p.f){ftoEl.textContent=p.f;ftoEl.style.display='block';}
   else{ftoEl.style.display='none';}
-  document.getElementById('dLink').href = `https://patents.google.com/patent/${pno}/en#figures`;
+  const patentUrl = `https://patents.google.com/patent/${pno}/en`;
+  document.getElementById('dLink').href = `${patentUrl}#figures`;
+  document.getElementById('dPdfLink').href = patentUrl;
 
-  const kb=document.getElementById('keyBar');
-  if(getKey()&&kb.querySelector('input')) kb.innerHTML='<span class="key-ok">✓ API Key 已儲存（本次工作階段有效）</span>';
   document.getElementById('dOverlay').classList.add('open');
   document.getElementById('drawer').classList.add('open');
   document.body.style.overflow='hidden';
 
-  if(imgCache[pno]){
-    renderImgs(imgCache[pno]);
-    document.getElementById('dStatus').innerHTML='✓ 圖面已載入';
-    return;
-  }
-
   document.getElementById('dImgs').innerHTML='';
-  document.getElementById('dStatus').innerHTML='<div class="spinner"></div> AI 正在擷取 '+pno+' 圖面…';
-  fetchPatentImages(pno).then(urls=>{
-    imgCache[pno]=urls;
-    renderImgs(urls);
-    document.getElementById('dStatus').innerHTML = urls.length>0
-      ? '✓ 取得 '+urls.length+' 張圖面'
-      : '— 未取得圖面，請點擊下方連結至 Google Patents 查看';
-  }).catch(e=>{
-    document.getElementById('dStatus').innerHTML='⚠ 擷取失敗，請使用下方連結';
-  });
+  document.getElementById('dStatus').innerHTML='✓ 本版不使用 Claude API、Anthropic API 或任何前端 API Key。';
+  document.getElementById('dFigNote').innerHTML =
+    'Google Patents 圖片網址常帶有雜湊路徑，且前端跨網域擷取容易受 CORS / hotlink 規則影響。這版改成穩定做法：直接開官方 Google Patents 圖面區或 PDF，不在公開 HTML 內儲存 API Key，也不假裝能在瀏覽器端可靠爬圖。';
 }
 
 function renderImgs(urls){
@@ -730,38 +716,6 @@ function closeDrawer(){
 
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
 
-async function fetchPatentImages(pno){
-  const prompt = `請用 web_search 工具搜尋專利 ${pno} 在 Google Patents 頁面上的圖面圖片 URL。
-
-搜尋關鍵字：site:patents.google.com ${pno}
-
-從搜尋結果中找出 patentimages.storage.googleapis.com 上的圖片 URL（.png 格式）。
-
-只回傳 JSON 陣列，不含任何其他文字或 markdown，例如：
-["https://patentimages.storage.googleapis.com/.../D00001.png","https://patentimages.storage.googleapis.com/.../D00002.png"]
-
-若找不到則回傳：[]`;
-
-  const key=getKey();
-  const headers={'Content-Type':'application/json'};
-  if(key) headers['x-api-key']=key;
-  const r = await fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers,
-    body:JSON.stringify({
-      model:'claude-sonnet-4-6',max_tokens:600,
-      tools:[{type:'web_search_20250305',name:'web_search'}],
-      messages:[{role:'user',content:prompt}]
-    })
-  });
-  if(!r.ok) throw new Error('API '+r.status);
-  const data=await r.json();
-  const text=data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
-  const m=text.match(/\[[\s\S]*?\]/);
-  if(m){try{const a=JSON.parse(m[0]);if(Array.isArray(a))return a.filter(u=>typeof u==='string'&&u.startsWith('http'));}catch(e){}}
-  const found=[...text.matchAll(/https:\/\/patentimages\.storage\.googleapis\.com\/[^\s"'<>]+\.png/g)].map(x=>x[0]);
-  return [...new Set(found)].slice(0,4);
-}
 </script>
 </body>
 </html>
