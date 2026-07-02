@@ -1118,6 +1118,38 @@ const chineseGlossary = {
   applicant:"申請廠商",
   "decision date":"核准 / 判定日期"
 };
+const devicePhraseGlossary = [
+  ["central venous pressure", "中央靜脈壓"],
+  ["monitoring kit", "監測套組"],
+  ["disposable", "拋棄式"],
+  ["single-use", "單次使用"],
+  ["tray", "托盤"],
+  ["kit", "套組"],
+  ["catheterization", "導管置入"],
+  ["catheter", "導管"],
+  ["dilator", "擴張器"],
+  ["vessel", "血管"],
+  ["introducer", "導引器"],
+  ["sheath", "鞘管"],
+  ["needle", "針具"],
+  ["needles", "針具"],
+  ["angiographic", "血管攝影"],
+  ["pressure", "壓力"],
+  ["monitoring", "監測"],
+  ["balloon", "球囊"],
+  ["stent", "支架"],
+  ["biliary", "膽道"],
+  ["venous", "靜脈"],
+  ["arterial", "動脈"],
+  ["biopsy", "活檢"],
+  ["syringe", "注射筒"],
+  ["drainage", "引流"],
+  ["trocar", "套管針"],
+  ["guidewire", "導線"],
+  ["hemostasis", "止血"],
+  ["valve", "閥"],
+  ["implant", "植入物"]
+];
 const workerCompanyKeywords = {
   all:"",
   boston:"boston",
@@ -1301,11 +1333,14 @@ function resetDraftDeviceState(){
 }
 
 function markCriteriaDirty(){
+  lastLiveKData = null;
+  lastLiveProblemRows = null;
   setDraftState(true);
   workerStatus.classList.remove("hidden");
-  workerStatus.textContent = "條件已修改但尚未確認；右側圖表與即時結果仍顯示上次確認的檢索條件。";
+  workerStatus.textContent = "條件已修改但尚未確認；已清除前次客訴/回收顯示，請按「確定並檢索」。";
   productIdentity.innerHTML = `<div class="empty">條件已修改。請先確認候選產品並重新檢索，產品名稱會在分析前顯示。</div>`;
   regulationInfo.innerHTML = `<div class="empty">條件已修改。重新檢索後會更新 FDA 對應法條。</div>`;
+  resetSurveillanceForPendingCriteria(readDraftCriteria());
 }
 
 function findDeviceCandidates(){
@@ -1491,10 +1526,22 @@ function zhForTerm(value){
   return hit ? hit[1] : "";
 }
 
+function translateDeviceName(value){
+  const text = String(value || "").toLowerCase();
+  const hits = [];
+  devicePhraseGlossary.forEach(([phrase, zh]) => {
+    if(text.includes(phrase) && !hits.includes(zh)){
+      hits.push(zh);
+    }
+  });
+  return hits.length ? hits.slice(0, 6).join(" / ") : "";
+}
+
 function translatedCell(value, fallbackNote = ""){
   const text = String(value || "-");
-  const zh = zhForTerm(text) || fallbackNote;
-  return `${escapeHtml(text)}${zh ? `<span class="zh-note">中文：${escapeHtml(zh)}</span>` : ""}`;
+  const zh = fallbackNote === "產品名稱原文" ? translateDeviceName(text) : zhForTerm(text);
+  const note = zh || fallbackNote;
+  return `${escapeHtml(text)}${note ? `<span class="zh-note">中文：${escapeHtml(note)}</span>` : ""}`;
 }
 
 function fda510kUrl(kNumber){
@@ -1852,6 +1899,34 @@ function resetSurveillanceForCompanyOnly(criteria, clearanceCount = 0){
   }];
   renderProblems({problems:lastLiveProblemRows});
   document.getElementById("events").innerHTML = `<div class="empty">尚未套用 FDA product code，未更新客訴/回收事件。請先到「證號與產品」分頁點選 Product code。</div>`;
+}
+
+function resetSurveillanceForPendingCriteria(criteria){
+  lastLiveProblemRows = null;
+  const waitingItems = [{label:"Pending confirmed search", zh:"等待重新確認檢索", count:1}];
+  const years = emptyYears();
+  document.getElementById("complaintCount").textContent = "0";
+  document.getElementById("recallCount").textContent = "0";
+  document.getElementById("complaintSub").textContent = "條件已修改，尚未重新查 MAUDE";
+  document.getElementById("recallSub").textContent = "條件已修改，尚未重新查 Recall";
+  document.getElementById("riskLevel").textContent = "待確認";
+  document.getElementById("riskSub").textContent = "請按「確定並檢索」後更新客訴與回收資料";
+  document.getElementById("complaintPieTitle").textContent = "客訴問題點比例";
+  document.getElementById("recallPieTitle").textContent = "回收原因比例";
+  drawPie(waitingItems, "complaintPie", "records");
+  renderLegend(waitingItems, "complaintLegend");
+  drawPie(waitingItems, "recallPie", "records");
+  renderLegend(waitingItems, "recallLegend");
+  renderBars(years, "complaintBars");
+  renderBars(years, "recallBars");
+  renderProblems({problems:[{
+    risk:"低",
+    problem:"條件已修改，尚未重新檢索",
+    models:[criteria.deviceText || "medical device"],
+    ids:[criteria.productCode || "product code 待確認"],
+    notes:"目前畫面已清除前次客訴/回收結果；請按「確定並檢索」取得新條件資料。"
+  }]});
+  document.getElementById("events").innerHTML = `<div class="empty">條件已修改，尚未重新檢索事件資料。</div>`;
 }
 
 function renderTags(values){
