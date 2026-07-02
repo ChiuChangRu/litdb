@@ -317,6 +317,35 @@ tr:last-child td{border-bottom:0}
 .code-filter-btn:hover{
   border-color:var(--blue);
 }
+.table-tools{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin:0 0 10px;
+}
+.table-tools label{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:700;
+}
+.table-tools select{
+  width:auto;
+  min-width:150px;
+  padding:6px 8px;
+}
+.zh-note{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.45;
+  margin-top:3px;
+}
+.inline-note{
+  display:inline;
+  margin-left:6px;
+}
 .timeline{
   display:grid;
   gap:10px;
@@ -976,6 +1005,7 @@ const dashboardData = {
 
 const suggestedMakers = [
   ["all","-- 全部公司 --","blood collection needle"],
+  ["bioteque","邦特 Bioteque","Bioteque medical device"],
   ["boston","Boston Scientific","Boston Scientific blood collection needle"],
   ["medtronic","Medtronic","Medtronic blood collection needle"],
   ["jnj","Johnson & Johnson","Johnson & Johnson blood collection needle"],
@@ -1052,7 +1082,37 @@ const tabPanels = {
 const loadingOverlay = document.getElementById("loadingOverlay");
 const loadingMessage = document.getElementById("loadingMessage");
 let mode = "complaints";
+let clearanceSortMode = "date-desc";
+let problemSortMode = "date-desc";
+let eventSortMode = "date-desc";
+let lastLiveKData = null;
+let lastLiveProblemRows = null;
 const workerBaseUrl = "https://dmac-fda-proxy.gogoyankee.workers.dev";
+const chineseGlossary = {
+  malfunction:"故障 / 功能異常",
+  injury:"傷害",
+  death:"死亡",
+  "maude event":"MAUDE 事件",
+  "maude record":"MAUDE 紀錄",
+  recall:"回收",
+  correction:"矯正措施",
+  removal:"移除",
+  "date unavailable":"未提供日期",
+  "customer complaint":"客訴",
+  "complaint":"客訴",
+  sterile:"無菌",
+  sterility:"無菌性",
+  leak:"洩漏",
+  needle:"針具",
+  catheter:"導管",
+  syringe:"注射筒",
+  stent:"支架",
+  pouch:"包裝袋",
+  seal:"封口",
+  "product code":"FDA 產品分類代碼",
+  applicant:"申請廠商",
+  "decision date":"核准 / 判定日期"
+};
 const workerCompanyKeywords = {
   all:"",
   boston:"boston",
@@ -1062,6 +1122,7 @@ const workerCompanyKeywords = {
   siemens:"siemens",
   philips:"philips",
   bd:"becton",
+  bioteque:"Bioteque",
   stryker:"stryker",
   zimmer:"zimmer",
   edwards:"edwards",
@@ -1397,21 +1458,63 @@ function renderBars(years){
   }).join("");
 }
 
+function dateValue(value){
+  const digits = String(value || "").replace(/\D/g, "").slice(0, 8);
+  return digits ? Number(digits) : 0;
+}
+
+function sortedByDate(rows, modeValue, getter){
+  return [...(rows || [])].sort((a, b) => {
+    const left = dateValue(getter(a));
+    const right = dateValue(getter(b));
+    return modeValue === "date-asc" ? left - right : right - left;
+  });
+}
+
+function zhForTerm(value){
+  const text = String(value || "").toLowerCase();
+  const exact = chineseGlossary[text];
+  if(exact) return exact;
+  const hit = Object.entries(chineseGlossary).find(([key]) => text.includes(key));
+  return hit ? hit[1] : "";
+}
+
+function translatedCell(value, fallbackNote = ""){
+  const text = String(value || "-");
+  const zh = zhForTerm(text) || fallbackNote;
+  return `${escapeHtml(text)}${zh ? `<span class="zh-note">中文：${escapeHtml(zh)}</span>` : ""}`;
+}
+
+function fda510kUrl(kNumber){
+  return `https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfpmn/pmn.cfm?ID=${encodeURIComponent(kNumber || "")}`;
+}
+
+function sortToolbar(id, modeValue, label = "排序"){
+  return `<div class="table-tools">
+    <label for="${id}">${label}</label>
+    <select id="${id}" data-sort-control>
+      <option value="date-desc"${modeValue === "date-desc" ? " selected" : ""}>日期新到舊</option>
+      <option value="date-asc"${modeValue === "date-asc" ? " selected" : ""}>日期舊到新</option>
+    </select>
+  </div>`;
+}
+
 function renderProblems(data){
   const q = problemSearch.value.trim().toLowerCase();
-  const rows = data.problems.filter(row=>{
+  const rows = sortedByDate(data.problems.filter(row=>{
     const hay = [row.problem,row.notes,...row.models,...row.ids].join(" ").toLowerCase();
     return !q || hay.includes(q);
-  });
+  }), problemSortMode, row => row.notes);
   if(!rows.length){
     document.getElementById("problemTable").innerHTML = `<div class="empty">沒有符合搜尋條件的問題點。</div>`;
     return;
   }
-  document.getElementById("problemTable").innerHTML = `<table>
-    <thead><tr><th>風險</th><th>問題點</th><th>對應型號</th><th>證號 / 追溯 ID</th><th>收巡重點</th></tr></thead>
+  document.getElementById("problemTable").innerHTML = `${sortToolbar("problemSort", problemSortMode, "問題點排序")}
+  <table>
+    <thead><tr><th>風險<span class="zh-note">Risk level</span></th><th>問題點<span class="zh-note">Problem / event type</span></th><th>對應型號<span class="zh-note">Model / device name</span></th><th>證號 / 追溯 ID<span class="zh-note">K number / report ID</span></th><th>收巡重點<span class="zh-note">Date / maker / note</span></th></tr></thead>
     <tbody>${rows.map(row=>`<tr>
       <td class="${riskClass(row.risk)}">${row.risk}</td>
-      <td><strong>${row.problem}</strong></td>
+      <td><strong>${translatedCell(row.problem)}</strong></td>
       <td>${row.models.map(m=>`<span class="model-chip">${m}</span>`).join("")}</td>
       <td>${row.ids.map(m=>`<span class="model-chip">${m}</span>`).join("")}</td>
       <td>${row.notes}</td>
@@ -1420,10 +1523,12 @@ function renderProblems(data){
 }
 
 function renderEvents(data){
-  document.getElementById("events").innerHTML = data.events.map(evt=>`<div class="event">
+  const events = sortedByDate(data.events, eventSortMode, evt => evt[0]);
+  document.getElementById("events").innerHTML = `${sortToolbar("eventSort", eventSortMode, "事件排序")}
+  ${events.map(evt=>`<div class="event">
     <div class="event-head"><span>${cleanDate(evt[0])} · ${evt[1]}</span><a href="${evt[3]}" target="_blank" rel="noreferrer">FDA</a></div>
     <p>${evt[2]}</p>
-  </div>`).join("");
+  </div>`).join("")}`;
 }
 
 function renderClearances(data){
@@ -1431,10 +1536,12 @@ function renderClearances(data){
     document.getElementById("clearances").innerHTML = `<div class="empty">此候選公司尚未匯入檢體針相關 510(k) / BK 證號。可由下方檢索入口查詢後補入。</div>`;
     return;
   }
-  document.getElementById("clearances").innerHTML = `<table>
-    <thead><tr><th>證號</th><th>器材 / 型號</th><th>日期 / 備註</th></tr></thead>
-    <tbody>${data.clearances.map(row=>`<tr>
-      <td><strong>${row[0]}</strong></td>
+  const rows = sortedByDate(data.clearances, clearanceSortMode, row => row[row.length - 1]);
+  document.getElementById("clearances").innerHTML = `${sortToolbar("clearanceSort", clearanceSortMode, "證號排序")}
+  <table>
+    <thead><tr><th>證號<span class="zh-note">K / BK number</span></th><th>器材 / 型號<span class="zh-note">Device / model</span></th><th>日期 / 備註<span class="zh-note">Date / note</span></th></tr></thead>
+    <tbody>${rows.map(row=>`<tr>
+      <td>${String(row[0] || "").match(/^(K|BK)\d+/i) ? `<a href="${fda510kUrl(row[0])}" target="_blank" rel="noreferrer"><strong>${escapeHtml(row[0])}</strong></a>` : `<strong>${escapeHtml(row[0] || "-")}</strong>`}</td>
       <td>${row[1]}${row[2] && row.length === 4 ? `<br><small>${row[2]}</small>` : ""}</td>
       <td>${row[row.length-1]}</td>
     </tr>`).join("")}</tbody>
@@ -1442,18 +1549,21 @@ function renderClearances(data){
 }
 
 function renderLiveClearances(kData){
-  const rows = kData?.results || [];
+  lastLiveKData = kData;
+  const rows = sortedByDate(kData?.results || [], clearanceSortMode, row => row.decision_date);
   if(!rows.length){
     document.getElementById("clearances").innerHTML = `<div class="empty">目前查詢條件未回傳 510(k) 證號。可放寬公司名稱或先移除 product code 後再查。</div>`;
     return;
   }
-  document.getElementById("clearances").innerHTML = `<table>
-    <thead><tr><th>K number</th><th>產品名稱</th><th>Product code</th><th>申請廠商 / 日期</th></tr></thead>
+  document.getElementById("clearances").innerHTML = `${sortToolbar("clearanceSort", clearanceSortMode, "證號排序")}
+  <table>
+    <thead><tr><th>K number<span class="zh-note">510(k) 證號，點擊開 FDA 原始頁</span></th><th>產品名稱<span class="zh-note">Device name, FDA 原文</span></th><th>Product code<span class="zh-note">FDA 產品分類代碼</span></th><th>申請廠商 / 日期<span class="zh-note">Applicant / decision date</span></th><th>關聯</th></tr></thead>
     <tbody>${rows.map(row=>`<tr>
-      <td><strong>${escapeHtml(row.k_number || "-")}</strong></td>
-      <td>${escapeHtml(row.device_name || row.openfda?.device_name || "-")}</td>
-      <td>${row.product_code ? `<button class="code-filter-btn" type="button" data-product-code="${escapeHtml(row.product_code)}" title="查詢 ${escapeHtml(row.product_code)} 的全部產品">${escapeHtml(row.product_code)}</button>` : escapeHtml(row.openfda?.product_code || "-")}</td>
-      <td>${escapeHtml(row.applicant || "-")}<br><small>${escapeHtml(row.decision_date || "")}</small></td>
+      <td>${row.k_number ? `<a href="${fda510kUrl(row.k_number)}" target="_blank" rel="noreferrer"><strong>${escapeHtml(row.k_number)}</strong></a>` : "<strong>-</strong>"}</td>
+      <td>${translatedCell(row.device_name || row.openfda?.device_name || "-", "產品名稱原文")}</td>
+      <td>${row.product_code ? `<button class="code-filter-btn" type="button" data-product-code="${escapeHtml(row.product_code)}" title="查詢 ${escapeHtml(row.product_code)} 的全部產品">${escapeHtml(row.product_code)}</button><span class="zh-note">點擊可查此分類代碼全部產品</span>` : translatedCell(row.openfda?.product_code || "-", "FDA 產品分類代碼")}</td>
+      <td>${translatedCell(row.applicant || "-", "申請廠商")}<br><small>${escapeHtml(row.decision_date || "")}<span class="zh-note">日期：核准 / 判定日期</span></small></td>
+      <td>${row.product_code ? `<button class="code-filter-btn" type="button" data-product-code="${escapeHtml(row.product_code)}" title="以 ${escapeHtml(row.product_code)} 關聯查詢客訴與回收">查客訴/回收</button>` : `<span class="muted">需 product code</span>`}</td>
     </tr>`).join("")}</tbody>
   </table>`;
 }
@@ -1626,7 +1736,7 @@ function summarizeYearsFromResults(results){
 }
 
 function liveProblemRows(maude){
-  const rows = (maude?.results || []).slice(0,10).map(item => {
+  const rows = (maude?.results || []).map(item => {
     const device = Array.isArray(item.device) ? item.device[0] || {} : {};
     const model = device.brand_name || device.generic_name || device.device_report_product_code || "openFDA MAUDE device";
     const problem = item.event_type || item.type_of_report?.join(", ") || "MAUDE event";
@@ -1684,9 +1794,40 @@ function updateLiveSections(maude, recall, yearCounts, criteria){
   drawPie(liveRecallPieItems(recall), "recallPie", "recalls");
   renderLegend(liveRecallPieItems(recall), "recallLegend");
   renderBars(yearCounts || summarizeYearsFromResults(maude?.results || []));
-  renderProblems({problems:liveProblemRows(maude)});
+  lastLiveProblemRows = liveProblemRows(maude);
+  renderProblems({problems:lastLiveProblemRows});
   document.getElementById("riskLevel").textContent = maudeCount || recallCount ? "待判讀" : "低";
   document.getElementById("riskSub").textContent = `${criteria.productCode} 客訴/回收即時資料，需依問題點人工判讀`;
+}
+
+function resetSurveillanceForCompanyOnly(criteria, clearanceCount = 0){
+  const label = criteria.makerName || criteria.companyKeyword || "目前公司";
+  const waitingItems = [{label:"Select product code first", zh:"請先選擇 FDA product code", count:1}];
+  const years = {2016:0,2017:0,2018:0,2019:0,2020:0,2021:0,2022:0,2023:0,2024:0,2025:0,2026:0};
+  document.getElementById("complaintCount").textContent = "0";
+  document.getElementById("recallCount").textContent = "0";
+  document.getElementById("clearanceCount").textContent = fmt(clearanceCount);
+  document.getElementById("complaintSub").textContent = "尚未套用 product code，未查 MAUDE";
+  document.getElementById("recallSub").textContent = "尚未套用 product code，未查 Recall";
+  document.getElementById("clearanceSub").textContent = `公司證號候選 ${fmt(clearanceCount)}；請點 Product code`;
+  document.getElementById("riskLevel").textContent = "待確認";
+  document.getElementById("riskSub").textContent = `${label} 已查到公司證號；客訴/回收需先選 FDA product code`;
+  document.getElementById("complaintPieTitle").textContent = "客訴問題點比例";
+  document.getElementById("recallPieTitle").textContent = "回收原因比例";
+  drawPie(waitingItems, "complaintPie", "records");
+  renderLegend(waitingItems, "complaintLegend");
+  drawPie(waitingItems, "recallPie", "records");
+  renderLegend(waitingItems, "recallLegend");
+  renderBars(years);
+  lastLiveProblemRows = [{
+    risk:"低",
+    problem:"尚未選擇 FDA product code",
+    models:[criteria.deviceText || "medical device"],
+    ids:["公司-only search"],
+    notes:"目前只完成公司 / 申請廠商的 510(k) 搜尋；請在證號清單點 Product code 後，再查該器材代碼的 MAUDE 客訴與 Recall 回收。"
+  }];
+  renderProblems({problems:lastLiveProblemRows});
+  document.getElementById("events").innerHTML = `<div class="empty">尚未套用 FDA product code，未更新客訴/回收事件。請先到「證號與產品」分頁點選 Product code。</div>`;
 }
 
 function renderTags(values){
@@ -1801,6 +1942,9 @@ async function fetchWorkerData(){
   workerStatus.textContent = productCode
     ? `正在透過 Worker 查詢 ${data.name} / ${deviceText} / ${productCode}...`
     : `正在查詢 ${keyword} 的 510(k) 證號；客訴與回收需先確認 product code。`;
+  if(!productCode){
+    resetSurveillanceForCompanyOnly(criteria, 0);
+  }
   try{
     const [maude, recall, kTotal, kFiltered, classification, yearCounts] = await Promise.all([
       productCode ? fetchJson("/api/maude", query) : Promise.resolve({meta:{results:{total:0}}, results:[], raw_count:0, filtered_count:0}),
@@ -1823,6 +1967,9 @@ async function fetchWorkerData(){
     renderProductIdentity(criteria, classification, kTotal, kFiltered, maude);
     renderLiveClearances(kFiltered);
     renderRegulationInfo(criteria, classification);
+    if(!productCode){
+      resetSurveillanceForCompanyOnly(criteria, kFilteredCount);
+    }
     workerStatus.textContent = `即時結果已更新：公司關鍵字「${keyword || "全部"}」。MAUDE/Recall 經 Worker；510(k) 先查 product code 總量再做公司篩選。`;
     workerResults.classList.remove("hidden");
     workerResults.innerHTML = [
@@ -1834,7 +1981,7 @@ async function fetchWorkerData(){
         keyword ? `Product code 總量 ${fmt(kTotalCount)}；公司篩選 ${fmt(kFilteredCount)}` : `Product code 總量 ${fmt(kTotalCount)}`
       )
     ].join("");
-    if(!shouldUseDemoData(criteria)){
+    if(productCode && !shouldUseDemoData(criteria)){
       updateLiveSections(maude, recall, yearCounts, criteria);
     }
   }catch(error){
@@ -1947,6 +2094,30 @@ productCodeInput.addEventListener("input", ()=>{
   markCriteriaDirty();
 });
 problemSearch.addEventListener("input", render);
+document.addEventListener("change", event => {
+  const control = event.target.closest("[data-sort-control]");
+  if(!control) return;
+  if(control.id === "clearanceSort"){
+    clearanceSortMode = control.value;
+    if(lastLiveKData){
+      renderLiveClearances(lastLiveKData);
+    } else {
+      render();
+    }
+  }
+  if(control.id === "problemSort"){
+    problemSortMode = control.value;
+    if(lastLiveProblemRows){
+      renderProblems({problems:lastLiveProblemRows});
+    } else {
+      render();
+    }
+  }
+  if(control.id === "eventSort"){
+    eventSortMode = control.value;
+    render();
+  }
+});
 document.getElementById("clearances").addEventListener("click", event => {
   const button = event.target.closest(".code-filter-btn");
   if(!button) return;
