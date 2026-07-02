@@ -731,6 +731,11 @@ tr:last-child td{border-bottom:0}
         </div>
       </div>
 
+      <div class="card span-12">
+        <h3>客訴年度趨勢</h3>
+        <div class="bars" id="complaintBars"></div>
+      </div>
+
       <div class="card span-6">
         <h3 id="recallPieTitle">回收原因比例</h3>
         <div class="chart-wrap">
@@ -739,9 +744,9 @@ tr:last-child td{border-bottom:0}
         </div>
       </div>
 
-      <div class="card span-5">
-        <h3>年度趨勢</h3>
-        <div class="bars" id="bars"></div>
+      <div class="card span-12">
+        <h3>回收年度趨勢</h3>
+        <div class="bars" id="recallBars"></div>
       </div>
 
       <div class="card span-12">
@@ -1221,8 +1226,9 @@ function setupTabs(){
     "recallCount",
     "riskLevel",
     "complaintPie",
+    "complaintBars",
     "recallPie",
-    "bars",
+    "recallBars",
     "problemTable",
     "events",
     "workerStatus"
@@ -1446,9 +1452,11 @@ function renderLegend(items, legendId = "complaintLegend"){
   }).join("");
 }
 
-function renderBars(years){
+function renderBars(years, targetId = "complaintBars"){
   const max = Math.max(...Object.values(years),1);
-  document.getElementById("bars").innerHTML = Object.entries(years).map(([year,count])=>{
+  const target = document.getElementById(targetId);
+  if(!target) return;
+  target.innerHTML = Object.entries(years).map(([year,count])=>{
     const height = Math.max(4, Math.round(count/max*160));
     return `<div class="bar" title="${year}: ${fmt(count)}">
       <div class="bar-fill" style="height:${height}px"></div>
@@ -1456,6 +1464,10 @@ function renderBars(years){
       <small>${year}</small>
     </div>`;
   }).join("");
+}
+
+function emptyYears(){
+  return {2016:0,2017:0,2018:0,2019:0,2020:0,2021:0,2022:0,2023:0,2024:0,2025:0,2026:0};
 }
 
 function dateValue(value){
@@ -1563,7 +1575,7 @@ function renderLiveClearances(kData){
       <td>${translatedCell(row.device_name || row.openfda?.device_name || "-", "產品名稱原文")}</td>
       <td>${row.product_code ? `<button class="code-filter-btn" type="button" data-product-code="${escapeHtml(row.product_code)}" title="查詢 ${escapeHtml(row.product_code)} 的全部產品">${escapeHtml(row.product_code)}</button><span class="zh-note">點擊可查此分類代碼全部產品</span>` : translatedCell(row.openfda?.product_code || "-", "FDA 產品分類代碼")}</td>
       <td>${translatedCell(row.applicant || "-", "申請廠商")}<br><small>${escapeHtml(row.decision_date || "")}<span class="zh-note">日期：核准 / 判定日期</span></small></td>
-      <td>${row.product_code ? `<button class="code-filter-btn" type="button" data-product-code="${escapeHtml(row.product_code)}" title="以 ${escapeHtml(row.product_code)} 關聯查詢客訴與回收">查客訴/回收</button>` : `<span class="muted">需 product code</span>`}</td>
+      <td>${row.product_code ? `<button class="code-filter-btn" type="button" data-product-code="${escapeHtml(row.product_code)}" data-device-name="${escapeHtml(row.device_name || row.openfda?.device_name || "")}" data-applicant="${escapeHtml(row.applicant || "")}" data-k-number="${escapeHtml(row.k_number || "")}" title="以此 K 證產品、申請廠商與 product code 關聯查詢客訴與回收">查客訴/回收</button>` : `<span class="muted">需 product code</span>`}</td>
     </tr>`).join("")}</tbody>
   </table>`;
 }
@@ -1696,7 +1708,7 @@ async function fetchOpenFdaTotal(endpoint, search){
 
 async function fetchOpenFdaYearCounts(productCode, keyword){
   if(!productCode){
-    return {2016:0,2017:0,2018:0,2019:0,2020:0,2021:0,2022:0,2023:0,2024:0,2025:0,2026:0};
+    return {complaints:emptyYears(), recalls:emptyYears(), combined:emptyYears()};
   }
   const years = Array.from({length:11}, (_, idx) => 2016 + idx);
   const entries = await Promise.all(years.map(async year => {
@@ -1718,9 +1730,19 @@ async function fetchOpenFdaYearCounts(productCode, keyword){
       fetchOpenFdaTotal("event", eventTerms.join(" AND ")),
       fetchOpenFdaTotal("recall", recallTerms.join(" AND "))
     ]);
-    return [year, maudeCount + recallCount];
+    return [year, maudeCount, recallCount];
   }));
-  return Object.fromEntries(entries);
+  const complaints = emptyYears();
+  const recalls = emptyYears();
+  entries.forEach(([year, maudeCount, recallCount]) => {
+    complaints[year] = maudeCount;
+    recalls[year] = recallCount;
+  });
+  return {
+    complaints,
+    recalls,
+    combined:Object.fromEntries(entries.map(([year, maudeCount, recallCount]) => [year, maudeCount + recallCount]))
+  };
 }
 
 function summarizeYearsFromResults(results){
@@ -1793,7 +1815,8 @@ function updateLiveSections(maude, recall, yearCounts, criteria){
   renderLegend(liveComplaintPieItems(maude), "complaintLegend");
   drawPie(liveRecallPieItems(recall), "recallPie", "recalls");
   renderLegend(liveRecallPieItems(recall), "recallLegend");
-  renderBars(yearCounts || summarizeYearsFromResults(maude?.results || []));
+  renderBars(yearCounts?.complaints || summarizeYearsFromResults(maude?.results || []), "complaintBars");
+  renderBars(yearCounts?.recalls || summarizeYearsFromResults(recall?.results || []), "recallBars");
   lastLiveProblemRows = liveProblemRows(maude);
   renderProblems({problems:lastLiveProblemRows});
   document.getElementById("riskLevel").textContent = maudeCount || recallCount ? "待判讀" : "低";
@@ -1818,7 +1841,8 @@ function resetSurveillanceForCompanyOnly(criteria, clearanceCount = 0){
   renderLegend(waitingItems, "complaintLegend");
   drawPie(waitingItems, "recallPie", "records");
   renderLegend(waitingItems, "recallLegend");
-  renderBars(years);
+  renderBars(years, "complaintBars");
+  renderBars(years, "recallBars");
   lastLiveProblemRows = [{
     risk:"低",
     problem:"尚未選擇 FDA product code",
@@ -2021,19 +2045,24 @@ function applyCriteriaAndFetch(){
   fetchWorkerData();
 }
 
-function searchByProductCode(productCode){
+function searchByProductCode(productCode, options = {}){
   if(!productCode) return;
   productCodeInput.value = productCode.toUpperCase();
-  makerSelect.value = "all";
+  deviceInput.value = options.deviceName || deviceInput.value;
+  makerSelect.value = options.applicant ? "manual" : "all";
   updateManualCompanyInput();
-  manualCompanyInput.value = "";
+  manualCompanyInput.value = options.applicant || "";
   selectedDeviceCandidate = null;
   deviceCandidateBox.classList.add("hidden");
   deviceCandidateList.innerHTML = "";
   appliedCriteria = readDraftCriteria();
+  if(options.kNumber){
+    appliedCriteria.kNumber = options.kNumber;
+    draftHint.textContent = `已套用 ${options.kNumber} / ${productCode}，以該證號產品與申請廠商關聯查詢客訴與回收。`;
+  }
   setDraftState(false);
   render({resetWorker:true});
-  showTab("clearance");
+  showTab(options.openTab || "surveillance");
   fetchWorkerData();
 }
 
@@ -2062,7 +2091,8 @@ function render(options = {}){
   renderLegend(data.complaintProblems, "complaintLegend");
   drawPie(data.recallProblems, "recallPie", "recalls");
   renderLegend(data.recallProblems, "recallLegend");
-  renderBars(data.years);
+  renderBars(data.years, "complaintBars");
+  renderBars(data.recalls ? data.years : emptyYears(), "recallBars");
   renderProblems(data);
   renderEvents(data);
   renderClearances(data);
@@ -2121,7 +2151,12 @@ document.addEventListener("change", event => {
 document.getElementById("clearances").addEventListener("click", event => {
   const button = event.target.closest(".code-filter-btn");
   if(!button) return;
-  searchByProductCode(button.dataset.productCode);
+  searchByProductCode(button.dataset.productCode, {
+    deviceName: button.dataset.deviceName || "",
+    applicant: button.dataset.applicant || "",
+    kNumber: button.dataset.kNumber || "",
+    openTab: button.dataset.kNumber ? "surveillance" : "clearance"
+  });
 });
 deviceCandidateList.addEventListener("click", event => {
   const button = event.target.closest(".candidate-option");
