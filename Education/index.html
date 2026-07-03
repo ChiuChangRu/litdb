@@ -1,0 +1,1022 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>醫療器材法規資訊連結整理 | Reguru.ai 書籤</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --ink: #172033;
+      --muted: #647084;
+      --line: #e4e9f2;
+      --accent: #0f766e;
+      --accent-soft: #dff7f3;
+      --chip: #eef2f7;
+      --shadow: 0 12px 30px rgba(15, 23, 42, .08);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background: radial-gradient(circle at top left, #e9fbf7 0, transparent 32rem), var(--bg);
+      color: var(--ink);
+      line-height: 1.55;
+    }
+    a { color: inherit; }
+    .wrap { max-width: 1220px; margin: 0 auto; padding: 36px 22px 56px; }
+    header {
+      background: linear-gradient(135deg, #0f766e, #1d4ed8);
+      color: white;
+      border-radius: 28px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+    header:after {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      right: -70px;
+      top: -90px;
+    }
+    .eyebrow { margin: 0 0 8px; opacity: .9; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(30px, 5vw, 52px); line-height: 1.08; }
+    .subtitle { max-width: 780px; margin: 18px 0 0; color: rgba(255,255,255,.88); font-size: 17px; }
+    .source { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; font-size: 13px; }
+    .source span { background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.25); border-radius: 999px; padding: 7px 11px; }
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      margin: 22px 0;
+      background: rgba(246,248,251,.86);
+      backdrop-filter: blur(12px);
+      padding: 16px 0;
+    }
+    .searchrow { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
+    .search {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 16px;
+      padding: 15px 16px;
+      font-size: 16px;
+      outline: none;
+      box-shadow: 0 4px 14px rgba(15,23,42,.04);
+    }
+    .count { color: var(--muted); white-space: nowrap; font-size: 14px; }
+    .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 13px; }
+    .filter {
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 9px 12px;
+      cursor: pointer;
+      font-weight: 650;
+      font-size: 13px;
+    }
+    .filter span { color: var(--muted); margin-left: 4px; font-weight: 600; }
+    .filter.active { background: var(--accent); color: white; border-color: var(--accent); }
+    .filter.active span { color: rgba(255,255,255,.86); }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 22px 0; }
+    .stat { background: white; border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
+    .stat strong { display: block; font-size: 28px; color: var(--accent); }
+    .stat span { color: var(--muted); font-size: 13px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: 0 8px 24px rgba(15,23,42,.05);
+      min-height: 255px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .card[hidden] { display: none; }
+    .card-top { display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+    .pill { display: inline-flex; align-items: center; border-radius: 999px; padding: 6px 9px; font-size: 12px; font-weight: 750; }
+    .category { background: var(--accent-soft); color: #0f5f59; }
+    .date { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .card h2 { margin: 0; font-size: 18px; line-height: 1.35; }
+    .card h2 a { text-decoration: none; }
+    .card h2 a:hover { text-decoration: underline; }
+    .meta { color: var(--muted); display: flex; gap: 8px; align-items: center; font-size: 13px; overflow-wrap: anywhere; }
+    .flag:empty { display: none; }
+    .use { margin: 0; color: #334155; font-size: 14px; }
+    .note { margin: -2px 0 0; color: var(--muted); font-size: 13px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: auto; }
+    .tag { background: var(--chip); color: #475569; border-radius: 999px; padding: 5px 8px; font-size: 12px; }
+    .tag.more { background: #e0e7ff; color: #3730a3; }
+    .empty { display: none; text-align: center; padding: 48px 20px; color: var(--muted); }
+    footer { margin-top: 28px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 680px) {
+      header { padding: 24px; border-radius: 22px; }
+      .searchrow { grid-template-columns: 1fr; }
+      .toolbar { position: static; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <p class="eyebrow">Medical Device Regulatory Resources</p>
+      <h1>醫療器材法規資訊連結整理</h1>
+      <p class="subtitle">依 Reguru.ai「醫材法規小學堂」嚴選書籤整理，將官方資料庫、EU/FDA、法規新聞、模板、臨床評估、SaMD/網安、課程與顧問資源分區。人類終於不用在 PDF 裡挖連結，文明又前進了 0.3 公分。</p>
+      <div class="source">
+        <span>整理日期：2026-07-03</span>
+        <span>可用外部連結：75 筆</span>
+        <span>重複與本機 chrome-extension 捷徑已合併/排除</span>
+      </div>
+    </header>
+
+    <section class="toolbar" aria-label="搜尋與篩選">
+      <div class="searchrow">
+        <input id="q" class="search" type="search" placeholder="搜尋：FDA、MDR、QMSR、SaMD、Clinical Evaluation、Templates..." autocomplete="off" />
+        <div class="count" id="count">顯示 75 / 75</div>
+      </div>
+      <div class="filters" id="filters"><button class="filter active" data-cat="全部" aria-pressed="true">全部 <span>75</span></button><button class="filter" data-cat="官方資料庫 / FDA" aria-pressed="false">官方資料庫 / FDA <span>8</span></button><button class="filter" data-cat="EU 官方 / NB" aria-pressed="false">EU 官方 / NB <span>6</span></button><button class="filter" data-cat="法規新聞 / 更新" aria-pressed="false">法規新聞 / 更新 <span>10</span></button><button class="filter" data-cat="模板 / SOP / QMS" aria-pressed="false">模板 / SOP / QMS <span>11</span></button><button class="filter" data-cat="臨床評估 / 文獻" aria-pressed="false">臨床評估 / 文獻 <span>7</span></button><button class="filter" data-cat="SaMD / 軟體 / 網安" aria-pressed="false">SaMD / 軟體 / 網安 <span>10</span></button><button class="filter" data-cat="學習頻道 / 課程" aria-pressed="false">學習頻道 / 課程 <span>15</span></button><button class="filter" data-cat="亞洲 / 全球市場" aria-pressed="false">亞洲 / 全球市場 <span>1</span></button><button class="filter" data-cat="顧問文章 / 資源中心" aria-pressed="false">顧問文章 / 資源中心 <span>7</span></button></div>
+    </section>
+
+    <section class="stats" aria-label="分類統計"><div class="stat"><strong>8</strong><span>官方資料庫 / FDA</span></div><div class="stat"><strong>6</strong><span>EU 官方 / NB</span></div><div class="stat"><strong>10</strong><span>法規新聞 / 更新</span></div><div class="stat"><strong>11</strong><span>模板 / SOP / QMS</span></div><div class="stat"><strong>7</strong><span>臨床評估 / 文獻</span></div><div class="stat"><strong>10</strong><span>SaMD / 軟體 / 網安</span></div><div class="stat"><strong>15</strong><span>學習頻道 / 課程</span></div><div class="stat"><strong>1</strong><span>亞洲 / 全球市場</span></div><div class="stat"><strong>7</strong><span>顧問文章 / 資源中心</span></div></section>
+
+    <section class="grid" id="cards" aria-label="連結清單">
+      <article class="card" data-category="學習頻道 / 課程" data-search="medical device insights | johner institut johner-institut.podigee.io 學習頻道 / 課程 jul 1, 2026 yt must-subscribe #johner #podcast">
+        <div class="card-top">
+          <span class="pill category">學習頻道 / 課程</span>
+          <span class="date">Jul 1, 2026</span>
+        </div>
+        <h2><a href="https://johner-institut.podigee.io/" target="_blank" rel="noopener noreferrer">Medical Device Insights | Johner Institut</a></h2>
+        <div class="meta"><span class="flag"></span><span>johner-institut.podigee.io</span></div>
+        <p class="use">拿來當 Podcast、YouTube、Substack 或課程的長期追蹤清單。</p>
+        
+        <div class="tags"><span class="tag">YT Must-Subscribe</span><span class="tag">#Johner</span><span class="tag">#Podcast</span></div>
+      </article>
+      <article class="card" data-category="SaMD / 軟體 / 網安" data-search="medcrypt blog medcrypt.com samd / 軟體 / 網安 jun 30, 2026 #cs #medcrypt">
+        <div class="card-top">
+          <span class="pill category">SaMD / 軟體 / 網安</span>
+          <span class="date">Jun 30, 2026</span>
+        </div>
+        <h2><a href="https://www.medcrypt.com/blog" target="_blank" rel="noopener noreferrer">Medcrypt Blog</a></h2>
+        <div class="meta"><span class="flag"></span><span>medcrypt.com</span></div>
+        <p class="use">追 SaMD、AI/ML、IEC 62304、網安與軟體合規材料。</p>
+        
+        <div class="tags"><span class="tag">#CS</span><span class="tag">#medcrypt</span></div>
+      </article>
+      <article class="card" data-category="法規新聞 / 更新" data-search="smart mdr | 4 easy ppec linkedin.com 法規新聞 / 更新 jun 17, 2026 regulatory news #mdr #bi-weeks #updates">
+        <div class="card-top">
+          <span class="pill category">法規新聞 / 更新</span>
+          <span class="date">Jun 17, 2026</span>
+        </div>
+        <h2><a href="https://www.linkedin.com/newsletters/7282004759140585472/?midToken=AQHAfd8aYoYxag&amp;midSig=3MTY1oaClw5Ik1&amp;trk=eml-email_series_follow_newsletter_02-newsletter_entity_lockup-0-newsletter_entity_cta&amp;trkEmail=eml-email_series_follow_newsletter_02-newsletter_entity_lockup-0-newsletter_entity_cta-null-7ise3a~mqgluo2e~m4-null-null&amp;eid=7ise3a-mqgluo2e-m4" target="_blank" rel="noopener noreferrer">Smart MDR | 4 Easy PPEC</a></h2>
+        <div class="meta"><span class="flag"></span><span>linkedin.com</span></div>
+        <p class="use">定期追法規動態，避免資訊像醫材標籤一樣到處飄。</p>
+        
+        <div class="tags"><span class="tag">Regulatory News</span><span class="tag">#MDR</span><span class="tag">#bi-weeks</span><span class="tag">#updates</span></div>
+      </article>
+      <article class="card" data-category="SaMD / 軟體 / 網安" data-search="news | smart mdr smartmdr.com samd / 軟體 / 網安 jun 17, 2026 regulatory news #smartmdr #fda #mdr #swissmedic">
+        <div class="card-top">
+          <span class="pill category">SaMD / 軟體 / 網安</span>
+          <span class="date">Jun 17, 2026</span>
+        </div>
+        <h2><a href="https://www.smartmdr.com/notcias" target="_blank" rel="noopener noreferrer">News | Smart MDR</a></h2>
+        <div class="meta"><span class="flag"></span><span>smartmdr.com</span></div>
+        <p class="use">追 SaMD、AI/ML、IEC 62304、網安與軟體合規材料。</p>
+        
+        <div class="tags"><span class="tag">Regulatory News</span><span class="tag">#smartmdr</span><span class="tag">#FDA</span><span class="tag">#MDR</span><span class="tag">#swissmedic</span></div>
+      </article>
+      <article class="card" data-category="SaMD / 軟體 / 網安" data-search="medical device news | easy medical device youtube.com samd / 軟體 / 網安 jun 17, 2026 regulatory news #emd #monthly #updates">
+        <div class="card-top">
+          <span class="pill category">SaMD / 軟體 / 網安</span>
+          <span class="date">Jun 17, 2026</span>
+        </div>
+        <h2><a href="https://www.youtube.com/watch?v=9SBW76VriPQ&amp;list=PLYaZs_Csy7XwxDTaMe7a_FZfz2PlsY4aC" target="_blank" rel="noopener noreferrer">Medical Device News | Easy Medical Device</a></h2>
+        <div class="meta"><span class="flag"></span><span>youtube.com</span></div>
+        <p class="use">追 SaMD、AI/ML、IEC 62304、網安與軟體合規材料。</p>
+        
+        <div class="tags"><span class="tag">Regulatory News</span><span class="tag">#EMD</span><span class="tag">#monthly</span><span class="tag">#updates</span></div>
+      </article>
+      <article class="card" data-category="學習頻道 / 課程" data-search="riskwise medtech | alexandra medrea | substack riskwise.substack.com 學習頻道 / 課程 may 28, 2026 substack must-follow #rm #riskwise #substack">
+        <div class="card-top">
+          <span class="pill category">學習頻道 / 課程</span>
+          <span class="date">May 28, 2026</span>
+        </div>
+        <h2><a href="https://riskwise.substack.com/" target="_blank" rel="noopener noreferrer">RiskWise MedTech | Alexandra Medrea | Substack</a></h2>
+        <div class="meta"><span class="flag"></span><span>riskwise.substack.com</span></div>
+        <p class="use">拿來當 Podcast、YouTube、Substack 或課程的長期追蹤清單。</p>
+        
+        <div class="tags"><span class="tag">Substack Must-Follow</span><span class="tag">#RM</span><span class="tag">#RiskWise</span><span class="tag">#Substack</span></div>
+      </article>
+      <article class="card" data-category="SaMD / 軟體 / 網安" data-search="the latest news and insights | scarlet scarlet.cc samd / 軟體 / 網安 may 27, 2026 regulatory news #mdr #nblm #scarlet #samd #aiamd #cs">
+        <div class="card-top">
+          <span class="pill category">SaMD / 軟體 / 網安</span>
+          <span class="date">May 27, 2026</span>
+        </div>
+        <h2><a href="https://www.scarlet.cc/blog" target="_blank" rel="noopener noreferrer">The latest news and insights | Scarlet</a></h2>
+        <div class="meta"><span class="flag"></span><span>scarlet.cc</span></div>
+        <p class="use">追 SaMD、AI/ML、IEC 62304、網安與軟體合規材料。</p>
+        
+        <div class="tags"><span class="tag">Regulatory News</span><span class="tag">#MDR</span><span class="tag">#nblm</span><span class="tag">#Scarlet</span><span class="tag">#SaMD</span><span class="tag">#AIaMD</span><span class="tag">#CS</span></div>
+      </article>
+      <article class="card" data-category="官方資料庫 / FDA" data-search="fda 510(k) search - by innolitics (samd and ai experts) fda.innolitics.com 官方資料庫 / fda may 20, 2026 us fda #innolitics #inno #fda">
+        <div class="card-top">
+          <span class="pill category">官方資料庫 / FDA</span>
+          <span class="date">May 20, 2026</span>
+        </div>
+        <h2><a href="https://fda.innolitics.com/" target="_blank" rel="noopener noreferrer">FDA 510(k) Search - By Innolitics (SaMD and AI Experts)</a></h2>
+        <div class="meta"><span class="flag"></span><span>fda.innolitics.com</span></div>
+        <p class="use">查美國官方要求、510(k)、QMSR、GMDN 或 FDA 學習資料。</p>
+        
+        <div class="tags"><span class="tag">US FDA</span><span class="tag">#Innolitics</span><span class="tag">#inno</span><span class="tag">#FDA</span></div>
+      </article>
+      <article class="card" data-category="法規新聞 / 更新" data-search="news | emergo by ul emergobyul.com 法規新聞 / 更新 may 19, 2026 regulatory news #mdr #fda #emergo #ul #global">
+        <div class="card-top">
+          <span class="pill category">法規新聞 / 更新</span>
+          <span class="date">May 19, 2026</span>
+        </div>
+        <h2><a href="https://www.emergobyul.com/news" target="_blank" rel="noopener noreferrer">News | Emergo by UL</a></h2>
+        <div class="meta"><span class="flag"></span><span>emergobyul.com</span></div>
+        <p class="use">定期追法規動態，避免資訊像醫材標籤一樣到處飄。</p>
+        
+        <div class="tags"><span class="tag">Regulatory News</span><span class="tag">#MDR</span><span class="tag">#FDA</span><span class="tag">#Emergo</span><span class="tag">#UL</span><span class="tag">#Global</span></div>
+      </article>
+      <article class="card" data-category="SaMD / 軟體 / 網安" data-search="the other consultants: medtech quality &amp; regulatory insights | adam isaacs rae | substack theotherconsultants.substack.com samd / 軟體 / 網安 may 4, 2026 substack must-follow #adam #substack #exnb">
+        <div class="card-top">
+          <span class="pill category">SaMD / 軟體 / 網安</span>
+          <span class="date">May 4, 2026</span>
+        </div>
+        <h2><a href="https://theotherconsultants.substack.com/?utm_source=homepage_recommendations&amp;utm_campaign=1477050" target="_blank" rel="noopener noreferrer">The Other Consultants: MedTech Quality &amp; Regulatory Insights | Adam Isaacs Rae | Substack</a></h2>
+        <div class="meta"><span class="flag"></span><span>theotherconsultants.substack.com</span></div>
+        <p class="use">追 SaMD、AI/ML、IEC 62304、網安與軟體合規材料。</p>
+        
+        <div class="tags"><span class="tag">Substack Must-Follow</span><span class="tag">#Adam</span><span class="tag">#Substack</span><span class="tag">#exNB</span></div>
+      </article>
+      <article class="card" data-category="模板 / SOP / QMS" data-search="template &amp; procedure download | lexqara lexqara.com 模板 / sop / qms may 4, 2026 templates #template #free #clinical evaluation #pms #rm">
+        <div class="card-top">
+          <span class="pill category">模板 / SOP / QMS</span>
+          <span class="date">May 4, 2026</span>
+        </div>
+        <h2><a href="https://lexqara.com/resource-center/" target="_blank" rel="noopener noreferrer">Template &amp; Procedure Download | Lexqara</a></h2>
+        <div class="meta"><span class="flag"></span><span>lexqara.com</span></div>
+        <p class="use">快速找 QMS、SOP、CER/PMS、軟體流程等文件骨架。</p>
+        
+        <div class="tags"><span class="tag">Templates</span><span class="tag">#Template</span><span class="tag">#free</span><span class="tag">#Clinical Evaluation</span><span class="tag">#PMS</span><span class="tag">#RM</span></div>
+      </article>
+      <article class="card" data-category="顧問文章 / 資源中心" data-search="blog | achieve achievexl.com 顧問文章 / 資源中心 may 4, 2026 #ltr #naveen #rm">
+        <div class="card-top">
+          <span class="pill category">顧問文章 / 資源中心</span>
+          <span class="date">May 4, 2026</span>
+        </div>
+        <h2><a href="https://www.achievexl.com/blog" target="_blank" rel="noopener noreferrer">Blog | Achieve</a></h2>
+        <div class="meta"><span class="flag"></span><span>achievexl.com</span></div>
+        <p class="use">顧問文章、白皮書與資源中心，適合找觀點與案例。</p>
+        
+        <div class="tags"><span class="tag">#LTR</span><span class="tag">#Naveen</span><span class="tag">#RM</span></div>
+      </article>
+      <article class="card" data-category="學習頻道 / 課程" data-search="achieve success through excellence achievexl.com 學習頻道 / 課程 may 4, 2026 #ltr #naveen #rm #training">
+        <div class="card-top">
+          <span class="pill category">學習頻道 / 課程</span>
+          <span class="date">May 4, 2026</span>
+        </div>
+        <h2><a href="https://www.achievexl.com/store" target="_blank" rel="noopener noreferrer">Achieve Success Through Excellence</a></h2>
+        <div class="meta"><span class="flag"></span><span>achievexl.com</span></div>
+        <p class="use">拿來當 Podcast、YouTube、Substack 或課程的長期追蹤清單。</p>
+        
+        <div class="tags"><span class="tag">#LTR</span><span class="tag">#Naveen</span><span class="tag">#RM</span><span class="tag">#Training</span></div>
+      </article>
+      <article class="card" data-category="EU 官方 / NB" data-search="team-nb documents &amp; position paper team-nb.org eu 官方 / nb apr 30, 2026 eu official #team-nb #mdr #ivdr">
+        <div class="card-top">
+          <span class="pill category">EU 官方 / NB</span>
+          <span class="date">Apr 30, 2026</span>
+        </div>
+        <h2><a href="https://www.team-nb.org/team-nb-documents/" target="_blank" rel="noopener noreferrer">Team-NB Documents &amp; Position Paper</a></h2>
+        <div class="meta"><span class="flag">🇪🇺</span><span>team-nb.org</span></div>
+        <p class="use">查 MDR/IVDR、NB 文件、主管機關與歐盟官方清單。</p>
+        
+        <div class="tags"><span class="tag">EU Official</span><span class="tag">#team-nb</span><span class="tag">#MDR</span><span class="tag">#IVDR</span></div>
+      </article>
+      <article class="card" data-category="臨床評估 / 文獻" data-search="systematic literature review course: learn the essentials | citemed citemed.com 臨床評估 / 文獻 apr 24, 2026 #citemed #ced #slr literature review">
+        <div class="card-top">
+          <span class="pill category">臨床評估 / 文獻</span>
+          <span class="date">Apr 24, 2026</span>
+        </div>
+        <h2><a href="https://citemed.com/citemed-systematic-literature-review-course/" target="_blank" rel="noopener noreferrer">Systematic Literature Review Course: Learn the Essentials | CiteMed</a></h2>
+        <div class="meta"><span class="flag"></span><span>citemed.com</span></div>
+        <p class="use">補 CER、CED、PMS/PMCF、SLR 與臨床評估方法。</p>
+        <p class="note">Literature Review</p>
+        <div class="tags"><span class="tag">#CiteMed</span><span class="tag">#CED</span><span class="tag">#SLR</span></div>
+      </article>
+      <article class="card" data-category="學習頻道 / 課程" data-search="quickvault | ready-to-use qms built for medtech growth &amp; market success quickvault.veeva.com 學習頻道 / 課程 apr 24, 2026 #eqms #pre-market #submission">
+        <div class="card-top">
+          <span class="pill category">學習頻道 / 課程</span>
+          <span class="date">Apr 24, 2026</span>
+        </div>
+        <h2><a href="https://quickvault.veeva.com/?utm_campaign=15840183-Webinars&amp;utm_medium=email&amp;_hsmi=415429001&amp;utm_content=415429001&amp;utm_source=hs_email" target="_blank" rel="noopener noreferrer">QuickVault | Ready-to-Use QMS Built for MedTech Growth &amp; Market Success</a></h2>
+        <div class="meta"><span class="flag"></span><span>quickvault.veeva.com</span></div>
+        <p class="use">拿來當 Podcast、YouTube、Substack 或課程的長期追蹤清單。</p>
+        
+        <div class="tags"><span class="tag">#eQMS</span><span class="tag">#Pre-market</span><span class="tag">#Submission</span></div>
+      </article>
+      <article class="card" data-category="模板 / SOP / QMS" data-search="medical devices templates - simplimedica simplimedica.com 模板 / sop / qms apr 24, 2026 templates #simplimedica #template">
+        <div class="card-top">
+          <span class="pill category">模板 / SOP / QMS</span>
+          <span class="date">Apr 24, 2026</span>
+        </div>
+        <h2><a href="https://simplimedica.com/medical-devices-templates/" target="_blank" rel="noopener noreferrer">Medical Devices Templates - SimpliMedica</a></h2>
+        <div class="meta"><span class="flag"></span><span>simplimedica.com</span></div>
+        <p class="use">快速找 QMS、SOP、CER/PMS、軟體流程等文件骨架。</p>
+        
+        <div class="tags"><span class="tag">Templates</span><span class="tag">#SimpliMedica</span><span class="tag">#Template</span></div>
+      </article>
+      <article class="card" data-category="學習頻道 / 課程" data-search="medtech leading voice - webinars youtube.com 學習頻道 / 課程 apr 24, 2026 yt must-subscribe #mlv #mdr #webinar">
+        <div class="card-top">
+          <span class="pill category">學習頻道 / 課程</span>
+          <span class="date">Apr 24, 2026</span>
+        </div>
+        <h2><a href="https://www.youtube.com/@medtechleadingvoice/videos" target="_blank" rel="noopener noreferrer">MedTech Leading Voice - Webinars</a></h2>
+        <div class="meta"><span class="flag">🇺🇸</span><span>youtube.com</span></div>
+        <p class="use">拿來當 Podcast、YouTube、Substack 或課程的長期追蹤清單。</p>
+        
+        <div class="tags"><span class="tag">YT Must-Subscribe</span><span class="tag">#MLV</span><span class="tag">#MDR</span><span class="tag">#Webinar</span></div>
+      </article>
+      <article class="card" data-category="學習頻道 / 課程" data-search="easy medical device | home page easymedicaldevice.com 學習頻道 / 課程 apr 24, 2026 #emd #podcast #mdr #qms">
+        <div class="card-top">
+          <span class="pill category">學習頻道 / 課程</span>
+          <span class="date">Apr 24, 2026</span>
+        </div>
+        <h2><a href="https://easymedicaldevice.com/" target="_blank" rel="noopener noreferrer">Easy Medical Device | Home Page</a></h2>
+        <div class="meta"><span class="flag"></span><span>easymedicaldevice.com</span></div>
+        <p class="use">拿來當 Podcast、YouTube、Substack 或課程的長期追蹤清單。</p>
+        
+        <div class="tags"><span class="tag">#EMD</span><span class="tag">#Podcast</span><span class="tag">#MDR</span><span class="tag">#QMS</span></div>
+      </article>
+      <article class="card" data-category="SaMD / 軟體 / 網安" data-search="innolitics | articles &amp; resources innolitics.com samd / 軟體 / 網安 apr 17, 2026 #innolitics #ai samd #cs #sw">
+        <div class="card-top">
+          <span class="pill category">SaMD / 軟體 / 網安</span>
+          <span class="date">Apr 17, 2026</span>
+        </div>
+        <h2><a href="https://innolitics.com/articles/" target="_blank" rel="noopener noreferrer">Innolitics | Articles &amp; Resources</a></h2>
+        <div class="meta"><span class="flag">🇺🇸</span><span>innolitics.com</span></div>
+        <p class="use">追 SaMD、AI/ML、IEC 62304、網安與軟體合規材料。</p>
+        
+        <div class="tags"><span class="tag">#Innolitics</span><span class="tag">#AI SaMD</span><span class="tag">#CS</span><span class="tag">#SW</span></div>
+      </article>
+      <article class="card" data-category="EU 官方 / NB" data-search="list of competent authorities in europe (download file) eumdrcompliance.podia.com eu 官方 / nb mar 24, 2026 #eumdrcomp #eu #ca #authority #mdr">
+        <div class="card-top">
+          <span class="pill category">EU 官方 / NB</span>
+          <span class="date">Mar 24, 2026</span>
+        </div>
+        <h2><a href="https://eumdrcompliance.podia.com/list-of-regulatory-authorities-in-europe-link" target="_blank" rel="noopener noreferrer">List of Competent Authorities in Europe (download file)</a></h2>
+        <div class="meta"><span class="flag"></span><span>eumdrcompliance.podia.com</span></div>
+        <p class="use">查 MDR/IVDR、NB 文件、主管機關與歐盟官方清單。</p>
+        
+        <div class="tags"><span class="tag">#EUMDRComp</span><span class="tag">#EU</span><span class="tag">#CA</span><span class="tag">#Authority</span><span class="tag">#MDR</span></div>
+      </article>
+      <article class="card" data-category="臨床評估 / 文獻" data-search="qtec group | news qtec-group.com 臨床評估 / 文獻 mar 22, 2026 #clinical evaluation">
+        <div class="card-top">
+          <span class="pill category">臨床評估 / 文獻</span>
+          <span class="date">Mar 22, 2026</span>
+        </div>
+        <h2><a href="https://www.qtec-group.com/en/news/" target="_blank" rel="noopener noreferrer">qtec group | News</a></h2>
+        <div class="meta"><span class="flag">🇩🇪</span><span>qtec-group.com</span></div>
+        <p class="use">補 CER、CED、PMS/PMCF、SLR 與臨床評估方法。</p>
+        
+        <div class="tags"><span class="tag">#Clinical Evaluation</span></div>
+      </article>
+      <article class="card" data-category="官方資料庫 / FDA" data-search="openfda apps open.fda.gov 官方資料庫 / fda mar 19, 2026 #fda">
+        <div class="card-top">
+          <span class="pill category">官方資料庫 / FDA</span>
+          <span class="date">Mar 19, 2026</span>
+        </div>
+        <h2><a href="https://open.fda.gov/community/?utm_content=373572871&amp;utm_medium=social&amp;utm_source=linkedin&amp;hss_channel=lis-ByIluLrwEC" target="_blank" rel="noopener noreferrer">openFDA Apps</a></h2>
+        <div class="meta"><span class="flag">🇺🇸</span><span>open.fda.gov</span></div>
+        <p class="use">查美國官方要求、510(k)、QMSR、GMDN 或 FDA 學習資料。</p>
+        
+        <div class="tags"><span class="tag">#FDA</span></div>
+      </article>
+      <article class="card" data-category="學習頻道 / 課程" data-search="leanraqa | substack leanraqa.substack.com 學習頻道 / 課程 feb 11, 2026 substack must-follow #leanqara #substack">
+        <div class="card-top">
+          <span class="pill category">學習頻道 / 課程</span>
+          <span class="date">Feb 11, 2026</span>
+        </div>
+        <h2><a href="https://leanraqa.substack.com/" target="_blank" rel="noopener noreferrer">leanRAQA | Substack</a></h2>
+        <div class="meta"><span class="flag">🇺🇸</span><span>leanraqa.substack.com</span></div>
+        <p class="use">拿來當 Podcast、YouTube、Substack 或課程的長期追蹤清單。</p>
+        
+        <div class="tags"><span class="tag">Substack Must-Follow</span><span class="tag">#leanQARA</span><span class="tag">#Substack</span></div>
+      </article>
+      <article class="card" data-category="顧問文章 / 資源中心" data-search="resources mdxcro mdxcro.com 顧問文章 / 資源中心 feb 5, 2026 #mdxcro #blog">
+        <div class="card-top">
+          <span class="pill category">顧問文章 / 資源中心</span>
+          <span class="date">Feb 5, 2026</span>
+        </div>
+        <h2><a href="https://mdxcro.com/resources/" target="_blank" rel="noopener noreferrer">Resources MDxCRO</a></h2>
+        <div class="meta"><span class="flag">🇪🇸</span><span>mdxcro.com</span></div>
+        <p class="use">顧問文章、白皮書與資源中心，適合找觀點與案例。</p>
+        
+        <div class="tags"><span class="tag">#MDxCRO</span><span class="tag">#Blog</span></div>
+      </article>
+      <article class="card" data-category="官方資料庫 / FDA" data-search="qmsr | fda fda.gov 官方資料庫 / fda feb 3, 2026 us fda #qmsr #fda">
+        <div class="card-top">
+          <span class="pill category">官方資料庫 / FDA</span>
+          <span class="date">Feb 3, 2026</span>
+        </div>
+        <h2><a href="https://www.fda.gov/medical-devices/postmarket-requirements-devices/quality-management-system-regulation-qmsr" target="_blank" rel="noopener noreferrer">QMSR | FDA</a></h2>
+        <div class="meta"><span class="flag"></span><span>fda.gov</span></div>
+        <p class="use">查美國官方要求、510(k)、QMSR、GMDN 或 FDA 學習資料。</p>
+        
+        <div class="tags"><span class="tag">US FDA</span><span class="tag">#QMSR</span><span class="tag">#FDA</span></div>
+      </article>
+      <article class="card" data-category="官方資料庫 / FDA" data-search="cdrh learn | qmsr fda.gov 官方資料庫 / fda feb 3, 2026 us fda #cdrh learn #qmsr #risk-based">
+        <div class="card-top">
+          <span class="pill category">官方資料庫 / FDA</span>
+          <span class="date">Feb 3, 2026</span>
+        </div>
+        <h2><a href="https://www.fda.gov/training-and-continuing-education/cdrh-learn" target="_blank" rel="noopener noreferrer">CDRH Learn | QMSR</a></h2>
+        <div class="meta"><span class="flag"></span><span>fda.gov</span></div>
+        <p class="use">查美國官方要求、510(k)、QMSR、GMDN 或 FDA 學習資料。</p>
+        
+        <div class="tags"><span class="tag">US FDA</span><span class="tag">#CDRH Learn</span><span class="tag">#QMSR</span><span class="tag">#Risk-based</span></div>
+      </article>
+      <article class="card" data-category="學習頻道 / 課程" data-search="neulearn – nuejin solutions neujinsolutions.heightsplatform.com 學習頻道 / 課程 jan 30, 2026 #nuejin #nuelearn #online course">
+        <div class="card-top">
+          <span class="pill category">學習頻道 / 課程</span>
+          <span class="date">Jan 30, 2026</span>
+        </div>
+        <h2><a href="https://neujinsolutions.heightsplatform.com/dashboard" target="_blank" rel="noopener noreferrer">NeuLearn – Nuejin Solutions</a></h2>
+        <div class="meta"><span class="flag">🇮🇳</span><span>neujinsolutions.heightsplatform.com</span></div>
+        <p class="use">拿來當 Podcast、YouTube、Substack 或課程的長期追蹤清單。</p>
+        
+        <div class="tags"><span class="tag">#Nuejin</span><span class="tag">#NueLearn</span><span class="tag">#Online Course</span></div>
+      </article>
+      <article class="card" data-category="官方資料庫 / FDA" data-search="gmdn code search members.gmdnagency.org 官方資料庫 / fda jan 28, 2026 #gmdn">
+        <div class="card-top">
+          <span class="pill category">官方資料庫 / FDA</span>
+          <span class="date">Jan 28, 2026</span>
+        </div>
+        <h2><a href="https://members.gmdnagency.org/Terms/Search" target="_blank" rel="noopener noreferrer">GMDN Code Search</a></h2>
+        <div class="meta"><span class="flag"></span><span>members.gmdnagency.org</span></div>
+        <p class="use">查美國官方要求、510(k)、QMSR、GMDN 或 FDA 學習資料。</p>
+        
+        <div class="tags"><span class="tag">#GMDN</span></div>
+      </article>
+      <article class="card" data-category="學習頻道 / 課程" data-search="steve silverman substack.com 學習頻道 / 課程 jan 24, 2026 substack must-follow #fda #exfda #substack #steve">
+        <div class="card-top">
+          <span class="pill category">學習頻道 / 課程</span>
+          <span class="date">Jan 24, 2026</span>
+        </div>
+        <h2><a href="https://substack.com/@stevesilverman208818" target="_blank" rel="noopener noreferrer">Steve Silverman</a></h2>
+        <div class="meta"><span class="flag">🇺🇸</span><span>substack.com</span></div>
+        <p class="use">拿來當 Podcast、YouTube、Substack 或課程的長期追蹤清單。</p>
+        
+        <div class="tags"><span class="tag">Substack Must-Follow</span><span class="tag">#FDA</span><span class="tag">#exFDA</span><span class="tag">#Substack</span><span class="tag">#Steve</span></div>
+      </article>
+      <article class="card" data-category="SaMD / 軟體 / 網安" data-search="hatem – clinical evaluation navigator hatemrabeh.substack.com samd / 軟體 / 網安 jan 15, 2026 #substack #hatem #clinical evaluation substack must-follow #ai samd clinical evaluation navigator">
+        <div class="card-top">
+          <span class="pill category">SaMD / 軟體 / 網安</span>
+          <span class="date">Jan 15, 2026</span>
+        </div>
+        <h2><a href="https://hatemrabeh.substack.com/archive?sort=new" target="_blank" rel="noopener noreferrer">Hatem – Clinical Evaluation Navigator</a></h2>
+        <div class="meta"><span class="flag">🇫🇷</span><span>hatemrabeh.substack.com</span></div>
+        <p class="use">追 SaMD、AI/ML、IEC 62304、網安與軟體合規材料。</p>
+        <p class="note">Clinical Evaluation Navigator</p>
+        <div class="tags"><span class="tag">#Substack</span><span class="tag">#Hatem</span><span class="tag">#Clinical Evaluation</span><span class="tag">Substack Must-Follow</span><span class="tag">#AI SaMD</span></div>
+      </article>
+      <article class="card" data-category="官方資料庫 / FDA" data-search="510k search - by innolitics 510k.innolitics.com 官方資料庫 / fda jan 6, 2026 #510k #openfda #innolitics">
+        <div class="card-top">
+          <span class="pill category">官方資料庫 / FDA</span>
+          <span class="date">Jan 6, 2026</span>
+        </div>
+        <h2><a href="https://510k.innolitics.com/?utm_content=364321669&amp;utm_medium=social&amp;utm_source=linkedin&amp;hss_channel=lis-TVO1OV55iv" target="_blank" rel="noopener noreferrer">510k Search - By Innolitics</a></h2>
+        <div class="meta"><span class="flag">🇺🇸</span><span>510k.innolitics.com</span></div>
+        <p class="use">查美國官方要求、510(k)、QMSR、GMDN 或 FDA 學習資料。</p>
+        
+        <div class="tags"><span class="tag">#510k</span><span class="tag">#OpenFDA</span><span class="tag">#Innolitics</span></div>
+      </article>
+      <article class="card" data-category="臨床評估 / 文獻" data-search="lfh regulatory – articles lfhregulatory.co.uk 臨床評估 / 文獻 nov 26, 2025 #uk #clinical evaluation #performance evaluation #qms #rm">
+        <div class="card-top">
+          <span class="pill category">臨床評估 / 文獻</span>
+          <span class="date">Nov 26, 2025</span>
+        </div>
+        <h2><a href="https://lfhregulatory.co.uk/news-and-stories/" target="_blank" rel="noopener noreferrer">LFH Regulatory – Articles</a></h2>
+        <div class="meta"><span class="flag">🇬🇧</span><span>lfhregulatory.co.uk</span></div>
+        <p class="use">補 CER、CED、PMS/PMCF、SLR 與臨床評估方法。</p>
+        
+        <div class="tags"><span class="tag">#UK</span><span class="tag">#Clinical Evaluation</span><span class="tag">#Performance Evaluation</span><span class="tag">#QMS</span><span class="tag">#RM</span></div>
+      </article>
+      <article class="card" data-category="臨床評估 / 文獻" data-search="edvance medtech edvance-medtech.eu 臨床評估 / 文獻 nov 14, 2025 #ced #clinical evaluation #training">
+        <div class="card-top">
+          <span class="pill category">臨床評估 / 文獻</span>
+          <span class="date">Nov 14, 2025</span>
+        </div>
+        <h2><a href="https://www.edvance-medtech.eu/start" target="_blank" rel="noopener noreferrer">Edvance MedTech</a></h2>
+        <div class="meta"><span class="flag">🇩🇪</span><span>edvance-medtech.eu</span></div>
+        <p class="use">補 CER、CED、PMS/PMCF、SLR 與臨床評估方法。</p>
+        
+        <div class="tags"><span class="tag">#CED</span><span class="tag">#Clinical Evaluation</span><span class="tag">#Training</span></div>
+      </article>
+      <article class="card" data-category="法規新聞 / 更新" data-search="raps.org raps.org 法規新聞 / 更新 nov 4, 2025 regulatory news #raps #updates">
+        <div class="card-top">
+          <span class="pill category">法規新聞 / 更新</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://www.raps.org/news-insights/regulatory-focus.html?sortBy=recent&amp;information_type=regulatory-news" target="_blank" rel="noopener noreferrer">raps.org</a></h2>
+        <div class="meta"><span class="flag"></span><span>raps.org</span></div>
+        <p class="use">定期追法規動態，避免資訊像醫材標籤一樣到處飄。</p>
+        
+        <div class="tags"><span class="tag">Regulatory News</span><span class="tag">#RAPS</span><span class="tag">#updates</span></div>
+      </article>
+      <article class="card" data-category="模板 / SOP / QMS" data-search="openregulatory.com openregulatory.com 模板 / sop / qms nov 4, 2025 templates #or #template #mdr">
+        <div class="card-top">
+          <span class="pill category">模板 / SOP / QMS</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://openregulatory.com/templates" target="_blank" rel="noopener noreferrer">openregulatory.com</a></h2>
+        <div class="meta"><span class="flag"></span><span>openregulatory.com</span></div>
+        <p class="use">快速找 QMS、SOP、CER/PMS、軟體流程等文件骨架。</p>
+        
+        <div class="tags"><span class="tag">Templates</span><span class="tag">#OR</span><span class="tag">#Template</span><span class="tag">#MDR</span></div>
+      </article>
+      <article class="card" data-category="法規新聞 / 更新" data-search="white papers | oriel orielstat.com 法規新聞 / 更新 nov 4, 2025 #oriel">
+        <div class="card-top">
+          <span class="pill category">法規新聞 / 更新</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://www.orielstat.com/white-papers-and-market-updates" target="_blank" rel="noopener noreferrer">White Papers | Oriel</a></h2>
+        <div class="meta"><span class="flag">🇺🇸</span><span>orielstat.com</span></div>
+        <p class="use">定期追法規動態，避免資訊像醫材標籤一樣到處飄。</p>
+        
+        <div class="tags"><span class="tag">#Oriel</span></div>
+      </article>
+      <article class="card" data-category="法規新聞 / 更新" data-search="the fda group&#x27;s insider newsletter | substack insider.thefdagroup.com 法規新聞 / 更新 nov 4, 2025 substack must-follow #thefdagroup #substack">
+        <div class="card-top">
+          <span class="pill category">法規新聞 / 更新</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://insider.thefdagroup.com/" target="_blank" rel="noopener noreferrer">The FDA Group&#x27;s Insider Newsletter | Substack</a></h2>
+        <div class="meta"><span class="flag">🇺🇸</span><span>insider.thefdagroup.com</span></div>
+        <p class="use">定期追法規動態，避免資訊像醫材標籤一樣到處飄。</p>
+        
+        <div class="tags"><span class="tag">Substack Must-Follow</span><span class="tag">#thefdagroup</span><span class="tag">#Substack</span></div>
+      </article>
+      <article class="card" data-category="顧問文章 / 資源中心" data-search="the fda group | blog thefdagroup.com 顧問文章 / 資源中心 nov 4, 2025 #thefdagroup #fda #qmsr">
+        <div class="card-top">
+          <span class="pill category">顧問文章 / 資源中心</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://www.thefdagroup.com/blog" target="_blank" rel="noopener noreferrer">The FDA Group | Blog</a></h2>
+        <div class="meta"><span class="flag">🇺🇸</span><span>thefdagroup.com</span></div>
+        <p class="use">顧問文章、白皮書與資源中心，適合找觀點與案例。</p>
+        
+        <div class="tags"><span class="tag">#thefdagroup</span><span class="tag">#FDA</span><span class="tag">#QMSR</span></div>
+      </article>
+      <article class="card" data-category="學習頻道 / 課程" data-search="the fda group youtube.com 學習頻道 / 課程 nov 4, 2025 yt must-subscribe #thefdagroup #fda">
+        <div class="card-top">
+          <span class="pill category">學習頻道 / 課程</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://www.youtube.com/@thefdagroup9424" target="_blank" rel="noopener noreferrer">The FDA Group</a></h2>
+        <div class="meta"><span class="flag">🇺🇸</span><span>youtube.com</span></div>
+        <p class="use">拿來當 Podcast、YouTube、Substack 或課程的長期追蹤清單。</p>
+        
+        <div class="tags"><span class="tag">YT Must-Subscribe</span><span class="tag">#thefdagroup</span><span class="tag">#FDA</span></div>
+      </article>
+      <article class="card" data-category="模板 / SOP / QMS" data-search="templates for iec 62304 software development process, by md101 consulting blog.cm-dm.com 模板 / sop / qms nov 4, 2025 templates #md101 #sw #62304 #template">
+        <div class="card-top">
+          <span class="pill category">模板 / SOP / QMS</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://blog.cm-dm.com/pages/Software-Development-Process-templates" target="_blank" rel="noopener noreferrer">Templates for IEC 62304 Software Development Process, by MD101 Consulting</a></h2>
+        <div class="meta"><span class="flag"></span><span>blog.cm-dm.com</span></div>
+        <p class="use">快速找 QMS、SOP、CER/PMS、軟體流程等文件骨架。</p>
+        
+        <div class="tags"><span class="tag">Templates</span><span class="tag">#MD101</span><span class="tag">#SW</span><span class="tag">#62304</span><span class="tag">#Template</span></div>
+      </article>
+      <article class="card" data-category="模板 / SOP / QMS" data-search="shop – easy medical device school school.easymedicaldevice.com 模板 / sop / qms nov 4, 2025 templates #emd #template">
+        <div class="card-top">
+          <span class="pill category">模板 / SOP / QMS</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://school.easymedicaldevice.com/shop" target="_blank" rel="noopener noreferrer">Shop – Easy Medical Device School</a></h2>
+        <div class="meta"><span class="flag"></span><span>school.easymedicaldevice.com</span></div>
+        <p class="use">快速找 QMS、SOP、CER/PMS、軟體流程等文件骨架。</p>
+        
+        <div class="tags"><span class="tag">Templates</span><span class="tag">#EMD</span><span class="tag">#Template</span></div>
+      </article>
+      <article class="card" data-category="亞洲 / 全球市場" data-search="resource center - pacific bridge medical pacificbridgemedical.com 亞洲 / 全球市場 nov 4, 2025 asia">
+        <div class="card-top">
+          <span class="pill category">亞洲 / 全球市場</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="http://www.pacificbridgemedical.com/resource-center" target="_blank" rel="noopener noreferrer">Resource Center - Pacific Bridge Medical</a></h2>
+        <div class="meta"><span class="flag"></span><span>pacificbridgemedical.com</span></div>
+        <p class="use">查亞洲或跨國市場准入與區域法規更新。</p>
+        
+        <div class="tags"><span class="tag">Asia</span></div>
+      </article>
+      <article class="card" data-category="法規新聞 / 更新" data-search="regulatory updates archives - andaman medical andamanmed.com 法規新聞 / 更新 nov 4, 2025 asia">
+        <div class="card-top">
+          <span class="pill category">法規新聞 / 更新</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://andamanmed.com/regulatory-updates" target="_blank" rel="noopener noreferrer">Regulatory updates Archives - Andaman Medical</a></h2>
+        <div class="meta"><span class="flag"></span><span>andamanmed.com</span></div>
+        <p class="use">定期追法規動態，避免資訊像醫材標籤一樣到處飄。</p>
+        
+        <div class="tags"><span class="tag">Asia</span></div>
+      </article>
+      <article class="card" data-category="法規新聞 / 更新" data-search="regulatory updates | casus casusconsulting.com 法規新聞 / 更新 nov 4, 2025 regulatory news #casus #updates">
+        <div class="card-top">
+          <span class="pill category">法規新聞 / 更新</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://casusconsulting.com/regulatory-updates" target="_blank" rel="noopener noreferrer">Regulatory Updates | Casus</a></h2>
+        <div class="meta"><span class="flag"></span><span>casusconsulting.com</span></div>
+        <p class="use">定期追法規動態，避免資訊像醫材標籤一樣到處飄。</p>
+        
+        <div class="tags"><span class="tag">Regulatory News</span><span class="tag">#Casus</span><span class="tag">#updates</span></div>
+      </article>
+      <article class="card" data-category="模板 / SOP / QMS" data-search="openregulatory (or) openregulatory.com 模板 / sop / qms nov 4, 2025 #template #eqms #samd #mdr">
+        <div class="card-top">
+          <span class="pill category">模板 / SOP / QMS</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://openregulatory.com/formwork" target="_blank" rel="noopener noreferrer">OpenRegulatory (OR)</a></h2>
+        <div class="meta"><span class="flag">🇩🇪</span><span>openregulatory.com</span></div>
+        <p class="use">快速找 QMS、SOP、CER/PMS、軟體流程等文件骨架。</p>
+        
+        <div class="tags"><span class="tag">#Template</span><span class="tag">#eQMS</span><span class="tag">#SaMD</span><span class="tag">#MDR</span></div>
+      </article>
+      <article class="card" data-category="法規新聞 / 更新" data-search="news | evnia evnia.dk 法規新聞 / 更新 nov 4, 2025 regulatory news #evnia #updates">
+        <div class="card-top">
+          <span class="pill category">法規新聞 / 更新</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://www.evnia.dk/category/knowledge-centre/news/" target="_blank" rel="noopener noreferrer">News | Evnia</a></h2>
+        <div class="meta"><span class="flag"></span><span>evnia.dk</span></div>
+        <p class="use">定期追法規動態，避免資訊像醫材標籤一樣到處飄。</p>
+        
+        <div class="tags"><span class="tag">Regulatory News</span><span class="tag">#Evnia</span><span class="tag">#updates</span></div>
+      </article>
+      <article class="card" data-category="SaMD / 軟體 / 網安" data-search="medical device hq youtube.com samd / 軟體 / 網安 nov 4, 2025 yt must-subscribe #mdhq #rm #sw #qms #training">
+        <div class="card-top">
+          <span class="pill category">SaMD / 軟體 / 網安</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://www.youtube.com/@MedicalDeviceHQ" target="_blank" rel="noopener noreferrer">Medical Device HQ</a></h2>
+        <div class="meta"><span class="flag">🇸🇪</span><span>youtube.com</span></div>
+        <p class="use">追 SaMD、AI/ML、IEC 62304、網安與軟體合規材料。</p>
+        
+        <div class="tags"><span class="tag">YT Must-Subscribe</span><span class="tag">#MDHQ</span><span class="tag">#RM</span><span class="tag">#SW</span><span class="tag">#QMS</span><span class="tag">#Training</span></div>
+      </article>
+      <article class="card" data-category="官方資料庫 / FDA" data-search="medical device academy blog medicaldeviceacademy.com 官方資料庫 / fda nov 4, 2025 #mda #blog #fda #510k #qmsr">
+        <div class="card-top">
+          <span class="pill category">官方資料庫 / FDA</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="http://medicaldeviceacademy.com/blog" target="_blank" rel="noopener noreferrer">Medical Device Academy Blog</a></h2>
+        <div class="meta"><span class="flag">🇺🇸</span><span>medicaldeviceacademy.com</span></div>
+        <p class="use">查美國官方要求、510(k)、QMSR、GMDN 或 FDA 學習資料。</p>
+        
+        <div class="tags"><span class="tag">#MDA</span><span class="tag">#Blog</span><span class="tag">#FDA</span><span class="tag">#510k</span><span class="tag">#QMSR</span></div>
+      </article>
+      <article class="card" data-category="官方資料庫 / FDA" data-search="medical device academy youtube.com 官方資料庫 / fda nov 4, 2025 yt must-subscribe #mda #qms #510k #qmsr">
+        <div class="card-top">
+          <span class="pill category">官方資料庫 / FDA</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://www.youtube.com/@MedicalDeviceAcademy" target="_blank" rel="noopener noreferrer">Medical Device Academy</a></h2>
+        <div class="meta"><span class="flag">🇺🇸</span><span>youtube.com</span></div>
+        <p class="use">查美國官方要求、510(k)、QMSR、GMDN 或 FDA 學習資料。</p>
+        
+        <div class="tags"><span class="tag">YT Must-Subscribe</span><span class="tag">#MDA</span><span class="tag">#QMS</span><span class="tag">#510k</span><span class="tag">#QMSR</span></div>
+      </article>
+      <article class="card" data-category="模板 / SOP / QMS" data-search="med dev qms - qms templates meddevqms.com 模板 / sop / qms nov 4, 2025 templates #template #qms">
+        <div class="card-top">
+          <span class="pill category">模板 / SOP / QMS</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://www.meddevqms.com/" target="_blank" rel="noopener noreferrer">MED DEV QMS - QMS Templates</a></h2>
+        <div class="meta"><span class="flag"></span><span>meddevqms.com</span></div>
+        <p class="use">快速找 QMS、SOP、CER/PMS、軟體流程等文件骨架。</p>
+        
+        <div class="tags"><span class="tag">Templates</span><span class="tag">#Template</span><span class="tag">#QMS</span></div>
+      </article>
+      <article class="card" data-category="模板 / SOP / QMS" data-search="mda_iso 13485 &amp; qmsr sop medicaldeviceacademy.com 模板 / sop / qms nov 4, 2025 templates #mda #template">
+        <div class="card-top">
+          <span class="pill category">模板 / SOP / QMS</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://medicaldeviceacademy.com/standard-operating-procedures-medical-device-academy" target="_blank" rel="noopener noreferrer">MDA_ISO 13485 &amp; QMSR SOP</a></h2>
+        <div class="meta"><span class="flag"></span><span>medicaldeviceacademy.com</span></div>
+        <p class="use">快速找 QMS、SOP、CER/PMS、軟體流程等文件骨架。</p>
+        
+        <div class="tags"><span class="tag">Templates</span><span class="tag">#MDA</span><span class="tag">#Template</span></div>
+      </article>
+      <article class="card" data-category="模板 / SOP / QMS" data-search="md law mdlaw.eu 模板 / sop / qms nov 4, 2025 templates #mdlaw #template">
+        <div class="card-top">
+          <span class="pill category">模板 / SOP / QMS</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://mdlaw.eu/store" target="_blank" rel="noopener noreferrer">MD law</a></h2>
+        <div class="meta"><span class="flag"></span><span>mdlaw.eu</span></div>
+        <p class="use">快速找 QMS、SOP、CER/PMS、軟體流程等文件骨架。</p>
+        
+        <div class="tags"><span class="tag">Templates</span><span class="tag">#MDlaw</span><span class="tag">#Template</span></div>
+      </article>
+      <article class="card" data-category="學習頻道 / 課程" data-search="let&#x27;s talk risk! | naveen agarwal, ph.d. | substack naveenagarwalphd.substack.com 學習頻道 / 課程 nov 4, 2025 substack must-follow #ltr #substack #rm">
+        <div class="card-top">
+          <span class="pill category">學習頻道 / 課程</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://naveenagarwalphd.substack.com/" target="_blank" rel="noopener noreferrer">Let&#x27;s Talk Risk! | Naveen Agarwal, Ph.D. | Substack</a></h2>
+        <div class="meta"><span class="flag">🇺🇸</span><span>naveenagarwalphd.substack.com</span></div>
+        <p class="use">拿來當 Podcast、YouTube、Substack 或課程的長期追蹤清單。</p>
+        
+        <div class="tags"><span class="tag">Substack Must-Follow</span><span class="tag">#LTR</span><span class="tag">#Substack</span><span class="tag">#RM</span></div>
+      </article>
+      <article class="card" data-category="EU 官方 / NB" data-search="iv diagnostic medical devices - internal market, industry, entrepreneurship and smes single-market-economy.ec.europa.eu eu 官方 / nb nov 4, 2025 eu official">
+        <div class="card-top">
+          <span class="pill category">EU 官方 / NB</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://single-market-economy.ec.europa.eu/single-market/goods/european-standards/harmonised-standards/iv-diagnostic-medical-devices_en" target="_blank" rel="noopener noreferrer">IV diagnostic medical devices - Internal Market, Industry, Entrepreneurship and SMEs</a></h2>
+        <div class="meta"><span class="flag">🇪🇺</span><span>single-market-economy.ec.europa.eu</span></div>
+        <p class="use">查 MDR/IVDR、NB 文件、主管機關與歐盟官方清單。</p>
+        
+        <div class="tags"><span class="tag">EU Official</span></div>
+      </article>
+      <article class="card" data-category="臨床評估 / 文獻" data-search="greenlight guru youtube.com 臨床評估 / 文獻 nov 4, 2025 yt must-subscribe #gg #qms #pmcf">
+        <div class="card-top">
+          <span class="pill category">臨床評估 / 文獻</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://www.youtube.com/@GreenlightGuru" target="_blank" rel="noopener noreferrer">Greenlight Guru</a></h2>
+        <div class="meta"><span class="flag">🇺🇸</span><span>youtube.com</span></div>
+        <p class="use">補 CER、CED、PMS/PMCF、SLR 與臨床評估方法。</p>
+        
+        <div class="tags"><span class="tag">YT Must-Subscribe</span><span class="tag">#GG</span><span class="tag">#QMS</span><span class="tag">#PMCF</span></div>
+      </article>
+      <article class="card" data-category="EU 官方 / NB" data-search="expert panels list health.ec.europa.eu eu 官方 / nb nov 4, 2025 eu official">
+        <div class="card-top">
+          <span class="pill category">EU 官方 / NB</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://health.ec.europa.eu/medical-devices-expert-panels/experts/expert-panels_en#4" target="_blank" rel="noopener noreferrer">Expert panels list</a></h2>
+        <div class="meta"><span class="flag">🇪🇺</span><span>health.ec.europa.eu</span></div>
+        <p class="use">查 MDR/IVDR、NB 文件、主管機關與歐盟官方清單。</p>
+        
+        <div class="tags"><span class="tag">EU Official</span></div>
+      </article>
+      <article class="card" data-category="學習頻道 / 課程" data-search="easy medical device youtube.com 學習頻道 / 課程 nov 4, 2025 yt must-subscribe #emd #mdr">
+        <div class="card-top">
+          <span class="pill category">學習頻道 / 課程</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://www.youtube.com/@EasyMedicalDevice" target="_blank" rel="noopener noreferrer">Easy Medical Device</a></h2>
+        <div class="meta"><span class="flag">🇨🇭</span><span>youtube.com</span></div>
+        <p class="use">拿來當 Podcast、YouTube、Substack 或課程的長期追蹤清單。</p>
+        
+        <div class="tags"><span class="tag">YT Must-Subscribe</span><span class="tag">#EMD</span><span class="tag">#MDR</span></div>
+      </article>
+      <article class="card" data-category="法規新聞 / 更新" data-search="eu medical device news | regulatory global regulatoryglobe.com 法規新聞 / 更新 nov 4, 2025 regulatory news #mdr #ivdr #updates">
+        <div class="card-top">
+          <span class="pill category">法規新聞 / 更新</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://www.regulatoryglobe.com/medical-device-news" target="_blank" rel="noopener noreferrer">EU Medical Device News | Regulatory Global</a></h2>
+        <div class="meta"><span class="flag"></span><span>regulatoryglobe.com</span></div>
+        <p class="use">定期追法規動態，避免資訊像醫材標籤一樣到處飄。</p>
+        
+        <div class="tags"><span class="tag">Regulatory News</span><span class="tag">#MDR</span><span class="tag">#IVDR</span><span class="tag">#updates</span></div>
+      </article>
+      <article class="card" data-category="法規新聞 / 更新" data-search="emd mag | easy medical device easymedicaldevice.com 法規新聞 / 更新 nov 4, 2025 regulatory news #emd #mag #magz #bi-months">
+        <div class="card-top">
+          <span class="pill category">法規新聞 / 更新</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://easymedicaldevice.com/emd-mag" target="_blank" rel="noopener noreferrer">EMD Mag | Easy Medical Device</a></h2>
+        <div class="meta"><span class="flag"></span><span>easymedicaldevice.com</span></div>
+        <p class="use">定期追法規動態，避免資訊像醫材標籤一樣到處飄。</p>
+        
+        <div class="tags"><span class="tag">Regulatory News</span><span class="tag">#EMD</span><span class="tag">#Mag</span><span class="tag">#magz</span><span class="tag">#bi-months</span></div>
+      </article>
+      <article class="card" data-category="臨床評估 / 文獻" data-search="donawa lifescience consulting (dlc) | publications donawa.com 臨床評估 / 文獻 nov 4, 2025 #clinical evaluation #donawa #ced">
+        <div class="card-top">
+          <span class="pill category">臨床評估 / 文獻</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://www.donawa.com/resources/publications#1559560166210-c5c174bc-3628" target="_blank" rel="noopener noreferrer">Donawa Lifescience Consulting (DLC) | Publications</a></h2>
+        <div class="meta"><span class="flag">🇮🇹</span><span>donawa.com</span></div>
+        <p class="use">補 CER、CED、PMS/PMCF、SLR 與臨床評估方法。</p>
+        
+        <div class="tags"><span class="tag">#Clinical Evaluation</span><span class="tag">#Donawa</span><span class="tag">#CED</span></div>
+      </article>
+      <article class="card" data-category="顧問文章 / 資源中心" data-search="blog | oriel orielstat.com 顧問文章 / 資源中心 nov 4, 2025 #qms #mdr #fda #qmsr #oriel">
+        <div class="card-top">
+          <span class="pill category">顧問文章 / 資源中心</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://www.orielstat.com/blog" target="_blank" rel="noopener noreferrer">Blog | Oriel</a></h2>
+        <div class="meta"><span class="flag">🇺🇸</span><span>orielstat.com</span></div>
+        <p class="use">顧問文章、白皮書與資源中心，適合找觀點與案例。</p>
+        
+        <div class="tags"><span class="tag">#QMS</span><span class="tag">#MDR</span><span class="tag">#FDA</span><span class="tag">#QMSR</span><span class="tag">#Oriel</span></div>
+      </article>
+      <article class="card" data-category="顧問文章 / 資源中心" data-search="blog | life science industry insights trinzo.com 顧問文章 / 資源中心 nov 4, 2025 #trino">
+        <div class="card-top">
+          <span class="pill category">顧問文章 / 資源中心</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://www.trinzo.com/blog" target="_blank" rel="noopener noreferrer">Blog | Life Science Industry Insights</a></h2>
+        <div class="meta"><span class="flag">🇮🇪</span><span>trinzo.com</span></div>
+        <p class="use">顧問文章、白皮書與資源中心，適合找觀點與案例。</p>
+        
+        <div class="tags"><span class="tag">#Trino</span></div>
+      </article>
+      <article class="card" data-category="顧問文章 / 資源中心" data-search="blog | easy medical device easymedicaldevice.com 顧問文章 / 資源中心 nov 4, 2025 #emd #mdr #qms">
+        <div class="card-top">
+          <span class="pill category">顧問文章 / 資源中心</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://easymedicaldevice.com/blog" target="_blank" rel="noopener noreferrer">Blog | Easy Medical Device</a></h2>
+        <div class="meta"><span class="flag">🇨🇭</span><span>easymedicaldevice.com</span></div>
+        <p class="use">顧問文章、白皮書與資源中心，適合找觀點與案例。</p>
+        
+        <div class="tags"><span class="tag">#EMD</span><span class="tag">#MDR</span><span class="tag">#QMS</span></div>
+      </article>
+      <article class="card" data-category="顧問文章 / 資源中心" data-search="blog - makrocare makrocare.com 顧問文章 / 資源中心 nov 4, 2025">
+        <div class="card-top">
+          <span class="pill category">顧問文章 / 資源中心</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://www.makrocare.com/makrocare-blog" target="_blank" rel="noopener noreferrer">Blog - MakroCare</a></h2>
+        <div class="meta"><span class="flag">🇺🇸</span><span>makrocare.com</span></div>
+        <p class="use">顧問文章、白皮書與資源中心，適合找觀點與案例。</p>
+        
+        <div class="tags"></div>
+      </article>
+      <article class="card" data-category="學習頻道 / 課程" data-search="bsi medical device training bsi.learncentral.com 學習頻道 / 課程 nov 4, 2025 #bsi #training">
+        <div class="card-top">
+          <span class="pill category">學習頻道 / 課程</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://bsi.learncentral.com/shop/Catalog.aspx?curriculum=7" target="_blank" rel="noopener noreferrer">BSI Medical Device Training</a></h2>
+        <div class="meta"><span class="flag">🇬🇧</span><span>bsi.learncentral.com</span></div>
+        <p class="use">拿來當 Podcast、YouTube、Substack 或課程的長期追蹤清單。</p>
+        
+        <div class="tags"><span class="tag">#BSI</span><span class="tag">#Training</span></div>
+      </article>
+      <article class="card" data-category="模板 / SOP / QMS" data-search="articles | mdhq medicaldevicehq.com 模板 / sop / qms nov 4, 2025 #rm #sw #qms #training #template #mdhq #blog">
+        <div class="card-top">
+          <span class="pill category">模板 / SOP / QMS</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://medicaldevicehq.com/articles" target="_blank" rel="noopener noreferrer">Articles | MDHQ</a></h2>
+        <div class="meta"><span class="flag">🇸🇪</span><span>medicaldevicehq.com</span></div>
+        <p class="use">快速找 QMS、SOP、CER/PMS、軟體流程等文件骨架。</p>
+        
+        <div class="tags"><span class="tag">#RM</span><span class="tag">#SW</span><span class="tag">#QMS</span><span class="tag">#Training</span><span class="tag">#Template</span><span class="tag">#MDHQ</span><span class="tag">#Blog</span></div>
+      </article>
+      <article class="card" data-category="SaMD / 軟體 / 網安" data-search="articles &amp; videos | innolitics innolitics.com samd / 軟體 / 網安 nov 4, 2025 #cs #innolitics #ai samd #samd">
+        <div class="card-top">
+          <span class="pill category">SaMD / 軟體 / 網安</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://innolitics.com/articles/cybersecurity" target="_blank" rel="noopener noreferrer">Articles &amp; Videos | Innolitics</a></h2>
+        <div class="meta"><span class="flag">🇺🇸</span><span>innolitics.com</span></div>
+        <p class="use">追 SaMD、AI/ML、IEC 62304、網安與軟體合規材料。</p>
+        
+        <div class="tags"><span class="tag">#CS</span><span class="tag">#Innolitics</span><span class="tag">#AI SaMD</span><span class="tag">#SaMD</span></div>
+      </article>
+      <article class="card" data-category="臨床評估 / 文獻" data-search="4betterdevices 4betterdevices.com 臨床評估 / 文獻 nov 4, 2025 #4bd #white paper #clinical evaluation #ced">
+        <div class="card-top">
+          <span class="pill category">臨床評估 / 文獻</span>
+          <span class="date">Nov 4, 2025</span>
+        </div>
+        <h2><a href="https://4betterdevices.com/guidances" target="_blank" rel="noopener noreferrer">4BetterDevices</a></h2>
+        <div class="meta"><span class="flag">🇩🇪</span><span>4betterdevices.com</span></div>
+        <p class="use">補 CER、CED、PMS/PMCF、SLR 與臨床評估方法。</p>
+        
+        <div class="tags"><span class="tag">#4BD</span><span class="tag">#White Paper</span><span class="tag">#Clinical Evaluation</span><span class="tag">#CED</span></div>
+      </article>
+      <article class="card" data-category="學習頻道 / 課程" data-search="qserve learn and training courses qservelearn.com 學習頻道 / 課程  training courses">
+        <div class="card-top">
+          <span class="pill category">學習頻道 / 課程</span>
+          <span class="date">未標日期</span>
+        </div>
+        <h2><a href="https://www.qservelearn.com/home?preview=true" target="_blank" rel="noopener noreferrer">Qserve Learn and Training Courses</a></h2>
+        <div class="meta"><span class="flag"></span><span>qservelearn.com</span></div>
+        <p class="use">拿來當 Podcast、YouTube、Substack 或課程的長期追蹤清單。</p>
+        <p class="note">Training Courses</p>
+        <div class="tags"></div>
+      </article>
+      <article class="card" data-category="EU 官方 / NB" data-search="medical devices - internal market, industry, entrepreneurship and smes single-market-economy.ec.europa.eu eu 官方 / nb ">
+        <div class="card-top">
+          <span class="pill category">EU 官方 / NB</span>
+          <span class="date">未標日期</span>
+        </div>
+        <h2><a href="https://single-market-economy.ec.europa.eu/single-market/goods/european-standards/harmonised-standards/medical-devices_en" target="_blank" rel="noopener noreferrer">Medical devices - Internal Market, Industry, Entrepreneurship and SMEs</a></h2>
+        <div class="meta"><span class="flag"></span><span>single-market-economy.ec.europa.eu</span></div>
+        <p class="use">查 MDR/IVDR、NB 文件、主管機關與歐盟官方清單。</p>
+        
+        <div class="tags"></div>
+      </article>
+      <article class="card" data-category="學習頻道 / 課程" data-search="let&#x27;s talk risk! with dr. naveen agarwal youtube.com 學習頻道 / 課程  yt must-subscribe #naveen #rm #podcast #ltr">
+        <div class="card-top">
+          <span class="pill category">學習頻道 / 課程</span>
+          <span class="date">未標日期</span>
+        </div>
+        <h2><a href="https://www.youtube.com/playlist?list=PLVwmUp8-vV5j5DDpZPyuKEeGgvgPsTRCD" target="_blank" rel="noopener noreferrer">Let&#x27;s Talk Risk! with Dr. Naveen Agarwal</a></h2>
+        <div class="meta"><span class="flag">🇺🇸</span><span>youtube.com</span></div>
+        <p class="use">拿來當 Podcast、YouTube、Substack 或課程的長期追蹤清單。</p>
+        
+        <div class="tags"><span class="tag">YT Must-Subscribe</span><span class="tag">#Naveen</span><span class="tag">#RM</span><span class="tag">#Podcast</span><span class="tag">#LTR</span></div>
+      </article>
+      <article class="card" data-category="模板 / SOP / QMS" data-search="fast track site | iso 13485 made easy: sops for fast-tracking your compliance fasttrackiso13485.com 模板 / sop / qms ">
+        <div class="card-top">
+          <span class="pill category">模板 / SOP / QMS</span>
+          <span class="date">未標日期</span>
+        </div>
+        <h2><a href="https://fasttrackiso13485.com/iso-13485-standard-operating-procedure-templates" target="_blank" rel="noopener noreferrer">Fast Track Site | ISO 13485 Made Easy: SOPs for Fast-Tracking Your Compliance</a></h2>
+        <div class="meta"><span class="flag"></span><span>fasttrackiso13485.com</span></div>
+        <p class="use">快速找 QMS、SOP、CER/PMS、軟體流程等文件骨架。</p>
+        
+        <div class="tags"></div>
+      </article>
+      <article class="card" data-category="EU 官方 / NB" data-search="eu mdr compliance eumdrcompliance.podia.com eu 官方 / nb  #mdr #rm #pms #eumdrcomp">
+        <div class="card-top">
+          <span class="pill category">EU 官方 / NB</span>
+          <span class="date">未標日期</span>
+        </div>
+        <h2><a href="https://eumdrcompliance.podia.com/" target="_blank" rel="noopener noreferrer">EU MDR Compliance</a></h2>
+        <div class="meta"><span class="flag">🇫🇷</span><span>eumdrcompliance.podia.com</span></div>
+        <p class="use">查 MDR/IVDR、NB 文件、主管機關與歐盟官方清單。</p>
+        
+        <div class="tags"><span class="tag">#MDR</span><span class="tag">#RM</span><span class="tag">#PMS</span><span class="tag">#EUMDRComp</span></div>
+      </article>
+      <article class="card" data-category="SaMD / 軟體 / 網安" data-search="cybermed cybermed.ai samd / 軟體 / 網安 ">
+        <div class="card-top">
+          <span class="pill category">SaMD / 軟體 / 網安</span>
+          <span class="date">未標日期</span>
+        </div>
+        <h2><a href="https://cybermed.ai/resources" target="_blank" rel="noopener noreferrer">CyberMed</a></h2>
+        <div class="meta"><span class="flag">🇺🇸</span><span>cybermed.ai</span></div>
+        <p class="use">追 SaMD、AI/ML、IEC 62304、網安與軟體合規材料。</p>
+        
+        <div class="tags"></div>
+      </article></section>
+    <div class="empty" id="empty">找不到符合條件的連結。搜尋詞可能比某些法規條文還難懂。</div>
+
+    <footer>
+      <p>提醒：外部網站內容與網址可能異動；正式法規判讀仍以 FDA、European Commission、Team-NB 等官方來源為準。</p>
+    </footer>
+  </main>
+
+  <script>
+    const q = document.getElementById('q');
+    const cards = Array.from(document.querySelectorAll('.card'));
+    const buttons = Array.from(document.querySelectorAll('.filter'));
+    const count = document.getElementById('count');
+    const empty = document.getElementById('empty');
+    let activeCat = '全部';
+
+    function applyFilter() {
+      const query = q.value.trim().toLowerCase();
+      let shown = 0;
+      cards.forEach(card => {
+        const okCat = activeCat === '全部' || card.dataset.category === activeCat;
+        const okText = !query || card.dataset.search.includes(query);
+        const show = okCat && okText;
+        card.hidden = !show;
+        if (show) shown++;
+      });
+      count.textContent = `顯示 ${shown} / 75`;
+      empty.style.display = shown ? 'none' : 'block';
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeCat = btn.dataset.cat;
+        buttons.forEach(b => {
+          const isActive = b === btn;
+          b.classList.toggle('active', isActive);
+          b.setAttribute('aria-pressed', String(isActive));
+        });
+        applyFilter();
+      });
+    });
+    q.addEventListener('input', applyFilter);
+  </script>
+</body>
+</html>

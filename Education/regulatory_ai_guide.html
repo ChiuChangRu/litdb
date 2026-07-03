@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI × 醫療器材法規運用實務指南</title>
+<style>
+  :root{
+    --ink:#14202e;
+    --ink-soft:#2c3a4a;
+    --paper:#faf7f2;
+    --paper-card:#ffffff;
+    --line:#e3dcd0;
+    --accent:#c4471a;      /* 法規橘 */
+    --accent-deep:#8f2f0f;
+    --iso:#2e6e6a;
+    --mdr:#3a5ba0;
+    --fda:#7a4ea0;
+    --warn:#b5641a;
+    --muted:#6c6155;
+    --code-bg:#1b2733;
+    --code-ink:#e8edf2;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",system-ui,-apple-system,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.78;
+    font-size:16px;
+  }
+  /* ---------- Layout ---------- */
+  .wrap{display:flex;min-height:100vh;}
+  nav.toc{
+    width:300px;flex:0 0 300px;
+    background:var(--ink);
+    color:#cfd8e2;
+    padding:30px 22px 60px;
+    position:sticky;top:0;height:100vh;overflow-y:auto;
+  }
+  nav.toc h1{
+    font-size:18px;color:#fff;line-height:1.4;margin:0 0 4px;font-weight:700;letter-spacing:.5px;
+  }
+  nav.toc .sub{font-size:12.5px;color:#8da0b4;margin-bottom:24px;border-bottom:1px solid #2a3b4d;padding-bottom:18px;}
+  nav.toc a{
+    display:block;color:#b6c4d4;text-decoration:none;font-size:13.5px;
+    padding:5px 10px;border-radius:6px;margin:1px 0;border-left:2px solid transparent;
+    transition:all .15s;
+  }
+  nav.toc a:hover{background:#1f2f40;color:#fff;}
+  nav.toc a.part{margin-top:16px;font-weight:700;color:#e8a583;font-size:12px;letter-spacing:1px;text-transform:uppercase;border-left:none;padding-left:10px;}
+  main{flex:1;min-width:0;padding:0 0 100px;}
+  .inner{max-width:880px;margin:0 auto;padding:0 46px;}
+
+  /* ---------- Hero ---------- */
+  header.hero{
+    background:linear-gradient(160deg,#14202e 0%,#1d3145 60%,#243d52 100%);
+    color:#fff;padding:64px 0 52px;margin-bottom:48px;
+    border-bottom:4px solid var(--accent);
+  }
+  header.hero .inner{padding-top:0;}
+  header.hero .eyebrow{
+    color:#e8a583;font-size:13px;letter-spacing:3px;text-transform:uppercase;font-weight:600;margin-bottom:18px;
+  }
+  header.hero h1{
+    font-size:38px;line-height:1.25;margin:0 0 18px;font-weight:800;letter-spacing:.5px;
+  }
+  header.hero p{font-size:16px;color:#c4d2e0;max-width:640px;margin:0;}
+  header.hero .meta{
+    margin-top:28px;display:flex;gap:26px;flex-wrap:wrap;font-size:13px;color:#9fb2c6;
+    border-top:1px solid #2f4459;padding-top:20px;
+  }
+  header.hero .meta b{color:#e8a583;font-weight:600;}
+
+  /* ---------- Sections ---------- */
+  section{margin-bottom:54px;scroll-margin-top:20px;}
+  .part-divider{
+    margin:64px 0 40px;padding:0;
+  }
+  .part-divider .inner{padding-top:0;padding-bottom:0;}
+  .part-label{
+    display:inline-block;background:var(--ink);color:#e8a583;font-size:12px;font-weight:700;
+    letter-spacing:2px;padding:6px 16px;border-radius:4px;text-transform:uppercase;
+  }
+  .part-divider h2{
+    font-size:27px;margin:16px 0 0;color:var(--ink);font-weight:800;line-height:1.3;
+    border-bottom:3px solid var(--accent);padding-bottom:14px;
+  }
+  h3{
+    font-size:21px;color:var(--ink);font-weight:700;margin:38px 0 14px;line-height:1.4;
+    display:flex;align-items:baseline;gap:10px;
+  }
+  h3 .ico{font-size:18px;}
+  h4{font-size:16.5px;color:var(--accent-deep);font-weight:700;margin:26px 0 10px;}
+  p{margin:12px 0;}
+  a.ext{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(196,71,26,.35);word-break:break-all;}
+  a.ext:hover{border-bottom-color:var(--accent);background:rgba(196,71,26,.06);}
+
+  /* ---------- Reg chips ---------- */
+  .chip{
+    display:inline-block;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:20px;
+    margin:0 3px 3px 0;letter-spacing:.3px;vertical-align:middle;white-space:nowrap;
+  }
+  .chip.iso{background:rgba(46,110,106,.13);color:var(--iso);border:1px solid rgba(46,110,106,.3);}
+  .chip.mdr{background:rgba(58,91,160,.12);color:var(--mdr);border:1px solid rgba(58,91,160,.3);}
+  .chip.fda{background:rgba(122,78,160,.12);color:var(--fda);border:1px solid rgba(122,78,160,.3);}
+  .chip.gen{background:rgba(196,71,26,.1);color:var(--accent-deep);border:1px solid rgba(196,71,26,.3);}
+
+  /* ---------- Callouts ---------- */
+  .callout{
+    border-radius:10px;padding:18px 22px;margin:20px 0;font-size:15px;border:1px solid var(--line);
+    background:var(--paper-card);
+  }
+  .callout .ct{font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;display:block;}
+  .callout.tip{background:#f4f9f4;border-color:#cfe6cf;}
+  .callout.tip .ct{color:#2f7d3a;}
+  .callout.warn{background:#fdf6ec;border-color:#f0d9b5;}
+  .callout.warn .ct{color:var(--warn);}
+  .callout.key{background:#fbf0eb;border-color:#eccabb;}
+  .callout.key .ct{color:var(--accent-deep);}
+  .callout.quote{background:#f3f5f8;border-left:4px solid var(--mdr);border-radius:0 8px 8px 0;font-style:italic;color:var(--ink-soft);}
+
+  /* ---------- Code / prompt ---------- */
+  pre{
+    background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:18px 20px;
+    overflow-x:auto;font-size:13.5px;line-height:1.7;margin:18px 0;
+    font-family:"SF Mono",Menlo,Consolas,"Courier New",monospace;
+    border:1px solid #2b3a49;
+  }
+  pre .pc{color:#e8a583;}
+  code.inline{
+    background:#efe7db;color:var(--accent-deep);padding:1.5px 6px;border-radius:4px;
+    font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13.5px;
+  }
+  .prompt-label{
+    display:inline-block;background:var(--accent);color:#fff;font-size:11px;font-weight:700;
+    padding:3px 12px;border-radius:6px 6px 0 0;letter-spacing:1px;margin-bottom:-2px;
+  }
+
+  /* ---------- Tables ---------- */
+  .tbl-wrap{overflow-x:auto;margin:20px 0;border-radius:10px;border:1px solid var(--line);}
+  table{border-collapse:collapse;width:100%;font-size:14px;background:var(--paper-card);}
+  th{background:var(--ink);color:#fff;text-align:left;padding:11px 14px;font-weight:600;font-size:13px;white-space:nowrap;}
+  td{padding:10px 14px;border-top:1px solid var(--line);vertical-align:top;}
+  tr:nth-child(even) td{background:#faf6f0;}
+  .grade-major{color:#c0392b;font-weight:700;}
+  .grade-minor{color:#b5641a;font-weight:700;}
+
+  /* ---------- Lists ---------- */
+  ul,ol{margin:12px 0;padding-left:24px;}
+  li{margin:7px 0;}
+  ul.clean{list-style:none;padding-left:0;}
+  ul.clean li{padding-left:24px;position:relative;}
+  ul.clean li::before{content:"▸";color:var(--accent);position:absolute;left:4px;font-weight:700;}
+
+  .lede{font-size:17px;color:var(--ink-soft);border-left:3px solid var(--accent);padding-left:18px;margin:0 0 28px;}
+
+  /* mobile */
+  @media(max-width:920px){
+    nav.toc{display:none;}
+    .inner{padding:0 22px;}
+    header.hero h1{font-size:29px;}
+    .part-divider h2{font-size:23px;}
+  }
+  footer{background:var(--ink);color:#8da0b4;padding:36px 0;font-size:13px;text-align:center;}
+  footer .inner{padding-top:0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ================= TOC ================= -->
+<nav class="toc">
+  <h1>AI × 醫療器材法規運用</h1>
+  <div class="sub">實務指南 · 2026-06-26 課程整合（講義 + 逐字稿）</div>
+
+  <a class="part">序 · 核心觀念</a>
+  <a href="#c0-1">法規專業為何決定 AI 成敗</a>
+  <a href="#c0-2">提示詞演化：Bad → Best</a>
+
+  <a class="part">PART 1 · 降低幻覺與法規定錨</a>
+  <a href="#c1-1">負面排除與版本定錨</a>
+  <a href="#c1-2">ISO 14971 新舊版差異實例</a>
+  <a href="#c1-3">思維鏈與法定要素拆解</a>
+  <a href="#c1-4">稽核員視角與自我批判</a>
+  <a href="#c1-5">量化、追溯與人類防線</a>
+
+  <a class="part">PART 2 · 法規寫作語氣</a>
+  <a href="#c2-1">法規文件 Tone 對照</a>
+  <a href="#c2-2">混合語氣與文件類型</a>
+
+  <a class="part">PART 3 · 法規知識庫</a>
+  <a href="#c3-1">知識系統分類架構</a>
+  <a href="#c3-2">NBLM 法規證據指令</a>
+  <a href="#c3-3">MDR 61(10) 案例對比</a>
+
+  <a class="part">PART 4 · 法規情報更新</a>
+  <a href="#c4-1">FDA CDRH / MDR-IVDR 流程</a>
+  <a href="#c4-2">Guidance 分類與索引問題</a>
+
+  <a class="part">PART 5 · 法規差異分析</a>
+  <a href="#c5-1">Gap Analysis 工作流</a>
+
+  <a class="part">PART 6 · 競品法規調查</a>
+  <a href="#c6-1">510(k) 變更歷程</a>
+
+  <a class="part">PART 7 · MAUDE → 風險分析</a>
+  <a href="#c7-1">不良事件還原風險分析</a>
+
+  <a class="part">PART 8 · 生命週期策略</a>
+  <a href="#c8-1">Guidance Mapping Matrix</a>
+
+  <a class="part">PART 9 · 角色與 Meta Prompt</a>
+  <a href="#c9-1">領域專家角色設定</a>
+  <a href="#c9-2">Meta Prompt 應用</a>
+
+  <a class="part">PART 10 · 其他法規應用</a>
+  <a href="#c10-1">ISO 15223-1 標籤</a>
+  <a href="#c10-2">法規教練</a>
+  <a href="#c10-3">AI 審查趨勢</a>
+
+  <a class="part">PART 11 · 資料保護合規</a>
+  <a href="#c11-1">標準版權與封閉環境</a>
+</nav>
+
+<!-- ================= MAIN ================= -->
+<main>
+
+<header class="hero">
+  <div class="inner">
+    <div class="eyebrow">Regulatory Affairs × Generative AI</div>
+    <h1>AI 在醫療器材法規<br>運用實務指南</h1>
+    <p>整合 2026-06-26 課程講義與現場逐字稿，聚焦所有與法規（ISO / MDR / IVDR / FDA）相關的 AI 應用方法、提示詞技巧與合規原則。</p>
+    <div class="meta">
+      <span><b>主題</b>　法規運用 Regulatory Application</span>
+      <span><b>來源</b>　講義 Markdown + 22 段逐字稿</span>
+      <span><b>對象</b>　QA / RA 法規專業人員</span>
+    </div>
+  </div>
+</header>
+
+<div class="inner">
+
+<!-- ===== 序 ===== -->
+<section id="c0-1">
+  <p class="lede">在 AI 時代，法規專業不是被取代的對象，而是駕馭 AI 的關鍵。沒有專業知識，你只能照單全收一堆看似專業、卻充滿合規漏洞的幻覺。</p>
+
+  <h3><span class="ico">⚖️</span>法規專業為何決定 AI 成敗</h3>
+  <p>AI 真正的價值，在於為法規專業人員提供一份具備防禦力的初稿（<code class="inline">audit-defensible draft</code>），但仍需人類在流程最後端閱讀、挑戰、改進，並為輸出承擔最終責任。</p>
+  <ul class="clean">
+    <li><b>弱提示（weak prompt）</b>通常只會產出讓人想整篇刪除重寫的內容。</li>
+    <li><b>精心設計的提示（well-engineered prompt）</b>能產出符合標準、結構完整、可隨時備查（audit ready）的初稿，並減少 70% 以上的撰寫工作量。</li>
+    <li>唯有你具備足夠知識、能看出 AI 哪裡寫錯，這些 Prompt 才會變得安全可用。</li>
+  </ul>
+  <div class="callout warn">
+    <span class="ct">⚠️ 風險提醒</span>
+    AI 雖能大幅節省時間，但前提是使用者具備深厚的行業知識。法規工作者必須懂得在提示詞中正確填入「適用法規、條款」與「產品的特性參數」。若缺乏經驗而盲目使用 AI，可能產出看似專業、卻充滿合規漏洞（幻覺）的文件，帶來極大風險。別忘了讓 AI 在人類監督（<code class="inline">human-in-the-loop</code>）下執行任務。
+  </div>
+
+  <h4>未來 4 年 QARA 人員的 AI 能力路線</h4>
+  <ul class="clean">
+    <li><b>未來 2 年：成為 Agentic AI 能手</b>—— 不是一次性 prompt，而是建立可重複使用的 agent（固定指令集、脈絡與規則），縮小每次輸出的變異。</li>
+    <li><b>之後 2 年：成為 AI 技能建構者</b>—— 建立可生成完整文件組的 skill pack，學會 markdown 與機器可讀輸出，整合結構化內容管理（一份 Intended Use Statement 只需存在一處、核准一次）。</li>
+    <li><b>分工順序不可逆</b>：資淺人員用 AI 加速學習，但必須先有「什麼是好的輸出」的判斷力；資深人員則先讓 AI 做初步、自己把關。</li>
+  </ul>
+</section>
+
+<section id="c0-2">
+  <h3><span class="ico">🎯</span>提示詞演化：Bad → Better → Best</h3>
+  <p>同樣一個任務，從「無腦輸出」到「專業顧問」的差別，在於是否提供了 <b>context（上下文）+ task（任務）+ process（步驟）</b>。</p>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>層級</th><th>內容</th><th>關鍵技巧</th></tr>
+    <tr><td><b>Bad</b></td><td>只有 task，把所有思考工作丟給 AI</td><td>—（產出與期待不符）</td></tr>
+    <tr><td><b>Better</b></td><td>task + process，要求 AI「先別急著寫」</td><td>逆向提問 Reverse Prompting：先請 AI 提出澄清問題，對齊 niche、受眾與目標</td></tr>
+    <tr><td><b>Best</b></td><td>context + task + process</td><td>背景注入 Context Grounding + 步驟拆解 Step-by-step：先上傳參考檔、請 AI 讀完再提問、再逐步推進</td></tr>
+  </table>
+  </div>
+  <div class="callout key">
+    <span class="ct">㊙️ 工作流程</span>
+    先提供上下文 → 請 AI 先讀資料 → 再提問 → 再 refine。如此安排能大幅減少 AI 錯誤，並產出高度客製化的實用內容。對法規工作而言，關鍵三要素是：<b>提問技巧、上下文（AI 越了解你輸出越好）、專屬知識庫</b>。
+  </div>
+</section>
+
+<!-- ===== PART 1 ===== -->
+<div class="part-divider" id="part1"><div class="inner" style="padding:0">
+  <span class="part-label">PART 1</span>
+  <h2>降低幻覺與法規定錨 — 把 AI 變成具稽核防禦力的審核專家</h2>
+</div></div>
+
+<section id="c1-1">
+  <p class="lede">幻覺一定會有，因為 LLM 是機率生成、往機率最大的方向走。法規工作者的任務，是用專業把 AI「定錨（anchor）」到正確的法規版本與條文上。</p>
+
+  <h3><span class="ico">🚫</span>負面排除與版本定錨
+    <span class="chip iso">ISO 14971</span><span class="chip mdr">MDR GSPR</span>
+  </h3>
+  <p>LLM 的訓練資料混雜大量舊版法規，而且拿不掉（都變成參數了）。控制方法有兩個核心：</p>
+  <ul class="clean">
+    <li><b>切斷過時知識（Version-specific）</b>：精準指定版本，例如 <code class="inline">Use ISO 14971:2019 (NOT 2007)</code>，防堵 AI 自動套用已廢棄的術語。</li>
+    <li><b>負面排除（Negative Constraints）</b>：預先提供規則與版本差異。例如明確告訴 AI：MDR Annex I GSPR §2 and 4 要求風險控制須為 reduce risks AFAP，<b>不允許</b> ISO 14971:2019 §4.2 Note 1 所舉例的 ALARP（盡可能降低風險），以避免最常見的版本混淆。</li>
+  </ul>
+  <div class="callout tip">
+    <span class="ct">㊙️ AI 看得懂高亮</span>
+    AI 能辨識 Markdown 強調符號：大寫代表 keep attention、粗體（** **）代表重點。給 AI 這些符號，它會對該處給予更多機率權重，往你要的方向投影。所以「<b>NOT 2007</b>」用粗體框起來會更有效。
+  </div>
+</section>
+
+<section id="c1-2">
+  <h3><span class="ico">🔍</span>實例：ISO 14971 新舊版的關鍵差異
+    <span class="chip iso">ISO 14971:2019</span>
+  </h3>
+  <p>逐字稿中講師示範了一個真實的幻覺案例。要求 AI 寫出「整體剩餘風險評估（overall residual risk）」章節原始條文，開源權重模型的輸出出現兩個錯誤：</p>
+  <ol>
+    <li><b>跑錯章節</b>：即便明確指定 overall，AI 仍跑到 §7.5（個別剩餘風險評估），而非條文 8（整體剩餘風險評估）—— 被 2007 舊版汙染。</li>
+    <li><b>漏掉新版核心邏輯</b>：沒提到整體剩餘風險要與臨床利益做權衡。</li>
+  </ol>
+  <div class="callout key">
+    <span class="ct">⚖️ 新舊版最大差異</span>
+    <b>舊版</b>：整體剩餘風險「不可接受」時，才要做利益風險評估。<br>
+    <b>新版</b>：在做整體剩餘風險評估時，<b>一律</b>採用利益與風險的權衡來作為判斷依據（不管可不可接受，都用 benefit-risk 來決定）。
+  </div>
+  <p>修正方法：在提示詞中（1）限定為條文 8、用粗體標註 <b>NOT</b> 舊版條文號；（2）補上關鍵字「評估整體剩餘風險時要將所有剩餘風險的貢獻與產品臨床利益做權衡」。AI 的 anchor 就會努力往「等於 1」的正確位置投影，把接近正確的條文逼出來。</p>
+  <div class="callout warn">
+    <span class="ct">⚠️ 資安延伸</span>
+    這種「提示詞注入逼出原文」的技巧，與越獄（jailbreak）原理相同 —— 可被用來逼出 AI 資料庫裡的版權條文或個資。這是 AI 時代的網路安全考量：防護欄會被邏輯繞過。
+  </div>
+</section>
+
+<section id="c1-3">
+  <h3><span class="ico">🧩</span>強制思維鏈推論與法定要素拆解
+    <span class="chip mdr">MDR GSPR §23.4(b)</span>
+  </h3>
+  <ul class="clean">
+    <li><b>強制第零步推論（Step 0: Reason explicitly）</b>：要求 AI 產出最終表格或文件前，先寫出推論過程與法規影響，避免淪為機械式填表，降低漏掉高風險項目的機率。</li>
+    <li><b>逐段展開以防跳步</b>：AI 天生偏好摘要、避重就輕。指定明確條款起訖範圍（例如逐段分析 review … against MDR Article 10.1 to 10.16）。</li>
+    <li><b>預期用途拆解為法規要素</b>：依 MDR GSPR §23.4(b) 將 Intended Purpose 拆為 Indication、Contraindications、Patient Target Group、Intended User，強迫模型逐一確認，確保法規涵蓋率完整。</li>
+  </ul>
+  <p>逐字稿補充：講師用「風險管理一步步做」類比 —— 先 create intended use → 回答安全特徵 37 個問題（依 intended use 涵蓋的 indication、intended user、使用環境、技術特徵）→ 再做風險分析。每一步的輸出餵入下一步的輸入，AI 才能維持追溯性與一致性，這就是 human-in-the-loop 的接龍。</p>
+</section>
+
+<section id="c1-4">
+  <h3><span class="ico">🕵️</span>內建稽核員視角與自我批判
+    <span class="chip gen">MDCG</span><span class="chip iso">ISO 13485</span>
+  </h3>
+  <ul class="clean">
+    <li><b>反思框架自我審查（Reflexion-style）</b>：指令結尾要求 AI 扮演 QMS auditor 或 TD assessor，依特定 MDCG guidance 回頭批改自己剛產出的草稿，列出潛在缺漏 —— 實測能將初稿遺漏率降至極低。</li>
+    <li><b>附加稽核員查核表</b>：在輸出結尾附上「第三方審查視角」的重點檢核清單（如管理審查議程後，附上外部稽核員會重點檢視的清單）。</li>
+    <li><b>審計風險分級標示</b>：做 Gap Analysis 時主動標示 <span class="grade-major">Major</span>、<span class="grade-minor">Minor conformity</span> 或 Opportunity for Improvement，作為 risk-based 分類。</li>
+  </ul>
+
+  <h4>精準標記需覈實的數據（Calibrated Claim Flagging）</h4>
+  <p>為防範 AI 捏造數據，要求 AI 在產出具體數據或高風險聲明時主動標記，引導人類專家把精力投入最關鍵數據的真實性查核：</p>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>Flag</th><th>在文件中的意思</th><th>可否直接使用</th></tr>
+    <tr><td><b>FACT</b></td><td>可回到明確來源支持的內容</td><td>可作為草稿依據，仍須確認引用與適用性</td></tr>
+    <tr><td><b>INFERENCE</b></td><td>基於證據所作的專業解讀</td><td>可保留，但需由具權責者確認</td></tr>
+    <tr><td><b>RECOMMENDATION</b></td><td>建議做法，不等於法規義務</td><td>可作為決策選項</td></tr>
+    <tr><td><b>TBD</b></td><td>關鍵資訊不足或適用性未確認</td><td>不得直接納入正式結論或受控文件</td></tr>
+  </table>
+  </div>
+</section>
+
+<section id="c1-5">
+  <h3><span class="ico">📐</span>拒絕模糊：量化、追溯與人類防線</h3>
+  <ul class="clean">
+    <li><b>要求統計證明</b>：禁止 AI 憑空生成武斷數字（如隨意填測試樣本數 50 人），強迫提出統計學理論支持與完整計算過程。</li>
+    <li><b>具體效能閾值定錨</b>：禁止空泛形容詞，必須推導出「具統計意義且可測試的效能閾值門檻」。</li>
+    <li><b>強制雙向追溯</b>：所有驗證測試、PMCF 目標都必須 100% 回溯對接到特定需求規格或臨床評估殘餘間隙（Residual Gaps），確保邏輯閉環。</li>
+  </ul>
+  <div class="callout key">
+    <span class="ct">🛡️ 嚴守人類決策防線</span>
+    在所有法規品保的提示詞操作中，必須建立核心認知：<b>AI 僅是起草工具，絕非最終決策者</b>。所有標準版本、法規解釋、臨床聲明與指引文件編號，在放入最終的 DHF、DMR、TD 或遞交 NB / FDA 之前，都必須由具資格的法規專業人員進行獨立的人工查驗與簽核。
+  </div>
+  <div class="callout quote">
+    使用 AI 就像騎馬：這匹馬能跑很快，但你是騎士，你的技巧（專業知識）決定了牠能跑多快、何時該停、何時該衝。沒有專業，馬就成了脫韁野馬。
+  </div>
+</section>
+
+<!-- ===== PART 2 ===== -->
+<div class="part-divider" id="part2"><div class="inner" style="padding:0">
+  <span class="part-label">PART 2</span>
+  <h2>法規寫作語氣（Tone）調整</h2>
+</div></div>
+
+<section id="c2-1">
+  <p class="lede">不同法規文件需要不同語氣。先選 1 個主 Tone，再加 1–2 個輔助 Tone：主 Tone 決定整體氣質，輔助 Tone 修正「太硬、太冷、太學術或太口語」的問題。</p>
+
+  <h3><span class="ico">✍️</span>法規寫作常用 Tone</h3>
+  <span class="prompt-label">PROMPT · 語氣調整</span>
+<pre><span class="pc"># Rewrite the following text while maintaining its original meaning,</span>
+<span class="pc"># but adjust the tone as specified below.</span>
+Original text: `[paste text]`
+New tone: `[formal, professional, authoritative, concise, etc.]`</pre>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>Tone</th><th>核心特徵</th><th>常見場景</th></tr>
+    <tr><td>Formal</td><td>避免口語、縮寫與過度主觀，句型完整正式</td><td>法規文件、官方聲明、合約、正式報告</td></tr>
+    <tr><td>Authoritative</td><td>自信、穩定、判斷明確</td><td>審查意見、法規回覆、評估結論、專家報告</td></tr>
+    <tr><td>Objective</td><td>以事實、可驗證內容為主，避免情緒化</td><td>稽核報告、finding、nonconformity、PMS/PSUR</td></tr>
+    <tr><td>Evidence-based</td><td>主張需有資料/文獻支持，重視可追溯性</td><td>CER、clinical overview、科學或臨床評估</td></tr>
+    <tr><td>Clear / Plain</td><td>讓讀者快速理解，減少術語</td><td>SSCP、IFU 說明、對非技術讀者文件</td></tr>
+    <tr><td>Concise</td><td>刪除冗詞，保留必要資訊與邏輯</td><td>Cover letter、deficiency response、管理摘要</td></tr>
+    <tr><td>Respectful</td><td>堅定但不對抗，保持禮貌合作</td><td>回覆主管機關、回覆公告機構、跨部門信件</td></tr>
+    <tr><td>Analytical</td><td>強調比較、評估、缺口判讀</td><td>technical assessment report、HF/UE report、風險分析</td></tr>
+  </table>
+  </div>
+</section>
+
+<section id="c2-2">
+  <h3><span class="ico">🎚️</span>不同文件類型的混合語氣（Blended Tone）</h3>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>文件類型</th><th>主 Tone</th><th>輔助 Tone</th><th>寫作重點</th></tr>
+    <tr><td>缺失回覆 Deficiency Response</td><td>Authoritative</td><td>Formal + Respectful</td><td>直接對應問題點、引用條文、必要時承諾改善並附時間表</td></tr>
+    <tr><td>臨床前測試報告</td><td>Formal</td><td>Objective + Precise</td><td>數據清楚、方法可追溯、結論不過度延伸</td></tr>
+    <tr><td>產品描述與規格</td><td>Professional</td><td>Clear + Structured</td><td>條目清晰、數值明確、避免行銷語言</td></tr>
+    <tr><td>風險管理文件 RMF</td><td>Formal</td><td>Authoritative + Objective</td><td>展現對 ISO 14971 的掌握；residual risk justification 不可語焉不詳</td></tr>
+    <tr><td>PMS / PSUR</td><td>Formal</td><td>Evidence-based + Objective</td><td>趨勢分析有結論、benefit-risk 持續合理性明確</td></tr>
+    <tr><td>臨床評估報告 CER</td><td>Formal</td><td>Evidence-based + Authoritative</td><td>文獻評估邏輯清楚、臨床差距誠實說明而非迴避</td></tr>
+    <tr><td>QMS SOP</td><td>Professional</td><td>Clear + Structured</td><td>動詞指令明確（shall/must）、責任人與記錄要求清楚</td></tr>
+    <tr><td>CAPA / Change / Letter to File</td><td>Professional</td><td>Objective + Concise</td><td>問題描述不模糊、根本原因有邏輯、決策依據清楚</td></tr>
+    <tr><td>IFU（非技術用戶）</td><td>Clear / Plain</td><td>Friendly + Reassuring</td><td>避免術語、句短直接；警示語氣不恐慌但清楚傳達風險</td></tr>
+    <tr><td>NB 稽核 Finding / NC / OFI</td><td>Authoritative</td><td>Formal + Objective</td><td>以事實為主、引用對應 Annex（MDR Annex IX/XI、ISO 13485）、問題分類有依據</td></tr>
+  </table>
+  </div>
+  <div class="callout tip">
+    <span class="ct">微調範例</span>
+    <b>Major NC</b>：Authoritative + Formal + Precise（後果與要求明確）。<b>Minor NC</b>：語氣不需嚴厲但期限範圍清楚。<b>Observation</b>：描述現象、指出潛在風險。<b>OFI</b>：較合作正向，強調改善機會而非問題。
+  </div>
+</section>
+
+<!-- ===== PART 3 ===== -->
+<div class="part-divider" id="part3"><div class="inner" style="padding:0">
+  <span class="part-label">PART 3</span>
+  <h2>建立可靠的法規知識庫（Regulatory Knowledge Base）</h2>
+</div></div>
+
+<section id="c3-1">
+  <p class="lede">一年後你跟同事的差距，來自背後是否有一群「專家知識庫」。把專家討論的經驗、ISO 標準、法規指引、webinar 內容整理成結構化報告，變成你的知識庫，再用問問題的方式探勘出來。</p>
+
+  <h3><span class="ico">🗂️</span>法規知識系統分類架構
+    <span class="chip mdr">MDR TD BPG</span><span class="chip fda">FDA Premarket</span>
+  </h3>
+  <p>檔名慣例 = [Author/organization]_[Title/Description]_[Date]，例如 <code class="inline">FDA_Device Software Function (DSF)_2024</code>。用與 MDR TD BPG、FDA premarket submissions、quality system 一致的術語分類：</p>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>分類</th><th>子項（法規對應）</th></tr>
+    <tr><td>1. Device Description & Specification (DDS)</td><td>Intended Use / Intended Purpose (IU)</td></tr>
+    <tr><td>2. Instruction for Use / User Manual (IFU/UM)</td><td>Labeling (LBL)</td></tr>
+    <tr><td>3. Biocompatibility (Biocomp)</td><td>BEP、BER、Chemical Characteristic (-18)、CMR ED</td></tr>
+    <tr><td>4. Software (SW)</td><td>SaMD、AI SaMD（Ground Truth）、AI Act、Cybersecurity (CS)、PCCP、SBOM、SRS</td></tr>
+    <tr><td>5. Active Device</td><td>60601-1 (ES)、60601-1-2 (EMC)、Wireless RF (WRF)、Wireless Coexistence (WCX)</td></tr>
+    <tr><td>6. Usability Engineering (UE)</td><td>Formative、Summative、URRA、UXUI</td></tr>
+    <tr><td>7. Sterilization (STER)</td><td>—</td></tr>
+    <tr><td>8. Risk Management (RM)</td><td>Hazard Analysis、Safety Char、Clinical Harm、Benefit Risk Analysis (BRA)</td></tr>
+    <tr><td>9. Clinical Evaluation (Clin Eval)</td><td>CDP、CEP、LSR、CER、Equivalence、Clinical Investigation、PMCF、Article 61(10)</td></tr>
+    <tr><td>10. PMS</td><td>Vigilance (VGL)、US Medical Device Reporting (MDR)</td></tr>
+    <tr><td>11. Reprocessing (SUDR)</td><td>single-use / reusable device</td></tr>
+    <tr><td>12. EU MDR / IVDR</td><td>EO、PRRC、TD、GSPR、Eudamed、Conformity Assessment (CAS)</td></tr>
+    <tr><td>13. FDA</td><td>510(k)、Q-Sub、De Novo、PMA、eSTAR</td></tr>
+    <tr><td>14. QMS</td><td>QMSR、MDR QMS、Design Control（DIP）、Process Validation (PVAL)</td></tr>
+  </table>
+  </div>
+  <div class="callout tip">
+    <span class="ct">㊙️ RAG 檢索效率</span>
+    為每份知識庫來源建立「結構化章節架構」與文件開頭的「語意標籤 — 關鍵字」。NBLM 的 chunk 機制對文件結構敏感，很高機率沿 Markdown 標題邊界切。每章節前加 keyword = 強化該 chunk 語意密度，讓它被抽出來時能自我說明（Anthropic Contextual Retrieval 研究）。結構清晰的單一文件 ≥ 多個零散來源（AWS RAG 最佳實務）。
+  </div>
+  <div class="callout warn">
+    <span class="ct">⚠️ 複雜 PDF 匯入陷阱</span>
+    複雜表格、雙欄排版的 PDF 匯入 NBLM 後，AI 看到的可能是錯亂的內容。解法：先用 Notion import PDF 轉格式 → 檢查正確後輸出 Markdown 給 NBLM；複雜表格用 AI 單獨重建（tb2md）。若官方有提供 HTML（如 EU MDR：<a class="ext" href="https://eur-lex.europa.eu/legal-content/EN/AUTO/?uri=CELEX:02017R0745-20260101" target="_blank">EUR-Lex 02017R0745</a>），直接下載 HTML 再轉 Markdown 餵 AI。
+  </div>
+</section>
+
+<section id="c3-2">
+  <h3><span class="ico">🏷️</span>NBLM 法規證據處理指令（Source Tiers & Claim Flagging）
+    <span class="chip gen">Audit-defensible</span>
+  </h3>
+  <p>這是課程中最完整的法規證據控制框架：為 NotebookLM 設定 Custom Instruction，讓它依「來源可靠性分級」標註每個 claim，產出 audit- 與 reviewer-defensible 的分析。核心分三層來源：</p>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>Tier</th><th>定義</th><th>範例</th><th>使用規則</th></tr>
+    <tr>
+      <td><b>Tier 1<br>官方</b></td>
+      <td>官方法規文本、主管機關 guidance、國際/調和標準</td>
+      <td>EU MDR/IVDR、FDA regulations & guidance、MDCG guidance、ISO/IEC/EN 標準</td>
+      <td>主要法規依據；但須再區分 legal requirement / guidance expectation / standard requirement（Tier 1 不等於全是法律強制）</td>
+    </tr>
+    <tr>
+      <td><b>Tier 2<br>認證機構解釋</b></td>
+      <td>公告機構、Team-NB 等具認證地位組織的解釋性文件</td>
+      <td>NB position paper、Team-NB paper、NB feedback、best practice</td>
+      <td>作為 reviewer/auditor expectation；不得寫成法規強制要求</td>
+    </tr>
+    <tr>
+      <td><b>Tier 3<br>業界專家洞見</b></td>
+      <td>製造商、顧問、臨床專家、blog/podcast/webinar/white paper</td>
+      <td>產業協會出版品、顧問文章、訓練教材</td>
+      <td>僅作 industry practice / expert opinion；不得寫成 official requirement</td>
+    </tr>
+  </table>
+  </div>
+
+  <h4>Claim 標註旗標（Flags）</h4>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>Flag</th><th>意義</th></tr>
+    <tr><td><code class="inline">[T1-REG]</code></td><td>Tier 1 明確法規要求</td></tr>
+    <tr><td><code class="inline">[T1-GD]</code></td><td>Tier 1 官方 guidance expectation</td></tr>
+    <tr><td><code class="inline">[T1-STD]</code></td><td>Tier 1 標準要求 / 符合性路徑</td></tr>
+    <tr><td><code class="inline">[T2-REF]</code></td><td>Tier 2 NB / Team-NB 審查期待或 best practice</td></tr>
+    <tr><td><code class="inline">[T3-INSIGHT]</code></td><td>Tier 3 業界 / 臨床端實務洞見</td></tr>
+    <tr><td><code class="inline">[UNSUPPORTED]</code></td><td>來源中找不到支持</td></tr>
+    <tr><td><code class="inline">[PARTIAL]</code></td><td>來源只支持一部分，原句有擴張解讀</td></tr>
+    <tr><td><code class="inline">[OVERSTATED]</code></td><td>把 guidance/standard/建議寫成強制法規要求 → 需降階改寫</td></tr>
+    <tr><td><code class="inline">[ASSUMPTION]</code></td><td>基於來源推論，但來源未明講</td></tr>
+    <tr><td><code class="inline">[NEEDS SOURCE]</code></td><td>claim 可能合理，但需補充適當來源</td></tr>
+  </table>
+  </div>
+  <div class="callout key">
+    <span class="ct">㊙️ 用詞強度（Wording Strength）規則</span>
+    只有 Tier 1 法規文本/標準條文支持時，才可用 must / shall / required / mandatory。依據 guidance 用 should / is expected；依據 Tier 2 用 reviewers may expect；依據 Tier 3 用 industry practice suggests。<b>Citation 必須精準到 Article、Annex、section、clause</b>（如 Article 61(6)(b) [WET]、Annex VII §1.2.9 [Structured Dialogue]），且不得補來源中不存在的條號。
+  </div>
+</section>
+
+<section id="c3-3">
+  <h3><span class="ico">📊</span>實證：知識庫如何改變法規回答品質
+    <span class="chip mdr">MDR Article 61(10)</span>
+  </h3>
+  <p>同一個問題「MDR 第 61(10) 條路徑是什麼？哪些醫材適用無臨床數據評估？」，有無知識庫與 Custom Instruction，差異巨大：</p>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>模式</th><th>表現</th></tr>
+    <tr><td>Gemini Pro（無知識庫）</td><td>內容大致正確但無來源標註、混入模型記憶，無法追溯</td></tr>
+    <tr><td>NBLM（無 custom instruction）</td><td>鎖定上傳來源，但無分級標註</td></tr>
+    <tr><td><b>NBLM（有 custom instruction）</b></td><td>每個 claim 附 <code class="inline">[T1-REG]</code> / <code class="inline">[T2-REF]</code> 標註、提供 Applicability Checklist、明確區分「適用 / 絕對不適用」並附 reviewer expectation 與 next step</td></tr>
+  </table>
+  </div>
+  <div class="callout key">
+    <span class="ct">⚖️ Article 61(10) 重點（NBLM 有指令版產出）</span>
+    這是「例外路徑」：在「不適合」取得 clinical data 時，僅依 non-clinical data 證明符合 GSPR <code class="inline">[T1-REG]</code>。<b>明文排除 Class III 與植入式醫材</b>。「Not appropriate」不等於「Not available」—— 不能因舊產品沒留臨床資料、或覺得試驗太貴就主張適用。<br>
+    <b>適用</b>：無直接人體接觸設備（醫療冰箱、滅菌鍋）、無特殊宣稱的基礎手術器械、純資訊顯示軟體。<br>
+    <b>絕對不適用</b>：帶臨床宣稱者（如手術刀宣稱「縮短手術時間」即需臨床數據）、直接驅動醫療決策的 SaMD、活體組織切片針等直接影響病患處置的器材。
+  </div>
+  <div class="callout warn">
+    <span class="ct">Gemini + Notebook vs 純 NotebookLM</span>
+    就算同一個 Notebook、同一問題，Gemini 天生會「混合外部知識」（一邊看 Notebook、一邊看 workspace、網路），會補背景、定義、甚至更新到今年資訊。NotebookLM 則硬鎖在你上傳的來源。選哪個取決於你要「可追溯零幻覺」還是「補充延伸」。
+  </div>
+</section>
+
+<!-- ===== PART 4 ===== -->
+<div class="part-divider" id="part4"><div class="inner" style="padding:0">
+  <span class="part-label">PART 4</span>
+  <h2>法規情報更新自動化（Regulatory Intelligence）</h2>
+</div></div>
+
+<section id="c4-1">
+  <p class="lede">如何讓 AI 每季自動撈出 FDA / 歐盟最近發布的法規與指引，分析差異、整理成報告？關鍵是從 layperson 搜尋升級成 regulatory professional 搜尋，並用 API / MCP 取代不穩定的網頁搜尋。</p>
+
+  <h3><span class="ico">🇺🇸</span>FDA CDRH 法規情報流程
+    <span class="chip fda">FDA CDRH</span><span class="chip fda">Federal Register</span>
+  </h3>
+  <p>三步驟 pipeline（product code 搜尋 → 510(k) 清單 → AI 擷取效能測試）的法規情報版，迭代到 v7.3，在 Codex (Agent) 上可全自動執行（不需手動用 Google Colab 敲 Federal Register API 驗證）。輸出分類：</p>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>類別</th><th>內容</th></tr>
+    <tr><td><b>A 類</b></td><td>Final guidance（最重要）</td></tr>
+    <tr><td><b>B 類</b></td><td>Draft guidance（最重要）</td></tr>
+    <tr><td>C 類</td><td>Federal Register 的 rule / order / reclassification order</td></tr>
+    <tr><td>其他</td><td>proposed、other important、未出刊預告 guidance、其他單位發表、日期邊界防呆項</td></tr>
+  </table>
+  </div>
+  <p>逐字稿示範：講師用 ChatGPT 5.5 extended 跑完整 prompt；最完美的執行環境是 <code class="inline">Codex (Agent)</code>（手腳靈活、能真正出去與 FDA openFDA 溝通、loss 極低），但 Codex 目前只有 Mac 版，Windows 用戶用 ChatGPT 跑同一 prompt。設計核心：web 搜尋一次 + API 敲一次，兩者互補，全部撈回再自行刪減。</p>
+
+  <h3><span class="ico">🇪🇺</span>MDR / IVDR 法規情報流程
+    <span class="chip mdr">EU MDR/IVDR</span><span class="chip mdr">OJEU</span>
+  </h3>
+  <p>迭代到 v1.1。目標兩類來源：（1）歐盟官方；（2）公告機構（半官方）發布的指引。需化成搜尋的 site：歐盟網站關鍵字搜尋 + 歐盟法規資料庫（OJEU 公告期刊）互補 + 公告機構網頁立場文件。分類順序：指引 → 實行細則 → MDCG 立場文件。</p>
+  <span class="prompt-label">PROMPT · MDR/IVDR Step 1 簡化版（v1.1 起點）</span>
+<pre>你是一位歐盟法規情報專家，專長每季更新所有關於歐盟醫療器材的
+法規指引或立場文件。請搜尋【過去三個月】期間，歐盟醫療器材領域
+來自官方與指定機構（公告機構）所發布的法規與文件。</pre>
+</section>
+
+<section id="c4-2">
+  <h3><span class="ico">⚠️</span>Guidance 搜尋與索引更新的關鍵問題</h3>
+  <div class="callout warn">
+    <span class="ct">⚠️ 索引未更新導致漏抓（真實案例）</span>
+    Perplexity 深入研究曾漏掉兩篇重要法規情報（C(2026) 1809 final、Team-NB 99 頁 feedback）。根因：AI 的搜尋用 <b>Bing</b>，而 Bing 的索引更新沒這麼快 —— 文獻昨天發表，今天去敲可能敲不到，因為索引上週才更新、這週還沒更新。日期太近就找不到。
+  </div>
+  <div class="callout tip">
+    <span class="ct">✅ 解法</span>
+    <b>Google Search 是目前索引完整性最強的搜尋引擎</b>，對中文、台灣本地、剛發布的 FDA guidance 抓取速度快很多。需要即時索引時用 Google Search（如 AI Studio Grounding）。若索引清單真的沒有，就改用「上網頁直接看」的方式互補（搜尋索引一次 + 自己上網頁看一次）。找到根因後請 AI 自行迭代一版，成功抓取漏掉的兩篇。
+  </div>
+
+  <h4>搜尋工具的穩定性比較（逐字稿重點）</h4>
+  <ul class="clean">
+    <li><b>人家寫的 MCP</b>：方便，但不知道內部怎麼寫的、是否有 bug、是否漏抓（自己搜到 1000 筆，MCP 可能只回 900 筆）。</li>
+    <li><b>ChatGPT 環境直接轉 API（沙盒）</b>：沙盒是保護環境，有時做不到某些事，不穩定。</li>
+    <li><b>Codex / Agent 環境</b>：手腳不受限，能到真實網路環境實戰，最穩定。</li>
+    <li><b>折衷方案：NyquistAI MCP</b>（一家做法規搜尋的公司提供、目前免費）：實測在 ChatGPT 環境用它敲，結果與 API 環境差不多，相對穩定可信。</li>
+  </ul>
+  <div class="callout key">
+    <span class="ct">㊙️ 開發 prompt vs layperson prompt</span>
+    結合專業判斷、事實查核與審查調整後開發的 prompt，一定比直接用 layperson prompt + 深入研究來得完整、可靠、穩定。例如以 Claude Sonnet 4.6 HIGH + Research mode 與 Codex v7.3 比較：Codex 在 discovery 完整性、日期邊界控制、Federal Register 覆蓋、排除項透明度上更強。
+  </div>
+</section>
+
+<!-- ===== PART 5 ===== -->
+<div class="part-divider" id="part5"><div class="inner" style="padding:0">
+  <span class="part-label">PART 5</span>
+  <h2>新舊版本法規差異分析（Gap Analysis）</h2>
+</div></div>
+
+<section id="c5-1">
+  <p class="lede">指引或標準改版時，如何快速、完整地找出具實質法規意義的變更？三段式工作流：快速概覽 → 製作 redline → AI 做 gap analysis。</p>
+
+  <h3><span class="ico">🆚</span>Gap Analysis 完整工作流</h3>
+  <ol>
+    <li><b>快速概覽</b>：用 <a class="ext" href="https://www.ilovepdf.com" target="_blank">iLovePDF</a> 比對前後版本，快速掌握差異輪廓。舊版指引可在 FDA Docket documents（官方版本歷史庫）下載。</li>
+    <li><b>製作 redline 版</b>：MS Word「校閱 › 比較 › 比較兩個文件」（舊版為原文件、新版為修訂文件），或 Adobe Acrobat Pro。</li>
+    <li><b>AI 做 gap analysis</b>：上傳 .docx 給 ChatGPT（可辨識 Word 內部標記）或上傳 HTML 給 Gemini / PPLX。</li>
+  </ol>
+  <div class="callout tip">
+    <span class="ct">㊙️ Word 內部標記辨識</span>
+    ChatGPT 直接上傳 redline 的 Word 檔可辨識內部標記（轉成 PDF 就不行）：插入 <code class="inline">&lt;w:ins&gt;</code>（藍色底線）、刪除 <code class="inline">&lt;w:del&gt;</code>（紅色刪除線）、移動來源 <code class="inline">&lt;w:moveFrom&gt;</code>（綠色刪除線）、移動到 <code class="inline">&lt;w:moveTo&gt;</code>（綠色底線）。給 Gemini / PPLX 看，需「另存為已篩選的網頁 (.htm)」移除 Word 專用標記。</div>
+
+  <h4>AI 分析步驟（提示詞邏輯）</h4>
+  <ol>
+    <li>先用 Python 掃描 HTML，找出所有修訂標記，識別類型並總計數量：刪除（Deletions）、修改（同位置刪除緊接新增）、新增（Insertions）。</li>
+    <li>逐一分析所有修訂標記，<b>展示如何篩選出具實質法規意義的變更</b>的推理過程。</li>
+    <li>從製造商角度評估對法規路徑、品質系統、上市前送件要求的影響。</li>
+    <li>用 markdown 生成完整法規差異分析表格。</li>
+    <li>生成執行摘要報告與製造商行動指南。</li>
+  </ol>
+  <h4>輸出表格欄位</h4>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>欄位</th><th>說明</th></tr>
+    <tr><td>編號</td><td>—</td></tr>
+    <tr><td>變更類型</td><td>刪除 / 修改 / 新增</td></tr>
+    <tr><td>上一版內容</td><td>刪除/修改前</td></tr>
+    <tr><td>現行版內容</td><td>新增/修改後</td></tr>
+    <tr><td>關鍵性</td><td><span class="grade-major">🔴 major</span> / <span class="grade-minor">🟡 minor</span></td></tr>
+    <tr><td>影響分析</td><td>impact analysis</td></tr>
+    <tr><td>行動建議</td><td>—</td></tr>
+  </table>
+  </div>
+  <p>逐字稿補充：講師示範了 NB 技術文件上市前指引從 V3.00 → V4.00 的變更分析，輸出含章節、原文/修改後文字、變更描述、impact 分析，並可篩選。理論上先看紅色（重要）部分即可，再看黃色，最後總結。</p>
+</section>
+
+<!-- ===== PART 6 ===== -->
+<div class="part-divider" id="part6"><div class="inner" style="padding:0">
+  <span class="part-label">PART 6</span>
+  <h2>調查競品的重大變更歷程</h2>
+</div></div>
+
+<section id="c6-1">
+  <p class="lede">一個產品在 FDA 資料庫常有多個 510(k)，如何調查整個產品的預期用途、產品範圍與規格的變更歷史脈絡？</p>
+
+  <h3><span class="ico">⏩</span>510(k) 變更歷程調查
+    <span class="chip fda">510(k)</span><span class="chip fda">De Novo</span><span class="chip fda">PMA</span>
+  </h3>
+  <span class="prompt-label">PROMPT · Perplexity 深入研究</span>
+<pre>在 FDA 的 premarket database (510k, de novo, PMA) 中，搜尋
+`[510(k) holder]` 持有者所有關於 `[產品名稱（SaMD）]` 的所有案號。
+分析每一個案號的 Summary，找出每一送件階段的預期用途演進
+（每個預期用途之間的差異、產品範圍，包含配件、軟體、技術規格上的變更）。</pre>
+  <p>做法：開 Perplexity 深入研究（deep research）模式 —— 它能搜尋的來源更多、產生報告的機制更完整。對於 traditional 或 special 510(k)，可看出適應症與技術特徵變了哪些東西，這對快樂點（predicate）策略很重要。</p>
+
+  <div class="callout key">
+    <span class="ct">㊙️ 把意外好的輸出變成可重複範本</span>
+    若某次 deep research 輸出意外滿意，請 AI 逆向工程把它變成可重複 prompt：「請回頭拆解這次生成的推理邏輯，用逆向工程找出所有不是我明確寫在提示詞、而是你根據上下文自行判斷補進去的關鍵元素，整理回原本提示詞，重寫成可重複範本。之後我只需替換 [510(k) holder、產品名稱、型號] 就能重複使用。」之後在 Perplexity 只要用一般搜尋模式，即有深入研究品質的結果，不必每次都耗用 deep research 額度。
+  </div>
+  <p><b>進階：Predicate Lineage 家族圖譜</b> —— 找出 predicate 家族圖譜，丟給 AI，請 AI 根據圖譜完整調查家族中 predicate / predicated 產品之間的預期用途、功能規格與產品範圍差異。</p>
+</section>
+
+<!-- ===== PART 7 ===== -->
+<div class="part-divider" id="part7"><div class="inner" style="padding:0">
+  <span class="part-label">PART 7</span>
+  <h2>FDA MAUDE 不良事件 → 風險分析輸入</h2>
+</div></div>
+
+<section id="c7-1">
+  <p class="lede">以前要到 MAUDE 輸入產品與日期、下載 CSV、用 Excel 與翻譯軟體逐欄人工篩選；現在可交給 AI。但關鍵是 — 必須命令 AI 使用 openFDA API，而非網頁搜尋。</p>
+
+  <h3><span class="ico">🔍</span>從 MAUDE 還原風險分析
+    <span class="chip fda">FDA MAUDE</span><span class="chip fda">openFDA API</span><span class="chip iso">ISO 14971</span>
+  </h3>
+  <p>失敗教訓：「在 FDA MAUDE 中查詢 product code XXX 近 5 年 injury 以上不良事件」這種 layperson prompt 會直接讓 AI 放棄（Perplexity 直接放棄、capacity 因任務太複雜跌倒）。關鍵是改用 openFDA 官方 REST API。</p>
+  <span class="prompt-label">PROMPT · MAUDE → 風險分析（Better）</span>
+<pre>使用 openFDA 官方的 REST API 呼叫 endpoint
+查詢並分析 Product Code: `[CGA]` 在 `[2021-04-26 至 2026-04-26]`
+期間內所發生 serious injury & death 的不良事件。
+
+分析時：
+1. 將事件依傷害的嚴重度進行分類
+2. 根據 Additional Manufacturer Narrative 與 Description of Event
+   or Problem 的內容，判斷是否與產品使用相關，並區分
+   <span class="pc">直接相關 / 間接相關 / 無相關</span> 的事件
+3. 選擇適當的 Root Cause Analysis 工具，分析每一個與產品使用
+   有直接或間接相關的不良事件，依據<span class="pc">合理可預見</span>的臨床情境，
+   還原出整個風險分析的過程（hazard, sequence of events,
+   hazardous situation, harm, severity 1-5, probability 1-5）。</pre>
+  <div class="callout key">
+    <span class="ct">㊙️ 為何要 AI「還原」風險分析</span>
+    MAUDE 的 Additional Manufacturer Narrative 與 Description of Event 兩欄，常充滿情緒化字眼（互相指責、否認），其實沒什麼資訊。但 AI 是文字接龍，給它蛛絲馬跡可幫你還原出一個「合理可預見的臨床情境」故事 —— 它不一定真的發生，但可作為開發前期「市場上體制問題的風險分析」的腦力激盪輸入。最後仍由人類判斷是否採用。
+  </div>
+  <div class="callout tip">
+    <span class="ct">穩定性：API vs MCP</span>
+    在 ChatGPT 沙盒環境直接轉 openFDA API 有時很久、會失敗（沙盒限制）。改用 <b>ChatGPT + NyquistAI MCP</b> 搜尋第一步驟，再接後續分析步驟，明顯穩定很多、回應更快。先驗證手動搜尋筆數（如 38 injury + 2 death），再確認 AI 撈回筆數是否吻合（185 vs 186 的小誤差可接受）。
+  </div>
+  <p>講師示範產出：總共撈到 serious + death 共 40 例（2 例死亡）→ 一步步拆解直接/間接/無關 → 入扣 analysis → 整理成每個 report number、嚴重度、廠商、產品問題代碼、用 5W 還原的 sequence 因果關係。</p>
+</section>
+
+<!-- ===== PART 8 ===== -->
+<div class="part-divider" id="part8"><div class="inner" style="padding:0">
+  <span class="part-label">PART 8</span>
+  <h2>FDA 產品生命週期法規策略分析</h2>
+</div></div>
+
+<section id="c8-1">
+  <p class="lede">廠商常遇到的問題：我有哪些 FDA 指引要遵循？這些指引在產品生命週期各階段都不同。建立一個方法，依生命週期從概念到上市後，對應到 FDA 有哪些相關指引。</p>
+
+  <h3><span class="ico">🗺️</span>Guidance-to-Product Lifecycle Mapping Matrix
+    <span class="chip fda">FDA Guidance</span><span class="chip fda">TPLC</span>
+  </h3>
+  <p>用 NyquistAI 作為 FDA guidance discovery engine（可搜尋 premarket database 與 guidance metadata，但不會把整份 guidance 章節內容吐出）。它能取得 guidance 的 meta data（描述檔：如何使用、範圍、keyword），這就夠用來判斷它在生命週期中放哪裡、是否與你的產品相關。</p>
+  <span class="prompt-label">PROMPT · Mapping Matrix（Basic）</span>
+<pre>請使用 NyquistAI，根據以下產品描述，建立 FDA Guidance-to-Product
+Lifecycle Mapping Matrix。
+產品：[例如：CGM 連續血糖監測裝置]
+預期用途：[連續監測血糖趨勢，提供即時血糖資訊與警示…]
+技術特徵：[穿戴式皮下感測器、Bluetooth、mobile app、iOS/Android]
+法規目標：[510(k) or PMA（請協助判斷）]
+
+請自行從產品描述推導 regulatory workstreams，不要要求我先知道
+FDA guidance 分類。輸出：
+1. Guidance Landscape Table  2. Product Lifecycle Mapping Matrix
+3. Core vs supporting guidance  4. Submission deliverables impact
+5. Gap / action item list  6. Regulatory strategy conclusion</pre>
+  <div class="callout key">
+    <span class="ct">㊙️ 進階版的關鍵設計</span>
+    進階 prompt 特別區分兩種概念：<b>Product Life Cycle Phases</b>（產品實際經歷的階段：Concept → Design Inputs/Outputs → V&V → Transfer → Premarket → Production → Postmarket → Change Management → Retirement）與 <b>Cross-Cutting Regulatory Domains</b>（橫跨多階段的主題：risk management、cybersecurity、human factors、software lifecycle、labeling、clinical evidence、PMS）。Risk management、cybersecurity、HF、software lifecycle <b>不要被當成單一 lifecycle stage</b>，而要對應到多個 phases；若某 guidance 橫跨多 phase，要在多個 phase 重複列出。
+  </div>
+  <p>每個 Mapping Matrix 欄位含：lifecycle phase、applicable domain、relevant guidance（附 PDF link）、why it applies、expected deliverable/evidence、submission/QMS/postmarket impact、internal owner、gap/action item、priority。AI 會把你想不到的概念補上（如 patient labeling、FCC、化學分析、interoperability、cybersecurity）。把所有連結丟到 notebook，這個產品的法規背景就建好了。相關術語：Regulatory Roadmap、Compliance Matrix、TPLC。</p>
+</section>
+
+<!-- ===== PART 9 ===== -->
+<div class="part-divider" id="part9"><div class="inner" style="padding:0">
+  <span class="part-label">PART 9</span>
+  <h2>法規角色設定與 Meta Prompt</h2>
+</div></div>
+
+<section id="c9-1">
+  <h3><span class="ico">👤</span>為 AI 設定領域專家角色</h3>
+  <p>標準角色設定公式：</p>
+  <div class="callout quote">
+    "You are a [特定領域專家頭銜] with [15-20+] years of experience in [特定法規/標準與實務]..."
+  </div>
+  <p>賦予 AI 帶年資的特定領域頭銜（不只說「你是法規專家」，而是「你是專精於 AI/ML SaMD 分類與預期用途撰寫的法規專家」），能啟動 LLM 內部最深層的語意網路與領域知識叢集，讓 AI 採用「不閃躲、降低僅給泛泛建議」的精確專業語氣。</p>
+</section>
+
+<section id="c9-2">
+  <h3><span class="ico">🔄</span>Meta Prompt — 讓 AI 幫你寫法規提示詞</h3>
+  <p>若不知道怎麼寫提示詞，只需提供 Meta Prompt 請 AI 幫你寫系統提示詞。</p>
+  <h4>範例一：Use-related Risk Analysis <span class="chip iso">IEC 62366-1</span></h4>
+  <span class="prompt-label">META PROMPT</span>
+<pre>依據來源資訊中所有關於「使用錯誤」與「使用相關風險分析」的內容，
+寫一個系統提示詞，請 AI 扮演「可用性專家（Usability Expert）」，
+協助我鑑別某個特定 medical device 在臨床與使用情境中潛在的
+use error、reasonably foreseeable misuse，並執行使用相關的風險
+分析（use-related risk analysis，包括如何評估使用錯誤對患者
+與使用者造成的潛在傷害與其嚴重度）。</pre>
+  <h4>範例二：QMS SOP 程序書 <span class="chip iso">ISO 13485</span></h4>
+  <p>建立流程化導向的系列程序書 —— An Example of Meta Prompt for a QARA Worker in QMS SOP Writing。</p>
+
+  <h3><span class="ico">🪜</span>Answer Leveling — 讓 AI 輸出更高層次
+    <span class="chip iso">ISO 14971 §7.1</span>
+  </h3>
+  <p>叫 AI 直接腦力激盪，結果往往太泛或不實用。更好的方式：先給 AI 兩個層級範例（Level 1 普通、Level 2 稍好），再請它產出多個 Level 3 想法。AI 會校準到「比你自己想得到的再好一點」的方向。應用於 ISO 14971 §7.1 Risk Control Option Analysis：提供你目前想到的 design solution 或 risk control measures 作為 Level 1/2 基礎範例。</p>
+  <div class="callout tip">
+    <span class="ct">逐字稿示範</span>
+    輸出兩個方案：方案 A 是「不計成本」的資優生答案（含完整 V&V 方法）；方案 B 是「對小公司最可行」的 60 分答案（含 information for safety 與保護措施）。兩個都幫你排版好，作為風險控制措施的腦力激盪。
+  </div>
+</section>
+
+<!-- ===== PART 10 ===== -->
+<div class="part-divider" id="part10"><div class="inner" style="padding:0">
+  <span class="part-label">PART 10</span>
+  <h2>其他法規應用</h2>
+</div></div>
+
+<section id="c10-1">
+  <h3><span class="ico">🏷️</span>快速製作 ISO 15223-1 標籤草稿
+    <span class="chip iso">ISO 15223-1</span>
+  </h3>
+  <p>用 Prompt 生成醫療器材標籤 artwork。比對方法：同一 prompt 在 Gemini 與 ChatGPT 各生成三次取最佳，以三色標示偏差程度 —— 紅色（重大偏差，與 ISO 15223-1 不同）、橘色（些微偏差）、綠色（精準控制，按 ISO 15223-1 生成 symbol）。實測結果：ChatGPT Image 2 對符號的精準控制優於 Gemini Nano Banana。</p>
+</section>
+
+<section id="c10-2">
+  <h3><span class="ico">🏋️</span>AI 作為法規教練</h3>
+  <p>用 AI 解釋與技術領域有關的法規（適合無 IT/coding 背景的 RAQA 人員）：</p>
+  <span class="prompt-label">PROMPT · 法規教練</span>
+<pre>Explain the following content related to `[FDA cybersecurity guidance
+and device software function guidance for SiMD or SaMD, and AI
+SaMD-related guidance]` in a simple, easy-to-understand way suitable
+for a medical device industry RAQA employee `[with no technical, IT,
+or coding background]`.</pre>
+  <p>其他回家作業：Intended use comparison prompt、製作 MDR GSPR 與 TD 對照表、找出與特定主題相關的 GSPR、為 eSTAR 與 510(k) summary 的「SE Comparison」生成兩個 rationales。</p>
+</section>
+
+<section id="c10-3">
+  <h3><span class="ico">🤖</span>AI 審查趨勢（逐字稿）
+    <span class="chip fda">FDA Elsa</span><span class="chip mdr">NB</span>
+  </h3>
+  <ul class="clean">
+    <li><b>FDA</b>：有一個 AI 工具（Elsa）提供給審查員，但用不用由每個審查員自行決定。環境是安全的，可把文件丟進去問問題。但仍有幻覺，很多審查員不見得信賴，或覺得 AI 輸出反而更麻煩（看太細）。不是丟進去按一下就列出所有缺失，審查員一樣要打東西進去。</li>
+    <li><b>NB（公告機構）</b>：目前還沒有任何 NB 公開說用 AI 做審查。原因之一是客戶資料的保密環境問題 —— FDA 有能力建立保密環境讓 ChatGPT 服務，但小型 NB 很難要求 ChatGPT 把資料放在自家 local 雲。開源權重模型雖可自建，但能力與實作難度都是問題。</li>
+  </ul>
+  <div class="callout warn">
+    <span class="ct">⚠️ 資料上傳風險</span>
+    把公司資料上傳到第三方語音/AI 服務就是有風險，因為資料在他們的伺服器裡，只是他們保證不用。企業方案（如 Gemini 企業版）因為要做長久生意、靠信賴吃飯，相對可信任。詳見 PART 11。
+  </div>
+</section>
+
+<!-- ===== PART 11 ===== -->
+<div class="part-divider" id="part11"><div class="inner" style="padding:0">
+  <span class="part-label">PART 11</span>
+  <h2>使用 AI 工具的資料保護合規原則</h2>
+</div></div>
+
+<section id="c11-1">
+  <p class="lede">合法購買 ISO 標準後，能否上傳到 AI 工具分析？標準發行機構的版權聲明通常禁止「複製、放在伺服器、網站」。AI 時代出現了灰色地帶。</p>
+
+  <h3><span class="ico">🛡️</span>標準版權與「封閉 + 拒絕訓練」原則
+    <span class="chip iso">ISO 版權</span><span class="chip gen">GDPR / ISO 27001</span>
+  </h3>
+  <p>版權條款的立法初衷，是防止企業買「單人授權」後放在公司 SharePoint / FTP 讓全公司共用，藉此規避「多用戶授權」。在各標準機構正式針對 AI 更新條款前，可遵循的實務原則：確保 AI 環境屬於「<b>封閉且拒絕模型訓練</b>」類型。這是兩個獨立條件：</p>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>條件</th><th>實際意義</th><th>技術機制</th></tr>
+    <tr><td><b>封閉（帳號隔離）</b></td><td>資料儲存在伺服器，但只有你本人能存取，無其他用戶或審查員能讀取</td><td>存取控制、私有資料庫隔離</td></tr>
+    <tr><td><b>拒絕模型訓練</b></td><td>資料不會被拿去更新 LLM 底層參數（Weights），AI 不會「學走」你的標準內容</td><td>RAG 架構，資料只作即時上下文，不影響模型本身</td></tr>
+  </table>
+  </div>
+  <div class="callout tip">
+    <span class="ct">RAG 與訓練的差別</span>
+    現代 AI 知識庫工具（含 NotebookLM）普遍用 RAG：提問時從私有資料庫「檢索」相關段落，臨時塞入當次對話上下文；提問結束後段落只是被「讀取」過，<b>LLM 神經網路參數分毫未動</b>。訓練/微調是完全不同的過程，需刻意的反向傳播才能改變模型。
+  </div>
+
+  <h4>各 AI 工具的合規程度</h4>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>工具</th><th>合規</th><th>說明</th></tr>
+    <tr><td>NotebookLM（企業版 Workspace）</td><td>✅ 完全符合</td><td>不訓練模型，且承諾「絕不會被任何人類審查員查看」</td></tr>
+    <tr><td>NotebookLM（個人 Gmail）</td><td>⚠️ 有條件</td><td>不訓練模型，但若點「讚/倒讚」或觸發濫用偵測，人類審查員有權調閱檔案 → 打破封閉前提</td></tr>
+    <tr><td>Gemini（企業版 Workspace）</td><td>✅ 完全符合</td><td>不訓練、無人類審查員介入</td></tr>
+    <tr><td>Gemini Advanced（個人付費）</td><td>⚠️ 不建議</td><td>預設仍收集對話與檔案改善模型；需手動關閉 Gemini Apps Activity（代價是失去歷史紀錄）</td></tr>
+    <tr><td>OpenAI API / ChatGPT Enterprise</td><td>✅ 符合</td><td>預設承諾不留存資料用於訓練</td></tr>
+    <tr><td>免費版 ChatGPT / 未關訓練的免費 Gemini</td><td>❌ 絕對不建議</td><td>會拿對話訓練底層模型，等同把版權標準「教給」公用 AI</td></tr>
+  </table>
+  </div>
+  <div class="callout key">
+    <span class="ct">實務使用建議</span>
+    <b>1.</b> 若需上傳版權或內部資料，務必用<b>企業版 Google Workspace 帳號</b>操作 NBLM / Gemini。<b>2.</b> 個人帳號操作 NBLM <b>絕對不要點「讚/倒讚」</b>回饋按鈕，以阻絕觸發人工審查。<b>3.</b> 善用雲端權限：NBLM 可讀 Google Drive 文件，只要檔案未分享、Notebook 未共用，架構上就像你個人的「數位抽屜」。
+  </div>
+  <div class="callout warn">
+    <span class="ct">⚠️ 資料落地（Data Residency）風險</span>
+    從 Drive 匯入的文件會被複製到 NotebookLM 自身獨立的儲存空間，組織的資料區域設定（Data Region）與共用限制<b>不適用於</b> NotebookLM 儲存的副本。若客戶或組織有 GDPR 或 ISO 27001 資料落地要求，需額外確認。
+  </div>
+  <div class="callout quote">
+    ISO 對 AI 這件事有特別說明：任何 AI 環境都不可以丟標準文本。你今天丟了就是違反授權條款。但這是 ISO 講的 —— 實務上你自己用就好，不要讓人發現，因為你不做別人也會做，落後了反而危險。（逐字稿觀點，僅供參考，仍應依各機構授權條款判斷）
+  </div>
+</section>
+
+</div><!-- /inner -->
+
+<footer>
+  <div class="inner" style="max-width:880px;margin:0 auto;">
+    AI × 醫療器材法規運用實務指南　·　整合自 2026-06-26 課程講義與逐字稿<br>
+    本文件聚焦法規（ISO / MDR / IVDR / FDA）相關內容　·　所有 AI 輸出仍須經合格法規專業人員人工查驗與簽核
+  </div>
+</footer>
+
+</main>
+</div><!-- /wrap -->
+</body>
+</html>
